@@ -1,0 +1,396 @@
+<!-- This file is machine generated: DO NOT EDIT! -->
+<h1 id="control-flow">Control Flow</h1>
+<p>Note: Functions taking <code>Tensor</code> arguments can also take anything accepted by <a href="framework.md#convert_to_tensor"><code>tf.convert_to_tensor</code></a>.</p>
+<p>[TOC]</p>
+<h2 id="control-flow-operations">Control Flow Operations</h2>
+<p>TensorFlow provides several operations and classes that you can use to control the execution of operations and add conditional dependencies to your graph.</p>
+<hr />
+<h3 id="tf.identityinput-namenone"><a name="//apple_ref/cpp/Function/identity" class="dashAnchor"></a><code id="identity">tf.identity(input, name=None)</code></h3>
+<p>Return a tensor with the same shape and contents as the input tensor or value.</p>
+<h5 id="args">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>input</code>.</p>
+<hr />
+<h3 id="tf.tupletensors-namenone-control_inputsnone"><a name="//apple_ref/cpp/Function/tuple" class="dashAnchor"></a><code id="tuple">tf.tuple(tensors, name=None, control_inputs=None)</code></h3>
+<p>Group tensors together.</p>
+<p>This creates a tuple of tensors with the same values as the <code>tensors</code> argument, except that the value of each tensor is only returned after the values of all tensors have been computed.</p>
+<p><code>control_inputs</code> contains additional ops that have to finish before this op finishes, but whose outputs are not returned.</p>
+<p>This can be used as a &quot;join&quot; mechanism for parallel computations: all the argument tensors can be computed in parallel, but the values of any tensor returned by <code>tuple</code> are only available after all the parallel computations are done.</p>
+<p>See also <code>group</code> and <code>with_dependencies</code>.</p>
+<h5 id="args-1">Args:</h5>
+<ul>
+<li><b><code>tensors</code></b>: A list of <code>Tensor</code>s or <code>IndexedSlices</code>, some entries can be <code>None</code>.</li>
+<li><b><code>name</code></b>: (optional) A name to use as a <code>name_scope</code> for the operation.</li>
+<li><b><code>control_inputs</code></b>: List of additional ops to finish before returning.</li>
+</ul>
+<h5 id="returns-1">Returns:</h5>
+<p>Same as <code>tensors</code>.</p>
+<h5 id="raises">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>tensors</code> does not contain any <code>Tensor</code> or <code>IndexedSlices</code>.</li>
+<li><b><code>TypeError</code></b>: If <code>control_inputs</code> is not a list of <code>Operation</code> or <code>Tensor</code> objects.</li>
+</ul>
+<hr />
+<h3 id="tf.groupinputs-kwargs"><a name="//apple_ref/cpp/Function/group" class="dashAnchor"></a><code id="group">tf.group(*inputs, **kwargs)</code></h3>
+<p>Create an op that groups multiple operations.</p>
+<p>When this op finishes, all ops in <code>input</code> have finished. This op has no output.</p>
+<p>See also <code>tuple</code> and <code>with_dependencies</code>.</p>
+<h5 id="args-2">Args:</h5>
+<ul>
+<li><b><code>*inputs</code></b>: Zero or more tensors to group.</li>
+<li><b><code>**kwargs</code></b>: Optional parameters to pass when constructing the NodeDef.</li>
+<li><b><code>name</code></b>: A name for this operation (optional).</li>
+</ul>
+<h5 id="returns-2">Returns:</h5>
+<p>An Operation that executes all its inputs.</p>
+<h5 id="raises-1">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If an unknown keyword argument is provided.</li>
+</ul>
+<hr />
+<h3 id="tf.no_opnamenone"><a name="//apple_ref/cpp/Function/no_op" class="dashAnchor"></a><code id="no_op">tf.no_op(name=None)</code></h3>
+<p>Does nothing. Only useful as a placeholder for control edges.</p>
+<h5 id="args-3">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-3">Returns:</h5>
+<p>The created Operation.</p>
+<hr />
+<h3 id="tf.count_up_toref-limit-namenone"><a name="//apple_ref/cpp/Function/count_up_to" class="dashAnchor"></a><code id="count_up_to">tf.count_up_to(ref, limit, name=None)</code></h3>
+<p>Increments 'ref' until it reaches 'limit'.</p>
+<h5 id="args-4">Args:</h5>
+<ul>
+<li><b><code>ref</code></b>: A mutable <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. Should be from a scalar <code>Variable</code> node.</li>
+<li><b><code>limit</code></b>: An <code>int</code>. If incrementing ref would bring it above limit, instead generates an 'OutOfRange' error.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-4">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>ref</code>. A copy of the input before increment. If nothing else modifies the input, the values produced will all be distinct.</p>
+<hr />
+<h3 id="tf.condpred-fn1-fn2-namenone"><a name="//apple_ref/cpp/Function/cond" class="dashAnchor"></a><code id="cond">tf.cond(pred, fn1, fn2, name=None)</code></h3>
+<p>Return either fn1() or fn2() based on the boolean predicate <code>pred</code>.</p>
+<p><code>fn1</code> and <code>fn2</code> both return lists of output tensors. <code>fn1</code> and <code>fn2</code> must have the same non-zero number and type of outputs.</p>
+<p>Note that the conditional execution applies only to the operations defined in fn1 and fn2. Consider the following simple program:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">z <span class="op">=</span> tf.multiply(a, b)
+result <span class="op">=</span> tf.cond(x <span class="op">&lt;</span> y, <span class="kw">lambda</span>: tf.add(x, z), <span class="kw">lambda</span>: tf.square(y))</code></pre></div>
+<p>If x &lt; y, the <code>tf.add</code> operation will be executed and tf.square operation will not be executed. Since z is needed for at least one branch of the cond, the tf.mul operation is always executed, unconditionally. Although this behavior is consistent with the dataflow model of TensorFlow, it has occasionally surprised some users who expected a lazier semantics.</p>
+<h5 id="args-5">Args:</h5>
+<ul>
+<li><b><code>pred</code></b>: A scalar determining whether to return the result of <code>fn1</code> or <code>fn2</code>.</li>
+<li><b><code>fn1</code></b>: The callable to be performed if pred is true.</li>
+<li><b><code>fn2</code></b>: The callable to be performed if pref is false.</li>
+<li><b><code>name</code></b>: Optional name prefix for the returned tensors.</li>
+</ul>
+<h5 id="returns-5">Returns:</h5>
+<p>Tensors returned by the call to either <code>fn1</code> or <code>fn2</code>. If the callables return a singleton list, the element is extracted from the list.</p>
+<h5 id="raises-2">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>fn1</code> or <code>fn2</code> is not callable.</li>
+<li><p><b><code>ValueError</code></b>: if <code>fn1</code> and <code>fn2</code> do not return the same number of tensors, or return tensors of different types.</p></li>
+<li><p><b><code>Example</code></b>:</p></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">  x <span class="op">=</span> tf.constant(<span class="dv">2</span>)
+  y <span class="op">=</span> tf.constant(<span class="dv">5</span>)
+  <span class="kw">def</span> f1(): <span class="cf">return</span> tf.multiply(x, <span class="dv">17</span>)
+  <span class="kw">def</span> f2(): <span class="cf">return</span> tf.add(y, <span class="dv">23</span>)
+  r <span class="op">=</span> tf.cond(tf.less(x, y), f1, f2)
+  <span class="co"># r is set to f1().</span>
+  <span class="co"># Operations in f2 (e.g., tf.add) are not executed.</span></code></pre></div>
+<hr />
+<h3 id="tf.casepred_fn_pairs-default-exclusivefalse-namecase"><a name="//apple_ref/cpp/Function/case" class="dashAnchor"></a><code id="case">tf.case(pred_fn_pairs, default, exclusive=False, name='case')</code></h3>
+<p>Create a case operation.</p>
+<p>The <code>pred_fn_pairs</code> parameter is a dict or list of pairs of size N. Each pair contains a boolean scalar tensor and a python callable that creates the tensors to be returned if the boolean evaluates to True. <code>default</code> is a callable generating a list of tensors. All the callables in <code>pred_fn_pairs</code> as well as <code>default</code> should return the same number and types of tensors.</p>
+<p>If <code>exclusive==True</code>, all predicates are evaluated, and an exception is thrown if more than one of the predicates evaluates to <code>True</code>. If <code>exclusive==False</code>, execution stops are the first predicate which evaluates to True, and the tensors generated by the corresponding function are returned immediately. If none of the predicates evaluate to True, this operation returns the tensors generated by <code>default</code>.</p>
+<p>Example 1: Pseudocode: <code>if (x &lt; y) return 17;     else return 23;</code></p>
+<p>Expressions: <code>f1 = lambda: tf.constant(17)     f2 = lambda: tf.constant(23)     r = case([(tf.less(x, y), f1)], default=f2)</code></p>
+<p>Example 2: Pseudocode: <code>if (x &lt; y &amp;&amp; x &gt; z) raise OpError(&quot;Only one predicate may evaluate true&quot;);     if (x &lt; y) return 17;     else if (x &gt; z) return 23;     else return -1;</code></p>
+<p>Expressions: <code>x = tf.constant(0)     y = tf.constant(1)     z = tf.constant(2)     def f1(): return tf.constant(17)     def f2(): return tf.constant(23)     def f3(): return tf.constant(-1)     r = case({tf.less(x, y): f1, tf.greater(x, z): f2},              default=f3, exclusive=True)</code></p>
+<h5 id="args-6">Args:</h5>
+<ul>
+<li><b><code>pred_fn_pairs</code></b>: Dict or list of pairs of a boolean scalar tensor and a callable which returns a list of tensors.</li>
+<li><b><code>default</code></b>: A callable that returns a list of tensors.</li>
+<li><b><code>exclusive</code></b>: True iff at most one predicate is allowed to evaluate to <code>True</code>.</li>
+<li><b><code>name</code></b>: A name for this operation (optional).</li>
+</ul>
+<h5 id="returns-6">Returns:</h5>
+<p>The tensors returned by the first pair whose predicate evaluated to True, or those returned by <code>default</code> if none does.</p>
+<h5 id="raises-3">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>pred_fn_pairs</code> is not a list/dictionary.</li>
+<li><b><code>TypeError</code></b>: If <code>pred_fn_pairs</code> is a list but does not contain 2-tuples.</li>
+<li><b><code>TypeError</code></b>: If <code>fns[i]</code> is not callable for any i, or <code>default</code> is not callable.</li>
+</ul>
+<hr />
+<h3 id="tf.while_loopcond-body-loop_vars-shape_invariantsnone-parallel_iterations10-back_proptrue-swap_memoryfalse-namenone"><a name="//apple_ref/cpp/Function/while_loop" class="dashAnchor"></a><code id="while_loop">tf.while_loop(cond, body, loop_vars, shape_invariants=None, parallel_iterations=10, back_prop=True, swap_memory=False, name=None)</code></h3>
+<p>Repeat <code>body</code> while the condition <code>cond</code> is true.</p>
+<p><code>cond</code> is a callable returning a boolean scalar tensor. <code>body</code> is a callable returning a (possibly nested) tuple, namedtuple or list of tensors of the same arity (length and structure) and types as <code>loop_vars</code>. <code>loop_vars</code> is a (possibly nested) tuple, namedtuple or list of tensors that is passed to both <code>cond</code> and <code>body</code>. <code>cond</code> and <code>body</code> both take as many arguments as there are <code>loop_vars</code>.</p>
+<p>While <code>cond</code> evaluates to true, <code>body</code> is executed.</p>
+<p>In addition to regular Tensors or IndexedSlices, the body may accept and return TensorArray objects. The flows of the TensorArray objects will be appropriately forwarded between loops and during gradient calculations.</p>
+<p>For correctness, <code>tf.while_loop()</code> strictly enforces shape invariants for the loop variables. A shape invariant is a (possibly partial) shape that is unchanged across the iterations of the loop. An error will be raised if the shape of a loop variable after an iteration is determined to be more general than or incompatible with its shape invariant. For example, a shape of [11, None] is more general than a shape of [11, 17], and [11, 21] is not compatible with [11, 17]. By default (if the argument <code>shape_invariants</code> is not specified), it is assumed that the initial shape of each tensor in <code>loop_vars</code> is the same in every iteration. The <code>shape_invariants</code> argument allows the caller to specify a less specific shape invariant for each loop variable, which is needed if the shape varies between iterations. The <a href="../../api_docs/python/framework.md#Tensor.set_shape"><code>Tensor.set_shape()</code></a> function may also be used in the <code>body</code> function to indicate that the output loop variable has a particular shape. The shape invariant for SparseTensor and IndexedSlices are treated specially as follows:</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>If a loop variable is a SparseTensor, the shape invariant must be TensorShape([r]) where r is the rank of the dense tensor represented by the sparse tensor. It means the shapes of the three tensors of the SparseTensor are ([None], [None, r], [r]). NOTE: The shape invariant here is the shape of the SparseTensor.dense_shape property. It must be the shape of a vector.</p></li>
+<li><p>If a loop variable is an IndexedSlices, the shape invariant must be a shape invariant of the values tensor of the IndexedSlices. It means the shapes of the three tensors of the IndexedSlices are (shape, [shape[0]], [shape.ndims]).</p></li>
+</ol>
+<p><code>while_loop</code> implements non-strict semantics, enabling multiple iterations to run in parallel. The maximum number of parallel iterations can be controlled by <code>parallel_iterations</code>, which gives users some control over memory consumption and execution order. For correct programs, <code>while_loop</code> should return the same result for any parallel_iterations &gt; 0.</p>
+<p>For training, TensorFlow remembers the tensors that are produced in the forward inference but needed in back propagation. These tensors can be a main source of memory consumption and often cause OOM problems when training on GPUs. When the flag swap_memory is true, we swap out these tensors from GPU to CPU. This for example allows us to train RNN models with very long sequences and large batches.</p>
+<h5 id="args-7">Args:</h5>
+<ul>
+<li><b><code>cond</code></b>: A callable that represents the termination condition of the loop.</li>
+<li><b><code>body</code></b>: A callable that represents the loop body.</li>
+<li><b><code>loop_vars</code></b>: A (possibly nested) tuple, namedtuple or list of numpy array, <code>Tensor</code>, and <code>TensorArray</code> objects.</li>
+<li><b><code>shape_invariants</code></b>: The shape invariants for the loop variables.</li>
+<li><b><code>parallel_iterations</code></b>: The number of iterations allowed to run in parallel. It must be a positive integer.</li>
+<li><b><code>back_prop</code></b>: Whether backprop is enabled for this while loop.</li>
+<li><b><code>swap_memory</code></b>: Whether GPU-CPU memory swap is enabled for this loop.</li>
+<li><b><code>name</code></b>: Optional name prefix for the returned tensors.</li>
+</ul>
+<h5 id="returns-7">Returns:</h5>
+<p>The output tensors for the loop variables after the loop. When the length of <code>loop_vars</code> is 1 this is a Tensor, TensorArray or IndexedSlice and when the length of <code>loop_vars</code> is greater than 1 it returns a list.</p>
+<h5 id="raises-4">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>cond</code> or <code>body</code> is not callable.</li>
+<li><p><b><code>ValueError</code></b>: if <code>loop_vars</code> is empty.</p></li>
+<li><p><b><code>Example</code></b>:</p></li>
+</ul>
+<p><code>python   i = tf.constant(0)   c = lambda i: tf.less(i, 10)   b = lambda i: tf.add(i, 1)   r = tf.while_loop(c, b, [i])</code></p>
+<p>Example with nesting and a namedtuple:</p>
+<p><code>python   import collections   Pair = collections.namedtuple('Pair', 'j, k')   ijk_0 = (tf.constant(0), Pair(tf.constant(1), tf.constant(2)))   c = lambda i, p: i &lt; 10   b = lambda i, p: (i + 1, Pair((p.j + p.k), (p.j - p.k)))   ijk_final = tf.while_loop(c, b, ijk_0)</code></p>
+<p>Example using shape_invariants:</p>
+<p><code>python   i0 = tf.constant(0)   m0 = tf.ones([2, 2])   c = lambda i, m: i &lt; 10   b = lambda i, m: [i+1, tf.concat([m, m], axis=0)]   tf.while_loop(       c, b, loop_vars=[i0, m0],       shape_invariants=[i0.get_shape(), tf.TensorShape([None, 2])])</code></p>
+<h2 id="logical-operators">Logical Operators</h2>
+<p>TensorFlow provides several operations that you can use to add logical operators to your graph.</p>
+<hr />
+<h3 id="tf.logical_andx-y-namenone"><a name="//apple_ref/cpp/Function/logical_and" class="dashAnchor"></a><code id="logical_and">tf.logical_and(x, y, name=None)</code></h3>
+<p>Returns the truth value of x AND y element-wise.</p>
+<p><em>NOTE</em>: <code>LogicalAnd</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-8">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> of type <code>bool</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code> of type <code>bool</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-8">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>bool</code>.</p>
+<hr />
+<h3 id="tf.logical_notx-namenone"><a name="//apple_ref/cpp/Function/logical_not" class="dashAnchor"></a><code id="logical_not">tf.logical_not(x, name=None)</code></h3>
+<p>Returns the truth value of NOT x element-wise.</p>
+<h5 id="args-9">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> of type <code>bool</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-9">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>bool</code>.</p>
+<hr />
+<h3 id="tf.logical_orx-y-namenone"><a name="//apple_ref/cpp/Function/logical_or" class="dashAnchor"></a><code id="logical_or">tf.logical_or(x, y, name=None)</code></h3>
+<p>Returns the truth value of x OR y element-wise.</p>
+<p><em>NOTE</em>: <code>LogicalOr</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-10">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> of type <code>bool</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code> of type <code>bool</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-10">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>bool</code>.</p>
+<hr />
+<h3 id="tf.logical_xorx-y-namelogicalxor"><a name="//apple_ref/cpp/Function/logical_xor" class="dashAnchor"></a><code id="logical_xor">tf.logical_xor(x, y, name='LogicalXor')</code></h3>
+<p>x ^ y = (x | y) &amp; ~(x &amp; y).</p>
+<h2 id="comparison-operators">Comparison Operators</h2>
+<p>TensorFlow provides several operations that you can use to add comparison operators to your graph.</p>
+<hr />
+<h3 id="tf.equalx-y-namenone"><a name="//apple_ref/cpp/Function/equal" class="dashAnchor"></a><code id="equal">tf.equal(x, y, name=None)</code></h3>
+<p>Returns the truth value of (x == y) element-wise.</p>
+<p><em>NOTE</em>: <code>Equal</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-11">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>uint8</code>, <code>int8</code>, <code>int16</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>quint8</code>, <code>qint8</code>, <code>qint32</code>, <code>string</code>, <code>bool</code>, <code>complex128</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-11">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>bool</code>.</p>
+<hr />
+<h3 id="tf.not_equalx-y-namenone"><a name="//apple_ref/cpp/Function/not_equal" class="dashAnchor"></a><code id="not_equal">tf.not_equal(x, y, name=None)</code></h3>
+<p>Returns the truth value of (x != y) element-wise.</p>
+<p><em>NOTE</em>: <code>NotEqual</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-12">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>uint8</code>, <code>int8</code>, <code>int16</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>quint8</code>, <code>qint8</code>, <code>qint32</code>, <code>string</code>, <code>bool</code>, <code>complex128</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-12">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>bool</code>.</p>
+<hr />
+<h3 id="tf.lessx-y-namenone"><a name="//apple_ref/cpp/Function/less" class="dashAnchor"></a><code id="less">tf.less(x, y, name=None)</code></h3>
+<p>Returns the truth value of (x &lt; y) element-wise.</p>
+<p><em>NOTE</em>: <code>Less</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-13">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>uint8</code>, <code>int16</code>, <code>int8</code>, <code>uint16</code>, <code>half</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-13">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>bool</code>.</p>
+<hr />
+<h3 id="tf.less_equalx-y-namenone"><a name="//apple_ref/cpp/Function/less_equal" class="dashAnchor"></a><code id="less_equal">tf.less_equal(x, y, name=None)</code></h3>
+<p>Returns the truth value of (x &lt;= y) element-wise.</p>
+<p><em>NOTE</em>: <code>LessEqual</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-14">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>uint8</code>, <code>int16</code>, <code>int8</code>, <code>uint16</code>, <code>half</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-14">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>bool</code>.</p>
+<hr />
+<h3 id="tf.greaterx-y-namenone"><a name="//apple_ref/cpp/Function/greater" class="dashAnchor"></a><code id="greater">tf.greater(x, y, name=None)</code></h3>
+<p>Returns the truth value of (x &gt; y) element-wise.</p>
+<p><em>NOTE</em>: <code>Greater</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-15">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>uint8</code>, <code>int16</code>, <code>int8</code>, <code>uint16</code>, <code>half</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-15">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>bool</code>.</p>
+<hr />
+<h3 id="tf.greater_equalx-y-namenone"><a name="//apple_ref/cpp/Function/greater_equal" class="dashAnchor"></a><code id="greater_equal">tf.greater_equal(x, y, name=None)</code></h3>
+<p>Returns the truth value of (x &gt;= y) element-wise.</p>
+<p><em>NOTE</em>: <code>GreaterEqual</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-16">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>uint8</code>, <code>int16</code>, <code>int8</code>, <code>uint16</code>, <code>half</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-16">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>bool</code>.</p>
+<hr />
+<h3 id="tf.wherecondition-xnone-ynone-namenone"><a name="//apple_ref/cpp/Function/where" class="dashAnchor"></a><code id="where">tf.where(condition, x=None, y=None, name=None)</code></h3>
+<p>Return the elements, either from <code>x</code> or <code>y</code>, depending on the <code>condition</code>.</p>
+<p>If both <code>x</code> and <code>y</code> are None, then this operation returns the coordinates of true elements of <code>condition</code>. The coordinates are returned in a 2-D tensor where the first dimension (rows) represents the number of true elements, and the second dimension (columns) represents the coordinates of the true elements. Keep in mind, the shape of the output tensor can vary depending on how many true values there are in input. Indices are output in row-major order.</p>
+<p>If both non-None, <code>x</code> and <code>y</code> must have the same shape. The <code>condition</code> tensor must be a scalar if <code>x</code> and <code>y</code> are scalar. If <code>x</code> and <code>y</code> are vectors or higher rank, then <code>condition</code> must be either a vector with size matching the first dimension of <code>x</code>, or must have the same shape as <code>x</code>.</p>
+<p>The <code>condition</code> tensor acts as a mask that chooses, based on the value at each element, whether the corresponding element / row in the output should be taken from <code>x</code> (if true) or <code>y</code> (if false).</p>
+<p>If <code>condition</code> is a vector and <code>x</code> and <code>y</code> are higher rank matrices, then it chooses which row (outer dimension) to copy from <code>x</code> and <code>y</code>. If <code>condition</code> has the same shape as <code>x</code> and <code>y</code>, then it chooses which element to copy from <code>x</code> and <code>y</code>.</p>
+<h5 id="args-17">Args:</h5>
+<ul>
+<li><b><code>condition</code></b>: A <code>Tensor</code> of type <code>bool</code></li>
+<li><b><code>x</code></b>: A Tensor which may have the same shape as <code>condition</code>. If <code>condition</code> is rank 1, <code>x</code> may have higher rank, but its first dimension must match the size of <code>condition</code>.</li>
+<li><b><code>y</code></b>: A <code>tensor</code> with the same shape and type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name of the operation (optional)</li>
+</ul>
+<h5 id="returns-17">Returns:</h5>
+<p>A <code>Tensor</code> with the same type and shape as <code>x</code>, <code>y</code> if they are non-None. A <code>Tensor</code> with shape <code>(num_true, dim_size(condition))</code>.</p>
+<h5 id="raises-5">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: When exactly one of <code>x</code> or <code>y</code> is non-None.</li>
+</ul>
+<h2 id="debugging-operations">Debugging Operations</h2>
+<p>TensorFlow provides several operations that you can use to validate values and debug your graph.</p>
+<hr />
+<h3 id="tf.is_finitex-namenone"><a name="//apple_ref/cpp/Function/is_finite" class="dashAnchor"></a><code id="is_finite">tf.is_finite(x, name=None)</code></h3>
+<p>Returns which elements of x are finite.</p>
+<p><span class="citation">@compatibility</span>(numpy) Equivalent to np.isfinite <span class="citation">@end_compatibility</span></p>
+<h5 id="args-18">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-18">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>bool</code>.</p>
+<hr />
+<h3 id="tf.is_infx-namenone"><a name="//apple_ref/cpp/Function/is_inf" class="dashAnchor"></a><code id="is_inf">tf.is_inf(x, name=None)</code></h3>
+<p>Returns which elements of x are Inf.</p>
+<p><span class="citation">@compatibility</span>(numpy) Equivalent to np.isinf <span class="citation">@end_compatibility</span></p>
+<h5 id="args-19">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-19">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>bool</code>.</p>
+<hr />
+<h3 id="tf.is_nanx-namenone"><a name="//apple_ref/cpp/Function/is_nan" class="dashAnchor"></a><code id="is_nan">tf.is_nan(x, name=None)</code></h3>
+<p>Returns which elements of x are NaN.</p>
+<p><span class="citation">@compatibility</span>(numpy) Equivalent to np.isnan <span class="citation">@end_compatibility</span></p>
+<h5 id="args-20">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-20">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>bool</code>.</p>
+<hr />
+<h3 id="tf.verify_tensor_all_finitet-msg-namenone"><a name="//apple_ref/cpp/Function/verify_tensor_all_finite" class="dashAnchor"></a><code id="verify_tensor_all_finite">tf.verify_tensor_all_finite(t, msg, name=None)</code></h3>
+<p>Assert that the tensor does not contain any NaN's or Inf's.</p>
+<h5 id="args-21">Args:</h5>
+<ul>
+<li><b><code>t</code></b>: Tensor to check.</li>
+<li><b><code>msg</code></b>: Message to log on failure.</li>
+<li><b><code>name</code></b>: A name for this operation (optional).</li>
+</ul>
+<h5 id="returns-21">Returns:</h5>
+<p>Same tensor as <code>t</code>.</p>
+<hr />
+<h3 id="tf.check_numericstensor-message-namenone"><a name="//apple_ref/cpp/Function/check_numerics" class="dashAnchor"></a><code id="check_numerics">tf.check_numerics(tensor, message, name=None)</code></h3>
+<p>Checks a tensor for NaN and Inf values.</p>
+<p>When run, reports an <code>InvalidArgument</code> error if <code>tensor</code> has any values that are not a number (NaN) or infinity (Inf). Otherwise, passes <code>tensor</code> as-is.</p>
+<h5 id="args-22">Args:</h5>
+<ul>
+<li><b><code>tensor</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>.</li>
+<li><b><code>message</code></b>: A <code>string</code>. Prefix of the error message.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-22">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>tensor</code>.</p>
+<hr />
+<h3 id="tf.add_check_numerics_ops"><a name="//apple_ref/cpp/Function/add_check_numerics_ops" class="dashAnchor"></a><code id="add_check_numerics_ops">tf.add_check_numerics_ops()</code></h3>
+<p>Connect a <code>check_numerics</code> to every floating point tensor.</p>
+<p><code>check_numerics</code> operations themselves are added for each <code>half</code>, <code>float</code>, or <code>double</code> tensor in the graph. For all ops in the graph, the <code>check_numerics</code> op for all of its (<code>half</code>, <code>float</code>, or <code>double</code>) inputs is guaranteed to run before the <code>check_numerics</code> op on any of its outputs.</p>
+<h5 id="returns-23">Returns:</h5>
+<p>A <code>group</code> op depending on all <code>check_numerics</code> ops added.</p>
+<hr />
+<h3 id="tf.assertcondition-data-summarizenone-namenone"><a name="//apple_ref/cpp/Class/Assert" class="dashAnchor"></a><code id="Assert">tf.Assert(condition, data, summarize=None, name=None)</code></h3>
+<p>Asserts that the given condition is true.</p>
+<p>If <code>condition</code> evaluates to false, print the list of tensors in <code>data</code>. <code>summarize</code> determines how many entries of the tensors to print.</p>
+<p>NOTE: To ensure that Assert executes, one usually attaches a dependency:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Ensure maximum element of x is smaller or equal to 1</span>
+assert_op <span class="op">=</span> tf.Assert(tf.less_equal(tf.reduce_max(x), <span class="dv">1</span>.), [x])
+<span class="cf">with</span> tf.control_dependencies([assert_op]):
+  ... code using x ...</code></pre></div>
+<h5 id="args-23">Args:</h5>
+<ul>
+<li><b><code>condition</code></b>: The condition to evaluate.</li>
+<li><b><code>data</code></b>: The tensors to print out when condition is false.</li>
+<li><b><code>summarize</code></b>: Print this many entries of each tensor.</li>
+<li><b><code>name</code></b>: A name for this operation (optional).</li>
+</ul>
+<h5 id="returns-24">Returns:</h5>
+<ul>
+<li><b><code>assert_op</code></b>: An <code>Operation</code> that, when executed, raises a <code>tf.errors.InvalidArgumentError</code> if <code>condition</code> is not true.</li>
+</ul>
+<hr />
+<h3 id="tf.printinput_-data-messagenone-first_nnone-summarizenone-namenone"><a name="//apple_ref/cpp/Class/Print" class="dashAnchor"></a><code id="Print">tf.Print(input_, data, message=None, first_n=None, summarize=None, name=None)</code></h3>
+<p>Prints a list of tensors.</p>
+<p>This is an identity op with the side effect of printing <code>data</code> when evaluating.</p>
+<h5 id="args-24">Args:</h5>
+<ul>
+<li><b><code>input_</code></b>: A tensor passed through this op.</li>
+<li><b><code>data</code></b>: A list of tensors to print out when op is evaluated.</li>
+<li><b><code>message</code></b>: A string, prefix of the error message.</li>
+<li><b><code>first_n</code></b>: Only log <code>first_n</code> number of times. Negative numbers log always; this is the default.</li>
+<li><b><code>summarize</code></b>: Only print this many entries of each tensor. If None, then a maximum of 3 elements are printed per input tensor.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-25">Returns:</h5>
+<p>Same tensor as <code>input_</code>.</p>

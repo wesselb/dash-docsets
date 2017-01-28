@@ -1,0 +1,158 @@
+<!-- This file is machine generated: DO NOT EDIT! -->
+<h1 id="bayesflow-entropy-contrib">BayesFlow Entropy (contrib)</h1>
+<p>[TOC]</p>
+<p>Entropy Ops.</p>
+<h2 id="background">Background</h2>
+<p>Common Shannon entropy, the Evidence Lower BOund (ELBO), KL divergence, and more all have information theoretic use and interpretations. They are also often used in variational inference. This library brings together <code>Ops</code> for estimating them, e.g. using Monte Carlo expectations.</p>
+<h2 id="examples">Examples</h2>
+<p>Example of fitting a variational posterior with the ELBO.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># We start by assuming knowledge of the log of a joint density p(z, x) over</span>
+<span class="co"># latent variable z and fixed measurement x.  Since x is fixed, the Python</span>
+<span class="co"># function does not take x as an argument.</span>
+<span class="kw">def</span> log_joint(z):
+  theta <span class="op">=</span> tf.Variable(<span class="dv">0</span>.)  <span class="co"># Trainable variable that helps define log_joint.</span>
+  ...
+
+<span class="co"># Next, define a Normal distribution with trainable parameters.</span>
+q <span class="op">=</span> distributions.Normal(mu<span class="op">=</span>tf.Variable(<span class="dv">0</span>.), sigma<span class="op">=</span>tf.Variable(<span class="dv">1</span>.))
+
+<span class="co"># Now, define a loss function (negative ELBO) that, when minimized, will adjust</span>
+<span class="co"># mu, sigma, and theta, increasing the ELBO, which we hope will both reduce the</span>
+<span class="co"># KL divergence between q(z) and p(z | x), and increase p(x).  Note that we</span>
+<span class="co"># cannot guarantee both, but in general we expect both to happen.</span>
+elbo <span class="op">=</span> entropy.elbo_ratio(log_p, q, n<span class="op">=</span><span class="dv">10</span>)
+loss <span class="op">=</span> <span class="op">-</span>elbo
+
+<span class="co"># Minimize the loss</span>
+train_op <span class="op">=</span> tf.train.GradientDescentOptimizer(<span class="fl">0.1</span>).minimize(loss)
+tf.global_variables_initializer().run()
+<span class="cf">for</span> step <span class="op">in</span> <span class="bu">range</span>(<span class="dv">100</span>):
+  train_op.run()</code></pre></div>
+<h2 id="ops">Ops</h2>
+<hr />
+<h3 id="tf.contrib.bayesflow.entropy.elbo_ratiolog_p-q-znone-nnone-seednone-formnone-nameelbo_ratio"><a name="//apple_ref/cpp/Function/elbo_ratio" class="dashAnchor"></a><code id="elbo_ratio">tf.contrib.bayesflow.entropy.elbo_ratio(log_p, q, z=None, n=None, seed=None, form=None, name='elbo_ratio')</code></h3>
+<p>Estimate of the ratio appearing in the <code>ELBO</code> and <code>KL</code> divergence.</p>
+<p>With <code>p(z) := exp{log_p(z)}</code>, this <code>Op</code> returns an approximation of</p>
+<pre><code>E_q[ Log[p(Z) / q(Z)] ]</code></pre>
+<p>The term <code>E_q[ Log[p(Z)] ]</code> is always computed as a sample mean. The term <code>E_q[ Log[q(z)] ]</code> can be computed with samples, or an exact formula if <code>q.entropy()</code> is defined. This is controlled with the kwarg <code>form</code>.</p>
+<p>This log-ratio appears in different contexts:</p>
+<h4 id="klq-p"><code>KL[q || p]</code></h4>
+<p>If <code>log_p(z) = Log[p(z)]</code> for distribution <code>p</code>, this <code>Op</code> approximates the negative Kullback-Leibler divergence.</p>
+<pre><code>elbo_ratio(log_p, q, n=100) = -1 * KL[q || p],
+KL[q || p] = E[ Log[q(Z)] - Log[p(Z)] ]</code></pre>
+<p>Note that if <code>p</code> is a <code>Distribution</code>, then <code>distributions.kl(q, p)</code> may be defined and available as an exact result.</p>
+<h4 id="elbo">ELBO</h4>
+<p>If <code>log_p(z) = Log[p(z, x)]</code> is the log joint of a distribution <code>p</code>, this is the Evidence Lower BOund (ELBO):</p>
+<pre><code>ELBO ~= E[ Log[p(Z, x)] - Log[q(Z)] ]
+      = Log[p(x)] - KL[q || p]
+     &lt;= Log[p(x)]</code></pre>
+<p>User supplies either <code>Tensor</code> of samples <code>z</code>, or number of samples to draw <code>n</code></p>
+<h5 id="args">Args:</h5>
+<ul>
+<li><b><code>log_p</code></b>: Callable mapping samples from <code>q</code> to <code>Tensors</code> with shape broadcastable to <code>q.batch_shape</code>. For example, <code>log_p</code> works &quot;just like&quot; <code>q.log_prob</code>.</li>
+<li><b><code>q</code></b>: <code>tf.contrib.distributions.Distribution</code>.</li>
+<li><b><code>z</code></b>: <code>Tensor</code> of samples from <code>q</code>, produced by <code>q.sample_n</code>.</li>
+<li><b><code>n</code></b>: Integer <code>Tensor</code>. Number of samples to generate if <code>z</code> is not provided.</li>
+<li><b><code>seed</code></b>: Python integer to seed the random number generator.</li>
+<li><b><code>form</code></b>: Either <code>ELBOForms.analytic_entropy</code> (use formula for entropy of <code>q</code>) or <code>ELBOForms.sample</code> (sample estimate of entropy), or <code>ELBOForms.default</code> (attempt analytic entropy, fallback on sample). Default value is <code>ELBOForms.default</code>.</li>
+<li><b><code>name</code></b>: A name to give this <code>Op</code>.</li>
+</ul>
+<h5 id="returns">Returns:</h5>
+<p>Scalar <code>Tensor</code> holding sample mean KL divergence. <code>shape</code> is the batch shape of <code>q</code>, and <code>dtype</code> is the same as <code>q</code>.</p>
+<h5 id="raises">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>form</code> is not handled by this function.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.bayesflow.entropy.entropy_shannonp-znone-nnone-seednone-formnone-nameentropy_shannon"><a name="//apple_ref/cpp/Function/entropy_shannon" class="dashAnchor"></a><code id="entropy_shannon">tf.contrib.bayesflow.entropy.entropy_shannon(p, z=None, n=None, seed=None, form=None, name='entropy_shannon')</code></h3>
+<p>Monte Carlo or deterministic computation of Shannon's entropy.</p>
+<p>Depending on the kwarg <code>form</code>, this <code>Op</code> returns either the analytic entropy of the distribution <code>p</code>, or the sampled entropy:</p>
+<pre><code>-n^{-1} sum_{i=1}^n p.log_prob(z_i),  where z_i ~ p,
+    \approx - E_p[ Log[p(Z)] ]
+    = Entropy[p]</code></pre>
+<p>User supplies either <code>Tensor</code> of samples <code>z</code>, or number of samples to draw <code>n</code></p>
+<h5 id="args-1">Args:</h5>
+<ul>
+<li><b><code>p</code></b>: <code>tf.contrib.distributions.Distribution</code></li>
+<li><b><code>z</code></b>: <code>Tensor</code> of samples from <code>p</code>, produced by <code>p.sample_n(n)</code> for some <code>n</code>.</li>
+<li><b><code>n</code></b>: Integer <code>Tensor</code>. Number of samples to generate if <code>z</code> is not provided.</li>
+<li><b><code>seed</code></b>: Python integer to seed the random number generator.</li>
+<li><b><code>form</code></b>: Either <code>ELBOForms.analytic_entropy</code> (use formula for entropy of <code>q</code>) or <code>ELBOForms.sample</code> (sample estimate of entropy), or <code>ELBOForms.default</code> (attempt analytic entropy, fallback on sample). Default value is <code>ELBOForms.default</code>.</li>
+<li><b><code>name</code></b>: A name to give this <code>Op</code>.</li>
+</ul>
+<h5 id="returns-1">Returns:</h5>
+<p>A <code>Tensor</code> with same <code>dtype</code> as <code>p</code>, and shape equal to <code>p.batch_shape</code>.</p>
+<h5 id="raises-1">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>form</code> not handled by this function.</li>
+<li><b><code>ValueError</code></b>: If <code>form</code> is <code>ELBOForms.analytic_entropy</code> and <code>n</code> was provided.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.bayesflow.entropy.renyi_ratiolog_p-q-alpha-znone-nnone-seednone-namerenyi_ratio"><a name="//apple_ref/cpp/Function/renyi_ratio" class="dashAnchor"></a><code id="renyi_ratio">tf.contrib.bayesflow.entropy.renyi_ratio(log_p, q, alpha, z=None, n=None, seed=None, name='renyi_ratio')</code></h3>
+<p>Monte Carlo estimate of the ratio appearing in Renyi divergence.</p>
+<p>This can be used to compute the Renyi (alpha) divergence, or a log evidence approximation based on Renyi divergence.</p>
+<h4 id="definition">Definition</h4>
+<p>With <code>z_i</code> iid samples from <code>q</code>, and <code>exp{log_p(z)} = p(z)</code>, this <code>Op</code> returns the (biased for finite <code>n</code>) estimate:</p>
+<pre><code>(1 - alpha)^{-1} Log[ n^{-1} sum_{i=1}^n ( p(z_i) / q(z_i) )^{1 - alpha},
+\approx (1 - alpha)^{-1} Log[ E_q[ (p(Z) / q(Z))^{1 - alpha} ]  ]</code></pre>
+<p>This ratio appears in different contexts:</p>
+<h4 id="renyi-divergence">Renyi divergence</h4>
+<p>If <code>log_p(z) = Log[p(z)]</code> is the log prob of a distribution, and <code>alpha &gt; 0</code>, <code>alpha != 1</code>, this <code>Op</code> approximates <code>-1</code> times Renyi divergence:</p>
+<pre><code># Choose reasonably high n to limit bias, see below.
+renyi_ratio(log_p, q, alpha, n=100)
+                \approx -1 * D_alpha[q || p],  where
+D_alpha[q || p] := (1 - alpha)^{-1} Log E_q[(p(Z) / q(Z))^{1 - alpha}]</code></pre>
+<p>The Renyi (or &quot;alpha&quot;) divergence is non-negative and equal to zero iff <code>q = p</code>. Various limits of <code>alpha</code> lead to different special case results:</p>
+<pre><code>alpha       D_alpha[q || p]
+-----       ---------------
+--&gt; 0       Log[ int_{q &gt; 0} p(z) dz ]
+= 0.5,      -2 Log[1 - Hel^2[q || p]],  (\propto squared Hellinger distance)
+--&gt; 1       KL[q || p]
+= 2         Log[ 1 + chi^2[q || p] ],   (\propto squared Chi-2 divergence)
+--&gt; infty   Log[ max_z{q(z) / p(z)} ],  (min description length principle).</code></pre>
+<p>See &quot;Renyi Divergence Variational Inference&quot;, by Li and Turner.</p>
+<h4 id="log-evidence-approximation">Log evidence approximation</h4>
+<p>If <code>log_p(z) = Log[p(z, x)]</code> is the log of the joint distribution <code>p</code>, this is an alternative to the ELBO common in variational inference.</p>
+<pre><code>L_alpha(q, p) = Log[p(x)] - D_alpha[q || p]</code></pre>
+<p>If <code>q</code> and <code>p</code> have the same support, and <code>0 &lt; a &lt;= b &lt; 1</code>, one can show <code>ELBO &lt;= D_b &lt;= D_a &lt;= Log[p(x)]</code>. Thus, this <code>Op</code> allows a smooth interpolation between the ELBO and the true evidence.</p>
+<h4 id="stability-notes">Stability notes</h4>
+<p>Note that when <code>1 - alpha</code> is not small, the ratio <code>(p(z) / q(z))^{1 - alpha}</code> is subject to underflow/overflow issues. For that reason, it is evaluated in log-space after centering. Nonetheless, infinite/NaN results may occur. For that reason, one may wish to shrink <code>alpha</code> gradually. See the <code>Op</code> <code>renyi_alpha</code>. Using <code>float64</code> will also help.</p>
+<h4 id="bias-for-finite-sample-size">Bias for finite sample size</h4>
+<p>Due to nonlinearity of the logarithm, for random variables <code>{X_1,...,X_n}</code>, <code>E[ Log[sum_{i=1}^n X_i] ] != Log[ E[sum_{i=1}^n X_i] ]</code>. As a result, this estimate is biased for finite <code>n</code>. For <code>alpha &lt; 1</code>, it is non-decreasing with <code>n</code> (in expectation). For example, if <code>n = 1</code>, this estimator yields the same result as <code>elbo_ratio</code>, and as <code>n</code> increases the expected value of the estimator increases.</p>
+<h4 id="call-signature">Call signature</h4>
+<p>User supplies either <code>Tensor</code> of samples <code>z</code>, or number of samples to draw <code>n</code></p>
+<h5 id="args-2">Args:</h5>
+<ul>
+<li><b><code>log_p</code></b>: Callable mapping samples from <code>q</code> to <code>Tensors</code> with shape broadcastable to <code>q.batch_shape</code>. For example, <code>log_p</code> works &quot;just like&quot; <code>q.log_prob</code>.</li>
+<li><b><code>q</code></b>: <code>tf.contrib.distributions.Distribution</code>. <code>float64</code> <code>dtype</code> recommended. <code>log_p</code> and <code>q</code> should be supported on the same set.</li>
+<li><b><code>alpha</code></b>: <code>Tensor</code> with shape <code>q.batch_shape</code> and values not equal to 1.</li>
+<li><b><code>z</code></b>: <code>Tensor</code> of samples from <code>q</code>, produced by <code>q.sample_n</code>.</li>
+<li><b><code>n</code></b>: Integer <code>Tensor</code>. The number of samples to use if <code>z</code> is not provided. Note that this can be highly biased for small <code>n</code>, see docstring.</li>
+<li><b><code>seed</code></b>: Python integer to seed the random number generator.</li>
+<li><b><code>name</code></b>: A name to give this <code>Op</code>.</li>
+</ul>
+<h5 id="returns-2">Returns:</h5>
+<ul>
+<li><b><code>renyi_result</code></b>: The scaled log of sample mean. <code>Tensor</code> with <code>shape</code> equal to batch shape of <code>q</code>, and <code>dtype</code> = <code>q.dtype</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.bayesflow.entropy.renyi_alphastep-decay_time-alpha_min-alpha_max0.99999-namerenyi_alpha"><a name="//apple_ref/cpp/Function/renyi_alpha" class="dashAnchor"></a><code id="renyi_alpha">tf.contrib.bayesflow.entropy.renyi_alpha(step, decay_time, alpha_min, alpha_max=0.99999, name='renyi_alpha')</code></h3>
+<p>Exponentially decaying <code>Tensor</code> appropriate for Renyi ratios.</p>
+<p>When minimizing the Renyi divergence for <code>0 &lt;= alpha &lt; 1</code> (or maximizing the Renyi equivalent of elbo) in high dimensions, it is not uncommon to experience <code>NaN</code> and <code>inf</code> values when <code>alpha</code> is far from <code>1</code>.</p>
+<p>For that reason, it is often desirable to start the optimization with <code>alpha</code> very close to 1, and reduce it to a final <code>alpha_min</code> according to some schedule. The user may even want to optimize using <code>elbo_ratio</code> for some fixed time before switching to Renyi based methods.</p>
+<p>This <code>Op</code> returns an <code>alpha</code> decaying exponentially with step:</p>
+<pre><code>s(step) = (exp{step / decay_time} - 1) / (e - 1)
+t(s) = max(0, min(s, 1)),  (smooth growth from 0 to 1)
+alpha(t) = (1 - t) alpha_min + t alpha_max</code></pre>
+<h5 id="args-3">Args:</h5>
+<ul>
+<li><b><code>step</code></b>: Non-negative scalar <code>Tensor</code>. Typically the global step or an offset version thereof.</li>
+<li><b><code>decay_time</code></b>: Positive scalar <code>Tensor</code>.</li>
+<li><b><code>alpha_min</code></b>: <code>float</code> or <code>double</code> <code>Tensor</code>. The minimal, final value of <code>alpha</code>, achieved when <code>step &gt;= decay_time</code></li>
+<li><b><code>alpha_max</code></b>: <code>Tensor</code> of same <code>dtype</code> as <code>alpha_min</code>. The maximal, beginning value of <code>alpha</code>, achieved when <code>step == 0</code></li>
+<li><b><code>name</code></b>: A name to give this <code>Op</code>.</li>
+</ul>
+<h5 id="returns-3">Returns:</h5>
+<ul>
+<li><b><code>alpha</code></b>: A <code>Tensor</code> of same <code>dtype</code> as <code>alpha_min</code>.</li>
+</ul>

@@ -1,0 +1,37 @@
+<!-- This file is machine generated: DO NOT EDIT! -->
+<h1 id="ffmpeg-contrib">FFmpeg (contrib)</h1>
+<p>[TOC]</p>
+<h2 id="encoding-and-decoding-audio-using-ffmpeg">Encoding and decoding audio using FFmpeg</h2>
+<p>TensorFlow provides Ops to decode and encode audio files using the <a href="https://www.ffmpeg.org/">FFmpeg</a> library. FFmpeg must be locally <a href="https://ffmpeg.org/download.html">installed</a> for these Ops to succeed.</p>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">from</span> tensorflow.contrib <span class="im">import</span> ffmpeg
+
+audio_binary <span class="op">=</span> tf.read_file(<span class="st">&#39;song.mp3&#39;</span>)
+waveform <span class="op">=</span> ffmpeg.decode_audio(
+    audio_binary, file_format<span class="op">=</span><span class="st">&#39;mp3&#39;</span>, samples_per_second<span class="op">=</span><span class="dv">44100</span>, channel_count<span class="op">=</span><span class="dv">2</span>)
+uncompressed_binary <span class="op">=</span> ffmpeg.encode_audio(
+    waveform, file_format<span class="op">=</span><span class="st">&#39;wav&#39;</span>, samples_per_second<span class="op">=</span><span class="dv">44100</span>)</code></pre></div>
+<hr />
+<h3 id="tf.contrib.ffmpeg.decode_audiocontents-file_formatnone-samples_per_secondnone-channel_countnone"><a name="//apple_ref/cpp/Function/decode_audio" class="dashAnchor"></a><code id="decode_audio">tf.contrib.ffmpeg.decode_audio(contents, file_format=None, samples_per_second=None, channel_count=None)</code></h3>
+<p>Create an op that decodes the contents of an audio file.</p>
+<p>Note that ffmpeg is free to select the &quot;best&quot; audio track from an mp4. https://trac.ffmpeg.org/wiki/Map</p>
+<h5 id="args">Args:</h5>
+<ul>
+<li><b><code>contents</code></b>: The binary contents of the audio file to decode. This is a scalar.</li>
+<li><b><code>file_format</code></b>: A string specifying which format the contents will conform to. This can be mp3, mp4, ogg, or wav.</li>
+<li><b><code>samples_per_second</code></b>: The number of samples per second that is assumed. In some cases, resampling will occur to generate the correct sample rate.</li>
+<li><b><code>channel_count</code></b>: The number of channels that should be created from the audio contents. If the contents have more than this number, then some channels will be merged or dropped. If contents has fewer than this, then additional channels will be created from the existing ones.</li>
+</ul>
+<h5 id="returns">Returns:</h5>
+<p>A rank 2 tensor that has time along dimension 0 and channels along dimension 1. Dimension 0 will be <code>samples_per_second * length</code> wide, and dimension 1 will be <code>channel_count</code> wide. If ffmpeg fails to decode the audio then an empty tensor will be returned.</p>
+<hr />
+<h3 id="tf.contrib.ffmpeg.encode_audioaudio-file_formatnone-samples_per_secondnone"><a name="//apple_ref/cpp/Function/encode_audio" class="dashAnchor"></a><code id="encode_audio">tf.contrib.ffmpeg.encode_audio(audio, file_format=None, samples_per_second=None)</code></h3>
+<p>Creates an op that encodes an audio file using sampled audio from a tensor.</p>
+<h5 id="args-1">Args:</h5>
+<ul>
+<li><b><code>audio</code></b>: A rank 2 tensor that has time along dimension 0 and channels along dimension 1. Dimension 0 is <code>samples_per_second * length</code> long in seconds.</li>
+<li><b><code>file_format</code></b>: The type of file to encode. &quot;wav&quot; is the only supported format.</li>
+<li><b><code>samples_per_second</code></b>: The number of samples in the audio tensor per second of audio.</li>
+</ul>
+<h5 id="returns-1">Returns:</h5>
+<p>A scalar tensor that contains the encoded audio in the specified file format.</p>

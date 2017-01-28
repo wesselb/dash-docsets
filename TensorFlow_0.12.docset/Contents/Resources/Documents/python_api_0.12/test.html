@@ -1,0 +1,514 @@
+<!-- This file is machine generated: DO NOT EDIT! -->
+<h1 id="testing">Testing</h1>
+<p>[TOC]</p>
+<h2 id="unit-tests">Unit tests</h2>
+<p>TensorFlow provides a convenience class inheriting from <code>unittest.TestCase</code> which adds methods relevant to TensorFlow tests. Here is an example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    <span class="im">import</span> tensorflow <span class="im">as</span> tf
+
+
+    <span class="kw">class</span> SquareTest(tf.test.TestCase):
+
+      <span class="kw">def</span> testSquare(<span class="va">self</span>):
+        <span class="cf">with</span> <span class="va">self</span>.test_session():
+          x <span class="op">=</span> tf.square([<span class="dv">2</span>, <span class="dv">3</span>])
+          <span class="va">self</span>.assertAllEqual(x.<span class="bu">eval</span>(), [<span class="dv">4</span>, <span class="dv">9</span>])
+
+
+    <span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:
+      tf.test.main()</code></pre></div>
+<p><code>tf.test.TestCase</code> inherits from <code>unittest.TestCase</code> but adds a few additional methods. We will document these methods soon.</p>
+<hr />
+<h3 id="tf.test.main"><a name="//apple_ref/cpp/Function/main" class="dashAnchor"></a><code id="main">tf.test.main()</code></h3>
+<p>Runs all unit tests.</p>
+<hr />
+<h3 id="class-tf.test.testcase"><a name="//apple_ref/cpp/Class/TestCase" class="dashAnchor"></a><code id="TestCase">class tf.test.TestCase</code></h3>
+<p>Base class for tests that need to test TensorFlow. - - -</p>
+<h4 id="tf.test.testcase.__call__args-kwds"><code id="TestCase.__call__">tf.test.TestCase.__call__(*args, **kwds)</code></h4>
+<hr />
+<h4 id="tf.test.testcase.__eq__other"><code id="TestCase.__eq__">tf.test.TestCase.__eq__(other)</code></h4>
+<hr />
+<h4 id="tf.test.testcase.__hash__"><code id="TestCase.__hash__">tf.test.TestCase.__hash__()</code></h4>
+<hr />
+<h4 id="tf.test.testcase.__init__methodnameruntest"><code id="TestCase.__init__">tf.test.TestCase.__init__(methodName='runTest')</code></h4>
+<hr />
+<h4 id="tf.test.testcase.__ne__other"><code id="TestCase.__ne__">tf.test.TestCase.__ne__(other)</code></h4>
+<hr />
+<h4 id="tf.test.testcase.__repr__"><code id="TestCase.__repr__">tf.test.TestCase.__repr__()</code></h4>
+<hr />
+<h4 id="tf.test.testcase.__str__"><code id="TestCase.__str__">tf.test.TestCase.__str__()</code></h4>
+<hr />
+<h4 id="tf.test.testcase.addcleanupfunction-args-kwargs"><code id="TestCase.addCleanup">tf.test.TestCase.addCleanup(function, *args, **kwargs)</code></h4>
+<p>Add a function, with arguments, to be called when the test is completed. Functions added are called on a LIFO basis and are called after tearDown on test failure or success.</p>
+<p>Cleanup items are called even if setUp fails (unlike tearDown).</p>
+<hr />
+<h4 id="tf.test.testcase.addtypeequalityfunctypeobj-function"><code id="TestCase.addTypeEqualityFunc">tf.test.TestCase.addTypeEqualityFunc(typeobj, function)</code></h4>
+<p>Add a type specific assertEqual style function to compare a type.</p>
+<p>This method is for use by TestCase subclasses that need to register their own type equality functions to provide nicer error messages.</p>
+<h5 id="args">Args:</h5>
+<ul>
+<li><b><code>typeobj</code></b>: The data type to call this function on when both values are of the same type in assertEqual().</li>
+<li><b><code>function</code></b>: The callable taking two arguments and an optional msg= argument that raises self.failureException with a useful error message when the two arguments are not equal.</li>
+</ul>
+<hr />
+<h4 id="tf.test.testcase.assertallclosea-b-rtol1e-06-atol1e-06"><code id="TestCase.assertAllClose">tf.test.TestCase.assertAllClose(a, b, rtol=1e-06, atol=1e-06)</code></h4>
+<p>Asserts that two numpy arrays have near values.</p>
+<h5 id="args-1">Args:</h5>
+<ul>
+<li><b><code>a</code></b>: a numpy ndarray or anything can be converted to one.</li>
+<li><b><code>b</code></b>: a numpy ndarray or anything can be converted to one.</li>
+<li><b><code>rtol</code></b>: relative tolerance</li>
+<li><b><code>atol</code></b>: absolute tolerance</li>
+</ul>
+<hr />
+<h4 id="tf.test.testcase.assertallcloseaccordingtotypea-b-rtol1e-06-atol1e-06"><code id="TestCase.assertAllCloseAccordingToType">tf.test.TestCase.assertAllCloseAccordingToType(a, b, rtol=1e-06, atol=1e-06)</code></h4>
+<p>Like assertAllClose, but also suitable for comparing fp16 arrays.</p>
+<p>In particular, the tolerance is reduced to 1e-3 if at least one of the arguments is of type float16.</p>
+<h5 id="args-2">Args:</h5>
+<ul>
+<li><b><code>a</code></b>: a numpy ndarray or anything can be converted to one.</li>
+<li><b><code>b</code></b>: a numpy ndarray or anything can be converted to one.</li>
+<li><b><code>rtol</code></b>: relative tolerance</li>
+<li><b><code>atol</code></b>: absolute tolerance</li>
+</ul>
+<hr />
+<h4 id="tf.test.testcase.assertallequala-b"><code id="TestCase.assertAllEqual">tf.test.TestCase.assertAllEqual(a, b)</code></h4>
+<p>Asserts that two numpy arrays have the same values.</p>
+<h5 id="args-3">Args:</h5>
+<ul>
+<li><b><code>a</code></b>: a numpy ndarray or anything can be converted to one.</li>
+<li><b><code>b</code></b>: a numpy ndarray or anything can be converted to one.</li>
+</ul>
+<hr />
+<h4 id="tf.test.testcase.assertalmostequalfirst-second-placesnone-msgnone-deltanone"><code id="TestCase.assertAlmostEqual">tf.test.TestCase.assertAlmostEqual(first, second, places=None, msg=None, delta=None)</code></h4>
+<p>Fail if the two objects are unequal as determined by their difference rounded to the given number of decimal places (default 7) and comparing to zero, or by comparing that the between the two objects is more than the given delta.</p>
+<p>Note that decimal places (from zero) are usually not the same as significant digits (measured from the most signficant digit).</p>
+<p>If the two objects compare equal then they will automatically compare almost equal.</p>
+<hr />
+<h4 id="tf.test.testcase.assertalmostequalsfirst-second-placesnone-msgnone-deltanone"><code id="TestCase.assertAlmostEquals">tf.test.TestCase.assertAlmostEquals(first, second, places=None, msg=None, delta=None)</code></h4>
+<p>Fail if the two objects are unequal as determined by their difference rounded to the given number of decimal places (default 7) and comparing to zero, or by comparing that the between the two objects is more than the given delta.</p>
+<p>Note that decimal places (from zero) are usually not the same as significant digits (measured from the most signficant digit).</p>
+<p>If the two objects compare equal then they will automatically compare almost equal.</p>
+<hr />
+<h4 id="tf.test.testcase.assertarraynearfarray1-farray2-err"><code id="TestCase.assertArrayNear">tf.test.TestCase.assertArrayNear(farray1, farray2, err)</code></h4>
+<p>Asserts that two float arrays are near each other.</p>
+<p>Checks that for all elements of farray1 and farray2 |f1 - f2| &lt; err. Asserts a test failure if not.</p>
+<h5 id="args-4">Args:</h5>
+<ul>
+<li><b><code>farray1</code></b>: a list of float values.</li>
+<li><b><code>farray2</code></b>: a list of float values.</li>
+<li><b><code>err</code></b>: a float value.</li>
+</ul>
+<hr />
+<h4 id="tf.test.testcase.assertdeviceequaldevice1-device2"><code id="TestCase.assertDeviceEqual">tf.test.TestCase.assertDeviceEqual(device1, device2)</code></h4>
+<p>Asserts that the two given devices are the same.</p>
+<h5 id="args-5">Args:</h5>
+<ul>
+<li><b><code>device1</code></b>: A string device name or TensorFlow <code>DeviceSpec</code> object.</li>
+<li><b><code>device2</code></b>: A string device name or TensorFlow <code>DeviceSpec</code> object.</li>
+</ul>
+<hr />
+<h4 id="tf.test.testcase.assertdictcontainssubsetexpected-actual-msgnone"><code id="TestCase.assertDictContainsSubset">tf.test.TestCase.assertDictContainsSubset(expected, actual, msg=None)</code></h4>
+<p>Checks whether actual is a superset of expected.</p>
+<hr />
+<h4 id="tf.test.testcase.assertdictequald1-d2-msgnone"><code id="TestCase.assertDictEqual">tf.test.TestCase.assertDictEqual(d1, d2, msg=None)</code></h4>
+<hr />
+<h4 id="tf.test.testcase.assertequalfirst-second-msgnone"><code id="TestCase.assertEqual">tf.test.TestCase.assertEqual(first, second, msg=None)</code></h4>
+<p>Fail if the two objects are unequal as determined by the '==' operator.</p>
+<hr />
+<h4 id="tf.test.testcase.assertequalsfirst-second-msgnone"><code id="TestCase.assertEquals">tf.test.TestCase.assertEquals(first, second, msg=None)</code></h4>
+<p>Fail if the two objects are unequal as determined by the '==' operator.</p>
+<hr />
+<h4 id="tf.test.testcase.assertfalseexpr-msgnone"><code id="TestCase.assertFalse">tf.test.TestCase.assertFalse(expr, msg=None)</code></h4>
+<p>Check that the expression is false.</p>
+<hr />
+<h4 id="tf.test.testcase.assertgreatera-b-msgnone"><code id="TestCase.assertGreater">tf.test.TestCase.assertGreater(a, b, msg=None)</code></h4>
+<p>Just like self.assertTrue(a &gt; b), but with a nicer default message.</p>
+<hr />
+<h4 id="tf.test.testcase.assertgreaterequala-b-msgnone"><code id="TestCase.assertGreaterEqual">tf.test.TestCase.assertGreaterEqual(a, b, msg=None)</code></h4>
+<p>Just like self.assertTrue(a &gt;= b), but with a nicer default message.</p>
+<hr />
+<h4 id="tf.test.testcase.assertinmember-container-msgnone"><code id="TestCase.assertIn">tf.test.TestCase.assertIn(member, container, msg=None)</code></h4>
+<p>Just like self.assertTrue(a in b), but with a nicer default message.</p>
+<hr />
+<h4 id="tf.test.testcase.assertisexpr1-expr2-msgnone"><code id="TestCase.assertIs">tf.test.TestCase.assertIs(expr1, expr2, msg=None)</code></h4>
+<p>Just like self.assertTrue(a is b), but with a nicer default message.</p>
+<hr />
+<h4 id="tf.test.testcase.assertisinstanceobj-cls-msgnone"><code id="TestCase.assertIsInstance">tf.test.TestCase.assertIsInstance(obj, cls, msg=None)</code></h4>
+<p>Same as self.assertTrue(isinstance(obj, cls)), with a nicer default message.</p>
+<hr />
+<h4 id="tf.test.testcase.assertisnoneobj-msgnone"><code id="TestCase.assertIsNone">tf.test.TestCase.assertIsNone(obj, msg=None)</code></h4>
+<p>Same as self.assertTrue(obj is None), with a nicer default message.</p>
+<hr />
+<h4 id="tf.test.testcase.assertisnotexpr1-expr2-msgnone"><code id="TestCase.assertIsNot">tf.test.TestCase.assertIsNot(expr1, expr2, msg=None)</code></h4>
+<p>Just like self.assertTrue(a is not b), but with a nicer default message.</p>
+<hr />
+<h4 id="tf.test.testcase.assertisnotnoneobj-msgnone"><code id="TestCase.assertIsNotNone">tf.test.TestCase.assertIsNotNone(obj, msg=None)</code></h4>
+<p>Included for symmetry with assertIsNone.</p>
+<hr />
+<h4 id="tf.test.testcase.assertitemsequalexpected_seq-actual_seq-msgnone"><code id="TestCase.assertItemsEqual">tf.test.TestCase.assertItemsEqual(expected_seq, actual_seq, msg=None)</code></h4>
+<p>An unordered sequence specific comparison. It asserts that actual_seq and expected_seq have the same element counts. Equivalent to::</p>
+<pre><code>self.assertEqual(Counter(iter(actual_seq)),
+                 Counter(iter(expected_seq)))</code></pre>
+<p>Asserts that each element has the same count in both sequences.</p>
+<h5 id="example">Example:</h5>
+<pre><code>- [0, 1, 1] and [1, 0, 1] compare equal.
+- [0, 0, 1] and [0, 1] compare unequal.</code></pre>
+<hr />
+<h4 id="tf.test.testcase.assertlessa-b-msgnone"><code id="TestCase.assertLess">tf.test.TestCase.assertLess(a, b, msg=None)</code></h4>
+<p>Just like self.assertTrue(a &lt; b), but with a nicer default message.</p>
+<hr />
+<h4 id="tf.test.testcase.assertlessequala-b-msgnone"><code id="TestCase.assertLessEqual">tf.test.TestCase.assertLessEqual(a, b, msg=None)</code></h4>
+<p>Just like self.assertTrue(a &lt;= b), but with a nicer default message.</p>
+<hr />
+<h4 id="tf.test.testcase.assertlistequallist1-list2-msgnone"><code id="TestCase.assertListEqual">tf.test.TestCase.assertListEqual(list1, list2, msg=None)</code></h4>
+<p>A list-specific equality assertion.</p>
+<h5 id="args-6">Args:</h5>
+<ul>
+<li><b><code>list1</code></b>: The first list to compare.</li>
+<li><b><code>list2</code></b>: The second list to compare.</li>
+<li><b><code>msg</code></b>: Optional message to use on failure instead of a list of differences.</li>
+</ul>
+<hr />
+<h4 id="tf.test.testcase.assertmultilineequalfirst-second-msgnone"><code id="TestCase.assertMultiLineEqual">tf.test.TestCase.assertMultiLineEqual(first, second, msg=None)</code></h4>
+<p>Assert that two multi-line strings are equal.</p>
+<hr />
+<h4 id="tf.test.testcase.assertndarraynearndarray1-ndarray2-err"><code id="TestCase.assertNDArrayNear">tf.test.TestCase.assertNDArrayNear(ndarray1, ndarray2, err)</code></h4>
+<p>Asserts that two numpy arrays have near values.</p>
+<h5 id="args-7">Args:</h5>
+<ul>
+<li><b><code>ndarray1</code></b>: a numpy ndarray.</li>
+<li><b><code>ndarray2</code></b>: a numpy ndarray.</li>
+<li><b><code>err</code></b>: a float. The maximum absolute difference allowed.</li>
+</ul>
+<hr />
+<h4 id="tf.test.testcase.assertnearf1-f2-err-msgnone"><code id="TestCase.assertNear">tf.test.TestCase.assertNear(f1, f2, err, msg=None)</code></h4>
+<p>Asserts that two floats are near each other.</p>
+<p>Checks that |f1 - f2| &lt; err and asserts a test failure if not.</p>
+<h5 id="args-8">Args:</h5>
+<ul>
+<li><b><code>f1</code></b>: A float value.</li>
+<li><b><code>f2</code></b>: A float value.</li>
+<li><b><code>err</code></b>: A float value.</li>
+<li><b><code>msg</code></b>: An optional string message to append to the failure message.</li>
+</ul>
+<hr />
+<h4 id="tf.test.testcase.assertnotalmostequalfirst-second-placesnone-msgnone-deltanone"><code id="TestCase.assertNotAlmostEqual">tf.test.TestCase.assertNotAlmostEqual(first, second, places=None, msg=None, delta=None)</code></h4>
+<p>Fail if the two objects are equal as determined by their difference rounded to the given number of decimal places (default 7) and comparing to zero, or by comparing that the between the two objects is less than the given delta.</p>
+<p>Note that decimal places (from zero) are usually not the same as significant digits (measured from the most signficant digit).</p>
+<p>Objects that are equal automatically fail.</p>
+<hr />
+<h4 id="tf.test.testcase.assertnotalmostequalsfirst-second-placesnone-msgnone-deltanone"><code id="TestCase.assertNotAlmostEquals">tf.test.TestCase.assertNotAlmostEquals(first, second, places=None, msg=None, delta=None)</code></h4>
+<p>Fail if the two objects are equal as determined by their difference rounded to the given number of decimal places (default 7) and comparing to zero, or by comparing that the between the two objects is less than the given delta.</p>
+<p>Note that decimal places (from zero) are usually not the same as significant digits (measured from the most signficant digit).</p>
+<p>Objects that are equal automatically fail.</p>
+<hr />
+<h4 id="tf.test.testcase.assertnotequalfirst-second-msgnone"><code id="TestCase.assertNotEqual">tf.test.TestCase.assertNotEqual(first, second, msg=None)</code></h4>
+<p>Fail if the two objects are equal as determined by the '!=' operator.</p>
+<hr />
+<h4 id="tf.test.testcase.assertnotequalsfirst-second-msgnone"><code id="TestCase.assertNotEquals">tf.test.TestCase.assertNotEquals(first, second, msg=None)</code></h4>
+<p>Fail if the two objects are equal as determined by the '!=' operator.</p>
+<hr />
+<h4 id="tf.test.testcase.assertnotinmember-container-msgnone"><code id="TestCase.assertNotIn">tf.test.TestCase.assertNotIn(member, container, msg=None)</code></h4>
+<p>Just like self.assertTrue(a not in b), but with a nicer default message.</p>
+<hr />
+<h4 id="tf.test.testcase.assertnotisinstanceobj-cls-msgnone"><code id="TestCase.assertNotIsInstance">tf.test.TestCase.assertNotIsInstance(obj, cls, msg=None)</code></h4>
+<p>Included for symmetry with assertIsInstance.</p>
+<hr />
+<h4 id="tf.test.testcase.assertnotregexpmatchestext-unexpected_regexp-msgnone"><code id="TestCase.assertNotRegexpMatches">tf.test.TestCase.assertNotRegexpMatches(text, unexpected_regexp, msg=None)</code></h4>
+<p>Fail the test if the text matches the regular expression.</p>
+<hr />
+<h4 id="tf.test.testcase.assertprotoequalsexpected_message_maybe_ascii-message"><code id="TestCase.assertProtoEquals">tf.test.TestCase.assertProtoEquals(expected_message_maybe_ascii, message)</code></h4>
+<p>Asserts that message is same as parsed expected_message_ascii.</p>
+<p>Creates another prototype of message, reads the ascii message into it and then compares them using self._AssertProtoEqual().</p>
+<h5 id="args-9">Args:</h5>
+<ul>
+<li><b><code>expected_message_maybe_ascii</code></b>: proto message in original or ascii form</li>
+<li><b><code>message</code></b>: the message to validate</li>
+</ul>
+<hr />
+<h4 id="tf.test.testcase.assertprotoequalsversionexpected-actual-producer17-min_consumer0"><code id="TestCase.assertProtoEqualsVersion">tf.test.TestCase.assertProtoEqualsVersion(expected, actual, producer=17, min_consumer=0)</code></h4>
+<hr />
+<h4 id="tf.test.testcase.assertraisesexcclass-callableobjnone-args-kwargs"><code id="TestCase.assertRaises">tf.test.TestCase.assertRaises(excClass, callableObj=None, *args, **kwargs)</code></h4>
+<p>Fail unless an exception of class excClass is raised by callableObj when invoked with arguments args and keyword arguments kwargs. If a different type of exception is raised, it will not be caught, and the test case will be deemed to have suffered an error, exactly as for an unexpected exception.</p>
+<p>If called with callableObj omitted or None, will return a context object used like this::</p>
+<pre><code> with self.assertRaises(SomeException):
+     do_something()</code></pre>
+<p>The context manager keeps a reference to the exception as the 'exception' attribute. This allows you to inspect the exception after the assertion::</p>
+<pre><code>with self.assertRaises(SomeException) as cm:
+    do_something()
+the_exception = cm.exception
+self.assertEqual(the_exception.error_code, 3)</code></pre>
+<hr />
+<h4 id="tf.test.testcase.assertraisesoperrorexpected_err_re_or_predicate"><code id="TestCase.assertRaisesOpError">tf.test.TestCase.assertRaisesOpError(expected_err_re_or_predicate)</code></h4>
+<hr />
+<h4 id="tf.test.testcase.assertraisesregexpexpected_exception-expected_regexp-callable_objnone-args-kwargs"><code id="TestCase.assertRaisesRegexp">tf.test.TestCase.assertRaisesRegexp(expected_exception, expected_regexp, callable_obj=None, *args, **kwargs)</code></h4>
+<p>Asserts that the message in a raised exception matches a regexp.</p>
+<h5 id="args-10">Args:</h5>
+<ul>
+<li><b><code>expected_exception</code></b>: Exception class expected to be raised.</li>
+<li><b><code>expected_regexp</code></b>: Regexp (re pattern object or string) expected to be found in error message.</li>
+<li><b><code>callable_obj</code></b>: Function to be called.</li>
+<li><b><code>args</code></b>: Extra args.</li>
+<li><b><code>kwargs</code></b>: Extra kwargs.</li>
+</ul>
+<hr />
+<h4 id="tf.test.testcase.assertraiseswithpredicatematchexception_type-expected_err_re_or_predicate"><code id="TestCase.assertRaisesWithPredicateMatch">tf.test.TestCase.assertRaisesWithPredicateMatch(exception_type, expected_err_re_or_predicate)</code></h4>
+<p>Returns a context manager to enclose code expected to raise an exception.</p>
+<p>If the exception is an OpError, the op stack is also included in the message predicate search.</p>
+<h5 id="args-11">Args:</h5>
+<ul>
+<li><b><code>exception_type</code></b>: The expected type of exception that should be raised.</li>
+<li><b><code>expected_err_re_or_predicate</code></b>: If this is callable, it should be a function of one argument that inspects the passed-in exception and returns True (success) or False (please fail the test). Otherwise, the error message is expected to match this regular expression partially.</li>
+</ul>
+<h5 id="returns">Returns:</h5>
+<p>A context manager to surround code that is expected to raise an exception.</p>
+<hr />
+<h4 id="tf.test.testcase.assertregexpmatchestext-expected_regexp-msgnone"><code id="TestCase.assertRegexpMatches">tf.test.TestCase.assertRegexpMatches(text, expected_regexp, msg=None)</code></h4>
+<p>Fail the test unless the text matches the regular expression.</p>
+<hr />
+<h4 id="tf.test.testcase.assertsequenceequalseq1-seq2-msgnone-seq_typenone"><code id="TestCase.assertSequenceEqual">tf.test.TestCase.assertSequenceEqual(seq1, seq2, msg=None, seq_type=None)</code></h4>
+<p>An equality assertion for ordered sequences (like lists and tuples).</p>
+<p>For the purposes of this function, a valid ordered sequence type is one which can be indexed, has a length, and has an equality operator.</p>
+<h5 id="args-12">Args:</h5>
+<ul>
+<li><b><code>seq1</code></b>: The first sequence to compare.</li>
+<li><b><code>seq2</code></b>: The second sequence to compare.</li>
+<li><b><code>seq_type</code></b>: The expected datatype of the sequences, or None if no datatype should be enforced.</li>
+<li><b><code>msg</code></b>: Optional message to use on failure instead of a list of differences.</li>
+</ul>
+<hr />
+<h4 id="tf.test.testcase.assertsetequalset1-set2-msgnone"><code id="TestCase.assertSetEqual">tf.test.TestCase.assertSetEqual(set1, set2, msg=None)</code></h4>
+<p>A set-specific equality assertion.</p>
+<h5 id="args-13">Args:</h5>
+<ul>
+<li><b><code>set1</code></b>: The first set to compare.</li>
+<li><b><code>set2</code></b>: The second set to compare.</li>
+<li><b><code>msg</code></b>: Optional message to use on failure instead of a list of differences.</li>
+</ul>
+<p>assertSetEqual uses ducktyping to support different types of sets, and is optimized for sets specifically (parameters must support a difference method).</p>
+<hr />
+<h4 id="tf.test.testcase.assertshapeequalnp_array-tf_tensor"><code id="TestCase.assertShapeEqual">tf.test.TestCase.assertShapeEqual(np_array, tf_tensor)</code></h4>
+<p>Asserts that a Numpy ndarray and a TensorFlow tensor have the same shape.</p>
+<h5 id="args-14">Args:</h5>
+<ul>
+<li><b><code>np_array</code></b>: A Numpy ndarray or Numpy scalar.</li>
+<li><b><code>tf_tensor</code></b>: A Tensor.</li>
+</ul>
+<h5 id="raises">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If the arguments have the wrong type.</li>
+</ul>
+<hr />
+<h4 id="tf.test.testcase.assertstartswithactual-expected_start-msgnone"><code id="TestCase.assertStartsWith">tf.test.TestCase.assertStartsWith(actual, expected_start, msg=None)</code></h4>
+<p>Assert that actual.startswith(expected_start) is True.</p>
+<h5 id="args-15">Args:</h5>
+<ul>
+<li><b><code>actual</code></b>: str</li>
+<li><b><code>expected_start</code></b>: str</li>
+<li><b><code>msg</code></b>: Optional message to report on failure.</li>
+</ul>
+<hr />
+<h4 id="tf.test.testcase.asserttrueexpr-msgnone"><code id="TestCase.assertTrue">tf.test.TestCase.assertTrue(expr, msg=None)</code></h4>
+<p>Check that the expression is true.</p>
+<hr />
+<h4 id="tf.test.testcase.asserttupleequaltuple1-tuple2-msgnone"><code id="TestCase.assertTupleEqual">tf.test.TestCase.assertTupleEqual(tuple1, tuple2, msg=None)</code></h4>
+<p>A tuple-specific equality assertion.</p>
+<h5 id="args-16">Args:</h5>
+<ul>
+<li><b><code>tuple1</code></b>: The first tuple to compare.</li>
+<li><b><code>tuple2</code></b>: The second tuple to compare.</li>
+<li><b><code>msg</code></b>: Optional message to use on failure instead of a list of differences.</li>
+</ul>
+<hr />
+<h4 id="tf.test.testcase.assert_expr-msgnone"><code id="TestCase.assert_">tf.test.TestCase.assert_(expr, msg=None)</code></h4>
+<p>Check that the expression is true.</p>
+<hr />
+<h4 id="tf.test.testcase.checkedthreadtarget-argsnone-kwargsnone"><code id="TestCase.checkedThread">tf.test.TestCase.checkedThread(target, args=None, kwargs=None)</code></h4>
+<p>Returns a Thread wrapper that asserts 'target' completes successfully.</p>
+<p>This method should be used to create all threads in test cases, as otherwise there is a risk that a thread will silently fail, and/or assertions made in the thread will not be respected.</p>
+<h5 id="args-17">Args:</h5>
+<ul>
+<li><b><code>target</code></b>: A callable object to be executed in the thread.</li>
+<li><b><code>args</code></b>: The argument tuple for the target invocation. Defaults to ().</li>
+<li><b><code>kwargs</code></b>: A dictionary of keyword arguments for the target invocation. Defaults to {}.</li>
+</ul>
+<h5 id="returns-1">Returns:</h5>
+<p>A wrapper for threading.Thread that supports start() and join() methods.</p>
+<hr />
+<h4 id="tf.test.testcase.counttestcases"><code id="TestCase.countTestCases">tf.test.TestCase.countTestCases()</code></h4>
+<hr />
+<h4 id="tf.test.testcase.debug"><code id="TestCase.debug">tf.test.TestCase.debug()</code></h4>
+<p>Run the test without collecting errors in a TestResult</p>
+<hr />
+<h4 id="tf.test.testcase.defaulttestresult"><code id="TestCase.defaultTestResult">tf.test.TestCase.defaultTestResult()</code></h4>
+<hr />
+<h4 id="tf.test.testcase.docleanups"><code id="TestCase.doCleanups">tf.test.TestCase.doCleanups()</code></h4>
+<p>Execute all cleanup functions. Normally called for you after tearDown.</p>
+<hr />
+<h4 id="tf.test.testcase.failmsgnone"><code id="TestCase.fail">tf.test.TestCase.fail(msg=None)</code></h4>
+<p>Fail immediately, with the given message.</p>
+<hr />
+<h4 id="tf.test.testcase.failifargs-kwargs"><code id="TestCase.failIf">tf.test.TestCase.failIf(*args, **kwargs)</code></h4>
+<hr />
+<h4 id="tf.test.testcase.failifalmostequalargs-kwargs"><code id="TestCase.failIfAlmostEqual">tf.test.TestCase.failIfAlmostEqual(*args, **kwargs)</code></h4>
+<hr />
+<h4 id="tf.test.testcase.failifequalargs-kwargs"><code id="TestCase.failIfEqual">tf.test.TestCase.failIfEqual(*args, **kwargs)</code></h4>
+<hr />
+<h4 id="tf.test.testcase.failunlessargs-kwargs"><code id="TestCase.failUnless">tf.test.TestCase.failUnless(*args, **kwargs)</code></h4>
+<hr />
+<h4 id="tf.test.testcase.failunlessalmostequalargs-kwargs"><code id="TestCase.failUnlessAlmostEqual">tf.test.TestCase.failUnlessAlmostEqual(*args, **kwargs)</code></h4>
+<hr />
+<h4 id="tf.test.testcase.failunlessequalargs-kwargs"><code id="TestCase.failUnlessEqual">tf.test.TestCase.failUnlessEqual(*args, **kwargs)</code></h4>
+<hr />
+<h4 id="tf.test.testcase.failunlessraisesargs-kwargs"><code id="TestCase.failUnlessRaises">tf.test.TestCase.failUnlessRaises(*args, **kwargs)</code></h4>
+<hr />
+<h4 id="tf.test.testcase.get_temp_dir"><code id="TestCase.get_temp_dir">tf.test.TestCase.get_temp_dir()</code></h4>
+<hr />
+<h4 id="tf.test.testcase.id"><code id="TestCase.id">tf.test.TestCase.id()</code></h4>
+<hr />
+<h4 id="tf.test.testcase.runresultnone"><code id="TestCase.run">tf.test.TestCase.run(result=None)</code></h4>
+<hr />
+<h4 id="tf.test.testcase.setup"><code id="TestCase.setUp">tf.test.TestCase.setUp()</code></h4>
+<hr />
+<h4 id="tf.test.testcase.setupclasscls"><code id="TestCase.setUpClass">tf.test.TestCase.setUpClass(cls)</code></h4>
+<p>Hook method for setting up class fixture before running tests in the class.</p>
+<hr />
+<h4 id="tf.test.testcase.shortdescription"><code id="TestCase.shortDescription">tf.test.TestCase.shortDescription()</code></h4>
+<p>Returns a one-line description of the test, or None if no description has been provided.</p>
+<p>The default implementation of this method returns the first line of the specified test method's docstring.</p>
+<hr />
+<h4 id="tf.test.testcase.skiptestreason"><code id="TestCase.skipTest">tf.test.TestCase.skipTest(reason)</code></h4>
+<p>Skip this test.</p>
+<hr />
+<h4 id="tf.test.testcase.teardown"><code id="TestCase.tearDown">tf.test.TestCase.tearDown()</code></h4>
+<hr />
+<h4 id="tf.test.testcase.teardownclasscls"><code id="TestCase.tearDownClass">tf.test.TestCase.tearDownClass(cls)</code></h4>
+<p>Hook method for deconstructing the class fixture after running all tests in the class.</p>
+<hr />
+<h4 id="tf.test.testcase.test_sessiongraphnone-confignone-use_gpufalse-force_gpufalse"><code id="TestCase.test_session">tf.test.TestCase.test_session(graph=None, config=None, use_gpu=False, force_gpu=False)</code></h4>
+<p>Returns a TensorFlow Session for use in executing tests.</p>
+<p>This method should be used for all functional tests.</p>
+<p>Use the <code>use_gpu</code> and <code>force_gpu</code> options to control where ops are run. If <code>force_gpu</code> is True, all ops are pinned to <code>/gpu:0</code>. Otherwise, if <code>use_gpu</code> is True, TensorFlow tries to run as many ops on the GPU as possible. If both <code>force_gpu and</code>use_gpu` are False, all ops are pinned to the CPU.</p>
+<p>Example:</p>
+<p>class MyOperatorTest(test_util.TensorFlowTestCase): def testMyOperator(self): with self.test_session(use_gpu=True): valid_input = [1.0, 2.0, 3.0, 4.0, 5.0] result = MyOperator(valid_input).eval() self.assertEqual(result, [1.0, 2.0, 3.0, 5.0, 8.0] invalid_input = [-1.0, 2.0, 7.0] with self.assertRaisesOpError(&quot;negative input not supported&quot;): MyOperator(invalid_input).eval()</p>
+<h5 id="args-18">Args:</h5>
+<ul>
+<li><b><code>graph</code></b>: Optional graph to use during the returned session.</li>
+<li><b><code>config</code></b>: An optional config_pb2.ConfigProto to use to configure the session.</li>
+<li><b><code>use_gpu</code></b>: If True, attempt to run as many ops as possible on GPU.</li>
+<li><b><code>force_gpu</code></b>: If True, pin all ops to <code>/gpu:0</code>.</li>
+</ul>
+<h5 id="returns-2">Returns:</h5>
+<p>A Session object that should be used as a context manager to surround the graph building and execution code in a test case.</p>
+<hr />
+<h3 id="tf.test.test_src_dir_pathrelative_path"><a name="//apple_ref/cpp/Function/test_src_dir_path" class="dashAnchor"></a><code id="test_src_dir_path">tf.test.test_src_dir_path(relative_path)</code></h3>
+<p>Creates an absolute test srcdir path given a relative path.</p>
+<h5 id="args-19">Args:</h5>
+<ul>
+<li><b><code>relative_path</code></b>: a path relative to tensorflow root. e.g. &quot;core/platform&quot;.</li>
+</ul>
+<h5 id="returns-3">Returns:</h5>
+<p>An absolute path to the linked in runfiles.</p>
+<h2 id="utilities">Utilities</h2>
+<hr />
+<h3 id="tf.test.assert_equal_graph_defactual-expected"><a name="//apple_ref/cpp/Function/assert_equal_graph_def" class="dashAnchor"></a><code id="assert_equal_graph_def">tf.test.assert_equal_graph_def(actual, expected)</code></h3>
+<p>Asserts that two <code>GraphDef</code>s are (mostly) the same.</p>
+<p>Compares two <code>GraphDef</code> protos for equality, ignoring versions and ordering of nodes, attrs, and control inputs. Node names are used to match up nodes between the graphs, so the naming of nodes must be consistent.</p>
+<h5 id="args-20">Args:</h5>
+<ul>
+<li><b><code>actual</code></b>: The <code>GraphDef</code> we have.</li>
+<li><b><code>expected</code></b>: The <code>GraphDef</code> we expected.</li>
+</ul>
+<h5 id="raises-1">Raises:</h5>
+<ul>
+<li><b><code>AssertionError</code></b>: If the <code>GraphDef</code>s do not match.</li>
+<li><b><code>TypeError</code></b>: If either argument is not a <code>GraphDef</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.test.get_temp_dir"><a name="//apple_ref/cpp/Function/get_temp_dir" class="dashAnchor"></a><code id="get_temp_dir">tf.test.get_temp_dir()</code></h3>
+<p>Returns a temporary directory for use during tests.</p>
+<p>There is no need to delete the directory after the test.</p>
+<h5 id="returns-4">Returns:</h5>
+<p>The temporary directory.</p>
+<hr />
+<h3 id="tf.test.is_built_with_cuda"><a name="//apple_ref/cpp/Function/is_built_with_cuda" class="dashAnchor"></a><code id="is_built_with_cuda">tf.test.is_built_with_cuda()</code></h3>
+<p>Returns whether TensorFlow was built with CUDA (GPU) support.</p>
+<hr />
+<h3 id="tf.test.is_gpu_available"><a name="//apple_ref/cpp/Function/is_gpu_available" class="dashAnchor"></a><code id="is_gpu_available">tf.test.is_gpu_available()</code></h3>
+<p>Returns whether TensorFlow can access a GPU.</p>
+<h2 id="gradient-checking">Gradient checking</h2>
+<p><a href="#compute_gradient"><code>compute_gradient</code></a> and <a href="#compute_gradient_error"><code>compute_gradient_error</code></a> perform numerical differentiation of graphs for comparison against registered analytic gradients.</p>
+<hr />
+<h3 id="tf.test.compute_gradientx-x_shape-y-y_shape-x_init_valuenone-delta0.001-init_targetsnone-extra_feed_dictnone"><a name="//apple_ref/cpp/Function/compute_gradient" class="dashAnchor"></a><code id="compute_gradient">tf.test.compute_gradient(x, x_shape, y, y_shape, x_init_value=None, delta=0.001, init_targets=None, extra_feed_dict=None)</code></h3>
+<p>Computes and returns the theoretical and numerical Jacobian.</p>
+<p>If <code>x</code> or <code>y</code> is complex, the Jacobian will still be real but the corresponding Jacobian dimension(s) will be twice as large. This is required even if both input and output is complex since TensorFlow graphs are not necessarily holomorphic, and may have gradients not expressible as complex numbers. For example, if <code>x</code> is complex with shape <code>[m]</code> and <code>y</code> is complex with shape <code>[n]</code>, each Jacobian <code>J</code> will have shape <code>[m * 2, n * 2]</code> with</p>
+<pre><code>J[:m, :n] = d(Re y)/d(Re x)
+J[:m, n:] = d(Im y)/d(Re x)
+J[m:, :n] = d(Re y)/d(Im x)
+J[m:, n:] = d(Im y)/d(Im x)</code></pre>
+<h5 id="args-21">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: a tensor or list of tensors</li>
+<li><p><b><code>x_shape</code></b>: the dimensions of x as a tuple or an array of ints. If x is a list, then this is the list of shapes.</p></li>
+<li><b><code>y</code></b>: a tensor</li>
+<li><b><code>y_shape</code></b>: the dimensions of y as a tuple or an array of ints.</li>
+<li><b><code>x_init_value</code></b>: (optional) a numpy array of the same shape as &quot;x&quot; representing the initial value of x. If x is a list, this should be a list of numpy arrays. If this is none, the function will pick a random tensor as the initial value.</li>
+<li><b><code>delta</code></b>: (optional) the amount of perturbation.</li>
+<li><b><code>init_targets</code></b>: list of targets to run to initialize model params. TODO(mrry): remove this argument.</li>
+<li><p><b><code>extra_feed_dict</code></b>: dict that allows fixing specified tensor values during the Jacobian calculation.</p></li>
+</ul>
+<h5 id="returns-5">Returns:</h5>
+<p>Two 2-d numpy arrays representing the theoretical and numerical Jacobian for dy/dx. Each has &quot;x_size&quot; rows and &quot;y_size&quot; columns where &quot;x_size&quot; is the number of elements in x and &quot;y_size&quot; is the number of elements in y. If x is a list, returns a list of two numpy arrays.</p>
+<hr />
+<h3 id="tf.test.compute_gradient_errorx-x_shape-y-y_shape-x_init_valuenone-delta0.001-init_targetsnone-extra_feed_dictnone"><a name="//apple_ref/cpp/Function/compute_gradient_error" class="dashAnchor"></a><code id="compute_gradient_error">tf.test.compute_gradient_error(x, x_shape, y, y_shape, x_init_value=None, delta=0.001, init_targets=None, extra_feed_dict=None)</code></h3>
+<p>Computes the gradient error.</p>
+<p>Computes the maximum error for dy/dx between the computed Jacobian and the numerically estimated Jacobian.</p>
+<p>This function will modify the tensors passed in as it adds more operations and hence changing the consumers of the operations of the input tensors.</p>
+<p>This function adds operations to the current session. To compute the error using a particular device, such as a GPU, use the standard methods for setting a device (e.g. using with sess.graph.device() or setting a device function in the session constructor).</p>
+<h5 id="args-22">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: a tensor or list of tensors</li>
+<li><p><b><code>x_shape</code></b>: the dimensions of x as a tuple or an array of ints. If x is a list, then this is the list of shapes.</p></li>
+<li><b><code>y</code></b>: a tensor</li>
+<li><b><code>y_shape</code></b>: the dimensions of y as a tuple or an array of ints.</li>
+<li><b><code>x_init_value</code></b>: (optional) a numpy array of the same shape as &quot;x&quot; representing the initial value of x. If x is a list, this should be a list of numpy arrays. If this is none, the function will pick a random tensor as the initial value.</li>
+<li><b><code>delta</code></b>: (optional) the amount of perturbation.</li>
+<li><b><code>init_targets</code></b>: list of targets to run to initialize model params. TODO(mrry): Remove this argument.</li>
+<li><p><b><code>extra_feed_dict</code></b>: dict that allows fixing specified tensor values during the Jacobian calculation.</p></li>
+</ul>
+<h5 id="returns-6">Returns:</h5>
+<p>The maximum error in between the two Jacobians.</p>
+<h2 id="other-functions-and-classes">Other Functions and Classes</h2>
+<hr />
+<h3 id="class-tf.test.benchmark"><a name="//apple_ref/cpp/Class/Benchmark" class="dashAnchor"></a><code id="Benchmark">class tf.test.Benchmark</code></h3>
+<p>Abstract class that provides helpers for TensorFlow benchmarks. - - -</p>
+<h4 id="tf.test.benchmark.is_abstractcls"><code id="Benchmark.is_abstract">tf.test.Benchmark.is_abstract(cls)</code></h4>
+<hr />
+<h4 id="tf.test.benchmark.report_benchmarkitersnone-cpu_timenone-wall_timenone-throughputnone-extrasnone-namenone"><code id="Benchmark.report_benchmark">tf.test.Benchmark.report_benchmark(iters=None, cpu_time=None, wall_time=None, throughput=None, extras=None, name=None)</code></h4>
+<p>Report a benchmark.</p>
+<h5 id="args-23">Args:</h5>
+<ul>
+<li><b><code>iters</code></b>: (optional) How many iterations were run</li>
+<li><b><code>cpu_time</code></b>: (optional) Total cpu time in seconds</li>
+<li><b><code>wall_time</code></b>: (optional) Total wall time in seconds</li>
+<li><b><code>throughput</code></b>: (optional) Throughput (in MB/s)</li>
+<li><b><code>extras</code></b>: (optional) Dict mapping string keys to additional benchmark info. Values may be either floats or values that are convertible to strings.</li>
+<li><b><code>name</code></b>: (optional) Override the BenchmarkEntry name with <code>name</code>. Otherwise it is inferred from the top-level method name.</li>
+</ul>
+<hr />
+<h4 id="tf.test.benchmark.run_op_benchmarksess-op_or_tensor-feed_dictnone-burn_iters2-min_iters10-store_tracefalse-namenone-extrasnone-mbs0"><code id="Benchmark.run_op_benchmark">tf.test.Benchmark.run_op_benchmark(sess, op_or_tensor, feed_dict=None, burn_iters=2, min_iters=10, store_trace=False, name=None, extras=None, mbs=0)</code></h4>
+<p>Run an op or tensor in the given session. Report the results.</p>
+<h5 id="args-24">Args:</h5>
+<ul>
+<li><b><code>sess</code></b>: <code>Session</code> object to use for timing.</li>
+<li><b><code>op_or_tensor</code></b>: <code>Operation</code> or <code>Tensor</code> to benchmark.</li>
+<li><b><code>feed_dict</code></b>: A <code>dict</code> of values to feed for each op iteration (see the <code>feed_dict</code> parameter of <code>Session.run</code>).</li>
+<li><b><code>burn_iters</code></b>: Number of burn-in iterations to run.</li>
+<li><b><code>min_iters</code></b>: Minimum number of iterations to use for timing.</li>
+<li><b><code>store_trace</code></b>: Boolean, whether to run an extra untimed iteration and store the trace of iteration in the benchmark report. The trace will be stored as a string in Google Chrome trace format in the extras field &quot;full_trace_chrome_format&quot;.</li>
+<li><b><code>name</code></b>: (optional) Override the BenchmarkEntry name with <code>name</code>. Otherwise it is inferred from the top-level method name.</li>
+<li><b><code>extras</code></b>: (optional) Dict mapping string keys to additional benchmark info. Values may be either floats or values that are convertible to strings.</li>
+<li><b><code>mbs</code></b>: (optional) The number of megabytes moved by this op, used to calculate the ops throughput.</li>
+</ul>
+<h5 id="returns-7">Returns:</h5>
+<p>A <code>dict</code> containing the key-value pairs that were passed to <code>report_benchmark</code>.</p>

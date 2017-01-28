@@ -1,0 +1,173 @@
+<!-- This file is machine generated: DO NOT EDIT! -->
+<h1 id="bayesflow-stochastic-tensors-contrib">BayesFlow Stochastic Tensors (contrib)</h1>
+<p>[TOC]</p>
+<p>Classes and helper functions for creating Stochastic Tensors.</p>
+<p><code>StochasticTensor</code> objects wrap <code>Distribution</code> objects. Their values may be samples from the underlying distribution, or the distribution mean (as governed by <code>value_type</code>). These objects provide a <code>loss</code> method for use when sampling from a non-reparameterized distribution. The <code>loss</code>method is used in conjunction with <code>stochastic_graph.surrogate_loss</code> to produce a single differentiable loss in stochastic graphs having both continuous and discrete stochastic nodes.</p>
+<h2 id="stochastic-tensor-classes">Stochastic Tensor Classes</h2>
+<hr />
+<h3 id="class-tf.contrib.bayesflow.stochastic_tensor.basestochastictensor"><a name="//apple_ref/cpp/Class/BaseStochasticTensor" class="dashAnchor"></a><code id="BaseStochasticTensor">class tf.contrib.bayesflow.stochastic_tensor.BaseStochasticTensor</code></h3>
+<p>Base Class for Tensor-like objects that emit stochastic values. - - -</p>
+<h4 id="tf.contrib.bayesflow.stochastic_tensor.basestochastictensor.__init__"><code id="BaseStochasticTensor.__init__">tf.contrib.bayesflow.stochastic_tensor.BaseStochasticTensor.__init__()</code></h4>
+<hr />
+<h4 id="tf.contrib.bayesflow.stochastic_tensor.basestochastictensor.dtype"><code id="BaseStochasticTensor.dtype">tf.contrib.bayesflow.stochastic_tensor.BaseStochasticTensor.dtype</code></h4>
+<hr />
+<h4 id="tf.contrib.bayesflow.stochastic_tensor.basestochastictensor.graph"><code id="BaseStochasticTensor.graph">tf.contrib.bayesflow.stochastic_tensor.BaseStochasticTensor.graph</code></h4>
+<hr />
+<h4 id="tf.contrib.bayesflow.stochastic_tensor.basestochastictensor.losssample_loss"><code id="BaseStochasticTensor.loss">tf.contrib.bayesflow.stochastic_tensor.BaseStochasticTensor.loss(sample_loss)</code></h4>
+<p>Returns the term to add to the surrogate loss.</p>
+<p>This method is called by <code>surrogate_loss</code>. The input <code>sample_loss</code> should have already had <code>stop_gradient</code> applied to it. This is because the surrogate_loss usually provides a Monte Carlo sample term of the form <code>differentiable_surrogate * sample_loss</code> where <code>sample_loss</code> is considered constant with respect to the input for purposes of the gradient.</p>
+<h5 id="args">Args:</h5>
+<ul>
+<li><b><code>sample_loss</code></b>: <code>Tensor</code>, sample loss downstream of this <code>StochasticTensor</code>.</li>
+</ul>
+<h5 id="returns">Returns:</h5>
+<p>Either <code>None</code> or a <code>Tensor</code>.</p>
+<hr />
+<h4 id="tf.contrib.bayesflow.stochastic_tensor.basestochastictensor.name"><code id="BaseStochasticTensor.name">tf.contrib.bayesflow.stochastic_tensor.BaseStochasticTensor.name</code></h4>
+<hr />
+<h4 id="tf.contrib.bayesflow.stochastic_tensor.basestochastictensor.valuenamenone"><code id="BaseStochasticTensor.value">tf.contrib.bayesflow.stochastic_tensor.BaseStochasticTensor.value(name=None)</code></h4>
+<hr />
+<h3 id="class-tf.contrib.bayesflow.stochastic_tensor.stochastictensor"><a name="//apple_ref/cpp/Class/StochasticTensor" class="dashAnchor"></a><code id="StochasticTensor">class tf.contrib.bayesflow.stochastic_tensor.StochasticTensor</code></h3>
+<p>StochasticTensor is a BaseStochasticTensor backed by a distribution. - - -</p>
+<h4 id="tf.contrib.bayesflow.stochastic_tensor.stochastictensor.__init__dist-namestochastictensor-dist_value_typenone-loss_fnscore_function"><code id="StochasticTensor.__init__">tf.contrib.bayesflow.stochastic_tensor.StochasticTensor.__init__(dist, name='StochasticTensor', dist_value_type=None, loss_fn=score_function)</code></h4>
+<p>Construct a <code>StochasticTensor</code>.</p>
+<p><code>StochasticTensor</code> is backed by the <code>dist</code> distribution and its <code>value</code> method will return the same value each time it is called. What <code>value</code> is returned is controlled by the <code>dist_value_type</code> (defaults to <code>SampleValue</code>).</p>
+<p>Some distributions' sample functions are not differentiable (e.g. a sample from a discrete distribution like a Bernoulli) and so to differentiate wrt parameters upstream of the sample requires a gradient estimator like the score function estimator. This is accomplished by passing a differentiable <code>loss_fn</code> to the <code>StochasticTensor</code>, which defaults to a function whose derivative is the score function estimator. Calling <code>stochastic_graph.surrogate_loss(final_losses)</code> will call <code>loss()</code> on every <code>StochasticTensor</code> upstream of final losses.</p>
+<p><code>loss()</code> will return None for <code>StochasticTensor</code>s backed by reparameterized distributions; it will also return None if the value type is <code>MeanValueType</code> or if <code>loss_fn=None</code>.</p>
+<h5 id="args-1">Args:</h5>
+<ul>
+<li><b><code>dist</code></b>: an instance of <code>Distribution</code>.</li>
+<li><b><code>name</code></b>: a name for this <code>StochasticTensor</code> and its ops.</li>
+<li><b><code>dist_value_type</code></b>: a <code>_StochasticValueType</code>, which will determine what the <code>value</code> of this <code>StochasticTensor</code> will be. If not provided, the value type set with the <code>value_type</code> context manager will be used.</li>
+<li><b><code>loss_fn</code></b>: callable that takes <code>(st, st.value(), influenced_loss)</code>, where <code>st</code> is this <code>StochasticTensor</code>, and returns a <code>Tensor</code> loss. By default, <code>loss_fn</code> is the <code>score_function</code>, or more precisely, the integral of the score function, such that when the gradient is taken, the score function results. See the <code>stochastic_gradient_estimators</code> module for additional loss functions and baselines.</li>
+</ul>
+<h5 id="raises">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>dist</code> is not an instance of <code>Distribution</code>.</li>
+<li><b><code>TypeError</code></b>: if <code>loss_fn</code> is not <code>callable</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.bayesflow.stochastic_tensor.stochastictensor.distribution"><code id="StochasticTensor.distribution">tf.contrib.bayesflow.stochastic_tensor.StochasticTensor.distribution</code></h4>
+<hr />
+<h4 id="tf.contrib.bayesflow.stochastic_tensor.stochastictensor.dtype"><code id="StochasticTensor.dtype">tf.contrib.bayesflow.stochastic_tensor.StochasticTensor.dtype</code></h4>
+<hr />
+<h4 id="tf.contrib.bayesflow.stochastic_tensor.stochastictensor.entropynameentropy"><code id="StochasticTensor.entropy">tf.contrib.bayesflow.stochastic_tensor.StochasticTensor.entropy(name='entropy')</code></h4>
+<hr />
+<h4 id="tf.contrib.bayesflow.stochastic_tensor.stochastictensor.graph"><code id="StochasticTensor.graph">tf.contrib.bayesflow.stochastic_tensor.StochasticTensor.graph</code></h4>
+<hr />
+<h4 id="tf.contrib.bayesflow.stochastic_tensor.stochastictensor.lossfinal_loss-nameloss"><code id="StochasticTensor.loss">tf.contrib.bayesflow.stochastic_tensor.StochasticTensor.loss(final_loss, name='Loss')</code></h4>
+<hr />
+<h4 id="tf.contrib.bayesflow.stochastic_tensor.stochastictensor.meannamemean"><code id="StochasticTensor.mean">tf.contrib.bayesflow.stochastic_tensor.StochasticTensor.mean(name='mean')</code></h4>
+<hr />
+<h4 id="tf.contrib.bayesflow.stochastic_tensor.stochastictensor.name"><code id="StochasticTensor.name">tf.contrib.bayesflow.stochastic_tensor.StochasticTensor.name</code></h4>
+<hr />
+<h4 id="tf.contrib.bayesflow.stochastic_tensor.stochastictensor.valuenamevalue"><code id="StochasticTensor.value">tf.contrib.bayesflow.stochastic_tensor.StochasticTensor.value(name='value')</code></h4>
+<hr />
+<h4 id="tf.contrib.bayesflow.stochastic_tensor.stochastictensor.value_type"><code id="StochasticTensor.value_type">tf.contrib.bayesflow.stochastic_tensor.StochasticTensor.value_type</code></h4>
+<h2 id="stochastic-tensor-value-types">Stochastic Tensor Value Types</h2>
+<hr />
+<h3 id="class-tf.contrib.bayesflow.stochastic_tensor.meanvalue"><a name="//apple_ref/cpp/Class/MeanValue" class="dashAnchor"></a><code id="MeanValue">class tf.contrib.bayesflow.stochastic_tensor.MeanValue</code></h3>
+<hr />
+<h4 id="tf.contrib.bayesflow.stochastic_tensor.meanvalue.__init__stop_gradientfalse"><code id="MeanValue.__init__">tf.contrib.bayesflow.stochastic_tensor.MeanValue.__init__(stop_gradient=False)</code></h4>
+<hr />
+<h4 id="tf.contrib.bayesflow.stochastic_tensor.meanvalue.declare_inputsunused_stochastic_tensor-unused_inputs_dict"><code id="MeanValue.declare_inputs">tf.contrib.bayesflow.stochastic_tensor.MeanValue.declare_inputs(unused_stochastic_tensor, unused_inputs_dict)</code></h4>
+<hr />
+<h4 id="tf.contrib.bayesflow.stochastic_tensor.meanvalue.popped_aboveunused_value_type"><code id="MeanValue.popped_above">tf.contrib.bayesflow.stochastic_tensor.MeanValue.popped_above(unused_value_type)</code></h4>
+<hr />
+<h4 id="tf.contrib.bayesflow.stochastic_tensor.meanvalue.pushed_aboveunused_value_type"><code id="MeanValue.pushed_above">tf.contrib.bayesflow.stochastic_tensor.MeanValue.pushed_above(unused_value_type)</code></h4>
+<hr />
+<h4 id="tf.contrib.bayesflow.stochastic_tensor.meanvalue.stop_gradient"><code id="MeanValue.stop_gradient">tf.contrib.bayesflow.stochastic_tensor.MeanValue.stop_gradient</code></h4>
+<hr />
+<h3 id="class-tf.contrib.bayesflow.stochastic_tensor.samplevalue"><a name="//apple_ref/cpp/Class/SampleValue" class="dashAnchor"></a><code id="SampleValue">class tf.contrib.bayesflow.stochastic_tensor.SampleValue</code></h3>
+<p>Draw samples, possibly adding new outer dimensions along the way.</p>
+<p>This ValueType draws samples from StochasticTensors run within its context, increasing the rank according to the requested shape.</p>
+<p>Examples:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">mu <span class="op">=</span> tf.zeros((<span class="dv">2</span>,<span class="dv">3</span>))
+sigma <span class="op">=</span> tf.ones((<span class="dv">2</span>, <span class="dv">3</span>))
+<span class="cf">with</span> sg.value_type(sg.SampleValue()):
+  st <span class="op">=</span> sg.StochasticTensor(
+    tf.contrib.distributions.Normal, mu<span class="op">=</span>mu, sigma<span class="op">=</span>sigma)
+<span class="co"># draws 1 sample and does not reshape</span>
+assertEqual(st.value().get_shape(), (<span class="dv">2</span>, <span class="dv">3</span>))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">mu <span class="op">=</span> tf.zeros((<span class="dv">2</span>,<span class="dv">3</span>))
+sigma <span class="op">=</span> tf.ones((<span class="dv">2</span>, <span class="dv">3</span>))
+<span class="cf">with</span> sg.value_type(sg.SampleValue(<span class="dv">4</span>)):
+  st <span class="op">=</span> sg.StochasticTensor(
+    tf.contrib.distributions.Normal, mu<span class="op">=</span>mu, sigma<span class="op">=</span>sigma)
+<span class="co"># draws 4 samples each with shape (2, 3) and concatenates</span>
+assertEqual(st.value().get_shape(), (<span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">3</span>))</code></pre></div>
+<hr />
+<h4 id="tf.contrib.bayesflow.stochastic_tensor.samplevalue.__init__shape-stop_gradientfalse"><code id="SampleValue.__init__">tf.contrib.bayesflow.stochastic_tensor.SampleValue.__init__(shape=(), stop_gradient=False)</code></h4>
+<p>Sample according to shape.</p>
+<p>For the given StochasticTensor <code>st</code> using this value type, the shape of <code>st.value()</code> will match that of <code>st.distribution.sample(shape)</code>.</p>
+<h5 id="args-2">Args:</h5>
+<ul>
+<li><b><code>shape</code></b>: A shape tuple or int32 tensor. The sample shape. Default is a scalar: take one sample and do not change the size.</li>
+<li><b><code>stop_gradient</code></b>: If <code>True</code>, StochasticTensors' values are wrapped in <code>stop_gradient</code>, to avoid backpropagation through.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.bayesflow.stochastic_tensor.samplevalue.declare_inputsunused_stochastic_tensor-unused_inputs_dict"><code id="SampleValue.declare_inputs">tf.contrib.bayesflow.stochastic_tensor.SampleValue.declare_inputs(unused_stochastic_tensor, unused_inputs_dict)</code></h4>
+<hr />
+<h4 id="tf.contrib.bayesflow.stochastic_tensor.samplevalue.popped_aboveunused_value_type"><code id="SampleValue.popped_above">tf.contrib.bayesflow.stochastic_tensor.SampleValue.popped_above(unused_value_type)</code></h4>
+<hr />
+<h4 id="tf.contrib.bayesflow.stochastic_tensor.samplevalue.pushed_aboveunused_value_type"><code id="SampleValue.pushed_above">tf.contrib.bayesflow.stochastic_tensor.SampleValue.pushed_above(unused_value_type)</code></h4>
+<hr />
+<h4 id="tf.contrib.bayesflow.stochastic_tensor.samplevalue.shape"><code id="SampleValue.shape">tf.contrib.bayesflow.stochastic_tensor.SampleValue.shape</code></h4>
+<hr />
+<h4 id="tf.contrib.bayesflow.stochastic_tensor.samplevalue.stop_gradient"><code id="SampleValue.stop_gradient">tf.contrib.bayesflow.stochastic_tensor.SampleValue.stop_gradient</code></h4>
+<hr />
+<h3 id="tf.contrib.bayesflow.stochastic_tensor.value_typedist_value_type"><a name="//apple_ref/cpp/Function/value_type" class="dashAnchor"></a><code id="value_type">tf.contrib.bayesflow.stochastic_tensor.value_type(dist_value_type)</code></h3>
+<p>Creates a value type context for any StochasticTensor created within.</p>
+<p>Typical usage:</p>
+<pre><code>with sg.value_type(sg.MeanValue(stop_gradients=True)):
+  st = sg.StochasticTensor(tf.contrib.distributions.Normal, mu=mu,
+                           sigma=sigma)</code></pre>
+<p>In the example above, <code>st.value()</code> (or equivalently, <code>tf.identity(st)</code>) will be the mean value of the Normal distribution, i.e., <code>mu</code> (possibly broadcasted to the shape of <code>sigma</code>). Furthermore, because the <code>MeanValue</code> was marked with <code>stop_gradients=True</code>, this value will have been wrapped in a <code>stop_gradients</code> call to disable any possible backpropagation.</p>
+<h5 id="args-3">Args:</h5>
+<ul>
+<li><b><code>dist_value_type</code></b>: An instance of <code>MeanValue</code>, <code>SampleValue</code>, or any other stochastic value type.</li>
+</ul>
+<h5 id="yields">Yields:</h5>
+<p>A context for <code>StochasticTensor</code> objects that controls the value created when they are initialized.</p>
+<h5 id="raises-1">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>dist_value_type</code> is not an instance of a stochastic value type.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.bayesflow.stochastic_tensor.get_current_value_type"><a name="//apple_ref/cpp/Function/get_current_value_type" class="dashAnchor"></a><code id="get_current_value_type">tf.contrib.bayesflow.stochastic_tensor.get_current_value_type()</code></h3>
+<h2 id="other-functions-and-classes">Other Functions and Classes</h2>
+<hr />
+<h3 id="class-tf.contrib.bayesflow.stochastic_tensor.observedstochastictensor"><a name="//apple_ref/cpp/Class/ObservedStochasticTensor" class="dashAnchor"></a><code id="ObservedStochasticTensor">class tf.contrib.bayesflow.stochastic_tensor.ObservedStochasticTensor</code></h3>
+<p>A StochasticTensor with an observed value. - - -</p>
+<h4 id="tf.contrib.bayesflow.stochastic_tensor.observedstochastictensor.__init__dist-value-namenone"><code id="ObservedStochasticTensor.__init__">tf.contrib.bayesflow.stochastic_tensor.ObservedStochasticTensor.__init__(dist, value, name=None)</code></h4>
+<p>Construct an <code>ObservedStochasticTensor</code>.</p>
+<p><code>ObservedStochasticTensor</code> is backed by distribution <code>dist</code> and uses the provided value instead of using the current value type to draw a value from the distribution. The provided value argument must be appropriately shaped to have come from the distribution.</p>
+<h5 id="args-4">Args:</h5>
+<ul>
+<li><b><code>dist</code></b>: an instance of <code>Distribution</code>.</li>
+<li><b><code>value</code></b>: a Tensor containing the observed value</li>
+<li><b><code>name</code></b>: a name for this <code>ObservedStochasticTensor</code> and its ops.</li>
+</ul>
+<h5 id="raises-2">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>dist</code> is not an instance of <code>Distribution</code>.</li>
+<li><b><code>ValueError</code></b>: if <code>value</code> is not compatible with the distribution.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.bayesflow.stochastic_tensor.observedstochastictensor.distribution"><code id="ObservedStochasticTensor.distribution">tf.contrib.bayesflow.stochastic_tensor.ObservedStochasticTensor.distribution</code></h4>
+<hr />
+<h4 id="tf.contrib.bayesflow.stochastic_tensor.observedstochastictensor.dtype"><code id="ObservedStochasticTensor.dtype">tf.contrib.bayesflow.stochastic_tensor.ObservedStochasticTensor.dtype</code></h4>
+<hr />
+<h4 id="tf.contrib.bayesflow.stochastic_tensor.observedstochastictensor.entropynameentropy"><code id="ObservedStochasticTensor.entropy">tf.contrib.bayesflow.stochastic_tensor.ObservedStochasticTensor.entropy(name='entropy')</code></h4>
+<hr />
+<h4 id="tf.contrib.bayesflow.stochastic_tensor.observedstochastictensor.graph"><code id="ObservedStochasticTensor.graph">tf.contrib.bayesflow.stochastic_tensor.ObservedStochasticTensor.graph</code></h4>
+<hr />
+<h4 id="tf.contrib.bayesflow.stochastic_tensor.observedstochastictensor.lossfinal_loss-namenone"><code id="ObservedStochasticTensor.loss">tf.contrib.bayesflow.stochastic_tensor.ObservedStochasticTensor.loss(final_loss, name=None)</code></h4>
+<hr />
+<h4 id="tf.contrib.bayesflow.stochastic_tensor.observedstochastictensor.meannamemean"><code id="ObservedStochasticTensor.mean">tf.contrib.bayesflow.stochastic_tensor.ObservedStochasticTensor.mean(name='mean')</code></h4>
+<hr />
+<h4 id="tf.contrib.bayesflow.stochastic_tensor.observedstochastictensor.name"><code id="ObservedStochasticTensor.name">tf.contrib.bayesflow.stochastic_tensor.ObservedStochasticTensor.name</code></h4>
+<hr />
+<h4 id="tf.contrib.bayesflow.stochastic_tensor.observedstochastictensor.valuenamevalue"><code id="ObservedStochasticTensor.value">tf.contrib.bayesflow.stochastic_tensor.ObservedStochasticTensor.value(name='value')</code></h4>
+<hr />
+<h4 id="tf.contrib.bayesflow.stochastic_tensor.observedstochastictensor.value_type"><code id="ObservedStochasticTensor.value_type">tf.contrib.bayesflow.stochastic_tensor.ObservedStochasticTensor.value_type</code></h4>

@@ -1,0 +1,106 @@
+<!-- This file is machine generated: DO NOT EDIT! -->
+<h1 id="bayesflow-monte-carlo-contrib">BayesFlow Monte Carlo (contrib)</h1>
+<p>[TOC]</p>
+<p>Monte Carlo integration and helpers.</p>
+<h2 id="background">Background</h2>
+<p>Monte Carlo integration refers to the practice of estimating an expectation with a sample mean. For example, given random variable <code>Z in R^k</code> with density <code>p</code>, the expectation of function <code>f</code> can be approximated like:</p>
+<pre><code>E_p[f(Z)] = \int f(z) p(z) dz
+          ~ S_n
+          := n^{-1} \sum_{i=1}^n f(z_i),  z_i iid samples from p.</code></pre>
+<p>If <code>E_p[|f(Z)|] &lt; infinity</code>, then <code>S_n --&gt; E_p[f(Z)]</code> by the strong law of large numbers. If <code>E_p[f(Z)^2] &lt; infinity</code>, then <code>S_n</code> is asymptotically normal with variance <code>Var[f(Z)] / n</code>.</p>
+<p>Practitioners of Bayesian statistics often find themselves wanting to estimate <code>E_p[f(Z)]</code> when the distribution <code>p</code> is known only up to a constant. For example, the joint distribution <code>p(z, x)</code> may be known, but the evidence <code>p(x) = \int p(z, x) dz</code> may be intractable. In that case, a parameterized distribution family <code>q_lambda(z)</code> may be chosen, and the optimal <code>lambda</code> is the one minimizing the KL divergence between <code>q_lambda(z)</code> and <code>p(z | x)</code>. We only know <code>p(z, x)</code>, but that is sufficient to find <code>lambda</code>.</p>
+<h2 id="log-space-evaluation-and-subtracting-the-maximum.">Log-space evaluation and subtracting the maximum.</h2>
+<p>Care must be taken when the random variable lives in a high dimensional space. For example, the naive importance sample estimate <code>E_q[f(Z) p(Z) / q(Z)]</code> involves the ratio of two terms <code>p(Z) / q(Z)</code>, each of which must have tails dropping off faster than <code>O(|z|^{-(k + 1)})</code> in order to have finite integral. This ratio would often be zero or infinity up to numerical precision.</p>
+<p>For that reason, we write</p>
+<pre><code>Log E_q[ f(Z) p(Z) / q(Z) ]
+   = Log E_q[ exp{Log[f(Z)] + Log[p(Z)] - Log[q(Z)] - C} ] + C,  where
+C := Max[ Log[f(Z)] + Log[p(Z)] - Log[q(Z)] ].</code></pre>
+<p>The maximum value of the exponentiated term will be 0.0, and the the expectation can be evaluated in a stable manner.</p>
+<h2 id="ops">Ops</h2>
+<hr />
+<h3 id="tf.contrib.bayesflow.monte_carlo.expectationf-p-znone-nnone-seednone-nameexpectation"><a name="//apple_ref/cpp/Function/expectation" class="dashAnchor"></a><code id="expectation">tf.contrib.bayesflow.monte_carlo.expectation(f, p, z=None, n=None, seed=None, name='expectation')</code></h3>
+<p>Monte Carlo estimate of an expectation: <code>E_p[f(Z)]</code> with sample mean.</p>
+<p>This <code>Op</code> returns</p>
+<pre><code>n^{-1} sum_{i=1}^n f(z_i),  where z_i ~ p
+\approx E_p[f(Z)]</code></pre>
+<p>User supplies either <code>Tensor</code> of samples <code>z</code>, or number of samples to draw <code>n</code></p>
+<h5 id="args">Args:</h5>
+<ul>
+<li><b><code>f</code></b>: Callable mapping samples from <code>p</code> to <code>Tensors</code>.</li>
+<li><b><code>p</code></b>: <code>tf.contrib.distributions.Distribution</code>.</li>
+<li><b><code>z</code></b>: <code>Tensor</code> of samples from <code>p</code>, produced by <code>p.sample_n</code>.</li>
+<li><b><code>n</code></b>: Integer <code>Tensor</code>. Number of samples to generate if <code>z</code> is not provided.</li>
+<li><b><code>seed</code></b>: Python integer to seed the random number generator.</li>
+<li><b><code>name</code></b>: A name to give this <code>Op</code>.</li>
+</ul>
+<h5 id="returns">Returns:</h5>
+<p>A <code>Tensor</code> with the same <code>dtype</code> as <code>p</code>.</p>
+<ul>
+<li><b><code>Example</code></b>:</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">N_samples <span class="op">=</span> <span class="dv">10000</span>
+
+distributions <span class="op">=</span> tf.contrib.distributions
+
+dist <span class="op">=</span> distributions.Uniform([<span class="fl">0.0</span>, <span class="fl">0.0</span>], [<span class="fl">1.0</span>, <span class="fl">2.0</span>])
+elementwise_mean <span class="op">=</span> <span class="kw">lambda</span> x: x
+mean_sum <span class="op">=</span> <span class="kw">lambda</span> x: tf.reduce_sum(x, <span class="dv">1</span>)
+
+estimate_elementwise_mean_tf <span class="op">=</span> monte_carlo.expectation(elementwise_mean,
+                                                       dist,
+                                                       n<span class="op">=</span>N_samples)
+estimate_mean_sum_tf <span class="op">=</span> monte_carlo.expectation(mean_sum,
+                                               dist,
+                                               n<span class="op">=</span>N_samples)
+
+<span class="cf">with</span> tf.Session() <span class="im">as</span> sess:
+  estimate_elementwise_mean, estimate_mean_sum <span class="op">=</span> (
+      sess.run([estimate_elementwise_mean_tf, estimate_mean_sum_tf]))
+<span class="bu">print</span> estimate_elementwise_mean
+<span class="op">&gt;&gt;&gt;</span> np.array([ <span class="fl">0.50018013</span>  <span class="fl">1.00097895</span>], dtype<span class="op">=</span>np.float32)
+<span class="bu">print</span> estimate_mean_sum
+<span class="op">&gt;&gt;&gt;</span> <span class="fl">1.49571</span></code></pre></div>
+<hr />
+<h3 id="tf.contrib.bayesflow.monte_carlo.expectation_importance_samplerf-log_p-sampling_dist_q-znone-nnone-seednone-nameexpectation_importance_sampler"><a name="//apple_ref/cpp/Function/expectation_importance_sampler" class="dashAnchor"></a><code id="expectation_importance_sampler">tf.contrib.bayesflow.monte_carlo.expectation_importance_sampler(f, log_p, sampling_dist_q, z=None, n=None, seed=None, name='expectation_importance_sampler')</code></h3>
+<p>Monte Carlo estimate of <code>E_p[f(Z)] = E_q[f(Z) p(Z) / q(Z)]</code>.</p>
+<p>With <code>p(z) := exp{log_p(z)}</code>, this <code>Op</code> returns</p>
+<pre><code>n^{-1} sum_{i=1}^n [ f(z_i) p(z_i) / q(z_i) ],  z_i ~ q,
+\approx E_q[ f(Z) p(Z) / q(Z) ]
+=       E_p[f(Z)]</code></pre>
+<p>This integral is done in log-space with max-subtraction to better handle the often extreme values that <code>f(z) p(z) / q(z)</code> can take on.</p>
+<p>If <code>f &gt;= 0</code>, it is up to 2x more efficient to exponentiate the result of <code>expectation_importance_sampler_logspace</code> applied to <code>Log[f]</code>.</p>
+<p>User supplies either <code>Tensor</code> of samples <code>z</code>, or number of samples to draw <code>n</code></p>
+<h5 id="args-1">Args:</h5>
+<ul>
+<li><b><code>f</code></b>: Callable mapping samples from <code>sampling_dist_q</code> to <code>Tensors</code> with shape broadcastable to <code>q.batch_shape</code>. For example, <code>f</code> works &quot;just like&quot; <code>q.log_prob</code>.</li>
+<li><b><code>log_p</code></b>: Callable mapping samples from <code>sampling_dist_q</code> to <code>Tensors</code> with shape broadcastable to <code>q.batch_shape</code>. For example, <code>log_p</code> works &quot;just like&quot; <code>sampling_dist_q.log_prob</code>.</li>
+<li><b><code>sampling_dist_q</code></b>: The sampling distribution. <code>tf.contrib.distributions.Distribution</code>. <code>float64</code> <code>dtype</code> recommended. <code>log_p</code> and <code>q</code> should be supported on the same set.</li>
+<li><b><code>z</code></b>: <code>Tensor</code> of samples from <code>q</code>, produced by <code>q.sample_n</code>.</li>
+<li><b><code>n</code></b>: Integer <code>Tensor</code>. Number of samples to generate if <code>z</code> is not provided.</li>
+<li><b><code>seed</code></b>: Python integer to seed the random number generator.</li>
+<li><b><code>name</code></b>: A name to give this <code>Op</code>.</li>
+</ul>
+<h5 id="returns-1">Returns:</h5>
+<p>The importance sampling estimate. <code>Tensor</code> with <code>shape</code> equal to batch shape of <code>q</code>, and <code>dtype</code> = <code>q.dtype</code>.</p>
+<hr />
+<h3 id="tf.contrib.bayesflow.monte_carlo.expectation_importance_sampler_logspacelog_f-log_p-sampling_dist_q-znone-nnone-seednone-nameexpectation_importance_sampler_logspace"><a name="//apple_ref/cpp/Function/expectation_importance_sampler_logspace" class="dashAnchor"></a><code id="expectation_importance_sampler_logspace">tf.contrib.bayesflow.monte_carlo.expectation_importance_sampler_logspace(log_f, log_p, sampling_dist_q, z=None, n=None, seed=None, name='expectation_importance_sampler_logspace')</code></h3>
+<p>Importance sampling with a positive function, in log-space.</p>
+<p>With <code>p(z) := exp{log_p(z)}</code>, and <code>f(z) = exp{log_f(z)}</code>, this <code>Op</code> returns</p>
+<pre><code>Log[ n^{-1} sum_{i=1}^n [ f(z_i) p(z_i) / q(z_i) ] ],  z_i ~ q,
+\approx Log[ E_q[ f(Z) p(Z) / q(Z) ] ]
+=       Log[E_p[f(Z)]]</code></pre>
+<p>This integral is done in log-space with max-subtraction to better handle the often extreme values that <code>f(z) p(z) / q(z)</code> can take on.</p>
+<p>In contrast to <code>expectation_importance_sampler</code>, this <code>Op</code> returns values in log-space.</p>
+<p>User supplies either <code>Tensor</code> of samples <code>z</code>, or number of samples to draw <code>n</code></p>
+<h5 id="args-2">Args:</h5>
+<ul>
+<li><b><code>log_f</code></b>: Callable mapping samples from <code>sampling_dist_q</code> to <code>Tensors</code> with shape broadcastable to <code>q.batch_shape</code>. For example, <code>log_f</code> works &quot;just like&quot; <code>sampling_dist_q.log_prob</code>.</li>
+<li><b><code>log_p</code></b>: Callable mapping samples from <code>sampling_dist_q</code> to <code>Tensors</code> with shape broadcastable to <code>q.batch_shape</code>. For example, <code>log_p</code> works &quot;just like&quot; <code>q.log_prob</code>.</li>
+<li><b><code>sampling_dist_q</code></b>: The sampling distribution. <code>tf.contrib.distributions.Distribution</code>. <code>float64</code> <code>dtype</code> recommended. <code>log_p</code> and <code>q</code> should be supported on the same set.</li>
+<li><b><code>z</code></b>: <code>Tensor</code> of samples from <code>q</code>, produced by <code>q.sample_n</code>.</li>
+<li><b><code>n</code></b>: Integer <code>Tensor</code>. Number of samples to generate if <code>z</code> is not provided.</li>
+<li><b><code>seed</code></b>: Python integer to seed the random number generator.</li>
+<li><b><code>name</code></b>: A name to give this <code>Op</code>.</li>
+</ul>
+<h5 id="returns-2">Returns:</h5>
+<p>Logarithm of the importance sampling estimate. <code>Tensor</code> with <code>shape</code> equal to batch shape of <code>q</code>, and <code>dtype</code> = <code>q.dtype</code>.</p>

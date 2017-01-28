@@ -1,0 +1,75 @@
+<!-- This file is machine generated: DO NOT EDIT! -->
+<h1 id="integrate-contrib">Integrate (contrib)</h1>
+<p>[TOC]</p>
+<p>Integration and ODE solvers for TensorFlow.</p>
+<h2 id="example-lorenz-attractor">Example: Lorenz attractor</h2>
+<p>We can use <code>odeint</code> to solve the <a href="https://en.wikipedia.org/wiki/Lorenz_system">Lorentz system</a> of ordinary differential equations, a prototypical example of chaotic dynamics:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">rho <span class="op">=</span> <span class="fl">28.0</span>
+sigma <span class="op">=</span> <span class="fl">10.0</span>
+beta <span class="op">=</span> <span class="fl">8.0</span><span class="op">/</span><span class="fl">3.0</span>
+
+<span class="kw">def</span> lorenz_equation(state, t):
+  x, y, z <span class="op">=</span> tf.unpack(state)
+  dx <span class="op">=</span> sigma <span class="op">*</span> (y <span class="op">-</span> x)
+  dy <span class="op">=</span> x <span class="op">*</span> (rho <span class="op">-</span> z) <span class="op">-</span> y
+  dz <span class="op">=</span> x <span class="op">*</span> y <span class="op">-</span> beta <span class="op">*</span> z
+  <span class="cf">return</span> tf.pack([dx, dy, dz])
+
+init_state <span class="op">=</span> tf.constant([<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">20</span>], dtype<span class="op">=</span>tf.float64)
+t <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">50</span>, num<span class="op">=</span><span class="dv">5000</span>)
+tensor_state, tensor_info <span class="op">=</span> tf.contrib.integrate.odeint(
+    lorenz_equation, init_state, t, full_output<span class="op">=</span><span class="va">True</span>)
+
+sess <span class="op">=</span> tf.Session()
+state, info <span class="op">=</span> sess.run([tensor_state, tensor_info])
+x, y, z <span class="op">=</span> state.T
+plt.plot(x, z)</code></pre></div>
+<div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+<p><img style="width:100%" src="../../images/lorenz_attractor.png" alt></p>
+</div>
+<h2 id="ops">Ops</h2>
+<hr />
+<h3 id="tf.contrib.integrate.odeintfunc-y0-t-rtol1e-06-atol1e-12-methodnone-optionsnone-full_outputfalse-namenone"><a name="//apple_ref/cpp/Function/odeint" class="dashAnchor"></a><code id="odeint">tf.contrib.integrate.odeint(func, y0, t, rtol=1e-06, atol=1e-12, method=None, options=None, full_output=False, name=None)</code></h3>
+<p>Integrate a system of ordinary differential equations.</p>
+<p>Solves the initial value problem for a non-stiff system of first order ode-s:</p>
+<p><code>dy/dt = func(y, t), y(t[0]) = y0</code></p>
+<p>where y is a Tensor of any shape.</p>
+<p>For example:</p>
+<p><code># solve `dy/dt = -y`, corresponding to exponential decay   tf.contrib.integrate.odeint(lambda y, _: -y, 1.0, [0, 1, 2])   =&gt; [1, exp(-1), exp(-2)]</code></p>
+<p>Output dtypes and numerical precision are based on the dtypes of the inputs <code>y0</code> and <code>t</code>.</p>
+<p>Currently, implements 5th order Runge-Kutta with adaptive step size control and dense output, using the Dormand-Prince method. Similar to the 'dopri5' method of <code>scipy.integrate.ode</code> and MATLAB's <code>ode45</code>.</p>
+<p>Based on: Shampine, Lawrence F. (1986), &quot;Some Practical Runge-Kutta Formulas&quot;, Mathematics of Computation, American Mathematical Society, 46 (173): 135-150, doi:10.2307/2008219</p>
+<h5 id="args">Args:</h5>
+<ul>
+<li><b><code>func</code></b>: Function that maps a Tensor holding the state <code>y</code> and a scalar Tensor <code>t</code> into a Tensor of state derivatives with respect to time.</li>
+<li><b><code>y0</code></b>: N-D Tensor giving starting value of <code>y</code> at time point <code>t[0]</code>. May have any floating point or complex dtype.</li>
+<li><b><code>t</code></b>: 1-D Tensor holding a sequence of time points for which to solve for <code>y</code>. The initial time point should be the first element of this sequence, and each time must be larger than the previous time. May have any floating point dtype. If not provided as a Tensor, converted to a Tensor with float64 dtype.</li>
+<li><b><code>rtol</code></b>: optional float64 Tensor specifying an upper bound on relative error, per element of <code>y</code>.</li>
+<li><b><code>atol</code></b>: optional float64 Tensor specifying an upper bound on absolute error, per element of <code>y</code>.</li>
+<li><b><code>method</code></b>: optional string indicating the integration method to use. Currently, the only valid option is <code>'dopri5'</code>.</li>
+<li><b><code>options</code></b>: optional dict of configuring options for the indicated integration method. Can only be provided if a <code>method</code> is explicitly set. For <code>'dopri5'</code>, valid options include:
+<ul>
+<li>first_step: an initial guess for the size of the first integration (current default: 1.0, but may later be changed to use heuristics based on the gradient).</li>
+<li>safety: safety factor for adaptive step control, generally a constant in the range 0.8-1 (default: 0.9).</li>
+<li>ifactor: maximum factor by which the adaptive step may be increased (default: 10.0).</li>
+<li>dfactor: maximum factor by which the adpative step may be decreased (default: 0.2).</li>
+<li>max_num_steps: integer maximum number of integrate steps between time points in <code>t</code> (default: 1000).</li>
+</ul></li>
+<li><b><code>full_output</code></b>: optional boolean. If True, <code>odeint</code> returns a tuple <code>(y, info_dict)</code> describing the integration process.</li>
+<li><b><code>name</code></b>: Optional name for this operation.</li>
+</ul>
+<h5 id="returns">Returns:</h5>
+<ul>
+<li><b><code>y</code></b>: (N+1)-D tensor, where the first dimension corresponds to different time points. Contains the solved value of y for each desired time point in <code>t</code>, with the initial value <code>y0</code> being the first element along the first dimension.</li>
+<li><b><code>info_dict</code></b>: only if <code>full_output == True</code>. A dict with the following values:
+<ul>
+<li>num_func_evals: integer Tensor counting the number of function evaluations.</li>
+<li>integrate_points: 1D float64 Tensor with the upper bound of each integration time step.</li>
+<li>error_ratio: 1D float Tensor with the estimated ratio of the integration error to the error tolerance at each integration step. An ratio greater than 1 corresponds to rejected steps.</li>
+</ul></li>
+</ul>
+<h5 id="raises">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if an invalid <code>method</code> is provided.</li>
+<li><b><code>TypeError</code></b>: if <code>options</code> is supplied without <code>method</code>, or if <code>t</code> or <code>y0</code> has an invalid dtype.</li>
+</ul>

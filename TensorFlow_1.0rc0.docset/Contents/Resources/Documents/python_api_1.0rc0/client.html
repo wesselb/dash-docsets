@@ -1,0 +1,343 @@
+<!-- This file is machine generated: DO NOT EDIT! -->
+<h1 id="running-graphs">Running Graphs</h1>
+<p>[TOC]</p>
+<p>This library contains classes for launching graphs and executing operations.</p>
+<p>The <a href="../../get_started/index.md#basic-usage">basic usage</a> guide has examples of how a graph is launched in a <a href="#Session"><code>tf.Session</code></a>.</p>
+<h2 id="session-management">Session management</h2>
+<hr />
+<h3 id="class-tf.session"><a name="//apple_ref/cpp/Class/Session" class="dashAnchor"></a><code id="Session">class tf.Session</code></h3>
+<p>A class for running TensorFlow operations.</p>
+<p>A <code>Session</code> object encapsulates the environment in which <code>Operation</code> objects are executed, and <code>Tensor</code> objects are evaluated. For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Build a graph.</span>
+a <span class="op">=</span> tf.constant(<span class="fl">5.0</span>)
+b <span class="op">=</span> tf.constant(<span class="fl">6.0</span>)
+c <span class="op">=</span> a <span class="op">*</span> b
+
+<span class="co"># Launch the graph in a session.</span>
+sess <span class="op">=</span> tf.Session()
+
+<span class="co"># Evaluate the tensor `c`.</span>
+<span class="bu">print</span>(sess.run(c))</code></pre></div>
+<p>A session may own resources, such as <a href="../../api_docs/python/state_ops.md#Variable">variables</a>, <a href="../../api_docs/python/io_ops.md#QueueBase">queues</a>, and <a href="../../api_docs/python/io_ops.md#ReaderBase">readers</a>. It is important to release these resources when they are no longer required. To do this, either invoke the <a href="#Session.close"><code>close()</code></a> method on the session, or use the session as a context manager. The following two examples are equivalent:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Using the `close()` method.</span>
+sess <span class="op">=</span> tf.Session()
+sess.run(...)
+sess.close()
+
+<span class="co"># Using the context manager.</span>
+<span class="cf">with</span> tf.Session() <span class="im">as</span> sess:
+  sess.run(...)</code></pre></div>
+<p>The <a href="https://www.tensorflow.org/code/tensorflow/core/protobuf/config.proto"><code>ConfigProto</code></a> protocol buffer exposes various configuration options for a session. For example, to create a session that uses soft constraints for device placement, and log the resulting placement decisions, create a session as follows:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Launch the graph in a session that allows soft device placement and</span>
+<span class="co"># logs the placement decisions.</span>
+sess <span class="op">=</span> tf.Session(config<span class="op">=</span>tf.ConfigProto(allow_soft_placement<span class="op">=</span><span class="va">True</span>,
+                                        log_device_placement<span class="op">=</span><span class="va">True</span>))</code></pre></div>
+<hr />
+<h4 id="tf.session.__init__target-graphnone-confignone"><code id="Session.__init__">tf.Session.__init__(target='', graph=None, config=None)</code></h4>
+<p>Creates a new TensorFlow session.</p>
+<p>If no <code>graph</code> argument is specified when constructing the session, the default graph will be launched in the session. If you are using more than one graph (created with <code>tf.Graph()</code> in the same process, you will have to use different sessions for each graph, but each graph can be used in multiple sessions. In this case, it is often clearer to pass the graph to be launched explicitly to the session constructor.</p>
+<h5 id="args">Args:</h5>
+<ul>
+<li><b><code>target</code></b>: (Optional.) The execution engine to connect to. Defaults to using an in-process engine. See <a href="https://www.tensorflow.org/how_tos/distributed/index.html">Distributed Tensorflow</a> for more examples.</li>
+<li><b><code>graph</code></b>: (Optional.) The <code>Graph</code> to be launched (described above).</li>
+<li><b><code>config</code></b>: (Optional.) A <a href="https://www.tensorflow.org/code/tensorflow/core/protobuf/config.proto"><code>ConfigProto</code></a> protocol buffer with configuration options for the session.</li>
+</ul>
+<hr />
+<h4 id="tf.session.runfetches-feed_dictnone-optionsnone-run_metadatanone"><code id="Session.run">tf.Session.run(fetches, feed_dict=None, options=None, run_metadata=None)</code></h4>
+<p>Runs operations and evaluates tensors in <code>fetches</code>.</p>
+<p>This method runs one &quot;step&quot; of TensorFlow computation, by running the necessary graph fragment to execute every <code>Operation</code> and evaluate every <code>Tensor</code> in <code>fetches</code>, substituting the values in <code>feed_dict</code> for the corresponding input values.</p>
+<p>The <code>fetches</code> argument may be a single graph element, or an arbitrarily nested list, tuple, namedtuple, dict, or OrderedDict containing graph elements at its leaves. A graph element can be one of the following types:</p>
+<ul>
+<li>An <a href="../../api_docs/python/framework.md#Operation"><code>Operation</code></a>. The corresponding fetched value will be <code>None</code>.</li>
+<li>A <a href="../../api_docs/python/framework.md#Tensor"><code>Tensor</code></a>. The corresponding fetched value will be a numpy ndarray containing the value of that tensor.</li>
+<li>A <a href="../../api_docs/python/sparse_ops.md#SparseTensor"><code>SparseTensor</code></a>. The corresponding fetched value will be a <a href="../../api_docs/python/sparse_ops.md#SparseTensorValue"><code>SparseTensorValue</code></a> containing the value of that sparse tensor.</li>
+<li>A <code>get_tensor_handle</code> op. The corresponding fetched value will be a numpy ndarray containing the handle of that tensor.</li>
+<li>A <code>string</code> which is the name of a tensor or operation in the graph.</li>
+</ul>
+<p>The value returned by <code>run()</code> has the same shape as the <code>fetches</code> argument, where the leaves are replaced by the corresponding values returned by TensorFlow.</p>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">   a <span class="op">=</span> tf.constant([<span class="dv">10</span>, <span class="dv">20</span>])
+   b <span class="op">=</span> tf.constant([<span class="fl">1.0</span>, <span class="fl">2.0</span>])
+   <span class="co"># &#39;fetches&#39; can be a singleton</span>
+   v <span class="op">=</span> session.run(a)
+   <span class="co"># v is the numpy array [10, 20]</span>
+   <span class="co"># &#39;fetches&#39; can be a list.</span>
+   v <span class="op">=</span> session.run([a, b])
+   <span class="co"># v a Python list with 2 numpy arrays: the numpy array [10, 20] and the</span>
+   <span class="co"># 1-D array [1.0, 2.0]</span>
+   <span class="co"># &#39;fetches&#39; can be arbitrary lists, tuples, namedtuple, dicts:</span>
+   MyData <span class="op">=</span> collections.namedtuple(<span class="st">&#39;MyData&#39;</span>, [<span class="st">&#39;a&#39;</span>, <span class="st">&#39;b&#39;</span>])
+   v <span class="op">=</span> session.run({<span class="st">&#39;k1&#39;</span>: MyData(a, b), <span class="st">&#39;k2&#39;</span>: [b, a]})
+   <span class="co"># v is a dict with</span>
+   <span class="co"># v[&#39;k1&#39;] is a MyData namedtuple with &#39;a&#39; the numpy array [10, 20] and</span>
+   <span class="co"># &#39;b&#39; the numpy array [1.0, 2.0]</span>
+   <span class="co"># v[&#39;k2&#39;] is a list with the numpy array [1.0, 2.0] and the numpy array</span>
+   <span class="co"># [10, 20].</span></code></pre></div>
+<p>The optional <code>feed_dict</code> argument allows the caller to override the value of tensors in the graph. Each key in <code>feed_dict</code> can be one of the following types:</p>
+<ul>
+<li>If the key is a <a href="../../api_docs/python/framework.md#Tensor"><code>Tensor</code></a>, the value may be a Python scalar, string, list, or numpy ndarray that can be converted to the same <code>dtype</code> as that tensor. Additionally, if the key is a <a href="../../api_docs/python/io_ops.md#placeholder">placeholder</a>, the shape of the value will be checked for compatibility with the placeholder.</li>
+<li>If the key is a <a href="../../api_docs/python/sparse_ops.md#SparseTensor"><code>SparseTensor</code></a>, the value should be a <a href="../../api_docs/python/sparse_ops.md#SparseTensorValue"><code>SparseTensorValue</code></a>.</li>
+<li>If the key is a nested tuple of <code>Tensor</code>s or <code>SparseTensor</code>s, the value should be a nested tuple with the same structure that maps to their corresponding values as above.</li>
+</ul>
+<p>Each value in <code>feed_dict</code> must be convertible to a numpy array of the dtype of the corresponding key.</p>
+<p>The optional <code>options</code> argument expects a [<code>RunOptions</code>] proto. The options allow controlling the behavior of this particular step (e.g. turning tracing on).</p>
+<p>The optional <code>run_metadata</code> argument expects a [<code>RunMetadata</code>] proto. When appropriate, the non-Tensor output of this step will be collected there. For example, when users turn on tracing in <code>options</code>, the profiled info will be collected into this argument and passed back.</p>
+<h5 id="args-1">Args:</h5>
+<ul>
+<li><b><code>fetches</code></b>: A single graph element, a list of graph elements, or a dictionary whose values are graph elements or lists of graph elements (described above).</li>
+<li><b><code>feed_dict</code></b>: A dictionary that maps graph elements to values (described above).</li>
+<li><b><code>options</code></b>: A [<code>RunOptions</code>] protocol buffer</li>
+<li><b><code>run_metadata</code></b>: A [<code>RunMetadata</code>] protocol buffer</li>
+</ul>
+<h5 id="returns">Returns:</h5>
+<p>Either a single value if <code>fetches</code> is a single graph element, or a list of values if <code>fetches</code> is a list, or a dictionary with the same keys as <code>fetches</code> if that is a dictionary (described above).</p>
+<h5 id="raises">Raises:</h5>
+<ul>
+<li><b><code>RuntimeError</code></b>: If this <code>Session</code> is in an invalid state (e.g. has been closed).</li>
+<li><b><code>TypeError</code></b>: If <code>fetches</code> or <code>feed_dict</code> keys are of an inappropriate type.</li>
+<li><b><code>ValueError</code></b>: If <code>fetches</code> or <code>feed_dict</code> keys are invalid or refer to a <code>Tensor</code> that doesn't exist.</li>
+</ul>
+<hr />
+<h4 id="tf.session.close"><code id="Session.close">tf.Session.close()</code></h4>
+<p>Closes this session.</p>
+<p>Calling this method frees all resources associated with the session.</p>
+<h5 id="raises-1">Raises:</h5>
+<p>tf.errors.OpError: Or one of its subclasses if an error occurs while closing the TensorFlow session.</p>
+<hr />
+<h4 id="tf.session.graph"><code id="Session.graph">tf.Session.graph</code></h4>
+<p>The graph that was launched in this session.</p>
+<hr />
+<h4 id="tf.session.as_default"><code id="Session.as_default">tf.Session.as_default()</code></h4>
+<p>Returns a context manager that makes this object the default session.</p>
+<p>Use with the <code>with</code> keyword to specify that calls to <a href="../../api_docs/python/framework.md#Operation.run"><code>Operation.run()</code></a> or <a href="../../api_docs/python/framework.md#Tensor.eval"><code>Tensor.eval()</code></a> should be executed in this session.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">c <span class="op">=</span> tf.constant(..)
+sess <span class="op">=</span> tf.Session()
+
+<span class="cf">with</span> sess.as_default():
+  <span class="cf">assert</span> tf.get_default_session() <span class="op">is</span> sess
+  <span class="bu">print</span>(c.<span class="bu">eval</span>())</code></pre></div>
+<p>To get the current default session, use <a href="#get_default_session"><code>tf.get_default_session()</code></a>.</p>
+<p><em>N.B.</em> The <code>as_default</code> context manager <em>does not</em> close the session when you exit the context, and you must close the session explicitly.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">c <span class="op">=</span> tf.constant(...)
+sess <span class="op">=</span> tf.Session()
+<span class="cf">with</span> sess.as_default():
+  <span class="bu">print</span>(c.<span class="bu">eval</span>())
+<span class="co"># ...</span>
+<span class="cf">with</span> sess.as_default():
+  <span class="bu">print</span>(c.<span class="bu">eval</span>())
+
+sess.close()</code></pre></div>
+<p>Alternatively, you can use <code>with tf.Session():</code> to create a session that is automatically closed on exiting the context, including when an uncaught exception is raised.</p>
+<p><em>N.B.</em> The default graph is a property of the current thread. If you create a new thread, and wish to use the default session in that thread, you must explicitly add a <code>with sess.as_default():</code> in that thread's function.</p>
+<h5 id="returns-1">Returns:</h5>
+<p>A context manager using this session as the default session.</p>
+<hr />
+<h4 id="tf.session.resettarget-containersnone-confignone"><code id="Session.reset">tf.Session.reset(target, containers=None, config=None)</code></h4>
+<p>Resets resource containers on <code>target</code>, and close all connected sessions.</p>
+<p>A resource container is distributed across all workers in the same cluster as <code>target</code>. When a resource container on <code>target</code> is reset, resources associated with that container will be cleared. In particular, all Variables in the container will become undefined: they lose their values and shapes.</p>
+<p>NOTE: (i) reset() is currently only implemented for distributed sessions. (ii) Any sessions on the master named by <code>target</code> will be closed.</p>
+<p>If no resource containers are provided, all containers are reset.</p>
+<h5 id="args-2">Args:</h5>
+<ul>
+<li><b><code>target</code></b>: The execution engine to connect to.</li>
+<li><b><code>containers</code></b>: A list of resource container name strings, or <code>None</code> if all of all the containers are to be reset.</li>
+<li><b><code>config</code></b>: (Optional.) Protocol buffer with configuration options.</li>
+</ul>
+<h5 id="raises-2">Raises:</h5>
+<p>tf.errors.OpError: Or one of its subclasses if an error occurs while resetting containers.</p>
+<h4 id="other-methods">Other Methods</h4>
+<hr />
+<h4 id="tf.session.__enter__"><code id="Session.__enter__">tf.Session.__enter__()</code></h4>
+<hr />
+<h4 id="tf.session.__exit__exec_type-exec_value-exec_tb"><code id="Session.__exit__">tf.Session.__exit__(exec_type, exec_value, exec_tb)</code></h4>
+<hr />
+<h3 id="class-tf.interactivesession"><a name="//apple_ref/cpp/Class/InteractiveSession" class="dashAnchor"></a><code id="InteractiveSession">class tf.InteractiveSession</code></h3>
+<p>A TensorFlow <code>Session</code> for use in interactive contexts, such as a shell.</p>
+<p>The only difference with a regular <code>Session</code> is that an <code>InteractiveSession</code> installs itself as the default session on construction. The methods <a href="../../api_docs/python/framework.md#Tensor.eval"><code>Tensor.eval()</code></a> and <a href="../../api_docs/python/framework.md#Operation.run"><code>Operation.run()</code></a> will use that session to run ops.</p>
+<p>This is convenient in interactive shells and <a href="http://ipython.org">IPython notebooks</a>, as it avoids having to pass an explicit <code>Session</code> object to run ops.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">sess <span class="op">=</span> tf.InteractiveSession()
+a <span class="op">=</span> tf.constant(<span class="fl">5.0</span>)
+b <span class="op">=</span> tf.constant(<span class="fl">6.0</span>)
+c <span class="op">=</span> a <span class="op">*</span> b
+<span class="co"># We can just use &#39;c.eval()&#39; without passing &#39;sess&#39;</span>
+<span class="bu">print</span>(c.<span class="bu">eval</span>())
+sess.close()</code></pre></div>
+<p>Note that a regular session installs itself as the default session when it is created in a <code>with</code> statement. The common usage in non-interactive programs is to follow that pattern:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">a <span class="op">=</span> tf.constant(<span class="fl">5.0</span>)
+b <span class="op">=</span> tf.constant(<span class="fl">6.0</span>)
+c <span class="op">=</span> a <span class="op">*</span> b
+<span class="cf">with</span> tf.Session():
+  <span class="co"># We can also use &#39;c.eval()&#39; here.</span>
+  <span class="bu">print</span>(c.<span class="bu">eval</span>())</code></pre></div>
+<hr />
+<h4 id="tf.interactivesession.__init__target-graphnone-confignone"><code id="InteractiveSession.__init__">tf.InteractiveSession.__init__(target='', graph=None, config=None)</code></h4>
+<p>Creates a new interactive TensorFlow session.</p>
+<p>If no <code>graph</code> argument is specified when constructing the session, the default graph will be launched in the session. If you are using more than one graph (created with <code>tf.Graph()</code> in the same process, you will have to use different sessions for each graph, but each graph can be used in multiple sessions. In this case, it is often clearer to pass the graph to be launched explicitly to the session constructor.</p>
+<h5 id="args-3">Args:</h5>
+<ul>
+<li><b><code>target</code></b>: (Optional.) The execution engine to connect to. Defaults to using an in-process engine.</li>
+<li><b><code>graph</code></b>: (Optional.) The <code>Graph</code> to be launched (described above).</li>
+<li><b><code>config</code></b>: (Optional) <code>ConfigProto</code> proto used to configure the session.</li>
+</ul>
+<hr />
+<h4 id="tf.interactivesession.close"><code id="InteractiveSession.close">tf.InteractiveSession.close()</code></h4>
+<p>Closes an <code>InteractiveSession</code>.</p>
+<hr />
+<h3 id="tf.get_default_session"><a name="//apple_ref/cpp/Function/get_default_session" class="dashAnchor"></a><code id="get_default_session">tf.get_default_session()</code></h3>
+<p>Returns the default session for the current thread.</p>
+<p>The returned <code>Session</code> will be the innermost session on which a <code>Session</code> or <code>Session.as_default()</code> context has been entered.</p>
+<p>NOTE: The default session is a property of the current thread. If you create a new thread, and wish to use the default session in that thread, you must explicitly add a <code>with sess.as_default():</code> in that thread's function.</p>
+<h5 id="returns-2">Returns:</h5>
+<p>The default <code>Session</code> being used in the current thread.</p>
+<h2 id="error-classes-and-convenience-functions">Error classes and convenience functions</h2>
+<hr />
+<h3 id="class-tf.operror"><a name="//apple_ref/cpp/Class/OpError" class="dashAnchor"></a><code id="OpError">class tf.OpError</code></h3>
+<p>A generic error that is raised when TensorFlow execution fails.</p>
+<p>Whenever possible, the session will raise a more specific subclass of <code>OpError</code> from the <code>tf.errors</code> module.</p>
+<hr />
+<h4 id="tf.operror.op"><code id="OpError.op">tf.OpError.op</code></h4>
+<p>The operation that failed, if known.</p>
+<p><em>N.B.</em> If the failed op was synthesized at runtime, e.g. a <code>Send</code> or <code>Recv</code> op, there will be no corresponding <a href="../../api_docs/python/framework.md#Operation"><code>Operation</code></a> object. In that case, this will return <code>None</code>, and you should instead use the <a href="#OpError.node_def"><code>OpError.node_def</code></a> to discover information about the op.</p>
+<h5 id="returns-3">Returns:</h5>
+<p>The <code>Operation</code> that failed, or None.</p>
+<hr />
+<h4 id="tf.operror.node_def"><code id="OpError.node_def">tf.OpError.node_def</code></h4>
+<p>The <code>NodeDef</code> proto representing the op that failed.</p>
+<h4 id="other-methods-1">Other Methods</h4>
+<hr />
+<h4 id="tf.operror.__init__node_def-op-message-error_code"><code id="OpError.__init__">tf.OpError.__init__(node_def, op, message, error_code)</code></h4>
+<p>Creates a new <code>OpError</code> indicating that a particular op failed.</p>
+<h5 id="args-4">Args:</h5>
+<ul>
+<li><b><code>node_def</code></b>: The <code>node_def_pb2.NodeDef</code> proto representing the op that failed, if known; otherwise None.</li>
+<li><b><code>op</code></b>: The <code>ops.Operation</code> that failed, if known; otherwise None.</li>
+<li><b><code>message</code></b>: The message string describing the failure.</li>
+<li><b><code>error_code</code></b>: The <code>error_codes_pb2.Code</code> describing the error.</li>
+</ul>
+<hr />
+<h4 id="tf.operror.__str__"><code id="OpError.__str__">tf.OpError.__str__()</code></h4>
+<hr />
+<h4 id="tf.operror.error_code"><code id="OpError.error_code">tf.OpError.error_code</code></h4>
+<p>The integer error code that describes the error.</p>
+<hr />
+<h4 id="tf.operror.message"><code id="OpError.message">tf.OpError.message</code></h4>
+<p>The error message that describes the error.</p>
+<hr />
+<h3 id="class-tf.errors.cancellederror"><a name="//apple_ref/cpp/Class/CancelledError" class="dashAnchor"></a><code id="CancelledError">class tf.errors.CancelledError</code></h3>
+<p>Raised when an operation or step is cancelled.</p>
+<p>For example, a long-running operation (e.g. <a href="../../api_docs/python/io_ops.md#QueueBase.enqueue"><code>queue.enqueue()</code></a> may be cancelled by running another operation (e.g. <a href="../../api_docs/python/io_ops.md#QueueBase.close"><code>queue.close(cancel_pending_enqueues=True)</code></a>, or by <a href="../../api_docs/python/client.md#Session.close">closing the session</a>. A step that is running such a long-running operation will fail by raising <code>CancelledError</code>.</p>
+<hr />
+<h4 id="tf.errors.cancellederror.__init__node_def-op-message"><code id="CancelledError.__init__">tf.errors.CancelledError.__init__(node_def, op, message)</code></h4>
+<p>Creates a <code>CancelledError</code>.</p>
+<hr />
+<h3 id="class-tf.errors.unknownerror"><a name="//apple_ref/cpp/Class/UnknownError" class="dashAnchor"></a><code id="UnknownError">class tf.errors.UnknownError</code></h3>
+<p>Unknown error.</p>
+<p>An example of where this error may be returned is if a Status value received from another address space belongs to an error-space that is not known to this address space. Also errors raised by APIs that do not return enough error information may be converted to this error.</p>
+<hr />
+<h4 id="tf.errors.unknownerror.__init__node_def-op-message-error_code2"><code id="UnknownError.__init__">tf.errors.UnknownError.__init__(node_def, op, message, error_code=2)</code></h4>
+<p>Creates an <code>UnknownError</code>.</p>
+<hr />
+<h3 id="class-tf.errors.invalidargumenterror"><a name="//apple_ref/cpp/Class/InvalidArgumentError" class="dashAnchor"></a><code id="InvalidArgumentError">class tf.errors.InvalidArgumentError</code></h3>
+<p>Raised when an operation receives an invalid argument.</p>
+<p>This may occur, for example, if an operation is receives an input tensor that has an invalid value or shape. For example, the <a href="../../api_docs/python/math_ops.md#matmul"><code>tf.matmul()</code></a> op will raise this error if it receives an input that is not a matrix, and the <a href="../../api_docs/python/array_ops.md#reshape"><code>tf.reshape()</code></a> op will raise this error if the new shape does not match the number of elements in the input tensor.</p>
+<hr />
+<h4 id="tf.errors.invalidargumenterror.__init__node_def-op-message"><code id="InvalidArgumentError.__init__">tf.errors.InvalidArgumentError.__init__(node_def, op, message)</code></h4>
+<p>Creates an <code>InvalidArgumentError</code>.</p>
+<hr />
+<h3 id="class-tf.errors.deadlineexceedederror"><a name="//apple_ref/cpp/Class/DeadlineExceededError" class="dashAnchor"></a><code id="DeadlineExceededError">class tf.errors.DeadlineExceededError</code></h3>
+<p>Raised when a deadline expires before an operation could complete.</p>
+<p>This exception is not currently used.</p>
+<hr />
+<h4 id="tf.errors.deadlineexceedederror.__init__node_def-op-message"><code id="DeadlineExceededError.__init__">tf.errors.DeadlineExceededError.__init__(node_def, op, message)</code></h4>
+<p>Creates a <code>DeadlineExceededError</code>.</p>
+<hr />
+<h3 id="class-tf.errors.notfounderror"><a name="//apple_ref/cpp/Class/NotFoundError" class="dashAnchor"></a><code id="NotFoundError">class tf.errors.NotFoundError</code></h3>
+<p>Raised when a requested entity (e.g., a file or directory) was not found.</p>
+<p>For example, running the <a href="../../api_docs/python/io_ops.md#WholeFileReader"><code>tf.WholeFileReader.read()</code></a> operation could raise <code>NotFoundError</code> if it receives the name of a file that does not exist.</p>
+<hr />
+<h4 id="tf.errors.notfounderror.__init__node_def-op-message"><code id="NotFoundError.__init__">tf.errors.NotFoundError.__init__(node_def, op, message)</code></h4>
+<p>Creates a <code>NotFoundError</code>.</p>
+<hr />
+<h3 id="class-tf.errors.alreadyexistserror"><a name="//apple_ref/cpp/Class/AlreadyExistsError" class="dashAnchor"></a><code id="AlreadyExistsError">class tf.errors.AlreadyExistsError</code></h3>
+<p>Raised when an entity that we attempted to create already exists.</p>
+<p>For example, running an operation that saves a file (e.g. <a href="../../api_docs/python/train.md#Saver.save"><code>tf.train.Saver.save()</code></a>) could potentially raise this exception if an explicit filename for an existing file was passed.</p>
+<hr />
+<h4 id="tf.errors.alreadyexistserror.__init__node_def-op-message"><code id="AlreadyExistsError.__init__">tf.errors.AlreadyExistsError.__init__(node_def, op, message)</code></h4>
+<p>Creates an <code>AlreadyExistsError</code>.</p>
+<hr />
+<h3 id="class-tf.errors.permissiondeniederror"><a name="//apple_ref/cpp/Class/PermissionDeniedError" class="dashAnchor"></a><code id="PermissionDeniedError">class tf.errors.PermissionDeniedError</code></h3>
+<p>Raised when the caller does not have permission to run an operation.</p>
+<p>For example, running the <a href="../../api_docs/python/io_ops.md#WholeFileReader"><code>tf.WholeFileReader.read()</code></a> operation could raise <code>PermissionDeniedError</code> if it receives the name of a file for which the user does not have the read file permission.</p>
+<hr />
+<h4 id="tf.errors.permissiondeniederror.__init__node_def-op-message"><code id="PermissionDeniedError.__init__">tf.errors.PermissionDeniedError.__init__(node_def, op, message)</code></h4>
+<p>Creates a <code>PermissionDeniedError</code>.</p>
+<hr />
+<h3 id="class-tf.errors.unauthenticatederror"><a name="//apple_ref/cpp/Class/UnauthenticatedError" class="dashAnchor"></a><code id="UnauthenticatedError">class tf.errors.UnauthenticatedError</code></h3>
+<p>The request does not have valid authentication credentials.</p>
+<p>This exception is not currently used.</p>
+<hr />
+<h4 id="tf.errors.unauthenticatederror.__init__node_def-op-message"><code id="UnauthenticatedError.__init__">tf.errors.UnauthenticatedError.__init__(node_def, op, message)</code></h4>
+<p>Creates an <code>UnauthenticatedError</code>.</p>
+<hr />
+<h3 id="class-tf.errors.resourceexhaustederror"><a name="//apple_ref/cpp/Class/ResourceExhaustedError" class="dashAnchor"></a><code id="ResourceExhaustedError">class tf.errors.ResourceExhaustedError</code></h3>
+<p>Some resource has been exhausted.</p>
+<p>For example, this error might be raised if a per-user quota is exhausted, or perhaps the entire file system is out of space.</p>
+<hr />
+<h4 id="tf.errors.resourceexhaustederror.__init__node_def-op-message"><code id="ResourceExhaustedError.__init__">tf.errors.ResourceExhaustedError.__init__(node_def, op, message)</code></h4>
+<p>Creates a <code>ResourceExhaustedError</code>.</p>
+<hr />
+<h3 id="class-tf.errors.failedpreconditionerror"><a name="//apple_ref/cpp/Class/FailedPreconditionError" class="dashAnchor"></a><code id="FailedPreconditionError">class tf.errors.FailedPreconditionError</code></h3>
+<p>Operation was rejected because the system is not in a state to execute it.</p>
+<p>This exception is most commonly raised when running an operation that reads a <a href="../../api_docs/python/state_ops.md#Variable"><code>tf.Variable</code></a> before it has been initialized.</p>
+<hr />
+<h4 id="tf.errors.failedpreconditionerror.__init__node_def-op-message"><code id="FailedPreconditionError.__init__">tf.errors.FailedPreconditionError.__init__(node_def, op, message)</code></h4>
+<p>Creates a <code>FailedPreconditionError</code>.</p>
+<hr />
+<h3 id="class-tf.errors.abortederror"><a name="//apple_ref/cpp/Class/AbortedError" class="dashAnchor"></a><code id="AbortedError">class tf.errors.AbortedError</code></h3>
+<p>The operation was aborted, typically due to a concurrent action.</p>
+<p>For example, running a <a href="../../api_docs/python/io_ops.md#QueueBase.enqueue"><code>queue.enqueue()</code></a> operation may raise <code>AbortedError</code> if a <a href="../../api_docs/python/io_ops.md#QueueBase.close"><code>queue.close()</code></a> operation previously ran.</p>
+<hr />
+<h4 id="tf.errors.abortederror.__init__node_def-op-message"><code id="AbortedError.__init__">tf.errors.AbortedError.__init__(node_def, op, message)</code></h4>
+<p>Creates an <code>AbortedError</code>.</p>
+<hr />
+<h3 id="class-tf.errors.outofrangeerror"><a name="//apple_ref/cpp/Class/OutOfRangeError" class="dashAnchor"></a><code id="OutOfRangeError">class tf.errors.OutOfRangeError</code></h3>
+<p>Raised when an operation iterates past the valid input range.</p>
+<p>This exception is raised in &quot;end-of-file&quot; conditions, such as when a <a href="../../api_docs/python/io_ops.md#QueueBase.dequeue"><code>queue.dequeue()</code></a> operation is blocked on an empty queue, and a <a href="../../api_docs/python/io_ops.md#QueueBase.close"><code>queue.close()</code></a> operation executes.</p>
+<hr />
+<h4 id="tf.errors.outofrangeerror.__init__node_def-op-message"><code id="OutOfRangeError.__init__">tf.errors.OutOfRangeError.__init__(node_def, op, message)</code></h4>
+<p>Creates an <code>OutOfRangeError</code>.</p>
+<hr />
+<h3 id="class-tf.errors.unimplementederror"><a name="//apple_ref/cpp/Class/UnimplementedError" class="dashAnchor"></a><code id="UnimplementedError">class tf.errors.UnimplementedError</code></h3>
+<p>Raised when an operation has not been implemented.</p>
+<p>Some operations may raise this error when passed otherwise-valid arguments that it does not currently support. For example, running the <a href="../../api_docs/python/nn.md#max_pool"><code>tf.nn.max_pool()</code></a> operation would raise this error if pooling was requested on the batch dimension, because this is not yet supported.</p>
+<hr />
+<h4 id="tf.errors.unimplementederror.__init__node_def-op-message"><code id="UnimplementedError.__init__">tf.errors.UnimplementedError.__init__(node_def, op, message)</code></h4>
+<p>Creates an <code>UnimplementedError</code>.</p>
+<hr />
+<h3 id="class-tf.errors.internalerror"><a name="//apple_ref/cpp/Class/InternalError" class="dashAnchor"></a><code id="InternalError">class tf.errors.InternalError</code></h3>
+<p>Raised when the system experiences an internal error.</p>
+<p>This exception is raised when some invariant expected by the runtime has been broken. Catching this exception is not recommended.</p>
+<hr />
+<h4 id="tf.errors.internalerror.__init__node_def-op-message"><code id="InternalError.__init__">tf.errors.InternalError.__init__(node_def, op, message)</code></h4>
+<p>Creates an <code>InternalError</code>.</p>
+<hr />
+<h3 id="class-tf.errors.unavailableerror"><a name="//apple_ref/cpp/Class/UnavailableError" class="dashAnchor"></a><code id="UnavailableError">class tf.errors.UnavailableError</code></h3>
+<p>Raised when the runtime is currently unavailable.</p>
+<p>This exception is not currently used.</p>
+<hr />
+<h4 id="tf.errors.unavailableerror.__init__node_def-op-message"><code id="UnavailableError.__init__">tf.errors.UnavailableError.__init__(node_def, op, message)</code></h4>
+<p>Creates an <code>UnavailableError</code>.</p>
+<hr />
+<h3 id="class-tf.errors.datalosserror"><a name="//apple_ref/cpp/Class/DataLossError" class="dashAnchor"></a><code id="DataLossError">class tf.errors.DataLossError</code></h3>
+<p>Raised when unrecoverable data loss or corruption is encountered.</p>
+<p>For example, this may be raised by running a <a href="../../api_docs/python/io_ops.md#WholeFileReader"><code>tf.WholeFileReader.read()</code></a> operation, if the file is truncated while it is being read.</p>
+<hr />
+<h4 id="tf.errors.datalosserror.__init__node_def-op-message"><code id="DataLossError.__init__">tf.errors.DataLossError.__init__(node_def, op, message)</code></h4>
+<p>Creates a <code>DataLossError</code>.</p>
+<hr />
+<h3 id="tf.errors.exception_type_from_error_codeerror_code"><a name="//apple_ref/cpp/Function/exception_type_from_error_code" class="dashAnchor"></a><code id="exception_type_from_error_code">tf.errors.exception_type_from_error_code(error_code)</code></h3>
+<hr />
+<h3 id="tf.errors.error_code_from_exception_typecls"><a name="//apple_ref/cpp/Function/error_code_from_exception_type" class="dashAnchor"></a><code id="error_code_from_exception_type">tf.errors.error_code_from_exception_type(cls)</code></h3>
+<hr />
+<h3 id="tf.errors.raise_exception_on_not_ok_status"><a name="//apple_ref/cpp/Function/raise_exception_on_not_ok_status" class="dashAnchor"></a><code id="raise_exception_on_not_ok_status">tf.errors.raise_exception_on_not_ok_status()</code></h3>

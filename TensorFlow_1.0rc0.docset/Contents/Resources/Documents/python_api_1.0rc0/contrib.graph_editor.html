@@ -1,0 +1,1157 @@
+<!-- This file is machine generated: DO NOT EDIT! -->
+<h1 id="graph-editor-contrib">Graph Editor (contrib)</h1>
+<p>[TOC]</p>
+<p>TensorFlow Graph Editor.</p>
+<p>The TensorFlow Graph Editor library allows for modification of an existing <code>tf.Graph</code> instance in-place.</p>
+<p>The author's github username is <a href="https://github.com/purpledog">purpledog</a>.</p>
+<h2 id="library-overview">Library overview</h2>
+<p>Appending new nodes is the only graph editing operation allowed by the TensorFlow core library. The Graph Editor library is an attempt to allow for other kinds of editing operations, namely, <em>rerouting</em> and <em>transforming</em>.</p>
+<ul>
+<li><em>rerouting</em> is a local operation consisting in re-plugging existing tensors (the edges of the graph). Operations (the nodes) are not modified by this operation. For example, rerouting can be used to insert an operation adding noise in place of an existing tensor.</li>
+<li><em>transforming</em> is a global operation consisting in transforming a graph into another. By default, a transformation is a simple copy but it can be customized to achieved other goals. For instance, a graph can be transformed into another one in which noise is added after all the operations of a specific type.</li>
+</ul>
+<p><strong>Important: modifying a graph in-place with the Graph Editor must be done <code>offline</code>, that is, without any active sessions.</strong></p>
+<p>Of course new operations can be appended online but Graph Editor specific operations like rerouting and transforming can currently only be done offline.</p>
+<p>Here is an example of what you <strong>cannot</strong> do:</p>
+<ul>
+<li>Build a graph.</li>
+<li>Create a session and run the graph.</li>
+<li>Modify the graph with the Graph Editor.</li>
+<li>Re-run the graph with the <code>same</code> previously created session.</li>
+</ul>
+<p>To edit an already running graph, follow these steps:</p>
+<ul>
+<li>Build a graph.</li>
+<li>Create a session and run the graph.</li>
+<li>Save the graph state and terminate the session</li>
+<li>Modify the graph with the Graph Editor.</li>
+<li>create a new session and restore the graph state</li>
+<li>Re-run the graph with the newly created session.</li>
+</ul>
+<p>Note that this procedure is very costly because a new session must be created after any modifications. Among other things, it takes time because the entire graph state must be saved and restored again.</p>
+<h2 id="sub-graph">Sub-graph</h2>
+<p>Most of the functions in the Graph Editor library operate on <em>sub-graph</em>. More precisely, they take as input arguments instances of the SubGraphView class (or anything which can be converted to it). Doing so allows the same function to transparently operate on single operations as well as sub-graph of any size.</p>
+<p>A subgraph can be created in several ways:</p>
+<ul>
+<li>using a list of ops:</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">my_sgv <span class="op">=</span> ge.sgv(ops)</code></pre></div>
+<ul>
+<li>from a name scope:</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">my_sgv <span class="op">=</span> ge.sgv_scope(<span class="st">&quot;foo/bar&quot;</span>, graph<span class="op">=</span>tf.get_default_graph())</code></pre></div>
+<ul>
+<li>using regular expression:</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">my_sgv <span class="op">=</span> ge.sgv(<span class="st">&quot;foo/.*/.*read$&quot;</span>, graph<span class="op">=</span>tf.get_default_graph())</code></pre></div>
+<p>Note that the Graph Editor is meant to manipulate several graphs at the same time, typically during transform or copy operation. For that reason, to avoid any confusion, the default graph is never used and the graph on which to operate must always be given explicitly. This is the reason why <em><code>graph=tf.get_default_graph()</code></em> is used in the code snippets above.</p>
+<h2 id="modules-overview">Modules overview</h2>
+<ul>
+<li>util: utility functions.</li>
+<li>select: various selection methods of TensorFlow tensors and operations.</li>
+<li>match: TensorFlow graph matching. Think of this as regular expressions for graphs (but not quite yet).</li>
+<li>reroute: various ways of rerouting tensors to different consuming ops like <em>swap</em> or <em>reroute_a2b</em>.</li>
+<li>subgraph: the SubGraphView class, which enables subgraph manipulations in a TensorFlow <code>tf.Graph</code>.</li>
+<li>edit: various editing functions operating on subgraphs like <em>detach</em>, <em>connect</em> or <em>bypass</em>.</li>
+<li>transform: the Transformer class, which enables transforming (or simply copying) a subgraph into another one.</li>
+</ul>
+<h2 id="module-util">Module: util</h2>
+<hr />
+<h3 id="tf.contrib.graph_editor.make_list_of_opops-check_graphtrue-allow_graphtrue-ignore_tsfalse"><a name="//apple_ref/cpp/Function/make_list_of_op" class="dashAnchor"></a><code id="make_list_of_op">tf.contrib.graph_editor.make_list_of_op(ops, check_graph=True, allow_graph=True, ignore_ts=False)</code></h3>
+<p>Convert ops to a list of <code>tf.Operation</code>.</p>
+<h5 id="args">Args:</h5>
+<ul>
+<li><b><code>ops</code></b>: can be an iterable of <code>tf.Operation</code>, a <code>tf.Graph</code> or a single operation.</li>
+<li><b><code>check_graph</code></b>: if <code>True</code> check if all the operations belong to the same graph.</li>
+<li><b><code>allow_graph</code></b>: if <code>False</code> a <code>tf.Graph</code> cannot be converted.</li>
+<li><b><code>ignore_ts</code></b>: if True, silently ignore <code>tf.Tensor</code>.</li>
+</ul>
+<h5 id="returns">Returns:</h5>
+<p>A newly created list of <code>tf.Operation</code>.</p>
+<h5 id="raises">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if ops cannot be converted to a list of <code>tf.Operation</code> or, if <code>check_graph</code> is <code>True</code>, if all the ops do not belong to the same graph.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.graph_editor.get_tensorsgraph"><a name="//apple_ref/cpp/Function/get_tensors" class="dashAnchor"></a><code id="get_tensors">tf.contrib.graph_editor.get_tensors(graph)</code></h3>
+<p>get all the tensors which are input or output of an op in the graph.</p>
+<h5 id="args-1">Args:</h5>
+<ul>
+<li><b><code>graph</code></b>: a <code>tf.Graph</code>.</li>
+</ul>
+<h5 id="returns-1">Returns:</h5>
+<p>A list of <code>tf.Tensor</code>.</p>
+<h5 id="raises-1">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if graph is not a <code>tf.Graph</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.graph_editor.make_list_of_tts-check_graphtrue-allow_graphtrue-ignore_opsfalse"><a name="//apple_ref/cpp/Function/make_list_of_t" class="dashAnchor"></a><code id="make_list_of_t">tf.contrib.graph_editor.make_list_of_t(ts, check_graph=True, allow_graph=True, ignore_ops=False)</code></h3>
+<p>Convert ts to a list of <code>tf.Tensor</code>.</p>
+<h5 id="args-2">Args:</h5>
+<ul>
+<li><b><code>ts</code></b>: can be an iterable of <code>tf.Tensor</code>, a <code>tf.Graph</code> or a single tensor.</li>
+<li><b><code>check_graph</code></b>: if <code>True</code> check if all the tensors belong to the same graph.</li>
+<li><b><code>allow_graph</code></b>: if <code>False</code> a <code>tf.Graph</code> cannot be converted.</li>
+<li><b><code>ignore_ops</code></b>: if <code>True</code>, silently ignore <code>tf.Operation</code>.</li>
+</ul>
+<h5 id="returns-2">Returns:</h5>
+<p>A newly created list of <code>tf.Tensor</code>.</p>
+<h5 id="raises-2">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>ts</code> cannot be converted to a list of <code>tf.Tensor</code> or, if <code>check_graph</code> is <code>True</code>, if all the ops do not belong to the same graph.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.graph_editor.get_generating_opsts"><a name="//apple_ref/cpp/Function/get_generating_ops" class="dashAnchor"></a><code id="get_generating_ops">tf.contrib.graph_editor.get_generating_ops(ts)</code></h3>
+<p>Return all the generating ops of the tensors in <code>ts</code>.</p>
+<h5 id="args-3">Args:</h5>
+<ul>
+<li><b><code>ts</code></b>: a list of <code>tf.Tensor</code></li>
+</ul>
+<h5 id="returns-3">Returns:</h5>
+<p>A list of all the generating <code>tf.Operation</code> of the tensors in <code>ts</code>.</p>
+<h5 id="raises-3">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>ts</code> cannot be converted to a list of <code>tf.Tensor</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.graph_editor.get_consuming_opsts"><a name="//apple_ref/cpp/Function/get_consuming_ops" class="dashAnchor"></a><code id="get_consuming_ops">tf.contrib.graph_editor.get_consuming_ops(ts)</code></h3>
+<p>Return all the consuming ops of the tensors in ts.</p>
+<h5 id="args-4">Args:</h5>
+<ul>
+<li><b><code>ts</code></b>: a list of <code>tf.Tensor</code></li>
+</ul>
+<h5 id="returns-4">Returns:</h5>
+<p>A list of all the consuming <code>tf.Operation</code> of the tensors in <code>ts</code>.</p>
+<h5 id="raises-4">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if ts cannot be converted to a list of <code>tf.Tensor</code>.</li>
+</ul>
+<hr />
+<h3 id="class-tf.contrib.graph_editor.controloutputs"><a name="//apple_ref/cpp/Class/ControlOutputs" class="dashAnchor"></a><code id="ControlOutputs">class tf.contrib.graph_editor.ControlOutputs</code></h3>
+<p>The control outputs topology. - - -</p>
+<h4 id="tf.contrib.graph_editor.controloutputs.__init__graph"><code id="ControlOutputs.__init__">tf.contrib.graph_editor.ControlOutputs.__init__(graph)</code></h4>
+<p>Create a dictionary of control-output dependencies.</p>
+<h5 id="args-5">Args:</h5>
+<ul>
+<li><b><code>graph</code></b>: a <code>tf.Graph</code>.</li>
+</ul>
+<h5 id="returns-5">Returns:</h5>
+<p>A dictionary where a key is a <code>tf.Operation</code> instance and the corresponding value is a list of all the ops which have the key as one of their control-input dependencies.</p>
+<h5 id="raises-5">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: graph is not a <code>tf.Graph</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.graph_editor.controloutputs.getop"><code id="ControlOutputs.get">tf.contrib.graph_editor.ControlOutputs.get(op)</code></h4>
+<p>return the control outputs of op.</p>
+<hr />
+<h4 id="tf.contrib.graph_editor.controloutputs.get_all"><code id="ControlOutputs.get_all">tf.contrib.graph_editor.ControlOutputs.get_all()</code></h4>
+<hr />
+<h4 id="tf.contrib.graph_editor.controloutputs.graph"><code id="ControlOutputs.graph">tf.contrib.graph_editor.ControlOutputs.graph</code></h4>
+<hr />
+<h4 id="tf.contrib.graph_editor.controloutputs.update"><code id="ControlOutputs.update">tf.contrib.graph_editor.ControlOutputs.update()</code></h4>
+<p>Update the control outputs if the graph has changed.</p>
+<hr />
+<h3 id="tf.contrib.graph_editor.placeholder_nametnone-scopenone"><a name="//apple_ref/cpp/Function/placeholder_name" class="dashAnchor"></a><code id="placeholder_name">tf.contrib.graph_editor.placeholder_name(t=None, scope=None)</code></h3>
+<p>Create placeholder name for the graph editor.</p>
+<h5 id="args-6">Args:</h5>
+<ul>
+<li><b><code>t</code></b>: optional tensor on which the placeholder operation's name will be based on</li>
+<li><b><code>scope</code></b>: absolute scope with which to prefix the placeholder's name. None means that the scope of t is preserved. &quot;&quot; means the root scope.</li>
+</ul>
+<h5 id="returns-6">Returns:</h5>
+<p>A new placeholder name prefixed by &quot;geph&quot;. Note that &quot;geph&quot; stands for Graph Editor PlaceHolder. This convention allows to quickly identify the placeholder generated by the Graph Editor.</p>
+<h5 id="raises-6">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if t is not None or a tf.Tensor.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.graph_editor.make_placeholder_from_tensort-scopenone"><a name="//apple_ref/cpp/Function/make_placeholder_from_tensor" class="dashAnchor"></a><code id="make_placeholder_from_tensor">tf.contrib.graph_editor.make_placeholder_from_tensor(t, scope=None)</code></h3>
+<p>Create a <code>tf.placeholder</code> for the Graph Editor.</p>
+<p>Note that the correct graph scope must be set by the calling function.</p>
+<h5 id="args-7">Args:</h5>
+<ul>
+<li><b><code>t</code></b>: a <code>tf.Tensor</code> whose name will be used to create the placeholder (see function placeholder_name).</li>
+<li><b><code>scope</code></b>: absolute scope within which to create the placeholder. None means that the scope of <code>t</code> is preserved. <code>&quot;&quot;</code> means the root scope.</li>
+</ul>
+<h5 id="returns-7">Returns:</h5>
+<p>A newly created <code>tf.placeholder</code>.</p>
+<h5 id="raises-7">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>t</code> is not <code>None</code> or a <code>tf.Tensor</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.graph_editor.make_placeholder_from_dtype_and_shapedtype-shapenone-scopenone"><a name="//apple_ref/cpp/Function/make_placeholder_from_dtype_and_shape" class="dashAnchor"></a><code id="make_placeholder_from_dtype_and_shape">tf.contrib.graph_editor.make_placeholder_from_dtype_and_shape(dtype, shape=None, scope=None)</code></h3>
+<p>Create a tf.placeholder for the Graph Editor.</p>
+<p>Note that the correct graph scope must be set by the calling function. The placeholder is named using the function placeholder_name (with no tensor argument).</p>
+<h5 id="args-8">Args:</h5>
+<ul>
+<li><b><code>dtype</code></b>: the tensor type.</li>
+<li><b><code>shape</code></b>: the tensor shape (optional).</li>
+<li><b><code>scope</code></b>: absolute scope within which to create the placeholder. None means that the scope of t is preserved. &quot;&quot; means the root scope.</li>
+</ul>
+<h5 id="returns-8">Returns:</h5>
+<p>A newly created tf.placeholder.</p>
+<h2 id="module-select">Module: select</h2>
+<hr />
+<h3 id="tf.contrib.graph_editor.filter_tsops-positive_filter"><a name="//apple_ref/cpp/Function/filter_ts" class="dashAnchor"></a><code id="filter_ts">tf.contrib.graph_editor.filter_ts(ops, positive_filter)</code></h3>
+<p>Get all the tensors which are input or output of an op in ops.</p>
+<h5 id="args-9">Args:</h5>
+<ul>
+<li><b><code>ops</code></b>: an object convertible to a list of <code>tf.Operation</code>.</li>
+<li><b><code>positive_filter</code></b>: a function deciding whether to keep a tensor or not. If <code>True</code>, all the tensors are returned.</li>
+</ul>
+<h5 id="returns-9">Returns:</h5>
+<p>A list of <code>tf.Tensor</code>.</p>
+<h5 id="raises-8">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if ops cannot be converted to a list of <code>tf.Operation</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.graph_editor.filter_ts_from_regexops-regex"><a name="//apple_ref/cpp/Function/filter_ts_from_regex" class="dashAnchor"></a><code id="filter_ts_from_regex">tf.contrib.graph_editor.filter_ts_from_regex(ops, regex)</code></h3>
+<p>Get all the tensors linked to ops that match the given regex.</p>
+<h5 id="args-10">Args:</h5>
+<ul>
+<li><b><code>ops</code></b>: an object convertible to a list of tf.Operation.</li>
+<li><b><code>regex</code></b>: a regular expression matching the tensors' name. For example, &quot;^foo(/.*)?:+$&quot; will match all the tensors in the &quot;foo&quot; scope.</li>
+</ul>
+<h5 id="returns-10">Returns:</h5>
+<p>A list of tf.Tensor.</p>
+<h5 id="raises-9">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if ops cannot be converted to a list of tf.Operation.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.graph_editor.filter_opsops-positive_filter"><a name="//apple_ref/cpp/Function/filter_ops" class="dashAnchor"></a><code id="filter_ops">tf.contrib.graph_editor.filter_ops(ops, positive_filter)</code></h3>
+<p>Get the ops passing the given filter.</p>
+<h5 id="args-11">Args:</h5>
+<ul>
+<li><b><code>ops</code></b>: an object convertible to a list of tf.Operation.</li>
+<li><b><code>positive_filter</code></b>: a function deciding where to keep an operation or not. If True, all the operations are returned.</li>
+</ul>
+<h5 id="returns-11">Returns:</h5>
+<p>A list of selected tf.Operation.</p>
+<h5 id="raises-10">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if ops cannot be converted to a list of tf.Operation.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.graph_editor.filter_ops_from_regexops-regex"><a name="//apple_ref/cpp/Function/filter_ops_from_regex" class="dashAnchor"></a><code id="filter_ops_from_regex">tf.contrib.graph_editor.filter_ops_from_regex(ops, regex)</code></h3>
+<p>Get all the operations that match the given regex.</p>
+<h5 id="args-12">Args:</h5>
+<ul>
+<li><b><code>ops</code></b>: an object convertible to a list of <code>tf.Operation</code>.</li>
+<li><b><code>regex</code></b>: a regular expression matching the operation's name. For example, <code>&quot;^foo(/.*)?$&quot;</code> will match all the operations in the &quot;foo&quot; scope.</li>
+</ul>
+<h5 id="returns-12">Returns:</h5>
+<p>A list of <code>tf.Operation</code>.</p>
+<h5 id="raises-11">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if ops cannot be converted to a list of <code>tf.Operation</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.graph_editor.get_name_scope_opsops-scope"><a name="//apple_ref/cpp/Function/get_name_scope_ops" class="dashAnchor"></a><code id="get_name_scope_ops">tf.contrib.graph_editor.get_name_scope_ops(ops, scope)</code></h3>
+<p>Get all the operations under the given scope path.</p>
+<h5 id="args-13">Args:</h5>
+<ul>
+<li><b><code>ops</code></b>: an object convertible to a list of tf.Operation.</li>
+<li><b><code>scope</code></b>: a scope path.</li>
+</ul>
+<h5 id="returns-13">Returns:</h5>
+<p>A list of tf.Operation.</p>
+<h5 id="raises-12">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if ops cannot be converted to a list of tf.Operation.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.graph_editor.check_cioscontrol_inputsfalse-control_outputsnone-control_iosnone"><a name="//apple_ref/cpp/Function/check_cios" class="dashAnchor"></a><code id="check_cios">tf.contrib.graph_editor.check_cios(control_inputs=False, control_outputs=None, control_ios=None)</code></h3>
+<p>Do various check on control_inputs and control_outputs.</p>
+<h5 id="args-14">Args:</h5>
+<ul>
+<li><b><code>control_inputs</code></b>: A boolean indicating whether control inputs are enabled.</li>
+<li><b><code>control_outputs</code></b>: An instance of util.ControlOutputs or None. If not None, control outputs are enabled.</li>
+<li><b><code>control_ios</code></b>: An instance of util.ControlOutputs or None. If not None, both control inputs and control outputs are enabled. This is equivalent to set control_inputs to True and control_outputs to the util.ControlOutputs instance.</li>
+</ul>
+<h5 id="returns-14">Returns:</h5>
+<p>A tuple <code>(control_inputs, control_outputs)</code> where: <code>control_inputs</code> is a boolean indicating whether to use control inputs. <code>control_outputs</code> is an instance of util.ControlOutputs or None</p>
+<h5 id="raises-13">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if control_inputs is an instance of util.ControlOutputs but control_outputs is not None</li>
+<li><b><code>TypeError</code></b>: if control_outputs is not None and is not a util.ControlOutputs.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.graph_editor.get_ops_iosops-control_inputsfalse-control_outputsnone-control_iosnone"><a name="//apple_ref/cpp/Function/get_ops_ios" class="dashAnchor"></a><code id="get_ops_ios">tf.contrib.graph_editor.get_ops_ios(ops, control_inputs=False, control_outputs=None, control_ios=None)</code></h3>
+<p>Return all the <code>tf.Operation</code> which are connected to an op in ops.</p>
+<h5 id="args-15">Args:</h5>
+<ul>
+<li><b><code>ops</code></b>: an object convertible to a list of <code>tf.Operation</code>.</li>
+<li><b><code>control_inputs</code></b>: A boolean indicating whether control inputs are enabled.</li>
+<li><b><code>control_outputs</code></b>: An instance of <code>util.ControlOutputs</code> or <code>None</code>. If not <code>None</code>, control outputs are enabled.</li>
+<li><b><code>control_ios</code></b>: An instance of <code>util.ControlOutputs</code> or <code>None</code>. If not <code>None</code>, both control inputs and control outputs are enabled. This is equivalent to set <code>control_inputs</code> to <code>True</code> and <code>control_outputs</code> to the <code>util.ControlOutputs</code> instance.</li>
+</ul>
+<h5 id="returns-15">Returns:</h5>
+<p>All the <code>tf.Operation</code> surrounding the given ops.</p>
+<h5 id="raises-14">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>ops</code> cannot be converted to a list of <code>tf.Operation</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.graph_editor.compute_boundary_tsops"><a name="//apple_ref/cpp/Function/compute_boundary_ts" class="dashAnchor"></a><code id="compute_boundary_ts">tf.contrib.graph_editor.compute_boundary_ts(ops)</code></h3>
+<p>Compute the tensors at the boundary of a set of ops.</p>
+<p>This function looks at all the tensors connected to the given ops (in/out) and classify them into three categories: 1) input tensors: tensors whose generating operation is not in ops. 2) output tensors: tensors whose consumer operations are not in ops 3) inside tensors: tensors which are neither input nor output tensors.</p>
+<p>Note that a tensor can be both an inside tensor and an output tensor if it is consumed by operations both outside and inside of <code>ops</code>.</p>
+<h5 id="args-16">Args:</h5>
+<ul>
+<li><b><code>ops</code></b>: an object convertible to a list of tf.Operation.</li>
+</ul>
+<h5 id="returns-16">Returns:</h5>
+<p>A tuple <code>(outside_input_ts, outside_output_ts, inside_ts)</code> where: <code>outside_input_ts</code> is a Python list of input tensors; <code>outside_output_ts</code> is a python list of output tensors; <code>inside_ts</code> is a python list of inside tensors. Since a tensor can be both an inside tensor and an output tensor, <code>outside_output_ts</code> and <code>inside_ts</code> might intersect.</p>
+<h5 id="raises-15">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if ops cannot be converted to a list of tf.Operation.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.graph_editor.get_within_boundary_opsops-seed_ops-boundary_ops-inclusivetrue-control_inputsfalse-control_outputsnone-control_iosnone"><a name="//apple_ref/cpp/Function/get_within_boundary_ops" class="dashAnchor"></a><code id="get_within_boundary_ops">tf.contrib.graph_editor.get_within_boundary_ops(ops, seed_ops, boundary_ops=(), inclusive=True, control_inputs=False, control_outputs=None, control_ios=None)</code></h3>
+<p>Return all the <code>tf.Operation</code> within the given boundary.</p>
+<h5 id="args-17">Args:</h5>
+<ul>
+<li><b><code>ops</code></b>: an object convertible to a list of <code>tf.Operation</code>. those ops define the set in which to perform the operation (if a <code>tf.Graph</code> is given, it will be converted to the list of all its operations).</li>
+<li><b><code>seed_ops</code></b>: the operations from which to start expanding.</li>
+<li><b><code>boundary_ops</code></b>: the ops forming the boundary.</li>
+<li><b><code>inclusive</code></b>: if <code>True</code>, the result will also include the boundary ops.</li>
+<li><b><code>control_inputs</code></b>: A boolean indicating whether control inputs are enabled.</li>
+<li><b><code>control_outputs</code></b>: An instance of <code>util.ControlOutputs</code> or <code>None</code>. If not <code>None</code>, control outputs are enabled.</li>
+<li><b><code>control_ios</code></b>: An instance of <code>util.ControlOutputs</code> or <code>None</code>. If not <code>None</code>, both control inputs and control outputs are enabled. This is equivalent to set control_inputs to True and control_outputs to the <code>util.ControlOutputs</code> instance.</li>
+</ul>
+<h5 id="returns-17">Returns:</h5>
+<p>All the <code>tf.Operation</code> surrounding the given ops.</p>
+<h5 id="raises-16">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>ops</code> or <code>seed_ops</code> cannot be converted to a list of <code>tf.Operation</code>.</li>
+<li><b><code>ValueError</code></b>: if the boundary is intersecting with the seeds.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.graph_editor.get_forward_walk_opsseed_ops-inclusivetrue-within_opsnone-stop_at_ts-control_outputsnone"><a name="//apple_ref/cpp/Function/get_forward_walk_ops" class="dashAnchor"></a><code id="get_forward_walk_ops">tf.contrib.graph_editor.get_forward_walk_ops(seed_ops, inclusive=True, within_ops=None, stop_at_ts=(), control_outputs=None)</code></h3>
+<p>Do a forward graph walk and return all the visited ops.</p>
+<h5 id="args-18">Args:</h5>
+<ul>
+<li><b><code>seed_ops</code></b>: an iterable of operations from which the forward graph walk starts. If a list of tensors is given instead, the seed_ops are set to be the consumers of those tensors.</li>
+<li><b><code>inclusive</code></b>: if True the given seed_ops are also part of the resulting set.</li>
+<li><b><code>within_ops</code></b>: an iterable of <code>tf.Operation</code> within which the search is restricted. If <code>within_ops</code> is <code>None</code>, the search is performed within the whole graph.</li>
+<li><b><code>stop_at_ts</code></b>: an iterable of tensors at which the graph walk stops.</li>
+<li><b><code>control_outputs</code></b>: a <code>util.ControlOutputs</code> instance or None. If not <code>None</code>, it will be used while walking the graph forward.</li>
+</ul>
+<h5 id="returns-18">Returns:</h5>
+<p>A Python set of all the <code>tf.Operation</code> ahead of <code>seed_ops</code>.</p>
+<h5 id="raises-17">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>seed_ops</code> or <code>within_ops</code> cannot be converted to a list of <code>tf.Operation</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.graph_editor.get_backward_walk_opsseed_ops-inclusivetrue-within_opsnone-stop_at_ts-control_inputsfalse"><a name="//apple_ref/cpp/Function/get_backward_walk_ops" class="dashAnchor"></a><code id="get_backward_walk_ops">tf.contrib.graph_editor.get_backward_walk_ops(seed_ops, inclusive=True, within_ops=None, stop_at_ts=(), control_inputs=False)</code></h3>
+<p>Do a backward graph walk and return all the visited ops.</p>
+<h5 id="args-19">Args:</h5>
+<ul>
+<li><b><code>seed_ops</code></b>: an iterable of operations from which the backward graph walk starts. If a list of tensors is given instead, the seed_ops are set to be the generators of those tensors.</li>
+<li><b><code>inclusive</code></b>: if True the given seed_ops are also part of the resulting set.</li>
+<li><b><code>within_ops</code></b>: an iterable of <code>tf.Operation</code> within which the search is restricted. If <code>within_ops</code> is <code>None</code>, the search is performed within the whole graph.</li>
+<li><b><code>stop_at_ts</code></b>: an iterable of tensors at which the graph walk stops.</li>
+<li><b><code>control_inputs</code></b>: if True, control inputs will be used while moving backward.</li>
+</ul>
+<h5 id="returns-19">Returns:</h5>
+<p>A Python set of all the <code>tf.Operation</code> behind <code>seed_ops</code>.</p>
+<h5 id="raises-18">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>seed_ops</code> or <code>within_ops</code> cannot be converted to a list of <code>tf.Operation</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.graph_editor.get_walks_intersection_opsforward_seed_ops-backward_seed_ops-forward_inclusivetrue-backward_inclusivetrue-within_opsnone-control_inputsfalse-control_outputsnone-control_iosnone"><a name="//apple_ref/cpp/Function/get_walks_intersection_ops" class="dashAnchor"></a><code id="get_walks_intersection_ops">tf.contrib.graph_editor.get_walks_intersection_ops(forward_seed_ops, backward_seed_ops, forward_inclusive=True, backward_inclusive=True, within_ops=None, control_inputs=False, control_outputs=None, control_ios=None)</code></h3>
+<p>Return the intersection of a forward and a backward walk.</p>
+<h5 id="args-20">Args:</h5>
+<ul>
+<li><b><code>forward_seed_ops</code></b>: an iterable of operations from which the forward graph walk starts. If a list of tensors is given instead, the seed_ops are set to be the consumers of those tensors.</li>
+<li><b><code>backward_seed_ops</code></b>: an iterable of operations from which the backward graph walk starts. If a list of tensors is given instead, the seed_ops are set to be the generators of those tensors.</li>
+<li><b><code>forward_inclusive</code></b>: if True the given forward_seed_ops are also part of the resulting set.</li>
+<li><b><code>backward_inclusive</code></b>: if True the given backward_seed_ops are also part of the resulting set.</li>
+<li><b><code>within_ops</code></b>: an iterable of tf.Operation within which the search is restricted. If within_ops is None, the search is performed within the whole graph.</li>
+<li><b><code>control_inputs</code></b>: A boolean indicating whether control inputs are enabled.</li>
+<li><b><code>control_outputs</code></b>: An instance of util.ControlOutputs or None. If not None, control outputs are enabled.</li>
+<li><b><code>control_ios</code></b>: An instance of util.ControlOutputs or None. If not None, both control inputs and control outputs are enabled. This is equivalent to set control_inputs to True and control_outputs to the util.ControlOutputs instance.</li>
+</ul>
+<h5 id="returns-20">Returns:</h5>
+<p>A Python set of all the tf.Operation in the intersection of a forward and a backward walk.</p>
+<h5 id="raises-19">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>forward_seed_ops</code> or <code>backward_seed_ops</code> or <code>within_ops</code> cannot be converted to a list of <code>tf.Operation</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.graph_editor.get_walks_union_opsforward_seed_ops-backward_seed_ops-forward_inclusivetrue-backward_inclusivetrue-within_opsnone-control_inputsfalse-control_outputsnone-control_iosnone"><a name="//apple_ref/cpp/Function/get_walks_union_ops" class="dashAnchor"></a><code id="get_walks_union_ops">tf.contrib.graph_editor.get_walks_union_ops(forward_seed_ops, backward_seed_ops, forward_inclusive=True, backward_inclusive=True, within_ops=None, control_inputs=False, control_outputs=None, control_ios=None)</code></h3>
+<p>Return the union of a forward and a backward walk.</p>
+<h5 id="args-21">Args:</h5>
+<ul>
+<li><b><code>forward_seed_ops</code></b>: an iterable of operations from which the forward graph walk starts. If a list of tensors is given instead, the seed_ops are set to be the consumers of those tensors.</li>
+<li><b><code>backward_seed_ops</code></b>: an iterable of operations from which the backward graph walk starts. If a list of tensors is given instead, the seed_ops are set to be the generators of those tensors.</li>
+<li><b><code>forward_inclusive</code></b>: if True the given forward_seed_ops are also part of the resulting set.</li>
+<li><b><code>backward_inclusive</code></b>: if True the given backward_seed_ops are also part of the resulting set.</li>
+<li><b><code>within_ops</code></b>: restrict the search within those operations. If within_ops is None, the search is done within the whole graph.</li>
+<li><b><code>control_inputs</code></b>: A boolean indicating whether control inputs are enabled.</li>
+<li><b><code>control_outputs</code></b>: An instance of util.ControlOutputs or None. If not None, control outputs are enabled.</li>
+<li><b><code>control_ios</code></b>: An instance of util.ControlOutputs or None. If not None, both control inputs and control outputs are enabled. This is equivalent to set control_inputs to True and control_outputs to the util.ControlOutputs instance.</li>
+</ul>
+<h5 id="returns-21">Returns:</h5>
+<p>A Python set of all the tf.Operation in the union of a forward and a backward walk.</p>
+<h5 id="raises-20">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if forward_seed_ops or backward_seed_ops or within_ops cannot be converted to a list of tf.Operation.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.graph_editor.select_opsargs-kwargs"><a name="//apple_ref/cpp/Function/select_ops" class="dashAnchor"></a><code id="select_ops">tf.contrib.graph_editor.select_ops(*args, **kwargs)</code></h3>
+<p>Helper to select operations.</p>
+<h5 id="args-22">Args:</h5>
+<ul>
+<li><b><code>*args</code></b>: list of 1) regular expressions (compiled or not) or 2) (array of) <code>tf.Operation</code>. <code>tf.Tensor</code> instances are silently ignored.</li>
+<li><b><code>**kwargs</code></b>: 'graph': <code>tf.Graph</code> in which to perform the regex query.This is required when using regex. 'positive_filter': an elem if selected only if <code>positive_filter(elem)</code> is <code>True</code>. This is optional. 'restrict_ops_regex': a regular expression is ignored if it doesn't start with the substring &quot;(?#ops)&quot;.</li>
+</ul>
+<h5 id="returns-22">Returns:</h5>
+<p>A list of <code>tf.Operation</code>.</p>
+<h5 id="raises-21">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if the optional keyword argument graph is not a <code>tf.Graph</code> or if an argument in args is not an (array of) <code>tf.Operation</code> or an (array of) <code>tf.Tensor</code> (silently ignored) or a string or a regular expression.</li>
+<li><b><code>ValueError</code></b>: if one of the keyword arguments is unexpected or if a regular expression is used without passing a graph as a keyword argument.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.graph_editor.select_tsargs-kwargs"><a name="//apple_ref/cpp/Function/select_ts" class="dashAnchor"></a><code id="select_ts">tf.contrib.graph_editor.select_ts(*args, **kwargs)</code></h3>
+<p>Helper to select tensors.</p>
+<h5 id="args-23">Args:</h5>
+<ul>
+<li><b><code>*args</code></b>: list of 1) regular expressions (compiled or not) or 2) (array of) <code>tf.Tensor</code>. <code>tf.Operation</code> instances are silently ignored.</li>
+<li><b><code>**kwargs</code></b>: 'graph': <code>tf.Graph</code> in which to perform the regex query.This is required when using regex. 'positive_filter': an elem if selected only if <code>positive_filter(elem)</code> is <code>True</code>. This is optional. 'restrict_ts_regex': a regular expression is ignored if it doesn't start with the substring &quot;(?#ts)&quot;.</li>
+</ul>
+<h5 id="returns-23">Returns:</h5>
+<p>A list of <code>tf.Tensor</code>.</p>
+<h5 id="raises-22">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if the optional keyword argument graph is not a <code>tf.Graph</code> or if an argument in args is not an (array of) <code>tf.Tensor</code> or an (array of) <code>tf.Operation</code> (silently ignored) or a string or a regular expression.</li>
+<li><b><code>ValueError</code></b>: if one of the keyword arguments is unexpected or if a regular expression is used without passing a graph as a keyword argument.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.graph_editor.select_ops_and_tsargs-kwargs"><a name="//apple_ref/cpp/Function/select_ops_and_ts" class="dashAnchor"></a><code id="select_ops_and_ts">tf.contrib.graph_editor.select_ops_and_ts(*args, **kwargs)</code></h3>
+<p>Helper to select operations and tensors.</p>
+<h5 id="args-24">Args:</h5>
+<ul>
+<li><b><code>*args</code></b>: list of 1) regular expressions (compiled or not) or 2) (array of) <code>tf.Operation</code> 3) (array of) tf.Tensor. Regular expressions matching tensors must start with the comment <code>&quot;(?#ts)&quot;</code>, for instance: <code>&quot;(?#ts)^foo/.*&quot;</code>.</li>
+<li><b><code>**kwargs</code></b>: 'graph': <code>tf.Graph</code> in which to perform the regex query.This is required when using regex. 'positive_filter': an elem if selected only if <code>positive_filter(elem)</code> is <code>True</code>. This is optional.</li>
+</ul>
+<h5 id="returns-24">Returns:</h5>
+<p>A tuple <code>(ops, ts)</code> where: <code>ops</code> is a list of <code>tf.Operation</code>, and <code>ts</code> is a list of <code>tf.Tensor</code></p>
+<h5 id="raises-23">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if the optional keyword argument graph is not a <code>tf.Graph</code> or if an argument in args is not an (array of) <code>tf.Tensor</code> or an (array of) <code>tf.Operation</code> or a string or a regular expression.</li>
+<li><b><code>ValueError</code></b>: if one of the keyword arguments is unexpected or if a regular expression is used without passing a graph as a keyword argument.</li>
+</ul>
+<h2 id="module-subgraph">Module: subgraph</h2>
+<hr />
+<h3 id="class-tf.contrib.graph_editor.subgraphview"><a name="//apple_ref/cpp/Class/SubGraphView" class="dashAnchor"></a><code id="SubGraphView">class tf.contrib.graph_editor.SubGraphView</code></h3>
+<p>A subgraph view on an existing <code>tf.Graph</code>.</p>
+<p>An instance of this class is a subgraph view on an existing <code>tf.Graph</code>. &quot;subgraph&quot; means that it can represent part of the whole <code>tf.Graph</code>. &quot;view&quot; means that it only provides a passive observation and do not to act on the <code>tf.Graph</code>. Note that in this documentation, the term &quot;subgraph&quot; is often used as substitute to &quot;subgraph view&quot;.</p>
+<p>A subgraph contains:</p>
+<ul>
+<li>a list of input tensors, accessible via the <code>inputs</code> property.</li>
+<li>a list of output tensors, accessible via the <code>outputs</code> property.</li>
+<li>and the operations in between, accessible via the &quot;ops&quot; property.</li>
+</ul>
+<p>An subgraph can be seen as a function F(i0, i1, ...) -&gt; o0, o1, ... It is a function which takes as input some input tensors and returns as output some output tensors. The computation that the function performs is encoded in the operations of the subgraph.</p>
+<p>The tensors (input or output) can be of two kinds:</p>
+<ul>
+<li>connected: a connected tensor connects to at least one operation contained in the subgraph. One example is a subgraph representing a single operation and its inputs and outputs: all the input and output tensors of the op are &quot;connected&quot;.</li>
+<li>passthrough: a passthrough tensor does not connect to any operation contained in the subgraph. One example is a subgraph representing a single tensor: this tensor is passthrough. By default a passthrough tensor is present both in the input and output tensors of the subgraph. It can however be remapped to only appear as an input (or output) only.</li>
+</ul>
+<p>The input and output tensors can be remapped. For instance, some input tensor can be omitted. For instance, a subgraph representing an operation with two inputs can be remapped to only take one input. Note that this does not change at all the underlying <code>tf.Graph</code> (remember, it is a view). It means that the other input is being ignored, or is being treated as &quot;given&quot;. The analogy with functions can be extended like this: F(x,y) is the original function. Remapping the inputs from [x, y] to just [x] means that the subgraph now represent the function F_y(x) (y is &quot;given&quot;).</p>
+<p>The output tensors can also be remapped. For instance, some output tensor can be omitted. Other output tensor can be duplicated as well. As mentioned before, this does not change at all the underlying <code>tf.Graph</code>. The analogy with functions can be extended like this: F(...)-&gt;x,y is the original function. Remapping the outputs from [x, y] to just [y,y] means that the subgraph now represent the function M(F(...)) where M is the function M(a,b)-&gt;b,b.</p>
+<p>It is useful to describe three other kind of tensors:</p>
+<ul>
+<li>internal: an internal tensor is a tensor connecting operations contained in the subgraph. One example in the subgraph representing the two operations A and B connected sequentially: -&gt; A -&gt; B -&gt;. The middle arrow is an internal tensor.</li>
+<li>actual input: an input tensor of the subgraph, regardless of whether it is listed in &quot;inputs&quot; or not (masked-out).</li>
+<li>actual output: an output tensor of the subgraph, regardless of whether it is listed in &quot;outputs&quot; or not (masked-out).</li>
+<li>hidden input: an actual input which has been masked-out using an input remapping. In other word, a hidden input is a non-internal tensor not listed as a input tensor and one of whose consumers belongs to the subgraph.</li>
+<li>hidden output: a actual output which has been masked-out using an output remapping. In other word, a hidden output is a non-internal tensor not listed as an output and one of whose generating operations belongs to the subgraph.</li>
+</ul>
+<p>Here are some useful guarantees about an instance of a SubGraphView:</p>
+<ul>
+<li>the input (or output) tensors are not internal.</li>
+<li>the input (or output) tensors are either &quot;connected&quot; or &quot;passthrough&quot;.</li>
+<li>the passthrough tensors are not connected to any of the operation of the subgraph.</li>
+</ul>
+<p>Note that there is no guarantee that an operation in a subgraph contributes at all to its inputs or outputs. For instance, remapping both the inputs and outputs to empty lists will produce a subgraph which still contains all the original operations. However, the remove_unused_ops function can be used to make a new subgraph view whose operations are connected to at least one of the input or output tensors.</p>
+<p>An instance of this class is meant to be a lightweight object which is not modified in-place by the user. Rather, the user can create new modified instances of a given subgraph. In that sense, the class SubGraphView is meant to be used like an immutable python object.</p>
+<p>A common problem when using views is that they can get out-of-sync with the data they observe (in this case, a <code>tf.Graph</code>). This is up to the user to ensure that this doesn't happen. To keep on the safe side, it is recommended that the life time of subgraph views are kept very short. One way to achieve this is to use subgraphs within a &quot;with make_sgv(...) as sgv:&quot; Python context.</p>
+<p>To alleviate the out-of-sync problem, some functions are granted the right to modified subgraph in place. This is typically the case of graph manipulation functions which, given some subgraphs as arguments, can modify the underlying <code>tf.Graph</code>. Since this modification is likely to render the subgraph view invalid, those functions can modify the argument in place to reflect the change. For instance, calling the function swap_inputs(svg0, svg1) will modify svg0 and svg1 in place to reflect the fact that their inputs have now being swapped. - - -</p>
+<h4 id="tf.contrib.graph_editor.subgraphview.__bool__"><code id="SubGraphView.__bool__">tf.contrib.graph_editor.SubGraphView.__bool__()</code></h4>
+<p>Allows for implicit boolean conversion.</p>
+<hr />
+<h4 id="tf.contrib.graph_editor.subgraphview.__copy__"><code id="SubGraphView.__copy__">tf.contrib.graph_editor.SubGraphView.__copy__()</code></h4>
+<p>Create a copy of this subgraph.</p>
+<p>Note that this class is a &quot;view&quot;, copying it only create another view and does not copy the underlying part of the <code>tf.Graph</code>.</p>
+<h5 id="returns-25">Returns:</h5>
+<p>A new identical instance of the original subgraph view.</p>
+<hr />
+<h4 id="tf.contrib.graph_editor.subgraphview.__enter__"><code id="SubGraphView.__enter__">tf.contrib.graph_editor.SubGraphView.__enter__()</code></h4>
+<p>Allow Python context to minimize the life time of a subgraph view.</p>
+<p>A subgraph view is meant to be a lightweight and transient object. A short lifetime will alleviate the &quot;out-of-sync&quot; issue mentioned earlier. For that reason, a SubGraphView instance can be used within a Python context. For example:</p>
+<p>from tensorflow.contrib import graph_editor as ge with ge.make_sgv(...) as sgv: print(sgv)</p>
+<h5 id="returns-26">Returns:</h5>
+<p>Itself.</p>
+<hr />
+<h4 id="tf.contrib.graph_editor.subgraphview.__exit__exc_type-exc_value-traceback"><code id="SubGraphView.__exit__">tf.contrib.graph_editor.SubGraphView.__exit__(exc_type, exc_value, traceback)</code></h4>
+<hr />
+<h4 id="tf.contrib.graph_editor.subgraphview.__init__inside_ops-passthrough_ts"><code id="SubGraphView.__init__">tf.contrib.graph_editor.SubGraphView.__init__(inside_ops=(), passthrough_ts=())</code></h4>
+<p>Create a subgraph containing the given ops and the &quot;passthrough&quot; tensors.</p>
+<h5 id="args-25">Args:</h5>
+<ul>
+<li><b><code>inside_ops</code></b>: an object convertible to a list of <code>tf.Operation</code>. This list defines all the operations in the subgraph.</li>
+<li><b><code>passthrough_ts</code></b>: an object convertible to a list of <code>tf.Tensor</code>. This list define all the &quot;passthrough&quot; tensors. A passthrough tensor is a tensor which goes directly from the input of the subgraph to it output, without any intermediate operations. All the non passthrough tensors are silently ignored.</li>
+</ul>
+<h5 id="raises-24">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if inside_ops cannot be converted to a list of <code>tf.Operation</code> or if <code>passthrough_ts</code> cannot be converted to a list of <code>tf.Tensor</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.graph_editor.subgraphview.__nonzero__"><code id="SubGraphView.__nonzero__">tf.contrib.graph_editor.SubGraphView.__nonzero__()</code></h4>
+<p>Allows for implicit boolean conversion.</p>
+<hr />
+<h4 id="tf.contrib.graph_editor.subgraphview.__str__"><code id="SubGraphView.__str__">tf.contrib.graph_editor.SubGraphView.__str__()</code></h4>
+<hr />
+<h4 id="tf.contrib.graph_editor.subgraphview.connected_inputs"><code id="SubGraphView.connected_inputs">tf.contrib.graph_editor.SubGraphView.connected_inputs</code></h4>
+<p>The connected input tensors of this subgraph view.</p>
+<hr />
+<h4 id="tf.contrib.graph_editor.subgraphview.connected_outputs"><code id="SubGraphView.connected_outputs">tf.contrib.graph_editor.SubGraphView.connected_outputs</code></h4>
+<p>The connected output tensors of this subgraph view.</p>
+<hr />
+<h4 id="tf.contrib.graph_editor.subgraphview.consumers"><code id="SubGraphView.consumers">tf.contrib.graph_editor.SubGraphView.consumers()</code></h4>
+<p>Return a Python set of all the consumers of this subgraph view.</p>
+<p>A consumer of a subgraph view is a tf.Operation which is a consumer of one of the output tensors and is not in the subgraph.</p>
+<h5 id="returns-27">Returns:</h5>
+<p>A list of <code>tf.Operation</code> which are the consumers of this subgraph view.</p>
+<hr />
+<h4 id="tf.contrib.graph_editor.subgraphview.copy"><code id="SubGraphView.copy">tf.contrib.graph_editor.SubGraphView.copy()</code></h4>
+<p>Return a copy of itself.</p>
+<p>Note that this class is a &quot;view&quot;, copying it only create another view and does not copy the underlying part of the tf.Graph.</p>
+<h5 id="returns-28">Returns:</h5>
+<p>A new instance identical to the original one.</p>
+<hr />
+<h4 id="tf.contrib.graph_editor.subgraphview.find_op_by_nameop_name"><code id="SubGraphView.find_op_by_name">tf.contrib.graph_editor.SubGraphView.find_op_by_name(op_name)</code></h4>
+<p>Return the op named op_name.</p>
+<h5 id="args-26">Args:</h5>
+<ul>
+<li><b><code>op_name</code></b>: the name to search for</li>
+</ul>
+<h5 id="returns-29">Returns:</h5>
+<p>The op named op_name.</p>
+<h5 id="raises-25">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if the op_name could not be found.</li>
+<li><b><code>AssertionError</code></b>: if the name was found multiple time.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.graph_editor.subgraphview.graph"><code id="SubGraphView.graph">tf.contrib.graph_editor.SubGraphView.graph</code></h4>
+<p>The underlying <code>tf.Graph</code>.</p>
+<hr />
+<h4 id="tf.contrib.graph_editor.subgraphview.input_indext"><code id="SubGraphView.input_index">tf.contrib.graph_editor.SubGraphView.input_index(t)</code></h4>
+<p>Find the input index corresponding to the given input tensor t.</p>
+<h5 id="args-27">Args:</h5>
+<ul>
+<li><b><code>t</code></b>: the input tensor of this subgraph view.</li>
+</ul>
+<h5 id="returns-30">Returns:</h5>
+<p>The index in the self.inputs list.</p>
+<h5 id="raises-26">Raises:</h5>
+<ul>
+<li><b><code>Error</code></b>: if t in not an input tensor.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.graph_editor.subgraphview.inputs"><code id="SubGraphView.inputs">tf.contrib.graph_editor.SubGraphView.inputs</code></h4>
+<p>The input tensors of this subgraph view.</p>
+<hr />
+<h4 id="tf.contrib.graph_editor.subgraphview.is_passthrought"><code id="SubGraphView.is_passthrough">tf.contrib.graph_editor.SubGraphView.is_passthrough(t)</code></h4>
+<p>Check whether a tensor is passthrough.</p>
+<hr />
+<h4 id="tf.contrib.graph_editor.subgraphview.opop_id"><code id="SubGraphView.op">tf.contrib.graph_editor.SubGraphView.op(op_id)</code></h4>
+<p>Get an op by its index.</p>
+<hr />
+<h4 id="tf.contrib.graph_editor.subgraphview.ops"><code id="SubGraphView.ops">tf.contrib.graph_editor.SubGraphView.ops</code></h4>
+<p>The operations in this subgraph view.</p>
+<hr />
+<h4 id="tf.contrib.graph_editor.subgraphview.output_indext"><code id="SubGraphView.output_index">tf.contrib.graph_editor.SubGraphView.output_index(t)</code></h4>
+<p>Find the output index corresponding to given output tensor t.</p>
+<h5 id="args-28">Args:</h5>
+<ul>
+<li><b><code>t</code></b>: the output tensor of this subgraph view.</li>
+</ul>
+<h5 id="returns-31">Returns:</h5>
+<p>The index in the self.outputs list.</p>
+<h5 id="raises-27">Raises:</h5>
+<ul>
+<li><b><code>Error</code></b>: if t in not an output tensor.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.graph_editor.subgraphview.outputs"><code id="SubGraphView.outputs">tf.contrib.graph_editor.SubGraphView.outputs</code></h4>
+<p>The output tensors of this subgraph view.</p>
+<hr />
+<h4 id="tf.contrib.graph_editor.subgraphview.passthroughs"><code id="SubGraphView.passthroughs">tf.contrib.graph_editor.SubGraphView.passthroughs</code></h4>
+<p>The passthrough tensors, going straight from input to output.</p>
+<hr />
+<h4 id="tf.contrib.graph_editor.subgraphview.remapnew_input_indicesnone-new_output_indicesnone"><code id="SubGraphView.remap">tf.contrib.graph_editor.SubGraphView.remap(new_input_indices=None, new_output_indices=None)</code></h4>
+<p>Remap the inputs and outputs of the subgraph.</p>
+<p>Note that this is only modifying the view: the underlying tf.Graph is not affected.</p>
+<h5 id="args-29">Args:</h5>
+<ul>
+<li><b><code>new_input_indices</code></b>: an iterable of integers representing a mapping between the old inputs and the new ones. This mapping can be under-complete and must be without repetitions.</li>
+<li><b><code>new_output_indices</code></b>: an iterable of integers representing a mapping between the old outputs and the new ones. This mapping can be under-complete and can have repetitions.</li>
+</ul>
+<h5 id="returns-32">Returns:</h5>
+<p>A new modified instance of the original subgraph view with remapped inputs and outputs.</p>
+<hr />
+<h4 id="tf.contrib.graph_editor.subgraphview.remap_defaultremove_input_maptrue-remove_output_maptrue"><code id="SubGraphView.remap_default">tf.contrib.graph_editor.SubGraphView.remap_default(remove_input_map=True, remove_output_map=True)</code></h4>
+<p>Remap the inputs and/or outputs to the default mapping.</p>
+<h5 id="args-30">Args:</h5>
+<ul>
+<li><b><code>remove_input_map</code></b>: if True the input map is reset to the default one.</li>
+<li><b><code>remove_output_map</code></b>: if True the output map is reset to the default one.</li>
+</ul>
+<h5 id="returns-33">Returns:</h5>
+<p>A new modified instance of the original subgraph view with its input and/or output mapping reset to the default one.</p>
+<hr />
+<h4 id="tf.contrib.graph_editor.subgraphview.remap_inputsnew_input_indices"><code id="SubGraphView.remap_inputs">tf.contrib.graph_editor.SubGraphView.remap_inputs(new_input_indices)</code></h4>
+<p>Remap the inputs of the subgraph.</p>
+<p>If the inputs of the original subgraph are [t0, t1, t2], remapping to [2,0] will create a new instance whose inputs is [t2, t0].</p>
+<p>Note that this is only modifying the view: the underlying <code>tf.Graph</code> is not affected.</p>
+<h5 id="args-31">Args:</h5>
+<ul>
+<li><b><code>new_input_indices</code></b>: an iterable of integers representing a mapping between the old inputs and the new ones. This mapping can be under-complete and must be without repetitions.</li>
+</ul>
+<h5 id="returns-34">Returns:</h5>
+<p>A new modified instance of the original subgraph view with remapped inputs.</p>
+<hr />
+<h4 id="tf.contrib.graph_editor.subgraphview.remap_outputsnew_output_indices"><code id="SubGraphView.remap_outputs">tf.contrib.graph_editor.SubGraphView.remap_outputs(new_output_indices)</code></h4>
+<p>Remap the output of the subgraph.</p>
+<p>If the output of the original subgraph are [t0, t1, t2], remapping to [1,1,0] will create a new instance whose outputs is [t1, t1, t0].</p>
+<p>Note that this is only modifying the view: the underlying tf.Graph is not affected.</p>
+<h5 id="args-32">Args:</h5>
+<ul>
+<li><b><code>new_output_indices</code></b>: an iterable of integers representing a mapping between the old outputs and the new ones. This mapping can be under-complete and can have repetitions.</li>
+</ul>
+<h5 id="returns-35">Returns:</h5>
+<p>A new modified instance of the original subgraph view with remapped outputs.</p>
+<hr />
+<h4 id="tf.contrib.graph_editor.subgraphview.remap_outputs_make_unique"><code id="SubGraphView.remap_outputs_make_unique">tf.contrib.graph_editor.SubGraphView.remap_outputs_make_unique()</code></h4>
+<p>Remap the outputs so that all the tensors appears only once.</p>
+<hr />
+<h4 id="tf.contrib.graph_editor.subgraphview.remap_outputs_to_consumers"><code id="SubGraphView.remap_outputs_to_consumers">tf.contrib.graph_editor.SubGraphView.remap_outputs_to_consumers()</code></h4>
+<p>Remap the outputs to match the number of consumers.</p>
+<hr />
+<h4 id="tf.contrib.graph_editor.subgraphview.remove_unused_opscontrol_inputstrue"><code id="SubGraphView.remove_unused_ops">tf.contrib.graph_editor.SubGraphView.remove_unused_ops(control_inputs=True)</code></h4>
+<p>Remove unused ops.</p>
+<h5 id="args-33">Args:</h5>
+<ul>
+<li><b><code>control_inputs</code></b>: if True, control inputs are used to detect used ops.</li>
+</ul>
+<h5 id="returns-36">Returns:</h5>
+<p>A new subgraph view which only contains used operations.</p>
+<hr />
+<h3 id="tf.contrib.graph_editor.make_viewargs-kwargs"><a name="//apple_ref/cpp/Function/make_view" class="dashAnchor"></a><code id="make_view">tf.contrib.graph_editor.make_view(*args, **kwargs)</code></h3>
+<p>Create a SubGraphView from selected operations and passthrough tensors.</p>
+<h5 id="args-34">Args:</h5>
+<ul>
+<li><b><code>*args</code></b>: list of 1) regular expressions (compiled or not) or 2) (array of) <code>tf.Operation</code> 3) (array of) <code>tf.Tensor</code>. Those objects will be converted into a list of operations and a list of candidate for passthrough tensors.</li>
+<li><b><code>**kwargs</code></b>: keyword graph is used 1) to check that the ops and ts are from the correct graph 2) for regular expression query</li>
+</ul>
+<h5 id="returns-37">Returns:</h5>
+<p>A subgraph view.</p>
+<h5 id="raises-28">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if the optional keyword argument graph is not a <code>tf.Graph</code> or if an argument in args is not an (array of) <code>tf.Tensor</code> or an (array of) <code>tf.Operation</code> or a string or a regular expression.</li>
+<li><b><code>ValueError</code></b>: if one of the keyword arguments is unexpected.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.graph_editor.make_view_from_scopescope-graph"><a name="//apple_ref/cpp/Function/make_view_from_scope" class="dashAnchor"></a><code id="make_view_from_scope">tf.contrib.graph_editor.make_view_from_scope(scope, graph)</code></h3>
+<p>Make a subgraph from a name scope.</p>
+<h5 id="args-35">Args:</h5>
+<ul>
+<li><b><code>scope</code></b>: the name of the scope.</li>
+<li><b><code>graph</code></b>: the <code>tf.Graph</code>.</li>
+</ul>
+<h5 id="returns-38">Returns:</h5>
+<p>A subgraph view representing the given scope.</p>
+<h2 id="module-reroute">Module: reroute</h2>
+<hr />
+<h3 id="tf.contrib.graph_editor.swap_tsts0-ts1-can_modifynone-cannot_modifynone"><a name="//apple_ref/cpp/Function/swap_ts" class="dashAnchor"></a><code id="swap_ts">tf.contrib.graph_editor.swap_ts(ts0, ts1, can_modify=None, cannot_modify=None)</code></h3>
+<p>For each tensor's pair, swap the end of (t0,t1).</p>
+<p>B0 B1 B0 B1 | | =&gt; X A0 A1 A0 A1</p>
+<h5 id="args-36">Args:</h5>
+<ul>
+<li><b><code>ts0</code></b>: an object convertible to a list of <code>tf.Tensor</code>.</li>
+<li><b><code>ts1</code></b>: an object convertible to a list of <code>tf.Tensor</code>.</li>
+<li><b><code>can_modify</code></b>: iterable of operations which can be modified. Any operation outside within_ops will be left untouched by this function.</li>
+<li><b><code>cannot_modify</code></b>: iterable of operations which cannot be modified. Any operation within cannot_modify will be left untouched by this function.</li>
+</ul>
+<h5 id="returns-39">Returns:</h5>
+<p>The number of individual modifications made by the function.</p>
+<h5 id="raises-29">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if ts0 or ts1 cannot be converted to a list of tf.Tensor.</li>
+<li><b><code>TypeError</code></b>: if can_modify or cannot_modify is not None and cannot be converted to a list of tf.Operation.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.graph_editor.reroute_a2b_tsts0-ts1-can_modifynone-cannot_modifynone"><a name="//apple_ref/cpp/Function/reroute_a2b_ts" class="dashAnchor"></a><code id="reroute_a2b_ts">tf.contrib.graph_editor.reroute_a2b_ts(ts0, ts1, can_modify=None, cannot_modify=None)</code></h3>
+<p>For each tensor's pair, replace the end of t1 by the end of t0.</p>
+<p>B0 B1 B0 B1 | | =&gt; |/ A0 A1 A0 A1</p>
+<p>The end of the tensors in ts1 are left dangling.</p>
+<h5 id="args-37">Args:</h5>
+<ul>
+<li><b><code>ts0</code></b>: an object convertible to a list of <code>tf.Tensor</code>.</li>
+<li><b><code>ts1</code></b>: an object convertible to a list of <code>tf.Tensor</code>.</li>
+<li><b><code>can_modify</code></b>: iterable of operations which can be modified. Any operation outside within_ops will be left untouched by this function.</li>
+<li><b><code>cannot_modify</code></b>: iterable of operations which cannot be modified. Any operation within cannot_modify will be left untouched by this function.</li>
+</ul>
+<h5 id="returns-40">Returns:</h5>
+<p>The number of individual modifications made by the function.</p>
+<h5 id="raises-30">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if ts0 or ts1 cannot be converted to a list of tf.Tensor.</li>
+<li><b><code>TypeError</code></b>: if can_modify or cannot_modify is not None and cannot be converted to a list of tf.Operation.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.graph_editor.reroute_b2a_tsts0-ts1-can_modifynone-cannot_modifynone"><a name="//apple_ref/cpp/Function/reroute_b2a_ts" class="dashAnchor"></a><code id="reroute_b2a_ts">tf.contrib.graph_editor.reroute_b2a_ts(ts0, ts1, can_modify=None, cannot_modify=None)</code></h3>
+<p>For each tensor's pair, replace the end of t0 by the end of t1.</p>
+<p>B0 B1 B0 B1 | | =&gt; | A0 A1 A0 A1</p>
+<p>The end of the tensors in ts0 are left dangling.</p>
+<h5 id="args-38">Args:</h5>
+<ul>
+<li><b><code>ts0</code></b>: an object convertible to a list of <code>tf.Tensor</code>.</li>
+<li><b><code>ts1</code></b>: an object convertible to a list of <code>tf.Tensor</code>.</li>
+<li><b><code>can_modify</code></b>: iterable of operations which can be modified. Any operation outside within_ops will be left untouched by this function.</li>
+<li><b><code>cannot_modify</code></b>: iterable of operations which cannot be modified. Any operation within cannot_modify will be left untouched by this function.</li>
+</ul>
+<h5 id="returns-41">Returns:</h5>
+<p>The number of individual modifications made by the function.</p>
+<h5 id="raises-31">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if ts0 or ts1 cannot be converted to a list of tf.Tensor.</li>
+<li><b><code>TypeError</code></b>: if can_modify or cannot_modify is not None and cannot be converted to a list of tf.Operation.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.graph_editor.swap_inputssgv0-sgv1"><a name="//apple_ref/cpp/Function/swap_inputs" class="dashAnchor"></a><code id="swap_inputs">tf.contrib.graph_editor.swap_inputs(sgv0, sgv1)</code></h3>
+<p>Swap all the inputs of sgv0 and sgv1 (see reroute_inputs).</p>
+<hr />
+<h3 id="tf.contrib.graph_editor.reroute_a2b_inputssgv0-sgv1"><a name="//apple_ref/cpp/Function/reroute_a2b_inputs" class="dashAnchor"></a><code id="reroute_a2b_inputs">tf.contrib.graph_editor.reroute_a2b_inputs(sgv0, sgv1)</code></h3>
+<p>Re-route all the inputs of sgv0 to sgv1 (see reroute_inputs).</p>
+<hr />
+<h3 id="tf.contrib.graph_editor.reroute_b2a_inputssgv0-sgv1"><a name="//apple_ref/cpp/Function/reroute_b2a_inputs" class="dashAnchor"></a><code id="reroute_b2a_inputs">tf.contrib.graph_editor.reroute_b2a_inputs(sgv0, sgv1)</code></h3>
+<p>Re-route all the inputs of sgv1 to sgv0 (see reroute_inputs).</p>
+<hr />
+<h3 id="tf.contrib.graph_editor.swap_outputssgv0-sgv1"><a name="//apple_ref/cpp/Function/swap_outputs" class="dashAnchor"></a><code id="swap_outputs">tf.contrib.graph_editor.swap_outputs(sgv0, sgv1)</code></h3>
+<p>Swap all the outputs of sgv0 and sgv1 (see _reroute_outputs).</p>
+<hr />
+<h3 id="tf.contrib.graph_editor.reroute_a2b_outputssgv0-sgv1"><a name="//apple_ref/cpp/Function/reroute_a2b_outputs" class="dashAnchor"></a><code id="reroute_a2b_outputs">tf.contrib.graph_editor.reroute_a2b_outputs(sgv0, sgv1)</code></h3>
+<p>Re-route all the outputs of sgv0 to sgv1 (see _reroute_outputs).</p>
+<hr />
+<h3 id="tf.contrib.graph_editor.reroute_b2a_outputssgv0-sgv1"><a name="//apple_ref/cpp/Function/reroute_b2a_outputs" class="dashAnchor"></a><code id="reroute_b2a_outputs">tf.contrib.graph_editor.reroute_b2a_outputs(sgv0, sgv1)</code></h3>
+<p>Re-route all the outputs of sgv1 to sgv0 (see _reroute_outputs).</p>
+<hr />
+<h3 id="tf.contrib.graph_editor.swapsgv0-sgv1"><a name="//apple_ref/cpp/Function/swap" class="dashAnchor"></a><code id="swap">tf.contrib.graph_editor.swap(sgv0, sgv1)</code></h3>
+<p>Swap the inputs and outputs of sgv1 to sgv0 (see _reroute).</p>
+<hr />
+<h3 id="tf.contrib.graph_editor.reroute_a2bsgv0-sgv1"><a name="//apple_ref/cpp/Function/reroute_a2b" class="dashAnchor"></a><code id="reroute_a2b">tf.contrib.graph_editor.reroute_a2b(sgv0, sgv1)</code></h3>
+<p>Re-route the inputs and outputs of sgv0 to sgv1 (see _reroute).</p>
+<hr />
+<h3 id="tf.contrib.graph_editor.reroute_b2asgv0-sgv1"><a name="//apple_ref/cpp/Function/reroute_b2a" class="dashAnchor"></a><code id="reroute_b2a">tf.contrib.graph_editor.reroute_b2a(sgv0, sgv1)</code></h3>
+<p>Re-route the inputs and outputs of sgv1 to sgv0 (see _reroute).</p>
+<hr />
+<h3 id="tf.contrib.graph_editor.remove_control_inputsop-cops"><a name="//apple_ref/cpp/Function/remove_control_inputs" class="dashAnchor"></a><code id="remove_control_inputs">tf.contrib.graph_editor.remove_control_inputs(op, cops)</code></h3>
+<p>Remove the control inputs cops from co.</p>
+<p>Warning: this function is directly manipulating the internals of the <code>tf.Graph</code>.</p>
+<h5 id="args-39">Args:</h5>
+<ul>
+<li><b><code>op</code></b>: a <code>tf.Operation</code> from which to remove the control inputs.</li>
+<li><b><code>cops</code></b>: an object convertible to a list of <code>tf.Operation</code>.</li>
+</ul>
+<h5 id="raises-32">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if op is not a <code>tf.Operation</code>.</li>
+<li><b><code>ValueError</code></b>: if any cop in cops is not a control input of op.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.graph_editor.add_control_inputsop-cops"><a name="//apple_ref/cpp/Function/add_control_inputs" class="dashAnchor"></a><code id="add_control_inputs">tf.contrib.graph_editor.add_control_inputs(op, cops)</code></h3>
+<p>Add the control inputs cops to co.</p>
+<p>Warning: this function is directly manipulating the internals of the tf.Graph.</p>
+<h5 id="args-40">Args:</h5>
+<ul>
+<li><b><code>op</code></b>: a tf.Operation to which the control inputs are added.</li>
+<li><b><code>cops</code></b>: an object convertible to a list of <code>tf.Operation</code>.</li>
+</ul>
+<h5 id="raises-33">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if op is not a tf.Operation</li>
+<li><b><code>ValueError</code></b>: if any cop in cops is already a control input of op.</li>
+</ul>
+<h2 id="module-edit">Module: edit</h2>
+<hr />
+<h3 id="tf.contrib.graph_editor.detach_control_inputssgv"><a name="//apple_ref/cpp/Function/detach_control_inputs" class="dashAnchor"></a><code id="detach_control_inputs">tf.contrib.graph_editor.detach_control_inputs(sgv)</code></h3>
+<p>Detach all the external control inputs of the subgraph sgv.</p>
+<h5 id="args-41">Args:</h5>
+<ul>
+<li><b><code>sgv</code></b>: the subgraph view to be detached. This argument is converted to a subgraph using the same rules as the function subgraph.make_view.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.graph_editor.detach_control_outputssgv-control_outputs"><a name="//apple_ref/cpp/Function/detach_control_outputs" class="dashAnchor"></a><code id="detach_control_outputs">tf.contrib.graph_editor.detach_control_outputs(sgv, control_outputs)</code></h3>
+<p>Detach all the external control outputs of the subgraph sgv.</p>
+<h5 id="args-42">Args:</h5>
+<ul>
+<li><b><code>sgv</code></b>: the subgraph view to be detached. This argument is converted to a subgraph using the same rules as the function subgraph.make_view.</li>
+<li><b><code>control_outputs</code></b>: a util.ControlOutputs instance.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.graph_editor.detach_inputssgv-control_inputsfalse"><a name="//apple_ref/cpp/Function/detach_inputs" class="dashAnchor"></a><code id="detach_inputs">tf.contrib.graph_editor.detach_inputs(sgv, control_inputs=False)</code></h3>
+<p>Detach the inputs of a subgraph view.</p>
+<h5 id="args-43">Args:</h5>
+<ul>
+<li><b><code>sgv</code></b>: the subgraph view to be detached. This argument is converted to a subgraph using the same rules as the function subgraph.make_view. Note that sgv is modified in place.</li>
+<li><b><code>control_inputs</code></b>: if True control_inputs are also detached.</li>
+</ul>
+<h5 id="returns-42">Returns:</h5>
+<p>A tuple <code>(sgv, input_placeholders)</code> where <code>sgv</code> is a new subgraph view of the detached subgraph; <code>input_placeholders</code> is a list of the created input placeholders.</p>
+<h5 id="raises-34">Raises:</h5>
+<ul>
+<li><b><code>StandardError</code></b>: if sgv cannot be converted to a SubGraphView using the same rules than the function subgraph.make_view.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.graph_editor.detach_outputssgv-control_outputsnone"><a name="//apple_ref/cpp/Function/detach_outputs" class="dashAnchor"></a><code id="detach_outputs">tf.contrib.graph_editor.detach_outputs(sgv, control_outputs=None)</code></h3>
+<p>Detach the output of a subgraph view.</p>
+<h5 id="args-44">Args:</h5>
+<ul>
+<li><b><code>sgv</code></b>: the subgraph view to be detached. This argument is converted to a subgraph using the same rules as the function subgraph.make_view. Note that sgv is modified in place.</li>
+<li><b><code>control_outputs</code></b>: a util.ControlOutputs instance or None. If not None the control outputs are also detached.</li>
+</ul>
+<h5 id="returns-43">Returns:</h5>
+<p>A tuple <code>(sgv, output_placeholders)</code> where <code>sgv</code> is a new subgraph view of the detached subgraph; <code>output_placeholders</code> is a list of the created output placeholders.</p>
+<h5 id="raises-35">Raises:</h5>
+<ul>
+<li><b><code>StandardError</code></b>: if sgv cannot be converted to a SubGraphView using the same rules than the function subgraph.make_view.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.graph_editor.detachsgv-control_inputsfalse-control_outputsnone-control_iosnone"><a name="//apple_ref/cpp/Function/detach" class="dashAnchor"></a><code id="detach">tf.contrib.graph_editor.detach(sgv, control_inputs=False, control_outputs=None, control_ios=None)</code></h3>
+<p>Detach both the inputs and the outputs of a subgraph view.</p>
+<h5 id="args-45">Args:</h5>
+<ul>
+<li><b><code>sgv</code></b>: the subgraph view to be detached. This argument is converted to a subgraph using the same rules as the function subgraph.make_view. Note that sgv is modified in place.</li>
+<li><b><code>control_inputs</code></b>: A boolean indicating whether control inputs are enabled.</li>
+<li><b><code>control_outputs</code></b>: An instance of util.ControlOutputs or None. If not None, control outputs are enabled.</li>
+<li><b><code>control_ios</code></b>: An instance of util.ControlOutputs or None. If not None, both control inputs and control outputs are enabled. This is equivalent to set control_inputs to True and control_outputs to the util.ControlOutputs instance.</li>
+</ul>
+<h5 id="returns-44">Returns:</h5>
+<p>A tuple <code>(sgv, detached_inputs, detached_outputs)</code> where: <code>sgv</code> is a new subgraph view of the detached subgraph; <code>detach_inputs</code> is a list of the created input placeholders; <code>detach_outputs</code> is a list of the created output placeholders.</p>
+<h5 id="raises-36">Raises:</h5>
+<ul>
+<li><b><code>StandardError</code></b>: if sgv cannot be converted to a SubGraphView using the same rules than the function subgraph.make_view.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.graph_editor.connectsgv0-sgv1-disconnect_firstfalse"><a name="//apple_ref/cpp/Function/connect" class="dashAnchor"></a><code id="connect">tf.contrib.graph_editor.connect(sgv0, sgv1, disconnect_first=False)</code></h3>
+<p>Connect the outputs of sgv0 to the inputs of sgv1.</p>
+<h5 id="args-46">Args:</h5>
+<ul>
+<li><b><code>sgv0</code></b>: the first subgraph to have its outputs swapped. This argument is converted to a subgraph using the same rules as the function subgraph.make_view. Note that sgv0 is modified in place.</li>
+<li><b><code>sgv1</code></b>: the second subgraph to have its outputs swapped. This argument is converted to a subgraph using the same rules as the function subgraph.make_view. Note that sgv1 is modified in place.</li>
+<li><b><code>disconnect_first</code></b>: if True the current outputs of sgv0 are disconnected.</li>
+</ul>
+<h5 id="returns-45">Returns:</h5>
+<p>A tuple <code>(sgv0, sgv1)</code> of the now connected subgraphs.</p>
+<h5 id="raises-37">Raises:</h5>
+<ul>
+<li><b><code>StandardError</code></b>: if sgv0 or sgv1 cannot be converted to a SubGraphView using the same rules than the function subgraph.make_view.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.graph_editor.bypasssgv"><a name="//apple_ref/cpp/Function/bypass" class="dashAnchor"></a><code id="bypass">tf.contrib.graph_editor.bypass(sgv)</code></h3>
+<p>Bypass the given subgraph by connecting its inputs to its outputs.</p>
+<h5 id="args-47">Args:</h5>
+<ul>
+<li><b><code>sgv</code></b>: the subgraph view to be bypassed. This argument is converted to a subgraph using the same rules than the function subgraph.make_view. Note that sgv is modified in place.</li>
+</ul>
+<h5 id="returns-46">Returns:</h5>
+<p>A tuple <code>(sgv, detached_inputs)</code> where: <code>sgv</code> is a new subgraph view of the bypassed subgraph; <code>detached_inputs</code> is a list of the created input placeholders.</p>
+<h5 id="raises-38">Raises:</h5>
+<ul>
+<li><b><code>StandardError</code></b>: if sgv cannot be converted to a SubGraphView using the same rules than the function subgraph.make_view.</li>
+</ul>
+<h2 id="module-transform">Module: transform</h2>
+<hr />
+<h3 id="tf.contrib.graph_editor.replace_t_with_placeholder_handlerinfo-t"><a name="//apple_ref/cpp/Function/replace_t_with_placeholder_handler" class="dashAnchor"></a><code id="replace_t_with_placeholder_handler">tf.contrib.graph_editor.replace_t_with_placeholder_handler(info, t)</code></h3>
+<p>Transform a tensor into a placeholder tensor.</p>
+<p>This handler is typically used to transform a subgraph input tensor into a placeholder.</p>
+<h5 id="args-48">Args:</h5>
+<ul>
+<li><b><code>info</code></b>: Transform._Info instance.</li>
+<li><b><code>t</code></b>: tensor whose input must be transformed into a place holder.</li>
+</ul>
+<h5 id="returns-47">Returns:</h5>
+<p>The tensor generated by the newly created place holder.</p>
+<hr />
+<h3 id="tf.contrib.graph_editor.keep_t_if_possible_handlerinfo-t"><a name="//apple_ref/cpp/Function/keep_t_if_possible_handler" class="dashAnchor"></a><code id="keep_t_if_possible_handler">tf.contrib.graph_editor.keep_t_if_possible_handler(info, t)</code></h3>
+<p>Transform a tensor into itself (identity) if possible.</p>
+<p>This handler transform a tensor into itself if the source and destination graph are the same. Otherwise it will create a placeholder. This handler is typically used to transform a hidden input tensors.</p>
+<h5 id="args-49">Args:</h5>
+<ul>
+<li><b><code>info</code></b>: Transform._Info instance.</li>
+<li><b><code>t</code></b>: tensor whose input must be transformed into a place holder.</li>
+</ul>
+<h5 id="returns-48">Returns:</h5>
+<p>The tensor generated by the newly created place holder.</p>
+<hr />
+<h3 id="tf.contrib.graph_editor.assign_renamed_collections_handlerinfo-elem-elem_"><a name="//apple_ref/cpp/Function/assign_renamed_collections_handler" class="dashAnchor"></a><code id="assign_renamed_collections_handler">tf.contrib.graph_editor.assign_renamed_collections_handler(info, elem, elem_)</code></h3>
+<p>Add the transformed elem to the (renamed) collections of elem.</p>
+<h5 id="args-50">Args:</h5>
+<ul>
+<li><b><code>info</code></b>: Transform._Info instance.</li>
+<li><b><code>elem</code></b>: the original element (<code>tf.Tensor</code> or <code>tf.Operation</code>)</li>
+<li><b><code>elem_</code></b>: the transformed element</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.graph_editor.transform_op_if_inside_handlerinfo-op-keep_if_possibletrue"><a name="//apple_ref/cpp/Function/transform_op_if_inside_handler" class="dashAnchor"></a><code id="transform_op_if_inside_handler">tf.contrib.graph_editor.transform_op_if_inside_handler(info, op, keep_if_possible=True)</code></h3>
+<p>Transform an optional op only if it is inside the subgraph.</p>
+<p>This handler is typically use to handle original op: it is fine to keep them if they are inside the subgraph, otherwise they are just ignored.</p>
+<h5 id="args-51">Args:</h5>
+<ul>
+<li><b><code>info</code></b>: Transform._Info instance.</li>
+<li><b><code>op</code></b>: the optional op to transform (or ignore).</li>
+<li><b><code>keep_if_possible</code></b>: re-attach to the original op if possible, that is, if the source graph and the destination graph are the same.</li>
+</ul>
+<h5 id="returns-49">Returns:</h5>
+<p>The transformed op or None.</p>
+<hr />
+<h3 id="tf.contrib.graph_editor.copy_op_handlerinfo-op-copy_shapetrue"><a name="//apple_ref/cpp/Function/copy_op_handler" class="dashAnchor"></a><code id="copy_op_handler">tf.contrib.graph_editor.copy_op_handler(info, op, copy_shape=True)</code></h3>
+<p>Copy a <code>tf.Operation</code>.</p>
+<h5 id="args-52">Args:</h5>
+<ul>
+<li><b><code>info</code></b>: Transform._Info instance.</li>
+<li><b><code>op</code></b>: the <code>tf.Operation</code> to be copied.</li>
+<li><b><code>copy_shape</code></b>: also copy the shape of the tensor</li>
+</ul>
+<h5 id="returns-50">Returns:</h5>
+<p>A copy of op.</p>
+<hr />
+<h3 id="tf.contrib.graph_editor.transform_op_in_placeinfo-op-detach_outputsfalse"><a name="//apple_ref/cpp/Function/transform_op_in_place" class="dashAnchor"></a><code id="transform_op_in_place">tf.contrib.graph_editor.transform_op_in_place(info, op, detach_outputs=False)</code></h3>
+<p>Transform a op in-place - experimental!</p>
+<p>Transform an operation in place. It reconnects the inputs if they have been modified. if detach_outputs is True, the outputs of op are also detached.</p>
+<h5 id="args-53">Args:</h5>
+<ul>
+<li><b><code>info</code></b>: Transform._Info instance.</li>
+<li><b><code>op</code></b>: the op to transform in place.</li>
+<li><b><code>detach_outputs</code></b>: if True, the outputs of op are detached, ready for the user to add more operation.</li>
+</ul>
+<h5 id="returns-51">Returns:</h5>
+<p>The transformed op.</p>
+<hr />
+<h3 id="class-tf.contrib.graph_editor.transformer"><a name="//apple_ref/cpp/Class/Transformer" class="dashAnchor"></a><code id="Transformer">class tf.contrib.graph_editor.Transformer</code></h3>
+<p>Transform a subgraph into another one.</p>
+<p>By default, the constructor create a transform which copy a subgraph and replaces inputs with placeholders. This behavior can be modified by changing the handlers. - - -</p>
+<h4 id="tf.contrib.graph_editor.transformer.__call__sgv-dst_graph-dst_scope-src_scope-reuse_dst_scopefalse"><code id="Transformer.__call__">tf.contrib.graph_editor.Transformer.__call__(sgv, dst_graph, dst_scope, src_scope='', reuse_dst_scope=False)</code></h4>
+<p>Execute the transformation.</p>
+<h5 id="args-54">Args:</h5>
+<ul>
+<li><b><code>sgv</code></b>: the source subgraph-view.</li>
+<li><b><code>dst_graph</code></b>: the destination graph.</li>
+<li><b><code>dst_scope</code></b>: the destination scope.</li>
+<li><b><code>src_scope</code></b>: the source scope, which specify the path from which the relative path of the transformed nodes are computed. For instance, if src_scope is a/ and dst_scoped is b/, then the node a/x/y will have a relative path of x/y and will be transformed into b/x/y.</li>
+<li><b><code>reuse_dst_scope</code></b>: if True the dst_scope is re-used if it already exists. Otherwise, the scope is given a unique name based on the one given by appending an underscore followed by a digit (default).</li>
+</ul>
+<h5 id="returns-52">Returns:</h5>
+<p>A tuple <code>(sgv, info)</code> where: <code>sgv</code> is the transformed subgraph view; <code>info</code> is an instance of Transformer.ResultInfo containing information about the transform, including mapping between original and transformed tensors and operations.</p>
+<h5 id="raises-39">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if the arguments are invalid.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.graph_editor.transformer.__init__"><code id="Transformer.__init__">tf.contrib.graph_editor.Transformer.__init__()</code></h4>
+<p>Transformer constructor.</p>
+<p>The following members can be modified: transform_op_handler: handle the transformation of a <code>tf.Operation</code>. This handler defaults to a simple copy. assign_collections_handler: handle the assignment of collections. This handler defaults to assigning new collections created under the given name-scope. transform_external_input_handler: handle the transform of the inputs to the given subgraph. This handler defaults to creating placeholders instead of the ops just before the input tensors of the subgraph. transform_external_hidden_input_handler: handle the transform of the hidden inputs of the subgraph, that is, the inputs which are not listed in sgv.inputs. This handler defaults to a transform which keep the same input if the source and destination graphs are the same, otherwise use placeholders. transform_original_op_handler: handle the transform of original_op. This handler defaults to transforming original_op only if they are in the subgraph, otherwise they are ignored.</p>
+<hr />
+<h4 id="tf.contrib.graph_editor.transformer.new_namename"><code id="Transformer.new_name">tf.contrib.graph_editor.Transformer.new_name(name)</code></h4>
+<p>Compute a destination name from a source name.</p>
+<h5 id="args-55">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: the name to be &quot;transformed&quot;.</li>
+</ul>
+<h5 id="returns-53">Returns:</h5>
+<p>The transformed name.</p>
+<h5 id="raises-40">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if the source scope is used (that is, not an empty string) and the source name does not belong to the source scope.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.graph_editor.copysgv-dst_graphnone-dst_scope-src_scope-reuse_dst_scopefalse"><a name="//apple_ref/cpp/Function/copy" class="dashAnchor"></a><code id="copy">tf.contrib.graph_editor.copy(sgv, dst_graph=None, dst_scope='', src_scope='', reuse_dst_scope=False)</code></h3>
+<p>Copy a subgraph.</p>
+<h5 id="args-56">Args:</h5>
+<ul>
+<li><b><code>sgv</code></b>: the source subgraph-view. This argument is converted to a subgraph using the same rules than the function subgraph.make_view.</li>
+<li><b><code>dst_graph</code></b>: the destination graph.</li>
+<li><b><code>dst_scope</code></b>: the destination scope.</li>
+<li><b><code>src_scope</code></b>: the source scope.</li>
+<li><b><code>reuse_dst_scope</code></b>: if True the dst_scope is re-used if it already exists. Otherwise, the scope is given a unique name based on the one given by appending an underscore followed by a digit (default).</li>
+</ul>
+<h5 id="returns-54">Returns:</h5>
+<p>A tuple <code>(sgv, info)</code> where: <code>sgv</code> is the transformed subgraph view; <code>info</code> is an instance of Transformer.ResultInfo containing information about the transform, including mapping between original and transformed tensors and operations.</p>
+<h5 id="raises-41">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>dst_graph</code> is not a <code>tf.Graph</code>.</li>
+<li><b><code>StandardError</code></b>: if sgv cannot be converted to a SubGraphView using the same rules than the function subgraph.make_view.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.graph_editor.copy_with_input_replacementssgv-replacement_ts-dst_graphnone-dst_scope-src_scope-reuse_dst_scopefalse"><a name="//apple_ref/cpp/Function/copy_with_input_replacements" class="dashAnchor"></a><code id="copy_with_input_replacements">tf.contrib.graph_editor.copy_with_input_replacements(sgv, replacement_ts, dst_graph=None, dst_scope='', src_scope='', reuse_dst_scope=False)</code></h3>
+<p>Copy a subgraph, replacing some of its inputs.</p>
+<p>Note a replacement only happens if the tensor to be replaced is an input of the given subgraph. The inputs of a subgraph can be queried using sgv.inputs.</p>
+<h5 id="args-57">Args:</h5>
+<ul>
+<li><b><code>sgv</code></b>: the source subgraph-view. This argument is converted to a subgraph using the same rules as the function subgraph.make_view.</li>
+<li><b><code>replacement_ts</code></b>: dictionary mapping from original tensors to the replaced one.</li>
+<li><b><code>dst_graph</code></b>: the destination graph.</li>
+<li><b><code>dst_scope</code></b>: the destination scope.</li>
+<li><b><code>src_scope</code></b>: the source scope.</li>
+<li><b><code>reuse_dst_scope</code></b>: if True the dst_scope is re-used if it already exists. Otherwise, the scope is given a unique name based on the one given by appending an underscore followed by a digit (default).</li>
+</ul>
+<h5 id="returns-55">Returns:</h5>
+<p>A tuple <code>(sgv, info)</code> where: <code>sgv</code> is the transformed subgraph view; <code>info</code> is an instance of Transformer.ResultInfo containing information about the transform, including mapping between original and transformed tensors and operations.</p>
+<h5 id="raises-42">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if dst_graph is not a tf.Graph.</li>
+<li><b><code>StandardError</code></b>: if sgv cannot be converted to a SubGraphView using the same rules as the function subgraph.make_view.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.graph_editor.graph_replacetarget_ts-replacement_ts-dst_scope-src_scope-reuse_dst_scopefalse"><a name="//apple_ref/cpp/Function/graph_replace" class="dashAnchor"></a><code id="graph_replace">tf.contrib.graph_editor.graph_replace(target_ts, replacement_ts, dst_scope='', src_scope='', reuse_dst_scope=False)</code></h3>
+<p>Create a new graph which compute the targets from the replaced Tensors.</p>
+<h5 id="args-58">Args:</h5>
+<ul>
+<li><b><code>target_ts</code></b>: a single tf.Tensor or an iterable of tf.Tensor.</li>
+<li><b><code>replacement_ts</code></b>: dictionary mapping from original tensors to replaced tensors</li>
+<li><b><code>dst_scope</code></b>: the destination scope.</li>
+<li><b><code>src_scope</code></b>: the source scope.</li>
+<li><b><code>reuse_dst_scope</code></b>: if True the dst_scope is re-used if it already exists. Otherwise, the scope is given a unique name based on the one given by appending an underscore followed by a digit (default).</li>
+</ul>
+<h5 id="returns-56">Returns:</h5>
+<p>A single tf.Tensor or a list of target tf.Tensor, depending on the type of the input argument <code>target_ts</code>. The returned tensors are recomputed using the tensors from replacement_ts.</p>
+<h5 id="raises-43">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if the targets are not connected to replacement_ts.</li>
+</ul>
+<h2 id="module-match">Module: match</h2>
+<hr />
+<h3 id="tf.contrib.graph_editor.op_typeop_types-opnone"><a name="//apple_ref/cpp/Function/op_type" class="dashAnchor"></a><code id="op_type">tf.contrib.graph_editor.op_type(op_types, op=None)</code></h3>
+<p>Check if an op is of the given type.</p>
+<h5 id="args-59">Args:</h5>
+<ul>
+<li><b><code>op_types</code></b>: tuple of strings containing the types to check against. For instance: (&quot;Add&quot;, &quot;Const&quot;)</li>
+<li><b><code>op</code></b>: the operation to check (or None).</li>
+</ul>
+<h5 id="returns-57">Returns:</h5>
+<p>if op is not None, return True if the op is of the correct type. if op is None, return a lambda function which does the type checking.</p>
+<hr />
+<h3 id="class-tf.contrib.graph_editor.opmatcher"><a name="//apple_ref/cpp/Class/OpMatcher" class="dashAnchor"></a><code id="OpMatcher">class tf.contrib.graph_editor.OpMatcher</code></h3>
+<p>Graph match class. - - -</p>
+<h4 id="tf.contrib.graph_editor.opmatcher.__call__op"><code id="OpMatcher.__call__">tf.contrib.graph_editor.OpMatcher.__call__(op)</code></h4>
+<p>Evaluate if the op matches or not.</p>
+<hr />
+<h4 id="tf.contrib.graph_editor.opmatcher.__init__positive_filter"><code id="OpMatcher.__init__">tf.contrib.graph_editor.OpMatcher.__init__(positive_filter)</code></h4>
+<p>Graph match constructor.</p>
+<hr />
+<h4 id="tf.contrib.graph_editor.opmatcher.control_input_opsargs"><code id="OpMatcher.control_input_ops">tf.contrib.graph_editor.OpMatcher.control_input_ops(*args)</code></h4>
+<p>Add input matches.</p>
+<hr />
+<h4 id="tf.contrib.graph_editor.opmatcher.input_opsargs"><code id="OpMatcher.input_ops">tf.contrib.graph_editor.OpMatcher.input_ops(*args)</code></h4>
+<p>Add input matches.</p>
+<hr />
+<h4 id="tf.contrib.graph_editor.opmatcher.output_opsargs"><code id="OpMatcher.output_ops">tf.contrib.graph_editor.OpMatcher.output_ops(*args)</code></h4>
+<p>Add output matches.</p>
+<h2 id="useful-aliases">Useful aliases</h2>
+<hr />
+<h3 id="tf.contrib.graph_editor.phdtype-shapenone-scopenone"><a name="//apple_ref/cpp/Function/ph" class="dashAnchor"></a><code id="ph">tf.contrib.graph_editor.ph(dtype, shape=None, scope=None)</code></h3>
+<p>Create a tf.placeholder for the Graph Editor.</p>
+<p>Note that the correct graph scope must be set by the calling function. The placeholder is named using the function placeholder_name (with no tensor argument).</p>
+<h5 id="args-60">Args:</h5>
+<ul>
+<li><b><code>dtype</code></b>: the tensor type.</li>
+<li><b><code>shape</code></b>: the tensor shape (optional).</li>
+<li><b><code>scope</code></b>: absolute scope within which to create the placeholder. None means that the scope of t is preserved. &quot;&quot; means the root scope.</li>
+</ul>
+<h5 id="returns-58">Returns:</h5>
+<p>A newly created tf.placeholder.</p>
+<hr />
+<h3 id="tf.contrib.graph_editor.sgvargs-kwargs"><a name="//apple_ref/cpp/Function/sgv" class="dashAnchor"></a><code id="sgv">tf.contrib.graph_editor.sgv(*args, **kwargs)</code></h3>
+<p>Create a SubGraphView from selected operations and passthrough tensors.</p>
+<h5 id="args-61">Args:</h5>
+<ul>
+<li><b><code>*args</code></b>: list of 1) regular expressions (compiled or not) or 2) (array of) <code>tf.Operation</code> 3) (array of) <code>tf.Tensor</code>. Those objects will be converted into a list of operations and a list of candidate for passthrough tensors.</li>
+<li><b><code>**kwargs</code></b>: keyword graph is used 1) to check that the ops and ts are from the correct graph 2) for regular expression query</li>
+</ul>
+<h5 id="returns-59">Returns:</h5>
+<p>A subgraph view.</p>
+<h5 id="raises-44">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if the optional keyword argument graph is not a <code>tf.Graph</code> or if an argument in args is not an (array of) <code>tf.Tensor</code> or an (array of) <code>tf.Operation</code> or a string or a regular expression.</li>
+<li><b><code>ValueError</code></b>: if one of the keyword arguments is unexpected.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.graph_editor.sgv_scopescope-graph"><a name="//apple_ref/cpp/Function/sgv_scope" class="dashAnchor"></a><code id="sgv_scope">tf.contrib.graph_editor.sgv_scope(scope, graph)</code></h3>
+<p>Make a subgraph from a name scope.</p>
+<h5 id="args-62">Args:</h5>
+<ul>
+<li><b><code>scope</code></b>: the name of the scope.</li>
+<li><b><code>graph</code></b>: the <code>tf.Graph</code>.</li>
+</ul>
+<h5 id="returns-60">Returns:</h5>
+<p>A subgraph view representing the given scope.</p>
+<hr />
+<h3 id="tf.contrib.graph_editor.tsargs-kwargs"><a name="//apple_ref/cpp/Function/ts" class="dashAnchor"></a><code id="ts">tf.contrib.graph_editor.ts(*args, **kwargs)</code></h3>
+<p>Helper to select tensors.</p>
+<h5 id="args-63">Args:</h5>
+<ul>
+<li><b><code>*args</code></b>: list of 1) regular expressions (compiled or not) or 2) (array of) <code>tf.Tensor</code>. <code>tf.Operation</code> instances are silently ignored.</li>
+<li><b><code>**kwargs</code></b>: 'graph': <code>tf.Graph</code> in which to perform the regex query.This is required when using regex. 'positive_filter': an elem if selected only if <code>positive_filter(elem)</code> is <code>True</code>. This is optional. 'restrict_ts_regex': a regular expression is ignored if it doesn't start with the substring &quot;(?#ts)&quot;.</li>
+</ul>
+<h5 id="returns-61">Returns:</h5>
+<p>A list of <code>tf.Tensor</code>.</p>
+<h5 id="raises-45">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if the optional keyword argument graph is not a <code>tf.Graph</code> or if an argument in args is not an (array of) <code>tf.Tensor</code> or an (array of) <code>tf.Operation</code> (silently ignored) or a string or a regular expression.</li>
+<li><b><code>ValueError</code></b>: if one of the keyword arguments is unexpected or if a regular expression is used without passing a graph as a keyword argument.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.graph_editor.opsargs-kwargs"><a name="//apple_ref/cpp/Function/ops" class="dashAnchor"></a><code id="ops">tf.contrib.graph_editor.ops(*args, **kwargs)</code></h3>
+<p>Helper to select operations.</p>
+<h5 id="args-64">Args:</h5>
+<ul>
+<li><b><code>*args</code></b>: list of 1) regular expressions (compiled or not) or 2) (array of) <code>tf.Operation</code>. <code>tf.Tensor</code> instances are silently ignored.</li>
+<li><b><code>**kwargs</code></b>: 'graph': <code>tf.Graph</code> in which to perform the regex query.This is required when using regex. 'positive_filter': an elem if selected only if <code>positive_filter(elem)</code> is <code>True</code>. This is optional. 'restrict_ops_regex': a regular expression is ignored if it doesn't start with the substring &quot;(?#ops)&quot;.</li>
+</ul>
+<h5 id="returns-62">Returns:</h5>
+<p>A list of <code>tf.Operation</code>.</p>
+<h5 id="raises-46">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if the optional keyword argument graph is not a <code>tf.Graph</code> or if an argument in args is not an (array of) <code>tf.Operation</code> or an (array of) <code>tf.Tensor</code> (silently ignored) or a string or a regular expression.</li>
+<li><b><code>ValueError</code></b>: if one of the keyword arguments is unexpected or if a regular expression is used without passing a graph as a keyword argument.</li>
+</ul>
+<hr />
+<h3 id="class-tf.contrib.graph_editor.matcher"><a name="//apple_ref/cpp/Function/matcher" class="dashAnchor"></a><code id="matcher">class tf.contrib.graph_editor.matcher</code></h3>
+<p>Graph match class. - - -</p>
+<h4 id="tf.contrib.graph_editor.matcher.__call__op"><code id="matcher.__call__">tf.contrib.graph_editor.matcher.__call__(op)</code></h4>
+<p>Evaluate if the op matches or not.</p>
+<hr />
+<h4 id="tf.contrib.graph_editor.matcher.__init__positive_filter"><code id="matcher.__init__">tf.contrib.graph_editor.matcher.__init__(positive_filter)</code></h4>
+<p>Graph match constructor.</p>
+<hr />
+<h4 id="tf.contrib.graph_editor.matcher.control_input_opsargs"><code id="matcher.control_input_ops">tf.contrib.graph_editor.matcher.control_input_ops(*args)</code></h4>
+<p>Add input matches.</p>
+<hr />
+<h4 id="tf.contrib.graph_editor.matcher.input_opsargs"><code id="matcher.input_ops">tf.contrib.graph_editor.matcher.input_ops(*args)</code></h4>
+<p>Add input matches.</p>
+<hr />
+<h4 id="tf.contrib.graph_editor.matcher.output_opsargs"><code id="matcher.output_ops">tf.contrib.graph_editor.matcher.output_ops(*args)</code></h4>
+<p>Add output matches.</p>

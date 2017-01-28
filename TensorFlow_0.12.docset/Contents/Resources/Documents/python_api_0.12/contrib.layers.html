@@ -1,0 +1,971 @@
+<!-- This file is machine generated: DO NOT EDIT! -->
+<h1 id="layers-contrib">Layers (contrib)</h1>
+<p>[TOC]</p>
+<p>Ops for building neural network layers, regularizers, summaries, etc.</p>
+<h2 id="higher-level-ops-for-building-neural-network-layers.">Higher level ops for building neural network layers.</h2>
+<p>This package provides several ops that take care of creating variables that are used internally in a consistent way and provide the building blocks for many common machine learning algorithms.</p>
+<hr />
+<h3 id="tf.contrib.layers.avg_pool2dargs-kwargs"><a name="//apple_ref/cpp/Function/avg_pool2d" class="dashAnchor"></a><code id="avg_pool2d">tf.contrib.layers.avg_pool2d(*args, **kwargs)</code></h3>
+<p>Adds a 2D average pooling op.</p>
+<p>It is assumed that the pooling is done per image but not in batch or channels.</p>
+<h5 id="args">Args:</h5>
+<ul>
+<li><b><code>inputs</code></b>: A 4-D tensor of shape <code>[batch_size, height, width, channels]</code> if <code>data_format</code> is <code>NHWC</code>, and <code>[batch_size, channels, height, width]</code> if <code>data_format</code> is <code>NCHW</code>.</li>
+<li><b><code>kernel_size</code></b>: A list of length 2: [kernel_height, kernel_width] of the pooling kernel over which the op is computed. Can be an int if both values are the same.</li>
+<li><b><code>stride</code></b>: A list of length 2: [stride_height, stride_width]. Can be an int if both strides are the same. Note that presently both strides must have the same value.</li>
+<li><b><code>padding</code></b>: The padding method, either 'VALID' or 'SAME'.</li>
+<li><b><code>data_format</code></b>: A string. <code>NHWC</code> (default) and <code>NCHW</code> are supported.</li>
+<li><b><code>outputs_collections</code></b>: The collections to which the outputs are added.</li>
+<li><b><code>scope</code></b>: Optional scope for name_scope.</li>
+</ul>
+<h5 id="returns">Returns:</h5>
+<p>A <code>Tensor</code> representing the results of the pooling operation.</p>
+<h5 id="raises">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>data_format</code> is neither <code>NHWC</code> nor <code>NCHW</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.layers.batch_normargs-kwargs"><a name="//apple_ref/cpp/Function/batch_norm" class="dashAnchor"></a><code id="batch_norm">tf.contrib.layers.batch_norm(*args, **kwargs)</code></h3>
+<p>Adds a Batch Normalization layer from http://arxiv.org/abs/1502.03167.</p>
+<p>&quot;Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift&quot;</p>
+<p>Sergey Ioffe, Christian Szegedy</p>
+<p>Can be used as a normalizer function for conv2d and fully_connected.</p>
+<p>Note: When is_training is True the moving_mean and moving_variance need to be updated, by default the update_ops are placed in <code>tf.GraphKeys.UPDATE_OPS</code> so they need to be added as a dependency to the <code>train_op</code>, example:</p>
+<p>update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS) if update_ops: updates = tf.group(*update_ops) total_loss = control_flow_ops.with_dependencies([updates], total_loss)</p>
+<p>One can set updates_collections=None to force the updates in place, but that can have speed penalty, specially in distributed settings.</p>
+<h5 id="args-1">Args:</h5>
+<ul>
+<li><b><code>inputs</code></b>: a tensor with 2 or more dimensions, where the first dimension has <code>batch_size</code>. The normalization is over all but the last dimension if <code>data_format</code> is <code>NHWC</code> and the second dimension if <code>data_format</code> is <code>NCHW</code>.</li>
+<li><b><code>decay</code></b>: decay for the moving average. Reasonable values for <code>decay</code> are close to 1.0, typically in the multiple-nines range: 0.999, 0.99, 0.9, etc. Lower <code>decay</code> value (recommend trying <code>decay</code>=0.9) if model experiences reasonably good training performance but poor validation and/or test performance.</li>
+<li><b><code>center</code></b>: If True, subtract <code>beta</code>. If False, <code>beta</code> is ignored.</li>
+<li><b><code>scale</code></b>: If True, multiply by <code>gamma</code>. If False, <code>gamma</code> is not used. When the next layer is linear (also e.g. <code>nn.relu</code>), this can be disabled since the scaling can be done by the next layer.</li>
+<li><b><code>epsilon</code></b>: small float added to variance to avoid dividing by zero.</li>
+<li><b><code>activation_fn</code></b>: activation function, default set to None to skip it and maintain a linear activation.</li>
+<li><b><code>param_initializers</code></b>: optional initializers for beta, gamma, moving mean and moving variance.</li>
+<li><b><code>updates_collections</code></b>: collections to collect the update ops for computation. The updates_ops need to be executed with the train_op. If None, a control dependency would be added to make sure the updates are computed in place.</li>
+<li><b><code>is_training</code></b>: whether or not the layer is in training mode. In training mode it would accumulate the statistics of the moments into <code>moving_mean</code> and <code>moving_variance</code> using an exponential moving average with the given <code>decay</code>. When it is not in training mode then it would use the values of the <code>moving_mean</code> and the <code>moving_variance</code>.</li>
+<li><b><code>reuse</code></b>: whether or not the layer and its variables should be reused. To be able to reuse the layer scope must be given.</li>
+<li><b><code>variables_collections</code></b>: optional collections for the variables.</li>
+<li><b><code>outputs_collections</code></b>: collections to add the outputs.</li>
+<li><b><code>trainable</code></b>: If <code>True</code> also add variables to the graph collection <code>GraphKeys.TRAINABLE_VARIABLES</code> (see <code>tf.Variable</code>).</li>
+<li><b><code>batch_weights</code></b>: An optional tensor of shape <code>[batch_size]</code>, containing a frequency weight for each batch item. If present, then the batch normalization uses weighted mean and variance. (This can be used to correct for bias in training example selection.)</li>
+<li><b><code>fused</code></b>: Use nn.fused_batch_norm if True, nn.batch_normalization otherwise.</li>
+<li><b><code>data_format</code></b>: A string. <code>NHWC</code> (default) and <code>NCHW</code> are supported.</li>
+<li><b><code>scope</code></b>: Optional scope for <code>variable_scope</code>.</li>
+</ul>
+<h5 id="returns-1">Returns:</h5>
+<p>A <code>Tensor</code> representing the output of the operation.</p>
+<h5 id="raises-1">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>batch_weights</code> is not None and <code>fused</code> is True.</li>
+<li><b><code>ValueError</code></b>: if <code>data_format</code> is neither <code>NHWC</code> nor <code>NCHW</code>.</li>
+<li><b><code>ValueError</code></b>: if the rank of <code>inputs</code> is undefined.</li>
+<li><b><code>ValueError</code></b>: if rank or channels dimension of <code>inputs</code> is undefined.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.layers.convolution2dargs-kwargs"><a name="//apple_ref/cpp/Function/convolution2d" class="dashAnchor"></a><code id="convolution2d">tf.contrib.layers.convolution2d(*args, **kwargs)</code></h3>
+<p>Adds an N-D convolution followed by an optional batch_norm layer.</p>
+<p>It is required that 1 &lt;= N &lt;= 3.</p>
+<p><code>convolution</code> creates a variable called <code>weights</code>, representing the convolutional kernel, that is convolved (actually cross-correlated) with the <code>inputs</code> to produce a <code>Tensor</code> of activations. If a <code>normalizer_fn</code> is provided (such as <code>batch_norm</code>), it is then applied. Otherwise, if <code>normalizer_fn</code> is None and a <code>biases_initializer</code> is provided then a <code>biases</code> variable would be created and added the activations. Finally, if <code>activation_fn</code> is not <code>None</code>, it is applied to the activations as well.</p>
+<p>Performs a'trous convolution with input stride/dilation rate equal to <code>rate</code> if a value &gt; 1 for any dimension of <code>rate</code> is specified. In this case <code>stride</code> values != 1 are not supported.</p>
+<h5 id="args-2">Args:</h5>
+<ul>
+<li><b><code>inputs</code></b>: a Tensor of rank N+2 of shape <code>[batch_size] + input_spatial_shape + [in_channels]</code> if data_format does not start with &quot;NC&quot; (default), or <code>[batch_size, in_channels] + input_spatial_shape</code> if data_format starts with &quot;NC&quot;.</li>
+<li><b><code>num_outputs</code></b>: integer, the number of output filters.</li>
+<li><b><code>kernel_size</code></b>: a sequence of N positive integers specifying the spatial dimensions of of the filters. Can be a single integer to specify the same value for all spatial dimensions.</li>
+<li><b><code>stride</code></b>: a sequence of N positive integers specifying the stride at which to compute output. Can be a single integer to specify the same value for all spatial dimensions. Specifying any <code>stride</code> value != 1 is incompatible with specifying any <code>rate</code> value != 1.</li>
+<li><b><code>padding</code></b>: one of <code>&quot;VALID&quot;</code> or <code>&quot;SAME&quot;</code>.</li>
+<li><b><code>data_format</code></b>: A string or None. Specifies whether the channel dimension of the <code>input</code> and output is the last dimension (default, or if <code>data_format</code> does not start with &quot;NC&quot;), or the second dimension (if <code>data_format</code> starts with &quot;NC&quot;). For N=1, the valid values are &quot;NWC&quot; (default) and &quot;NCW&quot;. For N=2, the valid values are &quot;NHWC&quot; (default) and &quot;NCHW&quot;. For N=3, currently the only valid value is &quot;NDHWC&quot;.</li>
+<li><b><code>rate</code></b>: a sequence of N positive integers specifying the dilation rate to use for a'trous convolution. Can be a single integer to specify the same value for all spatial dimensions. Specifying any <code>rate</code> value != 1 is incompatible with specifying any <code>stride</code> value != 1.</li>
+<li><b><code>activation_fn</code></b>: activation function, set to None to skip it and maintain a linear activation.</li>
+<li><b><code>normalizer_fn</code></b>: normalization function to use instead of <code>biases</code>. If <code>normalizer_fn</code> is provided then <code>biases_initializer</code> and <code>biases_regularizer</code> are ignored and <code>biases</code> are not created nor added. default set to None for no normalizer function</li>
+<li><b><code>normalizer_params</code></b>: normalization function parameters.</li>
+<li><b><code>weights_initializer</code></b>: An initializer for the weights.</li>
+<li><b><code>weights_regularizer</code></b>: Optional regularizer for the weights.</li>
+<li><b><code>biases_initializer</code></b>: An initializer for the biases. If None skip biases.</li>
+<li><b><code>biases_regularizer</code></b>: Optional regularizer for the biases.</li>
+<li><b><code>reuse</code></b>: whether or not the layer and its variables should be reused. To be able to reuse the layer scope must be given.</li>
+<li><b><code>variables_collections</code></b>: optional list of collections for all the variables or a dictionary containing a different list of collection per variable.</li>
+<li><b><code>outputs_collections</code></b>: collection to add the outputs.</li>
+<li><b><code>trainable</code></b>: If <code>True</code> also add variables to the graph collection <code>GraphKeys.TRAINABLE_VARIABLES</code> (see tf.Variable).</li>
+<li><b><code>scope</code></b>: Optional scope for <code>variable_scope</code>.</li>
+</ul>
+<h5 id="returns-2">Returns:</h5>
+<p>a tensor representing the output of the operation.</p>
+<h5 id="raises-2">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>data_format</code> is invalid.</li>
+<li><b><code>ValueError</code></b>: both 'rate' and <code>stride</code> are not uniformly 1.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.layers.convolution2d_in_planeargs-kwargs"><a name="//apple_ref/cpp/Function/convolution2d_in_plane" class="dashAnchor"></a><code id="convolution2d_in_plane">tf.contrib.layers.convolution2d_in_plane(*args, **kwargs)</code></h3>
+<p>Performs the same in-plane convolution to each channel independently.</p>
+<p>This is useful for performing various simple channel-independent convolution operations such as image gradients:</p>
+<p>image = tf.constant(..., shape=(16, 240, 320, 3)) vert_gradients = layers.conv2d_in_plane(image, kernel=[1, -1], kernel_size=[2, 1]) horz_gradients = layers.conv2d_in_plane(image, kernel=[1, -1], kernel_size=[1, 2])</p>
+<h5 id="args-3">Args:</h5>
+<ul>
+<li><b><code>inputs</code></b>: a 4-D tensor with dimensions [batch_size, height, width, channels].</li>
+<li><b><code>kernel_size</code></b>: a list of length 2 holding the [kernel_height, kernel_width] of of the pooling. Can be an int if both values are the same.</li>
+<li><b><code>stride</code></b>: a list of length 2 <code>[stride_height, stride_width]</code>. Can be an int if both strides are the same. Note that presently both strides must have the same value.</li>
+<li><b><code>padding</code></b>: the padding type to use, either 'SAME' or 'VALID'.</li>
+<li><b><code>activation_fn</code></b>: activation function, set to None to skip it and maintain a linear activation.</li>
+<li><b><code>normalizer_fn</code></b>: normalization function to use instead of <code>biases</code>. If <code>normalizer_fn</code> is provided then <code>biases_initializer</code> and <code>biases_regularizer</code> are ignored and <code>biases</code> are not created nor added. default set to None for no normalizer function</li>
+<li><b><code>normalizer_params</code></b>: normalization function parameters.</li>
+<li><b><code>weights_initializer</code></b>: An initializer for the weights.</li>
+<li><b><code>weights_regularizer</code></b>: Optional regularizer for the weights.</li>
+<li><b><code>biases_initializer</code></b>: An initializer for the biases. If None skip biases.</li>
+<li><b><code>biases_regularizer</code></b>: Optional regularizer for the biases.</li>
+<li><b><code>reuse</code></b>: whether or not the layer and its variables should be reused. To be able to reuse the layer scope must be given.</li>
+<li><b><code>variables_collections</code></b>: optional list of collections for all the variables or a dictionary containing a different list of collection per variable.</li>
+<li><b><code>outputs_collections</code></b>: collection to add the outputs.</li>
+<li><b><code>trainable</code></b>: If <code>True</code> also add variables to the graph collection <code>GraphKeys.TRAINABLE_VARIABLES</code> (see tf.Variable).</li>
+<li><b><code>scope</code></b>: Optional scope for <code>variable_scope</code>.</li>
+</ul>
+<h5 id="returns-3">Returns:</h5>
+<p>A <code>Tensor</code> representing the output of the operation.</p>
+<hr />
+<h3 id="tf.contrib.layers.convolution2d_transposeargs-kwargs"><a name="//apple_ref/cpp/Function/convolution2d_transpose" class="dashAnchor"></a><code id="convolution2d_transpose">tf.contrib.layers.convolution2d_transpose(*args, **kwargs)</code></h3>
+<p>Adds a convolution2d_transpose with an optional batch normalization layer.</p>
+<p>The function creates a variable called <code>weights</code>, representing the kernel, that is convolved with the input. If <code>batch_norm_params</code> is <code>None</code>, a second variable called 'biases' is added to the result of the operation.</p>
+<h5 id="args-4">Args:</h5>
+<ul>
+<li><b><code>inputs</code></b>: A 4-D <code>Tensor</code> of type <code>float</code> and shape <code>[batch, height, width, in_channels]</code> for <code>NHWC</code> data format or <code>[batch, in_channels, height, width]</code> for <code>NCHW</code> data format.</li>
+<li><b><code>num_outputs</code></b>: integer, the number of output filters.</li>
+<li><b><code>kernel_size</code></b>: a list of length 2 holding the [kernel_height, kernel_width] of of the filters. Can be an int if both values are the same.</li>
+<li><b><code>stride</code></b>: a list of length 2: [stride_height, stride_width]. Can be an int if both strides are the same. Note that presently both strides must have the same value.</li>
+<li><b><code>padding</code></b>: one of 'VALID' or 'SAME'.</li>
+<li><b><code>data_format</code></b>: A string. <code>NHWC</code> (default) and <code>NCHW</code> are supported.</li>
+<li><b><code>activation_fn</code></b>: activation function, set to None to skip it and maintain a linear activation.</li>
+<li><b><code>normalizer_fn</code></b>: normalization function to use instead of <code>biases</code>. If <code>normalizer_fn</code> is provided then <code>biases_initializer</code> and <code>biases_regularizer</code> are ignored and <code>biases</code> are not created nor added. default set to None for no normalizer function</li>
+<li><b><code>normalizer_params</code></b>: normalization function parameters.</li>
+<li><b><code>weights_initializer</code></b>: An initializer for the weights.</li>
+<li><b><code>weights_regularizer</code></b>: Optional regularizer for the weights.</li>
+<li><b><code>biases_initializer</code></b>: An initializer for the biases. If None skip biases.</li>
+<li><b><code>biases_regularizer</code></b>: Optional regularizer for the biases.</li>
+<li><b><code>reuse</code></b>: whether or not the layer and its variables should be reused. To be able to reuse the layer scope must be given.</li>
+<li><b><code>variables_collections</code></b>: optional list of collections for all the variables or a dictionary containing a different list of collection per variable.</li>
+<li><b><code>outputs_collections</code></b>: collection to add the outputs.</li>
+<li><b><code>trainable</code></b>: whether or not the variables should be trainable or not.</li>
+<li><b><code>scope</code></b>: Optional scope for variable_scope.</li>
+</ul>
+<h5 id="returns-4">Returns:</h5>
+<p>a tensor representing the output of the operation.</p>
+<h5 id="raises-3">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if 'kernel_size' is not a list of length 2.</li>
+<li><b><code>ValueError</code></b>: if <code>data_format</code> is neither <code>NHWC</code> nor <code>NCHW</code>.</li>
+<li><b><code>ValueError</code></b>: if <code>C</code> dimension of <code>inputs</code> is None.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.layers.flattenargs-kwargs"><a name="//apple_ref/cpp/Function/flatten" class="dashAnchor"></a><code id="flatten">tf.contrib.layers.flatten(*args, **kwargs)</code></h3>
+<p>Flattens the input while maintaining the batch_size.</p>
+<p>Assumes that the first dimension represents the batch.</p>
+<h5 id="args-5">Args:</h5>
+<ul>
+<li><b><code>inputs</code></b>: a tensor of size [batch_size, ...].</li>
+<li><b><code>outputs_collections</code></b>: collection to add the outputs.</li>
+<li><b><code>scope</code></b>: Optional scope for name_scope.</li>
+</ul>
+<h5 id="returns-5">Returns:</h5>
+<p>a flattened tensor with shape [batch_size, k].</p>
+<h5 id="raises-4">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if inputs.shape is wrong.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.layers.fully_connectedargs-kwargs"><a name="//apple_ref/cpp/Function/fully_connected" class="dashAnchor"></a><code id="fully_connected">tf.contrib.layers.fully_connected(*args, **kwargs)</code></h3>
+<p>Adds a fully connected layer.</p>
+<p><code>fully_connected</code> creates a variable called <code>weights</code>, representing a fully connected weight matrix, which is multiplied by the <code>inputs</code> to produce a <code>Tensor</code> of hidden units. If a <code>normalizer_fn</code> is provided (such as <code>batch_norm</code>), it is then applied. Otherwise, if <code>normalizer_fn</code> is None and a <code>biases_initializer</code> is provided then a <code>biases</code> variable would be created and added the hidden units. Finally, if <code>activation_fn</code> is not <code>None</code>, it is applied to the hidden units as well.</p>
+<p>Note: that if <code>inputs</code> have a rank greater than 2, then <code>inputs</code> is flattened prior to the initial matrix multiply by <code>weights</code>.</p>
+<h5 id="args-6">Args:</h5>
+<ul>
+<li><b><code>inputs</code></b>: A tensor of with at least rank 2 and value for the last dimension, i.e. <code>[batch_size, depth]</code>, <code>[None, None, None, channels]</code>.</li>
+<li><b><code>num_outputs</code></b>: Integer or long, the number of output units in the layer.</li>
+<li><b><code>activation_fn</code></b>: activation function, set to None to skip it and maintain a linear activation.</li>
+<li><b><code>normalizer_fn</code></b>: normalization function to use instead of <code>biases</code>. If <code>normalizer_fn</code> is provided then <code>biases_initializer</code> and <code>biases_regularizer</code> are ignored and <code>biases</code> are not created nor added. default set to None for no normalizer function</li>
+<li><b><code>normalizer_params</code></b>: normalization function parameters.</li>
+<li><b><code>weights_initializer</code></b>: An initializer for the weights.</li>
+<li><b><code>weights_regularizer</code></b>: Optional regularizer for the weights.</li>
+<li><b><code>biases_initializer</code></b>: An initializer for the biases. If None skip biases.</li>
+<li><b><code>biases_regularizer</code></b>: Optional regularizer for the biases.</li>
+<li><b><code>reuse</code></b>: whether or not the layer and its variables should be reused. To be able to reuse the layer scope must be given.</li>
+<li><b><code>variables_collections</code></b>: Optional list of collections for all the variables or a dictionary containing a different list of collections per variable.</li>
+<li><b><code>outputs_collections</code></b>: collection to add the outputs.</li>
+<li><b><code>trainable</code></b>: If <code>True</code> also add variables to the graph collection <code>GraphKeys.TRAINABLE_VARIABLES</code> (see tf.Variable).</li>
+<li><b><code>scope</code></b>: Optional scope for variable_scope.</li>
+</ul>
+<h5 id="returns-6">Returns:</h5>
+<p>the tensor variable representing the result of the series of operations.</p>
+<h5 id="raises-5">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if x has rank less than 2 or if its last dimension is not set.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.layers.layer_normargs-kwargs"><a name="//apple_ref/cpp/Function/layer_norm" class="dashAnchor"></a><code id="layer_norm">tf.contrib.layers.layer_norm(*args, **kwargs)</code></h3>
+<p>Adds a Layer Normalization layer from https://arxiv.org/abs/1607.06450.</p>
+<p>&quot;Layer Normalization&quot;</p>
+<p>Jimmy Lei Ba, Jamie Ryan Kiros, Geoffrey E. Hinton</p>
+<p>Can be used as a normalizer function for conv2d and fully_connected.</p>
+<h5 id="args-7">Args:</h5>
+<ul>
+<li><b><code>inputs</code></b>: a tensor with 2 or more dimensions. The normalization occurs over all but the first dimension.</li>
+<li><b><code>center</code></b>: If True, subtract <code>beta</code>. If False, <code>beta</code> is ignored.</li>
+<li><b><code>scale</code></b>: If True, multiply by <code>gamma</code>. If False, <code>gamma</code> is not used. When the next layer is linear (also e.g. <code>nn.relu</code>), this can be disabled since the scaling can be done by the next layer.</li>
+<li><b><code>activation_fn</code></b>: activation function, default set to None to skip it and maintain a linear activation.</li>
+<li><b><code>reuse</code></b>: whether or not the layer and its variables should be reused. To be able to reuse the layer scope must be given.</li>
+<li><b><code>variables_collections</code></b>: optional collections for the variables.</li>
+<li><b><code>outputs_collections</code></b>: collections to add the outputs.</li>
+<li><b><code>trainable</code></b>: If <code>True</code> also add variables to the graph collection <code>GraphKeys.TRAINABLE_VARIABLES</code> (see tf.Variable).</li>
+<li><b><code>scope</code></b>: Optional scope for <code>variable_scope</code>.</li>
+</ul>
+<h5 id="returns-7">Returns:</h5>
+<p>A <code>Tensor</code> representing the output of the operation.</p>
+<h5 id="raises-6">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if rank or last dimension of <code>inputs</code> is undefined.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.layers.max_pool2dargs-kwargs"><a name="//apple_ref/cpp/Function/max_pool2d" class="dashAnchor"></a><code id="max_pool2d">tf.contrib.layers.max_pool2d(*args, **kwargs)</code></h3>
+<p>Adds a 2D Max Pooling op.</p>
+<p>It is assumed that the pooling is done per image but not in batch or channels.</p>
+<h5 id="args-8">Args:</h5>
+<ul>
+<li><b><code>inputs</code></b>: A 4-D tensor of shape <code>[batch_size, height, width, channels]</code> if <code>data_format</code> is <code>NHWC</code>, and <code>[batch_size, channels, height, width]</code> if <code>data_format</code> is <code>NCHW</code>.</li>
+<li><b><code>kernel_size</code></b>: A list of length 2: [kernel_height, kernel_width] of the pooling kernel over which the op is computed. Can be an int if both values are the same.</li>
+<li><b><code>stride</code></b>: A list of length 2: [stride_height, stride_width]. Can be an int if both strides are the same. Note that presently both strides must have the same value.</li>
+<li><b><code>padding</code></b>: The padding method, either 'VALID' or 'SAME'.</li>
+<li><b><code>data_format</code></b>: A string. <code>NHWC</code> (default) and <code>NCHW</code> are supported.</li>
+<li><b><code>outputs_collections</code></b>: The collections to which the outputs are added.</li>
+<li><b><code>scope</code></b>: Optional scope for name_scope.</li>
+</ul>
+<h5 id="returns-8">Returns:</h5>
+<p>A <code>Tensor</code> representing the results of the pooling operation.</p>
+<h5 id="raises-7">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>data_format</code> is neither <code>NHWC</code> nor <code>NCHW</code>.</li>
+<li><b><code>ValueError</code></b>: If 'kernel_size' is not a 2-D list</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.layers.one_hot_encodingargs-kwargs"><a name="//apple_ref/cpp/Function/one_hot_encoding" class="dashAnchor"></a><code id="one_hot_encoding">tf.contrib.layers.one_hot_encoding(*args, **kwargs)</code></h3>
+<p>Transform numeric labels into onehot_labels using <code>tf.one_hot</code>.</p>
+<h5 id="args-9">Args:</h5>
+<ul>
+<li><b><code>labels</code></b>: [batch_size] target labels.</li>
+<li><b><code>num_classes</code></b>: total number of classes.</li>
+<li><b><code>on_value</code></b>: A scalar defining the on-value.</li>
+<li><b><code>off_value</code></b>: A scalar defining the off-value.</li>
+<li><b><code>outputs_collections</code></b>: collection to add the outputs.</li>
+<li><b><code>scope</code></b>: Optional scope for name_scope.</li>
+</ul>
+<h5 id="returns-9">Returns:</h5>
+<p>one hot encoding of the labels.</p>
+<hr />
+<h3 id="tf.contrib.layers.repeatinputs-repetitions-layer-args-kwargs"><a name="//apple_ref/cpp/Function/repeat" class="dashAnchor"></a><code id="repeat">tf.contrib.layers.repeat(inputs, repetitions, layer, *args, **kwargs)</code></h3>
+<p>Applies the same layer with the same arguments repeatedly.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">  y <span class="op">=</span> repeat(x, <span class="dv">3</span>, conv2d, <span class="dv">64</span>, [<span class="dv">3</span>, <span class="dv">3</span>], scope<span class="op">=</span><span class="st">&#39;conv1&#39;</span>)
+  <span class="co"># It is equivalent to:</span>
+
+  x <span class="op">=</span> conv2d(x, <span class="dv">64</span>, [<span class="dv">3</span>, <span class="dv">3</span>], scope<span class="op">=</span><span class="st">&#39;conv1/conv1_1&#39;</span>)
+  x <span class="op">=</span> conv2d(x, <span class="dv">64</span>, [<span class="dv">3</span>, <span class="dv">3</span>], scope<span class="op">=</span><span class="st">&#39;conv1/conv1_2&#39;</span>)
+  y <span class="op">=</span> conv2d(x, <span class="dv">64</span>, [<span class="dv">3</span>, <span class="dv">3</span>], scope<span class="op">=</span><span class="st">&#39;conv1/conv1_3&#39;</span>)</code></pre></div>
+<p>If the <code>scope</code> argument is not given in <code>kwargs</code>, it is set to <code>layer.__name__</code>, or <code>layer.func.__name__</code> (for <code>functools.partial</code> objects). If neither <code>__name__</code> nor <code>func.__name__</code> is available, the layers are called with <code>scope='stack'</code>.</p>
+<h5 id="args-10">Args:</h5>
+<ul>
+<li><b><code>inputs</code></b>: A <code>Tensor</code> suitable for layer.</li>
+<li><b><code>repetitions</code></b>: Int, number of repetitions.</li>
+<li><b><code>layer</code></b>: A layer with arguments <code>(inputs, *args, **kwargs)</code></li>
+<li><b><code>*args</code></b>: Extra args for the layer.</li>
+<li><b><code>**kwargs</code></b>: Extra kwargs for the layer.</li>
+</ul>
+<h5 id="returns-10">Returns:</h5>
+<p>a tensor result of applying the layer, repetitions times.</p>
+<h5 id="raises-8">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if the op is unknown or wrong.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.layers.safe_embedding_lookup_sparseembedding_weights-sparse_ids-sparse_weightsnone-combinernone-default_idnone-namenone-partition_strategydiv-max_normnone"><a name="//apple_ref/cpp/Function/safe_embedding_lookup_sparse" class="dashAnchor"></a><code id="safe_embedding_lookup_sparse">tf.contrib.layers.safe_embedding_lookup_sparse(embedding_weights, sparse_ids, sparse_weights=None, combiner=None, default_id=None, name=None, partition_strategy='div', max_norm=None)</code></h3>
+<p>Lookup embedding results, accounting for invalid IDs and empty features.</p>
+<p>The partitioned embedding in <code>embedding_weights</code> must all be the same shape except for the first dimension. The first dimension is allowed to vary as the vocabulary size is not necessarily a multiple of <code>P</code>. <code>embedding_weights</code> may be a <code>PartitionedVariable</code> as returned by using <code>tf.get_variable()</code> with a partitioner.</p>
+<p>Invalid IDs (&lt; 0) are pruned from input IDs and weights, as well as any IDs with non-positive weight. For an entry with no features, the embedding vector for <code>default_id</code> is returned, or the 0-vector if <code>default_id</code> is not supplied.</p>
+<p>The ids and weights may be multi-dimensional. Embeddings are always aggregated along the last dimension.</p>
+<h5 id="args-11">Args:</h5>
+<ul>
+<li><b><code>embedding_weights</code></b>: A list of <code>P</code> float tensors or values representing partitioned embedding tensors. Alternatively, a <code>PartitionedVariable</code>, created by partitioning along dimension 0. The total unpartitioned shape should be <code>[e_0, e_1, ..., e_m]</code>, where <code>e_0</code> represents the vocab size and <code>e_1, ..., e_m</code> are the embedding dimensions.</li>
+<li><b><code>sparse_ids</code></b>: <code>SparseTensor</code> of shape <code>[d_0, d_1, ..., d_n]</code> containing the ids. <code>d_0</code> is typically batch size.</li>
+<li><b><code>sparse_weights</code></b>: <code>SparseTensor</code> of same shape as <code>sparse_ids</code>, containing float weights corresponding to <code>sparse_ids</code>, or <code>None</code> if all weights are be assumed to be 1.0.</li>
+<li><b><code>combiner</code></b>: A string specifying how to combine embedding results for each entry. Currently &quot;mean&quot;, &quot;sqrtn&quot; and &quot;sum&quot; are supported, with &quot;mean&quot; the default.</li>
+<li><b><code>default_id</code></b>: The id to use for an entry with no features.</li>
+<li><b><code>name</code></b>: A name for this operation (optional).</li>
+<li><b><code>partition_strategy</code></b>: A string specifying the partitioning strategy. Currently <code>&quot;div&quot;</code> and <code>&quot;mod&quot;</code> are supported. Default is <code>&quot;div&quot;</code>.</li>
+<li><b><code>max_norm</code></b>: If not None, all embeddings are l2-normalized to max_norm before combining.</li>
+</ul>
+<h5 id="returns-11">Returns:</h5>
+<p>Dense tensor of shape <code>[d_0, d_1, ..., d_{n-1}, e_1, ..., e_m]</code>.</p>
+<h5 id="raises-9">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>embedding_weights</code> is empty.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.layers.separable_convolution2dargs-kwargs"><a name="//apple_ref/cpp/Function/separable_convolution2d" class="dashAnchor"></a><code id="separable_convolution2d">tf.contrib.layers.separable_convolution2d(*args, **kwargs)</code></h3>
+<p>Adds a depth-separable 2D convolution with optional batch_norm layer.</p>
+<p>This op first performs a depthwise convolution that acts separately on channels, creating a variable called <code>depthwise_weights</code>. If <code>num_outputs</code> is not None, it adds a pointwise convolution that mixes channels, creating a variable called <code>pointwise_weights</code>. Then, if <code>batch_norm_params</code> is None, it adds bias to the result, creating a variable called 'biases', otherwise it adds a batch normalization layer. It finally applies an activation function to produce the end result.</p>
+<h5 id="args-12">Args:</h5>
+<ul>
+<li><b><code>inputs</code></b>: a tensor of size [batch_size, height, width, channels].</li>
+<li><b><code>num_outputs</code></b>: the number of pointwise convolution output filters. If is None, then we skip the pointwise convolution stage.</li>
+<li><b><code>kernel_size</code></b>: a list of length 2: [kernel_height, kernel_width] of of the filters. Can be an int if both values are the same.</li>
+<li><b><code>depth_multiplier</code></b>: the number of depthwise convolution output channels for each input channel. The total number of depthwise convolution output channels will be equal to <code>num_filters_in * depth_multiplier</code>.</li>
+<li><b><code>stride</code></b>: a list of length 2: [stride_height, stride_width], specifying the depthwise convolution stride. Can be an int if both strides are the same.</li>
+<li><b><code>padding</code></b>: one of 'VALID' or 'SAME'.</li>
+<li><b><code>activation_fn</code></b>: activation function, set to None to skip it and maintain a linear activation.</li>
+<li><b><code>normalizer_fn</code></b>: normalization function to use instead of <code>biases</code>. If <code>normalizer_fn</code> is provided then <code>biases_initializer</code> and <code>biases_regularizer</code> are ignored and <code>biases</code> are not created nor added. default set to None for no normalizer function</li>
+<li><b><code>normalizer_params</code></b>: normalization function parameters.</li>
+<li><b><code>weights_initializer</code></b>: An initializer for the weights.</li>
+<li><b><code>weights_regularizer</code></b>: Optional regularizer for the weights.</li>
+<li><b><code>biases_initializer</code></b>: An initializer for the biases. If None skip biases.</li>
+<li><b><code>biases_regularizer</code></b>: Optional regularizer for the biases.</li>
+<li><b><code>reuse</code></b>: whether or not the layer and its variables should be reused. To be able to reuse the layer scope must be given.</li>
+<li><b><code>variables_collections</code></b>: optional list of collections for all the variables or a dictionay containing a different list of collection per variable.</li>
+<li><b><code>outputs_collections</code></b>: collection to add the outputs.</li>
+<li><b><code>trainable</code></b>: whether or not the variables should be trainable or not.</li>
+<li><b><code>scope</code></b>: Optional scope for variable_scope.</li>
+</ul>
+<h5 id="returns-12">Returns:</h5>
+<p>A <code>Tensor</code> representing the output of the operation.</p>
+<hr />
+<h3 id="tf.stackvalues-axis0-namestack"><a name="//apple_ref/cpp/Function/stack" class="dashAnchor"></a><code id="stack">tf.stack(values, axis=0, name='stack')</code></h3>
+<p>Stacks a list of rank-<code>R</code> tensors into one rank-<code>(R+1)</code> tensor.</p>
+<p>Packs the list of tensors in <code>values</code> into a tensor with rank one higher than each tensor in <code>values</code>, by packing them along the <code>axis</code> dimension. Given a list of length <code>N</code> of tensors of shape <code>(A, B, C)</code>;</p>
+<p>if <code>axis == 0</code> then the <code>output</code> tensor will have the shape <code>(N, A, B, C)</code>. if <code>axis == 1</code> then the <code>output</code> tensor will have the shape <code>(A, N, B, C)</code>. Etc.</p>
+<p>For example:</p>
+<pre class="prettyprint"><code># &#39;x&#39; is [1, 4]
+# &#39;y&#39; is [2, 5]
+# &#39;z&#39; is [3, 6]
+stack([x, y, z]) =&gt; [[1, 4], [2, 5], [3, 6]]  # Pack along first dim.
+stack([x, y, z], axis=1) =&gt; [[1, 2, 3], [4, 5, 6]]</code></pre>
+<p>This is the opposite of unstack. The numpy equivalent is</p>
+<pre><code>tf.stack([x, y, z]) = np.asarray([x, y, z])</code></pre>
+<h5 id="args-13">Args:</h5>
+<ul>
+<li><b><code>values</code></b>: A list of <code>Tensor</code> objects with the same shape and type.</li>
+<li><b><code>axis</code></b>: An <code>int</code>. The axis to stack along. Defaults to the first dimension. Supports negative indexes.</li>
+<li><b><code>name</code></b>: A name for this operation (optional).</li>
+</ul>
+<h5 id="returns-13">Returns:</h5>
+<ul>
+<li><b><code>output</code></b>: A stacked <code>Tensor</code> with the same type as <code>values</code>.</li>
+</ul>
+<h5 id="raises-10">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>axis</code> is out of the range [-(R+1), R+1).</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.layers.unit_normargs-kwargs"><a name="//apple_ref/cpp/Function/unit_norm" class="dashAnchor"></a><code id="unit_norm">tf.contrib.layers.unit_norm(*args, **kwargs)</code></h3>
+<p>Normalizes the given input across the specified dimension to unit length.</p>
+<p>Note that the rank of <code>input</code> must be known.</p>
+<h5 id="args-14">Args:</h5>
+<ul>
+<li><b><code>inputs</code></b>: A <code>Tensor</code> of arbitrary size.</li>
+<li><b><code>dim</code></b>: The dimension along which the input is normalized.</li>
+<li><b><code>epsilon</code></b>: A small value to add to the inputs to avoid dividing by zero.</li>
+<li><b><code>scope</code></b>: Optional scope for variable_scope.</li>
+</ul>
+<h5 id="returns-14">Returns:</h5>
+<p>The normalized <code>Tensor</code>.</p>
+<h5 id="raises-11">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If dim is smaller than the number of dimensions in 'inputs'.</li>
+</ul>
+<p>Aliases for fully_connected which set a default activation function are available: <code>relu</code>, <code>relu6</code> and <code>linear</code>.</p>
+<h2 id="regularizers">Regularizers</h2>
+<p>Regularization can help prevent overfitting. These have the signature <code>fn(weights)</code>. The loss is typically added to <code>tf.GraphKeys.REGULARIZATION_LOSSES</code>.</p>
+<hr />
+<h3 id="tf.contrib.layers.apply_regularizationregularizer-weights_listnone"><a name="//apple_ref/cpp/Function/apply_regularization" class="dashAnchor"></a><code id="apply_regularization">tf.contrib.layers.apply_regularization(regularizer, weights_list=None)</code></h3>
+<p>Returns the summed penalty by applying <code>regularizer</code> to the <code>weights_list</code>.</p>
+<p>Adding a regularization penalty over the layer weights and embedding weights can help prevent overfitting the training data. Regularization over layer biases is less common/useful, but assuming proper data preprocessing/mean subtraction, it usually shouldn't hurt much either.</p>
+<h5 id="args-15">Args:</h5>
+<ul>
+<li><b><code>regularizer</code></b>: A function that takes a single <code>Tensor</code> argument and returns a scalar <code>Tensor</code> output.</li>
+<li><b><code>weights_list</code></b>: List of weights <code>Tensors</code> or <code>Variables</code> to apply <code>regularizer</code> over. Defaults to the <code>GraphKeys.WEIGHTS</code> collection if <code>None</code>.</li>
+</ul>
+<h5 id="returns-15">Returns:</h5>
+<p>A scalar representing the overall regularization penalty.</p>
+<h5 id="raises-12">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>regularizer</code> does not return a scalar output, or if we find no weights.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.layers.l1_regularizerscale-scopenone"><a name="//apple_ref/cpp/Function/l1_regularizer" class="dashAnchor"></a><code id="l1_regularizer">tf.contrib.layers.l1_regularizer(scale, scope=None)</code></h3>
+<p>Returns a function that can be used to apply L1 regularization to weights.</p>
+<p>L1 regularization encourages sparsity.</p>
+<h5 id="args-16">Args:</h5>
+<ul>
+<li><b><code>scale</code></b>: A scalar multiplier <code>Tensor</code>. 0.0 disables the regularizer.</li>
+<li><b><code>scope</code></b>: An optional scope name.</li>
+</ul>
+<h5 id="returns-16">Returns:</h5>
+<p>A function with signature <code>l1(weights)</code> that apply L1 regularization.</p>
+<h5 id="raises-13">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If scale is negative or if scale is not a float.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.layers.l2_regularizerscale-scopenone"><a name="//apple_ref/cpp/Function/l2_regularizer" class="dashAnchor"></a><code id="l2_regularizer">tf.contrib.layers.l2_regularizer(scale, scope=None)</code></h3>
+<p>Returns a function that can be used to apply L2 regularization to weights.</p>
+<p>Small values of L2 can help prevent overfitting the training data.</p>
+<h5 id="args-17">Args:</h5>
+<ul>
+<li><b><code>scale</code></b>: A scalar multiplier <code>Tensor</code>. 0.0 disables the regularizer.</li>
+<li><b><code>scope</code></b>: An optional scope name.</li>
+</ul>
+<h5 id="returns-17">Returns:</h5>
+<p>A function with signature <code>l2(weights)</code> that applies L2 regularization.</p>
+<h5 id="raises-14">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If scale is negative or if scale is not a float.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.layers.sum_regularizerregularizer_list-scopenone"><a name="//apple_ref/cpp/Function/sum_regularizer" class="dashAnchor"></a><code id="sum_regularizer">tf.contrib.layers.sum_regularizer(regularizer_list, scope=None)</code></h3>
+<p>Returns a function that applies the sum of multiple regularizers.</p>
+<h5 id="args-18">Args:</h5>
+<ul>
+<li><b><code>regularizer_list</code></b>: A list of regularizers to apply.</li>
+<li><b><code>scope</code></b>: An optional scope name</li>
+</ul>
+<h5 id="returns-18">Returns:</h5>
+<p>A function with signature <code>sum_reg(weights)</code> that applies the sum of all the input regularizers.</p>
+<h2 id="initializers">Initializers</h2>
+<p>Initializers are used to initialize variables with sensible values given their size, data type, and purpose.</p>
+<hr />
+<h3 id="tf.contrib.layers.xavier_initializeruniformtrue-seednone-dtypetf.float32"><a name="//apple_ref/cpp/Function/xavier_initializer" class="dashAnchor"></a><code id="xavier_initializer">tf.contrib.layers.xavier_initializer(uniform=True, seed=None, dtype=tf.float32)</code></h3>
+<p>Returns an initializer performing &quot;Xavier&quot; initialization for weights.</p>
+<p>This function implements the weight initialization from:</p>
+<p>Xavier Glorot and Yoshua Bengio (2010): Understanding the difficulty of training deep feedforward neural networks. International conference on artificial intelligence and statistics.</p>
+<p>This initializer is designed to keep the scale of the gradients roughly the same in all layers. In uniform distribution this ends up being the range: <code>x = sqrt(6. / (in + out)); [-x, x]</code> and for normal distribution a standard deviation of <code>sqrt(3. / (in + out))</code> is used.</p>
+<h5 id="args-19">Args:</h5>
+<ul>
+<li><b><code>uniform</code></b>: Whether to use uniform or normal distributed random initialization.</li>
+<li><b><code>seed</code></b>: A Python integer. Used to create random seeds. See <a href="../../api_docs/python/constant_op.md#set_random_seed"><code>set_random_seed</code></a> for behavior.</li>
+<li><b><code>dtype</code></b>: The data type. Only floating point types are supported.</li>
+</ul>
+<h5 id="returns-19">Returns:</h5>
+<p>An initializer for a weight matrix.</p>
+<hr />
+<h3 id="tf.contrib.layers.xavier_initializer_conv2duniformtrue-seednone-dtypetf.float32"><a name="//apple_ref/cpp/Function/xavier_initializer_conv2d" class="dashAnchor"></a><code id="xavier_initializer_conv2d">tf.contrib.layers.xavier_initializer_conv2d(uniform=True, seed=None, dtype=tf.float32)</code></h3>
+<p>Returns an initializer performing &quot;Xavier&quot; initialization for weights.</p>
+<p>This function implements the weight initialization from:</p>
+<p>Xavier Glorot and Yoshua Bengio (2010): Understanding the difficulty of training deep feedforward neural networks. International conference on artificial intelligence and statistics.</p>
+<p>This initializer is designed to keep the scale of the gradients roughly the same in all layers. In uniform distribution this ends up being the range: <code>x = sqrt(6. / (in + out)); [-x, x]</code> and for normal distribution a standard deviation of <code>sqrt(3. / (in + out))</code> is used.</p>
+<h5 id="args-20">Args:</h5>
+<ul>
+<li><b><code>uniform</code></b>: Whether to use uniform or normal distributed random initialization.</li>
+<li><b><code>seed</code></b>: A Python integer. Used to create random seeds. See <a href="../../api_docs/python/constant_op.md#set_random_seed"><code>set_random_seed</code></a> for behavior.</li>
+<li><b><code>dtype</code></b>: The data type. Only floating point types are supported.</li>
+</ul>
+<h5 id="returns-20">Returns:</h5>
+<p>An initializer for a weight matrix.</p>
+<hr />
+<h3 id="tf.contrib.layers.variance_scaling_initializerfactor2.0-modefan_in-uniformfalse-seednone-dtypetf.float32"><a name="//apple_ref/cpp/Function/variance_scaling_initializer" class="dashAnchor"></a><code id="variance_scaling_initializer">tf.contrib.layers.variance_scaling_initializer(factor=2.0, mode='FAN_IN', uniform=False, seed=None, dtype=tf.float32)</code></h3>
+<p>Returns an initializer that generates tensors without scaling variance.</p>
+<p>When initializing a deep network, it is in principle advantageous to keep the scale of the input variance constant, so it does not explode or diminish by reaching the final layer. This initializer use the following formula:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">  <span class="cf">if</span> mode<span class="op">=</span><span class="st">&#39;FAN_IN&#39;</span>: <span class="co"># Count only number of input connections.</span>
+    n <span class="op">=</span> fan_in
+  <span class="cf">elif</span> mode<span class="op">=</span><span class="st">&#39;FAN_OUT&#39;</span>: <span class="co"># Count only number of output connections.</span>
+    n <span class="op">=</span> fan_out
+  <span class="cf">elif</span> mode<span class="op">=</span><span class="st">&#39;FAN_AVG&#39;</span>: <span class="co"># Average number of inputs and output connections.</span>
+    n <span class="op">=</span> (fan_in <span class="op">+</span> fan_out)<span class="op">/</span><span class="fl">2.0</span>
+
+    truncated_normal(shape, <span class="fl">0.0</span>, stddev<span class="op">=</span>sqrt(factor <span class="op">/</span> n))</code></pre></div>
+<ul>
+<li>To get <a href="http://arxiv.org/pdf/1502.01852v1.pdf">Delving Deep into Rectifiers</a>, use (Default):<br/> <code>factor=2.0 mode='FAN_IN' uniform=False</code></li>
+<li>To get <a href="http://arxiv.org/abs/1408.5093">Convolutional Architecture for Fast Feature Embedding</a>, use:<br/> <code>factor=1.0 mode='FAN_IN' uniform=True</code></li>
+<li>To get <a href="http://jmlr.org/proceedings/papers/v9/glorot10a/glorot10a.pdf">Understanding the difficulty of training deep feedforward neural networks</a>, use:<br/> <code>factor=1.0 mode='FAN_AVG' uniform=True.</code></li>
+<li>To get <code>xavier_initializer</code> use either:<br/> <code>factor=1.0 mode='FAN_AVG' uniform=True</code>, or<br/> <code>factor=1.0 mode='FAN_AVG' uniform=False</code>.</li>
+</ul>
+<h5 id="args-21">Args:</h5>
+<ul>
+<li><b><code>factor</code></b>: Float. A multiplicative factor.</li>
+<li><b><code>mode</code></b>: String. 'FAN_IN', 'FAN_OUT', 'FAN_AVG'.</li>
+<li><b><code>uniform</code></b>: Whether to use uniform or normal distributed random initialization.</li>
+<li><b><code>seed</code></b>: A Python integer. Used to create random seeds. See <a href="../../api_docs/python/constant_op.md#set_random_seed"><code>set_random_seed</code></a> for behavior.</li>
+<li><b><code>dtype</code></b>: The data type. Only floating point types are supported.</li>
+</ul>
+<h5 id="returns-21">Returns:</h5>
+<p>An initializer that generates tensors with unit variance.</p>
+<h5 id="raises-15">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>dtype</code> is not a floating point type.</li>
+<li><b><code>TypeError</code></b>: if <code>mode</code> is not in ['FAN_IN', 'FAN_OUT', 'FAN_AVG'].</li>
+</ul>
+<h2 id="optimization">Optimization</h2>
+<p>Optimize weights given a loss.</p>
+<hr />
+<h3 id="tf.contrib.layers.optimize_lossloss-global_step-learning_rate-optimizer-gradient_noise_scalenone-gradient_multipliersnone-clip_gradientsnone-learning_rate_decay_fnnone-update_opsnone-variablesnone-namenone-summariesnone-colocate_gradients_with_opsfalse"><a name="//apple_ref/cpp/Function/optimize_loss" class="dashAnchor"></a><code id="optimize_loss">tf.contrib.layers.optimize_loss(loss, global_step, learning_rate, optimizer, gradient_noise_scale=None, gradient_multipliers=None, clip_gradients=None, learning_rate_decay_fn=None, update_ops=None, variables=None, name=None, summaries=None, colocate_gradients_with_ops=False)</code></h3>
+<p>Given loss and parameters for optimizer, returns a training op.</p>
+<p>Various ways of passing optimizers, include:</p>
+<ul>
+<li>string, name of the optimizer like 'SGD', 'Adam', see OPTIMIZER_CLS_NAMES for full list. E.g. <code>optimize_loss(..., optimizer='Adam')</code>.</li>
+<li>function, takes learning rate <code>Tensor</code> as argument and must return <code>Optimizer</code> instance. E.g. <code>optimize_loss(..., optimizer=lambda lr: tf.train.MomentumOptimizer(lr, momentum=0.5))</code>. Alternatively, if <code>learning_rate</code> is <code>None</code>, the function takes no arguments. E.g. <code>optimize_loss(..., learning_rate=None, optimizer=lambda: tf.train.MomentumOptimizer(0.5, momentum=0.5))</code>.</li>
+<li>class, subclass of <code>Optimizer</code> that takes only one required argument - learning rate, such as AdamOptimizer, AdagradOptimizer. E.g. <code>optimize_loss(..., optimizer=tf.train.AdagradOptimizer)</code>.</li>
+<li>object, instance of subclass of <code>Optimizer</code>. E.g., <code>optimizer_loss(..., optimizer=tf.train.AdagradOptimizer(0.5))</code>.</li>
+</ul>
+<h5 id="args-22">Args:</h5>
+<ul>
+<li><b><code>loss</code></b>: Scalar <code>Tensor</code>.</li>
+<li><b><code>global_step</code></b>: Scalar int <code>Tensor</code>, step counter for each update. If not supplied, it will be fetched from the default graph (see <code>tf.contrib.framework.get_global_step</code> for details). If it's not been created, no step will be incremented with each weight update. <code>learning_rate_decay_fn</code> requires <code>global_step</code>.</li>
+<li><b><code>learning_rate</code></b>: float or <code>Tensor</code>, magnitude of update per each training step. Can be <code>None</code>.</li>
+<li><b><code>optimizer</code></b>: string, class or optimizer instance, used as trainer. string should be name of optimizer, like 'SGD', 'Adam', 'Adagrad'. Full list in OPTIMIZER_CLS_NAMES constant. class should be sub-class of <code>tf.Optimizer</code> that implements <code>compute_gradients</code> and <code>apply_gradients</code> functions. optimizer instance should be instantiation of <code>tf.Optimizer</code> sub-class and have <code>compute_gradients</code> and <code>apply_gradients</code> functions.</li>
+<li><b><code>gradient_noise_scale</code></b>: float or None, adds 0-mean normal noise scaled by this value.</li>
+<li><b><code>gradient_multipliers</code></b>: dict of variables or variable names to floats. If present, gradients for specified variables will be multiplied by given constant.</li>
+<li><b><code>clip_gradients</code></b>: float, callable or <code>None</code>. If float, is provided, a global clipping is applied to prevent the norm of the gradient to exceed this value. Alternatively, a callable can be provided e.g.: adaptive_clipping. This callable takes a <code>list</code> of <code>(gradients, variables)</code> <code>tuple</code>s and returns the same thing with the gradients modified.</li>
+<li><b><code>learning_rate_decay_fn</code></b>: function, takes <code>learning_rate</code> and <code>global_step</code> <code>Tensor</code>s, returns <code>Tensor</code>. Can be used to implement any learning rate decay functions. For example: <code>tf.train.exponential_decay</code>. Ignored if <code>learning_rate</code> is not supplied.</li>
+<li><b><code>update_ops</code></b>: list of update <code>Operation</code>s to execute at each step. If <code>None</code>, uses elements of UPDATE_OPS collection. The order of execution between <code>update_ops</code> and <code>loss</code> is non-deterministic.</li>
+<li><b><code>variables</code></b>: list of variables to optimize or <code>None</code> to use all trainable variables.</li>
+<li><b><code>name</code></b>: The name for this operation is used to scope operations and summaries.</li>
+<li><b><code>summaries</code></b>: List of internal quantities to visualize on tensorboard. If not set only the loss and the learning rate will be reported. The complete list is in OPTIMIZER_SUMMARIES.</li>
+<li><b><code>colocate_gradients_with_ops</code></b>: If True, try colocating gradients with the corresponding op.</li>
+</ul>
+<h5 id="returns-22">Returns:</h5>
+<p>Training op.</p>
+<h5 id="raises-16">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if:
+<ul>
+<li><code>loss</code> is an invalid type or shape.</li>
+<li><code>global_step</code> is an invalid type or shape.</li>
+<li><code>learning_rate</code> is an invalid type or value.</li>
+<li><code>optimizer</code> is wrong type.</li>
+<li><code>clip_gradients</code> is not float or callable.</li>
+<li><code>learning_rate</code> and <code>learning_rate_decay_fn</code> are supplied, but no <code>global_step</code> is available.</li>
+</ul></li>
+</ul>
+<h2 id="summaries">Summaries</h2>
+<p>Helper functions to summarize specific variables or ops.</p>
+<hr />
+<h3 id="tf.contrib.layers.summarize_activationop"><a name="//apple_ref/cpp/Function/summarize_activation" class="dashAnchor"></a><code id="summarize_activation">tf.contrib.layers.summarize_activation(op)</code></h3>
+<p>Summarize an activation.</p>
+<p>This applies the given activation and adds useful summaries specific to the activation.</p>
+<h5 id="args-23">Args:</h5>
+<ul>
+<li><b><code>op</code></b>: The tensor to summarize (assumed to be a layer activation).</li>
+</ul>
+<h5 id="returns-23">Returns:</h5>
+<p>The summary op created to summarize <code>op</code>.</p>
+<hr />
+<h3 id="tf.contrib.layers.summarize_tensortensor-tagnone"><a name="//apple_ref/cpp/Function/summarize_tensor" class="dashAnchor"></a><code id="summarize_tensor">tf.contrib.layers.summarize_tensor(tensor, tag=None)</code></h3>
+<p>Summarize a tensor using a suitable summary type.</p>
+<p>This function adds a summary op for <code>tensor</code>. The type of summary depends on the shape of <code>tensor</code>. For scalars, a <code>scalar_summary</code> is created, for all other tensors, <code>histogram_summary</code> is used.</p>
+<h5 id="args-24">Args:</h5>
+<ul>
+<li><b><code>tensor</code></b>: The tensor to summarize</li>
+<li><b><code>tag</code></b>: The tag to use, if None then use tensor's op's name.</li>
+</ul>
+<h5 id="returns-24">Returns:</h5>
+<p>The summary op created or None for string tensors.</p>
+<hr />
+<h3 id="tf.contrib.layers.summarize_tensorstensors-summarizersummarize_tensor"><a name="//apple_ref/cpp/Function/summarize_tensors" class="dashAnchor"></a><code id="summarize_tensors">tf.contrib.layers.summarize_tensors(tensors, summarizer=summarize_tensor)</code></h3>
+<p>Summarize a set of tensors.</p>
+<hr />
+<h3 id="tf.contrib.layers.summarize_collectioncollection-name_filternone-summarizersummarize_tensor"><a name="//apple_ref/cpp/Function/summarize_collection" class="dashAnchor"></a><code id="summarize_collection">tf.contrib.layers.summarize_collection(collection, name_filter=None, summarizer=summarize_tensor)</code></h3>
+<p>Summarize a graph collection of tensors, possibly filtered by name.</p>
+<p>The layers module defines convenience functions <code>summarize_variables</code>, <code>summarize_weights</code> and <code>summarize_biases</code>, which set the <code>collection</code> argument of <code>summarize_collection</code> to <code>VARIABLES</code>, <code>WEIGHTS</code> and <code>BIASES</code>, respectively.</p>
+<hr />
+<h3 id="tf.contrib.layers.summarize_activationsname_filternone-summarizersummarize_activation"><a name="//apple_ref/cpp/Function/summarize_activations" class="dashAnchor"></a><code id="summarize_activations">tf.contrib.layers.summarize_activations(name_filter=None, summarizer=summarize_activation)</code></h3>
+<p>Summarize activations, using <code>summarize_activation</code> to summarize.</p>
+<h2 id="feature-columns">Feature columns</h2>
+<p>Feature columns provide a mechanism to map data to a model.</p>
+<hr />
+<h3 id="tf.contrib.layers.bucketized_columnsource_column-boundaries"><a name="//apple_ref/cpp/Function/bucketized_column" class="dashAnchor"></a><code id="bucketized_column">tf.contrib.layers.bucketized_column(source_column, boundaries)</code></h3>
+<p>Creates a _BucketizedColumn for discretizing dense input.</p>
+<h5 id="args-25">Args:</h5>
+<ul>
+<li><b><code>source_column</code></b>: A _RealValuedColumn defining dense column.</li>
+<li><b><code>boundaries</code></b>: A list of floats specifying the boundaries. It has to be sorted.</li>
+</ul>
+<h5 id="returns-25">Returns:</h5>
+<p>A _BucketizedColumn.</p>
+<h5 id="raises-17">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if 'boundaries' is empty or not sorted.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.layers.check_feature_columnsfeature_columns"><a name="//apple_ref/cpp/Function/check_feature_columns" class="dashAnchor"></a><code id="check_feature_columns">tf.contrib.layers.check_feature_columns(feature_columns)</code></h3>
+<p>Checks the validity of the set of FeatureColumns.</p>
+<h5 id="args-26">Args:</h5>
+<ul>
+<li><b><code>feature_columns</code></b>: A set of instances or subclasses of FeatureColumn.</li>
+</ul>
+<h5 id="raises-18">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If there are duplicate feature column keys.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.layers.create_feature_spec_for_parsingfeature_columns"><a name="//apple_ref/cpp/Function/create_feature_spec_for_parsing" class="dashAnchor"></a><code id="create_feature_spec_for_parsing">tf.contrib.layers.create_feature_spec_for_parsing(feature_columns)</code></h3>
+<p>Helper that prepares features config from input feature_columns.</p>
+<p>The returned feature config can be used as arg 'features' in tf.parse_example.</p>
+<p>Typical usage example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Define features and transformations</span>
+feature_a <span class="op">=</span> sparse_column_with_vocabulary_file(...)
+feature_b <span class="op">=</span> real_valued_column(...)
+feature_c_bucketized <span class="op">=</span> bucketized_column(real_valued_column(<span class="st">&quot;feature_c&quot;</span>), ...)
+feature_a_x_feature_c <span class="op">=</span> crossed_column(
+  columns<span class="op">=</span>[feature_a, feature_c_bucketized], ...)
+
+feature_columns <span class="op">=</span> <span class="bu">set</span>(
+  [feature_b, feature_c_bucketized, feature_a_x_feature_c])
+batch_examples <span class="op">=</span> tf.parse_example(
+    serialized<span class="op">=</span>serialized_examples,
+    features<span class="op">=</span>create_feature_spec_for_parsing(feature_columns))</code></pre></div>
+<p>For the above example, create_feature_spec_for_parsing would return the dict: { &quot;feature_a&quot;: parsing_ops.VarLenFeature(tf.string), &quot;feature_b&quot;: parsing_ops.FixedLenFeature([1], dtype=tf.float32), &quot;feature_c&quot;: parsing_ops.FixedLenFeature([1], dtype=tf.float32) }</p>
+<h5 id="args-27">Args:</h5>
+<ul>
+<li><b><code>feature_columns</code></b>: An iterable containing all the feature columns. All items should be instances of classes derived from _FeatureColumn, unless feature_columns is a dict -- in which case, this should be true of all values in the dict.</li>
+</ul>
+<h5 id="returns-26">Returns:</h5>
+<p>A dict mapping feature keys to FixedLenFeature or VarLenFeature values.</p>
+<hr />
+<h3 id="tf.contrib.layers.crossed_columncolumns-hash_bucket_size-combinernone-ckpt_to_load_fromnone-tensor_name_in_ckptnone-hash_keynone"><a name="//apple_ref/cpp/Function/crossed_column" class="dashAnchor"></a><code id="crossed_column">tf.contrib.layers.crossed_column(columns, hash_bucket_size, combiner=None, ckpt_to_load_from=None, tensor_name_in_ckpt=None, hash_key=None)</code></h3>
+<p>Creates a _CrossedColumn for performing feature crosses.</p>
+<h5 id="args-28">Args:</h5>
+<ul>
+<li><b><code>columns</code></b>: An iterable of _FeatureColumn. Items can be an instance of _SparseColumn, _CrossedColumn, or _BucketizedColumn.</li>
+<li><b><code>hash_bucket_size</code></b>: An int that is &gt; 1. The number of buckets.</li>
+<li><b><code>combiner</code></b>: A combiner string, supports sum, mean, sqrtn.</li>
+<li><b><code>ckpt_to_load_from</code></b>: (Optional). String representing checkpoint name/pattern to restore the column weights. Required if <code>tensor_name_in_ckpt</code> is not None.</li>
+<li><b><code>tensor_name_in_ckpt</code></b>: (Optional). Name of the <code>Tensor</code> in the provided checkpoint from which to restore the column weights. Required if <code>ckpt_to_load_from</code> is not None.</li>
+<li><b><code>hash_key</code></b>: Specify the hash_key that will be used by the <code>FingerprintCat64</code> function to combine the crosses fingerprints on SparseFeatureCrossOp (optional).</li>
+</ul>
+<h5 id="returns-27">Returns:</h5>
+<p>A _CrossedColumn.</p>
+<h5 id="raises-19">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if any item in columns is not an instance of _SparseColumn, _CrossedColumn, or _BucketizedColumn, or hash_bucket_size is not an int.</li>
+<li><b><code>ValueError</code></b>: if hash_bucket_size is not &gt; 1 or len(columns) is not &gt; 1.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.layers.embedding_columnsparse_id_column-dimension-combinernone-initializernone-ckpt_to_load_fromnone-tensor_name_in_ckptnone"><a name="//apple_ref/cpp/Function/embedding_column" class="dashAnchor"></a><code id="embedding_column">tf.contrib.layers.embedding_column(sparse_id_column, dimension, combiner=None, initializer=None, ckpt_to_load_from=None, tensor_name_in_ckpt=None)</code></h3>
+<p>Creates an <code>_EmbeddingColumn</code> for feeding sparse data into a DNN.</p>
+<h5 id="args-29">Args:</h5>
+<ul>
+<li><b><code>sparse_id_column</code></b>: A <code>_SparseColumn</code> which is created by for example <code>sparse_column_with_*</code> or crossed_column functions. Note that <code>combiner</code> defined in <code>sparse_id_column</code> is ignored.</li>
+<li><b><code>dimension</code></b>: An integer specifying dimension of the embedding.</li>
+<li><b><code>combiner</code></b>: A string specifying how to reduce if there are multiple entries in a single row. Currently &quot;mean&quot;, &quot;sqrtn&quot; and &quot;sum&quot; are supported. Each of this can be considered an example level normalization on the column:
+<ul>
+<li>&quot;sum&quot;: do not normalize</li>
+<li>&quot;mean&quot;: do l1 normalization</li>
+<li>&quot;sqrtn&quot;: do l2 normalization For more information: <code>tf.embedding_lookup_sparse</code>.</li>
+</ul></li>
+<li><b><code>initializer</code></b>: A variable initializer function to be used in embedding variable initialization. If not specified, defaults to <code>tf.truncated_normal_initializer</code> with mean 0.0 and standard deviation 1/sqrt(sparse_id_column.length).</li>
+<li><b><code>ckpt_to_load_from</code></b>: (Optional). String representing checkpoint name/pattern to restore the column weights. Required if <code>tensor_name_in_ckpt</code> is not None.</li>
+<li><b><code>tensor_name_in_ckpt</code></b>: (Optional). Name of the <code>Tensor</code> in the provided checkpoint from which to restore the column weights. Required if <code>ckpt_to_load_from</code> is not None.</li>
+</ul>
+<h5 id="returns-28">Returns:</h5>
+<p>An <code>_EmbeddingColumn</code>.</p>
+<hr />
+<h3 id="tf.contrib.layers.hashed_embedding_columncolumn_name-size-dimension-combinernone-initializernone"><a name="//apple_ref/cpp/Function/hashed_embedding_column" class="dashAnchor"></a><code id="hashed_embedding_column">tf.contrib.layers.hashed_embedding_column(column_name, size, dimension, combiner=None, initializer=None)</code></h3>
+<p>Creates an embedding column of a sparse feature using parameter hashing.</p>
+<p>The i-th embedding component of a value v is found by retrieving an embedding weight whose index is a fingerprint of the pair (v,i).</p>
+<h5 id="args-30">Args:</h5>
+<ul>
+<li><b><code>column_name</code></b>: A string defining sparse column name.</li>
+<li><b><code>size</code></b>: An integer specifying the number of parameters in the embedding layer.</li>
+<li><b><code>dimension</code></b>: An integer specifying dimension of the embedding.</li>
+<li><b><code>combiner</code></b>: A string specifying how to reduce if there are multiple entries in a single row. Currently &quot;mean&quot;, &quot;sqrtn&quot; and &quot;sum&quot; are supported. Each of this can be thought as example level normalizations on the column:
+<ul>
+<li>&quot;sum&quot;: do not normalize features in the column</li>
+<li>&quot;mean&quot;: do l1 normalization on features in the column</li>
+<li>&quot;sqrtn&quot;: do l2 normalization on features in the column For more information: <code>tf.embedding_lookup_sparse</code>.</li>
+</ul></li>
+<li><b><code>initializer</code></b>: A variable initializer function to be used in embedding variable initialization. If not specified, defaults to <code>tf.truncated_normal_initializer</code> with mean 0 and standard deviation 0.1.</li>
+</ul>
+<h5 id="returns-29">Returns:</h5>
+<p>A _HashedEmbeddingColumn.</p>
+<h5 id="raises-20">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if dimension or size is not a positive integer; or if combiner is not supported.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.layers.input_from_feature_columnscolumns_to_tensors-feature_columns-weight_collectionsnone-trainabletrue-scopenone"><a name="//apple_ref/cpp/Function/input_from_feature_columns" class="dashAnchor"></a><code id="input_from_feature_columns">tf.contrib.layers.input_from_feature_columns(columns_to_tensors, feature_columns, weight_collections=None, trainable=True, scope=None)</code></h3>
+<p>A tf.contrib.layer style input layer builder based on FeatureColumns.</p>
+<p>Generally a single example in training data is described with feature columns. At the first layer of the model, this column oriented data should be converted to a single tensor. Each feature column needs a different kind of operation during this conversion. For example sparse features need a totally different handling than continuous features.</p>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">  <span class="co"># Building model for training</span>
+  columns_to_tensor <span class="op">=</span> tf.parse_example(...)
+  first_layer <span class="op">=</span> input_from_feature_columns(
+      columns_to_tensors<span class="op">=</span>columns_to_tensor,
+      feature_columns<span class="op">=</span>feature_columns)
+  second_layer <span class="op">=</span> fully_connected(inputs<span class="op">=</span>first_layer, ...)
+  ...</code></pre></div>
+<p>where feature_columns can be defined as follows:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">  sparse_feature <span class="op">=</span> sparse_column_with_hash_bucket(
+      column_name<span class="op">=</span><span class="st">&quot;sparse_col&quot;</span>, ...)
+  sparse_feature_emb <span class="op">=</span> embedding_column(sparse_id_column<span class="op">=</span>sparse_feature, ...)
+  real_valued_feature <span class="op">=</span> real_valued_column(...)
+  real_valued_buckets <span class="op">=</span> bucketized_column(
+      source_column<span class="op">=</span>real_valued_feature, ...)
+
+  feature_columns<span class="op">=</span>[sparse_feature_emb, real_valued_buckets]</code></pre></div>
+<h5 id="args-31">Args:</h5>
+<ul>
+<li><b><code>columns_to_tensors</code></b>: A mapping from feature column to tensors. 'string' key means a base feature (not-transformed). It can have FeatureColumn as a key too. That means that FeatureColumn is already transformed by input pipeline. For example, <code>inflow</code> may have handled transformations.</li>
+<li><b><code>feature_columns</code></b>: A set containing all the feature columns. All items in the set should be instances of classes derived by FeatureColumn.</li>
+<li><b><code>weight_collections</code></b>: List of graph collections to which weights are added.</li>
+<li><b><code>trainable</code></b>: If <code>True</code> also add variables to the graph collection <code>GraphKeys.TRAINABLE_VARIABLES</code> (see tf.Variable).</li>
+<li><b><code>scope</code></b>: Optional scope for variable_scope.</li>
+</ul>
+<h5 id="returns-30">Returns:</h5>
+<p>A Tensor which can be consumed by hidden layers in the neural network.</p>
+<h5 id="raises-21">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if FeatureColumn cannot be consumed by a neural network.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.layers.joint_weighted_sum_from_feature_columnscolumns_to_tensors-feature_columns-num_outputs-weight_collectionsnone-trainabletrue-scopenone"><a name="//apple_ref/cpp/Function/joint_weighted_sum_from_feature_columns" class="dashAnchor"></a><code id="joint_weighted_sum_from_feature_columns">tf.contrib.layers.joint_weighted_sum_from_feature_columns(columns_to_tensors, feature_columns, num_outputs, weight_collections=None, trainable=True, scope=None)</code></h3>
+<p>A restricted linear prediction builder based on FeatureColumns.</p>
+<p>As long as all feature columns are unweighted sparse columns this computes the prediction of a linear model which stores all weights in a single variable.</p>
+<h5 id="args-32">Args:</h5>
+<ul>
+<li><b><code>columns_to_tensors</code></b>: A mapping from feature column to tensors. 'string' key means a base feature (not-transformed). It can have FeatureColumn as a key too. That means that FeatureColumn is already transformed by input pipeline. For example, <code>inflow</code> may have handled transformations.</li>
+<li><b><code>feature_columns</code></b>: A set containing all the feature columns. All items in the set should be instances of classes derived from FeatureColumn.</li>
+<li><b><code>num_outputs</code></b>: An integer specifying number of outputs. Default value is 1.</li>
+<li><b><code>weight_collections</code></b>: List of graph collections to which weights are added.</li>
+<li><b><code>trainable</code></b>: If <code>True</code> also add variables to the graph collection <code>GraphKeys.TRAINABLE_VARIABLES</code> (see tf.Variable).</li>
+<li><b><code>scope</code></b>: Optional scope for variable_scope.</li>
+</ul>
+<h5 id="returns-31">Returns:</h5>
+<p>A tuple containing:</p>
+<pre><code>* A Tensor which represents predictions of a linear model.
+* A list of Variables storing the weights.
+* A Variable which is used for bias.</code></pre>
+<h5 id="raises-22">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if FeatureColumn cannot be used for linear predictions.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.layers.make_place_holder_tensors_for_base_featuresfeature_columns"><a name="//apple_ref/cpp/Function/make_place_holder_tensors_for_base_features" class="dashAnchor"></a><code id="make_place_holder_tensors_for_base_features">tf.contrib.layers.make_place_holder_tensors_for_base_features(feature_columns)</code></h3>
+<p>Returns placeholder tensors for inference.</p>
+<h5 id="args-33">Args:</h5>
+<ul>
+<li><b><code>feature_columns</code></b>: An iterable containing all the feature columns. All items should be instances of classes derived from _FeatureColumn.</li>
+</ul>
+<h5 id="returns-32">Returns:</h5>
+<p>A dict mapping feature keys to SparseTensors (sparse columns) or placeholder Tensors (dense columns).</p>
+<hr />
+<h3 id="tf.contrib.layers.one_hot_columnsparse_id_column"><a name="//apple_ref/cpp/Function/one_hot_column" class="dashAnchor"></a><code id="one_hot_column">tf.contrib.layers.one_hot_column(sparse_id_column)</code></h3>
+<p>Creates an <code>_OneHotColumn</code> for a one-hot or multi-hot repr in a DNN.</p>
+<h5 id="args-34">Args:</h5>
+<ul>
+<li><b><code>sparse_id_column</code></b>: A _SparseColumn which is created by <code>sparse_column_with_*</code> or crossed_column functions. Note that <code>combiner</code> defined in <code>sparse_id_column</code> is ignored.</li>
+</ul>
+<h5 id="returns-33">Returns:</h5>
+<p>An _OneHotColumn.</p>
+<hr />
+<h3 id="tf.contrib.layers.parse_feature_columns_from_examplesserialized-feature_columns-namenone-example_namesnone"><a name="//apple_ref/cpp/Function/parse_feature_columns_from_examples" class="dashAnchor"></a><code id="parse_feature_columns_from_examples">tf.contrib.layers.parse_feature_columns_from_examples(serialized, feature_columns, name=None, example_names=None)</code></h3>
+<p>Parses tf.Examples to extract tensors for given feature_columns.</p>
+<p>This is a wrapper of 'tf.parse_example'.</p>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">columns_to_tensor <span class="op">=</span> parse_feature_columns_from_examples(
+    serialized<span class="op">=</span>my_data,
+    feature_columns<span class="op">=</span>my_features)
+
+<span class="co"># Where my_features are:</span>
+<span class="co"># Define features and transformations</span>
+sparse_feature_a <span class="op">=</span> sparse_column_with_keys(
+    column_name<span class="op">=</span><span class="st">&quot;sparse_feature_a&quot;</span>, keys<span class="op">=</span>[<span class="st">&quot;AB&quot;</span>, <span class="st">&quot;CD&quot;</span>, ...])
+
+embedding_feature_a <span class="op">=</span> embedding_column(
+    sparse_id_column<span class="op">=</span>sparse_feature_a, dimension<span class="op">=</span><span class="dv">3</span>, combiner<span class="op">=</span><span class="st">&quot;sum&quot;</span>)
+
+sparse_feature_b <span class="op">=</span> sparse_column_with_hash_bucket(
+    column_name<span class="op">=</span><span class="st">&quot;sparse_feature_b&quot;</span>, hash_bucket_size<span class="op">=</span><span class="dv">1000</span>)
+
+embedding_feature_b <span class="op">=</span> embedding_column(
+    sparse_id_column<span class="op">=</span>sparse_feature_b, dimension<span class="op">=</span><span class="dv">16</span>, combiner<span class="op">=</span><span class="st">&quot;sum&quot;</span>)
+
+crossed_feature_a_x_b <span class="op">=</span> crossed_column(
+    columns<span class="op">=</span>[sparse_feature_a, sparse_feature_b], hash_bucket_size<span class="op">=</span><span class="dv">10000</span>)
+
+real_feature <span class="op">=</span> real_valued_column(<span class="st">&quot;real_feature&quot;</span>)
+real_feature_buckets <span class="op">=</span> bucketized_column(
+    source_column<span class="op">=</span>real_feature, boundaries<span class="op">=</span>[...])
+
+my_features <span class="op">=</span> [embedding_feature_b, real_feature_buckets, embedding_feature_a]</code></pre></div>
+<h5 id="args-35">Args:</h5>
+<ul>
+<li><b><code>serialized</code></b>: A vector (1-D Tensor) of strings, a batch of binary serialized <code>Example</code> protos.</li>
+<li><b><code>feature_columns</code></b>: An iterable containing all the feature columns. All items should be instances of classes derived from _FeatureColumn.</li>
+<li><b><code>name</code></b>: A name for this operation (optional).</li>
+<li><b><code>example_names</code></b>: A vector (1-D Tensor) of strings (optional), the names of the serialized protos in the batch.</li>
+</ul>
+<h5 id="returns-34">Returns:</h5>
+<p>A <code>dict</code> mapping FeatureColumn to <code>Tensor</code> and <code>SparseTensor</code> values.</p>
+<hr />
+<h3 id="tf.contrib.layers.parse_feature_columns_from_sequence_examplesserialized-context_feature_columns-sequence_feature_columns-namenone-example_namenone"><a name="//apple_ref/cpp/Function/parse_feature_columns_from_sequence_examples" class="dashAnchor"></a><code id="parse_feature_columns_from_sequence_examples">tf.contrib.layers.parse_feature_columns_from_sequence_examples(serialized, context_feature_columns, sequence_feature_columns, name=None, example_name=None)</code></h3>
+<p>Parses tf.SequenceExamples to extract tensors for given <code>FeatureColumn</code>s.</p>
+<h5 id="args-36">Args:</h5>
+<ul>
+<li><b><code>serialized</code></b>: A scalar (0-D Tensor) of type string, a single serialized <code>SequenceExample</code> proto.</li>
+<li><b><code>context_feature_columns</code></b>: An iterable containing the feature columns for context features. All items should be instances of classes derived from <code>_FeatureColumn</code>. Can be <code>None</code>.</li>
+<li><b><code>sequence_feature_columns</code></b>: An iterable containing the feature columns for sequence features. All items should be instances of classes derived from <code>_FeatureColumn</code>. Can be <code>None</code>.</li>
+<li><b><code>name</code></b>: A name for this operation (optional).</li>
+<li><b><code>example_name</code></b>: A scalar (0-D Tensor) of type string (optional), the names of the serialized proto.</li>
+</ul>
+<h5 id="returns-35">Returns:</h5>
+<p>A tuple consisting of:</p>
+<ul>
+<li><b><code>context_features</code></b>: a dict mapping <code>FeatureColumns</code> from <code>context_feature_columns</code> to their parsed <code>Tensors</code>/<code>SparseTensor</code>s.</li>
+<li><b><code>sequence_features</code></b>: a dict mapping <code>FeatureColumns</code> from <code>sequence_feature_columns</code> to their parsed <code>Tensors</code>/<code>SparseTensor</code>s.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.layers.real_valued_columncolumn_name-dimension1-default_valuenone-dtypetf.float32-normalizernone"><a name="//apple_ref/cpp/Function/real_valued_column" class="dashAnchor"></a><code id="real_valued_column">tf.contrib.layers.real_valued_column(column_name, dimension=1, default_value=None, dtype=tf.float32, normalizer=None)</code></h3>
+<p>Creates a <code>_RealValuedColumn</code> for dense numeric data.</p>
+<h5 id="args-37">Args:</h5>
+<ul>
+<li><b><code>column_name</code></b>: A string defining real valued column name.</li>
+<li><b><code>dimension</code></b>: An integer specifying dimension of the real valued column. The default is 1. The Tensor representing the _RealValuedColumn will have the shape of [batch_size, dimension].</li>
+<li><b><code>default_value</code></b>: A single value compatible with dtype or a list of values compatible with dtype which the column takes on during tf.Example parsing if data is missing. If None, then tf.parse_example will fail if an example does not contain this column. If a single value is provided, the same value will be applied as the default value for every dimension. If a list of values is provided, the length of the list should be equal to the value of <code>dimension</code>.</li>
+<li><b><code>dtype</code></b>: defines the type of values. Default value is tf.float32. Must be a non-quantized, real integer or floating point type.</li>
+<li><b><code>normalizer</code></b>: If not None, a function that can be used to normalize the value of the real valued column after default_value is applied for parsing. Normalizer function takes the input tensor as its argument, and returns the output tensor. (e.g. lambda x: (x - 3.0) / 4.2).</li>
+</ul>
+<h5 id="returns-36">Returns:</h5>
+<p>A _RealValuedColumn.</p>
+<h5 id="raises-23">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if dimension is not an int</li>
+<li><b><code>ValueError</code></b>: if dimension is not a positive integer</li>
+<li><b><code>TypeError</code></b>: if default_value is a list but its length is not equal to the value of <code>dimension</code>.</li>
+<li><b><code>TypeError</code></b>: if default_value is not compatible with dtype.</li>
+<li><b><code>ValueError</code></b>: if dtype is not convertable to tf.float32.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.layers.shared_embedding_columnssparse_id_columns-dimension-combinernone-shared_embedding_namenone-initializernone-ckpt_to_load_fromnone-tensor_name_in_ckptnone"><a name="//apple_ref/cpp/Function/shared_embedding_columns" class="dashAnchor"></a><code id="shared_embedding_columns">tf.contrib.layers.shared_embedding_columns(sparse_id_columns, dimension, combiner=None, shared_embedding_name=None, initializer=None, ckpt_to_load_from=None, tensor_name_in_ckpt=None)</code></h3>
+<p>Creates a list of <code>_EmbeddingColumn</code> sharing the same embedding.</p>
+<h5 id="args-38">Args:</h5>
+<ul>
+<li><b><code>sparse_id_columns</code></b>: An iterable of <code>_SparseColumn</code>, such as those created by <code>sparse_column_with_*</code> or crossed_column functions. Note that <code>combiner</code> defined in each sparse_id_column is ignored.</li>
+<li><b><code>dimension</code></b>: An integer specifying dimension of the embedding.</li>
+<li><b><code>combiner</code></b>: A string specifying how to reduce if there are multiple entries in a single row. Currently &quot;mean&quot;, &quot;sqrtn&quot; and &quot;sum&quot; are supported. Each of this can be considered an example level normalization on the column:
+<ul>
+<li>&quot;sum&quot;: do not normalize</li>
+<li>&quot;mean&quot;: do l1 normalization</li>
+<li>&quot;sqrtn&quot;: do l2 normalization For more information: <code>tf.embedding_lookup_sparse</code>.</li>
+</ul></li>
+<li><b><code>shared_embedding_name</code></b>: (Optional). A string specifying the name of shared embedding weights. This will be needed if you want to reference the shared embedding separately from the generated <code>_EmbeddingColumn</code>.</li>
+<li><b><code>initializer</code></b>: A variable initializer function to be used in embedding variable initialization. If not specified, defaults to <code>tf.truncated_normal_initializer</code> with mean 0.0 and standard deviation 1/sqrt(sparse_id_columns[0].length).</li>
+<li><b><code>ckpt_to_load_from</code></b>: (Optional). String representing checkpoint name/pattern to restore the column weights. Required if <code>tensor_name_in_ckpt</code> is not None.</li>
+<li><b><code>tensor_name_in_ckpt</code></b>: (Optional). Name of the <code>Tensor</code> in the provided checkpoint from which to restore the column weights. Required if <code>ckpt_to_load_from</code> is not None.</li>
+</ul>
+<h5 id="returns-37">Returns:</h5>
+<p>A tuple of <code>_EmbeddingColumn</code> with shared embedding space.</p>
+<h5 id="raises-24">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if sparse_id_columns is empty, or its elements are not compatible with each other.</li>
+<li><b><code>TypeError</code></b>: if <code>sparse_id_columns</code> is not a sequence or is a string. If at least one element of <code>sparse_id_columns</code> is not a <code>SparseTensor</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.layers.sparse_column_with_hash_bucketcolumn_name-hash_bucket_size-combinernone-dtypetf.string"><a name="//apple_ref/cpp/Function/sparse_column_with_hash_bucket" class="dashAnchor"></a><code id="sparse_column_with_hash_bucket">tf.contrib.layers.sparse_column_with_hash_bucket(column_name, hash_bucket_size, combiner=None, dtype=tf.string)</code></h3>
+<p>Creates a _SparseColumn with hashed bucket configuration.</p>
+<p>Use this when your sparse features are in string or integer format, but you don't have a vocab file that maps each value to an integer ID. output_id = Hash(input_feature_string) % bucket_size</p>
+<h5 id="args-39">Args:</h5>
+<ul>
+<li><b><code>column_name</code></b>: A string defining sparse column name.</li>
+<li><b><code>hash_bucket_size</code></b>: An int that is &gt; 1. The number of buckets.</li>
+<li><b><code>combiner</code></b>: A string specifying how to reduce if the sparse column is multivalent. Currently &quot;mean&quot;, &quot;sqrtn&quot; and &quot;sum&quot; are supported, with &quot;sum&quot; the default:
+<ul>
+<li>&quot;sum&quot;: do not normalize features in the column</li>
+<li>&quot;mean&quot;: do l1 normalization on features in the column</li>
+<li>&quot;sqrtn&quot;: do l2 normalization on features in the column For more information: <code>tf.embedding_lookup_sparse</code>.</li>
+</ul></li>
+<li><b><code>dtype</code></b>: The type of features. Only string and integer types are supported.</li>
+</ul>
+<h5 id="returns-38">Returns:</h5>
+<p>A _SparseColumn with hashed bucket configuration</p>
+<h5 id="raises-25">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: hash_bucket_size is not greater than 2.</li>
+<li><b><code>ValueError</code></b>: dtype is neither string nor integer.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.layers.sparse_column_with_integerized_featurecolumn_name-bucket_size-combinernone-dtypetf.int64"><a name="//apple_ref/cpp/Function/sparse_column_with_integerized_feature" class="dashAnchor"></a><code id="sparse_column_with_integerized_feature">tf.contrib.layers.sparse_column_with_integerized_feature(column_name, bucket_size, combiner=None, dtype=tf.int64)</code></h3>
+<p>Creates an integerized _SparseColumn.</p>
+<p>Use this when your features are already pre-integerized into int64 IDs. output_id = input_feature</p>
+<h5 id="args-40">Args:</h5>
+<ul>
+<li><b><code>column_name</code></b>: A string defining sparse column name.</li>
+<li><b><code>bucket_size</code></b>: An int that is &gt; 1. The number of buckets. It should be bigger than maximum feature. In other words features in this column should be an int64 in range [0, bucket_size)</li>
+<li><b><code>combiner</code></b>: A string specifying how to reduce if the sparse column is multivalent. Currently &quot;mean&quot;, &quot;sqrtn&quot; and &quot;sum&quot; are supported, with &quot;sum&quot; the default:
+<ul>
+<li>&quot;sum&quot;: do not normalize features in the column</li>
+<li>&quot;mean&quot;: do l1 normalization on features in the column</li>
+<li>&quot;sqrtn&quot;: do l2 normalization on features in the column For more information: <code>tf.embedding_lookup_sparse</code>.</li>
+</ul></li>
+<li><b><code>dtype</code></b>: Type of features. It should be an integer type. Default value is dtypes.int64.</li>
+</ul>
+<h5 id="returns-39">Returns:</h5>
+<p>An integerized _SparseColumn definition.</p>
+<h5 id="raises-26">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: bucket_size is not greater than 1.</li>
+<li><b><code>ValueError</code></b>: dtype is not integer.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.layers.sparse_column_with_keyscolumn_name-keys-default_value-1-combinernone"><a name="//apple_ref/cpp/Function/sparse_column_with_keys" class="dashAnchor"></a><code id="sparse_column_with_keys">tf.contrib.layers.sparse_column_with_keys(column_name, keys, default_value=-1, combiner=None)</code></h3>
+<p>Creates a _SparseColumn with keys.</p>
+<p>Look up logic is as follows: lookup_id = index_of_feature_in_keys if feature in keys else default_value</p>
+<h5 id="args-41">Args:</h5>
+<ul>
+<li><b><code>column_name</code></b>: A string defining sparse column name.</li>
+<li><b><code>keys</code></b>: a string list defining vocabulary.</li>
+<li><b><code>default_value</code></b>: The value to use for out-of-vocabulary feature values. Default is -1.</li>
+<li><b><code>combiner</code></b>: A string specifying how to reduce if the sparse column is multivalent. Currently &quot;mean&quot;, &quot;sqrtn&quot; and &quot;sum&quot; are supported, with &quot;sum&quot; the default:
+<ul>
+<li>&quot;sum&quot;: do not normalize features in the column</li>
+<li>&quot;mean&quot;: do l1 normalization on features in the column</li>
+<li>&quot;sqrtn&quot;: do l2 normalization on features in the column For more information: <code>tf.embedding_lookup_sparse</code>.</li>
+</ul></li>
+</ul>
+<h5 id="returns-40">Returns:</h5>
+<p>A _SparseColumnKeys with keys configuration.</p>
+<hr />
+<h3 id="tf.contrib.layers.weighted_sparse_columnsparse_id_column-weight_column_name-dtypetf.float32"><a name="//apple_ref/cpp/Function/weighted_sparse_column" class="dashAnchor"></a><code id="weighted_sparse_column">tf.contrib.layers.weighted_sparse_column(sparse_id_column, weight_column_name, dtype=tf.float32)</code></h3>
+<p>Creates a _SparseColumn by combining sparse_id_column with a weight column.</p>
+<p>Example:</p>
+<p><code>python   sparse_feature = sparse_column_with_hash_bucket(column_name=&quot;sparse_col&quot;,                                                   hash_bucket_size=1000)   weighted_feature = weighted_sparse_column(sparse_id_column=sparse_feature,                                             weight_column_name=&quot;weights_col&quot;)</code></p>
+<p>This configuration assumes that input dictionary of model contains the following two items: * (key=&quot;sparse_col&quot;, value=sparse_tensor) where sparse_tensor is a SparseTensor. * (key=&quot;weights_col&quot;, value=weights_tensor) where weights_tensor is a SparseTensor. Following are assumed to be true: * sparse_tensor.indices = weights_tensor.indices * sparse_tensor.shape = weights_tensor.shape</p>
+<h5 id="args-42">Args:</h5>
+<ul>
+<li><b><code>sparse_id_column</code></b>: A <code>_SparseColumn</code> which is created by <code>sparse_column_with_*</code> functions.</li>
+<li><b><code>weight_column_name</code></b>: A string defining a sparse column name which represents weight or value of the corresponding sparse id feature.</li>
+<li><b><code>dtype</code></b>: Type of weights, such as <code>tf.float32</code></li>
+</ul>
+<h5 id="returns-41">Returns:</h5>
+<p>A _WeightedSparseColumn composed of two sparse features: one represents id, the other represents weight (value) of the id feature in that example.</p>
+<h5 id="raises-27">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if dtype is not convertible to float.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.layers.weighted_sum_from_feature_columnscolumns_to_tensors-feature_columns-num_outputs-weight_collectionsnone-trainabletrue-scopenone"><a name="//apple_ref/cpp/Function/weighted_sum_from_feature_columns" class="dashAnchor"></a><code id="weighted_sum_from_feature_columns">tf.contrib.layers.weighted_sum_from_feature_columns(columns_to_tensors, feature_columns, num_outputs, weight_collections=None, trainable=True, scope=None)</code></h3>
+<p>A tf.contrib.layer style linear prediction builder based on FeatureColumns.</p>
+<p>Generally a single example in training data is described with feature columns. This function generates weighted sum for each num_outputs. Weighted sum refers to logits in classification problems. It refers to prediction itself for linear regression problems.</p>
+<p>Example:</p>
+<p><code># Building model for training   feature_columns = (       real_valued_column(&quot;my_feature1&quot;),       ...   )   columns_to_tensor = tf.parse_example(...)   logits = weighted_sum_from_feature_columns(       columns_to_tensors=columns_to_tensor,       feature_columns=feature_columns,       num_outputs=1)   loss = tf.nn.sigmoid_cross_entropy_with_logits(logits, labels)</code></p>
+<h5 id="args-43">Args:</h5>
+<ul>
+<li><b><code>columns_to_tensors</code></b>: A mapping from feature column to tensors. 'string' key means a base feature (not-transformed). It can have FeatureColumn as a key too. That means that FeatureColumn is already transformed by input pipeline. For example, <code>inflow</code> may have handled transformations.</li>
+<li><b><code>feature_columns</code></b>: A set containing all the feature columns. All items in the set should be instances of classes derived from FeatureColumn.</li>
+<li><b><code>num_outputs</code></b>: An integer specifying number of outputs. Default value is 1.</li>
+<li><b><code>weight_collections</code></b>: List of graph collections to which weights are added.</li>
+<li><b><code>trainable</code></b>: If <code>True</code> also add variables to the graph collection <code>GraphKeys.TRAINABLE_VARIABLES</code> (see tf.Variable).</li>
+<li><b><code>scope</code></b>: Optional scope for variable_scope.</li>
+</ul>
+<h5 id="returns-42">Returns:</h5>
+<p>A tuple containing:</p>
+<pre><code>* A Tensor which represents predictions of a linear model.
+* A dictionary which maps feature_column to corresponding Variable.
+* A Variable which is used for bias.</code></pre>
+<h5 id="raises-28">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if FeatureColumn cannot be used for linear predictions.</li>
+</ul>

@@ -1,0 +1,211 @@
+<!-- This file is machine generated: DO NOT EDIT! -->
+<h1 id="optimization-contrib">Optimization (contrib)</h1>
+<p>[TOC]</p>
+<p>opt: A module containing optimization routines.</p>
+<h2 id="other-functions-and-classes">Other Functions and Classes</h2>
+<hr />
+<h3 id="class-tf.contrib.opt.externaloptimizerinterface"><a name="//apple_ref/cpp/Class/ExternalOptimizerInterface" class="dashAnchor"></a><code id="ExternalOptimizerInterface">class tf.contrib.opt.ExternalOptimizerInterface</code></h3>
+<p>Base class for interfaces with external optimization algorithms.</p>
+<p>Subclass this and implement <code>_minimize</code> in order to wrap a new optimization algorithm.</p>
+<p><code>ExternalOptimizerInterface</code> should not be instantiated directly; instead use e.g. <code>ScipyOptimizerInterface</code>.</p>
+<hr />
+<h4 id="tf.contrib.opt.externaloptimizerinterface.__init__loss-var_listnone-equalitiesnone-inequalitiesnone-optimizer_kwargs"><code id="ExternalOptimizerInterface.__init__">tf.contrib.opt.ExternalOptimizerInterface.__init__(loss, var_list=None, equalities=None, inequalities=None, **optimizer_kwargs)</code></h4>
+<p>Initialize a new interface instance.</p>
+<h5 id="args">Args:</h5>
+<ul>
+<li><b><code>loss</code></b>: A scalar <code>Tensor</code> to be minimized.</li>
+<li><b><code>var_list</code></b>: Optional list of <code>Variable</code> objects to update to minimize <code>loss</code>. Defaults to the list of variables collected in the graph under the key <code>GraphKeys.TRAINABLE_VARIABLES</code>.</li>
+<li><b><code>equalities</code></b>: Optional list of equality constraint scalar <code>Tensor</code>s to be held equal to zero.</li>
+<li><b><code>inequalities</code></b>: Optional list of inequality constraint scalar <code>Tensor</code>s to be kept nonnegative.</li>
+<li><b><code>**optimizer_kwargs</code></b>: Other subclass-specific keyword arguments.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.opt.externaloptimizerinterface.minimizesessionnone-feed_dictnone-fetchesnone-step_callbacknone-loss_callbacknone"><code id="ExternalOptimizerInterface.minimize">tf.contrib.opt.ExternalOptimizerInterface.minimize(session=None, feed_dict=None, fetches=None, step_callback=None, loss_callback=None)</code></h4>
+<p>Minimize a scalar <code>Tensor</code>.</p>
+<p>Variables subject to optimization are updated in-place at the end of optimization.</p>
+<p>Note that this method does <em>not</em> just return a minimization <code>Op</code>, unlike <code>Optimizer.minimize()</code>; instead it actually performs minimization by executing commands to control a <code>Session</code>.</p>
+<h5 id="args-1">Args:</h5>
+<ul>
+<li><b><code>session</code></b>: A <code>Session</code> instance.</li>
+<li><b><code>feed_dict</code></b>: A feed dict to be passed to calls to <code>session.run</code>.</li>
+<li><b><code>fetches</code></b>: A list of <code>Tensor</code>s to fetch and supply to <code>loss_callback</code> as positional arguments.</li>
+<li><b><code>step_callback</code></b>: A function to be called at each optimization step; arguments are the current values of all optimization variables flattened into a single vector.</li>
+<li><b><code>loss_callback</code></b>: A function to be called every time the loss and gradients are computed, with evaluated fetches supplied as positional arguments.</li>
+</ul>
+<hr />
+<h3 id="class-tf.contrib.opt.movingaverageoptimizer"><a name="//apple_ref/cpp/Class/MovingAverageOptimizer" class="dashAnchor"></a><code id="MovingAverageOptimizer">class tf.contrib.opt.MovingAverageOptimizer</code></h3>
+<p>Optimizer wrapper that maintains a moving average of parameters. - - -</p>
+<h4 id="tf.contrib.opt.movingaverageoptimizer.__init__opt-average_decay0.9999-num_updatesnone-sequential_updatetrue"><code id="MovingAverageOptimizer.__init__">tf.contrib.opt.MovingAverageOptimizer.__init__(opt, average_decay=0.9999, num_updates=None, sequential_update=True)</code></h4>
+<p>Construct a new MovingAverageOptimizer.</p>
+<h5 id="args-2">Args:</h5>
+<ul>
+<li><b><code>opt</code></b>: A tf.Optimizer that will be used to compute and apply gradients.</li>
+<li><b><code>average_decay</code></b>: Float. Decay to use to maintain the moving averages of trained variables. See tf.train.ExponentialMovingAverage for details.</li>
+<li><b><code>num_updates</code></b>: Optional count of number of updates applied to variables. See tf.train.ExponentialMovingAverage for details.</li>
+<li><b><code>sequential_update</code></b>: Bool. If False, will compute the moving average at the same time as the model is updated, potentially doing benign data races. If True, will update the moving average after gradient updates.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.opt.movingaverageoptimizer.apply_gradientsgrads_and_vars-global_stepnone-namenone"><code id="MovingAverageOptimizer.apply_gradients">tf.contrib.opt.MovingAverageOptimizer.apply_gradients(grads_and_vars, global_step=None, name=None)</code></h4>
+<hr />
+<h4 id="tf.contrib.opt.movingaverageoptimizer.compute_gradientsloss-var_listnone-gate_gradients1-aggregation_methodnone-colocate_gradients_with_opsfalse-grad_lossnone"><code id="MovingAverageOptimizer.compute_gradients">tf.contrib.opt.MovingAverageOptimizer.compute_gradients(loss, var_list=None, gate_gradients=1, aggregation_method=None, colocate_gradients_with_ops=False, grad_loss=None)</code></h4>
+<p>Compute gradients of <code>loss</code> for the variables in <code>var_list</code>.</p>
+<p>This is the first part of <code>minimize()</code>. It returns a list of (gradient, variable) pairs where &quot;gradient&quot; is the gradient for &quot;variable&quot;. Note that &quot;gradient&quot; can be a <code>Tensor</code>, an <code>IndexedSlices</code>, or <code>None</code> if there is no gradient for the given variable.</p>
+<h5 id="args-3">Args:</h5>
+<ul>
+<li><b><code>loss</code></b>: A Tensor containing the value to minimize.</li>
+<li><b><code>var_list</code></b>: Optional list of <code>tf.Variable</code> to update to minimize <code>loss</code>. Defaults to the list of variables collected in the graph under the key <code>GraphKey.TRAINABLE_VARIABLES</code>.</li>
+<li><b><code>gate_gradients</code></b>: How to gate the computation of gradients. Can be <code>GATE_NONE</code>, <code>GATE_OP</code>, or <code>GATE_GRAPH</code>.</li>
+<li><b><code>aggregation_method</code></b>: Specifies the method used to combine gradient terms. Valid values are defined in the class <code>AggregationMethod</code>.</li>
+<li><b><code>colocate_gradients_with_ops</code></b>: If True, try colocating gradients with the corresponding op.</li>
+<li><b><code>grad_loss</code></b>: Optional. A <code>Tensor</code> holding the gradient computed for <code>loss</code>.</li>
+</ul>
+<h5 id="returns">Returns:</h5>
+<p>A list of (gradient, variable) pairs. Variable is always present, but gradient can be <code>None</code>.</p>
+<h5 id="raises">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>var_list</code> contains anything else than <code>Variable</code> objects.</li>
+<li><b><code>ValueError</code></b>: If some arguments are invalid.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.opt.movingaverageoptimizer.get_name"><code id="MovingAverageOptimizer.get_name">tf.contrib.opt.MovingAverageOptimizer.get_name()</code></h4>
+<hr />
+<h4 id="tf.contrib.opt.movingaverageoptimizer.get_slotvar-name"><code id="MovingAverageOptimizer.get_slot">tf.contrib.opt.MovingAverageOptimizer.get_slot(var, name)</code></h4>
+<p>Return a slot named <code>name</code> created for <code>var</code> by the Optimizer.</p>
+<p>Some <code>Optimizer</code> subclasses use additional variables. For example <code>Momentum</code> and <code>Adagrad</code> use variables to accumulate updates. This method gives access to these <code>Variable</code> objects if for some reason you need them.</p>
+<p>Use <code>get_slot_names()</code> to get the list of slot names created by the <code>Optimizer</code>.</p>
+<h5 id="args-4">Args:</h5>
+<ul>
+<li><b><code>var</code></b>: A variable passed to <code>minimize()</code> or <code>apply_gradients()</code>.</li>
+<li><b><code>name</code></b>: A string.</li>
+</ul>
+<h5 id="returns-1">Returns:</h5>
+<p>The <code>Variable</code> for the slot if it was created, <code>None</code> otherwise.</p>
+<hr />
+<h4 id="tf.contrib.opt.movingaverageoptimizer.get_slot_names"><code id="MovingAverageOptimizer.get_slot_names">tf.contrib.opt.MovingAverageOptimizer.get_slot_names()</code></h4>
+<p>Return a list of the names of slots created by the <code>Optimizer</code>.</p>
+<p>See <code>get_slot()</code>.</p>
+<h5 id="returns-2">Returns:</h5>
+<p>A list of strings.</p>
+<hr />
+<h4 id="tf.contrib.opt.movingaverageoptimizer.minimizeloss-global_stepnone-var_listnone-gate_gradients1-aggregation_methodnone-colocate_gradients_with_opsfalse-namenone-grad_lossnone"><code id="MovingAverageOptimizer.minimize">tf.contrib.opt.MovingAverageOptimizer.minimize(loss, global_step=None, var_list=None, gate_gradients=1, aggregation_method=None, colocate_gradients_with_ops=False, name=None, grad_loss=None)</code></h4>
+<p>Add operations to minimize <code>loss</code> by updating <code>var_list</code>.</p>
+<p>This method simply combines calls <code>compute_gradients()</code> and <code>apply_gradients()</code>. If you want to process the gradient before applying them call <code>compute_gradients()</code> and <code>apply_gradients()</code> explicitly instead of using this function.</p>
+<h5 id="args-5">Args:</h5>
+<ul>
+<li><b><code>loss</code></b>: A <code>Tensor</code> containing the value to minimize.</li>
+<li><b><code>global_step</code></b>: Optional <code>Variable</code> to increment by one after the variables have been updated.</li>
+<li><b><code>var_list</code></b>: Optional list of <code>Variable</code> objects to update to minimize <code>loss</code>. Defaults to the list of variables collected in the graph under the key <code>GraphKeys.TRAINABLE_VARIABLES</code>.</li>
+<li><b><code>gate_gradients</code></b>: How to gate the computation of gradients. Can be <code>GATE_NONE</code>, <code>GATE_OP</code>, or <code>GATE_GRAPH</code>.</li>
+<li><b><code>aggregation_method</code></b>: Specifies the method used to combine gradient terms. Valid values are defined in the class <code>AggregationMethod</code>.</li>
+<li><b><code>colocate_gradients_with_ops</code></b>: If True, try colocating gradients with the corresponding op.</li>
+<li><b><code>name</code></b>: Optional name for the returned operation.</li>
+<li><b><code>grad_loss</code></b>: Optional. A <code>Tensor</code> holding the gradient computed for <code>loss</code>.</li>
+</ul>
+<h5 id="returns-3">Returns:</h5>
+<p>An Operation that updates the variables in <code>var_list</code>. If <code>global_step</code> was not <code>None</code>, that operation also increments <code>global_step</code>.</p>
+<h5 id="raises-1">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If some of the variables are not <code>Variable</code> objects.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.opt.movingaverageoptimizer.swapping_savervar_listnone-nameswapping_saver-kwargs"><code id="MovingAverageOptimizer.swapping_saver">tf.contrib.opt.MovingAverageOptimizer.swapping_saver(var_list=None, name='swapping_saver', **kwargs)</code></h4>
+<p>Create a saver swapping moving averages and variables.</p>
+<p>You should use this saver during training. It will save the moving averages of the trained parameters under the original parameter names. For evaluations or inference you should use a regular saver and it will automatically use the moving averages for the trained variable.</p>
+<p>You must call this function after all variables have been created and after you have called Optimizer.minimize().</p>
+<h5 id="args-6">Args:</h5>
+<ul>
+<li><b><code>var_list</code></b>: List of variables to save, as per <code>Saver()</code>. If set to None, will save all the variables that have been created before this call.</li>
+<li><b><code>name</code></b>: The name of the saver.</li>
+<li><b><code>**kwargs</code></b>: Keyword arguments of <code>Saver()</code>.</li>
+</ul>
+<h5 id="returns-4">Returns:</h5>
+<p>A <code>tf.Saver</code> object.</p>
+<h5 id="raises-2">Raises:</h5>
+<ul>
+<li><b><code>RuntimeError</code></b>: If apply_gradients or minimize has not been called before.</li>
+</ul>
+<hr />
+<h3 id="class-tf.contrib.opt.scipyoptimizerinterface"><a name="//apple_ref/cpp/Class/ScipyOptimizerInterface" class="dashAnchor"></a><code id="ScipyOptimizerInterface">class tf.contrib.opt.ScipyOptimizerInterface</code></h3>
+<p>Wrapper allowing <code>scipy.optimize.minimize</code> to operate a <code>tf.Session</code>.</p>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">vector <span class="op">=</span> tf.Variable([<span class="dv">7</span>., <span class="dv">7</span>.], <span class="st">&#39;vector&#39;</span>)
+
+<span class="co"># Make vector norm as small as possible.</span>
+loss <span class="op">=</span> tf.reduce_sum(tf.square(vector))
+
+optimizer <span class="op">=</span> ScipyOptimizerInterface(loss, options<span class="op">=</span>{<span class="st">&#39;maxiter&#39;</span>: <span class="dv">100</span>})
+
+<span class="cf">with</span> tf.Session() <span class="im">as</span> session:
+  optimizer.minimize(session)
+
+<span class="co"># The value of vector should now be [0., 0.].</span></code></pre></div>
+<p>Example with constraints:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">vector <span class="op">=</span> tf.Variable([<span class="dv">7</span>., <span class="dv">7</span>.], <span class="st">&#39;vector&#39;</span>)
+
+<span class="co"># Make vector norm as small as possible.</span>
+loss <span class="op">=</span> tf.reduce_sum(tf.square(vector))
+<span class="co"># Ensure the vector&#39;s y component is = 1.</span>
+equalities <span class="op">=</span> [vector[<span class="dv">1</span>] <span class="op">-</span> <span class="dv">1</span>.]
+<span class="co"># Ensure the vector&#39;s x component is &gt;= 1.</span>
+inequalities <span class="op">=</span> [vector[<span class="dv">0</span>] <span class="op">-</span> <span class="dv">1</span>.]
+
+<span class="co"># Our default SciPy optimization algorithm, L-BFGS-B, does not support</span>
+<span class="co"># general constraints. Thus we use SLSQP instead.</span>
+optimizer <span class="op">=</span> ScipyOptimizerInterface(
+    loss, equalities<span class="op">=</span>equalities, inequalities<span class="op">=</span>inequalities, method<span class="op">=</span><span class="st">&#39;SLSQP&#39;</span>)
+
+<span class="cf">with</span> tf.Session() <span class="im">as</span> session:
+  optimizer.minimize(session)
+
+<span class="co"># The value of vector should now be [1., 1.].</span></code></pre></div>
+<hr />
+<h4 id="tf.contrib.opt.scipyoptimizerinterface.__init__loss-var_listnone-equalitiesnone-inequalitiesnone-optimizer_kwargs"><code id="ScipyOptimizerInterface.__init__">tf.contrib.opt.ScipyOptimizerInterface.__init__(loss, var_list=None, equalities=None, inequalities=None, **optimizer_kwargs)</code></h4>
+<p>Initialize a new interface instance.</p>
+<h5 id="args-7">Args:</h5>
+<ul>
+<li><b><code>loss</code></b>: A scalar <code>Tensor</code> to be minimized.</li>
+<li><b><code>var_list</code></b>: Optional list of <code>Variable</code> objects to update to minimize <code>loss</code>. Defaults to the list of variables collected in the graph under the key <code>GraphKeys.TRAINABLE_VARIABLES</code>.</li>
+<li><b><code>equalities</code></b>: Optional list of equality constraint scalar <code>Tensor</code>s to be held equal to zero.</li>
+<li><b><code>inequalities</code></b>: Optional list of inequality constraint scalar <code>Tensor</code>s to be kept nonnegative.</li>
+<li><b><code>**optimizer_kwargs</code></b>: Other subclass-specific keyword arguments.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.opt.scipyoptimizerinterface.minimizesessionnone-feed_dictnone-fetchesnone-step_callbacknone-loss_callbacknone"><code id="ScipyOptimizerInterface.minimize">tf.contrib.opt.ScipyOptimizerInterface.minimize(session=None, feed_dict=None, fetches=None, step_callback=None, loss_callback=None)</code></h4>
+<p>Minimize a scalar <code>Tensor</code>.</p>
+<p>Variables subject to optimization are updated in-place at the end of optimization.</p>
+<p>Note that this method does <em>not</em> just return a minimization <code>Op</code>, unlike <code>Optimizer.minimize()</code>; instead it actually performs minimization by executing commands to control a <code>Session</code>.</p>
+<h5 id="args-8">Args:</h5>
+<ul>
+<li><b><code>session</code></b>: A <code>Session</code> instance.</li>
+<li><b><code>feed_dict</code></b>: A feed dict to be passed to calls to <code>session.run</code>.</li>
+<li><b><code>fetches</code></b>: A list of <code>Tensor</code>s to fetch and supply to <code>loss_callback</code> as positional arguments.</li>
+<li><b><code>step_callback</code></b>: A function to be called at each optimization step; arguments are the current values of all optimization variables flattened into a single vector.</li>
+<li><b><code>loss_callback</code></b>: A function to be called every time the loss and gradients are computed, with evaluated fetches supplied as positional arguments.</li>
+</ul>
+<hr />
+<h3 id="class-tf.contrib.opt.variableclippingoptimizer"><a name="//apple_ref/cpp/Class/VariableClippingOptimizer" class="dashAnchor"></a><code id="VariableClippingOptimizer">class tf.contrib.opt.VariableClippingOptimizer</code></h3>
+<p>Wrapper optimizer that clips the norm of specified variables after update.</p>
+<p>This optimizer delegates all aspects of gradient calculation and application to an underlying optimizer. After applying gradients, this optimizer then clips the variable to have a maximum L2 norm along specified dimensions. NB: this is quite different from clipping the norm of the gradients.</p>
+<p>Multiple instances of <code>VariableClippingOptimizer</code> may be chained to specify different max norms for different subsets of variables.</p>
+<p>This is more efficient at serving-time than using normalization during embedding lookup, at the expense of more expensive training and fewer guarantees about the norms.</p>
+<hr />
+<h4 id="tf.contrib.opt.variableclippingoptimizer.__init__opt-vars_to_clip_dims-max_norm-use_lockingfalse-colocate_clip_ops_with_varsfalse-namevariableclipping"><code id="VariableClippingOptimizer.__init__">tf.contrib.opt.VariableClippingOptimizer.__init__(opt, vars_to_clip_dims, max_norm, use_locking=False, colocate_clip_ops_with_vars=False, name='VariableClipping')</code></h4>
+<p>Construct a new clip-norm optimizer.</p>
+<h5 id="args-9">Args:</h5>
+<ul>
+<li><b><code>opt</code></b>: The actual optimizer that will be used to compute and apply the gradients. Must be one of the Optimizer classes.</li>
+<li><b><code>vars_to_clip_dims</code></b>: A dict with keys as Variables and values as lists of dimensions along which to compute the L2-norm. See <code>tf.clip_by_norm</code> for more details.</li>
+<li><b><code>max_norm</code></b>: The L2-norm to clip to, for all variables specified.</li>
+<li><b><code>use_locking</code></b>: If <code>True</code> use locks for clip update operations.</li>
+<li><b><code>colocate_clip_ops_with_vars</code></b>: If <code>True</code>, try colocating the clip norm ops with the corresponding variable.</li>
+<li><b><code>name</code></b>: Optional name prefix for the operations created when applying gradients. Defaults to &quot;VariableClipping&quot;.</li>
+</ul>
+<h4 id="other-methods">Other Methods</h4>
+<hr />
+<h4 id="tf.contrib.opt.variableclippingoptimizer.apply_gradientsgrads_and_vars-global_stepnone-namenone"><code id="VariableClippingOptimizer.apply_gradients">tf.contrib.opt.VariableClippingOptimizer.apply_gradients(grads_and_vars, global_step=None, name=None)</code></h4>
+<hr />
+<h4 id="tf.contrib.opt.variableclippingoptimizer.compute_gradientsargs-kwargs"><code id="VariableClippingOptimizer.compute_gradients">tf.contrib.opt.VariableClippingOptimizer.compute_gradients(*args, **kwargs)</code></h4>
+<hr />
+<h4 id="tf.contrib.opt.variableclippingoptimizer.get_slotargs-kwargs"><code id="VariableClippingOptimizer.get_slot">tf.contrib.opt.VariableClippingOptimizer.get_slot(*args, **kwargs)</code></h4>
+<hr />
+<h4 id="tf.contrib.opt.variableclippingoptimizer.get_slot_namesargs-kwargs"><code id="VariableClippingOptimizer.get_slot_names">tf.contrib.opt.VariableClippingOptimizer.get_slot_names(*args, **kwargs)</code></h4>

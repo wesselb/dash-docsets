@@ -1,0 +1,1697 @@
+<!-- This file is machine generated: DO NOT EDIT! -->
+<h1 id="tensor-transformations">Tensor Transformations</h1>
+<p>Note: Functions taking <code>Tensor</code> arguments can also take anything accepted by <a href="framework.md#convert_to_tensor"><code>tf.convert_to_tensor</code></a>.</p>
+<p>[TOC]</p>
+<h2 id="casting">Casting</h2>
+<p>TensorFlow provides several operations that you can use to cast tensor data types in your graph.</p>
+<hr />
+<h3 id="tf.string_to_numberstring_tensor-out_typenone-namenone"><a name="//apple_ref/cpp/Function/string_to_number" class="dashAnchor"></a><code id="string_to_number">tf.string_to_number(string_tensor, out_type=None, name=None)</code></h3>
+<p>Converts each string in the input Tensor to the specified numeric type.</p>
+<p>(Note that int32 overflow results in an error while float overflow results in a rounded value.)</p>
+<h5 id="args">Args:</h5>
+<ul>
+<li><b><code>string_tensor</code></b>: A <code>Tensor</code> of type <code>string</code>.</li>
+<li><b><code>out_type</code></b>: An optional <code>tf.DType</code> from: <code>tf.float32, tf.int32</code>. Defaults to <code>tf.float32</code>. The numeric type to interpret each string in <code>string_tensor</code> as.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>out_type</code>. A Tensor of the same shape as the input <code>string_tensor</code>.</p>
+<hr />
+<h3 id="tf.to_doublex-nametodouble"><a name="//apple_ref/cpp/Function/to_double" class="dashAnchor"></a><code id="to_double">tf.to_double(x, name='ToDouble')</code></h3>
+<p>Casts a tensor to type <code>float64</code>.</p>
+<h5 id="args-1">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> or <code>SparseTensor</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-1">Returns:</h5>
+<p>A <code>Tensor</code> or <code>SparseTensor</code> with same shape as <code>x</code> with type <code>float64</code>.</p>
+<h5 id="raises">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>x</code> cannot be cast to the <code>float64</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.to_floatx-nametofloat"><a name="//apple_ref/cpp/Function/to_float" class="dashAnchor"></a><code id="to_float">tf.to_float(x, name='ToFloat')</code></h3>
+<p>Casts a tensor to type <code>float32</code>.</p>
+<h5 id="args-2">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> or <code>SparseTensor</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-2">Returns:</h5>
+<p>A <code>Tensor</code> or <code>SparseTensor</code> with same shape as <code>x</code> with type <code>float32</code>.</p>
+<h5 id="raises-1">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>x</code> cannot be cast to the <code>float32</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.to_bfloat16x-nametobfloat16"><a name="//apple_ref/cpp/Function/to_bfloat16" class="dashAnchor"></a><code id="to_bfloat16">tf.to_bfloat16(x, name='ToBFloat16')</code></h3>
+<p>Casts a tensor to type <code>bfloat16</code>.</p>
+<h5 id="args-3">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> or <code>SparseTensor</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-3">Returns:</h5>
+<p>A <code>Tensor</code> or <code>SparseTensor</code> with same shape as <code>x</code> with type <code>bfloat16</code>.</p>
+<h5 id="raises-2">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>x</code> cannot be cast to the <code>bfloat16</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.to_int32x-nametoint32"><a name="//apple_ref/cpp/Function/to_int32" class="dashAnchor"></a><code id="to_int32">tf.to_int32(x, name='ToInt32')</code></h3>
+<p>Casts a tensor to type <code>int32</code>.</p>
+<h5 id="args-4">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> or <code>SparseTensor</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-4">Returns:</h5>
+<p>A <code>Tensor</code> or <code>SparseTensor</code> with same shape as <code>x</code> with type <code>int32</code>.</p>
+<h5 id="raises-3">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>x</code> cannot be cast to the <code>int32</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.to_int64x-nametoint64"><a name="//apple_ref/cpp/Function/to_int64" class="dashAnchor"></a><code id="to_int64">tf.to_int64(x, name='ToInt64')</code></h3>
+<p>Casts a tensor to type <code>int64</code>.</p>
+<h5 id="args-5">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> or <code>SparseTensor</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-5">Returns:</h5>
+<p>A <code>Tensor</code> or <code>SparseTensor</code> with same shape as <code>x</code> with type <code>int64</code>.</p>
+<h5 id="raises-4">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>x</code> cannot be cast to the <code>int64</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.castx-dtype-namenone"><a name="//apple_ref/cpp/Function/cast" class="dashAnchor"></a><code id="cast">tf.cast(x, dtype, name=None)</code></h3>
+<p>Casts a tensor to a new type.</p>
+<p>The operation casts <code>x</code> (in case of <code>Tensor</code>) or <code>x.values</code> (in case of <code>SparseTensor</code>) to <code>dtype</code>.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># tensor `a` is [1.8, 2.2], dtype=tf.float</span>
+tf.cast(a, tf.int32) <span class="op">==&gt;</span> [<span class="dv">1</span>, <span class="dv">2</span>]  <span class="co"># dtype=tf.int32</span></code></pre></div>
+<h5 id="args-6">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> or <code>SparseTensor</code>.</li>
+<li><b><code>dtype</code></b>: The destination type.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-6">Returns:</h5>
+<p>A <code>Tensor</code> or <code>SparseTensor</code> with same shape as <code>x</code>.</p>
+<h5 id="raises-5">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>x</code> cannot be cast to the <code>dtype</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.bitcastinput-type-namenone"><a name="//apple_ref/cpp/Function/bitcast" class="dashAnchor"></a><code id="bitcast">tf.bitcast(input, type, name=None)</code></h3>
+<p>Bitcasts a tensor from one type to another without copying data.</p>
+<p>Given a tensor <code>input</code>, this operation returns a tensor that has the same buffer data as <code>input</code> with datatype <code>type</code>.</p>
+<p>If the input datatype <code>T</code> is larger than the output datatype <code>type</code> then the shape changes from [...] to [..., sizeof(<code>T</code>)/sizeof(<code>type</code>)].</p>
+<p>If <code>T</code> is smaller than <code>type</code>, the operator requires that the rightmost dimension be equal to sizeof(<code>type</code>)/sizeof(<code>T</code>). The shape then goes from [..., sizeof(<code>type</code>)/sizeof(<code>T</code>)] to [...].</p>
+<p><em>NOTE</em>: Bitcast is implemented as a low-level cast, so machines with different endian orderings will give different results.</p>
+<h5 id="args-7">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int64</code>, <code>int32</code>, <code>uint8</code>, <code>uint16</code>, <code>int16</code>, <code>int8</code>, <code>complex64</code>, <code>complex128</code>, <code>qint8</code>, <code>quint8</code>, <code>qint32</code>, <code>half</code>.</li>
+<li><b><code>type</code></b>: A <code>tf.DType</code> from: <code>tf.float32, tf.float64, tf.int64, tf.int32, tf.uint8, tf.uint16, tf.int16, tf.int8, tf.complex64, tf.complex128, tf.qint8, tf.quint8, tf.qint32, tf.half</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-7">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>type</code>.</p>
+<hr />
+<h3 id="tf.saturate_castvalue-dtype-namenone"><a name="//apple_ref/cpp/Function/saturate_cast" class="dashAnchor"></a><code id="saturate_cast">tf.saturate_cast(value, dtype, name=None)</code></h3>
+<p>Performs a safe saturating cast of <code>value</code> to <code>dtype</code>.</p>
+<p>This function casts the input to <code>dtype</code> without applying any scaling. If there is a danger that values would over or underflow in the cast, this op applies the appropriate clamping before the cast.</p>
+<h5 id="args-8">Args:</h5>
+<ul>
+<li><b><code>value</code></b>: A <code>Tensor</code>.</li>
+<li><b><code>dtype</code></b>: The desired output <code>DType</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-8">Returns:</h5>
+<p><code>value</code> safely cast to <code>dtype</code>.</p>
+<h2 id="shapes-and-shaping">Shapes and Shaping</h2>
+<p>TensorFlow provides several operations that you can use to determine the shape of a tensor and change the shape of a tensor.</p>
+<hr />
+<h3 id="tf.broadcast_dynamic_shapeshape_x-shape_y"><a name="//apple_ref/cpp/Function/broadcast_dynamic_shape" class="dashAnchor"></a><code id="broadcast_dynamic_shape">tf.broadcast_dynamic_shape(shape_x, shape_y)</code></h3>
+<p>Returns the broadcasted dynamic shape between <code>shape_x</code> and <code>shape_y</code>.</p>
+<h5 id="args-9">Args:</h5>
+<ul>
+<li><b><code>shape_x</code></b>: A rank 1 integer <code>Tensor</code>, representing the shape of x.</li>
+<li><b><code>shape_y</code></b>: A rank 1 integer <code>Tensor</code>, representing the shape of x.</li>
+</ul>
+<h5 id="returns-9">Returns:</h5>
+<p>A rank 1 integer <code>Tensor</code> representing the broadcasted shape.</p>
+<hr />
+<h3 id="tf.broadcast_static_shapeshape_x-shape_y"><a name="//apple_ref/cpp/Function/broadcast_static_shape" class="dashAnchor"></a><code id="broadcast_static_shape">tf.broadcast_static_shape(shape_x, shape_y)</code></h3>
+<p>Returns the broadcasted static shape between <code>shape_x</code> and <code>shape_y</code>.</p>
+<h5 id="args-10">Args:</h5>
+<ul>
+<li><b><code>shape_x</code></b>: A <code>TensorShape</code></li>
+<li><b><code>shape_y</code></b>: A <code>TensorShape</code></li>
+</ul>
+<h5 id="returns-10">Returns:</h5>
+<p>A <code>TensorShape</code> representing the broadcasted shape.</p>
+<h5 id="raises-6">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If the two shapes can not be broadcasted.</li>
+</ul>
+<hr />
+<h3 id="tf.shapeinput-namenone-out_typetf.int32"><a name="//apple_ref/cpp/Function/shape" class="dashAnchor"></a><code id="shape">tf.shape(input, name=None, out_type=tf.int32)</code></h3>
+<p>Returns the shape of a tensor.</p>
+<p>This operation returns a 1-D integer tensor representing the shape of <code>input</code>.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># &#39;t&#39; is [[[1, 1, 1], [2, 2, 2]], [[3, 3, 3], [4, 4, 4]]]</span>
+shape(t) <span class="op">==&gt;</span> [<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>]</code></pre></div>
+<h5 id="args-11">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code> or <code>SparseTensor</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+<li><b><code>out_type</code></b>: (Optional) The specified output type of the operation (<code>int32</code> or <code>int64</code>). Defaults to <code>tf.int32</code>.</li>
+</ul>
+<h5 id="returns-11">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>out_type</code>.</p>
+<hr />
+<h3 id="tf.shape_ninput-out_typenone-namenone"><a name="//apple_ref/cpp/Function/shape_n" class="dashAnchor"></a><code id="shape_n">tf.shape_n(input, out_type=None, name=None)</code></h3>
+<p>Returns shape of tensors.</p>
+<p>This operation returns N 1-D integer tensors representing shape of <code>input[i]s</code>.</p>
+<h5 id="args-12">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A list of at least 1 <code>Tensor</code> objects of the same type.</li>
+<li><b><code>out_type</code></b>: An optional <code>tf.DType</code> from: <code>tf.int32, tf.int64</code>. Defaults to <code>tf.int32</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-12">Returns:</h5>
+<p>A list with the same number of <code>Tensor</code> objects as <code>input</code> of <code>Tensor</code> objects of type out_type.</p>
+<hr />
+<h3 id="tf.sizeinput-namenone-out_typetf.int32"><a name="//apple_ref/cpp/Function/size" class="dashAnchor"></a><code id="size">tf.size(input, name=None, out_type=tf.int32)</code></h3>
+<p>Returns the size of a tensor.</p>
+<p>This operation returns an integer representing the number of elements in <code>input</code>.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># &#39;t&#39; is [[[1, 1, 1], [2, 2, 2]], [[3, 3, 3], [4, 4, 4]]]]</span>
+size(t) <span class="op">==&gt;</span> <span class="dv">12</span></code></pre></div>
+<h5 id="args-13">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code> or <code>SparseTensor</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+<li><b><code>out_type</code></b>: (Optional) The specified output type of the operation (<code>int32</code> or <code>int64</code>). Defaults to tf.int32.</li>
+</ul>
+<h5 id="returns-13">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>out_type</code>. Defaults to tf.int32.</p>
+<hr />
+<h3 id="tf.rankinput-namenone"><a name="//apple_ref/cpp/Function/rank" class="dashAnchor"></a><code id="rank">tf.rank(input, name=None)</code></h3>
+<p>Returns the rank of a tensor.</p>
+<p>This operation returns an integer representing the rank of <code>input</code>.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># &#39;t&#39; is [[[1, 1, 1], [2, 2, 2]], [[3, 3, 3], [4, 4, 4]]]</span>
+<span class="co"># shape of tensor &#39;t&#39; is [2, 2, 3]</span>
+rank(t) <span class="op">==&gt;</span> <span class="dv">3</span></code></pre></div>
+<p><strong>Note</strong>: The rank of a tensor is not the same as the rank of a matrix. The rank of a tensor is the number of indices required to uniquely select each element of the tensor. Rank is also known as &quot;order&quot;, &quot;degree&quot;, or &quot;ndims.&quot;</p>
+<h5 id="args-14">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code> or <code>SparseTensor</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-14">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>int32</code>.</p>
+<p><span class="citation">@compatibility</span>(numpy) Equivalent to np.ndim <span class="citation">@end_compatibility</span></p>
+<hr />
+<h3 id="tf.reshapetensor-shape-namenone"><a name="//apple_ref/cpp/Function/reshape" class="dashAnchor"></a><code id="reshape">tf.reshape(tensor, shape, name=None)</code></h3>
+<p>Reshapes a tensor.</p>
+<p>Given <code>tensor</code>, this operation returns a tensor that has the same values as <code>tensor</code> with shape <code>shape</code>.</p>
+<p>If one component of <code>shape</code> is the special value -1, the size of that dimension is computed so that the total size remains constant. In particular, a <code>shape</code> of <code>[-1]</code> flattens into 1-D. At most one component of <code>shape</code> can be -1.</p>
+<p>If <code>shape</code> is 1-D or higher, then the operation returns a tensor with shape <code>shape</code> filled with the values of <code>tensor</code>. In this case, the number of elements implied by <code>shape</code> must be the same as the number of elements in <code>tensor</code>.</p>
+<p>For example:</p>
+<pre class="prettyprint"><code># tensor &#39;t&#39; is [1, 2, 3, 4, 5, 6, 7, 8, 9]
+# tensor &#39;t&#39; has shape [9]
+reshape(t, [3, 3]) ==&gt; [[1, 2, 3],
+                        [4, 5, 6],
+                        [7, 8, 9]]
+
+# tensor &#39;t&#39; is [[[1, 1], [2, 2]],
+#                [[3, 3], [4, 4]]]
+# tensor &#39;t&#39; has shape [2, 2, 2]
+reshape(t, [2, 4]) ==&gt; [[1, 1, 2, 2],
+                        [3, 3, 4, 4]]
+
+# tensor &#39;t&#39; is [[[1, 1, 1],
+#                 [2, 2, 2]],
+#                [[3, 3, 3],
+#                 [4, 4, 4]],
+#                [[5, 5, 5],
+#                 [6, 6, 6]]]
+# tensor &#39;t&#39; has shape [3, 2, 3]
+# pass &#39;[-1]&#39; to flatten &#39;t&#39;
+reshape(t, [-1]) ==&gt; [1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 6]
+
+# -1 can also be used to infer the shape
+
+# -1 is inferred to be 9:
+reshape(t, [2, -1]) ==&gt; [[1, 1, 1, 2, 2, 2, 3, 3, 3],
+                         [4, 4, 4, 5, 5, 5, 6, 6, 6]]
+# -1 is inferred to be 2:
+reshape(t, [-1, 9]) ==&gt; [[1, 1, 1, 2, 2, 2, 3, 3, 3],
+                         [4, 4, 4, 5, 5, 5, 6, 6, 6]]
+# -1 is inferred to be 3:
+reshape(t, [ 2, -1, 3]) ==&gt; [[[1, 1, 1],
+                              [2, 2, 2],
+                              [3, 3, 3]],
+                             [[4, 4, 4],
+                              [5, 5, 5],
+                              [6, 6, 6]]]
+
+# tensor &#39;t&#39; is [7]
+# shape `[]` reshapes to a scalar
+reshape(t, []) ==&gt; 7</code></pre>
+<h5 id="args-15">Args:</h5>
+<ul>
+<li><b><code>tensor</code></b>: A <code>Tensor</code>.</li>
+<li><b><code>shape</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. Defines the shape of the output tensor.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-15">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>tensor</code>.</p>
+<hr />
+<h3 id="tf.squeezeinput-axisnone-namenone-squeeze_dimsnone"><a name="//apple_ref/cpp/Function/squeeze" class="dashAnchor"></a><code id="squeeze">tf.squeeze(input, axis=None, name=None, squeeze_dims=None)</code></h3>
+<p>Removes dimensions of size 1 from the shape of a tensor.</p>
+<p>Given a tensor <code>input</code>, this operation returns a tensor of the same type with all dimensions of size 1 removed. If you don't want to remove all size 1 dimensions, you can remove specific size 1 dimensions by specifying <code>axis</code>.</p>
+<p>For example:</p>
+<pre class="prettyprint"><code># &#39;t&#39; is a tensor of shape [1, 2, 1, 3, 1, 1]
+shape(squeeze(t)) ==&gt; [2, 3]</code></pre>
+<p>Or, to remove specific size 1 dimensions:</p>
+<pre class="prettyprint"><code># &#39;t&#39; is a tensor of shape [1, 2, 1, 3, 1, 1]
+shape(squeeze(t, [2, 4])) ==&gt; [1, 2, 3, 1]</code></pre>
+<h5 id="args-16">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. The <code>input</code> to squeeze.</li>
+<li><b><code>axis</code></b>: An optional list of <code>ints</code>. Defaults to <code>[]</code>. If specified, only squeezes the dimensions listed. The dimension index starts at 0. It is an error to squeeze a dimension that is not 1.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+<li><b><code>squeeze_dims</code></b>: Deprecated keyword argument that is now axis.</li>
+</ul>
+<h5 id="returns-16">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>input</code>. Contains the same data as <code>input</code>, but has one or more dimensions of size 1 removed.</p>
+<h5 id="raises-7">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: When both <code>squeeze_dims</code> and <code>axis</code> are specified.</li>
+</ul>
+<hr />
+<h3 id="tf.expand_dimsinput-axisnone-namenone-dimnone"><a name="//apple_ref/cpp/Function/expand_dims" class="dashAnchor"></a><code id="expand_dims">tf.expand_dims(input, axis=None, name=None, dim=None)</code></h3>
+<p>Inserts a dimension of 1 into a tensor's shape.</p>
+<p>Given a tensor <code>input</code>, this operation inserts a dimension of 1 at the dimension index <code>axis</code> of <code>input</code>'s shape. The dimension index <code>axis</code> starts at zero; if you specify a negative number for <code>axis</code> it is counted backward from the end.</p>
+<p>This operation is useful if you want to add a batch dimension to a single element. For example, if you have a single image of shape <code>[height, width, channels]</code>, you can make it a batch of 1 image with <code>expand_dims(image, 0)</code>, which will make the shape <code>[1, height, width, channels]</code>.</p>
+<p>Other examples:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># &#39;t&#39; is a tensor of shape [2]</span>
+shape(expand_dims(t, <span class="dv">0</span>)) <span class="op">==&gt;</span> [<span class="dv">1</span>, <span class="dv">2</span>]
+shape(expand_dims(t, <span class="dv">1</span>)) <span class="op">==&gt;</span> [<span class="dv">2</span>, <span class="dv">1</span>]
+shape(expand_dims(t, <span class="op">-</span><span class="dv">1</span>)) <span class="op">==&gt;</span> [<span class="dv">2</span>, <span class="dv">1</span>]
+
+<span class="co"># &#39;t2&#39; is a tensor of shape [2, 3, 5]</span>
+shape(expand_dims(t2, <span class="dv">0</span>)) <span class="op">==&gt;</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>]
+shape(expand_dims(t2, <span class="dv">2</span>)) <span class="op">==&gt;</span> [<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">5</span>]
+shape(expand_dims(t2, <span class="dv">3</span>)) <span class="op">==&gt;</span> [<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">1</span>]</code></pre></div>
+<p>This operation requires that:</p>
+<p><code>-1-input.dims() &lt;= dim &lt;= input.dims()</code></p>
+<p>This operation is related to <code>squeeze()</code>, which removes dimensions of size 1.</p>
+<h5 id="args-17">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>.</li>
+<li><b><code>axis</code></b>: 0-D (scalar). Specifies the dimension index at which to expand the shape of <code>input</code>.</li>
+<li><b><code>name</code></b>: The name of the output <code>Tensor</code>.</li>
+<li><b><code>dim</code></b>: 0-D (scalar). Equivalent to <code>axis</code>, to be deprecated.</li>
+</ul>
+<h5 id="returns-17">Returns:</h5>
+<p>A <code>Tensor</code> with the same data as <code>input</code>, but its shape has an additional dimension of size 1 added.</p>
+<h5 id="raises-8">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if both <code>dim</code> and <code>axis</code> are specified.</li>
+</ul>
+<hr />
+<h3 id="tf.meshgridargs-kwargs"><a name="//apple_ref/cpp/Function/meshgrid" class="dashAnchor"></a><code id="meshgrid">tf.meshgrid(*args, **kwargs)</code></h3>
+<p>Broadcasts parameters for evaluation on an N-D grid.</p>
+<p>Given N one-dimensional coordinate arrays <code>*args</code>, returns a list <code>outputs</code> of N-D coordinate arrays for evaluating expressions on an N-D grid.</p>
+<p>Notes:</p>
+<p><code>meshgrid</code> supports cartesian ('xy') and matrix ('ij') indexing conventions. When the <code>indexing</code> argument is set to 'xy' (the default), the broadcasting instructions for the first two dimensions are swapped.</p>
+<p>Examples:</p>
+<p>Calling <code>X, Y = meshgrid(x, y)</code> with the tensors</p>
+<pre class="prettyprint"><code>  x = [1, 2, 3]
+  y = [4, 5, 6]</code></pre>
+<p>results in</p>
+<pre class="prettyprint"><code>  X = [[1, 1, 1],
+       [2, 2, 2],
+       [3, 3, 3]]
+  Y = [[4, 5, 6],
+       [4, 5, 6],
+       [4, 5, 6]]</code></pre>
+<h5 id="args-18">Args:</h5>
+<ul>
+<li><b><code>*args</code></b>: <code>Tensor</code>s with rank 1</li>
+<li><b><code>indexing</code></b>: Either 'xy' or 'ij' (optional, default: 'xy')</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-18">Returns:</h5>
+<ul>
+<li><b><code>outputs</code></b>: A list of N <code>Tensor</code>s with rank N</li>
+</ul>
+<h2 id="slicing-and-joining">Slicing and Joining</h2>
+<p>TensorFlow provides several operations to slice or extract parts of a tensor, or join multiple tensors together.</p>
+<hr />
+<h3 id="tf.sliceinput_-begin-size-namenone"><a name="//apple_ref/cpp/Function/slice" class="dashAnchor"></a><code id="slice">tf.slice(input_, begin, size, name=None)</code></h3>
+<p>Extracts a slice from a tensor.</p>
+<p>This operation extracts a slice of size <code>size</code> from a tensor <code>input</code> starting at the location specified by <code>begin</code>. The slice <code>size</code> is represented as a tensor shape, where <code>size[i]</code> is the number of elements of the 'i'th dimension of <code>input</code> that you want to slice. The starting location (<code>begin</code>) for the slice is represented as an offset in each dimension of <code>input</code>. In other words, <code>begin[i]</code> is the offset into the 'i'th dimension of <code>input</code> that you want to slice from.</p>
+<p><code>begin</code> is zero-based; <code>size</code> is one-based. If <code>size[i]</code> is -1, all remaining elements in dimension i are included in the slice. In other words, this is equivalent to setting:</p>
+<p><code>size[i] = input.dim_size(i) - begin[i]</code></p>
+<p>This operation requires that:</p>
+<p><code>0 &lt;= begin[i] &lt;= begin[i] + size[i] &lt;= Di  for i in [0, n]</code></p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># &#39;input&#39; is [[[1, 1, 1], [2, 2, 2]],</span>
+<span class="co">#             [[3, 3, 3], [4, 4, 4]],</span>
+<span class="co">#             [[5, 5, 5], [6, 6, 6]]]</span>
+tf.<span class="bu">slice</span>(<span class="bu">input</span>, [<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>], [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3</span>]) <span class="op">==&gt;</span> [[[<span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">3</span>]]]
+tf.<span class="bu">slice</span>(<span class="bu">input</span>, [<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>], [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]) <span class="op">==&gt;</span> [[[<span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">3</span>],
+                                            [<span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">4</span>]]]
+tf.<span class="bu">slice</span>(<span class="bu">input</span>, [<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>], [<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">3</span>]) <span class="op">==&gt;</span> [[[<span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">3</span>]],
+                                           [[<span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>]]]</code></pre></div>
+<h5 id="args-19">Args:</h5>
+<ul>
+<li><b><code>input_</code></b>: A <code>Tensor</code>.</li>
+<li><b><code>begin</code></b>: An <code>int32</code> or <code>int64</code> <code>Tensor</code>.</li>
+<li><b><code>size</code></b>: An <code>int32</code> or <code>int64</code> <code>Tensor</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-19">Returns:</h5>
+<p>A <code>Tensor</code> the same type as <code>input</code>.</p>
+<hr />
+<h3 id="tf.strided_sliceinput_-begin-end-stridesnone-begin_mask0-end_mask0-ellipsis_mask0-new_axis_mask0-shrink_axis_mask0-varnone-namenone"><a name="//apple_ref/cpp/Function/strided_slice" class="dashAnchor"></a><code id="strided_slice">tf.strided_slice(input_, begin, end, strides=None, begin_mask=0, end_mask=0, ellipsis_mask=0, new_axis_mask=0, shrink_axis_mask=0, var=None, name=None)</code></h3>
+<p>Extracts a strided slice from a tensor.</p>
+<p>To a first order, this operation extracts a slice of size <code>end - begin</code> from a tensor <code>input</code> starting at the location specified by <code>begin</code>. The slice continues by adding <code>stride</code> to the <code>begin</code> index until all dimensions are not less than <code>end</code>. Note that components of stride can be negative, which causes a reverse slice.</p>
+<p>This operation can be thought of an encoding of a numpy style sliced range. Given a python slice input[<spec0>, <spec1>, ..., <specn>] this function will be called as follows.</p>
+<p><code>begin</code>, <code>end</code>, and <code>strides</code> will be all length n. n is in general not the same dimensionality as <code>input</code>.</p>
+<p>For the ith spec, <code>begin_mask</code>, <code>end_mask</code>, <code>ellipsis_mask</code>, <code>new_axis_mask</code>, and <code>shrink_axis_mask</code> will have the ith bit corresponding to the ith spec.</p>
+<p>If the ith bit of <code>begin_mask</code> is non-zero, <code>begin[i]</code> is ignored and the fullest possible range in that dimension is used instead. <code>end_mask</code> works analogously, except with the end range.</p>
+<p><code>foo[5:,:,:3]</code> on a 7x8x9 tensor is equivalent to <code>foo[5:7,0:8,0:3]</code>. <code>foo[::-1]</code> reverses a tensor with shape 8.</p>
+<p>If the ith bit of <code>ellipsis_mask</code>, as many unspecified dimensions as needed will be inserted between other dimensions. Only one non-zero bit is allowed in <code>ellipsis_mask</code>.</p>
+<p>For example <code>foo[3:5,...,4:5]</code> on a shape 10x3x3x10 tensor is equivalent to <code>foo[3:5,:,:,4:5]</code> and <code>foo[3:5,...]</code> is equivalent to <code>foo[3:5,:,:,:]</code>.</p>
+<p>If the ith bit of <code>new_axis_mask</code> is one, then a <code>begin</code>, <code>end</code>, and <code>stride</code> are ignored and a new length 1 dimension is added at this point in the output tensor.</p>
+<p>For example <code>foo[3:5,4]</code> on a 10x8 tensor produces a shape 2 tensor whereas <code>foo[3:5,4:5]</code> produces a shape 2x1 tensor with shrink_mask being 1&lt;&lt;1 == 2.</p>
+<p>If the ith bit of <code>shrink_axis_mask</code> is one, then <code>begin</code>, <code>end[i]</code>, and <code>stride[i]</code> are used to do a slice in the appropriate dimension, but the output tensor will be reduced in dimensionality by one. This is only valid if the ith entry of slice[i]==1.</p>
+<p>NOTE: <code>begin</code> and <code>end</code> are zero-indexed<code>.</code>strides` entries must be non-zero.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># &#39;input&#39; is [[[1, 1, 1], [2, 2, 2]],</span>
+<span class="co">#             [[3, 3, 3], [4, 4, 4]],</span>
+<span class="co">#             [[5, 5, 5], [6, 6, 6]]]</span>
+tf.strided_slice(<span class="bu">input</span>, [<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>], [<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">3</span>], [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>]) <span class="op">==&gt;</span> [[[<span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">3</span>]]]
+tf.strided_slice(<span class="bu">input</span>, [<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>], [<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>], [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>]) <span class="op">==&gt;</span> [[[<span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">3</span>],
+                                                               [<span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">4</span>]]]
+tf.strided_slice(<span class="bu">input</span>, [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>], [<span class="dv">2</span>, <span class="op">-</span><span class="dv">1</span>, <span class="dv">3</span>], [<span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>]) <span class="op">==&gt;</span>[[[<span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">4</span>],
+                                                                [<span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">3</span>]]]</code></pre></div>
+<h5 id="args-20">Args:</h5>
+<ul>
+<li><b><code>input_</code></b>: A <code>Tensor</code>.</li>
+<li><b><code>begin</code></b>: An <code>int32</code> or <code>int64</code> <code>Tensor</code>.</li>
+<li><b><code>end</code></b>: An <code>int32</code> or <code>int64</code> <code>Tensor</code>.</li>
+<li><b><code>strides</code></b>: An <code>int32</code> or <code>int64</code> <code>Tensor</code>.</li>
+<li><b><code>begin_mask</code></b>: An <code>int32</code> mask.</li>
+<li><b><code>end_mask</code></b>: An <code>int32</code> mask.</li>
+<li><b><code>ellipsis_mask</code></b>: An <code>int32</code> mask.</li>
+<li><b><code>new_axis_mask</code></b>: An <code>int32</code> mask.</li>
+<li><b><code>shrink_axis_mask</code></b>: An <code>int32</code> mask.</li>
+<li><b><code>var</code></b>: The variable corresponding to <code>input_</code> or None</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-20">Returns:</h5>
+<p>A <code>Tensor</code> the same type as <code>input</code>.</p>
+<hr />
+<h3 id="tf.splitvalue-num_or_size_splits-axis0-numnone-namesplit"><a name="//apple_ref/cpp/Function/split" class="dashAnchor"></a><code id="split">tf.split(value, num_or_size_splits, axis=0, num=None, name='split')</code></h3>
+<p>Splits a tensor into sub tensors.</p>
+<p>If <code>num_or_size_splits</code> is a scalar, <code>num_split</code>, then splits <code>value</code> along dimension <code>axis</code> into <code>num_split</code> smaller tensors. Requires that <code>num_split</code> evenly divides <code>value.shape[axis]</code>.</p>
+<p>If <code>num_or_size_splits</code> is a tensor, <code>size_splits</code>, then splits <code>value</code> into <code>len(size_splits)</code> pieces. The shape of the <code>i</code>-th piece has the same size as the <code>value</code> except along dimension <code>axis</code> where the size is <code>size_splits[i]</code>.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># &#39;value&#39; is a tensor with shape [5, 30]</span>
+<span class="co"># Split &#39;value&#39; into 3 tensors with sizes [4, 15, 11] along dimension 1</span>
+split0, split1, split2 <span class="op">=</span> tf.split(value, [<span class="dv">4</span>, <span class="dv">15</span>, <span class="dv">11</span>], <span class="dv">1</span>)
+tf.shape(split0) <span class="op">==&gt;</span> [<span class="dv">5</span>, <span class="dv">4</span>]
+tf.shape(split1) <span class="op">==&gt;</span> [<span class="dv">5</span>, <span class="dv">15</span>]
+tf.shape(split2) <span class="op">==&gt;</span> [<span class="dv">5</span>, <span class="dv">11</span>]
+<span class="co"># Split &#39;value&#39; into 3 tensors along dimension 1</span>
+split0, split1, split2 <span class="op">=</span> tf.split(value, num_or_size_splits<span class="op">=</span><span class="dv">3</span>, axis<span class="op">=</span><span class="dv">1</span>)
+tf.shape(split0) <span class="op">==&gt;</span> [<span class="dv">5</span>, <span class="dv">10</span>]</code></pre></div>
+<h5 id="args-21">Args:</h5>
+<ul>
+<li><b><code>value</code></b>: The <code>Tensor</code> to split.</li>
+<li><b><code>num_or_size_splits</code></b>: Either an integer indicating the number of splits along split_dim or a 1-D Tensor containing the sizes of each output tensor along split_dim. If an integer then it must evenly divide <code>value.shape[axis]</code>; otherwise the sum of sizes along the split dimension must match that of the <code>value</code>.</li>
+<li><b><code>axis</code></b>: A 0-D <code>int32</code> <code>Tensor</code>. The dimension along which to split. Must be in the range <code>[0, rank(value))</code>. Defaults to 0.</li>
+<li><b><code>num</code></b>: Optional, used to specify the number of outputs when it cannot be inferred from the shape of <code>size_splits</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-21">Returns:</h5>
+<p>if <code>num_or_size_splits</code> is a scalar returns <code>num_or_size_splits</code> <code>Tensor</code> objects; if <code>num_or_size_splits</code> is a 1-D Tensor returns <code>num_or_size_splits.get_shape[0]</code> <code>Tensor</code> objects resulting from splitting <code>value</code>.</p>
+<h5 id="raises-9">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>num</code> is unspecified and cannot be inferred.</li>
+</ul>
+<hr />
+<h3 id="tf.tileinput-multiples-namenone"><a name="//apple_ref/cpp/Function/tile" class="dashAnchor"></a><code id="tile">tf.tile(input, multiples, name=None)</code></h3>
+<p>Constructs a tensor by tiling a given tensor.</p>
+<p>This operation creates a new tensor by replicating <code>input</code> <code>multiples</code> times. The output tensor's i'th dimension has <code>input.dims(i) * multiples[i]</code> elements, and the values of <code>input</code> are replicated <code>multiples[i]</code> times along the 'i'th dimension. For example, tiling <code>[a b c d]</code> by <code>[2]</code> produces <code>[a b c d a b c d]</code>.</p>
+<h5 id="args-22">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. 1-D or higher.</li>
+<li><b><code>multiples</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. 1-D. Length must be the same as the number of dimensions in <code>input</code></li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-22">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>input</code>.</p>
+<hr />
+<h3 id="tf.padtensor-paddings-modeconstant-namenone"><a name="//apple_ref/cpp/Function/pad" class="dashAnchor"></a><code id="pad">tf.pad(tensor, paddings, mode='CONSTANT', name=None)</code></h3>
+<p>Pads a tensor.</p>
+<p>This operation pads a <code>tensor</code> according to the <code>paddings</code> you specify. <code>paddings</code> is an integer tensor with shape <code>[n, 2]</code>, where n is the rank of <code>tensor</code>. For each dimension D of <code>input</code>, <code>paddings[D, 0]</code> indicates how many values to add before the contents of <code>tensor</code> in that dimension, and <code>paddings[D, 1]</code> indicates how many values to add after the contents of <code>tensor</code> in that dimension. If <code>mode</code> is &quot;REFLECT&quot; then both <code>paddings[D, 0]</code> and <code>paddings[D, 1]</code> must be no greater than <code>tensor.dim_size(D) - 1</code>. If <code>mode</code> is &quot;SYMMETRIC&quot; then both <code>paddings[D, 0]</code> and <code>paddings[D, 1]</code> must be no greater than <code>tensor.dim_size(D)</code>.</p>
+<p>The padded size of each dimension D of the output is:</p>
+<p><code>paddings[D, 0] + tensor.dim_size(D) + paddings[D, 1]</code></p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># &#39;t&#39; is [[1, 2, 3], [4, 5, 6]].</span>
+<span class="co"># &#39;paddings&#39; is [[1, 1,], [2, 2]].</span>
+<span class="co"># rank of &#39;t&#39; is 2.</span>
+pad(t, paddings, <span class="st">&quot;CONSTANT&quot;</span>) <span class="op">==&gt;</span> [[<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>],
+                                  [<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">0</span>],
+                                  [<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">0</span>],
+                                  [<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>]]
+
+pad(t, paddings, <span class="st">&quot;REFLECT&quot;</span>) <span class="op">==&gt;</span> [[<span class="dv">6</span>, <span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">5</span>, <span class="dv">4</span>],
+                                 [<span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">1</span>],
+                                 [<span class="dv">6</span>, <span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">5</span>, <span class="dv">4</span>],
+                                 [<span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">1</span>]]
+
+pad(t, paddings, <span class="st">&quot;SYMMETRIC&quot;</span>) <span class="op">==&gt;</span> [[<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">2</span>],
+                                   [<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">2</span>],
+                                   [<span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">6</span>, <span class="dv">5</span>],
+                                   [<span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">6</span>, <span class="dv">5</span>]]</code></pre></div>
+<h5 id="args-23">Args:</h5>
+<ul>
+<li><b><code>tensor</code></b>: A <code>Tensor</code>.</li>
+<li><b><code>paddings</code></b>: A <code>Tensor</code> of type <code>int32</code>.</li>
+<li><b><code>mode</code></b>: One of &quot;CONSTANT&quot;, &quot;REFLECT&quot;, or &quot;SYMMETRIC&quot; (case-insensitive)</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-23">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>tensor</code>.</p>
+<h5 id="raises-10">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: When mode is not one of &quot;CONSTANT&quot;, &quot;REFLECT&quot;, or &quot;SYMMETRIC&quot;.</li>
+</ul>
+<hr />
+<h3 id="tf.concatvalues-axis-nameconcat"><a name="//apple_ref/cpp/Function/concat" class="dashAnchor"></a><code id="concat">tf.concat(values, axis, name='concat')</code></h3>
+<p>Concatenates tensors along one dimension.</p>
+<p>Concatenates the list of tensors <code>values</code> along dimension <code>axis</code>. If <code>values[i].shape = [D0, D1, ... Daxis(i), ...Dn]</code>, the concatenated result has shape</p>
+<pre><code>[D0, D1, ... Raxis, ...Dn]</code></pre>
+<p>where</p>
+<pre><code>Raxis = sum(Daxis(i))</code></pre>
+<p>That is, the data from the input tensors is joined along the <code>axis</code> dimension.</p>
+<p>The number of dimensions of the input tensors must match, and all dimensions except <code>axis</code> must be equal.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">t1 <span class="op">=</span> [[<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>], [<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>]]
+t2 <span class="op">=</span> [[<span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>], [<span class="dv">10</span>, <span class="dv">11</span>, <span class="dv">12</span>]]
+tf.concat([t1, t2], <span class="dv">0</span>) <span class="op">==&gt;</span> [[<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>], [<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>], [<span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>], [<span class="dv">10</span>, <span class="dv">11</span>, <span class="dv">12</span>]]
+tf.concat([t1, t2], <span class="dv">1</span>) <span class="op">==&gt;</span> [[<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>], [<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">10</span>, <span class="dv">11</span>, <span class="dv">12</span>]]
+
+<span class="co"># tensor t3 with shape [2, 3]</span>
+<span class="co"># tensor t4 with shape [2, 3]</span>
+tf.shape(tf.concat([t3, t4], <span class="dv">0</span>)) <span class="op">==&gt;</span> [<span class="dv">4</span>, <span class="dv">3</span>]
+tf.shape(tf.concat([t3, t4], <span class="dv">1</span>)) <span class="op">==&gt;</span> [<span class="dv">2</span>, <span class="dv">6</span>]</code></pre></div>
+<p>Note: If you are concatenating along a new axis consider using stack. E.g.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.concat([tf.expand_dims(t, axis) <span class="cf">for</span> t <span class="op">in</span> tensors], axis)</code></pre></div>
+<p>can be rewritten as</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.stack(tensors, axis<span class="op">=</span>axis)</code></pre></div>
+<h5 id="args-24">Args:</h5>
+<ul>
+<li><b><code>values</code></b>: A list of <code>Tensor</code> objects or a single <code>Tensor</code>.</li>
+<li><b><code>axis</code></b>: 0-D <code>int32</code> <code>Tensor</code>. Dimension along which to concatenate.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-24">Returns:</h5>
+<p>A <code>Tensor</code> resulting from concatenation of the input tensors.</p>
+<hr />
+<h3 id="tf.stackvalues-axis0-namestack"><a name="//apple_ref/cpp/Function/stack" class="dashAnchor"></a><code id="stack">tf.stack(values, axis=0, name='stack')</code></h3>
+<p>Stacks a list of rank-<code>R</code> tensors into one rank-<code>(R+1)</code> tensor.</p>
+<p>Packs the list of tensors in <code>values</code> into a tensor with rank one higher than each tensor in <code>values</code>, by packing them along the <code>axis</code> dimension. Given a list of length <code>N</code> of tensors of shape <code>(A, B, C)</code>;</p>
+<p>if <code>axis == 0</code> then the <code>output</code> tensor will have the shape <code>(N, A, B, C)</code>. if <code>axis == 1</code> then the <code>output</code> tensor will have the shape <code>(A, N, B, C)</code>. Etc.</p>
+<p>For example:</p>
+<pre class="prettyprint"><code># &#39;x&#39; is [1, 4]
+# &#39;y&#39; is [2, 5]
+# &#39;z&#39; is [3, 6]
+stack([x, y, z]) =&gt; [[1, 4], [2, 5], [3, 6]]  # Pack along first dim.
+stack([x, y, z], axis=1) =&gt; [[1, 2, 3], [4, 5, 6]]</code></pre>
+<p>This is the opposite of unstack. The numpy equivalent is</p>
+<pre><code>tf.stack([x, y, z]) = np.asarray([x, y, z])</code></pre>
+<h5 id="args-25">Args:</h5>
+<ul>
+<li><b><code>values</code></b>: A list of <code>Tensor</code> objects with the same shape and type.</li>
+<li><b><code>axis</code></b>: An <code>int</code>. The axis to stack along. Defaults to the first dimension. Supports negative indexes.</li>
+<li><b><code>name</code></b>: A name for this operation (optional).</li>
+</ul>
+<h5 id="returns-25">Returns:</h5>
+<ul>
+<li><b><code>output</code></b>: A stacked <code>Tensor</code> with the same type as <code>values</code>.</li>
+</ul>
+<h5 id="raises-11">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>axis</code> is out of the range [-(R+1), R+1).</li>
+</ul>
+<hr />
+<h3 id="tf.parallel_stackvalues-nameparallel_stack"><a name="//apple_ref/cpp/Function/parallel_stack" class="dashAnchor"></a><code id="parallel_stack">tf.parallel_stack(values, name='parallel_stack')</code></h3>
+<p>Stacks a list of rank-<code>R</code> tensors into one rank-<code>(R+1)</code> tensor in parallel.</p>
+<p>Requires that the shape of inputs be known at graph construction time.</p>
+<p>Packs the list of tensors in <code>values</code> into a tensor with rank one higher than each tensor in <code>values</code>, by packing them along the first dimension. Given a list of length <code>N</code> of tensors of shape <code>(A, B, C)</code>; the <code>output</code> tensor will have the shape <code>(N, A, B, C)</code>.</p>
+<p>For example:</p>
+<pre class="prettyprint"><code># &#39;x&#39; is [1, 4]
+# &#39;y&#39; is [2, 5]
+# &#39;z&#39; is [3, 6]
+parallel_stack([x, y, z]) =&gt; [[1, 4], [2, 5], [3, 6]]</code></pre>
+<p>The difference between stack and parallel_stack is that stack requires all of the inputs be computed before the operation will begin but doesn't require that the input shapes be known during graph construction. Parallel stack will copy pieces of the input into the output as they become available, in some situations this can provide a performance benefit.</p>
+<p>This is the opposite of unstack. The numpy equivalent is</p>
+<pre><code>tf.parallel_stack([x, y, z]) = np.asarray([x, y, z])</code></pre>
+<h5 id="args-26">Args:</h5>
+<ul>
+<li><b><code>values</code></b>: A list of <code>Tensor</code> objects with the same shape and type.</li>
+<li><b><code>name</code></b>: A name for this operation (optional).</li>
+</ul>
+<h5 id="returns-26">Returns:</h5>
+<ul>
+<li><b><code>output</code></b>: A stacked <code>Tensor</code> with the same type as <code>values</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.unstackvalue-numnone-axis0-nameunstack"><a name="//apple_ref/cpp/Function/unstack" class="dashAnchor"></a><code id="unstack">tf.unstack(value, num=None, axis=0, name='unstack')</code></h3>
+<p>Unpacks the given dimension of a rank-<code>R</code> tensor into rank-<code>(R-1)</code> tensors.</p>
+<p>Unpacks <code>num</code> tensors from <code>value</code> by chipping it along the <code>axis</code> dimension. If <code>num</code> is not specified (the default), it is inferred from <code>value</code>'s shape. If <code>value.shape[axis]</code> is not known, <code>ValueError</code> is raised.</p>
+<p>For example, given a tensor of shape <code>(A, B, C, D)</code>;</p>
+<p>If <code>axis == 0</code> then the i'th tensor in <code>output</code> is the slice <code>value[i, :, :, :]</code> and each tensor in <code>output</code> will have shape <code>(B, C, D)</code>. (Note that the dimension unpacked along is gone, unlike <code>split</code>).</p>
+<p>If <code>axis == 1</code> then the i'th tensor in <code>output</code> is the slice <code>value[:, i, :, :]</code> and each tensor in <code>output</code> will have shape <code>(A, C, D)</code>. Etc.</p>
+<p>This is the opposite of pack. The numpy equivalent is</p>
+<pre><code>tf.unstack(x, n) = list(x)</code></pre>
+<h5 id="args-27">Args:</h5>
+<ul>
+<li><b><code>value</code></b>: A rank <code>R &gt; 0</code> <code>Tensor</code> to be unstacked.</li>
+<li><b><code>num</code></b>: An <code>int</code>. The length of the dimension <code>axis</code>. Automatically inferred if <code>None</code> (the default).</li>
+<li><b><code>axis</code></b>: An <code>int</code>. The axis to unstack along. Defaults to the first dimension. Supports negative indexes.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-27">Returns:</h5>
+<p>The list of <code>Tensor</code> objects unstacked from <code>value</code>.</p>
+<h5 id="raises-12">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>num</code> is unspecified and cannot be inferred.</li>
+<li><b><code>ValueError</code></b>: If <code>axis</code> is out of the range [-R, R).</li>
+</ul>
+<hr />
+<h3 id="tf.reverse_sequenceinput-seq_lengths-seq_axisnone-batch_axisnone-namenone-seq_dimnone-batch_dimnone"><a name="//apple_ref/cpp/Function/reverse_sequence" class="dashAnchor"></a><code id="reverse_sequence">tf.reverse_sequence(input, seq_lengths, seq_axis=None, batch_axis=None, name=None, seq_dim=None, batch_dim=None)</code></h3>
+<p>Reverses variable length slices.</p>
+<p>This op first slices <code>input</code> along the dimension <code>batch_axis</code>, and for each slice <code>i</code>, reverses the first <code>seq_lengths[i]</code> elements along the dimension <code>seq_axis</code>.</p>
+<p>The elements of <code>seq_lengths</code> must obey <code>seq_lengths[i] &lt; input.dims[seq_dim]</code>, and <code>seq_lengths</code> must be a vector of length <code>input.dims[batch_dim]</code>.</p>
+<p>The output slice <code>i</code> along dimension <code>batch_axis</code> is then given by input slice <code>i</code>, with the first <code>seq_lengths[i]</code> slices along dimension <code>seq_axis</code> reversed.</p>
+<p>For example:</p>
+<pre class="prettyprint"><code># Given this:
+batch_dim = 0
+seq_dim = 1
+input.dims = (4, 8, ...)
+seq_lengths = [7, 2, 3, 5]
+
+# then slices of input are reversed on seq_dim, but only up to seq_lengths:
+output[0, 0:7, :, ...] = input[0, 7:0:-1, :, ...]
+output[1, 0:2, :, ...] = input[1, 2:0:-1, :, ...]
+output[2, 0:3, :, ...] = input[2, 3:0:-1, :, ...]
+output[3, 0:5, :, ...] = input[3, 5:0:-1, :, ...]
+
+# while entries past seq_lens are copied through:
+output[0, 7:, :, ...] = input[0, 7:, :, ...]
+output[1, 2:, :, ...] = input[1, 2:, :, ...]
+output[2, 3:, :, ...] = input[2, 3:, :, ...]
+output[3, 2:, :, ...] = input[3, 2:, :, ...]</code></pre>
+<p>In contrast, if:</p>
+<pre class="prettyprint"><code># Given this:
+batch_dim = 2
+seq_dim = 0
+input.dims = (8, ?, 4, ...)
+seq_lengths = [7, 2, 3, 5]
+
+# then slices of input are reversed on seq_dim, but only up to seq_lengths:
+output[0:7, :, 0, :, ...] = input[7:0:-1, :, 0, :, ...]
+output[0:2, :, 1, :, ...] = input[2:0:-1, :, 1, :, ...]
+output[0:3, :, 2, :, ...] = input[3:0:-1, :, 2, :, ...]
+output[0:5, :, 3, :, ...] = input[5:0:-1, :, 3, :, ...]
+
+# while entries past seq_lens are copied through:
+output[7:, :, 0, :, ...] = input[7:, :, 0, :, ...]
+output[2:, :, 1, :, ...] = input[2:, :, 1, :, ...]
+output[3:, :, 2, :, ...] = input[3:, :, 2, :, ...]
+output[2:, :, 3, :, ...] = input[2:, :, 3, :, ...]</code></pre>
+<h5 id="args-28">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. The input to reverse.</li>
+<li><b><code>seq_lengths</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. 1-D with length <code>input.dims(batch_dim)</code> and <code>max(seq_lengths) &lt; input.dims(seq_dim)</code></li>
+<li><b><code>seq_axis</code></b>: An <code>int</code>. The dimension which is partially reversed.</li>
+<li><b><code>batch_axis</code></b>: An optional <code>int</code>. Defaults to <code>0</code>. The dimension along which reversal is performed.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-28">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>input</code>. The partially reversed input. It has the same shape as <code>input</code>.</p>
+<hr />
+<h3 id="tf.reversetensor-axis-namenone"><a name="//apple_ref/cpp/Function/reverse" class="dashAnchor"></a><code id="reverse">tf.reverse(tensor, axis, name=None)</code></h3>
+<p>Reverses specific dimensions of a tensor.</p>
+<p>NOTE <code>tf.reverse</code> has now changed behavior in preparation for 1.0. <code>tf.reverse_v2</code> is currently an alias that will be deprecated before TF 1.0.</p>
+<p>Given a <code>tensor</code>, and a <code>int32</code> tensor <code>axis</code> representing the set of dimensions of <code>tensor</code> to reverse. This operation reverses each dimension <code>i</code> for which there exists <code>j</code> s.t. <code>axis[j] == i</code>.</p>
+<p><code>tensor</code> can have up to 8 dimensions. The number of dimensions specified in <code>axis</code> may be 0 or more entries. If an index is specified more than once, a InvalidArgument error is raised.</p>
+<p>For example:</p>
+<pre class="prettyprint"><code># tensor &#39;t&#39; is [[[[ 0,  1,  2,  3],
+#                  [ 4,  5,  6,  7],
+#                  [ 8,  9, 10, 11]],
+#                 [[12, 13, 14, 15],
+#                  [16, 17, 18, 19],
+#                  [20, 21, 22, 23]]]]
+# tensor &#39;t&#39; shape is [1, 2, 3, 4]
+
+# &#39;dims&#39; is [3] or &#39;dims&#39; is -1
+reverse(t, dims) ==&gt; [[[[ 3,  2,  1,  0],
+                        [ 7,  6,  5,  4],
+                        [ 11, 10, 9, 8]],
+                       [[15, 14, 13, 12],
+                        [19, 18, 17, 16],
+                        [23, 22, 21, 20]]]]
+
+# &#39;dims&#39; is &#39;[1]&#39; (or &#39;dims&#39; is &#39;[-3]&#39;)
+reverse(t, dims) ==&gt; [[[[12, 13, 14, 15],
+                        [16, 17, 18, 19],
+                        [20, 21, 22, 23]
+                       [[ 0,  1,  2,  3],
+                        [ 4,  5,  6,  7],
+                        [ 8,  9, 10, 11]]]]
+
+# &#39;dims&#39; is &#39;[2]&#39; (or &#39;dims&#39; is &#39;[-2]&#39;)
+reverse(t, dims) ==&gt; [[[[8, 9, 10, 11],
+                        [4, 5, 6, 7],
+                        [0, 1, 2, 3]]
+                       [[20, 21, 22, 23],
+                        [16, 17, 18, 19],
+                        [12, 13, 14, 15]]]]</code></pre>
+<h5 id="args-29">Args:</h5>
+<ul>
+<li><b><code>tensor</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>uint8</code>, <code>int8</code>, <code>int32</code>, <code>int64</code>, <code>bool</code>, <code>half</code>, <code>float32</code>, <code>float64</code>, <code>complex64</code>, <code>complex128</code>. Up to 8-D.</li>
+<li><b><code>axis</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. 1-D. The indices of the dimensions to reverse.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-29">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>tensor</code>. The same shape as <code>tensor</code>.</p>
+<hr />
+<h3 id="tf.reverse_v2tensor-axis-namenone"><a name="//apple_ref/cpp/Function/reverse_v2" class="dashAnchor"></a><code id="reverse_v2">tf.reverse_v2(tensor, axis, name=None)</code></h3>
+<p>Reverses specific dimensions of a tensor.</p>
+<p>NOTE <code>tf.reverse</code> has now changed behavior in preparation for 1.0. <code>tf.reverse_v2</code> is currently an alias that will be deprecated before TF 1.0.</p>
+<p>Given a <code>tensor</code>, and a <code>int32</code> tensor <code>axis</code> representing the set of dimensions of <code>tensor</code> to reverse. This operation reverses each dimension <code>i</code> for which there exists <code>j</code> s.t. <code>axis[j] == i</code>.</p>
+<p><code>tensor</code> can have up to 8 dimensions. The number of dimensions specified in <code>axis</code> may be 0 or more entries. If an index is specified more than once, a InvalidArgument error is raised.</p>
+<p>For example:</p>
+<pre class="prettyprint"><code># tensor &#39;t&#39; is [[[[ 0,  1,  2,  3],
+#                  [ 4,  5,  6,  7],
+#                  [ 8,  9, 10, 11]],
+#                 [[12, 13, 14, 15],
+#                  [16, 17, 18, 19],
+#                  [20, 21, 22, 23]]]]
+# tensor &#39;t&#39; shape is [1, 2, 3, 4]
+
+# &#39;dims&#39; is [3] or &#39;dims&#39; is -1
+reverse(t, dims) ==&gt; [[[[ 3,  2,  1,  0],
+                        [ 7,  6,  5,  4],
+                        [ 11, 10, 9, 8]],
+                       [[15, 14, 13, 12],
+                        [19, 18, 17, 16],
+                        [23, 22, 21, 20]]]]
+
+# &#39;dims&#39; is &#39;[1]&#39; (or &#39;dims&#39; is &#39;[-3]&#39;)
+reverse(t, dims) ==&gt; [[[[12, 13, 14, 15],
+                        [16, 17, 18, 19],
+                        [20, 21, 22, 23]
+                       [[ 0,  1,  2,  3],
+                        [ 4,  5,  6,  7],
+                        [ 8,  9, 10, 11]]]]
+
+# &#39;dims&#39; is &#39;[2]&#39; (or &#39;dims&#39; is &#39;[-2]&#39;)
+reverse(t, dims) ==&gt; [[[[8, 9, 10, 11],
+                        [4, 5, 6, 7],
+                        [0, 1, 2, 3]]
+                       [[20, 21, 22, 23],
+                        [16, 17, 18, 19],
+                        [12, 13, 14, 15]]]]</code></pre>
+<h5 id="args-30">Args:</h5>
+<ul>
+<li><b><code>tensor</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>uint8</code>, <code>int8</code>, <code>int32</code>, <code>int64</code>, <code>bool</code>, <code>half</code>, <code>float32</code>, <code>float64</code>, <code>complex64</code>, <code>complex128</code>. Up to 8-D.</li>
+<li><b><code>axis</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. 1-D. The indices of the dimensions to reverse.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-30">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>tensor</code>. The same shape as <code>tensor</code>.</p>
+<hr />
+<h3 id="tf.transposea-permnone-nametranspose"><a name="//apple_ref/cpp/Function/transpose" class="dashAnchor"></a><code id="transpose">tf.transpose(a, perm=None, name='transpose')</code></h3>
+<p>Transposes <code>a</code>. Permutes the dimensions according to <code>perm</code>.</p>
+<p>The returned tensor's dimension i will correspond to the input dimension <code>perm[i]</code>. If <code>perm</code> is not given, it is set to (n-1...0), where n is the rank of the input tensor. Hence by default, this operation performs a regular matrix transpose on 2-D input Tensors.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># &#39;x&#39; is [[1 2 3]</span>
+<span class="co">#         [4 5 6]]</span>
+tf.transpose(x) <span class="op">==&gt;</span> [[<span class="dv">1</span> <span class="dv">4</span>]
+                     [<span class="dv">2</span> <span class="dv">5</span>]
+                     [<span class="dv">3</span> <span class="dv">6</span>]]
+
+<span class="co"># Equivalently</span>
+tf.transpose(x, perm<span class="op">=</span>[<span class="dv">1</span>, <span class="dv">0</span>]) <span class="op">==&gt;</span> [[<span class="dv">1</span> <span class="dv">4</span>]
+                                  [<span class="dv">2</span> <span class="dv">5</span>]
+                                  [<span class="dv">3</span> <span class="dv">6</span>]]
+
+<span class="co"># &#39;perm&#39; is more useful for n-dimensional tensors, for n &gt; 2</span>
+<span class="co"># &#39;x&#39; is   [[[1  2  3]</span>
+<span class="co">#            [4  5  6]]</span>
+<span class="co">#           [[7  8  9]</span>
+<span class="co">#            [10 11 12]]]</span>
+<span class="co"># Take the transpose of the matrices in dimension-0</span>
+tf.transpose(x, perm<span class="op">=</span>[<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">1</span>]) <span class="op">==&gt;</span> [[[<span class="dv">1</span>  <span class="dv">4</span>]
+                                      [<span class="dv">2</span>  <span class="dv">5</span>]
+                                      [<span class="dv">3</span>  <span class="dv">6</span>]]
+
+                                     [[<span class="dv">7</span> <span class="dv">10</span>]
+                                      [<span class="dv">8</span> <span class="dv">11</span>]
+                                      [<span class="dv">9</span> <span class="dv">12</span>]]]</code></pre></div>
+<h5 id="args-31">Args:</h5>
+<ul>
+<li><b><code>a</code></b>: A <code>Tensor</code>.</li>
+<li><b><code>perm</code></b>: A permutation of the dimensions of <code>a</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-31">Returns:</h5>
+<p>A transposed <code>Tensor</code>.</p>
+<hr />
+<h3 id="tf.extract_image_patchesimages-ksizes-strides-rates-padding-namenone"><a name="//apple_ref/cpp/Function/extract_image_patches" class="dashAnchor"></a><code id="extract_image_patches">tf.extract_image_patches(images, ksizes, strides, rates, padding, name=None)</code></h3>
+<p>Extract <code>patches</code> from <code>images</code> and put them in the &quot;depth&quot; output dimension.</p>
+<h5 id="args-32">Args:</h5>
+<ul>
+<li><b><code>images</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>uint8</code>, <code>int16</code>, <code>int8</code>, <code>uint16</code>, <code>half</code>. 4-D Tensor with shape <code>[batch, in_rows, in_cols, depth]</code>.</li>
+<li><b><code>ksizes</code></b>: A list of <code>ints</code> that has length <code>&gt;= 4</code>. The size of the sliding window for each dimension of <code>images</code>.</li>
+<li><b><code>strides</code></b>: A list of <code>ints</code> that has length <code>&gt;= 4</code>. 1-D of length 4. How far the centers of two consecutive patches are in the images. Must be: <code>[1, stride_rows, stride_cols, 1]</code>.</li>
+<li><b><code>rates</code></b>: A list of <code>ints</code> that has length <code>&gt;= 4</code>. 1-D of length 4. Must be: <code>[1, rate_rows, rate_cols, 1]</code>. This is the input stride, specifying how far two consecutive patch samples are in the input. Equivalent to extracting patches with <code>patch_sizes_eff = patch_sizes + (patch_sizes - 1) * (rates - 1)</code>, followed by subsampling them spatially by a factor of <code>rates</code>.</li>
+<li><p><b><code>padding</code></b>: A <code>string</code> from: <code>&quot;SAME&quot;, &quot;VALID&quot;</code>. The type of padding algorithm to use.</p>
+<p>We specify the size-related attributes as:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">      ksizes <span class="op">=</span> [<span class="dv">1</span>, ksize_rows, ksize_cols, <span class="dv">1</span>]
+      strides <span class="op">=</span> [<span class="dv">1</span>, strides_rows, strides_cols, <span class="dv">1</span>]
+      rates <span class="op">=</span> [<span class="dv">1</span>, rates_rows, rates_cols, <span class="dv">1</span>]</code></pre></div></li>
+<li><p><b><code>name</code></b>: A name for the operation (optional).</p></li>
+</ul>
+<h5 id="returns-32">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>images</code>. 4-D Tensor with shape <code>[batch, out_rows, out_cols, ksize_rows *   ksize_cols * depth]</code> containing image patches with size <code>ksize_rows x ksize_cols x depth</code> vectorized in the &quot;depth&quot; dimension.</p>
+<hr />
+<h3 id="tf.space_to_batch_ndinput-block_shape-paddings-namenone"><a name="//apple_ref/cpp/Function/space_to_batch_nd" class="dashAnchor"></a><code id="space_to_batch_nd">tf.space_to_batch_nd(input, block_shape, paddings, name=None)</code></h3>
+<p>SpaceToBatch for N-D tensors of type T.</p>
+<p>This operation divides &quot;spatial&quot; dimensions <code>[1, ..., M]</code> of the input into a grid of blocks of shape <code>block_shape</code>, and interleaves these blocks with the &quot;batch&quot; dimension (0) such that in the output, the spatial dimensions <code>[1, ..., M]</code> correspond to the position within the grid, and the batch dimension combines both the position within a spatial block and the original batch position. Prior to division into blocks, the spatial dimensions of the input are optionally zero padded according to <code>paddings</code>. See below for a precise description.</p>
+<h5 id="args-33">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. N-D with shape <code>input_shape = [batch] + spatial_shape + remaining_shape</code>, where spatial_shape has <code>M</code> dimensions.</li>
+<li><b><code>block_shape</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. 1-D with shape <code>[M]</code>, all values must be &gt;= 1.</li>
+<li><p><b><code>paddings</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. 2-D with shape <code>[M, 2]</code>, all values must be &gt;= 0. <code>paddings[i] = [pad_start, pad_end]</code> specifies the padding for input dimension <code>i + 1</code>, which corresponds to spatial dimension <code>i</code>. It is required that <code>block_shape[i]</code> divides <code>input_shape[i + 1] + pad_start + pad_end</code>.</p>
+<p>This operation is equivalent to the following steps:</p>
+<ol style="list-style-type: decimal">
+<li><p>Zero-pad the start and end of dimensions <code>[1, ..., M]</code> of the input according to <code>paddings</code> to produce <code>padded</code> of shape <code>padded_shape</code>.</p></li>
+<li><p>Reshape <code>padded</code> to <code>reshaped_padded</code> of shape:</p>
+<p>[batch] + [padded_shape[1] / block_shape[0], block_shape[0], ..., padded_shape[M] / block_shape[M-1], block_shape[M-1]] + remaining_shape</p></li>
+<li><p>Permute dimensions of <code>reshaped_padded</code> to produce <code>permuted_reshaped_padded</code> of shape:</p>
+<p>block_shape + [batch] + [padded_shape[1] / block_shape[0], ..., padded_shape[M] / block_shape[M-1]] + remaining_shape</p></li>
+<li><p>Reshape <code>permuted_reshaped_padded</code> to flatten <code>block_shape</code> into the batch dimension, producing an output tensor of shape:</p>
+<p>[batch * prod(block_shape)] + [padded_shape[1] / block_shape[0], ..., padded_shape[M] / block_shape[M-1]] + remaining_shape</p></li>
+</ol>
+<p>Some examples:</p>
+<ol style="list-style-type: decimal">
+<li>For the following input of shape <code>[1, 2, 2, 1]</code>, <code>block_shape = [2, 2]</code>, and <code>paddings = [[0, 0], [0, 0]]</code>:</li>
+</ol>
+<pre class="prettyprint"><code>x = [[[[1], [2]], [[3], [4]]]]</code></pre>
+<p>The output tensor has shape <code>[4, 1, 1, 1]</code> and value:</p>
+<pre class="prettyprint"><code>[[[[1]]], [[[2]]], [[[3]]], [[[4]]]]</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>For the following input of shape <code>[1, 2, 2, 3]</code>, <code>block_shape = [2, 2]</code>, and <code>paddings = [[0, 0], [0, 0]]</code>:</li>
+</ol>
+<pre class="prettyprint"><code>x = [[[[1, 2, 3], [4, 5, 6]],
+      [[7, 8, 9], [10, 11, 12]]]]</code></pre>
+<p>The output tensor has shape <code>[4, 1, 1, 3]</code> and value:</p>
+<pre class="prettyprint"><code>[[[1, 2, 3]], [[4, 5, 6]], [[7, 8, 9]], [[10, 11, 12]]]</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>For the following input of shape <code>[1, 4, 4, 1]</code>, <code>block_shape = [2, 2]</code>, and <code>paddings = [[0, 0], [0, 0]]</code>:</li>
+</ol>
+<pre class="prettyprint"><code>x = [[[[1],   [2],  [3],  [4]],
+      [[5],   [6],  [7],  [8]],
+      [[9],  [10], [11],  [12]],
+      [[13], [14], [15],  [16]]]]</code></pre>
+<p>The output tensor has shape <code>[4, 2, 2, 1]</code> and value:</p>
+<pre class="prettyprint"><code>x = [[[[1], [3]], [[5], [7]]],
+     [[[2], [4]], [[10], [12]]],
+     [[[5], [7]], [[13], [15]]],
+     [[[6], [8]], [[14], [16]]]]</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>For the following input of shape <code>[2, 2, 4, 1]</code>, block_shape = <code>[2, 2]</code>, and paddings = <code>[[0, 0], [2, 0]]</code>:</li>
+</ol>
+<pre class="prettyprint"><code>x = [[[[1],   [2],  [3],  [4]],
+      [[5],   [6],  [7],  [8]]],
+     [[[9],  [10], [11],  [12]],
+      [[13], [14], [15],  [16]]]]</code></pre>
+<p>The output tensor has shape <code>[8, 1, 3, 1]</code> and value:</p>
+<pre class="prettyprint"><code>x = [[[[0], [1], [3]]], [[[0], [9], [11]]],
+     [[[0], [2], [4]]], [[[0], [10], [12]]],
+     [[[0], [5], [7]]], [[[0], [13], [15]]],
+     [[[0], [6], [8]]], [[[0], [14], [16]]]]</code></pre>
+<p>Among others, this operation is useful for reducing atrous convolution into regular convolution.</p></li>
+<li><p><b><code>name</code></b>: A name for the operation (optional).</p></li>
+</ul>
+<h5 id="returns-33">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>input</code>.</p>
+<hr />
+<h3 id="tf.space_to_batchinput-paddings-block_size-namenone"><a name="//apple_ref/cpp/Function/space_to_batch" class="dashAnchor"></a><code id="space_to_batch">tf.space_to_batch(input, paddings, block_size, name=None)</code></h3>
+<p>SpaceToBatch for 4-D tensors of type T.</p>
+<p>This is a legacy version of the more general SpaceToBatchND.</p>
+<p>Zero-pads and then rearranges (permutes) blocks of spatial data into batch. More specifically, this op outputs a copy of the input tensor where values from the <code>height</code> and <code>width</code> dimensions are moved to the <code>batch</code> dimension. After the zero-padding, both <code>height</code> and <code>width</code> of the input must be divisible by the block size.</p>
+<h5 id="args-34">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. 4-D with shape <code>[batch, height, width, depth]</code>.</li>
+<li><p><b><code>paddings</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. 2-D tensor of non-negative integers with shape <code>[2, 2]</code>. It specifies the padding of the input with zeros across the spatial dimensions as follows:</p>
+<pre><code>  paddings = [[pad_top, pad_bottom], [pad_left, pad_right]]</code></pre>
+<p>The effective spatial dimensions of the zero-padded input tensor will be:</p>
+<pre><code>  height_pad = pad_top + height + pad_bottom
+  width_pad = pad_left + width + pad_right</code></pre>
+<p>The attr <code>block_size</code> must be greater than one. It indicates the block size.</p>
+<ul>
+<li>Non-overlapping blocks of size <code>block_size x block size</code> in the height and width dimensions are rearranged into the batch dimension at each location.</li>
+<li>The batch of the output tensor is <code>batch * block_size * block_size</code>.</li>
+<li>Both height_pad and width_pad must be divisible by block_size.</li>
+</ul>
+<p>The shape of the output will be:</p>
+<pre><code>[batch*block_size*block_size, height_pad/block_size, width_pad/block_size,
+ depth]</code></pre>
+<p>Some examples:</p>
+<ol style="list-style-type: decimal">
+<li>For the following input of shape <code>[1, 2, 2, 1]</code> and block_size of 2:</li>
+</ol>
+<pre class="prettyprint"><code>x = [[[[1], [2]], [[3], [4]]]]</code></pre>
+<p>The output tensor has shape <code>[4, 1, 1, 1]</code> and value:</p>
+<pre class="prettyprint"><code>[[[[1]]], [[[2]]], [[[3]]], [[[4]]]]</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>For the following input of shape <code>[1, 2, 2, 3]</code> and block_size of 2:</li>
+</ol>
+<pre class="prettyprint"><code>x = [[[[1, 2, 3], [4, 5, 6]],
+      [[7, 8, 9], [10, 11, 12]]]]</code></pre>
+<p>The output tensor has shape <code>[4, 1, 1, 3]</code> and value:</p>
+<pre class="prettyprint"><code>[[[1, 2, 3]], [[4, 5, 6]], [[7, 8, 9]], [[10, 11, 12]]]</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>For the following input of shape <code>[1, 4, 4, 1]</code> and block_size of 2:</li>
+</ol>
+<pre class="prettyprint"><code>x = [[[[1],   [2],  [3],  [4]],
+      [[5],   [6],  [7],  [8]],
+      [[9],  [10], [11],  [12]],
+      [[13], [14], [15],  [16]]]]</code></pre>
+<p>The output tensor has shape <code>[4, 2, 2, 1]</code> and value:</p>
+<pre class="prettyprint"><code>x = [[[[1], [3]], [[5], [7]]],
+     [[[2], [4]], [[10], [12]]],
+     [[[5], [7]], [[13], [15]]],
+     [[[6], [8]], [[14], [16]]]]</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>For the following input of shape <code>[2, 2, 4, 1]</code> and block_size of 2:</li>
+</ol>
+<pre class="prettyprint"><code>x = [[[[1],   [2],  [3],  [4]],
+      [[5],   [6],  [7],  [8]]],
+     [[[9],  [10], [11],  [12]],
+      [[13], [14], [15],  [16]]]]</code></pre>
+<p>The output tensor has shape <code>[8, 1, 2, 1]</code> and value:</p>
+<pre class="prettyprint"><code>x = [[[[1], [3]]], [[[9], [11]]], [[[2], [4]]], [[[10], [12]]],
+     [[[5], [7]]], [[[13], [15]]], [[[6], [8]]], [[[14], [16]]]]</code></pre>
+<p>Among others, this operation is useful for reducing atrous convolution into regular convolution.</p></li>
+<li><b><code>block_size</code></b>: An <code>int</code> that is <code>&gt;= 2</code>.</li>
+<li><p><b><code>name</code></b>: A name for the operation (optional).</p></li>
+</ul>
+<h5 id="returns-34">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>input</code>.</p>
+<hr />
+<h3 id="tf.required_space_to_batch_paddingsinput_shape-block_shape-base_paddingsnone-namenone"><a name="//apple_ref/cpp/Function/required_space_to_batch_paddings" class="dashAnchor"></a><code id="required_space_to_batch_paddings">tf.required_space_to_batch_paddings(input_shape, block_shape, base_paddings=None, name=None)</code></h3>
+<p>Calculate padding required to make block_shape divide input_shape.</p>
+<p>This function can be used to calculate a suitable paddings argument for use with space_to_batch_nd and batch_to_space_nd.</p>
+<h5 id="args-35">Args:</h5>
+<ul>
+<li><b><code>input_shape</code></b>: int32 Tensor of shape [N].</li>
+<li><b><code>block_shape</code></b>: int32 Tensor of shape [N].</li>
+<li><b><code>base_paddings</code></b>: Optional int32 Tensor of shape [N, 2]. Specifies the minimum amount of padding to use. All elements must be &gt;= 0. If not specified, defaults to 0.</li>
+<li><b><code>name</code></b>: string. Optional name prefix.</li>
+</ul>
+<h5 id="returns-35">Returns:</h5>
+<p>(paddings, crops), where:</p>
+<p><code>paddings</code> and <code>crops</code> are int32 Tensors of rank 2 and shape [N, 2]</p>
+<ul>
+<li><p><b><code>satisfying</code></b>:</p>
+<p>paddings[i, 0] = base_paddings[i, 0]. 0 &lt;= paddings[i, 1] - base_paddings[i, 1] &lt; block_shape[i] (input_shape[i] + paddings[i, 0] + paddings[i, 1]) % block_shape[i] == 0</p>
+<p>crops[i, 0] = 0 crops[i, 1] = paddings[i, 1] - base_paddings[i, 1]</p></li>
+<li><p><b><code>Raises</code></b>: ValueError if called with incompatible shapes.</p></li>
+</ul>
+<hr />
+<h3 id="tf.batch_to_space_ndinput-block_shape-crops-namenone"><a name="//apple_ref/cpp/Function/batch_to_space_nd" class="dashAnchor"></a><code id="batch_to_space_nd">tf.batch_to_space_nd(input, block_shape, crops, name=None)</code></h3>
+<p>BatchToSpace for N-D tensors of type T.</p>
+<p>This operation reshapes the &quot;batch&quot; dimension 0 into <code>M + 1</code> dimensions of shape <code>block_shape + [batch]</code>, interleaves these blocks back into the grid defined by the spatial dimensions <code>[1, ..., M]</code>, to obtain a result with the same rank as the input. The spatial dimensions of this intermediate result are then optionally cropped according to <code>crops</code> to produce the output. This is the reverse of SpaceToBatch. See below for a precise description.</p>
+<h5 id="args-36">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. N-D with shape <code>input_shape = [batch] + spatial_shape + remaining_shape</code>, where spatial_shape has M dimensions.</li>
+<li><b><code>block_shape</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. 1-D with shape <code>[M]</code>, all values must be &gt;= 1.</li>
+<li><p><b><code>crops</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. 2-D with shape <code>[M, 2]</code>, all values must be &gt;= 0. <code>crops[i] = [crop_start, crop_end]</code> specifies the amount to crop from input dimension <code>i + 1</code>, which corresponds to spatial dimension <code>i</code>. It is required that <code>crop_start[i] + crop_end[i] &lt;= block_shape[i] * input_shape[i + 1]</code>.</p>
+<p>This operation is equivalent to the following steps:</p>
+<ol style="list-style-type: decimal">
+<li><p>Reshape <code>input</code> to <code>reshaped</code> of shape: [block_shape[0], ..., block_shape[M-1], batch / prod(block_shape), input_shape[1], ..., input_shape[N-1]]</p></li>
+<li><p>Permute dimensions of <code>reshaped</code> to produce <code>permuted</code> of shape [batch / prod(block_shape),</p>
+<p>input_shape[1], block_shape[0], ..., input_shape[M], block_shape[M-1],</p>
+<p>input_shape[M+1], ..., input_shape[N-1]]</p></li>
+<li><p>Reshape <code>permuted</code> to produce <code>reshaped_permuted</code> of shape [batch / prod(block_shape),</p>
+<p>input_shape[1] * block_shape[0], ..., input_shape[M] * block_shape[M-1],</p>
+<p>input_shape[M+1], ..., input_shape[N-1]]</p></li>
+<li><p>Crop the start and end of dimensions <code>[1, ..., M]</code> of <code>reshaped_permuted</code> according to <code>crops</code> to produce the output of shape: [batch / prod(block_shape),</p>
+<p>input_shape[1] * block_shape[0] - crops[0,0] - crops[0,1], ..., input_shape[M] * block_shape[M-1] - crops[M-1,0] - crops[M-1,1],</p>
+<p>input_shape[M+1], ..., input_shape[N-1]]</p></li>
+</ol>
+<p>Some examples:</p>
+<ol style="list-style-type: decimal">
+<li>For the following input of shape <code>[4, 1, 1, 1]</code>, <code>block_shape = [2, 2]</code>, and <code>crops = [[0, 0], [0, 0]]</code>:</li>
+</ol>
+<pre class="prettyprint"><code>[[[[1]]], [[[2]]], [[[3]]], [[[4]]]]</code></pre>
+<p>The output tensor has shape <code>[1, 2, 2, 1]</code> and value:</p>
+<pre class="prettyprint"><code>x = [[[[1], [2]], [[3], [4]]]]</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>For the following input of shape <code>[4, 1, 1, 3]</code>, <code>block_shape = [2, 2]</code>, and <code>crops = [[0, 0], [0, 0]]</code>:</li>
+</ol>
+<pre class="prettyprint"><code>[[[1, 2, 3]], [[4, 5, 6]], [[7, 8, 9]], [[10, 11, 12]]]</code></pre>
+<p>The output tensor has shape <code>[1, 2, 2, 3]</code> and value:</p>
+<pre class="prettyprint"><code>x = [[[[1, 2, 3], [4, 5, 6]],
+      [[7, 8, 9], [10, 11, 12]]]]</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>For the following input of shape <code>[4, 2, 2, 1]</code>, <code>block_shape = [2, 2]</code>, and <code>crops = [[0, 0], [0, 0]]</code>:</li>
+</ol>
+<pre class="prettyprint"><code>x = [[[[1], [3]], [[5], [7]]],
+     [[[2], [4]], [[10], [12]]],
+     [[[5], [7]], [[13], [15]]],
+     [[[6], [8]], [[14], [16]]]]</code></pre>
+<p>The output tensor has shape <code>[1, 4, 4, 1]</code> and value:</p>
+<pre class="prettyprint"><code>x = [[[1],   [2],  [3],  [4]],
+     [[5],   [6],  [7],  [8]],
+     [[9],  [10], [11],  [12]],
+     [[13], [14], [15],  [16]]]</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>For the following input of shape <code>[8, 1, 3, 1]</code>, <code>block_shape = [2, 2]</code>, and <code>crops = [[0, 0], [2, 0]]</code>:</li>
+</ol>
+<pre class="prettyprint"><code>x = [[[[0], [1], [3]]], [[[0], [9], [11]]],
+     [[[0], [2], [4]]], [[[0], [10], [12]]],
+     [[[0], [5], [7]]], [[[0], [13], [15]]],
+     [[[0], [6], [8]]], [[[0], [14], [16]]]]</code></pre>
+<p>The output tensor has shape <code>[2, 2, 4, 1]</code> and value:</p>
+<pre class="prettyprint"><code>x = [[[[1],   [2],  [3],  [4]],
+      [[5],   [6],  [7],  [8]]],
+     [[[9],  [10], [11],  [12]],
+      [[13], [14], [15],  [16]]]]</code></pre></li>
+<li><p><b><code>name</code></b>: A name for the operation (optional).</p></li>
+</ul>
+<h5 id="returns-36">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>input</code>.</p>
+<hr />
+<h3 id="tf.batch_to_spaceinput-crops-block_size-namenone"><a name="//apple_ref/cpp/Function/batch_to_space" class="dashAnchor"></a><code id="batch_to_space">tf.batch_to_space(input, crops, block_size, name=None)</code></h3>
+<p>BatchToSpace for 4-D tensors of type T.</p>
+<p>This is a legacy version of the more general BatchToSpaceND.</p>
+<p>Rearranges (permutes) data from batch into blocks of spatial data, followed by cropping. This is the reverse transformation of SpaceToBatch. More specifically, this op outputs a copy of the input tensor where values from the <code>batch</code> dimension are moved in spatial blocks to the <code>height</code> and <code>width</code> dimensions, followed by cropping along the <code>height</code> and <code>width</code> dimensions.</p>
+<h5 id="args-37">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. 4-D tensor with shape <code>[batch*block_size*block_size, height_pad/block_size, width_pad/block_size,   depth]</code>. Note that the batch size of the input tensor must be divisible by <code>block_size * block_size</code>.</li>
+<li><p><b><code>crops</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. 2-D tensor of non-negative integers with shape <code>[2, 2]</code>. It specifies how many elements to crop from the intermediate result across the spatial dimensions as follows:</p>
+<pre><code>crops = [[crop_top, crop_bottom], [crop_left, crop_right]]</code></pre></li>
+<li><b><code>block_size</code></b>: An <code>int</code> that is <code>&gt;= 2</code>.</li>
+<li><p><b><code>name</code></b>: A name for the operation (optional).</p></li>
+</ul>
+<h5 id="returns-37">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>input</code>. 4-D with shape <code>[batch, height, width, depth]</code>, where:</p>
+<pre><code>    height = height_pad - crop_top - crop_bottom
+    width = width_pad - crop_left - crop_right</code></pre>
+<p>The attr <code>block_size</code> must be greater than one. It indicates the block size.</p>
+<p>Some examples:</p>
+<ol style="list-style-type: decimal">
+<li>For the following input of shape <code>[4, 1, 1, 1]</code> and block_size of 2:</li>
+</ol>
+<p><code>prettyprint   [[[[1]]], [[[2]]], [[[3]]], [[[4]]]]</code></p>
+<p>The output tensor has shape <code>[1, 2, 2, 1]</code> and value:</p>
+<p><code>prettyprint   x = [[[[1], [2]], [[3], [4]]]]</code></p>
+<ol start="2" style="list-style-type: decimal">
+<li>For the following input of shape <code>[4, 1, 1, 3]</code> and block_size of 2:</li>
+</ol>
+<p><code>prettyprint   [[[1, 2, 3]], [[4, 5, 6]], [[7, 8, 9]], [[10, 11, 12]]]</code></p>
+<p>The output tensor has shape <code>[1, 2, 2, 3]</code> and value:</p>
+<p><code>prettyprint   x = [[[[1, 2, 3], [4, 5, 6]],         [[7, 8, 9], [10, 11, 12]]]]</code></p>
+<ol start="3" style="list-style-type: decimal">
+<li>For the following input of shape <code>[4, 2, 2, 1]</code> and block_size of 2:</li>
+</ol>
+<p><code>prettyprint   x = [[[[1], [3]], [[5], [7]]],        [[[2], [4]], [[10], [12]]],        [[[5], [7]], [[13], [15]]],        [[[6], [8]], [[14], [16]]]]</code></p>
+<p>The output tensor has shape <code>[1, 4, 4, 1]</code> and value:</p>
+<p><code>prettyprint   x = [[[1],   [2],  [3],  [4]],        [[5],   [6],  [7],  [8]],        [[9],  [10], [11],  [12]],        [[13], [14], [15],  [16]]]</code></p>
+<ol start="4" style="list-style-type: decimal">
+<li>For the following input of shape <code>[8, 1, 2, 1]</code> and block_size of 2:</li>
+</ol>
+<p><code>prettyprint   x = [[[[1], [3]]], [[[9], [11]]], [[[2], [4]]], [[[10], [12]]],        [[[5], [7]]], [[[13], [15]]], [[[6], [8]]], [[[14], [16]]]]</code></p>
+<p>The output tensor has shape <code>[2, 2, 4, 1]</code> and value:</p>
+<p><code>prettyprint   x = [[[[1], [3]], [[5], [7]]],        [[[2], [4]], [[10], [12]]],        [[[5], [7]], [[13], [15]]],        [[[6], [8]], [[14], [16]]]]</code></p>
+<hr />
+<h3 id="tf.space_to_depthinput-block_size-namenone"><a name="//apple_ref/cpp/Function/space_to_depth" class="dashAnchor"></a><code id="space_to_depth">tf.space_to_depth(input, block_size, name=None)</code></h3>
+<p>SpaceToDepth for tensors of type T.</p>
+<p>Rearranges blocks of spatial data, into depth. More specifically, this op outputs a copy of the input tensor where values from the <code>height</code> and <code>width</code> dimensions are moved to the <code>depth</code> dimension. The attr <code>block_size</code> indicates the input block size and how the data is moved.</p>
+<ul>
+<li>Non-overlapping blocks of size <code>block_size x block size</code> are rearranged into depth at each location.</li>
+<li>The depth of the output tensor is <code>input_depth * block_size * block_size</code>.</li>
+<li>The input tensor's height and width must be divisible by block_size.</li>
+</ul>
+<p>That is, assuming the input is in the shape: <code>[batch, height, width, depth]</code>, the shape of the output will be: <code>[batch, height/block_size, width/block_size, depth*block_size*block_size]</code></p>
+<p>This operation requires that the input tensor be of rank 4, and that <code>block_size</code> be &gt;=1 and a divisor of both the input <code>height</code> and <code>width</code>.</p>
+<p>This operation is useful for resizing the activations between convolutions (but keeping all data), e.g. instead of pooling. It is also useful for training purely convolutional models.</p>
+<p>For example, given this input of shape <code>[1, 2, 2, 1]</code>, and block_size of 2:</p>
+<pre class="prettyprint"><code>x = [[[[1], [2]],
+      [[3], [4]]]]</code></pre>
+<p>This operation will output a tensor of shape <code>[1, 1, 1, 4]</code>:</p>
+<pre class="prettyprint"><code>[[[[1, 2, 3, 4]]]]</code></pre>
+<p>Here, the input has a batch of 1 and each batch element has shape <code>[2, 2, 1]</code>, the corresponding output will have a single element (i.e. width and height are both 1) and will have a depth of 4 channels (1 * block_size * block_size). The output element shape is <code>[1, 1, 4]</code>.</p>
+<p>For an input tensor with larger depth, here of shape <code>[1, 2, 2, 3]</code>, e.g.</p>
+<pre class="prettyprint"><code>x = [[[[1, 2, 3], [4, 5, 6]],
+      [[7, 8, 9], [10, 11, 12]]]]</code></pre>
+<p>This operation, for block_size of 2, will return the following tensor of shape <code>[1, 1, 1, 12]</code></p>
+<pre class="prettyprint"><code>[[[[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]]]]</code></pre>
+<p>Similarly, for the following input of shape <code>[1 4 4 1]</code>, and a block size of 2:</p>
+<pre class="prettyprint"><code>x = [[[[1],   [2],  [5],  [6]],
+      [[3],   [4],  [7],  [8]],
+      [[9],  [10], [13],  [14]],
+      [[11], [12], [15],  [16]]]]</code></pre>
+<p>the operator will return the following tensor of shape <code>[1 2 2 4]</code>:</p>
+<pre class="prettyprint"><code>x = [[[[1, 2, 3, 4],
+       [5, 6, 7, 8]],
+      [[9, 10, 11, 12],
+       [13, 14, 15, 16]]]]</code></pre>
+<h5 id="args-38">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>.</li>
+<li><b><code>block_size</code></b>: An <code>int</code> that is <code>&gt;= 2</code>. The size of the spatial block.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-38">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>input</code>.</p>
+<hr />
+<h3 id="tf.depth_to_spaceinput-block_size-namenone"><a name="//apple_ref/cpp/Function/depth_to_space" class="dashAnchor"></a><code id="depth_to_space">tf.depth_to_space(input, block_size, name=None)</code></h3>
+<p>DepthToSpace for tensors of type T.</p>
+<p>Rearranges data from depth into blocks of spatial data. This is the reverse transformation of SpaceToDepth. More specifically, this op outputs a copy of the input tensor where values from the <code>depth</code> dimension are moved in spatial blocks to the <code>height</code> and <code>width</code> dimensions. The attr <code>block_size</code> indicates the input block size and how the data is moved.</p>
+<ul>
+<li>Chunks of data of size <code>block_size * block_size</code> from depth are rearranged into non-overlapping blocks of size <code>block_size x block_size</code></li>
+<li>The width the output tensor is <code>input_depth * block_size</code>, whereas the height is <code>input_height * block_size</code>.</li>
+<li>The depth of the input tensor must be divisible by <code>block_size * block_size</code>.</li>
+</ul>
+<p>That is, assuming the input is in the shape: <code>[batch, height, width, depth]</code>, the shape of the output will be: <code>[batch, height*block_size, width*block_size, depth/(block_size*block_size)]</code></p>
+<p>This operation requires that the input tensor be of rank 4, and that <code>block_size</code> be &gt;=1 and that <code>block_size * block_size</code> be a divisor of the input depth.</p>
+<p>This operation is useful for resizing the activations between convolutions (but keeping all data), e.g. instead of pooling. It is also useful for training purely convolutional models.</p>
+<p>For example, given this input of shape <code>[1, 1, 1, 4]</code>, and a block size of 2:</p>
+<pre class="prettyprint"><code>x = [[[[1, 2, 3, 4]]]]
+</code></pre>
+<p>This operation will output a tensor of shape <code>[1, 2, 2, 1]</code>:</p>
+<pre class="prettyprint"><code>   [[[[1], [2]],
+     [[3], [4]]]]</code></pre>
+<p>Here, the input has a batch of 1 and each batch element has shape <code>[1, 1, 4]</code>, the corresponding output will have 2x2 elements and will have a depth of 1 channel (1 = <code>4 / (block_size * block_size)</code>). The output element shape is <code>[2, 2, 1]</code>.</p>
+<p>For an input tensor with larger depth, here of shape <code>[1, 1, 1, 12]</code>, e.g.</p>
+<pre class="prettyprint"><code>x = [[[[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]]]]</code></pre>
+<p>This operation, for block size of 2, will return the following tensor of shape <code>[1, 2, 2, 3]</code></p>
+<pre class="prettyprint"><code>   [[[[1, 2, 3], [4, 5, 6]],
+     [[7, 8, 9], [10, 11, 12]]]]
+</code></pre>
+<p>Similarly, for the following input of shape <code>[1 2 2 4]</code>, and a block size of 2:</p>
+<pre class="prettyprint"><code>x =  [[[[1, 2, 3, 4],
+       [5, 6, 7, 8]],
+      [[9, 10, 11, 12],
+       [13, 14, 15, 16]]]]</code></pre>
+<p>the operator will return the following tensor of shape <code>[1 4 4 1]</code>:</p>
+<pre class="prettyprint"><code>x = [[ [1],   [2],  [5],  [6]],
+     [ [3],   [4],  [7],  [8]],
+     [ [9],  [10], [13],  [14]],
+     [ [11], [12], [15],  [16]]]
+</code></pre>
+<h5 id="args-39">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>.</li>
+<li><b><code>block_size</code></b>: An <code>int</code> that is <code>&gt;= 2</code>. The size of the spatial block, same as in Space2Depth.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-39">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>input</code>.</p>
+<hr />
+<h3 id="tf.gatherparams-indices-validate_indicesnone-namenone"><a name="//apple_ref/cpp/Function/gather" class="dashAnchor"></a><code id="gather">tf.gather(params, indices, validate_indices=None, name=None)</code></h3>
+<p>Gather slices from <code>params</code> according to <code>indices</code>.</p>
+<p><code>indices</code> must be an integer tensor of any dimension (usually 0-D or 1-D). Produces an output tensor with shape <code>indices.shape + params.shape[1:]</code> where:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    <span class="co"># Scalar indices</span>
+    output[:, ..., :] <span class="op">=</span> params[indices, :, ... :]
+
+    <span class="co"># Vector indices</span>
+    output[i, :, ..., :] <span class="op">=</span> params[indices[i], :, ... :]
+
+    <span class="co"># Higher rank indices</span>
+    output[i, ..., j, :, ... :] <span class="op">=</span> params[indices[i, ..., j], :, ..., :]</code></pre></div>
+<p>If <code>indices</code> is a permutation and <code>len(indices) == params.shape[0]</code> then this operation will permute <code>params</code> accordingly.</p>
+<div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+<p><img style="width:100%" src="../../images/Gather.png" alt></p>
+</div>
+<h5 id="args-40">Args:</h5>
+<ul>
+<li><b><code>params</code></b>: A <code>Tensor</code>.</li>
+<li><b><code>indices</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>.</li>
+<li><b><code>validate_indices</code></b>: An optional <code>bool</code>. Defaults to <code>True</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-40">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>params</code>.</p>
+<hr />
+<h3 id="tf.gather_ndparams-indices-namenone"><a name="//apple_ref/cpp/Function/gather_nd" class="dashAnchor"></a><code id="gather_nd">tf.gather_nd(params, indices, name=None)</code></h3>
+<p>Gather values or slices from <code>params</code> according to <code>indices</code>.</p>
+<p><code>params</code> is a Tensor of rank <code>P</code> and <code>indices</code> is a Tensor of rank <code>Q</code>.</p>
+<p><code>indices</code> must be integer tensor, containing indices into <code>params</code>. It must be shape <code>[d_0, ..., d_{Q-2}, K]</code> where <code>0 &lt; K &lt;= P</code>.</p>
+<p>The innermost dimension of <code>indices</code> (with length <code>K</code>) corresponds to indices into elements (if <code>K = P</code>) or slices (if <code>K &lt; P</code>) along the <code>K</code>th dimension of <code>params</code>.</p>
+<p>Produces an output tensor with shape</p>
+<pre><code>[d_0, ..., d_{Q-2}, params.shape[K], ..., params.shape[P-1]].</code></pre>
+<p>Some examples below.</p>
+<p>Simple indexing into a matrix:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    indices <span class="op">=</span> [[<span class="dv">0</span>, <span class="dv">0</span>], [<span class="dv">1</span>, <span class="dv">1</span>]]
+    params <span class="op">=</span> [[<span class="st">&#39;a&#39;</span>, <span class="st">&#39;b&#39;</span>], [<span class="st">&#39;c&#39;</span>, <span class="st">&#39;d&#39;</span>]]
+    output <span class="op">=</span> [<span class="st">&#39;a&#39;</span>, <span class="st">&#39;d&#39;</span>]</code></pre></div>
+<p>Slice indexing into a matrix:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    indices <span class="op">=</span> [[<span class="dv">1</span>], [<span class="dv">0</span>]]
+    params <span class="op">=</span> [[<span class="st">&#39;a&#39;</span>, <span class="st">&#39;b&#39;</span>], [<span class="st">&#39;c&#39;</span>, <span class="st">&#39;d&#39;</span>]]
+    output <span class="op">=</span> [[<span class="st">&#39;c&#39;</span>, <span class="st">&#39;d&#39;</span>], [<span class="st">&#39;a&#39;</span>, <span class="st">&#39;b&#39;</span>]]</code></pre></div>
+<p>Indexing into a 3-tensor:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    indices <span class="op">=</span> [[<span class="dv">1</span>]]
+    params <span class="op">=</span> [[[<span class="st">&#39;a0&#39;</span>, <span class="st">&#39;b0&#39;</span>], [<span class="st">&#39;c0&#39;</span>, <span class="st">&#39;d0&#39;</span>]],
+              [[<span class="st">&#39;a1&#39;</span>, <span class="st">&#39;b1&#39;</span>], [<span class="st">&#39;c1&#39;</span>, <span class="st">&#39;d1&#39;</span>]]]
+    output <span class="op">=</span> [[[<span class="st">&#39;a1&#39;</span>, <span class="st">&#39;b1&#39;</span>], [<span class="st">&#39;c1&#39;</span>, <span class="st">&#39;d1&#39;</span>]]]
+
+
+    indices <span class="op">=</span> [[<span class="dv">0</span>, <span class="dv">1</span>], [<span class="dv">1</span>, <span class="dv">0</span>]]
+    params <span class="op">=</span> [[[<span class="st">&#39;a0&#39;</span>, <span class="st">&#39;b0&#39;</span>], [<span class="st">&#39;c0&#39;</span>, <span class="st">&#39;d0&#39;</span>]],
+              [[<span class="st">&#39;a1&#39;</span>, <span class="st">&#39;b1&#39;</span>], [<span class="st">&#39;c1&#39;</span>, <span class="st">&#39;d1&#39;</span>]]]
+    output <span class="op">=</span> [[<span class="st">&#39;c0&#39;</span>, <span class="st">&#39;d0&#39;</span>], [<span class="st">&#39;a1&#39;</span>, <span class="st">&#39;b1&#39;</span>]]
+
+
+    indices <span class="op">=</span> [[<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>], [<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>]]
+    params <span class="op">=</span> [[[<span class="st">&#39;a0&#39;</span>, <span class="st">&#39;b0&#39;</span>], [<span class="st">&#39;c0&#39;</span>, <span class="st">&#39;d0&#39;</span>]],
+              [[<span class="st">&#39;a1&#39;</span>, <span class="st">&#39;b1&#39;</span>], [<span class="st">&#39;c1&#39;</span>, <span class="st">&#39;d1&#39;</span>]]]
+    output <span class="op">=</span> [<span class="st">&#39;b0&#39;</span>, <span class="st">&#39;b1&#39;</span>]</code></pre></div>
+<p>Batched indexing into a matrix:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    indices <span class="op">=</span> [[[<span class="dv">0</span>, <span class="dv">0</span>]], [[<span class="dv">0</span>, <span class="dv">1</span>]]]
+    params <span class="op">=</span> [[<span class="st">&#39;a&#39;</span>, <span class="st">&#39;b&#39;</span>], [<span class="st">&#39;c&#39;</span>, <span class="st">&#39;d&#39;</span>]]
+    output <span class="op">=</span> [[<span class="st">&#39;a&#39;</span>], [<span class="st">&#39;b&#39;</span>]]</code></pre></div>
+<p>Batched slice indexing into a matrix:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    indices <span class="op">=</span> [[[<span class="dv">1</span>]], [[<span class="dv">0</span>]]]
+    params <span class="op">=</span> [[<span class="st">&#39;a&#39;</span>, <span class="st">&#39;b&#39;</span>], [<span class="st">&#39;c&#39;</span>, <span class="st">&#39;d&#39;</span>]]
+    output <span class="op">=</span> [[[<span class="st">&#39;c&#39;</span>, <span class="st">&#39;d&#39;</span>]], [[<span class="st">&#39;a&#39;</span>, <span class="st">&#39;b&#39;</span>]]]</code></pre></div>
+<p>Batched indexing into a 3-tensor:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    indices <span class="op">=</span> [[[<span class="dv">1</span>]], [[<span class="dv">0</span>]]]
+    params <span class="op">=</span> [[[<span class="st">&#39;a0&#39;</span>, <span class="st">&#39;b0&#39;</span>], [<span class="st">&#39;c0&#39;</span>, <span class="st">&#39;d0&#39;</span>]],
+              [[<span class="st">&#39;a1&#39;</span>, <span class="st">&#39;b1&#39;</span>], [<span class="st">&#39;c1&#39;</span>, <span class="st">&#39;d1&#39;</span>]]]
+    output <span class="op">=</span> [[[[<span class="st">&#39;a1&#39;</span>, <span class="st">&#39;b1&#39;</span>], [<span class="st">&#39;c1&#39;</span>, <span class="st">&#39;d1&#39;</span>]]],
+              [[[<span class="st">&#39;a0&#39;</span>, <span class="st">&#39;b0&#39;</span>], [<span class="st">&#39;c0&#39;</span>, <span class="st">&#39;d0&#39;</span>]]]]
+
+    indices <span class="op">=</span> [[[<span class="dv">0</span>, <span class="dv">1</span>], [<span class="dv">1</span>, <span class="dv">0</span>]], [[<span class="dv">0</span>, <span class="dv">0</span>], [<span class="dv">1</span>, <span class="dv">1</span>]]]
+    params <span class="op">=</span> [[[<span class="st">&#39;a0&#39;</span>, <span class="st">&#39;b0&#39;</span>], [<span class="st">&#39;c0&#39;</span>, <span class="st">&#39;d0&#39;</span>]],
+              [[<span class="st">&#39;a1&#39;</span>, <span class="st">&#39;b1&#39;</span>], [<span class="st">&#39;c1&#39;</span>, <span class="st">&#39;d1&#39;</span>]]]
+    output <span class="op">=</span> [[[<span class="st">&#39;c0&#39;</span>, <span class="st">&#39;d0&#39;</span>], [<span class="st">&#39;a1&#39;</span>, <span class="st">&#39;b1&#39;</span>]],
+              [[<span class="st">&#39;a0&#39;</span>, <span class="st">&#39;b0&#39;</span>], [<span class="st">&#39;c1&#39;</span>, <span class="st">&#39;d1&#39;</span>]]]
+
+
+    indices <span class="op">=</span> [[[<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>], [<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>]], [[<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>], [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>]]]
+    params <span class="op">=</span> [[[<span class="st">&#39;a0&#39;</span>, <span class="st">&#39;b0&#39;</span>], [<span class="st">&#39;c0&#39;</span>, <span class="st">&#39;d0&#39;</span>]],
+              [[<span class="st">&#39;a1&#39;</span>, <span class="st">&#39;b1&#39;</span>], [<span class="st">&#39;c1&#39;</span>, <span class="st">&#39;d1&#39;</span>]]]
+    output <span class="op">=</span> [[<span class="st">&#39;b0&#39;</span>, <span class="st">&#39;b1&#39;</span>], [<span class="st">&#39;d0&#39;</span>, <span class="st">&#39;c1&#39;</span>]]</code></pre></div>
+<h5 id="args-41">Args:</h5>
+<ul>
+<li><b><code>params</code></b>: A <code>Tensor</code>. <code>P-D</code>. The tensor from which to gather values.</li>
+<li><b><code>indices</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. <code>Q-D</code>. Index tensor having shape <code>[d_0, ..., d_{Q-2}, K]</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-41">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>params</code>. <code>(P+Q-K-1)-D</code>. Values from <code>params</code> gathered from indices given by <code>indices</code>.</p>
+<hr />
+<h3 id="tf.unique_with_countsx-out_idxnone-namenone"><a name="//apple_ref/cpp/Function/unique_with_counts" class="dashAnchor"></a><code id="unique_with_counts">tf.unique_with_counts(x, out_idx=None, name=None)</code></h3>
+<p>Finds unique elements in a 1-D tensor.</p>
+<p>This operation returns a tensor <code>y</code> containing all of the unique elements of <code>x</code> sorted in the same order that they occur in <code>x</code>. This operation also returns a tensor <code>idx</code> the same size as <code>x</code> that contains the index of each value of <code>x</code> in the unique output <code>y</code>. Finally, it returns a third tensor <code>count</code> that contains the count of each element of <code>y</code> in <code>x</code>. In other words:</p>
+<p><code>y[idx[i]] = x[i] for i in [0, 1,...,rank(x) - 1]</code></p>
+<p>For example:</p>
+<pre class="prettyprint"><code># tensor &#39;x&#39; is [1, 1, 2, 4, 4, 4, 7, 8, 8]
+y, idx, count = unique_with_counts(x)
+y ==&gt; [1, 2, 4, 7, 8]
+idx ==&gt; [0, 0, 1, 2, 2, 2, 3, 4, 4]
+count ==&gt; [2, 1, 3, 1, 2]</code></pre>
+<h5 id="args-42">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. 1-D.</li>
+<li><b><code>out_idx</code></b>: An optional <code>tf.DType</code> from: <code>tf.int32, tf.int64</code>. Defaults to <code>tf.int32</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-42">Returns:</h5>
+<p>A tuple of <code>Tensor</code> objects (y, idx, count).</p>
+<ul>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Has the same type as <code>x</code>. 1-D.</li>
+<li><b><code>idx</code></b>: A <code>Tensor</code> of type <code>out_idx</code>. 1-D.</li>
+<li><b><code>count</code></b>: A <code>Tensor</code> of type <code>out_idx</code>. 1-D.</li>
+</ul>
+<hr />
+<h3 id="tf.scatter_ndindices-updates-shape-namenone"><a name="//apple_ref/cpp/Function/scatter_nd" class="dashAnchor"></a><code id="scatter_nd">tf.scatter_nd(indices, updates, shape, name=None)</code></h3>
+<p>Creates a new tensor by applying sparse <code>updates</code> to individual</p>
+<p>values or slices within a zero tensor of the given <code>shape</code> tensor according to indices. This operator is the inverse of the <a href="#gather_nd">tf.gather_nd</a> operator which extracts values or slices from a given tensor.</p>
+<p>TODO(simister): Add a link to Variable.<strong>getitem</strong> documentation on slice syntax.</p>
+<p><code>shape</code> is a <code>TensorShape</code> with rank <code>P</code> and <code>indices</code> is a <code>Tensor</code> of rank <code>Q</code>.</p>
+<p><code>indices</code> must be integer tensor, containing indices into <code>shape</code>. It must be shape <code>[d_0, ..., d_{Q-2}, K]</code> where <code>0 &lt; K &lt;= P</code>.</p>
+<p>The innermost dimension of <code>indices</code> (with length <code>K</code>) corresponds to indices into elements (if <code>K = P</code>) or slices (if <code>K &lt; P</code>) along the <code>K</code>th dimension of <code>shape</code>.</p>
+<p><code>updates</code> is Tensor of rank <code>Q-1+P-K</code> with shape:</p>
+<pre><code>[d_0, ..., d_{Q-2}, shape[K], ..., shape[P-1]].</code></pre>
+<p>The simplest form of scatter is to insert individual elements in a tensor by index. For example, say we want to insert 4 scattered elements in a rank-1 tensor with 8 elements.</p>
+<div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+<p><img style="width:100%" src="../../images/ScatterNd1.png" alt></p>
+</div>
+<p>In Python, this scatter operation would look like this:</p>
+<pre><code>indices = tf.constant([[4], [3], [1], [7]])
+updates = tf.constant([9, 10, 11, 12])
+shape = tf.constant([8])
+scatter = tf.scatter_nd(indices, updates, shape)
+with tf.Session() as sess:
+  print sess.run(scatter)</code></pre>
+<p>The resulting tensor would look like this:</p>
+<pre><code>[0, 11, 0, 10, 9, 0, 0, 12]</code></pre>
+<p>We can also, insert entire slices of a higher rank tensor all at once. For example, if we wanted to insert two slices in the first dimension of a rank-3 tensor with two matrices of new values.</p>
+<div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+<p><img style="width:100%" src="../../images/ScatterNd2.png" alt></p>
+</div>
+<p>In Python, this scatter operation would look like this:</p>
+<pre><code>indices = tf.constant([[0], [2]])
+updates = tf.constant([[[5, 5, 5, 5], [6, 6, 6, 6],
+                        [7, 7, 7, 7], [8, 8, 8, 8]],
+                       [[5, 5, 5, 5], [6, 6, 6, 6],
+                        [7, 7, 7, 7], [8, 8, 8, 8]]])
+shape = tf.constant([4, 4, 4])
+scatter = tf.scatter_nd(indices, updates, shape)
+with tf.Session() as sess:
+  print sess.run(scatter)</code></pre>
+<p>The resulting tensor would look like this:</p>
+<pre><code>[[[5, 5, 5, 5], [6, 6, 6, 6], [7, 7, 7, 7], [8, 8, 8, 8]],
+ [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]],
+ [[5, 5, 5, 5], [6, 6, 6, 6], [7, 7, 7, 7], [8, 8, 8, 8]],
+ [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]]</code></pre>
+<h5 id="args-43">Args:</h5>
+<ul>
+<li><b><code>indices</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. A Tensor. Must be one of the following types: int32, int64. A tensor of indices into ref.</li>
+<li><b><code>updates</code></b>: A <code>Tensor</code>. A Tensor. Must have the same type as tensor. A tensor of updated values to store in ref.</li>
+<li><b><code>shape</code></b>: A <code>Tensor</code>. Must have the same type as <code>indices</code>. A vector. The shape of the resulting tensor.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-43">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>updates</code>. A new tensor with the given shape and updates applied according to the indices.</p>
+<hr />
+<h3 id="tf.dynamic_partitiondata-partitions-num_partitions-namenone"><a name="//apple_ref/cpp/Function/dynamic_partition" class="dashAnchor"></a><code id="dynamic_partition">tf.dynamic_partition(data, partitions, num_partitions, name=None)</code></h3>
+<p>Partitions <code>data</code> into <code>num_partitions</code> tensors using indices from <code>partitions</code>.</p>
+<p>For each index tuple <code>js</code> of size <code>partitions.ndim</code>, the slice <code>data[js, ...]</code> becomes part of <code>outputs[partitions[js]]</code>. The slices with <code>partitions[js] = i</code> are placed in <code>outputs[i]</code> in lexicographic order of <code>js</code>, and the first dimension of <code>outputs[i]</code> is the number of entries in <code>partitions</code> equal to <code>i</code>. In detail,</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    outputs[i].shape <span class="op">=</span> [<span class="bu">sum</span>(partitions <span class="op">==</span> i)] <span class="op">+</span> data.shape[partitions.ndim:]
+
+    outputs[i] <span class="op">=</span> pack([data[js, ...] <span class="cf">for</span> js <span class="cf">if</span> partitions[js] <span class="op">==</span> i])</code></pre></div>
+<p><code>data.shape</code> must start with <code>partitions.shape</code>.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    <span class="co"># Scalar partitions.</span>
+    partitions <span class="op">=</span> <span class="dv">1</span>
+    num_partitions <span class="op">=</span> <span class="dv">2</span>
+    data <span class="op">=</span> [<span class="dv">10</span>, <span class="dv">20</span>]
+    outputs[<span class="dv">0</span>] <span class="op">=</span> []  <span class="co"># Empty with shape [0, 2]</span>
+    outputs[<span class="dv">1</span>] <span class="op">=</span> [[<span class="dv">10</span>, <span class="dv">20</span>]]
+
+    <span class="co"># Vector partitions.</span>
+    partitions <span class="op">=</span> [<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>]
+    num_partitions <span class="op">=</span> <span class="dv">2</span>
+    data <span class="op">=</span> [<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>, <span class="dv">40</span>, <span class="dv">50</span>]
+    outputs[<span class="dv">0</span>] <span class="op">=</span> [<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">50</span>]
+    outputs[<span class="dv">1</span>] <span class="op">=</span> [<span class="dv">30</span>, <span class="dv">40</span>]</code></pre></div>
+<div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+<p><img style="width:100%" src="../../images/DynamicPartition.png" alt></p>
+</div>
+<h5 id="args-44">Args:</h5>
+<ul>
+<li><b><code>data</code></b>: A <code>Tensor</code>.</li>
+<li><b><code>partitions</code></b>: A <code>Tensor</code> of type <code>int32</code>. Any shape. Indices in the range <code>[0, num_partitions)</code>.</li>
+<li><b><code>num_partitions</code></b>: An <code>int</code> that is <code>&gt;= 1</code>. The number of partitions to output.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-44">Returns:</h5>
+<p>A list of <code>num_partitions</code> <code>Tensor</code> objects of the same type as data.</p>
+<hr />
+<h3 id="tf.dynamic_stitchindices-data-namenone"><a name="//apple_ref/cpp/Function/dynamic_stitch" class="dashAnchor"></a><code id="dynamic_stitch">tf.dynamic_stitch(indices, data, name=None)</code></h3>
+<p>Interleave the values from the <code>data</code> tensors into a single tensor.</p>
+<p>Builds a merged tensor such that</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    merged[indices[m][i, ..., j], ...] <span class="op">=</span> data[m][i, ..., j, ...]</code></pre></div>
+<p>For example, if each <code>indices[m]</code> is scalar or vector, we have</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    <span class="co"># Scalar indices:</span>
+    merged[indices[m], ...] <span class="op">=</span> data[m][...]
+
+    <span class="co"># Vector indices:</span>
+    merged[indices[m][i], ...] <span class="op">=</span> data[m][i, ...]</code></pre></div>
+<p>Each <code>data[i].shape</code> must start with the corresponding <code>indices[i].shape</code>, and the rest of <code>data[i].shape</code> must be constant w.r.t. <code>i</code>. That is, we must have <code>data[i].shape = indices[i].shape + constant</code>. In terms of this <code>constant</code>, the output shape is</p>
+<pre><code>merged.shape = [max(indices)] + constant</code></pre>
+<p>Values are merged in order, so if an index appears in both <code>indices[m][i]</code> and <code>indices[n][j]</code> for <code>(m,i) &lt; (n,j)</code> the slice <code>data[n][j]</code> will appear in the merged result.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    indices[<span class="dv">0</span>] <span class="op">=</span> <span class="dv">6</span>
+    indices[<span class="dv">1</span>] <span class="op">=</span> [<span class="dv">4</span>, <span class="dv">1</span>]
+    indices[<span class="dv">2</span>] <span class="op">=</span> [[<span class="dv">5</span>, <span class="dv">2</span>], [<span class="dv">0</span>, <span class="dv">3</span>]]
+    data[<span class="dv">0</span>] <span class="op">=</span> [<span class="dv">61</span>, <span class="dv">62</span>]
+    data[<span class="dv">1</span>] <span class="op">=</span> [[<span class="dv">41</span>, <span class="dv">42</span>], [<span class="dv">11</span>, <span class="dv">12</span>]]
+    data[<span class="dv">2</span>] <span class="op">=</span> [[[<span class="dv">51</span>, <span class="dv">52</span>], [<span class="dv">21</span>, <span class="dv">22</span>]], [[<span class="dv">1</span>, <span class="dv">2</span>], [<span class="dv">31</span>, <span class="dv">32</span>]]]
+    merged <span class="op">=</span> [[<span class="dv">1</span>, <span class="dv">2</span>], [<span class="dv">11</span>, <span class="dv">12</span>], [<span class="dv">21</span>, <span class="dv">22</span>], [<span class="dv">31</span>, <span class="dv">32</span>], [<span class="dv">41</span>, <span class="dv">42</span>],
+              [<span class="dv">51</span>, <span class="dv">52</span>], [<span class="dv">61</span>, <span class="dv">62</span>]]</code></pre></div>
+<div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+<p><img style="width:100%" src="../../images/DynamicStitch.png" alt></p>
+</div>
+<h5 id="args-45">Args:</h5>
+<ul>
+<li><b><code>indices</code></b>: A list of at least 1 <code>Tensor</code> objects of type <code>int32</code>.</li>
+<li><b><code>data</code></b>: A list with the same number of <code>Tensor</code> objects as <code>indices</code> of <code>Tensor</code> objects of the same type.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-45">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>data</code>.</p>
+<hr />
+<h3 id="tf.boolean_masktensor-mask-nameboolean_mask"><a name="//apple_ref/cpp/Function/boolean_mask" class="dashAnchor"></a><code id="boolean_mask">tf.boolean_mask(tensor, mask, name='boolean_mask')</code></h3>
+<p>Apply boolean mask to tensor. Numpy equivalent is <code>tensor[mask]</code>.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># 1-D example</span>
+tensor <span class="op">=</span> [<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]
+mask <span class="op">=</span> np.array([<span class="va">True</span>, <span class="va">False</span>, <span class="va">True</span>, <span class="va">False</span>])
+boolean_mask(tensor, mask) <span class="op">==&gt;</span> [<span class="dv">0</span>, <span class="dv">2</span>]</code></pre></div>
+<p>In general, <code>0 &lt; dim(mask) = K &lt;= dim(tensor)</code>, and <code>mask</code>'s shape must match the first K dimensions of <code>tensor</code>'s shape. We then have: <code>boolean_mask(tensor, mask)[i, j1,...,jd] = tensor[i1,...,iK,j1,...,jd]</code> where <code>(i1,...,iK)</code> is the ith <code>True</code> entry of <code>mask</code> (row-major order).</p>
+<h5 id="args-46">Args:</h5>
+<ul>
+<li><b><code>tensor</code></b>: N-D tensor.</li>
+<li><b><code>mask</code></b>: K-D boolean tensor, K &lt;= N and K must be known statically.</li>
+<li><b><code>name</code></b>: A name for this operation (optional).</li>
+</ul>
+<h5 id="returns-46">Returns:</h5>
+<p>(N-K+1)-dimensional tensor populated by entries in <code>tensor</code> corresponding to <code>True</code> values in <code>mask</code>.</p>
+<h5 id="raises-13">Raises:</h5>
+<ul>
+<li><p><b><code>ValueError</code></b>: If shapes do not conform.</p></li>
+<li><p><b><code>Examples</code></b>:</p></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># 2-D example</span>
+tensor <span class="op">=</span> [[<span class="dv">1</span>, <span class="dv">2</span>], [<span class="dv">3</span>, <span class="dv">4</span>], [<span class="dv">5</span>, <span class="dv">6</span>]]
+mask <span class="op">=</span> np.array([<span class="va">True</span>, <span class="va">False</span>, <span class="va">True</span>])
+boolean_mask(tensor, mask) <span class="op">==&gt;</span> [[<span class="dv">1</span>, <span class="dv">2</span>], [<span class="dv">5</span>, <span class="dv">6</span>]]</code></pre></div>
+<hr />
+<h3 id="tf.one_hotindices-depth-on_valuenone-off_valuenone-axisnone-dtypenone-namenone"><a name="//apple_ref/cpp/Function/one_hot" class="dashAnchor"></a><code id="one_hot">tf.one_hot(indices, depth, on_value=None, off_value=None, axis=None, dtype=None, name=None)</code></h3>
+<p>Returns a one-hot tensor.</p>
+<p>The locations represented by indices in <code>indices</code> take value <code>on_value</code>, while all other locations take value <code>off_value</code>.</p>
+<p><code>on_value</code> and <code>off_value</code> must have matching data types. If <code>dtype</code> is also provided, they must be the same data type as specified by <code>dtype</code>.</p>
+<p>If <code>on_value</code> is not provided, it will default to the value <code>1</code> with type <code>dtype</code></p>
+<p>If <code>off_value</code> is not provided, it will default to the value <code>0</code> with type <code>dtype</code></p>
+<p>If the input <code>indices</code> is rank <code>N</code>, the output will have rank <code>N+1</code>. The new axis is created at dimension <code>axis</code> (default: the new axis is appended at the end).</p>
+<p>If <code>indices</code> is a scalar the output shape will be a vector of length <code>depth</code></p>
+<p>If <code>indices</code> is a vector of length <code>features</code>, the output shape will be:</p>
+<pre><code>  features x depth if axis == -1
+  depth x features if axis == 0</code></pre>
+<p>If <code>indices</code> is a matrix (batch) with shape <code>[batch, features]</code>, the output shape will be:</p>
+<pre><code>  batch x features x depth if axis == -1
+  batch x depth x features if axis == 1
+  depth x batch x features if axis == 0</code></pre>
+<p>If <code>dtype</code> is not provided, it will attempt to assume the data type of <code>on_value</code> or <code>off_value</code>, if one or both are passed in. If none of <code>on_value</code>, <code>off_value</code>, or <code>dtype</code> are provided, <code>dtype</code> will default to the value <code>tf.float32</code>.</p>
+<p>Note: If a non-numeric data type output is desired (<code>tf.string</code>, <code>tf.bool</code>, etc.), both <code>on_value</code> and <code>off_value</code> <em>must</em> be provided to <code>one_hot</code>.</p>
+<h1 id="examples">Examples</h1>
+<p>Suppose that</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">  indices <span class="op">=</span> [<span class="dv">0</span>, <span class="dv">2</span>, <span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>]
+  depth <span class="op">=</span> <span class="dv">3</span>
+  on_value <span class="op">=</span> <span class="fl">5.0</span>
+  off_value <span class="op">=</span> <span class="fl">0.0</span>
+  axis <span class="op">=</span> <span class="op">-</span><span class="dv">1</span></code></pre></div>
+<p>Then output is <code>[4 x 3]</code>:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">  output <span class="op">=</span>
+  [<span class="fl">5.0</span> <span class="fl">0.0</span> <span class="fl">0.0</span>]  <span class="op">//</span> one_hot(<span class="dv">0</span>)
+  [<span class="fl">0.0</span> <span class="fl">0.0</span> <span class="fl">5.0</span>]  <span class="op">//</span> one_hot(<span class="dv">2</span>)
+  [<span class="fl">0.0</span> <span class="fl">0.0</span> <span class="fl">0.0</span>]  <span class="op">//</span> one_hot(<span class="op">-</span><span class="dv">1</span>)
+  [<span class="fl">0.0</span> <span class="fl">5.0</span> <span class="fl">0.0</span>]  <span class="op">//</span> one_hot(<span class="dv">1</span>)</code></pre></div>
+<p>Suppose that</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">  indices <span class="op">=</span> [[<span class="dv">0</span>, <span class="dv">2</span>], [<span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>]]
+  depth <span class="op">=</span> <span class="dv">3</span>
+  on_value <span class="op">=</span> <span class="fl">1.0</span>
+  off_value <span class="op">=</span> <span class="fl">0.0</span>
+  axis <span class="op">=</span> <span class="op">-</span><span class="dv">1</span></code></pre></div>
+<p>Then output is <code>[2 x 2 x 3]</code>:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">  output <span class="op">=</span>
+  [
+    [<span class="fl">1.0</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>]  <span class="op">//</span> one_hot(<span class="dv">0</span>)
+    [<span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">1.0</span>]  <span class="op">//</span> one_hot(<span class="dv">2</span>)
+  ][
+    [<span class="fl">0.0</span>, <span class="fl">1.0</span>, <span class="fl">0.0</span>]  <span class="op">//</span> one_hot(<span class="dv">1</span>)
+    [<span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>]  <span class="op">//</span> one_hot(<span class="op">-</span><span class="dv">1</span>)
+  ]</code></pre></div>
+<p>Using default values for <code>on_value</code> and <code>off_value</code>:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">  indices <span class="op">=</span> [<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>]
+  depth <span class="op">=</span> <span class="dv">3</span></code></pre></div>
+<p>The output will be</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">  output <span class="op">=</span>
+  [[<span class="dv">1</span>., <span class="dv">0</span>., <span class="dv">0</span>.],
+   [<span class="dv">0</span>., <span class="dv">1</span>., <span class="dv">0</span>.],
+   [<span class="dv">0</span>., <span class="dv">0</span>., <span class="dv">1</span>.]]</code></pre></div>
+<h5 id="args-47">Args:</h5>
+<ul>
+<li><b><code>indices</code></b>: A <code>Tensor</code> of indices.</li>
+<li><b><code>depth</code></b>: A scalar defining the depth of the one hot dimension.</li>
+<li><b><code>on_value</code></b>: A scalar defining the value to fill in output when <code>indices[j] = i</code>. (default: 1)</li>
+<li><b><code>off_value</code></b>: A scalar defining the value to fill in output when <code>indices[j] != i</code>. (default: 0)</li>
+<li><b><code>axis</code></b>: The axis to fill (default: -1, a new inner-most axis).</li>
+<li><b><code>dtype</code></b>: The data type of the output tensor.</li>
+</ul>
+<h5 id="returns-47">Returns:</h5>
+<ul>
+<li><b><code>output</code></b>: The one-hot tensor.</li>
+</ul>
+<h5 id="raises-14">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If dtype of either <code>on_value</code> or <code>off_value</code> don't match <code>dtype</code></li>
+<li><b><code>TypeError</code></b>: If dtype of <code>on_value</code> and <code>off_value</code> don't match one another</li>
+</ul>
+<hr />
+<h3 id="tf.sequence_masklengths-maxlennone-dtypetf.bool-namenone"><a name="//apple_ref/cpp/Function/sequence_mask" class="dashAnchor"></a><code id="sequence_mask">tf.sequence_mask(lengths, maxlen=None, dtype=tf.bool, name=None)</code></h3>
+<p>Return a mask tensor representing the first N positions of each row.</p>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.sequence_mask([<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">2</span>], <span class="dv">5</span>) <span class="op">=</span>
+  [[<span class="va">True</span>, <span class="va">False</span>, <span class="va">False</span>, <span class="va">False</span>, <span class="va">False</span>],
+   [<span class="va">True</span>, <span class="va">True</span>, <span class="va">True</span>, <span class="va">False</span>, <span class="va">False</span>],
+   [<span class="va">True</span>, <span class="va">True</span>, <span class="va">False</span>, <span class="va">False</span>, <span class="va">False</span>]]</code></pre></div>
+<h5 id="args-48">Args:</h5>
+<ul>
+<li><b><code>lengths</code></b>: 1D integer tensor, all its values &lt; maxlen.</li>
+<li><b><code>maxlen</code></b>: scalar integer tensor, maximum length of each row. Default: use maximum over lengths.</li>
+<li><b><code>dtype</code></b>: output type of the resulting tensor.</li>
+<li><b><code>name</code></b>: name of the op.</li>
+</ul>
+<h5 id="returns-48">Returns:</h5>
+<p>A 2D mask tensor, as shown in the example above, cast to specified dtype.</p>
+<h5 id="raises-15">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if the arguments have invalid rank.</li>
+</ul>
+<hr />
+<h3 id="tf.dequantizeinput-min_range-max_range-modenone-namenone"><a name="//apple_ref/cpp/Function/dequantize" class="dashAnchor"></a><code id="dequantize">tf.dequantize(input, min_range, max_range, mode=None, name=None)</code></h3>
+<p>Dequantize the 'input' tensor into a float Tensor.</p>
+<p>[min_range, max_range] are scalar floats that specify the range for the 'input' data. The 'mode' attribute controls exactly which calculations are used to convert the float values to their quantized equivalents.</p>
+<p>In 'MIN_COMBINED' mode, each value of the tensor will undergo the following:</p>
+<pre><code>if T == qint8, in[i] += (range(T) + 1)/ 2.0
+out[i] = min_range + (in[i]* (max_range - min_range) / range(T))</code></pre>
+<p>here <code>range(T) = numeric_limits&lt;T&gt;::max() - numeric_limits&lt;T&gt;::min()</code></p>
+<p><em>MIN_COMBINED Mode Example</em></p>
+<p>If the input comes from a QuantizedRelu6, the output type is quint8 (range of 0-255) but the possible range of QuantizedRelu6 is 0-6. The min_range and max_range values are therefore 0.0 and 6.0. Dequantize on quint8 will take each value, cast to float, and multiply by 6 / 255. Note that if quantizedtype is qint8, the operation will additionally add each value by 128 prior to casting.</p>
+<p>If the mode is 'MIN_FIRST', then this approach is used:</p>
+<pre><code>number_of_steps = 1 &lt;&lt; (# of bits in T)
+range_adjust = number_of_steps / (number_of_steps - 1)
+range = (range_max - range_min) * range_adjust
+range_scale = range / number_of_steps
+const double offset_input = static_cast&lt;double&gt;(input) - lowest_quantized;
+result = range_min + ((input - numeric_limits&lt;T&gt;::min()) * range_scale)</code></pre>
+<h5 id="args-49">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>qint8</code>, <code>quint8</code>, <code>qint16</code>, <code>quint16</code>, <code>qint32</code>.</li>
+<li><b><code>min_range</code></b>: A <code>Tensor</code> of type <code>float32</code>. The minimum scalar value possibly produced for the input.</li>
+<li><b><code>max_range</code></b>: A <code>Tensor</code> of type <code>float32</code>. The maximum scalar value possibly produced for the input.</li>
+<li><b><code>mode</code></b>: An optional <code>string</code> from: <code>&quot;MIN_COMBINED&quot;, &quot;MIN_FIRST&quot;</code>. Defaults to <code>&quot;MIN_COMBINED&quot;</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-49">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>float32</code>.</p>
+<hr />
+<h3 id="tf.quantize_v2input-min_range-max_range-t-modenone-namenone"><a name="//apple_ref/cpp/Function/quantize_v2" class="dashAnchor"></a><code id="quantize_v2">tf.quantize_v2(input, min_range, max_range, T, mode=None, name=None)</code></h3>
+<p>Quantize the 'input' tensor of type float to 'output' tensor of type 'T'.</p>
+<p>[min_range, max_range] are scalar floats that specify the range for the 'input' data. The 'mode' attribute controls exactly which calculations are used to convert the float values to their quantized equivalents.</p>
+<p>In 'MIN_COMBINED' mode, each value of the tensor will undergo the following:</p>
+<pre><code>out[i] = (in[i] - min_range) * range(T) / (max_range - min_range)
+if T == qint8, out[i] -= (range(T) + 1) / 2.0</code></pre>
+<p>here <code>range(T) = numeric_limits&lt;T&gt;::max() - numeric_limits&lt;T&gt;::min()</code></p>
+<p><em>MIN_COMBINED Mode Example</em></p>
+<p>Assume the input is type float and has a possible range of [0.0, 6.0] and the output type is quint8 ([0, 255]). The min_range and max_range values should be specified as 0.0 and 6.0. Quantizing from float to quint8 will multiply each value of the input by 255/6 and cast to quint8.</p>
+<p>If the output type was qint8 ([-128, 127]), the operation will additionally subtract each value by 128 prior to casting, so that the range of values aligns with the range of qint8.</p>
+<p>If the mode is 'MIN_FIRST', then this approach is used:</p>
+<pre><code>number_of_steps = 1 &lt;&lt; (# of bits in T)
+range_adjust = number_of_steps / (number_of_steps - 1)
+range = (range_max - range_min) * range_adjust
+range_scale = number_of_steps / range
+quantized = round(input * range_scale) - round(range_min * range_scale) +
+  numeric_limits&lt;T&gt;::min()
+quantized = max(quantized, numeric_limits&lt;T&gt;::min())
+quantized = min(quantized, numeric_limits&lt;T&gt;::max())</code></pre>
+<p>The biggest difference between this and MIN_COMBINED is that the minimum range is rounded first, before it's subtracted from the rounded value. With MIN_COMBINED, a small bias is introduced where repeated iterations of quantizing and dequantizing will introduce a larger and larger error.</p>
+<p>One thing to watch out for is that the operator may choose to adjust the requested minimum and maximum values slightly during the quantization process, so you should always use the output ports as the range for further calculations. For example, if the requested minimum and maximum values are close to equal, they will be separated by a small epsilon value to prevent ill-formed quantized buffers from being created. Otherwise, you can end up with buffers where all the quantized values map to the same float value, which causes problems for operations that have to perform further calculations on them.</p>
+<h5 id="args-50">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code> of type <code>float32</code>.</li>
+<li><b><code>min_range</code></b>: A <code>Tensor</code> of type <code>float32</code>. The minimum scalar value possibly produced for the input.</li>
+<li><b><code>max_range</code></b>: A <code>Tensor</code> of type <code>float32</code>. The maximum scalar value possibly produced for the input.</li>
+<li><b><code>T</code></b>: A <code>tf.DType</code> from: <code>tf.qint8, tf.quint8, tf.qint16, tf.quint16, tf.qint32</code>.</li>
+<li><b><code>mode</code></b>: An optional <code>string</code> from: <code>&quot;MIN_COMBINED&quot;, &quot;MIN_FIRST&quot;</code>. Defaults to <code>&quot;MIN_COMBINED&quot;</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-50">Returns:</h5>
+<p>A tuple of <code>Tensor</code> objects (output, output_min, output_max).</p>
+<ul>
+<li><b><code>output</code></b>: A <code>Tensor</code> of type <code>T</code>. The quantized data produced from the float input.</li>
+<li><b><code>output_min</code></b>: A <code>Tensor</code> of type <code>float32</code>. The actual minimum scalar value used for the output.</li>
+<li><b><code>output_max</code></b>: A <code>Tensor</code> of type <code>float32</code>. The actual maximum scalar value used for the output.</li>
+</ul>
+<hr />
+<h3 id="tf.quantized_concatconcat_dim-values-input_mins-input_maxes-namenone"><a name="//apple_ref/cpp/Function/quantized_concat" class="dashAnchor"></a><code id="quantized_concat">tf.quantized_concat(concat_dim, values, input_mins, input_maxes, name=None)</code></h3>
+<p>Concatenates quantized tensors along one dimension.</p>
+<h5 id="args-51">Args:</h5>
+<ul>
+<li><b><code>concat_dim</code></b>: A <code>Tensor</code> of type <code>int32</code>. 0-D. The dimension along which to concatenate. Must be in the range [0, rank(values)).</li>
+<li><b><code>values</code></b>: A list of at least 2 <code>Tensor</code> objects of the same type. The <code>N</code> Tensors to concatenate. Their ranks and types must match, and their sizes must match in all dimensions except <code>concat_dim</code>.</li>
+<li><b><code>input_mins</code></b>: A list with the same number of <code>Tensor</code> objects as <code>values</code> of <code>Tensor</code> objects of type <code>float32</code>. The minimum scalar values for each of the input tensors.</li>
+<li><b><code>input_maxes</code></b>: A list with the same number of <code>Tensor</code> objects as <code>values</code> of <code>Tensor</code> objects of type <code>float32</code>. The maximum scalar values for each of the input tensors.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-51">Returns:</h5>
+<p>A tuple of <code>Tensor</code> objects (output, output_min, output_max).</p>
+<ul>
+<li><b><code>output</code></b>: A <code>Tensor</code>. Has the same type as <code>values</code>. A <code>Tensor</code> with the concatenation of values stacked along the <code>concat_dim</code> dimension. This tensor's shape matches that of <code>values</code> except in <code>concat_dim</code> where it has the sum of the sizes.</li>
+<li><b><code>output_min</code></b>: A <code>Tensor</code> of type <code>float32</code>. The float value that the minimum quantized output value represents.</li>
+<li><b><code>output_max</code></b>: A <code>Tensor</code> of type <code>float32</code>. The float value that the maximum quantized output value represents.</li>
+</ul>
+<hr />
+<h3 id="tf.setdiff1dx-y-index_dtypetf.int32-namenone"><a name="//apple_ref/cpp/Function/setdiff1d" class="dashAnchor"></a><code id="setdiff1d">tf.setdiff1d(x, y, index_dtype=tf.int32, name=None)</code></h3>
+<p>Computes the difference between two lists of numbers or strings.</p>
+<p>Given a list <code>x</code> and a list <code>y</code>, this operation returns a list <code>out</code> that represents all values that are in <code>x</code> but not in <code>y</code>. The returned list <code>out</code> is sorted in the same order that the numbers appear in <code>x</code> (duplicates are preserved). This operation also returns a list <code>idx</code> that represents the position of each <code>out</code> element in <code>x</code>. In other words:</p>
+<p><code>out[i] = x[idx[i]] for i in [0, 1, ..., len(out) - 1]</code></p>
+<p>For example, given this input:</p>
+<pre class="prettyprint"><code>x = [1, 2, 3, 4, 5, 6]
+y = [1, 3, 5]</code></pre>
+<p>This operation would return:</p>
+<pre class="prettyprint"><code>out ==&gt; [2, 4, 6]
+idx ==&gt; [1, 3, 5]</code></pre>
+<h5 id="args-52">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. 1-D. Values to keep.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>. 1-D. Values to remove.</li>
+<li><b><code>out_idx</code></b>: An optional <code>tf.DType</code> from: <code>tf.int32, tf.int64</code>. Defaults to <code>tf.int32</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-52">Returns:</h5>
+<p>A tuple of <code>Tensor</code> objects (out, idx).</p>
+<ul>
+<li><b><code>out</code></b>: A <code>Tensor</code>. Has the same type as <code>x</code>. 1-D. Values present in <code>x</code> but not in <code>y</code>.</li>
+<li><b><code>idx</code></b>: A <code>Tensor</code> of type <code>out_idx</code>. 1-D. Positions of <code>x</code> values preserved in <code>out</code>.</li>
+</ul>
+<h2 id="fake-quantization">Fake quantization</h2>
+<p>Operations used to help train for better quantization accuracy.</p>
+<hr />
+<h3 id="tf.fake_quant_with_min_max_argsinputs-minnone-maxnone-namenone"><a name="//apple_ref/cpp/Function/fake_quant_with_min_max_args" class="dashAnchor"></a><code id="fake_quant_with_min_max_args">tf.fake_quant_with_min_max_args(inputs, min=None, max=None, name=None)</code></h3>
+<p>Fake-quantize the 'inputs' tensor, type float to 'outputs' tensor of same type.</p>
+<p>Attributes [min; max] define the clamping range for the 'inputs' data. Op divides this range into 255 steps (total of 256 values), then replaces each 'inputs' value with the closest of the quantized step values.</p>
+<p>Quantization is called fake since the output is still in floating point.</p>
+<h5 id="args-53">Args:</h5>
+<ul>
+<li><b><code>inputs</code></b>: A <code>Tensor</code> of type <code>float32</code>.</li>
+<li><b><code>min</code></b>: An optional <code>float</code>. Defaults to <code>-6</code>.</li>
+<li><b><code>max</code></b>: An optional <code>float</code>. Defaults to <code>6</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-53">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>float32</code>.</p>
+<hr />
+<h3 id="tf.fake_quant_with_min_max_args_gradientgradients-inputs-minnone-maxnone-namenone"><a name="//apple_ref/cpp/Function/fake_quant_with_min_max_args_gradient" class="dashAnchor"></a><code id="fake_quant_with_min_max_args_gradient">tf.fake_quant_with_min_max_args_gradient(gradients, inputs, min=None, max=None, name=None)</code></h3>
+<p>Compute gradients for a FakeQuantWithMinMaxArgs operation.</p>
+<h5 id="args-54">Args:</h5>
+<ul>
+<li><b><code>gradients</code></b>: A <code>Tensor</code> of type <code>float32</code>. Backpropagated gradients above the FakeQuantWithMinMaxArgs operation.</li>
+<li><b><code>inputs</code></b>: A <code>Tensor</code> of type <code>float32</code>. Values passed as inputs to the FakeQuantWithMinMaxArgs operation.</li>
+<li><b><code>min</code></b>: An optional <code>float</code>. Defaults to <code>-6</code>.</li>
+<li><b><code>max</code></b>: An optional <code>float</code>. Defaults to <code>6</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-54">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>float32</code>. Backpropagated gradients below the FakeQuantWithMinMaxArgs operation: <code>gradients * (inputs &gt;= min &amp;&amp; inputs &lt;= max)</code>.</p>
+<hr />
+<h3 id="tf.fake_quant_with_min_max_varsinputs-min-max-namenone"><a name="//apple_ref/cpp/Function/fake_quant_with_min_max_vars" class="dashAnchor"></a><code id="fake_quant_with_min_max_vars">tf.fake_quant_with_min_max_vars(inputs, min, max, name=None)</code></h3>
+<p>Fake-quantize the 'inputs' tensor of type float and shape <code>[b, h, w, d]</code> via</p>
+<p>global float scalars <code>min</code> and <code>max</code> to 'outputs' tensor of same shape as <code>inputs</code>.</p>
+<p>[min; max] is the clamping range for the 'inputs' data. Op divides this range into 255 steps (total of 256 values), then replaces each 'inputs' value with the closest of the quantized step values.</p>
+<p>This operation has a gradient and thus allows for training <code>min</code> and <code>max</code> values.</p>
+<h5 id="args-55">Args:</h5>
+<ul>
+<li><b><code>inputs</code></b>: A <code>Tensor</code> of type <code>float32</code>.</li>
+<li><b><code>min</code></b>: A <code>Tensor</code> of type <code>float32</code>.</li>
+<li><b><code>max</code></b>: A <code>Tensor</code> of type <code>float32</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-55">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>float32</code>.</p>
+<hr />
+<h3 id="tf.fake_quant_with_min_max_vars_gradientgradients-inputs-min-max-namenone"><a name="//apple_ref/cpp/Function/fake_quant_with_min_max_vars_gradient" class="dashAnchor"></a><code id="fake_quant_with_min_max_vars_gradient">tf.fake_quant_with_min_max_vars_gradient(gradients, inputs, min, max, name=None)</code></h3>
+<p>Compute gradients for a FakeQuantWithMinMaxVars operation.</p>
+<h5 id="args-56">Args:</h5>
+<ul>
+<li><b><code>gradients</code></b>: A <code>Tensor</code> of type <code>float32</code>. Backpropagated gradients above the FakeQuantWithMinMaxVars operation.</li>
+<li><b><code>inputs</code></b>: A <code>Tensor</code> of type <code>float32</code>. Values passed as inputs to the FakeQuantWithMinMaxVars operation. min, max: Quantization interval, scalar floats.</li>
+<li><b><code>min</code></b>: A <code>Tensor</code> of type <code>float32</code>.</li>
+<li><b><code>max</code></b>: A <code>Tensor</code> of type <code>float32</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-56">Returns:</h5>
+<p>A tuple of <code>Tensor</code> objects (backprops_wrt_input, backprop_wrt_min, backprop_wrt_max).</p>
+<ul>
+<li><b><code>backprops_wrt_input</code></b>: A <code>Tensor</code> of type <code>float32</code>. Backpropagated gradients w.r.t. inputs: <code>gradients * (inputs &gt;= min &amp;&amp; inputs &lt;= max)</code>.</li>
+<li><b><code>backprop_wrt_min</code></b>: A <code>Tensor</code> of type <code>float32</code>. Backpropagated gradients w.r.t. min parameter: <code>sum(gradients * (inputs &lt; min))</code>.</li>
+<li><b><code>backprop_wrt_max</code></b>: A <code>Tensor</code> of type <code>float32</code>. Backpropagated gradients w.r.t. max parameter: <code>sum(gradients * (inputs &gt; max))</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.fake_quant_with_min_max_vars_per_channelinputs-min-max-namenone"><a name="//apple_ref/cpp/Function/fake_quant_with_min_max_vars_per_channel" class="dashAnchor"></a><code id="fake_quant_with_min_max_vars_per_channel">tf.fake_quant_with_min_max_vars_per_channel(inputs, min, max, name=None)</code></h3>
+<p>Fake-quantize the 'inputs' tensor of type float and one of the shapes: <code>[d]</code>,</p>
+<p><code>[b, d]</code> <code>[b, h, w, d]</code> via per-channel floats <code>min</code> and <code>max</code> of shape <code>[d]</code> to 'outputs' tensor of same shape as <code>inputs</code>.</p>
+<p>[min; max] is the clamping range for the 'inputs' data in the corresponding depth channel. Op divides this range into 255 steps (total of 256 values), then replaces each 'inputs' value with the closest of the quantized step values.</p>
+<p>This operation has a gradient and thus allows for training <code>min</code> and <code>max</code> values.</p>
+<h5 id="args-57">Args:</h5>
+<ul>
+<li><b><code>inputs</code></b>: A <code>Tensor</code> of type <code>float32</code>.</li>
+<li><b><code>min</code></b>: A <code>Tensor</code> of type <code>float32</code>.</li>
+<li><b><code>max</code></b>: A <code>Tensor</code> of type <code>float32</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-57">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>float32</code>.</p>
+<hr />
+<h3 id="tf.fake_quant_with_min_max_vars_per_channel_gradientgradients-inputs-min-max-namenone"><a name="//apple_ref/cpp/Function/fake_quant_with_min_max_vars_per_channel_gradient" class="dashAnchor"></a><code id="fake_quant_with_min_max_vars_per_channel_gradient">tf.fake_quant_with_min_max_vars_per_channel_gradient(gradients, inputs, min, max, name=None)</code></h3>
+<p>Compute gradients for a FakeQuantWithMinMaxVarsPerChannel operation.</p>
+<h5 id="args-58">Args:</h5>
+<ul>
+<li><b><code>gradients</code></b>: A <code>Tensor</code> of type <code>float32</code>. Backpropagated gradients above the FakeQuantWithMinMaxVars operation, shape one of: <code>[d]</code>, <code>[b, d]</code>, <code>[b, h, w, d]</code>.</li>
+<li><b><code>inputs</code></b>: A <code>Tensor</code> of type <code>float32</code>. Values passed as inputs to the FakeQuantWithMinMaxVars operation, shape same as <code>gradients</code>. min, max: Quantization interval, floats of shape <code>[d]</code>.</li>
+<li><b><code>min</code></b>: A <code>Tensor</code> of type <code>float32</code>.</li>
+<li><b><code>max</code></b>: A <code>Tensor</code> of type <code>float32</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-58">Returns:</h5>
+<p>A tuple of <code>Tensor</code> objects (backprops_wrt_input, backprop_wrt_min, backprop_wrt_max).</p>
+<ul>
+<li><b><code>backprops_wrt_input</code></b>: A <code>Tensor</code> of type <code>float32</code>. Backpropagated gradients w.r.t. inputs, shape same as <code>inputs</code>: <code>gradients * (inputs &gt;= min &amp;&amp; inputs &lt;= max)</code>.</li>
+<li><b><code>backprop_wrt_min</code></b>: A <code>Tensor</code> of type <code>float32</code>. Backpropagated gradients w.r.t. min parameter, shape <code>[d]</code>: <code>sum_per_d(gradients * (inputs &lt; min))</code>.</li>
+<li><b><code>backprop_wrt_max</code></b>: A <code>Tensor</code> of type <code>float32</code>. Backpropagated gradients w.r.t. max parameter, shape <code>[d]</code>: <code>sum_per_d(gradients * (inputs &gt; max))</code>.</li>
+</ul>

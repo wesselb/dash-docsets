@@ -1,0 +1,1432 @@
+<!-- This file is machine generated: DO NOT EDIT! -->
+<h1 id="monitors-contrib">Monitors (contrib)</h1>
+<p>[TOC]</p>
+<p>Monitors allow user instrumentation of the training process.</p>
+<p>Monitors are useful to track training, report progress, request early stopping and more. Monitors use the observer pattern and notify at the following points:</p>
+<ul>
+<li>when training begins</li>
+<li>before a training step</li>
+<li>after a training step</li>
+<li>when training ends</li>
+</ul>
+<p>Monitors are not intended to be reusable.</p>
+<p>There are a few pre-defined monitors:</p>
+<ul>
+<li><code>CaptureVariable</code>: saves a variable's values</li>
+<li><code>GraphDump</code>: intended for debug only - saves all tensor values</li>
+<li><code>PrintTensor</code>: outputs one or more tensor values to log</li>
+<li><code>SummarySaver</code>: saves summaries to a summary writer</li>
+<li><code>ValidationMonitor</code>: runs model validation, by periodically calculating eval metrics on a separate data set; supports optional early stopping</li>
+</ul>
+<p>For more specific needs, you can create custom monitors by extending one of the following classes:</p>
+<ul>
+<li><code>BaseMonitor</code>: the base class for all monitors</li>
+<li><code>EveryN</code>: triggers a callback every N training steps</li>
+</ul>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">  <span class="kw">class</span> ExampleMonitor(monitors.BaseMonitor):
+    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>):
+      <span class="bu">print</span> <span class="st">&#39;Init&#39;</span>
+
+    <span class="kw">def</span> begin(<span class="va">self</span>, max_steps):
+      <span class="bu">print</span> <span class="st">&#39;Starting run. Will train until step </span><span class="sc">%d</span><span class="st">.&#39;</span> <span class="op">%</span> max_steps
+
+    <span class="kw">def</span> end(<span class="va">self</span>):
+      <span class="bu">print</span> <span class="st">&#39;Completed run.&#39;</span>
+
+    <span class="kw">def</span> step_begin(<span class="va">self</span>, step):
+      <span class="bu">print</span> <span class="st">&#39;About to run step </span><span class="sc">%d</span><span class="st">...&#39;</span> <span class="op">%</span> step
+      <span class="cf">return</span> [<span class="st">&#39;loss_1:0&#39;</span>]
+
+    <span class="kw">def</span> step_end(<span class="va">self</span>, step, outputs):
+      <span class="bu">print</span> <span class="st">&#39;Done running step </span><span class="sc">%d</span><span class="st">. The value of &quot;loss&quot; tensor: </span><span class="sc">%s</span><span class="st">&#39;</span> <span class="op">%</span> (
+        step, outputs[<span class="st">&#39;loss_1:0&#39;</span>])
+
+  linear_regressor <span class="op">=</span> LinearRegressor()
+  example_monitor <span class="op">=</span> ExampleMonitor()
+  linear_regressor.fit(
+    x, y, steps<span class="op">=</span><span class="dv">2</span>, batch_size<span class="op">=</span><span class="dv">1</span>, monitors<span class="op">=</span>[example_monitor])</code></pre></div>
+<h2 id="ops">Ops</h2>
+<hr />
+<h3 id="tf.contrib.learn.monitors.get_default_monitorsloss_opnone-summary_opnone-save_summary_steps100-output_dirnone-summary_writernone"><a name="//apple_ref/cpp/Function/get_default_monitors" class="dashAnchor"></a><code id="get_default_monitors">tf.contrib.learn.monitors.get_default_monitors(loss_op=None, summary_op=None, save_summary_steps=100, output_dir=None, summary_writer=None)</code></h3>
+<p>Returns a default set of typically-used monitors.</p>
+<h5 id="args">Args:</h5>
+<ul>
+<li><b><code>loss_op</code></b>: <code>Tensor</code>, the loss tensor. This will be printed using <code>PrintTensor</code> at the default interval.</li>
+<li><b><code>summary_op</code></b>: See <code>SummarySaver</code>.</li>
+<li><b><code>save_summary_steps</code></b>: See <code>SummarySaver</code>.</li>
+<li><b><code>output_dir</code></b>: See <code>SummarySaver</code>.</li>
+<li><b><code>summary_writer</code></b>: See <code>SummarySaver</code>.</li>
+</ul>
+<h5 id="returns">Returns:</h5>
+<p><code>list</code> of monitors.</p>
+<hr />
+<h3 id="class-tf.contrib.learn.monitors.basemonitor"><a name="//apple_ref/cpp/Class/BaseMonitor" class="dashAnchor"></a><code id="BaseMonitor">class tf.contrib.learn.monitors.BaseMonitor</code></h3>
+<p>Base class for Monitors.</p>
+<p>Defines basic interfaces of Monitors. Monitors can either be run on all workers or, more commonly, restricted to run exclusively on the elected chief worker. - - -</p>
+<h4 id="tf.contrib.learn.monitors.basemonitor.__init__args-kwargs"><code id="BaseMonitor.__init__">tf.contrib.learn.monitors.BaseMonitor.__init__(*args, **kwargs)</code></h4>
+<p>DEPRECATED FUNCTION</p>
+<p>THIS FUNCTION IS DEPRECATED. It will be removed after 2016-12-05. Instructions for updating: Monitors are deprecated. Please use tf.train.SessionRunHook.</p>
+<hr />
+<h4 id="tf.contrib.learn.monitors.basemonitor.beginmax_stepsnone"><code id="BaseMonitor.begin">tf.contrib.learn.monitors.BaseMonitor.begin(max_steps=None)</code></h4>
+<p>Called at the beginning of training.</p>
+<p>When called, the default graph is the one we are executing.</p>
+<h5 id="args-1">Args:</h5>
+<ul>
+<li><b><code>max_steps</code></b>: <code>int</code>, the maximum global step this training will run until.</li>
+</ul>
+<h5 id="raises">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've already begun a run.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.basemonitor.endsessionnone"><code id="BaseMonitor.end">tf.contrib.learn.monitors.BaseMonitor.end(session=None)</code></h4>
+<p>Callback at the end of training/evaluation.</p>
+<h5 id="args-2">Args:</h5>
+<ul>
+<li><b><code>session</code></b>: A <code>tf.Session</code> object that can be used to run ops.</li>
+</ul>
+<h5 id="raises-1">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've not begun a run.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.basemonitor.epoch_beginepoch"><code id="BaseMonitor.epoch_begin">tf.contrib.learn.monitors.BaseMonitor.epoch_begin(epoch)</code></h4>
+<p>Begin epoch.</p>
+<h5 id="args-3">Args:</h5>
+<ul>
+<li><b><code>epoch</code></b>: <code>int</code>, the epoch number.</li>
+</ul>
+<h5 id="raises-2">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've already begun an epoch, or <code>epoch</code> &lt; 0.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.basemonitor.epoch_endepoch"><code id="BaseMonitor.epoch_end">tf.contrib.learn.monitors.BaseMonitor.epoch_end(epoch)</code></h4>
+<p>End epoch.</p>
+<h5 id="args-4">Args:</h5>
+<ul>
+<li><b><code>epoch</code></b>: <code>int</code>, the epoch number.</li>
+</ul>
+<h5 id="raises-3">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've not begun an epoch, or <code>epoch</code> number does not match.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.basemonitor.post_stepstep-session"><code id="BaseMonitor.post_step">tf.contrib.learn.monitors.BaseMonitor.post_step(step, session)</code></h4>
+<p>Callback after the step is finished.</p>
+<p>Called after step_end and receives session to perform extra session.run calls. If failure occurred in the process, will be called as well.</p>
+<h5 id="args-5">Args:</h5>
+<ul>
+<li><b><code>step</code></b>: <code>int</code>, global step of the model.</li>
+<li><b><code>session</code></b>: <code>Session</code> object.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.basemonitor.run_on_all_workers"><code id="BaseMonitor.run_on_all_workers">tf.contrib.learn.monitors.BaseMonitor.run_on_all_workers</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.basemonitor.set_estimatorestimator"><code id="BaseMonitor.set_estimator">tf.contrib.learn.monitors.BaseMonitor.set_estimator(estimator)</code></h4>
+<p>A setter called automatically by the target estimator.</p>
+<p>If the estimator is locked, this method does nothing.</p>
+<h5 id="args-6">Args:</h5>
+<ul>
+<li><b><code>estimator</code></b>: the estimator that this monitor monitors.</li>
+</ul>
+<h5 id="raises-4">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if the estimator is None.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.basemonitor.step_beginstep"><code id="BaseMonitor.step_begin">tf.contrib.learn.monitors.BaseMonitor.step_begin(step)</code></h4>
+<p>Callback before training step begins.</p>
+<p>You may use this callback to request evaluation of additional tensors in the graph.</p>
+<h5 id="args-7">Args:</h5>
+<ul>
+<li><b><code>step</code></b>: <code>int</code>, the current value of the global step.</li>
+</ul>
+<h5 id="returns-1">Returns:</h5>
+<p>List of <code>Tensor</code> objects or string tensor names to be run.</p>
+<h5 id="raises-5">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've already begun a step, or <code>step</code> &lt; 0, or <code>step</code> &gt; <code>max_steps</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.basemonitor.step_endstep-output"><code id="BaseMonitor.step_end">tf.contrib.learn.monitors.BaseMonitor.step_end(step, output)</code></h4>
+<p>Callback after training step finished.</p>
+<p>This callback provides access to the tensors/ops evaluated at this step, including the additional tensors for which evaluation was requested in <code>step_begin</code>.</p>
+<p>In addition, the callback has the opportunity to stop training by returning <code>True</code>. This is useful for early stopping, for example.</p>
+<p>Note that this method is not called if the call to <code>Session.run()</code> that followed the last call to <code>step_begin()</code> failed.</p>
+<h5 id="args-8">Args:</h5>
+<ul>
+<li><b><code>step</code></b>: <code>int</code>, the current value of the global step.</li>
+<li><b><code>output</code></b>: <code>dict</code> mapping <code>string</code> values representing tensor names to the value resulted from running these tensors. Values may be either scalars, for scalar tensors, or Numpy <code>array</code>, for non-scalar tensors.</li>
+</ul>
+<h5 id="returns-2">Returns:</h5>
+<p><code>bool</code>. True if training should stop.</p>
+<h5 id="raises-6">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've not begun a step, or <code>step</code> number does not match.</li>
+</ul>
+<hr />
+<h3 id="class-tf.contrib.learn.monitors.capturevariable"><a name="//apple_ref/cpp/Class/CaptureVariable" class="dashAnchor"></a><code id="CaptureVariable">class tf.contrib.learn.monitors.CaptureVariable</code></h3>
+<p>Captures a variable's values into a collection.</p>
+<p>This monitor is useful for unit testing. You should exercise caution when using this monitor in production, since it never discards values.</p>
+<p>This is an <code>EveryN</code> monitor and has consistent semantic for <code>every_n</code> and <code>first_n</code>. - - -</p>
+<h4 id="tf.contrib.learn.monitors.capturevariable.__init__var_name-every_n100-first_n1"><code id="CaptureVariable.__init__">tf.contrib.learn.monitors.CaptureVariable.__init__(var_name, every_n=100, first_n=1)</code></h4>
+<p>Initializes a CaptureVariable monitor.</p>
+<h5 id="args-9">Args:</h5>
+<ul>
+<li><b><code>var_name</code></b>: <code>string</code>. The variable name, including suffix (typically &quot;:0&quot;).</li>
+<li><b><code>every_n</code></b>: <code>int</code>, print every N steps. See <code>PrintN.</code></li>
+<li><b><code>first_n</code></b>: <code>int</code>, also print the first N steps. See <code>PrintN.</code></li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.capturevariable.beginmax_stepsnone"><code id="CaptureVariable.begin">tf.contrib.learn.monitors.CaptureVariable.begin(max_steps=None)</code></h4>
+<p>Called at the beginning of training.</p>
+<p>When called, the default graph is the one we are executing.</p>
+<h5 id="args-10">Args:</h5>
+<ul>
+<li><b><code>max_steps</code></b>: <code>int</code>, the maximum global step this training will run until.</li>
+</ul>
+<h5 id="raises-7">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've already begun a run.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.capturevariable.endsessionnone"><code id="CaptureVariable.end">tf.contrib.learn.monitors.CaptureVariable.end(session=None)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.capturevariable.epoch_beginepoch"><code id="CaptureVariable.epoch_begin">tf.contrib.learn.monitors.CaptureVariable.epoch_begin(epoch)</code></h4>
+<p>Begin epoch.</p>
+<h5 id="args-11">Args:</h5>
+<ul>
+<li><b><code>epoch</code></b>: <code>int</code>, the epoch number.</li>
+</ul>
+<h5 id="raises-8">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've already begun an epoch, or <code>epoch</code> &lt; 0.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.capturevariable.epoch_endepoch"><code id="CaptureVariable.epoch_end">tf.contrib.learn.monitors.CaptureVariable.epoch_end(epoch)</code></h4>
+<p>End epoch.</p>
+<h5 id="args-12">Args:</h5>
+<ul>
+<li><b><code>epoch</code></b>: <code>int</code>, the epoch number.</li>
+</ul>
+<h5 id="raises-9">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've not begun an epoch, or <code>epoch</code> number does not match.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.capturevariable.every_n_post_stepstep-session"><code id="CaptureVariable.every_n_post_step">tf.contrib.learn.monitors.CaptureVariable.every_n_post_step(step, session)</code></h4>
+<p>Callback after a step is finished or <code>end()</code> is called.</p>
+<h5 id="args-13">Args:</h5>
+<ul>
+<li><b><code>step</code></b>: <code>int</code>, the current value of the global step.</li>
+<li><b><code>session</code></b>: <code>Session</code> object.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.capturevariable.every_n_step_beginstep"><code id="CaptureVariable.every_n_step_begin">tf.contrib.learn.monitors.CaptureVariable.every_n_step_begin(step)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.capturevariable.every_n_step_endstep-outputs"><code id="CaptureVariable.every_n_step_end">tf.contrib.learn.monitors.CaptureVariable.every_n_step_end(step, outputs)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.capturevariable.post_stepstep-session"><code id="CaptureVariable.post_step">tf.contrib.learn.monitors.CaptureVariable.post_step(step, session)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.capturevariable.run_on_all_workers"><code id="CaptureVariable.run_on_all_workers">tf.contrib.learn.monitors.CaptureVariable.run_on_all_workers</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.capturevariable.set_estimatorestimator"><code id="CaptureVariable.set_estimator">tf.contrib.learn.monitors.CaptureVariable.set_estimator(estimator)</code></h4>
+<p>A setter called automatically by the target estimator.</p>
+<p>If the estimator is locked, this method does nothing.</p>
+<h5 id="args-14">Args:</h5>
+<ul>
+<li><b><code>estimator</code></b>: the estimator that this monitor monitors.</li>
+</ul>
+<h5 id="raises-10">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if the estimator is None.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.capturevariable.step_beginstep"><code id="CaptureVariable.step_begin">tf.contrib.learn.monitors.CaptureVariable.step_begin(step)</code></h4>
+<p>Overrides <code>BaseMonitor.step_begin</code>.</p>
+<p>When overriding this method, you must call the super implementation.</p>
+<h5 id="args-15">Args:</h5>
+<ul>
+<li><b><code>step</code></b>: <code>int</code>, the current value of the global step.</li>
+</ul>
+<h5 id="returns-3">Returns:</h5>
+<p>A <code>list</code>, the result of every_n_step_begin, if that was called this step, or an empty list otherwise.</p>
+<h5 id="raises-11">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if called more than once during a step.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.capturevariable.step_endstep-output"><code id="CaptureVariable.step_end">tf.contrib.learn.monitors.CaptureVariable.step_end(step, output)</code></h4>
+<p>Overrides <code>BaseMonitor.step_end</code>.</p>
+<p>When overriding this method, you must call the super implementation.</p>
+<h5 id="args-16">Args:</h5>
+<ul>
+<li><b><code>step</code></b>: <code>int</code>, the current value of the global step.</li>
+<li><b><code>output</code></b>: <code>dict</code> mapping <code>string</code> values representing tensor names to the value resulted from running these tensors. Values may be either scalars, for scalar tensors, or Numpy <code>array</code>, for non-scalar tensors.</li>
+</ul>
+<h5 id="returns-4">Returns:</h5>
+<p><code>bool</code>, the result of every_n_step_end, if that was called this step, or <code>False</code> otherwise.</p>
+<hr />
+<h4 id="tf.contrib.learn.monitors.capturevariable.values"><code id="CaptureVariable.values">tf.contrib.learn.monitors.CaptureVariable.values</code></h4>
+<p>Returns the values captured so far.</p>
+<h5 id="returns-5">Returns:</h5>
+<p><code>dict</code> mapping <code>int</code> step numbers to that values of the variable at the respective step.</p>
+<hr />
+<h3 id="class-tf.contrib.learn.monitors.checkpointsaver"><a name="//apple_ref/cpp/Class/CheckpointSaver" class="dashAnchor"></a><code id="CheckpointSaver">class tf.contrib.learn.monitors.CheckpointSaver</code></h3>
+<p>Saves checkpoints every N steps. - - -</p>
+<h4 id="tf.contrib.learn.monitors.checkpointsaver.__init__checkpoint_dir-save_secsnone-save_stepsnone-savernone-checkpoint_basenamemodel.ckpt-scaffoldnone"><code id="CheckpointSaver.__init__">tf.contrib.learn.monitors.CheckpointSaver.__init__(checkpoint_dir, save_secs=None, save_steps=None, saver=None, checkpoint_basename='model.ckpt', scaffold=None)</code></h4>
+<p>Initialize CheckpointSaver monitor.</p>
+<h5 id="args-17">Args:</h5>
+<ul>
+<li><b><code>checkpoint_dir</code></b>: <code>str</code>, base directory for the checkpoint files.</li>
+<li><b><code>save_secs</code></b>: <code>int</code>, save every N secs.</li>
+<li><b><code>save_steps</code></b>: <code>int</code>, save every N steps.</li>
+<li><b><code>saver</code></b>: <code>Saver</code> object, used for saving.</li>
+<li><b><code>checkpoint_basename</code></b>: <code>str</code>, base name for the checkpoint files.</li>
+<li><b><code>scaffold</code></b>: <code>Scaffold</code>, use to get saver object.</li>
+</ul>
+<h5 id="raises-12">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If both <code>save_steps</code> and <code>save_secs</code> are not <code>None</code>.</li>
+<li><b><code>ValueError</code></b>: If both <code>save_steps</code> and <code>save_secs</code> are <code>None</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.checkpointsaver.beginmax_stepsnone"><code id="CheckpointSaver.begin">tf.contrib.learn.monitors.CheckpointSaver.begin(max_steps=None)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.checkpointsaver.endsessionnone"><code id="CheckpointSaver.end">tf.contrib.learn.monitors.CheckpointSaver.end(session=None)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.checkpointsaver.epoch_beginepoch"><code id="CheckpointSaver.epoch_begin">tf.contrib.learn.monitors.CheckpointSaver.epoch_begin(epoch)</code></h4>
+<p>Begin epoch.</p>
+<h5 id="args-18">Args:</h5>
+<ul>
+<li><b><code>epoch</code></b>: <code>int</code>, the epoch number.</li>
+</ul>
+<h5 id="raises-13">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've already begun an epoch, or <code>epoch</code> &lt; 0.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.checkpointsaver.epoch_endepoch"><code id="CheckpointSaver.epoch_end">tf.contrib.learn.monitors.CheckpointSaver.epoch_end(epoch)</code></h4>
+<p>End epoch.</p>
+<h5 id="args-19">Args:</h5>
+<ul>
+<li><b><code>epoch</code></b>: <code>int</code>, the epoch number.</li>
+</ul>
+<h5 id="raises-14">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've not begun an epoch, or <code>epoch</code> number does not match.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.checkpointsaver.post_stepstep-session"><code id="CheckpointSaver.post_step">tf.contrib.learn.monitors.CheckpointSaver.post_step(step, session)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.checkpointsaver.run_on_all_workers"><code id="CheckpointSaver.run_on_all_workers">tf.contrib.learn.monitors.CheckpointSaver.run_on_all_workers</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.checkpointsaver.set_estimatorestimator"><code id="CheckpointSaver.set_estimator">tf.contrib.learn.monitors.CheckpointSaver.set_estimator(estimator)</code></h4>
+<p>A setter called automatically by the target estimator.</p>
+<p>If the estimator is locked, this method does nothing.</p>
+<h5 id="args-20">Args:</h5>
+<ul>
+<li><b><code>estimator</code></b>: the estimator that this monitor monitors.</li>
+</ul>
+<h5 id="raises-15">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if the estimator is None.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.checkpointsaver.step_beginstep"><code id="CheckpointSaver.step_begin">tf.contrib.learn.monitors.CheckpointSaver.step_begin(step)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.checkpointsaver.step_endstep-output"><code id="CheckpointSaver.step_end">tf.contrib.learn.monitors.CheckpointSaver.step_end(step, output)</code></h4>
+<p>Callback after training step finished.</p>
+<p>This callback provides access to the tensors/ops evaluated at this step, including the additional tensors for which evaluation was requested in <code>step_begin</code>.</p>
+<p>In addition, the callback has the opportunity to stop training by returning <code>True</code>. This is useful for early stopping, for example.</p>
+<p>Note that this method is not called if the call to <code>Session.run()</code> that followed the last call to <code>step_begin()</code> failed.</p>
+<h5 id="args-21">Args:</h5>
+<ul>
+<li><b><code>step</code></b>: <code>int</code>, the current value of the global step.</li>
+<li><b><code>output</code></b>: <code>dict</code> mapping <code>string</code> values representing tensor names to the value resulted from running these tensors. Values may be either scalars, for scalar tensors, or Numpy <code>array</code>, for non-scalar tensors.</li>
+</ul>
+<h5 id="returns-6">Returns:</h5>
+<p><code>bool</code>. True if training should stop.</p>
+<h5 id="raises-16">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've not begun a step, or <code>step</code> number does not match.</li>
+</ul>
+<hr />
+<h3 id="class-tf.contrib.learn.monitors.everyn"><a name="//apple_ref/cpp/Class/EveryN" class="dashAnchor"></a><code id="EveryN">class tf.contrib.learn.monitors.EveryN</code></h3>
+<p>Base class for monitors that execute callbacks every N steps.</p>
+<p>This class adds three new callbacks: - every_n_step_begin - every_n_step_end - every_n_post_step</p>
+<p>The callbacks are executed every n steps, or optionally every step for the first m steps, where m and n can both be user-specified.</p>
+<p>When extending this class, note that if you wish to use any of the <code>BaseMonitor</code> callbacks, you must call their respective super implementation:</p>
+<p>def step_begin(self, step): super(ExampleMonitor, self).step_begin(step) return []</p>
+<p>Failing to call the super implementation will cause unpredictable behavior.</p>
+<p>The <code>every_n_post_step()</code> callback is also called after the last step if it was not already called through the regular conditions. Note that <code>every_n_step_begin()</code> and <code>every_n_step_end()</code> do not receive that special treatment. - - -</p>
+<h4 id="tf.contrib.learn.monitors.everyn.__init__every_n_steps100-first_n_steps1"><code id="EveryN.__init__">tf.contrib.learn.monitors.EveryN.__init__(every_n_steps=100, first_n_steps=1)</code></h4>
+<p>Initializes an <code>EveryN</code> monitor.</p>
+<h5 id="args-22">Args:</h5>
+<ul>
+<li><b><code>every_n_steps</code></b>: <code>int</code>, the number of steps to allow between callbacks.</li>
+<li><b><code>first_n_steps</code></b>: <code>int</code>, specifying the number of initial steps during which the callbacks will always be executed, regardless of the value of <code>every_n_steps</code>. Note that this value is relative to the global step</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.everyn.beginmax_stepsnone"><code id="EveryN.begin">tf.contrib.learn.monitors.EveryN.begin(max_steps=None)</code></h4>
+<p>Called at the beginning of training.</p>
+<p>When called, the default graph is the one we are executing.</p>
+<h5 id="args-23">Args:</h5>
+<ul>
+<li><b><code>max_steps</code></b>: <code>int</code>, the maximum global step this training will run until.</li>
+</ul>
+<h5 id="raises-17">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've already begun a run.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.everyn.endsessionnone"><code id="EveryN.end">tf.contrib.learn.monitors.EveryN.end(session=None)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.everyn.epoch_beginepoch"><code id="EveryN.epoch_begin">tf.contrib.learn.monitors.EveryN.epoch_begin(epoch)</code></h4>
+<p>Begin epoch.</p>
+<h5 id="args-24">Args:</h5>
+<ul>
+<li><b><code>epoch</code></b>: <code>int</code>, the epoch number.</li>
+</ul>
+<h5 id="raises-18">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've already begun an epoch, or <code>epoch</code> &lt; 0.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.everyn.epoch_endepoch"><code id="EveryN.epoch_end">tf.contrib.learn.monitors.EveryN.epoch_end(epoch)</code></h4>
+<p>End epoch.</p>
+<h5 id="args-25">Args:</h5>
+<ul>
+<li><b><code>epoch</code></b>: <code>int</code>, the epoch number.</li>
+</ul>
+<h5 id="raises-19">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've not begun an epoch, or <code>epoch</code> number does not match.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.everyn.every_n_post_stepstep-session"><code id="EveryN.every_n_post_step">tf.contrib.learn.monitors.EveryN.every_n_post_step(step, session)</code></h4>
+<p>Callback after a step is finished or <code>end()</code> is called.</p>
+<h5 id="args-26">Args:</h5>
+<ul>
+<li><b><code>step</code></b>: <code>int</code>, the current value of the global step.</li>
+<li><b><code>session</code></b>: <code>Session</code> object.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.everyn.every_n_step_beginstep"><code id="EveryN.every_n_step_begin">tf.contrib.learn.monitors.EveryN.every_n_step_begin(step)</code></h4>
+<p>Callback before every n'th step begins.</p>
+<h5 id="args-27">Args:</h5>
+<ul>
+<li><b><code>step</code></b>: <code>int</code>, the current value of the global step.</li>
+</ul>
+<h5 id="returns-7">Returns:</h5>
+<p>A <code>list</code> of tensors that will be evaluated at this step.</p>
+<hr />
+<h4 id="tf.contrib.learn.monitors.everyn.every_n_step_endstep-outputs"><code id="EveryN.every_n_step_end">tf.contrib.learn.monitors.EveryN.every_n_step_end(step, outputs)</code></h4>
+<p>Callback after every n'th step finished.</p>
+<p>This callback provides access to the tensors/ops evaluated at this step, including the additional tensors for which evaluation was requested in <code>step_begin</code>.</p>
+<p>In addition, the callback has the opportunity to stop training by returning <code>True</code>. This is useful for early stopping, for example.</p>
+<h5 id="args-28">Args:</h5>
+<ul>
+<li><b><code>step</code></b>: <code>int</code>, the current value of the global step.</li>
+<li><b><code>outputs</code></b>: <code>dict</code> mapping <code>string</code> values representing tensor names to the value resulted from running these tensors. Values may be either scalars, for scalar tensors, or Numpy <code>array</code>, for non-scalar tensors.</li>
+</ul>
+<h5 id="returns-8">Returns:</h5>
+<p><code>bool</code>. True if training should stop.</p>
+<hr />
+<h4 id="tf.contrib.learn.monitors.everyn.post_stepstep-session"><code id="EveryN.post_step">tf.contrib.learn.monitors.EveryN.post_step(step, session)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.everyn.run_on_all_workers"><code id="EveryN.run_on_all_workers">tf.contrib.learn.monitors.EveryN.run_on_all_workers</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.everyn.set_estimatorestimator"><code id="EveryN.set_estimator">tf.contrib.learn.monitors.EveryN.set_estimator(estimator)</code></h4>
+<p>A setter called automatically by the target estimator.</p>
+<p>If the estimator is locked, this method does nothing.</p>
+<h5 id="args-29">Args:</h5>
+<ul>
+<li><b><code>estimator</code></b>: the estimator that this monitor monitors.</li>
+</ul>
+<h5 id="raises-20">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if the estimator is None.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.everyn.step_beginstep"><code id="EveryN.step_begin">tf.contrib.learn.monitors.EveryN.step_begin(step)</code></h4>
+<p>Overrides <code>BaseMonitor.step_begin</code>.</p>
+<p>When overriding this method, you must call the super implementation.</p>
+<h5 id="args-30">Args:</h5>
+<ul>
+<li><b><code>step</code></b>: <code>int</code>, the current value of the global step.</li>
+</ul>
+<h5 id="returns-9">Returns:</h5>
+<p>A <code>list</code>, the result of every_n_step_begin, if that was called this step, or an empty list otherwise.</p>
+<h5 id="raises-21">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if called more than once during a step.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.everyn.step_endstep-output"><code id="EveryN.step_end">tf.contrib.learn.monitors.EveryN.step_end(step, output)</code></h4>
+<p>Overrides <code>BaseMonitor.step_end</code>.</p>
+<p>When overriding this method, you must call the super implementation.</p>
+<h5 id="args-31">Args:</h5>
+<ul>
+<li><b><code>step</code></b>: <code>int</code>, the current value of the global step.</li>
+<li><b><code>output</code></b>: <code>dict</code> mapping <code>string</code> values representing tensor names to the value resulted from running these tensors. Values may be either scalars, for scalar tensors, or Numpy <code>array</code>, for non-scalar tensors.</li>
+</ul>
+<h5 id="returns-10">Returns:</h5>
+<p><code>bool</code>, the result of every_n_step_end, if that was called this step, or <code>False</code> otherwise.</p>
+<hr />
+<h3 id="class-tf.contrib.learn.monitors.exportmonitor"><a name="//apple_ref/cpp/Class/ExportMonitor" class="dashAnchor"></a><code id="ExportMonitor">class tf.contrib.learn.monitors.ExportMonitor</code></h3>
+<p>Monitor that exports Estimator every N steps. - - -</p>
+<h4 id="tf.contrib.learn.monitors.exportmonitor.__init__args-kwargs"><code id="ExportMonitor.__init__">tf.contrib.learn.monitors.ExportMonitor.__init__(*args, **kwargs)</code></h4>
+<p>Initializes ExportMonitor. (deprecated arguments)</p>
+<p>SOME ARGUMENTS ARE DEPRECATED. They will be removed after 2016-09-23. Instructions for updating: The signature of the input_fn accepted by export is changing to be consistent with what's used by tf.Learn Estimator's train/evaluate. input_fn (and in most cases, input_feature_key) will both become required args.</p>
+<pre><code>Args:
+  every_n_steps: Run monitor every N steps.
+  export_dir: str, folder to export.
+  input_fn: A function that takes no argument and returns a tuple of
+    (features, labels), where features is a dict of string key to `Tensor`
+    and labels is a `Tensor` that&#39;s currently not used (and so can be
+    `None`).
+  input_feature_key: String key into the features dict returned by
+    `input_fn` that corresponds to the raw `Example` strings `Tensor` that
+    the exported model will take as input. Can only be `None` if you&#39;re
+    using a custom `signature_fn` that does not use the first arg
+    (examples).
+  exports_to_keep: int, number of exports to keep.
+  signature_fn: Function that returns a default signature and a named
+    signature map, given `Tensor` of `Example` strings, `dict` of `Tensor`s
+    for features and `dict` of `Tensor`s for predictions.
+  default_batch_size: Default batch size of the `Example` placeholder.
+
+Raises:
+  ValueError: If `input_fn` and `input_feature_key` are not both defined or
+    are not both `None`.</code></pre>
+<hr />
+<h4 id="tf.contrib.learn.monitors.exportmonitor.beginmax_stepsnone"><code id="ExportMonitor.begin">tf.contrib.learn.monitors.ExportMonitor.begin(max_steps=None)</code></h4>
+<p>Called at the beginning of training.</p>
+<p>When called, the default graph is the one we are executing.</p>
+<h5 id="args-32">Args:</h5>
+<ul>
+<li><b><code>max_steps</code></b>: <code>int</code>, the maximum global step this training will run until.</li>
+</ul>
+<h5 id="raises-22">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've already begun a run.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.exportmonitor.endsessionnone"><code id="ExportMonitor.end">tf.contrib.learn.monitors.ExportMonitor.end(session=None)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.exportmonitor.epoch_beginepoch"><code id="ExportMonitor.epoch_begin">tf.contrib.learn.monitors.ExportMonitor.epoch_begin(epoch)</code></h4>
+<p>Begin epoch.</p>
+<h5 id="args-33">Args:</h5>
+<ul>
+<li><b><code>epoch</code></b>: <code>int</code>, the epoch number.</li>
+</ul>
+<h5 id="raises-23">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've already begun an epoch, or <code>epoch</code> &lt; 0.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.exportmonitor.epoch_endepoch"><code id="ExportMonitor.epoch_end">tf.contrib.learn.monitors.ExportMonitor.epoch_end(epoch)</code></h4>
+<p>End epoch.</p>
+<h5 id="args-34">Args:</h5>
+<ul>
+<li><b><code>epoch</code></b>: <code>int</code>, the epoch number.</li>
+</ul>
+<h5 id="raises-24">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've not begun an epoch, or <code>epoch</code> number does not match.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.exportmonitor.every_n_post_stepstep-session"><code id="ExportMonitor.every_n_post_step">tf.contrib.learn.monitors.ExportMonitor.every_n_post_step(step, session)</code></h4>
+<p>Callback after a step is finished or <code>end()</code> is called.</p>
+<h5 id="args-35">Args:</h5>
+<ul>
+<li><b><code>step</code></b>: <code>int</code>, the current value of the global step.</li>
+<li><b><code>session</code></b>: <code>Session</code> object.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.exportmonitor.every_n_step_beginstep"><code id="ExportMonitor.every_n_step_begin">tf.contrib.learn.monitors.ExportMonitor.every_n_step_begin(step)</code></h4>
+<p>Callback before every n'th step begins.</p>
+<h5 id="args-36">Args:</h5>
+<ul>
+<li><b><code>step</code></b>: <code>int</code>, the current value of the global step.</li>
+</ul>
+<h5 id="returns-11">Returns:</h5>
+<p>A <code>list</code> of tensors that will be evaluated at this step.</p>
+<hr />
+<h4 id="tf.contrib.learn.monitors.exportmonitor.every_n_step_endstep-outputs"><code id="ExportMonitor.every_n_step_end">tf.contrib.learn.monitors.ExportMonitor.every_n_step_end(step, outputs)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.exportmonitor.export_dir"><code id="ExportMonitor.export_dir">tf.contrib.learn.monitors.ExportMonitor.export_dir</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.exportmonitor.exports_to_keep"><code id="ExportMonitor.exports_to_keep">tf.contrib.learn.monitors.ExportMonitor.exports_to_keep</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.exportmonitor.last_export_dir"><code id="ExportMonitor.last_export_dir">tf.contrib.learn.monitors.ExportMonitor.last_export_dir</code></h4>
+<p>Returns the directory containing the last completed export.</p>
+<h5 id="returns-12">Returns:</h5>
+<p>The string path to the exported directory. NB: this functionality was added on 2016/09/25; clients that depend on the return value may need to handle the case where this function returns None because the estimator being fitted does not yet return a value during export.</p>
+<hr />
+<h4 id="tf.contrib.learn.monitors.exportmonitor.post_stepstep-session"><code id="ExportMonitor.post_step">tf.contrib.learn.monitors.ExportMonitor.post_step(step, session)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.exportmonitor.run_on_all_workers"><code id="ExportMonitor.run_on_all_workers">tf.contrib.learn.monitors.ExportMonitor.run_on_all_workers</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.exportmonitor.set_estimatorestimator"><code id="ExportMonitor.set_estimator">tf.contrib.learn.monitors.ExportMonitor.set_estimator(estimator)</code></h4>
+<p>A setter called automatically by the target estimator.</p>
+<p>If the estimator is locked, this method does nothing.</p>
+<h5 id="args-37">Args:</h5>
+<ul>
+<li><b><code>estimator</code></b>: the estimator that this monitor monitors.</li>
+</ul>
+<h5 id="raises-25">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if the estimator is None.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.exportmonitor.signature_fn"><code id="ExportMonitor.signature_fn">tf.contrib.learn.monitors.ExportMonitor.signature_fn</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.exportmonitor.step_beginstep"><code id="ExportMonitor.step_begin">tf.contrib.learn.monitors.ExportMonitor.step_begin(step)</code></h4>
+<p>Overrides <code>BaseMonitor.step_begin</code>.</p>
+<p>When overriding this method, you must call the super implementation.</p>
+<h5 id="args-38">Args:</h5>
+<ul>
+<li><b><code>step</code></b>: <code>int</code>, the current value of the global step.</li>
+</ul>
+<h5 id="returns-13">Returns:</h5>
+<p>A <code>list</code>, the result of every_n_step_begin, if that was called this step, or an empty list otherwise.</p>
+<h5 id="raises-26">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if called more than once during a step.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.exportmonitor.step_endstep-output"><code id="ExportMonitor.step_end">tf.contrib.learn.monitors.ExportMonitor.step_end(step, output)</code></h4>
+<p>Overrides <code>BaseMonitor.step_end</code>.</p>
+<p>When overriding this method, you must call the super implementation.</p>
+<h5 id="args-39">Args:</h5>
+<ul>
+<li><b><code>step</code></b>: <code>int</code>, the current value of the global step.</li>
+<li><b><code>output</code></b>: <code>dict</code> mapping <code>string</code> values representing tensor names to the value resulted from running these tensors. Values may be either scalars, for scalar tensors, or Numpy <code>array</code>, for non-scalar tensors.</li>
+</ul>
+<h5 id="returns-14">Returns:</h5>
+<p><code>bool</code>, the result of every_n_step_end, if that was called this step, or <code>False</code> otherwise.</p>
+<hr />
+<h3 id="class-tf.contrib.learn.monitors.graphdump"><a name="//apple_ref/cpp/Class/GraphDump" class="dashAnchor"></a><code id="GraphDump">class tf.contrib.learn.monitors.GraphDump</code></h3>
+<p>Dumps almost all tensors in the graph at every step.</p>
+<p>Note, this is very expensive, prefer <code>PrintTensor</code> in production. - - -</p>
+<h4 id="tf.contrib.learn.monitors.graphdump.__init__ignore_opsnone"><code id="GraphDump.__init__">tf.contrib.learn.monitors.GraphDump.__init__(ignore_ops=None)</code></h4>
+<p>Initializes GraphDump monitor.</p>
+<h5 id="args-40">Args:</h5>
+<ul>
+<li><b><code>ignore_ops</code></b>: <code>list</code> of <code>string</code>. Names of ops to ignore. If None, <code>GraphDump.IGNORE_OPS</code> is used.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.graphdump.beginmax_stepsnone"><code id="GraphDump.begin">tf.contrib.learn.monitors.GraphDump.begin(max_steps=None)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.graphdump.compareother_dump-step-atol1e-06"><code id="GraphDump.compare">tf.contrib.learn.monitors.GraphDump.compare(other_dump, step, atol=1e-06)</code></h4>
+<p>Compares two <code>GraphDump</code> monitors and returns differences.</p>
+<h5 id="args-41">Args:</h5>
+<ul>
+<li><b><code>other_dump</code></b>: Another <code>GraphDump</code> monitor.</li>
+<li><b><code>step</code></b>: <code>int</code>, step to compare on.</li>
+<li><b><code>atol</code></b>: <code>float</code>, absolute tolerance in comparison of floating arrays.</li>
+</ul>
+<h5 id="returns-15">Returns:</h5>
+<p>Returns tuple:</p>
+<ul>
+<li><b><code>matched</code></b>: <code>list</code> of keys that matched.</li>
+<li><b><code>non_matched</code></b>: <code>dict</code> of keys to tuple of 2 mismatched values.</li>
+</ul>
+<h5 id="raises-27">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if a key in <code>data</code> is missing from <code>other_dump</code> at <code>step</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.graphdump.data"><code id="GraphDump.data">tf.contrib.learn.monitors.GraphDump.data</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.graphdump.endsessionnone"><code id="GraphDump.end">tf.contrib.learn.monitors.GraphDump.end(session=None)</code></h4>
+<p>Callback at the end of training/evaluation.</p>
+<h5 id="args-42">Args:</h5>
+<ul>
+<li><b><code>session</code></b>: A <code>tf.Session</code> object that can be used to run ops.</li>
+</ul>
+<h5 id="raises-28">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've not begun a run.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.graphdump.epoch_beginepoch"><code id="GraphDump.epoch_begin">tf.contrib.learn.monitors.GraphDump.epoch_begin(epoch)</code></h4>
+<p>Begin epoch.</p>
+<h5 id="args-43">Args:</h5>
+<ul>
+<li><b><code>epoch</code></b>: <code>int</code>, the epoch number.</li>
+</ul>
+<h5 id="raises-29">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've already begun an epoch, or <code>epoch</code> &lt; 0.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.graphdump.epoch_endepoch"><code id="GraphDump.epoch_end">tf.contrib.learn.monitors.GraphDump.epoch_end(epoch)</code></h4>
+<p>End epoch.</p>
+<h5 id="args-44">Args:</h5>
+<ul>
+<li><b><code>epoch</code></b>: <code>int</code>, the epoch number.</li>
+</ul>
+<h5 id="raises-30">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've not begun an epoch, or <code>epoch</code> number does not match.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.graphdump.post_stepstep-session"><code id="GraphDump.post_step">tf.contrib.learn.monitors.GraphDump.post_step(step, session)</code></h4>
+<p>Callback after the step is finished.</p>
+<p>Called after step_end and receives session to perform extra session.run calls. If failure occurred in the process, will be called as well.</p>
+<h5 id="args-45">Args:</h5>
+<ul>
+<li><b><code>step</code></b>: <code>int</code>, global step of the model.</li>
+<li><b><code>session</code></b>: <code>Session</code> object.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.graphdump.run_on_all_workers"><code id="GraphDump.run_on_all_workers">tf.contrib.learn.monitors.GraphDump.run_on_all_workers</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.graphdump.set_estimatorestimator"><code id="GraphDump.set_estimator">tf.contrib.learn.monitors.GraphDump.set_estimator(estimator)</code></h4>
+<p>A setter called automatically by the target estimator.</p>
+<p>If the estimator is locked, this method does nothing.</p>
+<h5 id="args-46">Args:</h5>
+<ul>
+<li><b><code>estimator</code></b>: the estimator that this monitor monitors.</li>
+</ul>
+<h5 id="raises-31">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if the estimator is None.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.graphdump.step_beginstep"><code id="GraphDump.step_begin">tf.contrib.learn.monitors.GraphDump.step_begin(step)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.graphdump.step_endstep-output"><code id="GraphDump.step_end">tf.contrib.learn.monitors.GraphDump.step_end(step, output)</code></h4>
+<hr />
+<h3 id="class-tf.contrib.learn.monitors.loggingtrainable"><a name="//apple_ref/cpp/Class/LoggingTrainable" class="dashAnchor"></a><code id="LoggingTrainable">class tf.contrib.learn.monitors.LoggingTrainable</code></h3>
+<p>Writes trainable variable values into log every N steps.</p>
+<p>Write the tensors in trainable variables <code>every_n</code> steps, starting with the <code>first_n</code>th step. - - -</p>
+<h4 id="tf.contrib.learn.monitors.loggingtrainable.__init__scopenone-every_n100-first_n1"><code id="LoggingTrainable.__init__">tf.contrib.learn.monitors.LoggingTrainable.__init__(scope=None, every_n=100, first_n=1)</code></h4>
+<p>Initializes LoggingTrainable monitor.</p>
+<h5 id="args-47">Args:</h5>
+<ul>
+<li><b><code>scope</code></b>: An optional string to match variable names using re.match.</li>
+<li><b><code>every_n</code></b>: Print every N steps.</li>
+<li><b><code>first_n</code></b>: Print first N steps.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.loggingtrainable.beginmax_stepsnone"><code id="LoggingTrainable.begin">tf.contrib.learn.monitors.LoggingTrainable.begin(max_steps=None)</code></h4>
+<p>Called at the beginning of training.</p>
+<p>When called, the default graph is the one we are executing.</p>
+<h5 id="args-48">Args:</h5>
+<ul>
+<li><b><code>max_steps</code></b>: <code>int</code>, the maximum global step this training will run until.</li>
+</ul>
+<h5 id="raises-32">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've already begun a run.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.loggingtrainable.endsessionnone"><code id="LoggingTrainable.end">tf.contrib.learn.monitors.LoggingTrainable.end(session=None)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.loggingtrainable.epoch_beginepoch"><code id="LoggingTrainable.epoch_begin">tf.contrib.learn.monitors.LoggingTrainable.epoch_begin(epoch)</code></h4>
+<p>Begin epoch.</p>
+<h5 id="args-49">Args:</h5>
+<ul>
+<li><b><code>epoch</code></b>: <code>int</code>, the epoch number.</li>
+</ul>
+<h5 id="raises-33">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've already begun an epoch, or <code>epoch</code> &lt; 0.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.loggingtrainable.epoch_endepoch"><code id="LoggingTrainable.epoch_end">tf.contrib.learn.monitors.LoggingTrainable.epoch_end(epoch)</code></h4>
+<p>End epoch.</p>
+<h5 id="args-50">Args:</h5>
+<ul>
+<li><b><code>epoch</code></b>: <code>int</code>, the epoch number.</li>
+</ul>
+<h5 id="raises-34">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've not begun an epoch, or <code>epoch</code> number does not match.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.loggingtrainable.every_n_post_stepstep-session"><code id="LoggingTrainable.every_n_post_step">tf.contrib.learn.monitors.LoggingTrainable.every_n_post_step(step, session)</code></h4>
+<p>Callback after a step is finished or <code>end()</code> is called.</p>
+<h5 id="args-51">Args:</h5>
+<ul>
+<li><b><code>step</code></b>: <code>int</code>, the current value of the global step.</li>
+<li><b><code>session</code></b>: <code>Session</code> object.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.loggingtrainable.every_n_step_beginstep"><code id="LoggingTrainable.every_n_step_begin">tf.contrib.learn.monitors.LoggingTrainable.every_n_step_begin(step)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.loggingtrainable.every_n_step_endstep-outputs"><code id="LoggingTrainable.every_n_step_end">tf.contrib.learn.monitors.LoggingTrainable.every_n_step_end(step, outputs)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.loggingtrainable.post_stepstep-session"><code id="LoggingTrainable.post_step">tf.contrib.learn.monitors.LoggingTrainable.post_step(step, session)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.loggingtrainable.run_on_all_workers"><code id="LoggingTrainable.run_on_all_workers">tf.contrib.learn.monitors.LoggingTrainable.run_on_all_workers</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.loggingtrainable.set_estimatorestimator"><code id="LoggingTrainable.set_estimator">tf.contrib.learn.monitors.LoggingTrainable.set_estimator(estimator)</code></h4>
+<p>A setter called automatically by the target estimator.</p>
+<p>If the estimator is locked, this method does nothing.</p>
+<h5 id="args-52">Args:</h5>
+<ul>
+<li><b><code>estimator</code></b>: the estimator that this monitor monitors.</li>
+</ul>
+<h5 id="raises-35">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if the estimator is None.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.loggingtrainable.step_beginstep"><code id="LoggingTrainable.step_begin">tf.contrib.learn.monitors.LoggingTrainable.step_begin(step)</code></h4>
+<p>Overrides <code>BaseMonitor.step_begin</code>.</p>
+<p>When overriding this method, you must call the super implementation.</p>
+<h5 id="args-53">Args:</h5>
+<ul>
+<li><b><code>step</code></b>: <code>int</code>, the current value of the global step.</li>
+</ul>
+<h5 id="returns-16">Returns:</h5>
+<p>A <code>list</code>, the result of every_n_step_begin, if that was called this step, or an empty list otherwise.</p>
+<h5 id="raises-36">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if called more than once during a step.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.loggingtrainable.step_endstep-output"><code id="LoggingTrainable.step_end">tf.contrib.learn.monitors.LoggingTrainable.step_end(step, output)</code></h4>
+<p>Overrides <code>BaseMonitor.step_end</code>.</p>
+<p>When overriding this method, you must call the super implementation.</p>
+<h5 id="args-54">Args:</h5>
+<ul>
+<li><b><code>step</code></b>: <code>int</code>, the current value of the global step.</li>
+<li><b><code>output</code></b>: <code>dict</code> mapping <code>string</code> values representing tensor names to the value resulted from running these tensors. Values may be either scalars, for scalar tensors, or Numpy <code>array</code>, for non-scalar tensors.</li>
+</ul>
+<h5 id="returns-17">Returns:</h5>
+<p><code>bool</code>, the result of every_n_step_end, if that was called this step, or <code>False</code> otherwise.</p>
+<hr />
+<h3 id="class-tf.contrib.learn.monitors.nanloss"><a name="//apple_ref/cpp/Class/NanLoss" class="dashAnchor"></a><code id="NanLoss">class tf.contrib.learn.monitors.NanLoss</code></h3>
+<p>NaN Loss monitor.</p>
+<p>Monitors loss and stops training if loss is NaN. Can either fail with exception or just stop training. - - -</p>
+<h4 id="tf.contrib.learn.monitors.nanloss.__init__loss_tensor-every_n_steps100-fail_on_nan_losstrue"><code id="NanLoss.__init__">tf.contrib.learn.monitors.NanLoss.__init__(loss_tensor, every_n_steps=100, fail_on_nan_loss=True)</code></h4>
+<p>Initializes NanLoss monitor.</p>
+<h5 id="args-55">Args:</h5>
+<ul>
+<li><b><code>loss_tensor</code></b>: <code>Tensor</code>, the loss tensor.</li>
+<li><b><code>every_n_steps</code></b>: <code>int</code>, run check every this many steps.</li>
+<li><b><code>fail_on_nan_loss</code></b>: <code>bool</code>, whether to raise exception when loss is NaN.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.nanloss.beginmax_stepsnone"><code id="NanLoss.begin">tf.contrib.learn.monitors.NanLoss.begin(max_steps=None)</code></h4>
+<p>Called at the beginning of training.</p>
+<p>When called, the default graph is the one we are executing.</p>
+<h5 id="args-56">Args:</h5>
+<ul>
+<li><b><code>max_steps</code></b>: <code>int</code>, the maximum global step this training will run until.</li>
+</ul>
+<h5 id="raises-37">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've already begun a run.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.nanloss.endsessionnone"><code id="NanLoss.end">tf.contrib.learn.monitors.NanLoss.end(session=None)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.nanloss.epoch_beginepoch"><code id="NanLoss.epoch_begin">tf.contrib.learn.monitors.NanLoss.epoch_begin(epoch)</code></h4>
+<p>Begin epoch.</p>
+<h5 id="args-57">Args:</h5>
+<ul>
+<li><b><code>epoch</code></b>: <code>int</code>, the epoch number.</li>
+</ul>
+<h5 id="raises-38">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've already begun an epoch, or <code>epoch</code> &lt; 0.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.nanloss.epoch_endepoch"><code id="NanLoss.epoch_end">tf.contrib.learn.monitors.NanLoss.epoch_end(epoch)</code></h4>
+<p>End epoch.</p>
+<h5 id="args-58">Args:</h5>
+<ul>
+<li><b><code>epoch</code></b>: <code>int</code>, the epoch number.</li>
+</ul>
+<h5 id="raises-39">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've not begun an epoch, or <code>epoch</code> number does not match.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.nanloss.every_n_post_stepstep-session"><code id="NanLoss.every_n_post_step">tf.contrib.learn.monitors.NanLoss.every_n_post_step(step, session)</code></h4>
+<p>Callback after a step is finished or <code>end()</code> is called.</p>
+<h5 id="args-59">Args:</h5>
+<ul>
+<li><b><code>step</code></b>: <code>int</code>, the current value of the global step.</li>
+<li><b><code>session</code></b>: <code>Session</code> object.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.nanloss.every_n_step_beginstep"><code id="NanLoss.every_n_step_begin">tf.contrib.learn.monitors.NanLoss.every_n_step_begin(step)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.nanloss.every_n_step_endstep-outputs"><code id="NanLoss.every_n_step_end">tf.contrib.learn.monitors.NanLoss.every_n_step_end(step, outputs)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.nanloss.post_stepstep-session"><code id="NanLoss.post_step">tf.contrib.learn.monitors.NanLoss.post_step(step, session)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.nanloss.run_on_all_workers"><code id="NanLoss.run_on_all_workers">tf.contrib.learn.monitors.NanLoss.run_on_all_workers</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.nanloss.set_estimatorestimator"><code id="NanLoss.set_estimator">tf.contrib.learn.monitors.NanLoss.set_estimator(estimator)</code></h4>
+<p>A setter called automatically by the target estimator.</p>
+<p>If the estimator is locked, this method does nothing.</p>
+<h5 id="args-60">Args:</h5>
+<ul>
+<li><b><code>estimator</code></b>: the estimator that this monitor monitors.</li>
+</ul>
+<h5 id="raises-40">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if the estimator is None.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.nanloss.step_beginstep"><code id="NanLoss.step_begin">tf.contrib.learn.monitors.NanLoss.step_begin(step)</code></h4>
+<p>Overrides <code>BaseMonitor.step_begin</code>.</p>
+<p>When overriding this method, you must call the super implementation.</p>
+<h5 id="args-61">Args:</h5>
+<ul>
+<li><b><code>step</code></b>: <code>int</code>, the current value of the global step.</li>
+</ul>
+<h5 id="returns-18">Returns:</h5>
+<p>A <code>list</code>, the result of every_n_step_begin, if that was called this step, or an empty list otherwise.</p>
+<h5 id="raises-41">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if called more than once during a step.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.nanloss.step_endstep-output"><code id="NanLoss.step_end">tf.contrib.learn.monitors.NanLoss.step_end(step, output)</code></h4>
+<p>Overrides <code>BaseMonitor.step_end</code>.</p>
+<p>When overriding this method, you must call the super implementation.</p>
+<h5 id="args-62">Args:</h5>
+<ul>
+<li><b><code>step</code></b>: <code>int</code>, the current value of the global step.</li>
+<li><b><code>output</code></b>: <code>dict</code> mapping <code>string</code> values representing tensor names to the value resulted from running these tensors. Values may be either scalars, for scalar tensors, or Numpy <code>array</code>, for non-scalar tensors.</li>
+</ul>
+<h5 id="returns-19">Returns:</h5>
+<p><code>bool</code>, the result of every_n_step_end, if that was called this step, or <code>False</code> otherwise.</p>
+<hr />
+<h3 id="class-tf.contrib.learn.monitors.printtensor"><a name="//apple_ref/cpp/Class/PrintTensor" class="dashAnchor"></a><code id="PrintTensor">class tf.contrib.learn.monitors.PrintTensor</code></h3>
+<p>Prints given tensors every N steps.</p>
+<p>This is an <code>EveryN</code> monitor and has consistent semantic for <code>every_n</code> and <code>first_n</code>.</p>
+<p>The tensors will be printed to the log, with <code>INFO</code> severity. - - -</p>
+<h4 id="tf.contrib.learn.monitors.printtensor.__init__tensor_names-every_n100-first_n1"><code id="PrintTensor.__init__">tf.contrib.learn.monitors.PrintTensor.__init__(tensor_names, every_n=100, first_n=1)</code></h4>
+<p>Initializes a PrintTensor monitor.</p>
+<h5 id="args-63">Args:</h5>
+<ul>
+<li><b><code>tensor_names</code></b>: <code>dict</code> of tag to tensor names or <code>iterable</code> of tensor names (strings).</li>
+<li><b><code>every_n</code></b>: <code>int</code>, print every N steps. See <code>PrintN.</code></li>
+<li><b><code>first_n</code></b>: <code>int</code>, also print the first N steps. See <code>PrintN.</code></li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.printtensor.beginmax_stepsnone"><code id="PrintTensor.begin">tf.contrib.learn.monitors.PrintTensor.begin(max_steps=None)</code></h4>
+<p>Called at the beginning of training.</p>
+<p>When called, the default graph is the one we are executing.</p>
+<h5 id="args-64">Args:</h5>
+<ul>
+<li><b><code>max_steps</code></b>: <code>int</code>, the maximum global step this training will run until.</li>
+</ul>
+<h5 id="raises-42">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've already begun a run.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.printtensor.endsessionnone"><code id="PrintTensor.end">tf.contrib.learn.monitors.PrintTensor.end(session=None)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.printtensor.epoch_beginepoch"><code id="PrintTensor.epoch_begin">tf.contrib.learn.monitors.PrintTensor.epoch_begin(epoch)</code></h4>
+<p>Begin epoch.</p>
+<h5 id="args-65">Args:</h5>
+<ul>
+<li><b><code>epoch</code></b>: <code>int</code>, the epoch number.</li>
+</ul>
+<h5 id="raises-43">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've already begun an epoch, or <code>epoch</code> &lt; 0.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.printtensor.epoch_endepoch"><code id="PrintTensor.epoch_end">tf.contrib.learn.monitors.PrintTensor.epoch_end(epoch)</code></h4>
+<p>End epoch.</p>
+<h5 id="args-66">Args:</h5>
+<ul>
+<li><b><code>epoch</code></b>: <code>int</code>, the epoch number.</li>
+</ul>
+<h5 id="raises-44">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've not begun an epoch, or <code>epoch</code> number does not match.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.printtensor.every_n_post_stepstep-session"><code id="PrintTensor.every_n_post_step">tf.contrib.learn.monitors.PrintTensor.every_n_post_step(step, session)</code></h4>
+<p>Callback after a step is finished or <code>end()</code> is called.</p>
+<h5 id="args-67">Args:</h5>
+<ul>
+<li><b><code>step</code></b>: <code>int</code>, the current value of the global step.</li>
+<li><b><code>session</code></b>: <code>Session</code> object.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.printtensor.every_n_step_beginstep"><code id="PrintTensor.every_n_step_begin">tf.contrib.learn.monitors.PrintTensor.every_n_step_begin(step)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.printtensor.every_n_step_endstep-outputs"><code id="PrintTensor.every_n_step_end">tf.contrib.learn.monitors.PrintTensor.every_n_step_end(step, outputs)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.printtensor.post_stepstep-session"><code id="PrintTensor.post_step">tf.contrib.learn.monitors.PrintTensor.post_step(step, session)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.printtensor.run_on_all_workers"><code id="PrintTensor.run_on_all_workers">tf.contrib.learn.monitors.PrintTensor.run_on_all_workers</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.printtensor.set_estimatorestimator"><code id="PrintTensor.set_estimator">tf.contrib.learn.monitors.PrintTensor.set_estimator(estimator)</code></h4>
+<p>A setter called automatically by the target estimator.</p>
+<p>If the estimator is locked, this method does nothing.</p>
+<h5 id="args-68">Args:</h5>
+<ul>
+<li><b><code>estimator</code></b>: the estimator that this monitor monitors.</li>
+</ul>
+<h5 id="raises-45">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if the estimator is None.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.printtensor.step_beginstep"><code id="PrintTensor.step_begin">tf.contrib.learn.monitors.PrintTensor.step_begin(step)</code></h4>
+<p>Overrides <code>BaseMonitor.step_begin</code>.</p>
+<p>When overriding this method, you must call the super implementation.</p>
+<h5 id="args-69">Args:</h5>
+<ul>
+<li><b><code>step</code></b>: <code>int</code>, the current value of the global step.</li>
+</ul>
+<h5 id="returns-20">Returns:</h5>
+<p>A <code>list</code>, the result of every_n_step_begin, if that was called this step, or an empty list otherwise.</p>
+<h5 id="raises-46">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if called more than once during a step.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.printtensor.step_endstep-output"><code id="PrintTensor.step_end">tf.contrib.learn.monitors.PrintTensor.step_end(step, output)</code></h4>
+<p>Overrides <code>BaseMonitor.step_end</code>.</p>
+<p>When overriding this method, you must call the super implementation.</p>
+<h5 id="args-70">Args:</h5>
+<ul>
+<li><b><code>step</code></b>: <code>int</code>, the current value of the global step.</li>
+<li><b><code>output</code></b>: <code>dict</code> mapping <code>string</code> values representing tensor names to the value resulted from running these tensors. Values may be either scalars, for scalar tensors, or Numpy <code>array</code>, for non-scalar tensors.</li>
+</ul>
+<h5 id="returns-21">Returns:</h5>
+<p><code>bool</code>, the result of every_n_step_end, if that was called this step, or <code>False</code> otherwise.</p>
+<hr />
+<h3 id="class-tf.contrib.learn.monitors.stepcounter"><a name="//apple_ref/cpp/Class/StepCounter" class="dashAnchor"></a><code id="StepCounter">class tf.contrib.learn.monitors.StepCounter</code></h3>
+<p>Steps per second monitor. - - -</p>
+<h4 id="tf.contrib.learn.monitors.stepcounter.__init__every_n_steps100-output_dirnone-summary_writernone"><code id="StepCounter.__init__">tf.contrib.learn.monitors.StepCounter.__init__(every_n_steps=100, output_dir=None, summary_writer=None)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.stepcounter.beginmax_stepsnone"><code id="StepCounter.begin">tf.contrib.learn.monitors.StepCounter.begin(max_steps=None)</code></h4>
+<p>Called at the beginning of training.</p>
+<p>When called, the default graph is the one we are executing.</p>
+<h5 id="args-71">Args:</h5>
+<ul>
+<li><b><code>max_steps</code></b>: <code>int</code>, the maximum global step this training will run until.</li>
+</ul>
+<h5 id="raises-47">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've already begun a run.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.stepcounter.endsessionnone"><code id="StepCounter.end">tf.contrib.learn.monitors.StepCounter.end(session=None)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.stepcounter.epoch_beginepoch"><code id="StepCounter.epoch_begin">tf.contrib.learn.monitors.StepCounter.epoch_begin(epoch)</code></h4>
+<p>Begin epoch.</p>
+<h5 id="args-72">Args:</h5>
+<ul>
+<li><b><code>epoch</code></b>: <code>int</code>, the epoch number.</li>
+</ul>
+<h5 id="raises-48">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've already begun an epoch, or <code>epoch</code> &lt; 0.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.stepcounter.epoch_endepoch"><code id="StepCounter.epoch_end">tf.contrib.learn.monitors.StepCounter.epoch_end(epoch)</code></h4>
+<p>End epoch.</p>
+<h5 id="args-73">Args:</h5>
+<ul>
+<li><b><code>epoch</code></b>: <code>int</code>, the epoch number.</li>
+</ul>
+<h5 id="raises-49">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've not begun an epoch, or <code>epoch</code> number does not match.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.stepcounter.every_n_post_stepstep-session"><code id="StepCounter.every_n_post_step">tf.contrib.learn.monitors.StepCounter.every_n_post_step(step, session)</code></h4>
+<p>Callback after a step is finished or <code>end()</code> is called.</p>
+<h5 id="args-74">Args:</h5>
+<ul>
+<li><b><code>step</code></b>: <code>int</code>, the current value of the global step.</li>
+<li><b><code>session</code></b>: <code>Session</code> object.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.stepcounter.every_n_step_beginstep"><code id="StepCounter.every_n_step_begin">tf.contrib.learn.monitors.StepCounter.every_n_step_begin(step)</code></h4>
+<p>Callback before every n'th step begins.</p>
+<h5 id="args-75">Args:</h5>
+<ul>
+<li><b><code>step</code></b>: <code>int</code>, the current value of the global step.</li>
+</ul>
+<h5 id="returns-22">Returns:</h5>
+<p>A <code>list</code> of tensors that will be evaluated at this step.</p>
+<hr />
+<h4 id="tf.contrib.learn.monitors.stepcounter.every_n_step_endcurrent_step-outputs"><code id="StepCounter.every_n_step_end">tf.contrib.learn.monitors.StepCounter.every_n_step_end(current_step, outputs)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.stepcounter.post_stepstep-session"><code id="StepCounter.post_step">tf.contrib.learn.monitors.StepCounter.post_step(step, session)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.stepcounter.run_on_all_workers"><code id="StepCounter.run_on_all_workers">tf.contrib.learn.monitors.StepCounter.run_on_all_workers</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.stepcounter.set_estimatorestimator"><code id="StepCounter.set_estimator">tf.contrib.learn.monitors.StepCounter.set_estimator(estimator)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.stepcounter.step_beginstep"><code id="StepCounter.step_begin">tf.contrib.learn.monitors.StepCounter.step_begin(step)</code></h4>
+<p>Overrides <code>BaseMonitor.step_begin</code>.</p>
+<p>When overriding this method, you must call the super implementation.</p>
+<h5 id="args-76">Args:</h5>
+<ul>
+<li><b><code>step</code></b>: <code>int</code>, the current value of the global step.</li>
+</ul>
+<h5 id="returns-23">Returns:</h5>
+<p>A <code>list</code>, the result of every_n_step_begin, if that was called this step, or an empty list otherwise.</p>
+<h5 id="raises-50">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if called more than once during a step.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.stepcounter.step_endstep-output"><code id="StepCounter.step_end">tf.contrib.learn.monitors.StepCounter.step_end(step, output)</code></h4>
+<p>Overrides <code>BaseMonitor.step_end</code>.</p>
+<p>When overriding this method, you must call the super implementation.</p>
+<h5 id="args-77">Args:</h5>
+<ul>
+<li><b><code>step</code></b>: <code>int</code>, the current value of the global step.</li>
+<li><b><code>output</code></b>: <code>dict</code> mapping <code>string</code> values representing tensor names to the value resulted from running these tensors. Values may be either scalars, for scalar tensors, or Numpy <code>array</code>, for non-scalar tensors.</li>
+</ul>
+<h5 id="returns-24">Returns:</h5>
+<p><code>bool</code>, the result of every_n_step_end, if that was called this step, or <code>False</code> otherwise.</p>
+<hr />
+<h3 id="class-tf.contrib.learn.monitors.stopatstep"><a name="//apple_ref/cpp/Class/StopAtStep" class="dashAnchor"></a><code id="StopAtStep">class tf.contrib.learn.monitors.StopAtStep</code></h3>
+<p>Monitor to request stop at a specified step. - - -</p>
+<h4 id="tf.contrib.learn.monitors.stopatstep.__init__num_stepsnone-last_stepnone"><code id="StopAtStep.__init__">tf.contrib.learn.monitors.StopAtStep.__init__(num_steps=None, last_step=None)</code></h4>
+<p>Create a StopAtStep monitor.</p>
+<p>This monitor requests stop after either a number of steps have been executed or a last step has been reached. Only of the two options can be specified.</p>
+<p>if <code>num_steps</code> is specified, it indicates the number of steps to execute after <code>begin()</code> is called. If instead <code>last_step</code> is specified, it indicates the last step we want to execute, as passed to the <code>step_begin()</code> call.</p>
+<h5 id="args-78">Args:</h5>
+<ul>
+<li><b><code>num_steps</code></b>: Number of steps to execute.</li>
+<li><b><code>last_step</code></b>: Step after which to stop.</li>
+</ul>
+<h5 id="raises-51">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If one of the arguments is invalid.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.stopatstep.beginmax_stepsnone"><code id="StopAtStep.begin">tf.contrib.learn.monitors.StopAtStep.begin(max_steps=None)</code></h4>
+<p>Called at the beginning of training.</p>
+<p>When called, the default graph is the one we are executing.</p>
+<h5 id="args-79">Args:</h5>
+<ul>
+<li><b><code>max_steps</code></b>: <code>int</code>, the maximum global step this training will run until.</li>
+</ul>
+<h5 id="raises-52">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've already begun a run.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.stopatstep.endsessionnone"><code id="StopAtStep.end">tf.contrib.learn.monitors.StopAtStep.end(session=None)</code></h4>
+<p>Callback at the end of training/evaluation.</p>
+<h5 id="args-80">Args:</h5>
+<ul>
+<li><b><code>session</code></b>: A <code>tf.Session</code> object that can be used to run ops.</li>
+</ul>
+<h5 id="raises-53">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've not begun a run.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.stopatstep.epoch_beginepoch"><code id="StopAtStep.epoch_begin">tf.contrib.learn.monitors.StopAtStep.epoch_begin(epoch)</code></h4>
+<p>Begin epoch.</p>
+<h5 id="args-81">Args:</h5>
+<ul>
+<li><b><code>epoch</code></b>: <code>int</code>, the epoch number.</li>
+</ul>
+<h5 id="raises-54">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've already begun an epoch, or <code>epoch</code> &lt; 0.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.stopatstep.epoch_endepoch"><code id="StopAtStep.epoch_end">tf.contrib.learn.monitors.StopAtStep.epoch_end(epoch)</code></h4>
+<p>End epoch.</p>
+<h5 id="args-82">Args:</h5>
+<ul>
+<li><b><code>epoch</code></b>: <code>int</code>, the epoch number.</li>
+</ul>
+<h5 id="raises-55">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've not begun an epoch, or <code>epoch</code> number does not match.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.stopatstep.post_stepstep-session"><code id="StopAtStep.post_step">tf.contrib.learn.monitors.StopAtStep.post_step(step, session)</code></h4>
+<p>Callback after the step is finished.</p>
+<p>Called after step_end and receives session to perform extra session.run calls. If failure occurred in the process, will be called as well.</p>
+<h5 id="args-83">Args:</h5>
+<ul>
+<li><b><code>step</code></b>: <code>int</code>, global step of the model.</li>
+<li><b><code>session</code></b>: <code>Session</code> object.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.stopatstep.run_on_all_workers"><code id="StopAtStep.run_on_all_workers">tf.contrib.learn.monitors.StopAtStep.run_on_all_workers</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.stopatstep.set_estimatorestimator"><code id="StopAtStep.set_estimator">tf.contrib.learn.monitors.StopAtStep.set_estimator(estimator)</code></h4>
+<p>A setter called automatically by the target estimator.</p>
+<p>If the estimator is locked, this method does nothing.</p>
+<h5 id="args-84">Args:</h5>
+<ul>
+<li><b><code>estimator</code></b>: the estimator that this monitor monitors.</li>
+</ul>
+<h5 id="raises-56">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if the estimator is None.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.stopatstep.step_beginstep"><code id="StopAtStep.step_begin">tf.contrib.learn.monitors.StopAtStep.step_begin(step)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.stopatstep.step_endstep-output"><code id="StopAtStep.step_end">tf.contrib.learn.monitors.StopAtStep.step_end(step, output)</code></h4>
+<hr />
+<h3 id="class-tf.contrib.learn.monitors.summarysaver"><a name="//apple_ref/cpp/Class/SummarySaver" class="dashAnchor"></a><code id="SummarySaver">class tf.contrib.learn.monitors.SummarySaver</code></h3>
+<p>Saves summaries every N steps. - - -</p>
+<h4 id="tf.contrib.learn.monitors.summarysaver.__init__summary_op-save_steps100-output_dirnone-summary_writernone-scaffoldnone"><code id="SummarySaver.__init__">tf.contrib.learn.monitors.SummarySaver.__init__(summary_op, save_steps=100, output_dir=None, summary_writer=None, scaffold=None)</code></h4>
+<p>Initializes a <code>SummarySaver</code> monitor.</p>
+<h5 id="args-85">Args:</h5>
+<ul>
+<li><b><code>summary_op</code></b>: <code>Tensor</code> of type <code>string</code>. A serialized <code>Summary</code> protocol buffer, as output by TF summary methods like <code>summary.scalar</code> or <code>summary.merge_all</code>.</li>
+<li><b><code>save_steps</code></b>: <code>int</code>, save summaries every N steps. See <code>EveryN</code>.</li>
+<li><b><code>output_dir</code></b>: <code>string</code>, the directory to save the summaries to. Only used if no <code>summary_writer</code> is supplied.</li>
+<li><b><code>summary_writer</code></b>: <code>SummaryWriter</code>. If <code>None</code> and an <code>output_dir</code> was passed, one will be created accordingly.</li>
+<li><b><code>scaffold</code></b>: <code>Scaffold</code> to get summary_op if it's not provided.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.summarysaver.beginmax_stepsnone"><code id="SummarySaver.begin">tf.contrib.learn.monitors.SummarySaver.begin(max_steps=None)</code></h4>
+<p>Called at the beginning of training.</p>
+<p>When called, the default graph is the one we are executing.</p>
+<h5 id="args-86">Args:</h5>
+<ul>
+<li><b><code>max_steps</code></b>: <code>int</code>, the maximum global step this training will run until.</li>
+</ul>
+<h5 id="raises-57">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've already begun a run.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.summarysaver.endsessionnone"><code id="SummarySaver.end">tf.contrib.learn.monitors.SummarySaver.end(session=None)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.summarysaver.epoch_beginepoch"><code id="SummarySaver.epoch_begin">tf.contrib.learn.monitors.SummarySaver.epoch_begin(epoch)</code></h4>
+<p>Begin epoch.</p>
+<h5 id="args-87">Args:</h5>
+<ul>
+<li><b><code>epoch</code></b>: <code>int</code>, the epoch number.</li>
+</ul>
+<h5 id="raises-58">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've already begun an epoch, or <code>epoch</code> &lt; 0.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.summarysaver.epoch_endepoch"><code id="SummarySaver.epoch_end">tf.contrib.learn.monitors.SummarySaver.epoch_end(epoch)</code></h4>
+<p>End epoch.</p>
+<h5 id="args-88">Args:</h5>
+<ul>
+<li><b><code>epoch</code></b>: <code>int</code>, the epoch number.</li>
+</ul>
+<h5 id="raises-59">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've not begun an epoch, or <code>epoch</code> number does not match.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.summarysaver.every_n_post_stepstep-session"><code id="SummarySaver.every_n_post_step">tf.contrib.learn.monitors.SummarySaver.every_n_post_step(step, session)</code></h4>
+<p>Callback after a step is finished or <code>end()</code> is called.</p>
+<h5 id="args-89">Args:</h5>
+<ul>
+<li><b><code>step</code></b>: <code>int</code>, the current value of the global step.</li>
+<li><b><code>session</code></b>: <code>Session</code> object.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.summarysaver.every_n_step_beginstep"><code id="SummarySaver.every_n_step_begin">tf.contrib.learn.monitors.SummarySaver.every_n_step_begin(step)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.summarysaver.every_n_step_endstep-outputs"><code id="SummarySaver.every_n_step_end">tf.contrib.learn.monitors.SummarySaver.every_n_step_end(step, outputs)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.summarysaver.post_stepstep-session"><code id="SummarySaver.post_step">tf.contrib.learn.monitors.SummarySaver.post_step(step, session)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.summarysaver.run_on_all_workers"><code id="SummarySaver.run_on_all_workers">tf.contrib.learn.monitors.SummarySaver.run_on_all_workers</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.summarysaver.set_estimatorestimator"><code id="SummarySaver.set_estimator">tf.contrib.learn.monitors.SummarySaver.set_estimator(estimator)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.summarysaver.step_beginstep"><code id="SummarySaver.step_begin">tf.contrib.learn.monitors.SummarySaver.step_begin(step)</code></h4>
+<p>Overrides <code>BaseMonitor.step_begin</code>.</p>
+<p>When overriding this method, you must call the super implementation.</p>
+<h5 id="args-90">Args:</h5>
+<ul>
+<li><b><code>step</code></b>: <code>int</code>, the current value of the global step.</li>
+</ul>
+<h5 id="returns-25">Returns:</h5>
+<p>A <code>list</code>, the result of every_n_step_begin, if that was called this step, or an empty list otherwise.</p>
+<h5 id="raises-60">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if called more than once during a step.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.summarysaver.step_endstep-output"><code id="SummarySaver.step_end">tf.contrib.learn.monitors.SummarySaver.step_end(step, output)</code></h4>
+<p>Overrides <code>BaseMonitor.step_end</code>.</p>
+<p>When overriding this method, you must call the super implementation.</p>
+<h5 id="args-91">Args:</h5>
+<ul>
+<li><b><code>step</code></b>: <code>int</code>, the current value of the global step.</li>
+<li><b><code>output</code></b>: <code>dict</code> mapping <code>string</code> values representing tensor names to the value resulted from running these tensors. Values may be either scalars, for scalar tensors, or Numpy <code>array</code>, for non-scalar tensors.</li>
+</ul>
+<h5 id="returns-26">Returns:</h5>
+<p><code>bool</code>, the result of every_n_step_end, if that was called this step, or <code>False</code> otherwise.</p>
+<hr />
+<h3 id="class-tf.contrib.learn.monitors.validationmonitor"><a name="//apple_ref/cpp/Class/ValidationMonitor" class="dashAnchor"></a><code id="ValidationMonitor">class tf.contrib.learn.monitors.ValidationMonitor</code></h3>
+<p>Runs evaluation of a given estimator, at most every N steps.</p>
+<p>Note that the evaluation is done based on the saved checkpoint, which will usually be older than the current step.</p>
+<p>Can do early stopping on validation metrics if <code>early_stopping_rounds</code> is provided. - - -</p>
+<h4 id="tf.contrib.learn.monitors.validationmonitor.__init__xnone-ynone-input_fnnone-batch_sizenone-eval_stepsnone-every_n_steps100-metricsnone-early_stopping_roundsnone-early_stopping_metricloss-early_stopping_metric_minimizetrue-namenone"><code id="ValidationMonitor.__init__">tf.contrib.learn.monitors.ValidationMonitor.__init__(x=None, y=None, input_fn=None, batch_size=None, eval_steps=None, every_n_steps=100, metrics=None, early_stopping_rounds=None, early_stopping_metric='loss', early_stopping_metric_minimize=True, name=None)</code></h4>
+<p>Initializes a ValidationMonitor.</p>
+<h5 id="args-92">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: See <code>BaseEstimator.evaluate</code>.</li>
+<li><b><code>y</code></b>: See <code>BaseEstimator.evaluate</code>.</li>
+<li><b><code>input_fn</code></b>: See <code>BaseEstimator.evaluate</code>.</li>
+<li><b><code>batch_size</code></b>: See <code>BaseEstimator.evaluate</code>.</li>
+<li><b><code>eval_steps</code></b>: See <code>BaseEstimator.evaluate</code>.</li>
+<li><b><code>every_n_steps</code></b>: Check for new checkpoints to evaluate every N steps. If a new checkpoint is found, it is evaluated. See <code>EveryN</code>.</li>
+<li><b><code>metrics</code></b>: See <code>BaseEstimator.evaluate</code>.</li>
+<li><b><code>early_stopping_rounds</code></b>: <code>int</code>. If the metric indicated by <code>early_stopping_metric</code> does not change according to <code>early_stopping_metric_minimize</code> for this many steps, then training will be stopped.</li>
+<li><b><code>early_stopping_metric</code></b>: <code>string</code>, name of the metric to check for early stopping.</li>
+<li><b><code>early_stopping_metric_minimize</code></b>: <code>bool</code>, True if <code>early_stopping_metric</code> is expected to decrease (thus early stopping occurs when this metric stops decreasing), False if <code>early_stopping_metric</code> is expected to increase. Typically, <code>early_stopping_metric_minimize</code> is True for loss metrics like mean squared error, and False for performance metrics like accuracy.</li>
+<li><b><code>name</code></b>: See <code>BaseEstimator.evaluate</code>.</li>
+</ul>
+<h5 id="raises-61">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If both x and input_fn are provided.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.validationmonitor.beginmax_stepsnone"><code id="ValidationMonitor.begin">tf.contrib.learn.monitors.ValidationMonitor.begin(max_steps=None)</code></h4>
+<p>Called at the beginning of training.</p>
+<p>When called, the default graph is the one we are executing.</p>
+<h5 id="args-93">Args:</h5>
+<ul>
+<li><b><code>max_steps</code></b>: <code>int</code>, the maximum global step this training will run until.</li>
+</ul>
+<h5 id="raises-62">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've already begun a run.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.validationmonitor.best_step"><code id="ValidationMonitor.best_step">tf.contrib.learn.monitors.ValidationMonitor.best_step</code></h4>
+<p>Returns the step at which the best early stopping metric was found.</p>
+<hr />
+<h4 id="tf.contrib.learn.monitors.validationmonitor.best_value"><code id="ValidationMonitor.best_value">tf.contrib.learn.monitors.ValidationMonitor.best_value</code></h4>
+<p>Returns the best early stopping metric value found so far.</p>
+<hr />
+<h4 id="tf.contrib.learn.monitors.validationmonitor.early_stopped"><code id="ValidationMonitor.early_stopped">tf.contrib.learn.monitors.ValidationMonitor.early_stopped</code></h4>
+<p>Returns True if this monitor caused an early stop.</p>
+<hr />
+<h4 id="tf.contrib.learn.monitors.validationmonitor.endsessionnone"><code id="ValidationMonitor.end">tf.contrib.learn.monitors.ValidationMonitor.end(session=None)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.validationmonitor.epoch_beginepoch"><code id="ValidationMonitor.epoch_begin">tf.contrib.learn.monitors.ValidationMonitor.epoch_begin(epoch)</code></h4>
+<p>Begin epoch.</p>
+<h5 id="args-94">Args:</h5>
+<ul>
+<li><b><code>epoch</code></b>: <code>int</code>, the epoch number.</li>
+</ul>
+<h5 id="raises-63">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've already begun an epoch, or <code>epoch</code> &lt; 0.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.validationmonitor.epoch_endepoch"><code id="ValidationMonitor.epoch_end">tf.contrib.learn.monitors.ValidationMonitor.epoch_end(epoch)</code></h4>
+<p>End epoch.</p>
+<h5 id="args-95">Args:</h5>
+<ul>
+<li><b><code>epoch</code></b>: <code>int</code>, the epoch number.</li>
+</ul>
+<h5 id="raises-64">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if we've not begun an epoch, or <code>epoch</code> number does not match.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.validationmonitor.every_n_post_stepstep-session"><code id="ValidationMonitor.every_n_post_step">tf.contrib.learn.monitors.ValidationMonitor.every_n_post_step(step, session)</code></h4>
+<p>Callback after a step is finished or <code>end()</code> is called.</p>
+<h5 id="args-96">Args:</h5>
+<ul>
+<li><b><code>step</code></b>: <code>int</code>, the current value of the global step.</li>
+<li><b><code>session</code></b>: <code>Session</code> object.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.validationmonitor.every_n_step_beginstep"><code id="ValidationMonitor.every_n_step_begin">tf.contrib.learn.monitors.ValidationMonitor.every_n_step_begin(step)</code></h4>
+<p>Callback before every n'th step begins.</p>
+<h5 id="args-97">Args:</h5>
+<ul>
+<li><b><code>step</code></b>: <code>int</code>, the current value of the global step.</li>
+</ul>
+<h5 id="returns-27">Returns:</h5>
+<p>A <code>list</code> of tensors that will be evaluated at this step.</p>
+<hr />
+<h4 id="tf.contrib.learn.monitors.validationmonitor.every_n_step_endstep-outputs"><code id="ValidationMonitor.every_n_step_end">tf.contrib.learn.monitors.ValidationMonitor.every_n_step_end(step, outputs)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.validationmonitor.post_stepstep-session"><code id="ValidationMonitor.post_step">tf.contrib.learn.monitors.ValidationMonitor.post_step(step, session)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.validationmonitor.run_on_all_workers"><code id="ValidationMonitor.run_on_all_workers">tf.contrib.learn.monitors.ValidationMonitor.run_on_all_workers</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.validationmonitor.set_estimatorestimator"><code id="ValidationMonitor.set_estimator">tf.contrib.learn.monitors.ValidationMonitor.set_estimator(estimator)</code></h4>
+<p>A setter called automatically by the target estimator.</p>
+<p>If the estimator is locked, this method does nothing.</p>
+<h5 id="args-98">Args:</h5>
+<ul>
+<li><b><code>estimator</code></b>: the estimator that this monitor monitors.</li>
+</ul>
+<h5 id="raises-65">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if the estimator is None.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.validationmonitor.step_beginstep"><code id="ValidationMonitor.step_begin">tf.contrib.learn.monitors.ValidationMonitor.step_begin(step)</code></h4>
+<p>Overrides <code>BaseMonitor.step_begin</code>.</p>
+<p>When overriding this method, you must call the super implementation.</p>
+<h5 id="args-99">Args:</h5>
+<ul>
+<li><b><code>step</code></b>: <code>int</code>, the current value of the global step.</li>
+</ul>
+<h5 id="returns-28">Returns:</h5>
+<p>A <code>list</code>, the result of every_n_step_begin, if that was called this step, or an empty list otherwise.</p>
+<h5 id="raises-66">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if called more than once during a step.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.monitors.validationmonitor.step_endstep-output"><code id="ValidationMonitor.step_end">tf.contrib.learn.monitors.ValidationMonitor.step_end(step, output)</code></h4>
+<p>Overrides <code>BaseMonitor.step_end</code>.</p>
+<p>When overriding this method, you must call the super implementation.</p>
+<h5 id="args-100">Args:</h5>
+<ul>
+<li><b><code>step</code></b>: <code>int</code>, the current value of the global step.</li>
+<li><b><code>output</code></b>: <code>dict</code> mapping <code>string</code> values representing tensor names to the value resulted from running these tensors. Values may be either scalars, for scalar tensors, or Numpy <code>array</code>, for non-scalar tensors.</li>
+</ul>
+<h5 id="returns-29">Returns:</h5>
+<p><code>bool</code>, the result of every_n_step_end, if that was called this step, or <code>False</code> otherwise.</p>
+<h2 id="other-functions-and-classes">Other Functions and Classes</h2>
+<hr />
+<h3 id="class-tf.contrib.learn.monitors.runhookadapterformonitors"><a name="//apple_ref/cpp/Class/RunHookAdapterForMonitors" class="dashAnchor"></a><code id="RunHookAdapterForMonitors">class tf.contrib.learn.monitors.RunHookAdapterForMonitors</code></h3>
+<p>Wraps monitors into a SessionRunHook. - - -</p>
+<h4 id="tf.contrib.learn.monitors.runhookadapterformonitors.__init__monitors"><code id="RunHookAdapterForMonitors.__init__">tf.contrib.learn.monitors.RunHookAdapterForMonitors.__init__(monitors)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.runhookadapterformonitors.after_runrun_context-run_values"><code id="RunHookAdapterForMonitors.after_run">tf.contrib.learn.monitors.RunHookAdapterForMonitors.after_run(run_context, run_values)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.runhookadapterformonitors.before_runrun_context"><code id="RunHookAdapterForMonitors.before_run">tf.contrib.learn.monitors.RunHookAdapterForMonitors.before_run(run_context)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.runhookadapterformonitors.begin"><code id="RunHookAdapterForMonitors.begin">tf.contrib.learn.monitors.RunHookAdapterForMonitors.begin()</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.monitors.runhookadapterformonitors.endsession"><code id="RunHookAdapterForMonitors.end">tf.contrib.learn.monitors.RunHookAdapterForMonitors.end(session)</code></h4>
+<hr />
+<h3 id="tf.contrib.learn.monitors.replace_monitors_with_hooksmonitors_or_hooks-estimator"><a name="//apple_ref/cpp/Function/replace_monitors_with_hooks" class="dashAnchor"></a><code id="replace_monitors_with_hooks">tf.contrib.learn.monitors.replace_monitors_with_hooks(monitors_or_hooks, estimator)</code></h3>
+<p>Wraps monitors with a hook.</p>
+<p><code>Monitor</code> is deprecated in favor of <code>SessionRunHook</code>. If you're using a monitor, you can wrap it with a hook using function. It is recommended to implement hook version of your monitor.</p>
+<h5 id="args-101">Args:</h5>
+<ul>
+<li><b><code>monitors_or_hooks</code></b>: A <code>list</code> may contain both monitors and hooks.</li>
+<li><b><code>estimator</code></b>: An <code>Estimator</code> that monitor will be used with.</li>
+</ul>
+<h5 id="returns-30">Returns:</h5>
+<p>Returns a list of hooks. If there is any monitor in the given list, it is replaced by a hook.</p>

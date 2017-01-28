@@ -1,0 +1,1959 @@
+<!-- This file is machine generated: DO NOT EDIT! -->
+<h1 id="math">Math</h1>
+<p>Note: Functions taking <code>Tensor</code> arguments can also take anything accepted by <a href="framework.md#convert_to_tensor"><code>tf.convert_to_tensor</code></a>.</p>
+<p>[TOC]</p>
+<p>Note: Elementwise binary operations in TensorFlow follow <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">numpy-style broadcasting</a>.</p>
+<h2 id="arithmetic-operators">Arithmetic Operators</h2>
+<p>TensorFlow provides several operations that you can use to add basic arithmetic operators to your graph.</p>
+<hr />
+<h3 id="tf.addx-y-namenone"><a name="//apple_ref/cpp/Function/add" class="dashAnchor"></a><code id="add">tf.add(x, y, name=None)</code></h3>
+<p>Returns x + y element-wise.</p>
+<p><em>NOTE</em>: <code>Add</code> supports broadcasting. <code>AddN</code> does not. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>uint8</code>, <code>int8</code>, <code>int16</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>complex128</code>, <code>string</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h3 id="tf.subtractx-y-namenone"><a name="//apple_ref/cpp/Function/subtract" class="dashAnchor"></a><code id="subtract">tf.subtract(x, y, name=None)</code></h3>
+<p>Returns x - y element-wise.</p>
+<p><em>NOTE</em>: <code>Sub</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-1">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>complex128</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-1">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h3 id="tf.multiplyx-y-namenone"><a name="//apple_ref/cpp/Function/multiply" class="dashAnchor"></a><code id="multiply">tf.multiply(x, y, name=None)</code></h3>
+<p>Returns x * y element-wise.</p>
+<p><em>NOTE</em>: <code>Mul</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-2">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>uint8</code>, <code>int8</code>, <code>uint16</code>, <code>int16</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>complex128</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-2">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h3 id="tf.scalar_mulscalar-x"><a name="//apple_ref/cpp/Function/scalar_mul" class="dashAnchor"></a><code id="scalar_mul">tf.scalar_mul(scalar, x)</code></h3>
+<p>Multiplies a scalar times a <code>Tensor</code> or <code>IndexedSlices</code> object.</p>
+<p>Intended for use in gradient code which might deal with <code>IndexedSlices</code> objects, which are easy to multiply by a scalar but more expensive to multiply with arbitrary tensors.</p>
+<h5 id="args-3">Args:</h5>
+<ul>
+<li><b><code>scalar</code></b>: A 0-D scalar <code>Tensor</code>. Must have known shape.</li>
+<li><b><code>x</code></b>: A <code>Tensor</code> or <code>IndexedSlices</code> to be scaled.</li>
+</ul>
+<h5 id="returns-3">Returns:</h5>
+<p><code>scalar * x</code> of the same type (<code>Tensor</code> or <code>IndexedSlices</code>) as <code>x</code>.</p>
+<h5 id="raises">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if scalar is not a 0-D <code>scalar</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.divx-y-namenone"><a name="//apple_ref/cpp/Function/div" class="dashAnchor"></a><code id="div">tf.div(x, y, name=None)</code></h3>
+<p>Returns x / y element-wise.</p>
+<p><em>NOTE</em>: <code>Div</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-4">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>uint8</code>, <code>int8</code>, <code>uint16</code>, <code>int16</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>complex128</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-4">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h3 id="tf.dividex-y-namenone"><a name="//apple_ref/cpp/Function/divide" class="dashAnchor"></a><code id="divide">tf.divide(x, y, name=None)</code></h3>
+<p>Computes Python style division of <code>x</code> by <code>y</code>.</p>
+<hr />
+<h3 id="tf.truedivx-y-namenone"><a name="//apple_ref/cpp/Function/truediv" class="dashAnchor"></a><code id="truediv">tf.truediv(x, y, name=None)</code></h3>
+<p>Divides x / y elementwise, always producing floating point results.</p>
+<p>The same as <code>tf.div</code> for floating point arguments, but casts integer arguments to floating point before dividing so that the result is always floating point. This op is generated by normal <code>x / y</code> division in Python 3 and in Python 2.7 with <code>from __future__ import division</code>. If you want integer division that rounds down, use <code>x // y</code> or <code>tf.floordiv</code>.</p>
+<p><code>x</code> and <code>y</code> must have the same numeric type. If the inputs are floating point, the output will have the same type. If the inputs are integral, the inputs are cast to <code>float32</code> for <code>int8</code> and <code>int16</code> and <code>float64</code> for <code>int32</code> and <code>int64</code> (matching the behavior of Numpy).</p>
+<h5 id="args-5">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code> numerator of numeric type.</li>
+<li><b><code>y</code></b>: <code>Tensor</code> denominator of numeric type.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-5">Returns:</h5>
+<p><code>x / y</code> evaluated in floating point.</p>
+<h5 id="raises-1">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>x</code> and <code>y</code> have different dtypes.</li>
+</ul>
+<hr />
+<h3 id="tf.floordivx-y-namenone"><a name="//apple_ref/cpp/Function/floordiv" class="dashAnchor"></a><code id="floordiv">tf.floordiv(x, y, name=None)</code></h3>
+<p>Divides <code>x / y</code> elementwise, rounding toward the most negative integer.</p>
+<p>The same as <code>tf.div(x,y)</code> for integers, but uses <code>tf.floor(tf.div(x,y))</code> for floating point arguments so that the result is always an integer (though possibly an integer represented as floating point). This op is generated by <code>x // y</code> floor division in Python 3 and in Python 2.7 with <code>from __future__ import division</code>.</p>
+<p>Note that for efficiency, <code>floordiv</code> uses C semantics for negative numbers (unlike Python and Numpy).</p>
+<p><code>x</code> and <code>y</code> must have the same type, and the result will have the same type as well.</p>
+<h5 id="args-6">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code> numerator of real numeric type.</li>
+<li><b><code>y</code></b>: <code>Tensor</code> denominator of real numeric type.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-6">Returns:</h5>
+<p><code>x / y</code> rounded down (except possibly towards zero for negative integers).</p>
+<h5 id="raises-2">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If the inputs are complex.</li>
+</ul>
+<hr />
+<h3 id="tf.realdivx-y-namenone"><a name="//apple_ref/cpp/Function/realdiv" class="dashAnchor"></a><code id="realdiv">tf.realdiv(x, y, name=None)</code></h3>
+<p>Returns x / y element-wise for real types.</p>
+<p>If <code>x</code> and <code>y</code> are reals, this will return the floating-point division.</p>
+<p><em>NOTE</em>: <code>Div</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-7">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>uint8</code>, <code>int8</code>, <code>uint16</code>, <code>int16</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>complex128</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-7">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h3 id="tf.truncatedivx-y-namenone"><a name="//apple_ref/cpp/Function/truncatediv" class="dashAnchor"></a><code id="truncatediv">tf.truncatediv(x, y, name=None)</code></h3>
+<p>Returns x / y element-wise for integer types.</p>
+<p>Truncation designates that negative numbers will round fractional quantities toward zero. I.e. -7 / 5 = 1. This matches C semantics but it is different than Python semantics. See <code>FloorDiv</code> for a division function that matches Python Semantics.</p>
+<p><em>NOTE</em>: <code>TruncateDiv</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-8">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>uint8</code>, <code>int8</code>, <code>uint16</code>, <code>int16</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>complex128</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-8">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h3 id="tf.floor_divx-y-namenone"><a name="//apple_ref/cpp/Function/floor_div" class="dashAnchor"></a><code id="floor_div">tf.floor_div(x, y, name=None)</code></h3>
+<p>Returns x // y element-wise.</p>
+<p><em>NOTE</em>: <code>FloorDiv</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-9">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>uint8</code>, <code>int8</code>, <code>uint16</code>, <code>int16</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>complex128</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-9">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h3 id="tf.truncatemodx-y-namenone"><a name="//apple_ref/cpp/Function/truncatemod" class="dashAnchor"></a><code id="truncatemod">tf.truncatemod(x, y, name=None)</code></h3>
+<p>Returns element-wise remainder of division. This emulates C semantics where</p>
+<p>true, this follows C semantics in that the result here is consistent with a flooring divide. E.g. <code>floor(x / y) * y + mod(x, y) = x</code>.</p>
+<p><em>NOTE</em>: <code>Mod</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-10">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>, <code>float32</code>, <code>float64</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-10">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h3 id="tf.floormodx-y-namenone"><a name="//apple_ref/cpp/Function/floormod" class="dashAnchor"></a><code id="floormod">tf.floormod(x, y, name=None)</code></h3>
+<p>Returns element-wise remainder of division. When <code>x &lt; 0</code> xor <code>y &lt; 0</code> is</p>
+<p>true, this follows Python semantics in that the result here is consistent with a flooring divide. E.g. <code>floor(x / y) * y + mod(x, y) = x</code>.</p>
+<p><em>NOTE</em>: <code>FloorMod</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-11">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>, <code>float32</code>, <code>float64</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-11">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h3 id="tf.modx-y-namenone"><a name="//apple_ref/cpp/Function/mod" class="dashAnchor"></a><code id="mod">tf.mod(x, y, name=None)</code></h3>
+<p>Returns element-wise remainder of division.</p>
+<p><em>NOTE</em>: <code>Mod</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-12">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>, <code>float32</code>, <code>float64</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-12">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h3 id="tf.crossa-b-namenone"><a name="//apple_ref/cpp/Function/cross" class="dashAnchor"></a><code id="cross">tf.cross(a, b, name=None)</code></h3>
+<p>Compute the pairwise cross product.</p>
+<p><code>a</code> and <code>b</code> must be the same shape; they can either be simple 3-element vectors, or any shape where the innermost dimension is 3. In the latter case, each pair of corresponding 3-element vectors is cross-multiplied independently.</p>
+<h5 id="args-13">Args:</h5>
+<ul>
+<li><b><code>a</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>uint8</code>, <code>int16</code>, <code>int8</code>, <code>uint16</code>, <code>half</code>. A tensor containing 3-element vectors.</li>
+<li><b><code>b</code></b>: A <code>Tensor</code>. Must have the same type as <code>a</code>. Another tensor, of same type and shape as <code>a</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-13">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>a</code>. Pairwise cross product of the vectors in <code>a</code> and <code>b</code>.</p>
+<h2 id="basic-math-functions">Basic Math Functions</h2>
+<p>TensorFlow provides several operations that you can use to add basic mathematical functions to your graph.</p>
+<hr />
+<h3 id="tf.add_ninputs-namenone"><a name="//apple_ref/cpp/Function/add_n" class="dashAnchor"></a><code id="add_n">tf.add_n(inputs, name=None)</code></h3>
+<p>Adds all input tensors element-wise.</p>
+<h5 id="args-14">Args:</h5>
+<ul>
+<li><b><code>inputs</code></b>: A list of <code>Tensor</code> objects, each with same shape and type.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-14">Returns:</h5>
+<p>A <code>Tensor</code> of same shape and type as the elements of <code>inputs</code>.</p>
+<h5 id="raises-3">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>inputs</code> don't all have same shape and dtype or the shape cannot be inferred.</li>
+</ul>
+<hr />
+<h3 id="tf.absx-namenone"><a name="//apple_ref/cpp/Function/abs" class="dashAnchor"></a><code id="abs">tf.abs(x, name=None)</code></h3>
+<p>Computes the absolute value of a tensor.</p>
+<p>Given a tensor of real numbers <code>x</code>, this operation returns a tensor containing the absolute value of each element in <code>x</code>. For example, if x is an input element and y is an output element, this operation computes \(y = |x|\).</p>
+<p>See <a href="#tf_complex_abs"><code>tf.complex_abs()</code></a> to compute the absolute value of a complex number.</p>
+<h5 id="args-15">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> or <code>SparseTensor</code> of type <code>float32</code>, <code>float64</code>, <code>int32</code>, or <code>int64</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-15">Returns:</h5>
+<p>A <code>Tensor</code> or <code>SparseTensor</code> the same size and type as <code>x</code> with absolute values.</p>
+<hr />
+<h3 id="tf.negativex-namenone"><a name="//apple_ref/cpp/Function/negative" class="dashAnchor"></a><code id="negative">tf.negative(x, name=None)</code></h3>
+<p>Computes numerical negative value element-wise.</p>
+<p>I.e., \(y = -x\).</p>
+<h5 id="args-16">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>complex128</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-16">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h3 id="tf.signx-namenone"><a name="//apple_ref/cpp/Function/sign" class="dashAnchor"></a><code id="sign">tf.sign(x, name=None)</code></h3>
+<p>Returns an element-wise indication of the sign of a number.</p>
+<p><code>y = sign(x) = -1</code> if <code>x &lt; 0</code>; 0 if <code>x == 0</code>; 1 if <code>x &gt; 0</code>.</p>
+<p>For complex numbers, <code>y = sign(x) = x / |x|</code> if <code>x != 0</code>, otherwise <code>y = 0</code>.</p>
+<h5 id="args-17">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> or <code>SparseTensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>complex128</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-17">Returns:</h5>
+<p>A <code>Tensor</code> or <code>SparseTensor</code>, respectively. Has the same type as <code>x</code>.</p>
+<hr />
+<h3 id="tf.reciprocalx-namenone"><a name="//apple_ref/cpp/Function/reciprocal" class="dashAnchor"></a><code id="reciprocal">tf.reciprocal(x, name=None)</code></h3>
+<p>Computes the reciprocal of x element-wise.</p>
+<p>I.e., \(y = 1 / x\).</p>
+<h5 id="args-18">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>complex128</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-18">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h3 id="tf.squarex-namenone"><a name="//apple_ref/cpp/Function/square" class="dashAnchor"></a><code id="square">tf.square(x, name=None)</code></h3>
+<p>Computes square of x element-wise.</p>
+<p>I.e., (y = x * x = x^2).</p>
+<h5 id="args-19">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> or <code>SparseTensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>complex128</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-19">Returns:</h5>
+<p>A <code>Tensor</code> or <code>SparseTensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h3 id="tf.roundx-namenone"><a name="//apple_ref/cpp/Function/round" class="dashAnchor"></a><code id="round">tf.round(x, name=None)</code></h3>
+<p>Rounds the values of a tensor to the nearest integer, element-wise.</p>
+<p>Rounds half to even. Also known as bankers rounding. If you want to round according to the current system rounding mode use tf::cint. For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># &#39;a&#39; is [0.9, 2.5, 2.3, 1.5, -4.5]</span>
+tf.<span class="bu">round</span>(a) <span class="op">==&gt;</span> [ <span class="fl">1.0</span>, <span class="fl">2.0</span>, <span class="fl">2.0</span>, <span class="fl">2.0</span>, <span class="op">-</span><span class="fl">4.0</span> ]</code></pre></div>
+<h5 id="args-20">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> of type <code>float32</code> or <code>float64</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-20">Returns:</h5>
+<p>A <code>Tensor</code> of same shape and type as <code>x</code>.</p>
+<hr />
+<h3 id="tf.sqrtx-namenone"><a name="//apple_ref/cpp/Function/sqrt" class="dashAnchor"></a><code id="sqrt">tf.sqrt(x, name=None)</code></h3>
+<p>Computes square root of x element-wise.</p>
+<p>I.e., (y =  = x^{1/2}).</p>
+<h5 id="args-21">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> or <code>SparseTensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>complex64</code>, <code>complex128</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-21">Returns:</h5>
+<p>A <code>Tensor</code> or <code>SparseTensor</code>, respectively. Has the same type as <code>x</code>.</p>
+<hr />
+<h3 id="tf.rsqrtx-namenone"><a name="//apple_ref/cpp/Function/rsqrt" class="dashAnchor"></a><code id="rsqrt">tf.rsqrt(x, name=None)</code></h3>
+<p>Computes reciprocal of square root of x element-wise.</p>
+<p>I.e., \(y = 1 / \).</p>
+<h5 id="args-22">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>complex64</code>, <code>complex128</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-22">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h3 id="tf.powx-y-namenone"><a name="//apple_ref/cpp/Function/pow" class="dashAnchor"></a><code id="pow">tf.pow(x, y, name=None)</code></h3>
+<p>Computes the power of one value to another.</p>
+<p>Given a tensor <code>x</code> and a tensor <code>y</code>, this operation computes \(x^y\) for corresponding elements in <code>x</code> and <code>y</code>. For example:</p>
+<pre><code># tensor &#39;x&#39; is [[2, 2], [3, 3]]
+# tensor &#39;y&#39; is [[8, 16], [2, 3]]
+tf.pow(x, y) ==&gt; [[256, 65536], [9, 27]]</code></pre>
+<h5 id="args-23">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> of type <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, or <code>complex128</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code> of type <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, or <code>complex128</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-23">Returns:</h5>
+<p>A <code>Tensor</code>.</p>
+<hr />
+<h3 id="tf.expx-namenone"><a name="//apple_ref/cpp/Function/exp" class="dashAnchor"></a><code id="exp">tf.exp(x, name=None)</code></h3>
+<p>Computes exponential of x element-wise. \(y = e^x\).</p>
+<h5 id="args-24">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>complex64</code>, <code>complex128</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-24">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h3 id="tf.logx-namenone"><a name="//apple_ref/cpp/Function/log" class="dashAnchor"></a><code id="log">tf.log(x, name=None)</code></h3>
+<p>Computes natural logarithm of x element-wise.</p>
+<p>I.e., \(y = _e x\).</p>
+<h5 id="args-25">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>complex64</code>, <code>complex128</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-25">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h3 id="tf.log1px-namenone"><a name="//apple_ref/cpp/Function/log1p" class="dashAnchor"></a><code id="log1p">tf.log1p(x, name=None)</code></h3>
+<p>Computes natural logarithm of (1 + x) element-wise.</p>
+<p>I.e., \(y = _e (1 + x)\).</p>
+<h5 id="args-26">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>complex64</code>, <code>complex128</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-26">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h3 id="tf.ceilx-namenone"><a name="//apple_ref/cpp/Function/ceil" class="dashAnchor"></a><code id="ceil">tf.ceil(x, name=None)</code></h3>
+<p>Returns element-wise smallest integer in not less than x.</p>
+<h5 id="args-27">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-27">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h3 id="tf.floorx-namenone"><a name="//apple_ref/cpp/Function/floor" class="dashAnchor"></a><code id="floor">tf.floor(x, name=None)</code></h3>
+<p>Returns element-wise largest integer not greater than x.</p>
+<h5 id="args-28">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-28">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h3 id="tf.maximumx-y-namenone"><a name="//apple_ref/cpp/Function/maximum" class="dashAnchor"></a><code id="maximum">tf.maximum(x, y, name=None)</code></h3>
+<p>Returns the max of x and y (i.e. x &gt; y ? x : y) element-wise.</p>
+<p><em>NOTE</em>: <code>Maximum</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-29">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-29">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h3 id="tf.minimumx-y-namenone"><a name="//apple_ref/cpp/Function/minimum" class="dashAnchor"></a><code id="minimum">tf.minimum(x, y, name=None)</code></h3>
+<p>Returns the min of x and y (i.e. x &lt; y ? x : y) element-wise.</p>
+<p><em>NOTE</em>: <code>Minimum</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-30">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-30">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h3 id="tf.cosx-namenone"><a name="//apple_ref/cpp/Function/cos" class="dashAnchor"></a><code id="cos">tf.cos(x, name=None)</code></h3>
+<p>Computes cos of x element-wise.</p>
+<h5 id="args-31">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>complex64</code>, <code>complex128</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-31">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h3 id="tf.sinx-namenone"><a name="//apple_ref/cpp/Function/sin" class="dashAnchor"></a><code id="sin">tf.sin(x, name=None)</code></h3>
+<p>Computes sin of x element-wise.</p>
+<h5 id="args-32">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>complex64</code>, <code>complex128</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-32">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h3 id="tf.lbetax-namelbeta"><a name="//apple_ref/cpp/Function/lbeta" class="dashAnchor"></a><code id="lbeta">tf.lbeta(x, name='lbeta')</code></h3>
+<p>Computes <code>ln(|Beta(x)|)</code>, reducing along the last dimension.</p>
+<p>Given one-dimensional <code>z = [z_0,...,z_{K-1}]</code>, we define</p>
+<p><code>Beta(z) = \prod_j Gamma(z_j) / Gamma(\sum_j z_j)</code></p>
+<p>And for <code>n + 1</code> dimensional <code>x</code> with shape <code>[N1, ..., Nn, K]</code>, we define <code>lbeta(x)[i1, ..., in] = Log(|Beta(x[i1, ..., in, :])|)</code>. In other words, the last dimension is treated as the <code>z</code> vector.</p>
+<p>Note that if <code>z = [u, v]</code>, then <code>Beta(z) = int_0^1 t^{u-1} (1 - t)^{v-1} dt</code>, which defines the traditional bivariate beta function.</p>
+<h5 id="args-33">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A rank <code>n + 1</code> <code>Tensor</code> with type <code>float</code>, or <code>double</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-33">Returns:</h5>
+<p>The logarithm of <code>|Beta(x)|</code> reducing along the last dimension.</p>
+<h5 id="raises-4">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>x</code> is empty with rank one or less.</li>
+</ul>
+<hr />
+<h3 id="tf.tanx-namenone"><a name="//apple_ref/cpp/Function/tan" class="dashAnchor"></a><code id="tan">tf.tan(x, name=None)</code></h3>
+<p>Computes tan of x element-wise.</p>
+<h5 id="args-34">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>complex128</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-34">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h3 id="tf.acosx-namenone"><a name="//apple_ref/cpp/Function/acos" class="dashAnchor"></a><code id="acos">tf.acos(x, name=None)</code></h3>
+<p>Computes acos of x element-wise.</p>
+<h5 id="args-35">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>complex128</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-35">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h3 id="tf.asinx-namenone"><a name="//apple_ref/cpp/Function/asin" class="dashAnchor"></a><code id="asin">tf.asin(x, name=None)</code></h3>
+<p>Computes asin of x element-wise.</p>
+<h5 id="args-36">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>complex128</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-36">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h3 id="tf.atanx-namenone"><a name="//apple_ref/cpp/Function/atan" class="dashAnchor"></a><code id="atan">tf.atan(x, name=None)</code></h3>
+<p>Computes atan of x element-wise.</p>
+<h5 id="args-37">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>complex128</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-37">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h3 id="tf.lgammax-namenone"><a name="//apple_ref/cpp/Function/lgamma" class="dashAnchor"></a><code id="lgamma">tf.lgamma(x, name=None)</code></h3>
+<p>Computes the log of the absolute value of <code>Gamma(x)</code> element-wise.</p>
+<h5 id="args-38">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-38">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h3 id="tf.digammax-namenone"><a name="//apple_ref/cpp/Function/digamma" class="dashAnchor"></a><code id="digamma">tf.digamma(x, name=None)</code></h3>
+<p>Computes Psi, the derivative of Lgamma (the log of the absolute value of</p>
+<p><code>Gamma(x)</code>), element-wise.</p>
+<h5 id="args-39">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-39">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h3 id="tf.erfx-namenone"><a name="//apple_ref/cpp/Function/erf" class="dashAnchor"></a><code id="erf">tf.erf(x, name=None)</code></h3>
+<p>Computes the Gauss error function of <code>x</code> element-wise.</p>
+<h5 id="args-40">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> of <code>SparseTensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-40">Returns:</h5>
+<p>A <code>Tensor</code> or <code>SparseTensor</code>, respectively. Has the same type as <code>x</code>.</p>
+<hr />
+<h3 id="tf.erfcx-namenone"><a name="//apple_ref/cpp/Function/erfc" class="dashAnchor"></a><code id="erfc">tf.erfc(x, name=None)</code></h3>
+<p>Computes the complementary error function of <code>x</code> element-wise.</p>
+<h5 id="args-41">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-41">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h3 id="tf.squared_differencex-y-namenone"><a name="//apple_ref/cpp/Function/squared_difference" class="dashAnchor"></a><code id="squared_difference">tf.squared_difference(x, y, name=None)</code></h3>
+<p>Returns (x - y)(x - y) element-wise.</p>
+<p><em>NOTE</em>: <code>SquaredDifference</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-42">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>complex128</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-42">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h3 id="tf.igammaa-x-namenone"><a name="//apple_ref/cpp/Function/igamma" class="dashAnchor"></a><code id="igamma">tf.igamma(a, x, name=None)</code></h3>
+<p>Compute the lower regularized incomplete Gamma function <code>Q(a, x)</code>.</p>
+<p>The lower regularized incomplete Gamma function is defined as:</p>
+<pre><code>P(a, x) = gamma(a, x) / Gamma(a) = 1 - Q(a, x)</code></pre>
+<p>where</p>
+<pre><code>gamma(a, x) = int_{0}^{x} t^{a-1} exp(-t) dt</code></pre>
+<p>is the lower incomplete Gamma function.</p>
+<p>Note, above <code>Q(a, x)</code> (<code>Igammac</code>) is the upper regularized complete Gamma function.</p>
+<h5 id="args-43">Args:</h5>
+<ul>
+<li><b><code>a</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>.</li>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must have the same type as <code>a</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-43">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>a</code>.</p>
+<hr />
+<h3 id="tf.igammaca-x-namenone"><a name="//apple_ref/cpp/Function/igammac" class="dashAnchor"></a><code id="igammac">tf.igammac(a, x, name=None)</code></h3>
+<p>Compute the upper regularized incomplete Gamma function <code>Q(a, x)</code>.</p>
+<p>The upper regularized incomplete Gamma function is defined as:</p>
+<pre><code>Q(a, x) = Gamma(a, x) / Gamma(a) = 1 - P(a, x)</code></pre>
+<p>where</p>
+<pre><code>Gamma(a, x) = int_{x}^{\infty} t^{a-1} exp(-t) dt</code></pre>
+<p>is the upper incomplete Gama function.</p>
+<p>Note, above <code>P(a, x)</code> (<code>Igamma</code>) is the lower regularized complete Gamma function.</p>
+<h5 id="args-44">Args:</h5>
+<ul>
+<li><b><code>a</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>.</li>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must have the same type as <code>a</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-44">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>a</code>.</p>
+<hr />
+<h3 id="tf.zetax-q-namenone"><a name="//apple_ref/cpp/Function/zeta" class="dashAnchor"></a><code id="zeta">tf.zeta(x, q, name=None)</code></h3>
+<p>Compute the Hurwitz zeta function \((x, q)\).</p>
+<p>The Hurwitz zeta function is defined as:</p>
+<pre><code>\zeta(x, q) = \sum_{n=0}^{\infty} (q + n)^{-x}</code></pre>
+<h5 id="args-45">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>.</li>
+<li><b><code>q</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-45">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h3 id="tf.polygammaa-x-namenone"><a name="//apple_ref/cpp/Function/polygamma" class="dashAnchor"></a><code id="polygamma">tf.polygamma(a, x, name=None)</code></h3>
+<p>Compute the polygamma function \(^{(n)}(x)\).</p>
+<p>The polygamma function is defined as:</p>
+<pre><code>\psi^{(n)}(x) = \frac{d^n}{dx^n} \psi(x)</code></pre>
+<p>where \((x)\) is the digamma function.</p>
+<h5 id="args-46">Args:</h5>
+<ul>
+<li><b><code>a</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>.</li>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must have the same type as <code>a</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-46">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>a</code>.</p>
+<hr />
+<h3 id="tf.betainca-b-x-namenone"><a name="//apple_ref/cpp/Function/betainc" class="dashAnchor"></a><code id="betainc">tf.betainc(a, b, x, name=None)</code></h3>
+<p>Compute the regularized incomplete beta integral \(I_x(a, b)\).</p>
+<p>The regularized incomplete beta integral is defined as:</p>
+<pre><code>I_x(a, b) = \frac{B(x; a, b)}{B(a, b)}</code></pre>
+<p>where</p>
+<pre><code>B(x; a, b) = \int_0^x t^{a-1} (1 - t)^{b-1} dt</code></pre>
+<p>is the incomplete beta function and \(B(a, b)\) is the <em>complete</em> beta function.</p>
+<h5 id="args-47">Args:</h5>
+<ul>
+<li><b><code>a</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>.</li>
+<li><b><code>b</code></b>: A <code>Tensor</code>. Must have the same type as <code>a</code>.</li>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must have the same type as <code>a</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-47">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>a</code>.</p>
+<hr />
+<h3 id="tf.rintx-namenone"><a name="//apple_ref/cpp/Function/rint" class="dashAnchor"></a><code id="rint">tf.rint(x, name=None)</code></h3>
+<p>Returns element-wise integer closest to x.</p>
+<p>If the result is midway between two representable values, the even representable is chosen. For example:</p>
+<pre><code>rint(-1.5) ==&gt; -2.0
+rint(0.5000001) ==&gt; 1.0
+rint([-1.7, -1.5, -0.2, 0.2, 1.5, 1.7, 2.0]) ==&gt; [-2., -2., -0., 0., 2., 2., 2.]</code></pre>
+<h5 id="args-48">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-48">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<h2 id="matrix-math-functions">Matrix Math Functions</h2>
+<p>TensorFlow provides several operations that you can use to add linear algebra functions on matrices to your graph.</p>
+<hr />
+<h3 id="tf.diagdiagonal-namenone"><a name="//apple_ref/cpp/Function/diag" class="dashAnchor"></a><code id="diag">tf.diag(diagonal, name=None)</code></h3>
+<p>Returns a diagonal tensor with a given diagonal values.</p>
+<p>Given a <code>diagonal</code>, this operation returns a tensor with the <code>diagonal</code> and everything else padded with zeros. The diagonal is computed as follows:</p>
+<p>Assume <code>diagonal</code> has dimensions [D1,..., Dk], then the output is a tensor of rank 2k with dimensions [D1,..., Dk, D1,..., Dk] where:</p>
+<p><code>output[i1,..., ik, i1,..., ik] = diagonal[i1, ..., ik]</code> and 0 everywhere else.</p>
+<p>For example:</p>
+<pre class="prettyprint"><code># &#39;diagonal&#39; is [1, 2, 3, 4]
+tf.diag(diagonal) ==&gt; [[1, 0, 0, 0]
+                       [0, 2, 0, 0]
+                       [0, 0, 3, 0]
+                       [0, 0, 0, 4]]</code></pre>
+<h5 id="args-49">Args:</h5>
+<ul>
+<li><b><code>diagonal</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>complex128</code>. Rank k tensor where k is at most 3.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-49">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>diagonal</code>.</p>
+<hr />
+<h3 id="tf.diag_partinput-namenone"><a name="//apple_ref/cpp/Function/diag_part" class="dashAnchor"></a><code id="diag_part">tf.diag_part(input, name=None)</code></h3>
+<p>Returns the diagonal part of the tensor.</p>
+<p>This operation returns a tensor with the <code>diagonal</code> part of the <code>input</code>. The <code>diagonal</code> part is computed as follows:</p>
+<p>Assume <code>input</code> has dimensions <code>[D1,..., Dk, D1,..., Dk]</code>, then the output is a tensor of rank <code>k</code> with dimensions <code>[D1,..., Dk]</code> where:</p>
+<p><code>diagonal[i1,..., ik] = input[i1, ..., ik, i1,..., ik]</code>.</p>
+<p>For example:</p>
+<pre class="prettyprint"><code># &#39;input&#39; is [[1, 0, 0, 0]
+              [0, 2, 0, 0]
+              [0, 0, 3, 0]
+              [0, 0, 0, 4]]
+
+tf.diag_part(input) ==&gt; [1, 2, 3, 4]</code></pre>
+<h5 id="args-50">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>complex128</code>. Rank k tensor where k is 2, 4, or 6.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-50">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>input</code>. The extracted diagonal.</p>
+<hr />
+<h3 id="tf.tracex-namenone"><a name="//apple_ref/cpp/Function/trace" class="dashAnchor"></a><code id="trace">tf.trace(x, name=None)</code></h3>
+<p>Compute the trace of a tensor <code>x</code>.</p>
+<p><code>trace(x)</code> returns the sum along the main diagonal of each inner-most matrix in x. If x is of rank <code>k</code> with shape <code>[I, J, K, ..., L, M, N]</code>, then output is a tensor of rank <code>k-2</code> with dimensions <code>[I, J, K, ..., L]</code> where</p>
+<p><code>output[i, j, k, ..., l] = trace(x[i, j, i, ..., l, :, :])</code></p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># &#39;x&#39; is [[1, 2],</span>
+<span class="co">#         [3, 4]]</span>
+tf.trace(x) <span class="op">==&gt;</span> <span class="dv">5</span>
+
+<span class="co"># &#39;x&#39; is [[1,2,3],</span>
+<span class="co">#         [4,5,6],</span>
+<span class="co">#         [7,8,9]]</span>
+tf.trace(x) <span class="op">==&gt;</span> <span class="dv">15</span>
+
+<span class="co"># &#39;x&#39; is [[[1,2,3],</span>
+<span class="co">#          [4,5,6],</span>
+<span class="co">#          [7,8,9]],</span>
+<span class="co">#         [[-1,-2,-3],</span>
+<span class="co">#          [-4,-5,-6],</span>
+<span class="co">#          [-7,-8,-9]]]</span>
+tf.trace(x) <span class="op">==&gt;</span> [<span class="dv">15</span>,<span class="op">-</span><span class="dv">15</span>]</code></pre></div>
+<h5 id="args-51">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: tensor.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-51">Returns:</h5>
+<p>The trace of input tensor.</p>
+<hr />
+<h3 id="tf.transposea-permnone-nametranspose"><a name="//apple_ref/cpp/Function/transpose" class="dashAnchor"></a><code id="transpose">tf.transpose(a, perm=None, name='transpose')</code></h3>
+<p>Transposes <code>a</code>. Permutes the dimensions according to <code>perm</code>.</p>
+<p>The returned tensor's dimension i will correspond to the input dimension <code>perm[i]</code>. If <code>perm</code> is not given, it is set to (n-1...0), where n is the rank of the input tensor. Hence by default, this operation performs a regular matrix transpose on 2-D input Tensors.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># &#39;x&#39; is [[1 2 3]</span>
+<span class="co">#         [4 5 6]]</span>
+tf.transpose(x) <span class="op">==&gt;</span> [[<span class="dv">1</span> <span class="dv">4</span>]
+                     [<span class="dv">2</span> <span class="dv">5</span>]
+                     [<span class="dv">3</span> <span class="dv">6</span>]]
+
+<span class="co"># Equivalently</span>
+tf.transpose(x, perm<span class="op">=</span>[<span class="dv">1</span>, <span class="dv">0</span>]) <span class="op">==&gt;</span> [[<span class="dv">1</span> <span class="dv">4</span>]
+                                  [<span class="dv">2</span> <span class="dv">5</span>]
+                                  [<span class="dv">3</span> <span class="dv">6</span>]]
+
+<span class="co"># &#39;perm&#39; is more useful for n-dimensional tensors, for n &gt; 2</span>
+<span class="co"># &#39;x&#39; is   [[[1  2  3]</span>
+<span class="co">#            [4  5  6]]</span>
+<span class="co">#           [[7  8  9]</span>
+<span class="co">#            [10 11 12]]]</span>
+<span class="co"># Take the transpose of the matrices in dimension-0</span>
+tf.transpose(x, perm<span class="op">=</span>[<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">1</span>]) <span class="op">==&gt;</span> [[[<span class="dv">1</span>  <span class="dv">4</span>]
+                                      [<span class="dv">2</span>  <span class="dv">5</span>]
+                                      [<span class="dv">3</span>  <span class="dv">6</span>]]
+
+                                     [[<span class="dv">7</span> <span class="dv">10</span>]
+                                      [<span class="dv">8</span> <span class="dv">11</span>]
+                                      [<span class="dv">9</span> <span class="dv">12</span>]]]</code></pre></div>
+<h5 id="args-52">Args:</h5>
+<ul>
+<li><b><code>a</code></b>: A <code>Tensor</code>.</li>
+<li><b><code>perm</code></b>: A permutation of the dimensions of <code>a</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-52">Returns:</h5>
+<p>A transposed <code>Tensor</code>.</p>
+<hr />
+<h3 id="tf.eyenum_rows-num_columnsnone-batch_shapenone-dtypetf.float32-namenone"><a name="//apple_ref/cpp/Function/eye" class="dashAnchor"></a><code id="eye">tf.eye(num_rows, num_columns=None, batch_shape=None, dtype=tf.float32, name=None)</code></h3>
+<p>Construct an identity matrix, or a batch of matrices.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Construct one identity matrix.</span>
+tf.eye(<span class="dv">2</span>)
+<span class="op">==&gt;</span> [[<span class="dv">1</span>., <span class="dv">0</span>.],
+     [<span class="dv">0</span>., <span class="dv">1</span>.]]
+
+<span class="co"># Construct a batch of 3 identity matricies, each 2 x 2.</span>
+<span class="co"># batch_identity[i, :, :] is a 2 x 2 identity matrix, i = 0, 1, 2.</span>
+batch_identity <span class="op">=</span> tf.eye(<span class="dv">2</span>, batch_shape<span class="op">=</span>[<span class="dv">3</span>])
+
+<span class="co"># Construct one 2 x 3 &quot;identity&quot; matrix</span>
+tf.eye(<span class="dv">2</span>, num_columns<span class="op">=</span><span class="dv">3</span>)
+<span class="op">==&gt;</span> [[ <span class="dv">1</span>.,  <span class="dv">0</span>.,  <span class="dv">0</span>.],
+     [ <span class="dv">0</span>.,  <span class="dv">1</span>.,  <span class="dv">0</span>.]]</code></pre></div>
+<h5 id="args-53">Args:</h5>
+<ul>
+<li><b><code>num_rows</code></b>: Non-negative <code>int32</code> scalar <code>Tensor</code> giving the number of rows in each batch matrix.</li>
+<li><b><code>num_columns</code></b>: Optional non-negative <code>int32</code> scalar <code>Tensor</code> giving the number of columns in each batch matrix. Defaults to <code>num_rows</code>.</li>
+<li><b><code>batch_shape</code></b>: <code>int32</code> <code>Tensor</code>. If provided, returned <code>Tensor</code> will have leading batch dimensions of this shape.</li>
+<li><b><code>dtype</code></b>: The type of an element in the resulting <code>Tensor</code></li>
+<li><b><code>name</code></b>: A name for this <code>Op</code>. Defaults to &quot;eye&quot;.</li>
+</ul>
+<h5 id="returns-53">Returns:</h5>
+<p>A <code>Tensor</code> of shape <code>batch_shape + [num_rows, num_columns]</code></p>
+<hr />
+<h3 id="tf.matrix_diagdiagonal-namenone"><a name="//apple_ref/cpp/Function/matrix_diag" class="dashAnchor"></a><code id="matrix_diag">tf.matrix_diag(diagonal, name=None)</code></h3>
+<p>Returns a batched diagonal tensor with a given batched diagonal values.</p>
+<p>Given a <code>diagonal</code>, this operation returns a tensor with the <code>diagonal</code> and everything else padded with zeros. The diagonal is computed as follows:</p>
+<p>Assume <code>diagonal</code> has <code>k</code> dimensions <code>[I, J, K, ..., N]</code>, then the output is a tensor of rank <code>k+1</code> with dimensions [I, J, K, ..., N, N]` where:</p>
+<p><code>output[i, j, k, ..., m, n] = 1{m=n} * diagonal[i, j, k, ..., n]</code>.</p>
+<p>For example:</p>
+<pre class="prettyprint"><code># &#39;diagonal&#39; is [[1, 2, 3, 4], [5, 6, 7, 8]]
+
+and diagonal.shape = (2, 4)
+
+tf.matrix_diag(diagonal) ==&gt; [[[1, 0, 0, 0]
+                                     [0, 2, 0, 0]
+                                     [0, 0, 3, 0]
+                                     [0, 0, 0, 4]],
+                                    [[5, 0, 0, 0]
+                                     [0, 6, 0, 0]
+                                     [0, 0, 7, 0]
+                                     [0, 0, 0, 8]]]
+
+which has shape (2, 4, 4)</code></pre>
+<h5 id="args-54">Args:</h5>
+<ul>
+<li><b><code>diagonal</code></b>: A <code>Tensor</code>. Rank <code>k</code>, where <code>k &gt;= 1</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-54">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>diagonal</code>. Rank <code>k+1</code>, with <code>output.shape = diagonal.shape + [diagonal.shape[-1]]</code>.</p>
+<hr />
+<h3 id="tf.matrix_diag_partinput-namenone"><a name="//apple_ref/cpp/Function/matrix_diag_part" class="dashAnchor"></a><code id="matrix_diag_part">tf.matrix_diag_part(input, name=None)</code></h3>
+<p>Returns the batched diagonal part of a batched tensor.</p>
+<p>This operation returns a tensor with the <code>diagonal</code> part of the batched <code>input</code>. The <code>diagonal</code> part is computed as follows:</p>
+<p>Assume <code>input</code> has <code>k</code> dimensions <code>[I, J, K, ..., M, N]</code>, then the output is a tensor of rank <code>k - 1</code> with dimensions <code>[I, J, K, ..., min(M, N)]</code> where:</p>
+<p><code>diagonal[i, j, k, ..., n] = input[i, j, k, ..., n, n]</code>.</p>
+<p>The input must be at least a matrix.</p>
+<p>For example:</p>
+<pre class="prettyprint"><code># &#39;input&#39; is [[[1, 0, 0, 0]
+               [0, 2, 0, 0]
+               [0, 0, 3, 0]
+               [0, 0, 0, 4]],
+              [[5, 0, 0, 0]
+               [0, 6, 0, 0]
+               [0, 0, 7, 0]
+               [0, 0, 0, 8]]]
+
+and input.shape = (2, 4, 4)
+
+tf.matrix_diag_part(input) ==&gt; [[1, 2, 3, 4], [5, 6, 7, 8]]
+
+which has shape (2, 4)</code></pre>
+<h5 id="args-55">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. Rank <code>k</code> tensor where <code>k &gt;= 2</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-55">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>input</code>. The extracted diagonal(s) having shape <code>diagonal.shape = input.shape[:-2] + [min(input.shape[-2:])]</code>.</p>
+<hr />
+<h3 id="tf.matrix_band_partinput-num_lower-num_upper-namenone"><a name="//apple_ref/cpp/Function/matrix_band_part" class="dashAnchor"></a><code id="matrix_band_part">tf.matrix_band_part(input, num_lower, num_upper, name=None)</code></h3>
+<p>Copy a tensor setting everything outside a central band in each innermost matrix</p>
+<p>to zero.</p>
+<p>The <code>band</code> part is computed as follows: Assume <code>input</code> has <code>k</code> dimensions <code>[I, J, K, ..., M, N]</code>, then the output is a tensor with the same shape where</p>
+<p><code>band[i, j, k, ..., m, n] = in_band(m, n) * input[i, j, k, ..., m, n]</code>.</p>
+<p>The indicator function</p>
+<p><code>in_band(m, n) = (num_lower &lt; 0 || (m-n) &lt;= num_lower)) &amp;&amp;                  (num_upper &lt; 0 || (n-m) &lt;= num_upper)</code>.</p>
+<p>For example:</p>
+<pre class="prettyprint"><code># if &#39;input&#39; is [[ 0,  1,  2, 3]
+                 [-1,  0,  1, 2]
+                 [-2, -1,  0, 1]
+                 [-3, -2, -1, 0]],
+
+tf.matrix_band_part(input, 1, -1) ==&gt; [[ 0,  1,  2, 3]
+                                       [-1,  0,  1, 2]
+                                       [ 0, -1,  0, 1]
+                                       [ 0,  0, -1, 0]],
+
+tf.matrix_band_part(input, 2, 1) ==&gt; [[ 0,  1,  0, 0]
+                                      [-1,  0,  1, 0]
+                                      [-2, -1,  0, 1]
+                                      [ 0, -2, -1, 0]]</code></pre>
+<p>Useful special cases:</p>
+<pre class="prettyprint"><code> tf.matrix_band_part(input, 0, -1) ==&gt; Upper triangular part.
+ tf.matrix_band_part(input, -1, 0) ==&gt; Lower triangular part.
+ tf.matrix_band_part(input, 0, 0) ==&gt; Diagonal.</code></pre>
+<h5 id="args-56">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. Rank <code>k</code> tensor.</li>
+<li><b><code>num_lower</code></b>: A <code>Tensor</code> of type <code>int64</code>. 0-D tensor. Number of subdiagonals to keep. If negative, keep entire lower triangle.</li>
+<li><b><code>num_upper</code></b>: A <code>Tensor</code> of type <code>int64</code>. 0-D tensor. Number of superdiagonals to keep. If negative, keep entire upper triangle.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-56">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>input</code>. Rank <code>k</code> tensor of the same shape as input. The extracted banded tensor.</p>
+<hr />
+<h3 id="tf.matrix_set_diaginput-diagonal-namenone"><a name="//apple_ref/cpp/Function/matrix_set_diag" class="dashAnchor"></a><code id="matrix_set_diag">tf.matrix_set_diag(input, diagonal, name=None)</code></h3>
+<p>Returns a batched matrix tensor with new batched diagonal values.</p>
+<p>Given <code>input</code> and <code>diagonal</code>, this operation returns a tensor with the same shape and values as <code>input</code>, except for the main diagonal of the innermost matrices. These will be overwritten by the values in <code>diagonal</code>.</p>
+<p>The output is computed as follows:</p>
+<p>Assume <code>input</code> has <code>k+1</code> dimensions <code>[I, J, K, ..., M, N]</code> and <code>diagonal</code> has <code>k</code> dimensions <code>[I, J, K, ..., min(M, N)]</code>. Then the output is a tensor of rank <code>k+1</code> with dimensions <code>[I, J, K, ..., M, N]</code> where:</p>
+<ul>
+<li><code>output[i, j, k, ..., m, n] = diagonal[i, j, k, ..., n]</code> for <code>m == n</code>.</li>
+<li><code>output[i, j, k, ..., m, n] = input[i, j, k, ..., m, n]</code> for <code>m != n</code>.</li>
+</ul>
+<h5 id="args-57">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. Rank <code>k+1</code>, where <code>k &gt;= 1</code>.</li>
+<li><b><code>diagonal</code></b>: A <code>Tensor</code>. Must have the same type as <code>input</code>. Rank <code>k</code>, where <code>k &gt;= 1</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-57">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>input</code>. Rank <code>k+1</code>, with <code>output.shape = input.shape</code>.</p>
+<hr />
+<h3 id="tf.matrix_transposea-namematrix_transpose"><a name="//apple_ref/cpp/Function/matrix_transpose" class="dashAnchor"></a><code id="matrix_transpose">tf.matrix_transpose(a, name='matrix_transpose')</code></h3>
+<p>Transposes last two dimensions of tensor <code>a</code>.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Matrix with no batch dimension.</span>
+<span class="co"># &#39;x&#39; is [[1 2 3]</span>
+<span class="co">#         [4 5 6]]</span>
+tf.matrix_transpose(x) <span class="op">==&gt;</span> [[<span class="dv">1</span> <span class="dv">4</span>]
+                                 [<span class="dv">2</span> <span class="dv">5</span>]
+                                 [<span class="dv">3</span> <span class="dv">6</span>]]
+
+<span class="co"># Matrix with two batch dimensions.</span>
+<span class="co"># x.shape is [1, 2, 3, 4]</span>
+<span class="co"># tf.matrix_transpose(x) is shape [1, 2, 4, 3]</span></code></pre></div>
+<h5 id="args-58">Args:</h5>
+<ul>
+<li><b><code>a</code></b>: A <code>Tensor</code> with <code>rank &gt;= 2</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-58">Returns:</h5>
+<p>A transposed batch matrix <code>Tensor</code>.</p>
+<h5 id="raises-5">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>a</code> is determined statically to have <code>rank &lt; 2</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.matmula-b-transpose_afalse-transpose_bfalse-adjoint_afalse-adjoint_bfalse-a_is_sparsefalse-b_is_sparsefalse-namenone"><a name="//apple_ref/cpp/Function/matmul" class="dashAnchor"></a><code id="matmul">tf.matmul(a, b, transpose_a=False, transpose_b=False, adjoint_a=False, adjoint_b=False, a_is_sparse=False, b_is_sparse=False, name=None)</code></h3>
+<p>Multiplies matrix <code>a</code> by matrix <code>b</code>, producing <code>a</code> * <code>b</code>.</p>
+<p>The inputs must be matrices (or tensors of rank &gt; 2, representing batches of matrices), with matching inner dimensions, possibly after transposition.</p>
+<p>Both matrices must be of the same type. The supported types are: <code>float16</code>, <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>complex64</code>, <code>complex128</code>.</p>
+<p>Either matrix can be transposed or adjointed (conjugated and transposed) on the fly by setting one of the corresponding flag to <code>True</code>. These are <code>False</code> by default.</p>
+<p>If one or both of the matrices contain a lot of zeros, a more efficient multiplication algorithm can be used by setting the corresponding <code>a_is_sparse</code> or <code>b_is_sparse</code> flag to <code>True</code>. These are <code>False</code> by default. This optimization is only available for plain matrices (rank-2 tensors) with datatypes <code>bfloat16</code> or <code>float32</code>.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># 2-D tensor `a`</span>
+a <span class="op">=</span> tf.constant([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>], shape<span class="op">=</span>[<span class="dv">2</span>, <span class="dv">3</span>]) <span class="op">=&gt;</span> [[<span class="dv">1</span>. <span class="dv">2</span>. <span class="dv">3</span>.]
+                                                      [<span class="dv">4</span>. <span class="dv">5</span>. <span class="dv">6</span>.]]
+<span class="co"># 2-D tensor `b`</span>
+b <span class="op">=</span> tf.constant([<span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">10</span>, <span class="dv">11</span>, <span class="dv">12</span>], shape<span class="op">=</span>[<span class="dv">3</span>, <span class="dv">2</span>]) <span class="op">=&gt;</span> [[<span class="dv">7</span>. <span class="dv">8</span>.]
+                                                         [<span class="dv">9</span>. <span class="dv">10</span>.]
+                                                         [<span class="dv">11</span>. <span class="dv">12</span>.]]
+c <span class="op">=</span> tf.matmul(a, b) <span class="op">=&gt;</span> [[<span class="dv">58</span> <span class="dv">64</span>]
+                        [<span class="dv">139</span> <span class="dv">154</span>]]
+
+
+<span class="co"># 3-D tensor `a`</span>
+a <span class="op">=</span> tf.constant(np.arange(<span class="dv">1</span>,<span class="dv">13</span>), shape<span class="op">=</span>[<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>]) <span class="op">=&gt;</span> [[[ <span class="dv">1</span>.  <span class="dv">2</span>.  <span class="dv">3</span>.]
+                                                       [ <span class="dv">4</span>.  <span class="dv">5</span>.  <span class="dv">6</span>.]],
+                                                      [[ <span class="dv">7</span>.  <span class="dv">8</span>.  <span class="dv">9</span>.]
+                                                       [<span class="dv">10</span>. <span class="dv">11</span>. <span class="dv">12</span>.]]]
+
+<span class="co"># 3-D tensor `b`</span>
+b <span class="op">=</span> tf.constant(np.arange(<span class="dv">13</span>,<span class="dv">25</span>), shape<span class="op">=</span>[<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">2</span>]) <span class="op">=&gt;</span> [[[<span class="dv">13</span>. <span class="dv">14</span>.]
+                                                        [<span class="dv">15</span>. <span class="dv">16</span>.]
+                                                        [<span class="dv">17</span>. <span class="dv">18</span>.]],
+                                                       [[<span class="dv">19</span>. <span class="dv">20</span>.]
+                                                        [<span class="dv">21</span>. <span class="dv">22</span>.]
+                                                        [<span class="dv">23</span>. <span class="dv">24</span>.]]]
+c <span class="op">=</span> tf.matmul(a, b) <span class="op">=&gt;</span> [[[ <span class="dv">94</span> <span class="dv">100</span>]
+                         [<span class="dv">229</span> <span class="dv">244</span>]],
+                        [[<span class="dv">508</span> <span class="dv">532</span>]
+                         [<span class="dv">697</span> <span class="dv">730</span>]]]</code></pre></div>
+<h5 id="args-59">Args:</h5>
+<ul>
+<li><b><code>a</code></b>: <code>Tensor</code> of type <code>float16</code>, <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>complex64</code>, <code>complex128</code> and rank &gt; 1.</li>
+<li><b><code>b</code></b>: <code>Tensor</code> with same type and rank as <code>a</code>.</li>
+<li><b><code>transpose_a</code></b>: If <code>True</code>, <code>a</code> is transposed before multiplication.</li>
+<li><b><code>transpose_b</code></b>: If <code>True</code>, <code>b</code> is transposed before multiplication.</li>
+<li><b><code>adjoint_a</code></b>: If <code>True</code>, <code>a</code> is conjugated and transposed before multiplication.</li>
+<li><b><code>adjoint_b</code></b>: If <code>True</code>, <code>b</code> is conjugated and transposed before multiplication.</li>
+<li><b><code>a_is_sparse</code></b>: If <code>True</code>, <code>a</code> is treated as a sparse matrix.</li>
+<li><b><code>b_is_sparse</code></b>: If <code>True</code>, <code>b</code> is treated as a sparse matrix.</li>
+<li><b><code>name</code></b>: Name for the operation (optional).</li>
+</ul>
+<h5 id="returns-59">Returns:</h5>
+<p>A <code>Tensor</code> of the same type as <code>a</code> and <code>b</code> where each inner-most matrix is the product of the corresponding matrices in <code>a</code> and <code>b, e.g. if all   transpose or adjoint attributes are</code>False`:</p>
+<p>output[..., :, :] = a[..., :, :] * b[..., :, :] ,</p>
+<h5 id="raises-6">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If transpose_a and adjoint_a, or transpose_b and adjoint_b are both set to True.</li>
+</ul>
+<hr />
+<h3 id="tf.batch_matmulx-y-adj_xnone-adj_ynone-namenone"><a name="//apple_ref/cpp/Function/batch_matmul" class="dashAnchor"></a><code id="batch_matmul">tf.batch_matmul(x, y, adj_x=None, adj_y=None, name=None)</code></h3>
+<p>Multiplies slices of two tensors in batches.</p>
+<p>Multiplies all slices of <code>Tensor</code> <code>x</code> and <code>y</code> (each slice can be viewed as an element of a batch), and arranges the individual results in a single output tensor of the same batch size. Each of the individual slices can optionally be adjointed (to adjoint a matrix means to transpose and conjugate it) before multiplication by setting the <code>adj_x</code> or <code>adj_y</code> flag to <code>True</code>, which are by default <code>False</code>.</p>
+<p>The input tensors <code>x</code> and <code>y</code> are 3-D or higher with shape <code>[..., r_x, c_x]</code> and <code>[..., r_y, c_y]</code>.</p>
+<p>The output tensor is 3-D or higher with shape <code>[..., r_o, c_o]</code>, where:</p>
+<pre><code>r_o = c_x if adj_x else r_x
+c_o = r_y if adj_y else c_y</code></pre>
+<p>It is computed as:</p>
+<pre><code>output[..., :, :] = matrix(x[..., :, :]) * matrix(y[..., :, :])</code></pre>
+<h5 id="args-60">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>complex64</code>, <code>complex128</code>. 3-D or higher with shape <code>[..., r_x, c_x]</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>. 3-D or higher with shape <code>[..., r_y, c_y]</code>.</li>
+<li><b><code>adj_x</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>. If <code>True</code>, adjoint the slices of <code>x</code>. Defaults to <code>False</code>.</li>
+<li><b><code>adj_y</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>. If <code>True</code>, adjoint the slices of <code>y</code>. Defaults to <code>False</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-60">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>. 3-D or higher with shape <code>[..., r_o, c_o]</code></p>
+<hr />
+<h3 id="tf.matrix_determinantinput-namenone"><a name="//apple_ref/cpp/Function/matrix_determinant" class="dashAnchor"></a><code id="matrix_determinant">tf.matrix_determinant(input, name=None)</code></h3>
+<p>Computes the determinant of one ore more square matrices.</p>
+<p>The input is a tensor of shape <code>[..., M, M]</code> whose inner-most 2 dimensions form square matrices. The output is a tensor containing the determinants for all input submatrices <code>[..., :, :]</code>.</p>
+<h5 id="args-61">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>. Shape is <code>[..., M, M]</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-61">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>input</code>. Shape is <code>[...]</code>.</p>
+<hr />
+<h3 id="tf.matrix_inverseinput-adjointnone-namenone"><a name="//apple_ref/cpp/Function/matrix_inverse" class="dashAnchor"></a><code id="matrix_inverse">tf.matrix_inverse(input, adjoint=None, name=None)</code></h3>
+<p>Computes the inverse of one or more square invertible matrices or their</p>
+<p>adjoints (conjugate transposes).</p>
+<p>The input is a tensor of shape <code>[..., M, M]</code> whose inner-most 2 dimensions form square matrices. The output is a tensor of the same shape as the input containing the inverse for all input submatrices <code>[..., :, :]</code>.</p>
+<p>The op uses LU decomposition with partial pivoting to compute the inverses.</p>
+<p>If a matrix is not invertible there is no guarantee what the op does. It may detect the condition and raise an exception or it may simply return a garbage result.</p>
+<h5 id="args-62">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float64</code>, <code>float32</code>. Shape is <code>[..., M, M]</code>.</li>
+<li><b><code>adjoint</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-62">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>input</code>. Shape is <code>[..., M, M]</code>.</p>
+<p><span class="citation">@compatibility</span>(numpy) Equivalent to np.linalg.inv <span class="citation">@end_compatibility</span></p>
+<hr />
+<h3 id="tf.choleskyinput-namenone"><a name="//apple_ref/cpp/Function/cholesky" class="dashAnchor"></a><code id="cholesky">tf.cholesky(input, name=None)</code></h3>
+<p>Computes the Cholesky decomposition of one or more square matrices.</p>
+<p>The input is a tensor of shape <code>[..., M, M]</code> whose inner-most 2 dimensions form square matrices, with the same constraints as the single matrix Cholesky decomposition above. The output is a tensor of the same shape as the input containing the Cholesky decompositions for all input submatrices <code>[..., :, :]</code>.</p>
+<h5 id="args-63">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float64</code>, <code>float32</code>. Shape is <code>[..., M, M]</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-63">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>input</code>. Shape is <code>[..., M, M]</code>.</p>
+<hr />
+<h3 id="tf.cholesky_solvechol-rhs-namenone"><a name="//apple_ref/cpp/Function/cholesky_solve" class="dashAnchor"></a><code id="cholesky_solve">tf.cholesky_solve(chol, rhs, name=None)</code></h3>
+<p>Solves systems of linear eqns <code>A X = RHS</code>, given Cholesky factorizations.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Solve 10 separate 2x2 linear systems:</span>
+A <span class="op">=</span> ... <span class="co"># shape 10 x 2 x 2</span>
+RHS <span class="op">=</span> ... <span class="co"># shape 10 x 2 x 1</span>
+chol <span class="op">=</span> tf.cholesky(A)  <span class="co"># shape 10 x 2 x 2</span>
+X <span class="op">=</span> tf.cholesky_solve(chol, RHS)  <span class="co"># shape 10 x 2 x 1</span>
+<span class="co"># tf.matmul(A, X) ~ RHS</span>
+X[<span class="dv">3</span>, :, <span class="dv">0</span>]  <span class="co"># Solution to the linear system A[3, :, :] x = RHS[3, :, 0]</span>
+
+<span class="co"># Solve five linear systems (K = 5) for every member of the length 10 batch.</span>
+A <span class="op">=</span> ... <span class="co"># shape 10 x 2 x 2</span>
+RHS <span class="op">=</span> ... <span class="co"># shape 10 x 2 x 5</span>
+...
+X[<span class="dv">3</span>, :, <span class="dv">2</span>]  <span class="co"># Solution to the linear system A[3, :, :] x = RHS[3, :, 2]</span></code></pre></div>
+<h5 id="args-64">Args:</h5>
+<ul>
+<li><b><code>chol</code></b>: A <code>Tensor</code>. Must be <code>float32</code> or <code>float64</code>, shape is <code>[..., M, M]</code>. Cholesky factorization of <code>A</code>, e.g. <code>chol = tf.cholesky(A)</code>. For that reason, only the lower triangular parts (including the diagonal) of the last two dimensions of <code>chol</code> are used. The strictly upper part is assumed to be zero and not accessed.</li>
+<li><b><code>rhs</code></b>: A <code>Tensor</code>, same type as <code>chol</code>, shape is <code>[..., M, K]</code>.</li>
+<li><b><code>name</code></b>: A name to give this <code>Op</code>. Defaults to <code>cholesky_solve</code>.</li>
+</ul>
+<h5 id="returns-64">Returns:</h5>
+<p>Solution to <code>A x = rhs</code>, shape <code>[..., M, K]</code>.</p>
+<hr />
+<h3 id="tf.matrix_solvematrix-rhs-adjointnone-namenone"><a name="//apple_ref/cpp/Function/matrix_solve" class="dashAnchor"></a><code id="matrix_solve">tf.matrix_solve(matrix, rhs, adjoint=None, name=None)</code></h3>
+<p>Solves systems of linear equations.</p>
+<p><code>Matrix</code> is a tensor of shape <code>[..., M, M]</code> whose inner-most 2 dimensions form square matrices. <code>Rhs</code> is a tensor of shape <code>[..., M, K]</code>. The <code>output</code> is a tensor shape <code>[..., M, K]</code>. If <code>adjoint</code> is <code>False</code> then each output matrix satisfies <code>matrix[..., :, :] * output[..., :, :] = rhs[..., :, :]</code>. If <code>adjoint</code> is <code>True</code> then each output matrix satisfies <code>adjoint(matrix[..., :, :]) * output[..., :, :] = rhs[..., :, :]</code>.</p>
+<h5 id="args-65">Args:</h5>
+<ul>
+<li><b><code>matrix</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float64</code>, <code>float32</code>, <code>complex64</code>, <code>complex128</code>. Shape is <code>[..., M, M]</code>.</li>
+<li><b><code>rhs</code></b>: A <code>Tensor</code>. Must have the same type as <code>matrix</code>. Shape is <code>[..., M, K]</code>.</li>
+<li><b><code>adjoint</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>. Boolean indicating whether to solve with <code>matrix</code> or its (block-wise) adjoint.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-65">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>matrix</code>. Shape is <code>[..., M, K]</code>.</p>
+<hr />
+<h3 id="tf.matrix_triangular_solvematrix-rhs-lowernone-adjointnone-namenone"><a name="//apple_ref/cpp/Function/matrix_triangular_solve" class="dashAnchor"></a><code id="matrix_triangular_solve">tf.matrix_triangular_solve(matrix, rhs, lower=None, adjoint=None, name=None)</code></h3>
+<p>Solves systems of linear equations with upper or lower triangular matrices by</p>
+<p>backsubstitution.</p>
+<p><code>matrix</code> is a tensor of shape <code>[..., M, M]</code> whose inner-most 2 dimensions form square matrices. If <code>lower</code> is <code>True</code> then the strictly upper triangular part of each inner-most matrix is assumed to be zero and not accessed. If <code>lower</code> is False then the strictly lower triangular part of each inner-most matrix is assumed to be zero and not accessed. <code>rhs</code> is a tensor of shape <code>[..., M, K]</code>.</p>
+<p>The output is a tensor of shape <code>[..., M, K]</code>. If <code>adjoint</code> is <code>True</code> then the innermost matrices in output<code>satisfy matrix equations</code>matrix[..., :, :] * output[..., :, :] = rhs[..., :, :]<code>. If</code>adjoint<code>is</code>False<code>then the strictly then the  innermost matrices in</code>output<code>satisfy matrix equations</code>adjoint(matrix[..., i, k]) * output[..., k, j] = rhs[..., i, j]`.</p>
+<h5 id="args-66">Args:</h5>
+<ul>
+<li><b><code>matrix</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float64</code>, <code>float32</code>. Shape is <code>[..., M, M]</code>.</li>
+<li><b><code>rhs</code></b>: A <code>Tensor</code>. Must have the same type as <code>matrix</code>. Shape is <code>[..., M, K]</code>.</li>
+<li><b><code>lower</code></b>: An optional <code>bool</code>. Defaults to <code>True</code>. Boolean indicating whether the innermost matrices in <code>matrix</code> are lower or upper triangular.</li>
+<li><p><b><code>adjoint</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>. Boolean indicating whether to solve with <code>matrix</code> or its (block-wise) adjoint.</p>
+<p><span class="citation">@compatibility</span>(numpy) Equivalent to np.linalg.triangular_solve <span class="citation">@end_compatibility</span></p></li>
+<li><p><b><code>name</code></b>: A name for the operation (optional).</p></li>
+</ul>
+<h5 id="returns-66">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>matrix</code>. Shape is <code>[..., M, K]</code>.</p>
+<hr />
+<h3 id="tf.matrix_solve_lsmatrix-rhs-l2_regularizer0.0-fasttrue-namenone"><a name="//apple_ref/cpp/Function/matrix_solve_ls" class="dashAnchor"></a><code id="matrix_solve_ls">tf.matrix_solve_ls(matrix, rhs, l2_regularizer=0.0, fast=True, name=None)</code></h3>
+<p>Solves one or more linear least-squares problems.</p>
+<p><code>matrix</code> is a tensor of shape <code>[..., M, N]</code> whose inner-most 2 dimensions form <code>M</code>-by-<code>N</code> matrices. Rhs is a tensor of shape <code>[..., M, K]</code> whose inner-most 2 dimensions form <code>M</code>-by-<code>K</code> matrices. The computed output is a <code>Tensor</code> of shape <code>[..., N, K]</code> whose inner-most 2 dimensions form <code>M</code>-by-<code>K</code> matrices that solve the equations <code>matrix[..., :, :] * output[..., :, :] = rhs[..., :, :]</code> in the least squares sense.</p>
+<p>Below we will use the following notation for each pair of matrix and right-hand sides in the batch:</p>
+<p><code>matrix</code>=\(A ^{m n}\), <code>rhs</code>=\(B ^{m k}\), <code>output</code>=\(X ^{n k}\), <code>l2_regularizer</code>=\(\).</p>
+<p>If <code>fast</code> is <code>True</code>, then the solution is computed by solving the normal equations using Cholesky decomposition. Specifically, if \(m n\) then \(X = (A^T A + I)^{-1} A^T B\), which solves the least-squares problem \(X = _{Z ^{n k}} ||A Z - B||_F^2 + ||Z||<em>F^2\). If \(m n\) then <code>output</code> is computed as \(X = A^T (A A^T + I)^{-1} B\), which (for \(= 0\)) is the minimum-norm solution to the under-determined linear system, i.e. \(X = </em>{Z ^{n k}} ||Z||_F^2 \), subject to \(A Z = B\). Notice that the fast path is only numerically stable when \(A\) is numerically full rank and has a condition number \((A) \) or\(\) is sufficiently large.</p>
+<p>If <code>fast</code> is <code>False</code> an algorithm based on the numerically robust complete orthogonal decomposition is used. This computes the minimum-norm least-squares solution, even when \(A\) is rank deficient. This path is typically 6-7 times slower than the fast path. If <code>fast</code> is <code>False</code> then <code>l2_regularizer</code> is ignored.</p>
+<h5 id="args-67">Args:</h5>
+<ul>
+<li><b><code>matrix</code></b>: <code>Tensor</code> of shape <code>[..., M, N]</code>.</li>
+<li><b><code>rhs</code></b>: <code>Tensor</code> of shape <code>[..., M, K]</code>.</li>
+<li><b><code>l2_regularizer</code></b>: 0-D <code>double</code> <code>Tensor</code>. Ignored if <code>fast=False</code>.</li>
+<li><b><code>fast</code></b>: bool. Defaults to <code>True</code>.</li>
+<li><b><code>name</code></b>: string, optional name of the operation.</li>
+</ul>
+<h5 id="returns-67">Returns:</h5>
+<ul>
+<li><b><code>output</code></b>: <code>Tensor</code> of shape <code>[..., N, K]</code> whose inner-most 2 dimensions form <code>M</code>-by-<code>K</code> matrices that solve the equations <code>matrix[..., :, :] * output[..., :, :] = rhs[..., :, :]</code> in the least squares sense.</li>
+</ul>
+<hr />
+<h3 id="tf.self_adjoint_eigtensor-namenone"><a name="//apple_ref/cpp/Function/self_adjoint_eig" class="dashAnchor"></a><code id="self_adjoint_eig">tf.self_adjoint_eig(tensor, name=None)</code></h3>
+<p>Computes the eigen decomposition of a batch of self-adjoint matrices.</p>
+<p>Computes the eigenvalues and eigenvectors of the innermost N-by-N matrices in <code>tensor</code> such that <code>tensor[...,:,:] * v[..., :,i] = e[..., i] * v[...,:,i]</code>, for i=0...N-1.</p>
+<h5 id="args-68">Args:</h5>
+<ul>
+<li><b><code>tensor</code></b>: <code>Tensor</code> of shape <code>[..., N, N]</code>. Only the lower triangular part of each inner inner matrix is referenced.</li>
+<li><b><code>name</code></b>: string, optional name of the operation.</li>
+</ul>
+<h5 id="returns-68">Returns:</h5>
+<ul>
+<li><b><code>e</code></b>: Eigenvalues. Shape is <code>[..., N]</code>.</li>
+<li><b><code>v</code></b>: Eigenvectors. Shape is <code>[..., N, N]</code>. The columns of the inner most matrices contain eigenvectors of the corresponding matrices in <code>tensor</code></li>
+</ul>
+<hr />
+<h3 id="tf.self_adjoint_eigvalstensor-namenone"><a name="//apple_ref/cpp/Function/self_adjoint_eigvals" class="dashAnchor"></a><code id="self_adjoint_eigvals">tf.self_adjoint_eigvals(tensor, name=None)</code></h3>
+<p>Computes the eigenvalues of one or more self-adjoint matrices.</p>
+<h5 id="args-69">Args:</h5>
+<ul>
+<li><b><code>tensor</code></b>: <code>Tensor</code> of shape <code>[..., N, N]</code>.</li>
+<li><b><code>name</code></b>: string, optional name of the operation.</li>
+</ul>
+<h5 id="returns-69">Returns:</h5>
+<ul>
+<li><b><code>e</code></b>: Eigenvalues. Shape is <code>[..., N]</code>. The vector <code>e[..., :]</code> contains the <code>N</code> eigenvalues of <code>tensor[..., :, :]</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.svdtensor-full_matricesfalse-compute_uvtrue-namenone"><a name="//apple_ref/cpp/Function/svd" class="dashAnchor"></a><code id="svd">tf.svd(tensor, full_matrices=False, compute_uv=True, name=None)</code></h3>
+<p>Computes the singular value decompositions of one or more matrices.</p>
+<p>Computes the SVD of each inner matrix in <code>tensor</code> such that <code>tensor[..., :, :] = u[..., :, :] * diag(s[..., :, :]) * transpose(v[..., :, :])</code></p>
+<pre class="prettyprint"><code># a is a tensor.
+# s is a tensor of singular values.
+# u is a tensor of left singular vectors.
+# v is a tensor of right singular vectors.
+s, u, v = svd(a)
+s = svd(a, compute_uv=False)</code></pre>
+<h5 id="args-70">Args:</h5>
+<ul>
+<li><b><code>matrix</code></b>: <code>Tensor</code> of shape <code>[..., M, N]</code>. Let <code>P</code> be the minimum of <code>M</code> and <code>N</code>.</li>
+<li><b><code>full_matrices</code></b>: If true, compute full-sized <code>u</code> and <code>v</code>. If false (the default), compute only the leading <code>P</code> singular vectors. Ignored if <code>compute_uv</code> is <code>False</code>.</li>
+<li><b><code>compute_uv</code></b>: If <code>True</code> then left and right singular vectors will be computed and returned in <code>u</code> and <code>v</code>, respectively. Otherwise, only the singular values will be computed, which can be significantly faster.</li>
+<li><b><code>name</code></b>: string, optional name of the operation.</li>
+</ul>
+<h5 id="returns-70">Returns:</h5>
+<ul>
+<li><b><code>s</code></b>: Singular values. Shape is <code>[..., P]</code>.</li>
+<li><b><code>u</code></b>: Right singular vectors. If <code>full_matrices</code> is <code>False</code> (default) then shape is <code>[..., M, P]</code>; if <code>full_matrices</code> is <code>True</code> then shape is <code>[..., M, M]</code>. Not returned if <code>compute_uv</code> is <code>False</code>.</li>
+<li><b><code>v</code></b>: Left singular vectors. If <code>full_matrices</code> is <code>False</code> (default) then shape is <code>[..., N, P]</code>. If <code>full_matrices</code> is <code>True</code> then shape is <code>[..., N, N]</code>. Not returned if <code>compute_uv</code> is <code>False</code>.</li>
+</ul>
+<h2 id="complex-number-functions">Complex Number Functions</h2>
+<p>TensorFlow provides several operations that you can use to add complex number functions to your graph.</p>
+<hr />
+<h3 id="tf.complexreal-imag-namenone"><a name="//apple_ref/cpp/Function/complex" class="dashAnchor"></a><code id="complex">tf.complex(real, imag, name=None)</code></h3>
+<p>Converts two real numbers to a complex number.</p>
+<p>Given a tensor <code>real</code> representing the real part of a complex number, and a tensor <code>imag</code> representing the imaginary part of a complex number, this operation returns complex numbers elementwise of the form (a + bj), where <em>a</em> represents the <code>real</code> part and <em>b</em> represents the <code>imag</code> part.</p>
+<p>The input tensors <code>real</code> and <code>imag</code> must have the same shape.</p>
+<p>For example:</p>
+<pre><code># tensor &#39;real&#39; is [2.25, 3.25]
+# tensor `imag` is [4.75, 5.75]
+tf.complex(real, imag) ==&gt; [[2.25 + 4.75j], [3.25 + 5.75j]]</code></pre>
+<h5 id="args-71">Args:</h5>
+<ul>
+<li><b><code>real</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>.</li>
+<li><b><code>imag</code></b>: A <code>Tensor</code>. Must have the same type as <code>real</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-71">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>complex64</code> or <code>complex128</code>.</p>
+<hr />
+<h3 id="tf.complex_absx-namenone"><a name="//apple_ref/cpp/Function/complex_abs" class="dashAnchor"></a><code id="complex_abs">tf.complex_abs(x, name=None)</code></h3>
+<p>Computes the complex absolute value of a tensor.</p>
+<p>Given a tensor <code>x</code> of complex numbers, this operation returns a tensor of type <code>float32</code> or <code>float64</code> that is the absolute value of each element in <code>x</code>. All elements in <code>x</code> must be complex numbers of the form \(a + bj\). The absolute value is computed as \( \).</p>
+<p>For example:</p>
+<pre><code># tensor &#39;x&#39; is [[-2.25 + 4.75j], [-3.25 + 5.75j]]
+tf.complex_abs(x) ==&gt; [5.25594902, 6.60492229]</code></pre>
+<h5 id="args-72">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> of type <code>complex64</code> or <code>complex128</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-72">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>float32</code> or <code>float64</code>.</p>
+<hr />
+<h3 id="tf.conjx-namenone"><a name="//apple_ref/cpp/Function/conj" class="dashAnchor"></a><code id="conj">tf.conj(x, name=None)</code></h3>
+<p>Returns the complex conjugate of a complex number.</p>
+<p>Given a tensor <code>input</code> of complex numbers, this operation returns a tensor of complex numbers that are the complex conjugate of each element in <code>input</code>. The complex numbers in <code>input</code> must be of the form \(a + bj\), where <em>a</em> is the real part and <em>b</em> is the imaginary part.</p>
+<p>The complex conjugate returned by this operation is of the form \(a - bj\).</p>
+<p>For example:</p>
+<pre><code># tensor &#39;input&#39; is [-2.25 + 4.75j, 3.25 + 5.75j]
+tf.conj(input) ==&gt; [-2.25 - 4.75j, 3.25 - 5.75j]</code></pre>
+<p>If <code>x</code> is real, it is returned unchanged.</p>
+<h5 id="args-73">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code> to conjugate. Must have numeric type.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-73">Returns:</h5>
+<p>A <code>Tensor</code> that is the conjugate of <code>x</code> (with the same type).</p>
+<h5 id="raises-7">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>x</code> is not a numeric tensor.</li>
+</ul>
+<hr />
+<h3 id="tf.imaginput-namenone"><a name="//apple_ref/cpp/Function/imag" class="dashAnchor"></a><code id="imag">tf.imag(input, name=None)</code></h3>
+<p>Returns the imaginary part of a complex number.</p>
+<p>Given a tensor <code>input</code> of complex numbers, this operation returns a tensor of type <code>float32</code> or <code>float64</code> that is the imaginary part of each element in <code>input</code>. All elements in <code>input</code> must be complex numbers of the form (a + bj), where <em>a</em> is the real part and <em>b</em> is the imaginary part returned by this operation.</p>
+<p>For example:</p>
+<pre><code># tensor &#39;input&#39; is [-2.25 + 4.75j, 3.25 + 5.75j]
+tf.imag(input) ==&gt; [4.75, 5.75]</code></pre>
+<h5 id="args-74">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>complex64</code>, <code>complex128</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-74">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>float32</code> or <code>float64</code>.</p>
+<hr />
+<h3 id="tf.realinput-namenone"><a name="//apple_ref/cpp/Function/real" class="dashAnchor"></a><code id="real">tf.real(input, name=None)</code></h3>
+<p>Returns the real part of a complex number.</p>
+<p>Given a tensor <code>input</code> of complex numbers, this operation returns a tensor of type <code>float32</code> or <code>float64</code> that is the real part of each element in <code>input</code>. All elements in <code>input</code> must be complex numbers of the form (a + bj), where <em>a</em> is the real part returned by this operation and <em>b</em> is the imaginary part.</p>
+<p>For example:</p>
+<pre><code># tensor &#39;input&#39; is [-2.25 + 4.75j, 3.25 + 5.75j]
+tf.real(input) ==&gt; [-2.25, 3.25]</code></pre>
+<p>If <code>input</code> is already real, it is returned unchanged.</p>
+<h5 id="args-75">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. Must have numeric type.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-75">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>float32</code> or <code>float64</code>.</p>
+<h2 id="fourier-transform-functions">Fourier Transform Functions</h2>
+<p>TensorFlow provides several operations that you can use to add discrete Fourier transform functions to your graph.</p>
+<hr />
+<h3 id="tf.fftinput-namenone"><a name="//apple_ref/cpp/Function/fft" class="dashAnchor"></a><code id="fft">tf.fft(input, name=None)</code></h3>
+<p>Compute the 1-dimensional discrete Fourier Transform over the inner-most</p>
+<p>dimension of <code>input</code>.</p>
+<h5 id="args-76">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code> of type <code>complex64</code>. A complex64 tensor.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-76">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>complex64</code>. A complex64 tensor of the same shape as <code>input</code>. The inner-most dimension of <code>input</code> is replaced with its 1D Fourier Transform.</p>
+<hr />
+<h3 id="tf.ifftinput-namenone"><a name="//apple_ref/cpp/Function/ifft" class="dashAnchor"></a><code id="ifft">tf.ifft(input, name=None)</code></h3>
+<p>Compute the inverse 1-dimensional discrete Fourier Transform over the inner-most</p>
+<p>dimension of <code>input</code>.</p>
+<h5 id="args-77">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code> of type <code>complex64</code>. A complex64 tensor.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-77">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>complex64</code>. A complex64 tensor of the same shape as <code>input</code>. The inner-most dimension of <code>input</code> is replaced with its inverse 1D Fourier Transform.</p>
+<hr />
+<h3 id="tf.fft2dinput-namenone"><a name="//apple_ref/cpp/Function/fft2d" class="dashAnchor"></a><code id="fft2d">tf.fft2d(input, name=None)</code></h3>
+<p>Compute the 2-dimensional discrete Fourier Transform over the inner-most</p>
+<p>2 dimensions of <code>input</code>.</p>
+<h5 id="args-78">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code> of type <code>complex64</code>. A complex64 tensor.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-78">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>complex64</code>. A complex64 tensor of the same shape as <code>input</code>. The inner-most 2 dimensions of <code>input</code> are replaced with their 2D Fourier Transform.</p>
+<p><span class="citation">@compatibility</span>(numpy) Equivalent to np.fft2 <span class="citation">@end_compatibility</span></p>
+<hr />
+<h3 id="tf.ifft2dinput-namenone"><a name="//apple_ref/cpp/Function/ifft2d" class="dashAnchor"></a><code id="ifft2d">tf.ifft2d(input, name=None)</code></h3>
+<p>Compute the inverse 2-dimensional discrete Fourier Transform over the inner-most</p>
+<p>2 dimensions of <code>input</code>.</p>
+<h5 id="args-79">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code> of type <code>complex64</code>. A complex64 tensor.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-79">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>complex64</code>. A complex64 tensor of the same shape as <code>input</code>. The inner-most 2 dimensions of <code>input</code> are replaced with their inverse 2D Fourier Transform.</p>
+<p><span class="citation">@compatibility</span>(numpy) Equivalent to np.ifft2 <span class="citation">@end_compatibility</span></p>
+<hr />
+<h3 id="tf.fft3dinput-namenone"><a name="//apple_ref/cpp/Function/fft3d" class="dashAnchor"></a><code id="fft3d">tf.fft3d(input, name=None)</code></h3>
+<p>Compute the 3-dimensional discrete Fourier Transform over the inner-most 3</p>
+<p>dimensions of <code>input</code>.</p>
+<h5 id="args-80">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code> of type <code>complex64</code>. A complex64 tensor.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-80">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>complex64</code>. A complex64 tensor of the same shape as <code>input</code>. The inner-most 3 dimensions of <code>input</code> are replaced with their 3D Fourier Transform.</p>
+<p><span class="citation">@compatibility</span>(numpy) Equivalent to np.fft3 <span class="citation">@end_compatibility</span></p>
+<hr />
+<h3 id="tf.ifft3dinput-namenone"><a name="//apple_ref/cpp/Function/ifft3d" class="dashAnchor"></a><code id="ifft3d">tf.ifft3d(input, name=None)</code></h3>
+<p>Compute the inverse 3-dimensional discrete Fourier Transform over the inner-most</p>
+<p>3 dimensions of <code>input</code>.</p>
+<h5 id="args-81">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code> of type <code>complex64</code>. A complex64 tensor.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-81">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>complex64</code>. A complex64 tensor of the same shape as <code>input</code>. The inner-most 3 dimensions of <code>input</code> are replaced with their inverse 3D Fourier Transform.</p>
+<p><span class="citation">@compatibility</span>(numpy) Equivalent to np.fft3 <span class="citation">@end_compatibility</span></p>
+<h2 id="reduction">Reduction</h2>
+<p>TensorFlow provides several operations that you can use to perform common math computations that reduce various dimensions of a tensor.</p>
+<hr />
+<h3 id="tf.reduce_suminput_tensor-axisnone-keep_dimsfalse-namenone-reduction_indicesnone"><a name="//apple_ref/cpp/Function/reduce_sum" class="dashAnchor"></a><code id="reduce_sum">tf.reduce_sum(input_tensor, axis=None, keep_dims=False, name=None, reduction_indices=None)</code></h3>
+<p>Computes the sum of elements across dimensions of a tensor.</p>
+<p>Reduces <code>input_tensor</code> along the dimensions given in <code>axis</code>. Unless <code>keep_dims</code> is true, the rank of the tensor is reduced by 1 for each entry in <code>axis</code>. If <code>keep_dims</code> is true, the reduced dimensions are retained with length 1.</p>
+<p>If <code>axis</code> has no entries, all dimensions are reduced, and a tensor with a single element is returned.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># &#39;x&#39; is [[1, 1, 1]</span>
+<span class="co">#         [1, 1, 1]]</span>
+tf.reduce_sum(x) <span class="op">==&gt;</span> <span class="dv">6</span>
+tf.reduce_sum(x, <span class="dv">0</span>) <span class="op">==&gt;</span> [<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>]
+tf.reduce_sum(x, <span class="dv">1</span>) <span class="op">==&gt;</span> [<span class="dv">3</span>, <span class="dv">3</span>]
+tf.reduce_sum(x, <span class="dv">1</span>, keep_dims<span class="op">=</span><span class="va">True</span>) <span class="op">==&gt;</span> [[<span class="dv">3</span>], [<span class="dv">3</span>]]
+tf.reduce_sum(x, [<span class="dv">0</span>, <span class="dv">1</span>]) <span class="op">==&gt;</span> <span class="dv">6</span></code></pre></div>
+<h5 id="args-82">Args:</h5>
+<ul>
+<li><b><code>input_tensor</code></b>: The tensor to reduce. Should have numeric type.</li>
+<li><b><code>axis</code></b>: The dimensions to reduce. If <code>None</code> (the default), reduces all dimensions.</li>
+<li><b><code>keep_dims</code></b>: If true, retains reduced dimensions with length 1.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+<li><b><code>reduction_indices</code></b>: The old (deprecated) name for axis.</li>
+</ul>
+<h5 id="returns-82">Returns:</h5>
+<p>The reduced tensor.</p>
+<p><span class="citation">@compatibility</span>(numpy) Equivalent to np.sum <span class="citation">@end_compatibility</span></p>
+<hr />
+<h3 id="tf.reduce_prodinput_tensor-axisnone-keep_dimsfalse-namenone-reduction_indicesnone"><a name="//apple_ref/cpp/Function/reduce_prod" class="dashAnchor"></a><code id="reduce_prod">tf.reduce_prod(input_tensor, axis=None, keep_dims=False, name=None, reduction_indices=None)</code></h3>
+<p>Computes the product of elements across dimensions of a tensor.</p>
+<p>Reduces <code>input_tensor</code> along the dimensions given in <code>axis</code>. Unless <code>keep_dims</code> is true, the rank of the tensor is reduced by 1 for each entry in <code>axis</code>. If <code>keep_dims</code> is true, the reduced dimensions are retained with length 1.</p>
+<p>If <code>axis</code> has no entries, all dimensions are reduced, and a tensor with a single element is returned.</p>
+<h5 id="args-83">Args:</h5>
+<ul>
+<li><b><code>input_tensor</code></b>: The tensor to reduce. Should have numeric type.</li>
+<li><b><code>axis</code></b>: The dimensions to reduce. If <code>None</code> (the default), reduces all dimensions.</li>
+<li><b><code>keep_dims</code></b>: If true, retains reduced dimensions with length 1.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+<li><b><code>reduction_indices</code></b>: The old (deprecated) name for axis.</li>
+</ul>
+<h5 id="returns-83">Returns:</h5>
+<p>The reduced tensor.</p>
+<p><span class="citation">@compatibility</span>(numpy) Equivalent to np.prod <span class="citation">@end_compatibility</span></p>
+<hr />
+<h3 id="tf.reduce_mininput_tensor-axisnone-keep_dimsfalse-namenone-reduction_indicesnone"><a name="//apple_ref/cpp/Function/reduce_min" class="dashAnchor"></a><code id="reduce_min">tf.reduce_min(input_tensor, axis=None, keep_dims=False, name=None, reduction_indices=None)</code></h3>
+<p>Computes the minimum of elements across dimensions of a tensor.</p>
+<p>Reduces <code>input_tensor</code> along the dimensions given in <code>axis</code>. Unless <code>keep_dims</code> is true, the rank of the tensor is reduced by 1 for each entry in <code>axis</code>. If <code>keep_dims</code> is true, the reduced dimensions are retained with length 1.</p>
+<p>If <code>axis</code> has no entries, all dimensions are reduced, and a tensor with a single element is returned.</p>
+<h5 id="args-84">Args:</h5>
+<ul>
+<li><b><code>input_tensor</code></b>: The tensor to reduce. Should have numeric type.</li>
+<li><b><code>axis</code></b>: The dimensions to reduce. If <code>None</code> (the default), reduces all dimensions.</li>
+<li><b><code>keep_dims</code></b>: If true, retains reduced dimensions with length 1.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+<li><b><code>reduction_indices</code></b>: The old (deprecated) name for axis.</li>
+</ul>
+<h5 id="returns-84">Returns:</h5>
+<p>The reduced tensor.</p>
+<p><span class="citation">@compatibility</span>(numpy) Equivalent to np.min <span class="citation">@end_compatibility</span></p>
+<hr />
+<h3 id="tf.reduce_maxinput_tensor-axisnone-keep_dimsfalse-namenone-reduction_indicesnone"><a name="//apple_ref/cpp/Function/reduce_max" class="dashAnchor"></a><code id="reduce_max">tf.reduce_max(input_tensor, axis=None, keep_dims=False, name=None, reduction_indices=None)</code></h3>
+<p>Computes the maximum of elements across dimensions of a tensor.</p>
+<p>Reduces <code>input_tensor</code> along the dimensions given in <code>axis</code>. Unless <code>keep_dims</code> is true, the rank of the tensor is reduced by 1 for each entry in <code>axis</code>. If <code>keep_dims</code> is true, the reduced dimensions are retained with length 1.</p>
+<p>If <code>axis</code> has no entries, all dimensions are reduced, and a tensor with a single element is returned.</p>
+<h5 id="args-85">Args:</h5>
+<ul>
+<li><b><code>input_tensor</code></b>: The tensor to reduce. Should have numeric type.</li>
+<li><b><code>axis</code></b>: The dimensions to reduce. If <code>None</code> (the default), reduces all dimensions.</li>
+<li><b><code>keep_dims</code></b>: If true, retains reduced dimensions with length 1.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+<li><b><code>reduction_indices</code></b>: The old (deprecated) name for axis.</li>
+</ul>
+<h5 id="returns-85">Returns:</h5>
+<p>The reduced tensor.</p>
+<p><span class="citation">@compatibility</span>(numpy) Equivalent to np.max <span class="citation">@end_compatibility</span></p>
+<hr />
+<h3 id="tf.reduce_meaninput_tensor-axisnone-keep_dimsfalse-namenone-reduction_indicesnone"><a name="//apple_ref/cpp/Function/reduce_mean" class="dashAnchor"></a><code id="reduce_mean">tf.reduce_mean(input_tensor, axis=None, keep_dims=False, name=None, reduction_indices=None)</code></h3>
+<p>Computes the mean of elements across dimensions of a tensor.</p>
+<p>Reduces <code>input_tensor</code> along the dimensions given in <code>axis</code>. Unless <code>keep_dims</code> is true, the rank of the tensor is reduced by 1 for each entry in <code>axis</code>. If <code>keep_dims</code> is true, the reduced dimensions are retained with length 1.</p>
+<p>If <code>axis</code> has no entries, all dimensions are reduced, and a tensor with a single element is returned.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># &#39;x&#39; is [[1., 1.]</span>
+<span class="co">#         [2., 2.]]</span>
+tf.reduce_mean(x) <span class="op">==&gt;</span> <span class="fl">1.5</span>
+tf.reduce_mean(x, <span class="dv">0</span>) <span class="op">==&gt;</span> [<span class="fl">1.5</span>, <span class="fl">1.5</span>]
+tf.reduce_mean(x, <span class="dv">1</span>) <span class="op">==&gt;</span> [<span class="dv">1</span>.,  <span class="dv">2</span>.]</code></pre></div>
+<h5 id="args-86">Args:</h5>
+<ul>
+<li><b><code>input_tensor</code></b>: The tensor to reduce. Should have numeric type.</li>
+<li><b><code>axis</code></b>: The dimensions to reduce. If <code>None</code> (the default), reduces all dimensions.</li>
+<li><b><code>keep_dims</code></b>: If true, retains reduced dimensions with length 1.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+<li><b><code>reduction_indices</code></b>: The old (deprecated) name for axis.</li>
+</ul>
+<h5 id="returns-86">Returns:</h5>
+<p>The reduced tensor.</p>
+<p><span class="citation">@compatibility</span>(numpy) Equivalent to np.mean <span class="citation">@end_compatibility</span></p>
+<hr />
+<h3 id="tf.reduce_allinput_tensor-axisnone-keep_dimsfalse-namenone-reduction_indicesnone"><a name="//apple_ref/cpp/Function/reduce_all" class="dashAnchor"></a><code id="reduce_all">tf.reduce_all(input_tensor, axis=None, keep_dims=False, name=None, reduction_indices=None)</code></h3>
+<p>Computes the &quot;logical and&quot; of elements across dimensions of a tensor.</p>
+<p>Reduces <code>input_tensor</code> along the dimensions given in <code>axis</code>. Unless <code>keep_dims</code> is true, the rank of the tensor is reduced by 1 for each entry in <code>axis</code>. If <code>keep_dims</code> is true, the reduced dimensions are retained with length 1.</p>
+<p>If <code>axis</code> has no entries, all dimensions are reduced, and a tensor with a single element is returned.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># &#39;x&#39; is [[True,  True]</span>
+<span class="co">#         [False, False]]</span>
+tf.reduce_all(x) <span class="op">==&gt;</span> <span class="va">False</span>
+tf.reduce_all(x, <span class="dv">0</span>) <span class="op">==&gt;</span> [<span class="va">False</span>, <span class="va">False</span>]
+tf.reduce_all(x, <span class="dv">1</span>) <span class="op">==&gt;</span> [<span class="va">True</span>, <span class="va">False</span>]</code></pre></div>
+<h5 id="args-87">Args:</h5>
+<ul>
+<li><b><code>input_tensor</code></b>: The boolean tensor to reduce.</li>
+<li><b><code>axis</code></b>: The dimensions to reduce. If <code>None</code> (the default), reduces all dimensions.</li>
+<li><b><code>keep_dims</code></b>: If true, retains reduced dimensions with length 1.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+<li><b><code>reduction_indices</code></b>: The old (deprecated) name for axis.</li>
+</ul>
+<h5 id="returns-87">Returns:</h5>
+<p>The reduced tensor.</p>
+<p><span class="citation">@compatibility</span>(numpy) Equivalent to np.all <span class="citation">@end_compatibility</span></p>
+<hr />
+<h3 id="tf.reduce_anyinput_tensor-axisnone-keep_dimsfalse-namenone-reduction_indicesnone"><a name="//apple_ref/cpp/Function/reduce_any" class="dashAnchor"></a><code id="reduce_any">tf.reduce_any(input_tensor, axis=None, keep_dims=False, name=None, reduction_indices=None)</code></h3>
+<p>Computes the &quot;logical or&quot; of elements across dimensions of a tensor.</p>
+<p>Reduces <code>input_tensor</code> along the dimensions given in <code>axis</code>. Unless <code>keep_dims</code> is true, the rank of the tensor is reduced by 1 for each entry in <code>axis</code>. If <code>keep_dims</code> is true, the reduced dimensions are retained with length 1.</p>
+<p>If <code>axis</code> has no entries, all dimensions are reduced, and a tensor with a single element is returned.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># &#39;x&#39; is [[True,  True]</span>
+<span class="co">#         [False, False]]</span>
+tf.reduce_any(x) <span class="op">==&gt;</span> <span class="va">True</span>
+tf.reduce_any(x, <span class="dv">0</span>) <span class="op">==&gt;</span> [<span class="va">True</span>, <span class="va">True</span>]
+tf.reduce_any(x, <span class="dv">1</span>) <span class="op">==&gt;</span> [<span class="va">True</span>, <span class="va">False</span>]</code></pre></div>
+<h5 id="args-88">Args:</h5>
+<ul>
+<li><b><code>input_tensor</code></b>: The boolean tensor to reduce.</li>
+<li><b><code>axis</code></b>: The dimensions to reduce. If <code>None</code> (the default), reduces all dimensions.</li>
+<li><b><code>keep_dims</code></b>: If true, retains reduced dimensions with length 1.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+<li><b><code>reduction_indices</code></b>: The old (deprecated) name for axis.</li>
+</ul>
+<h5 id="returns-88">Returns:</h5>
+<p>The reduced tensor.</p>
+<p><span class="citation">@compatibility</span>(numpy) Equivalent to np.any <span class="citation">@end_compatibility</span></p>
+<hr />
+<h3 id="tf.reduce_logsumexpinput_tensor-axisnone-keep_dimsfalse-namenone-reduction_indicesnone"><a name="//apple_ref/cpp/Function/reduce_logsumexp" class="dashAnchor"></a><code id="reduce_logsumexp">tf.reduce_logsumexp(input_tensor, axis=None, keep_dims=False, name=None, reduction_indices=None)</code></h3>
+<p>Computes log(sum(exp(elements across dimensions of a tensor))).</p>
+<p>Reduces <code>input_tensor</code> along the dimensions given in <code>axis</code>. Unless <code>keep_dims</code> is true, the rank of the tensor is reduced by 1 for each entry in <code>axis</code>. If <code>keep_dims</code> is true, the reduced dimensions are retained with length 1.</p>
+<p>If <code>axis</code> has no entries, all dimensions are reduced, and a tensor with a single element is returned.</p>
+<p>This function is more numerically stable than log(sum(exp(input))). It avoids overflows caused by taking the exp of large inputs and underflows caused by taking the log of small inputs.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># &#39;x&#39; is [[0, 0, 0]]</span>
+<span class="co">#         [0, 0, 0]]</span>
+tf.reduce_logsumexp(x) <span class="op">==&gt;</span> log(<span class="dv">6</span>)
+tf.reduce_logsumexp(x, <span class="dv">0</span>) <span class="op">==&gt;</span> [log(<span class="dv">2</span>), log(<span class="dv">2</span>), log(<span class="dv">2</span>)]
+tf.reduce_logsumexp(x, <span class="dv">1</span>) <span class="op">==&gt;</span> [log(<span class="dv">3</span>), log(<span class="dv">3</span>)]
+tf.reduce_logsumexp(x, <span class="dv">1</span>, keep_dims<span class="op">=</span><span class="va">True</span>) <span class="op">==&gt;</span> [[log(<span class="dv">3</span>)], [log(<span class="dv">3</span>)]]
+tf.reduce_logsumexp(x, [<span class="dv">0</span>, <span class="dv">1</span>]) <span class="op">==&gt;</span> log(<span class="dv">6</span>)</code></pre></div>
+<h5 id="args-89">Args:</h5>
+<ul>
+<li><b><code>input_tensor</code></b>: The tensor to reduce. Should have numeric type.</li>
+<li><b><code>axis</code></b>: The dimensions to reduce. If <code>None</code> (the default), reduces all dimensions.</li>
+<li><b><code>keep_dims</code></b>: If true, retains reduced dimensions with length 1.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+<li><b><code>reduction_indices</code></b>: The old (deprecated) name for axis.</li>
+</ul>
+<h5 id="returns-89">Returns:</h5>
+<p>The reduced tensor.</p>
+<hr />
+<h3 id="tf.count_nonzeroinput_tensor-axisnone-keep_dimsfalse-dtypetf.int64-namenone-reduction_indicesnone"><a name="//apple_ref/cpp/Function/count_nonzero" class="dashAnchor"></a><code id="count_nonzero">tf.count_nonzero(input_tensor, axis=None, keep_dims=False, dtype=tf.int64, name=None, reduction_indices=None)</code></h3>
+<p>Computes number of nonzero elements across dimensions of a tensor.</p>
+<p>Reduces <code>input_tensor</code> along the dimensions given in <code>axis</code>. Unless <code>keep_dims</code> is true, the rank of the tensor is reduced by 1 for each entry in <code>axis</code>. If <code>keep_dims</code> is true, the reduced dimensions are retained with length 1.</p>
+<p>If <code>axis</code> has no entries, all dimensions are reduced, and a tensor with a single element is returned.</p>
+<p><strong>NOTE</strong> Floating point comparison to zero is done by exact floating point equality check. Small values are <strong>not</strong> rounded to zero for purposes of the nonzero check.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># &#39;x&#39; is [[0, 1, 0]</span>
+<span class="co">#         [1, 1, 0]]</span>
+tf.count_nonzero(x) <span class="op">==&gt;</span> <span class="dv">3</span>
+tf.count_nonzero(x, <span class="dv">0</span>) <span class="op">==&gt;</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">0</span>]
+tf.count_nonzero(x, <span class="dv">1</span>) <span class="op">==&gt;</span> [<span class="dv">1</span>, <span class="dv">2</span>]
+tf.count_nonzero(x, <span class="dv">1</span>, keep_dims<span class="op">=</span><span class="va">True</span>) <span class="op">==&gt;</span> [[<span class="dv">1</span>], [<span class="dv">2</span>]]
+tf.count_nonzero(x, [<span class="dv">0</span>, <span class="dv">1</span>]) <span class="op">==&gt;</span> <span class="dv">3</span></code></pre></div>
+<h5 id="args-90">Args:</h5>
+<ul>
+<li><b><code>input_tensor</code></b>: The tensor to reduce. Should be of numeric type, or <code>bool</code>.</li>
+<li><b><code>axis</code></b>: The dimensions to reduce. If <code>None</code> (the default), reduces all dimensions.</li>
+<li><b><code>keep_dims</code></b>: If true, retains reduced dimensions with length 1.</li>
+<li><b><code>dtype</code></b>: The output dtype; defaults to <code>tf.int64</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+<li><b><code>reduction_indices</code></b>: The old (deprecated) name for axis.</li>
+</ul>
+<h5 id="returns-90">Returns:</h5>
+<p>The reduced tensor (number of nonzero values).</p>
+<hr />
+<h3 id="tf.accumulate_ninputs-shapenone-tensor_dtypenone-namenone"><a name="//apple_ref/cpp/Function/accumulate_n" class="dashAnchor"></a><code id="accumulate_n">tf.accumulate_n(inputs, shape=None, tensor_dtype=None, name=None)</code></h3>
+<p>Returns the element-wise sum of a list of tensors.</p>
+<p>Optionally, pass <code>shape</code> and <code>tensor_dtype</code> for shape and type checking, otherwise, these are inferred.</p>
+<p>NOTE: This operation is not differentiable and cannot be used if inputs depend on trainable variables. Please use <code>tf.add_n</code> for such cases.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># tensor &#39;a&#39; is [[1, 2], [3, 4]]</span>
+<span class="co"># tensor `b` is [[5, 0], [0, 6]]</span>
+tf.accumulate_n([a, b, a]) <span class="op">==&gt;</span> [[<span class="dv">7</span>, <span class="dv">4</span>], [<span class="dv">6</span>, <span class="dv">14</span>]]
+
+<span class="co"># Explicitly pass shape and type</span>
+tf.accumulate_n([a, b, a], shape<span class="op">=</span>[<span class="dv">2</span>, <span class="dv">2</span>], tensor_dtype<span class="op">=</span>tf.int32)
+  <span class="op">==&gt;</span> [[<span class="dv">7</span>, <span class="dv">4</span>], [<span class="dv">6</span>, <span class="dv">14</span>]]</code></pre></div>
+<h5 id="args-91">Args:</h5>
+<ul>
+<li><b><code>inputs</code></b>: A list of <code>Tensor</code> objects, each with same shape and type.</li>
+<li><b><code>shape</code></b>: Shape of elements of <code>inputs</code>.</li>
+<li><b><code>tensor_dtype</code></b>: The type of <code>inputs</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-91">Returns:</h5>
+<p>A <code>Tensor</code> of same shape and type as the elements of <code>inputs</code>.</p>
+<h5 id="raises-8">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>inputs</code> don't all have same shape and dtype or the shape cannot be inferred.</li>
+</ul>
+<hr />
+<h3 id="tf.einsumequation-inputs"><a name="//apple_ref/cpp/Function/einsum" class="dashAnchor"></a><code id="einsum">tf.einsum(equation, *inputs)</code></h3>
+<p>A generalized contraction between tensors of arbitrary dimension.</p>
+<p>This function returns a tensor whose elements are defined by <code>equation</code>, which is written in a shorthand form inspired by the Einstein summation convention. As an example, consider multiplying two matrices A and B to form a matrix C. The elements of C are given by:</p>
+<pre><code>  C[i,k] = sum_j A[i,j] * B[j,k]</code></pre>
+<p>The corresponding <code>equation</code> is:</p>
+<pre><code>  ij,jk-&gt;ik</code></pre>
+<p>In general, the <code>equation</code> is obtained from the more familiar element-wise equation by 1. removing variable names, brackets, and commas, 2. replacing &quot;*&quot; with &quot;,&quot;, 3. dropping summation signs, and 4. moving the output to the right, and replacing &quot;=&quot; with &quot;-&gt;&quot;.</p>
+<p>Many common operations can be expressed in this way. For example:</p>
+<h1 id="matrix-multiplication">Matrix multiplication</h1>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>einsum('ij,jk-&gt;ik', m0, m1) # output[i,k] = sum_j m0[i,j] * m1[j, k]</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<h1 id="dot-product">Dot product</h1>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>einsum('i,i-&gt;', u, v) # output = sum_i u[i]*v[i]</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<h1 id="outer-product">Outer product</h1>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>einsum('i,j-&gt;ij', u, v) # output[i,j] = u[i]*v[j]</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<h1 id="transpose">Transpose</h1>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>einsum('ij-&gt;ji', m) # output[j,i] = m[i,j]</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<h1 id="batch-matrix-multiplication">Batch matrix multiplication</h1>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>einsum('aij,ajk-&gt;aik', s, t) # out[a,i,k] = sum_j s[a,i,j] * t[a, j, k]</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<p>This function behaves like <code>numpy.einsum</code>, but does not support: * Ellipses (subscripts like <code>ij...,jk...-&gt;ik...</code>) * Subscripts where an axis appears more than once for a single input (e.g. <code>ijj,k-&gt;ik</code>). * Subscripts that are summed across multiple inputs (e.g., <code>ij,ij,jk-&gt;ik</code>).</p>
+<h5 id="args-92">Args:</h5>
+<ul>
+<li><b><code>equation</code></b>: a <code>str</code> describing the contraction, in the same format as <code>numpy.einsum</code>.</li>
+<li><b><code>inputs</code></b>: the inputs to contract (each one a <code>Tensor</code>), whose shapes should be consistent with <code>equation</code>.</li>
+</ul>
+<h5 id="returns-92">Returns:</h5>
+<p>The contracted <code>Tensor</code>, with shape determined by <code>equation</code>.</p>
+<h5 id="raises-9">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If
+<ul>
+<li>the format of <code>equation</code> is incorrect,</li>
+<li>the number of inputs implied by <code>equation</code> does not match <code>len(inputs)</code>,</li>
+<li>an axis appears in the output subscripts but not in any of the inputs,</li>
+<li>the number of dimensions of an input differs from the number of indices in its subscript, or</li>
+<li>the input shapes are inconsistent along a particular axis.</li>
+</ul></li>
+</ul>
+<h2 id="scan">Scan</h2>
+<p>TensorFlow provides several operations that you can use to perform scans (running totals) across one axis of a tensor.</p>
+<hr />
+<h3 id="tf.cumsumx-axis0-exclusivefalse-reversefalse-namenone"><a name="//apple_ref/cpp/Function/cumsum" class="dashAnchor"></a><code id="cumsum">tf.cumsum(x, axis=0, exclusive=False, reverse=False, name=None)</code></h3>
+<p>Compute the cumulative sum of the tensor <code>x</code> along <code>axis</code>.</p>
+<p>By default, this op performs an inclusive cumsum, which means that the first element of the input is identical to the first element of the output:</p>
+<pre class="prettyprint"><code>tf.cumsum([a, b, c]) ==&gt; [a, a + b, a + b + c]</code></pre>
+<p>By setting the <code>exclusive</code> kwarg to <code>True</code>, an exclusive cumsum is performed instead:</p>
+<pre class="prettyprint"><code>tf.cumsum([a, b, c], exclusive=True) ==&gt; [0, a, a + b]</code></pre>
+<p>By setting the <code>reverse</code> kwarg to <code>True</code>, the cumsum is performed in the opposite direction:</p>
+<pre class="prettyprint"><code>tf.cumsum([a, b, c], reverse=True) ==&gt; [a + b + c, b + c, c]</code></pre>
+<p>This is more efficient than using separate <code>tf.reverse</code> ops.</p>
+<p>The <code>reverse</code> and <code>exclusive</code> kwargs can also be combined:</p>
+<pre class="prettyprint"><code>tf.cumsum([a, b, c], exclusive=True, reverse=True) ==&gt; [b + c, c, 0]</code></pre>
+<h5 id="args-93">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int64</code>, <code>int32</code>, <code>uint8</code>, <code>uint16</code>, <code>int16</code>, <code>int8</code>, <code>complex64</code>, <code>complex128</code>, <code>qint8</code>, <code>quint8</code>, <code>qint32</code>, <code>half</code>.</li>
+<li><b><code>axis</code></b>: A <code>Tensor</code> of type <code>int32</code> (default: 0).</li>
+<li><b><code>reverse</code></b>: A <code>bool</code> (default: False).</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-93">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h3 id="tf.cumprodx-axis0-exclusivefalse-reversefalse-namenone"><a name="//apple_ref/cpp/Function/cumprod" class="dashAnchor"></a><code id="cumprod">tf.cumprod(x, axis=0, exclusive=False, reverse=False, name=None)</code></h3>
+<p>Compute the cumulative product of the tensor <code>x</code> along <code>axis</code>.</p>
+<p>By default, this op performs an inclusive cumprod, which means that the first element of the input is identical to the first element of the output:</p>
+<pre class="prettyprint"><code>tf.cumprod([a, b, c]) ==&gt; [a, a * b, a * b * c]</code></pre>
+<p>By setting the <code>exclusive</code> kwarg to <code>True</code>, an exclusive cumprod is performed instead:</p>
+<pre class="prettyprint"><code>tf.cumprod([a, b, c], exclusive=True) ==&gt; [1, a, a * b]</code></pre>
+<p>By setting the <code>reverse</code> kwarg to <code>True</code>, the cumprod is performed in the opposite direction:</p>
+<pre class="prettyprint"><code>tf.cumprod([a, b, c], reverse=True) ==&gt; [a * b * c, b * c, c]</code></pre>
+<p>This is more efficient than using separate <code>tf.reverse</code> ops.</p>
+<p>The <code>reverse</code> and <code>exclusive</code> kwargs can also be combined:</p>
+<pre class="prettyprint"><code>tf.cumprod([a, b, c], exclusive=True, reverse=True) ==&gt; [b * c, c, 1]</code></pre>
+<h5 id="args-94">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int64</code>, <code>int32</code>, <code>uint8</code>, <code>uint16</code>, <code>int16</code>, <code>int8</code>, <code>complex64</code>, <code>complex128</code>, <code>qint8</code>, <code>quint8</code>, <code>qint32</code>, <code>half</code>.</li>
+<li><b><code>axis</code></b>: A <code>Tensor</code> of type <code>int32</code> (default: 0).</li>
+<li><b><code>reverse</code></b>: A <code>bool</code> (default: False).</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-94">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<h2 id="segmentation">Segmentation</h2>
+<p>TensorFlow provides several operations that you can use to perform common math computations on tensor segments. Here a segmentation is a partitioning of a tensor along the first dimension, i.e. it defines a mapping from the first dimension onto <code>segment_ids</code>. The <code>segment_ids</code> tensor should be the size of the first dimension, <code>d0</code>, with consecutive IDs in the range <code>0</code> to <code>k</code>, where <code>k&lt;d0</code>. In particular, a segmentation of a matrix tensor is a mapping of rows to segments.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">c <span class="op">=</span> tf.constant([[<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>], [<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">2</span>,<span class="op">-</span><span class="dv">3</span>,<span class="op">-</span><span class="dv">4</span>], [<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">7</span>,<span class="dv">8</span>]])
+tf.segment_sum(c, tf.constant([<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>]))
+  <span class="op">==&gt;</span>  [[<span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span>]
+        [<span class="dv">5</span> <span class="dv">6</span> <span class="dv">7</span> <span class="dv">8</span>]]</code></pre></div>
+<hr />
+<h3 id="tf.segment_sumdata-segment_ids-namenone"><a name="//apple_ref/cpp/Function/segment_sum" class="dashAnchor"></a><code id="segment_sum">tf.segment_sum(data, segment_ids, name=None)</code></h3>
+<p>Computes the sum along segments of a tensor.</p>
+<p>Read <a href="../../api_docs/python/math_ops.md#segmentation">the section on Segmentation</a> for an explanation of segments.</p>
+<p>Computes a tensor such that \(output_i = _j data_j\) where sum is over <code>j</code> such that <code>segment_ids[j] == i</code>.</p>
+<div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+<p><img style="width:100%" src="../../images/SegmentSum.png" alt></p>
+</div>
+<h5 id="args-95">Args:</h5>
+<ul>
+<li><b><code>data</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int64</code>, <code>int32</code>, <code>uint8</code>, <code>uint16</code>, <code>int16</code>, <code>int8</code>, <code>complex64</code>, <code>complex128</code>, <code>qint8</code>, <code>quint8</code>, <code>qint32</code>, <code>half</code>.</li>
+<li><b><code>segment_ids</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. A 1-D tensor whose rank is equal to the rank of <code>data</code>'s first dimension. Values should be sorted and can be repeated.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-95">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>data</code>. Has same shape as data, except for dimension 0 which has size <code>k</code>, the number of segments.</p>
+<hr />
+<h3 id="tf.segment_proddata-segment_ids-namenone"><a name="//apple_ref/cpp/Function/segment_prod" class="dashAnchor"></a><code id="segment_prod">tf.segment_prod(data, segment_ids, name=None)</code></h3>
+<p>Computes the product along segments of a tensor.</p>
+<p>Read <a href="../../api_docs/python/math_ops.md#segmentation">the section on Segmentation</a> for an explanation of segments.</p>
+<p>Computes a tensor such that \(output_i = _j data_j\) where the product is over <code>j</code> such that <code>segment_ids[j] == i</code>.</p>
+<div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+<p><img style="width:100%" src="../../images/SegmentProd.png" alt></p>
+</div>
+<h5 id="args-96">Args:</h5>
+<ul>
+<li><b><code>data</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int64</code>, <code>int32</code>, <code>uint8</code>, <code>uint16</code>, <code>int16</code>, <code>int8</code>, <code>complex64</code>, <code>complex128</code>, <code>qint8</code>, <code>quint8</code>, <code>qint32</code>, <code>half</code>.</li>
+<li><b><code>segment_ids</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. A 1-D tensor whose rank is equal to the rank of <code>data</code>'s first dimension. Values should be sorted and can be repeated.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-96">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>data</code>. Has same shape as data, except for dimension 0 which has size <code>k</code>, the number of segments.</p>
+<hr />
+<h3 id="tf.segment_mindata-segment_ids-namenone"><a name="//apple_ref/cpp/Function/segment_min" class="dashAnchor"></a><code id="segment_min">tf.segment_min(data, segment_ids, name=None)</code></h3>
+<p>Computes the minimum along segments of a tensor.</p>
+<p>Read <a href="../../api_docs/python/math_ops.md#segmentation">the section on Segmentation</a> for an explanation of segments.</p>
+<p>Computes a tensor such that \(output_i = _j(data_j)\) where <code>min</code> is over <code>j</code> such that <code>segment_ids[j] == i</code>.</p>
+<div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+<p><img style="width:100%" src="../../images/SegmentMin.png" alt></p>
+</div>
+<h5 id="args-97">Args:</h5>
+<ul>
+<li><b><code>data</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>uint8</code>, <code>int16</code>, <code>int8</code>, <code>uint16</code>, <code>half</code>.</li>
+<li><b><code>segment_ids</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. A 1-D tensor whose rank is equal to the rank of <code>data</code>'s first dimension. Values should be sorted and can be repeated.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-97">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>data</code>. Has same shape as data, except for dimension 0 which has size <code>k</code>, the number of segments.</p>
+<hr />
+<h3 id="tf.segment_maxdata-segment_ids-namenone"><a name="//apple_ref/cpp/Function/segment_max" class="dashAnchor"></a><code id="segment_max">tf.segment_max(data, segment_ids, name=None)</code></h3>
+<p>Computes the maximum along segments of a tensor.</p>
+<p>Read <a href="../../api_docs/python/math_ops.md#segmentation">the section on Segmentation</a> for an explanation of segments.</p>
+<p>Computes a tensor such that \(output_i = _j(data_j)\) where <code>max</code> is over <code>j</code> such that <code>segment_ids[j] == i</code>.</p>
+<div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+<p><img style="width:100%" src="../../images/SegmentMax.png" alt></p>
+</div>
+<h5 id="args-98">Args:</h5>
+<ul>
+<li><b><code>data</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>uint8</code>, <code>int16</code>, <code>int8</code>, <code>uint16</code>, <code>half</code>.</li>
+<li><b><code>segment_ids</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. A 1-D tensor whose rank is equal to the rank of <code>data</code>'s first dimension. Values should be sorted and can be repeated.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-98">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>data</code>. Has same shape as data, except for dimension 0 which has size <code>k</code>, the number of segments.</p>
+<hr />
+<h3 id="tf.segment_meandata-segment_ids-namenone"><a name="//apple_ref/cpp/Function/segment_mean" class="dashAnchor"></a><code id="segment_mean">tf.segment_mean(data, segment_ids, name=None)</code></h3>
+<p>Computes the mean along segments of a tensor.</p>
+<p>Read <a href="../../api_docs/python/math_ops.md#segmentation">the section on Segmentation</a> for an explanation of segments.</p>
+<p>Computes a tensor such that \(output_i = \) where <code>mean</code> is over <code>j</code> such that <code>segment_ids[j] == i</code> and <code>N</code> is the total number of values summed.</p>
+<div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+<p><img style="width:100%" src="../../images/SegmentMean.png" alt></p>
+</div>
+<h5 id="args-99">Args:</h5>
+<ul>
+<li><b><code>data</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>uint8</code>, <code>int16</code>, <code>int8</code>, <code>uint16</code>, <code>half</code>.</li>
+<li><b><code>segment_ids</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. A 1-D tensor whose rank is equal to the rank of <code>data</code>'s first dimension. Values should be sorted and can be repeated.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-99">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>data</code>. Has same shape as data, except for dimension 0 which has size <code>k</code>, the number of segments.</p>
+<hr />
+<h3 id="tf.unsorted_segment_sumdata-segment_ids-num_segments-namenone"><a name="//apple_ref/cpp/Function/unsorted_segment_sum" class="dashAnchor"></a><code id="unsorted_segment_sum">tf.unsorted_segment_sum(data, segment_ids, num_segments, name=None)</code></h3>
+<p>Computes the sum along segments of a tensor.</p>
+<p>Read <a href="../../api_docs/python/math_ops.md#segmentation">the section on Segmentation</a> for an explanation of segments.</p>
+<p>Computes a tensor such that <code>(output[i] = sum_{j...} data[j...]</code> where the sum is over tuples <code>j...</code> such that <code>segment_ids[j...] == i</code>. Unlike <code>SegmentSum</code>, <code>segment_ids</code> need not be sorted and need not cover all values in the full range of valid values.</p>
+<p>If the sum is empty for a given segment ID <code>i</code>, <code>output[i] = 0</code>.</p>
+<p><code>num_segments</code> should equal the number of distinct segment IDs.</p>
+<div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+<p><img style="width:100%" src="../../images/UnsortedSegmentSum.png" alt></p>
+</div>
+<h5 id="args-100">Args:</h5>
+<ul>
+<li><b><code>data</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int64</code>, <code>int32</code>, <code>uint8</code>, <code>uint16</code>, <code>int16</code>, <code>int8</code>, <code>complex64</code>, <code>complex128</code>, <code>qint8</code>, <code>quint8</code>, <code>qint32</code>, <code>half</code>.</li>
+<li><b><code>segment_ids</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. A tensor whose shape is a prefix of <code>data.shape</code>.</li>
+<li><b><code>num_segments</code></b>: A <code>Tensor</code> of type <code>int32</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-100">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>data</code>. Has same shape as data, except for the first <code>segment_ids.rank</code> dimensions, which are replaced with a single dimension which has size <code>num_segments</code>.</p>
+<hr />
+<h3 id="tf.sparse_segment_sumdata-indices-segment_ids-namenone"><a name="//apple_ref/cpp/Function/sparse_segment_sum" class="dashAnchor"></a><code id="sparse_segment_sum">tf.sparse_segment_sum(data, indices, segment_ids, name=None)</code></h3>
+<p>Computes the sum along sparse segments of a tensor.</p>
+<p>Read <a href="../../api_docs/python/math_ops.md#segmentation">the section on Segmentation</a> for an explanation of segments.</p>
+<p>Like <code>SegmentSum</code>, but <code>segment_ids</code> can have rank less than <code>data</code>'s first dimension, selecting a subset of dimension 0, specified by <code>indices</code>.</p>
+<p>For example:</p>
+<pre class="prettyprint"><code>c = tf.constant([[1,2,3,4], [-1,-2,-3,-4], [5,6,7,8]])
+
+# Select two rows, one segment.
+tf.sparse_segment_sum(c, tf.constant([0, 1]), tf.constant([0, 0]))
+  ==&gt; [[0 0 0 0]]
+
+# Select two rows, two segment.
+tf.sparse_segment_sum(c, tf.constant([0, 1]), tf.constant([0, 1]))
+  ==&gt; [[ 1  2  3  4]
+       [-1 -2 -3 -4]]
+
+# Select all rows, two segments.
+tf.sparse_segment_sum(c, tf.constant([0, 1, 2]), tf.constant([0, 0, 1]))
+  ==&gt; [[0 0 0 0]
+       [5 6 7 8]]
+
+# Which is equivalent to:
+tf.segment_sum(c, tf.constant([0, 0, 1]))</code></pre>
+<h5 id="args-101">Args:</h5>
+<ul>
+<li><b><code>data</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>uint8</code>, <code>int16</code>, <code>int8</code>, <code>uint16</code>, <code>half</code>.</li>
+<li><b><code>indices</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. A 1-D tensor. Has same rank as <code>segment_ids</code>.</li>
+<li><b><code>segment_ids</code></b>: A <code>Tensor</code> of type <code>int32</code>. A 1-D tensor. Values should be sorted and can be repeated.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-101">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>data</code>. Has same shape as data, except for dimension 0 which has size <code>k</code>, the number of segments.</p>
+<hr />
+<h3 id="tf.sparse_segment_meandata-indices-segment_ids-namenone"><a name="//apple_ref/cpp/Function/sparse_segment_mean" class="dashAnchor"></a><code id="sparse_segment_mean">tf.sparse_segment_mean(data, indices, segment_ids, name=None)</code></h3>
+<p>Computes the mean along sparse segments of a tensor.</p>
+<p>Read <a href="../../api_docs/python/math_ops.md#segmentation">the section on Segmentation</a> for an explanation of segments.</p>
+<p>Like <code>SegmentMean</code>, but <code>segment_ids</code> can have rank less than <code>data</code>'s first dimension, selecting a subset of dimension 0, specified by <code>indices</code>.</p>
+<h5 id="args-102">Args:</h5>
+<ul>
+<li><b><code>data</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>.</li>
+<li><b><code>indices</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. A 1-D tensor. Has same rank as <code>segment_ids</code>.</li>
+<li><b><code>segment_ids</code></b>: A <code>Tensor</code> of type <code>int32</code>. A 1-D tensor. Values should be sorted and can be repeated.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-102">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>data</code>. Has same shape as data, except for dimension 0 which has size <code>k</code>, the number of segments.</p>
+<hr />
+<h3 id="tf.sparse_segment_sqrt_ndata-indices-segment_ids-namenone"><a name="//apple_ref/cpp/Function/sparse_segment_sqrt_n" class="dashAnchor"></a><code id="sparse_segment_sqrt_n">tf.sparse_segment_sqrt_n(data, indices, segment_ids, name=None)</code></h3>
+<p>Computes the sum along sparse segments of a tensor divided by the sqrt of N.</p>
+<p>N is the size of the segment being reduced.</p>
+<p>Read <a href="../../api_docs/python/math_ops.md#segmentation">the section on Segmentation</a> for an explanation of segments.</p>
+<h5 id="args-103">Args:</h5>
+<ul>
+<li><b><code>data</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>.</li>
+<li><b><code>indices</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. A 1-D tensor. Has same rank as <code>segment_ids</code>.</li>
+<li><b><code>segment_ids</code></b>: A <code>Tensor</code> of type <code>int32</code>. A 1-D tensor. Values should be sorted and can be repeated.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-103">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>data</code>. Has same shape as data, except for dimension 0 which has size <code>k</code>, the number of segments.</p>
+<h2 id="sequence-comparison-and-indexing">Sequence Comparison and Indexing</h2>
+<p>TensorFlow provides several operations that you can use to add sequence comparison and index extraction to your graph. You can use these operations to determine sequence differences and determine the indexes of specific values in a tensor.</p>
+<hr />
+<h3 id="tf.argmininput-axisnone-namenone-dimensionnone"><a name="//apple_ref/cpp/Function/argmin" class="dashAnchor"></a><code id="argmin">tf.argmin(input, axis=None, name=None, dimension=None)</code></h3>
+<p>Returns the index with the smallest value across axiss of a tensor.</p>
+<h5 id="args-104">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int64</code>, <code>int32</code>, <code>uint8</code>, <code>uint16</code>, <code>int16</code>, <code>int8</code>, <code>complex64</code>, <code>complex128</code>, <code>qint8</code>, <code>quint8</code>, <code>qint32</code>, <code>half</code>.</li>
+<li><b><code>axis</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. int32, 0 &lt;= axis &lt; rank(input). Describes which axis of the input Tensor to reduce across. For vectors, use axis = 0.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-104">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>int64</code>.</p>
+<hr />
+<h3 id="tf.argmaxinput-axisnone-namenone-dimensionnone"><a name="//apple_ref/cpp/Function/argmax" class="dashAnchor"></a><code id="argmax">tf.argmax(input, axis=None, name=None, dimension=None)</code></h3>
+<p>Returns the index with the largest value across axiss of a tensor.</p>
+<h5 id="args-105">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int64</code>, <code>int32</code>, <code>uint8</code>, <code>uint16</code>, <code>int16</code>, <code>int8</code>, <code>complex64</code>, <code>complex128</code>, <code>qint8</code>, <code>quint8</code>, <code>qint32</code>, <code>half</code>.</li>
+<li><b><code>axis</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. int32, 0 &lt;= axis &lt; rank(input). Describes which axis of the input Tensor to reduce across. For vectors, use axis = 0.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-105">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>int64</code>.</p>
+<hr />
+<h3 id="tf.setdiff1dx-y-index_dtypetf.int32-namenone"><a name="//apple_ref/cpp/Function/setdiff1d" class="dashAnchor"></a><code id="setdiff1d">tf.setdiff1d(x, y, index_dtype=tf.int32, name=None)</code></h3>
+<p>Computes the difference between two lists of numbers or strings.</p>
+<p>Given a list <code>x</code> and a list <code>y</code>, this operation returns a list <code>out</code> that represents all values that are in <code>x</code> but not in <code>y</code>. The returned list <code>out</code> is sorted in the same order that the numbers appear in <code>x</code> (duplicates are preserved). This operation also returns a list <code>idx</code> that represents the position of each <code>out</code> element in <code>x</code>. In other words:</p>
+<p><code>out[i] = x[idx[i]] for i in [0, 1, ..., len(out) - 1]</code></p>
+<p>For example, given this input:</p>
+<pre class="prettyprint"><code>x = [1, 2, 3, 4, 5, 6]
+y = [1, 3, 5]</code></pre>
+<p>This operation would return:</p>
+<pre class="prettyprint"><code>out ==&gt; [2, 4, 6]
+idx ==&gt; [1, 3, 5]</code></pre>
+<h5 id="args-106">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. 1-D. Values to keep.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>. 1-D. Values to remove.</li>
+<li><b><code>out_idx</code></b>: An optional <code>tf.DType</code> from: <code>tf.int32, tf.int64</code>. Defaults to <code>tf.int32</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-106">Returns:</h5>
+<p>A tuple of <code>Tensor</code> objects (out, idx).</p>
+<ul>
+<li><b><code>out</code></b>: A <code>Tensor</code>. Has the same type as <code>x</code>. 1-D. Values present in <code>x</code> but not in <code>y</code>.</li>
+<li><b><code>idx</code></b>: A <code>Tensor</code> of type <code>out_idx</code>. 1-D. Positions of <code>x</code> values preserved in <code>out</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.wherecondition-xnone-ynone-namenone"><a name="//apple_ref/cpp/Function/where" class="dashAnchor"></a><code id="where">tf.where(condition, x=None, y=None, name=None)</code></h3>
+<p>Return the elements, either from <code>x</code> or <code>y</code>, depending on the <code>condition</code>.</p>
+<p>If both <code>x</code> and <code>y</code> are None, then this operation returns the coordinates of true elements of <code>condition</code>. The coordinates are returned in a 2-D tensor where the first dimension (rows) represents the number of true elements, and the second dimension (columns) represents the coordinates of the true elements. Keep in mind, the shape of the output tensor can vary depending on how many true values there are in input. Indices are output in row-major order.</p>
+<p>If both non-None, <code>x</code> and <code>y</code> must have the same shape. The <code>condition</code> tensor must be a scalar if <code>x</code> and <code>y</code> are scalar. If <code>x</code> and <code>y</code> are vectors or higher rank, then <code>condition</code> must be either a vector with size matching the first dimension of <code>x</code>, or must have the same shape as <code>x</code>.</p>
+<p>The <code>condition</code> tensor acts as a mask that chooses, based on the value at each element, whether the corresponding element / row in the output should be taken from <code>x</code> (if true) or <code>y</code> (if false).</p>
+<p>If <code>condition</code> is a vector and <code>x</code> and <code>y</code> are higher rank matrices, then it chooses which row (outer dimension) to copy from <code>x</code> and <code>y</code>. If <code>condition</code> has the same shape as <code>x</code> and <code>y</code>, then it chooses which element to copy from <code>x</code> and <code>y</code>.</p>
+<h5 id="args-107">Args:</h5>
+<ul>
+<li><b><code>condition</code></b>: A <code>Tensor</code> of type <code>bool</code></li>
+<li><b><code>x</code></b>: A Tensor which may have the same shape as <code>condition</code>. If <code>condition</code> is rank 1, <code>x</code> may have higher rank, but its first dimension must match the size of <code>condition</code>.</li>
+<li><b><code>y</code></b>: A <code>tensor</code> with the same shape and type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name of the operation (optional)</li>
+</ul>
+<h5 id="returns-107">Returns:</h5>
+<p>A <code>Tensor</code> with the same type and shape as <code>x</code>, <code>y</code> if they are non-None. A <code>Tensor</code> with shape <code>(num_true, dim_size(condition))</code>.</p>
+<h5 id="raises-10">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: When exactly one of <code>x</code> or <code>y</code> is non-None.</li>
+</ul>
+<hr />
+<h3 id="tf.uniquex-out_idxnone-namenone"><a name="//apple_ref/cpp/Function/unique" class="dashAnchor"></a><code id="unique">tf.unique(x, out_idx=None, name=None)</code></h3>
+<p>Finds unique elements in a 1-D tensor.</p>
+<p>This operation returns a tensor <code>y</code> containing all of the unique elements of <code>x</code> sorted in the same order that they occur in <code>x</code>. This operation also returns a tensor <code>idx</code> the same size as <code>x</code> that contains the index of each value of <code>x</code> in the unique output <code>y</code>. In other words:</p>
+<p><code>y[idx[i]] = x[i] for i in [0, 1,...,rank(x) - 1]</code></p>
+<p>For example:</p>
+<pre class="prettyprint"><code># tensor &#39;x&#39; is [1, 1, 2, 4, 4, 4, 7, 8, 8]
+y, idx = unique(x)
+y ==&gt; [1, 2, 4, 7, 8]
+idx ==&gt; [0, 0, 1, 2, 2, 2, 3, 4, 4]</code></pre>
+<h5 id="args-108">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. 1-D.</li>
+<li><b><code>out_idx</code></b>: An optional <code>tf.DType</code> from: <code>tf.int32, tf.int64</code>. Defaults to <code>tf.int32</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-108">Returns:</h5>
+<p>A tuple of <code>Tensor</code> objects (y, idx).</p>
+<ul>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Has the same type as <code>x</code>. 1-D.</li>
+<li><b><code>idx</code></b>: A <code>Tensor</code> of type <code>out_idx</code>. 1-D.</li>
+</ul>
+<hr />
+<h3 id="tf.edit_distancehypothesis-truth-normalizetrue-nameedit_distance"><a name="//apple_ref/cpp/Function/edit_distance" class="dashAnchor"></a><code id="edit_distance">tf.edit_distance(hypothesis, truth, normalize=True, name='edit_distance')</code></h3>
+<p>Computes the Levenshtein distance between sequences.</p>
+<p>This operation takes variable-length sequences (<code>hypothesis</code> and <code>truth</code>), each provided as a <code>SparseTensor</code>, and computes the Levenshtein distance. You can normalize the edit distance by length of <code>truth</code> by setting <code>normalize</code> to true.</p>
+<p>For example, given the following input:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># &#39;hypothesis&#39; is a tensor of shape `[2, 1]` with variable-length values:</span>
+<span class="co">#   (0,0) = [&quot;a&quot;]</span>
+<span class="co">#   (1,0) = [&quot;b&quot;]</span>
+hypothesis <span class="op">=</span> tf.SparseTensor(
+    [[<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>],
+     [<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>]],
+    [<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>]
+    (<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>))
+
+<span class="co"># &#39;truth&#39; is a tensor of shape `[2, 2]` with variable-length values:</span>
+<span class="co">#   (0,0) = []</span>
+<span class="co">#   (0,1) = [&quot;a&quot;]</span>
+<span class="co">#   (1,0) = [&quot;b&quot;, &quot;c&quot;]</span>
+<span class="co">#   (1,1) = [&quot;a&quot;]</span>
+truth <span class="op">=</span> tf.SparseTensor(
+    [[<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>],
+     [<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>],
+     [<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>],
+     [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>]]
+    [<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;c&quot;</span>, <span class="st">&quot;a&quot;</span>],
+    (<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>))
+
+normalize <span class="op">=</span> <span class="va">True</span></code></pre></div>
+<p>This operation would return the following:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># &#39;output&#39; is a tensor of shape `[2, 2]` with edit distances normalized</span>
+<span class="co"># by &#39;truth&#39; lengths.</span>
+output <span class="op">==&gt;</span> [[inf, <span class="fl">1.0</span>],  <span class="co"># (0,0): no truth, (0,1): no hypothesis</span>
+           [<span class="fl">0.5</span>, <span class="fl">1.0</span>]]  <span class="co"># (1,0): addition, (1,1): no hypothesis</span></code></pre></div>
+<h5 id="args-109">Args:</h5>
+<ul>
+<li><b><code>hypothesis</code></b>: A <code>SparseTensor</code> containing hypothesis sequences.</li>
+<li><b><code>truth</code></b>: A <code>SparseTensor</code> containing truth sequences.</li>
+<li><b><code>normalize</code></b>: A <code>bool</code>. If <code>True</code>, normalizes the Levenshtein distance by length of <code>truth.</code></li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-109">Returns:</h5>
+<p>A dense <code>Tensor</code> with rank <code>R - 1</code>, where R is the rank of the <code>SparseTensor</code> inputs <code>hypothesis</code> and <code>truth</code>.</p>
+<h5 id="raises-11">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If either <code>hypothesis</code> or <code>truth</code> are not a <code>SparseTensor</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.invert_permutationx-namenone"><a name="//apple_ref/cpp/Function/invert_permutation" class="dashAnchor"></a><code id="invert_permutation">tf.invert_permutation(x, name=None)</code></h3>
+<p>Computes the inverse permutation of a tensor.</p>
+<p>This operation computes the inverse of an index permutation. It takes a 1-D integer tensor <code>x</code>, which represents the indices of a zero-based array, and swaps each value with its index position. In other words, for an output tensor <code>y</code> and an input tensor <code>x</code>, this operation computes the following:</p>
+<p><code>y[x[i]] = i for i in [0, 1, ..., len(x) - 1]</code></p>
+<p>The values must include 0. There can be no duplicate values or negative values.</p>
+<p>For example:</p>
+<pre class="prettyprint"><code># tensor `x` is [3, 4, 0, 2, 1]
+invert_permutation(x) ==&gt; [2, 4, 3, 0, 1]</code></pre>
+<h5 id="args-110">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. 1-D.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-110">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>. 1-D.</p>
+<h2 id="other-functions-and-classes">Other Functions and Classes</h2>
+<hr />
+<h3 id="tf.mulx-y-namenone"><a name="//apple_ref/cpp/Function/mul" class="dashAnchor"></a><code id="mul">tf.mul(x, y, name=None)</code></h3>
+<p>Returns x * y element-wise.</p>
+<p><em>NOTE</em>: <code>Mul</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-111">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>uint8</code>, <code>int8</code>, <code>uint16</code>, <code>int16</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>complex128</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-111">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h3 id="tf.negx-namenone"><a name="//apple_ref/cpp/Function/neg" class="dashAnchor"></a><code id="neg">tf.neg(x, name=None)</code></h3>
+<p>Computes numerical negative value element-wise.</p>
+<p>I.e., (y = -x).</p>
+<h5 id="args-112">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> or <code>SparseTensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>complex128</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-112">Returns:</h5>
+<p>A <code>Tensor</code> or <code>SparseTensor</code>, respectively. Has the same type as <code>x</code>.</p>
+<hr />
+<h3 id="tf.subx-y-namenone"><a name="//apple_ref/cpp/Function/sub" class="dashAnchor"></a><code id="sub">tf.sub(x, y, name=None)</code></h3>
+<p>Returns x - y element-wise.</p>
+<p><em>NOTE</em>: <code>Sub</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-113">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>complex128</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-113">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>

@@ -1,0 +1,557 @@
+<!-- This file is machine generated: DO NOT EDIT! -->
+<h1 id="rnn-contrib">RNN (contrib)</h1>
+<p>[TOC]</p>
+<p>Additional RNN operations and cells.</p>
+<h2 id="this-package-provides-additional-contributed-rnncells.">This package provides additional contributed RNNCells.</h2>
+<h3 id="block-rnncells">Block RNNCells</h3>
+<hr />
+<h3 id="class-tf.contrib.rnn.lstmblockcell"><a name="//apple_ref/cpp/Class/LSTMBlockCell" class="dashAnchor"></a><code id="LSTMBlockCell">class tf.contrib.rnn.LSTMBlockCell</code></h3>
+<p>Basic LSTM recurrent network cell.</p>
+<p>The implementation is based on: http://arxiv.org/abs/1409.2329.</p>
+<p>We add <code>forget_bias</code> (default: 1) to the biases of the forget gate in order to reduce the scale of forgetting in the beginning of the training.</p>
+<p>Unlike <code>rnn_cell.LSTMCell</code>, this is a monolithic op and should be much faster. The weight and bias matrixes should be compatible as long as the variable scope matches, and you use <code>use_compatible_names=True</code>. - - -</p>
+<h4 id="tf.contrib.rnn.lstmblockcell.__call__x-states_prev-scopenone"><code id="LSTMBlockCell.__call__">tf.contrib.rnn.LSTMBlockCell.__call__(x, states_prev, scope=None)</code></h4>
+<p>Long short-term memory cell (LSTM).</p>
+<hr />
+<h4 id="tf.contrib.rnn.lstmblockcell.__init__num_units-forget_bias1.0-use_peepholefalse-use_compatible_namesfalse"><code id="LSTMBlockCell.__init__">tf.contrib.rnn.LSTMBlockCell.__init__(num_units, forget_bias=1.0, use_peephole=False, use_compatible_names=False)</code></h4>
+<p>Initialize the basic LSTM cell.</p>
+<h5 id="args">Args:</h5>
+<ul>
+<li><b><code>num_units</code></b>: int, The number of units in the LSTM cell.</li>
+<li><b><code>forget_bias</code></b>: float, The bias added to forget gates (see above).</li>
+<li><b><code>use_peephole</code></b>: Whether to use peephole connections or not.</li>
+<li><b><code>use_compatible_names</code></b>: If True, use the same variable naming as rnn_cell.LSTMCell</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.rnn.lstmblockcell.output_size"><code id="LSTMBlockCell.output_size">tf.contrib.rnn.LSTMBlockCell.output_size</code></h4>
+<hr />
+<h4 id="tf.contrib.rnn.lstmblockcell.state_size"><code id="LSTMBlockCell.state_size">tf.contrib.rnn.LSTMBlockCell.state_size</code></h4>
+<hr />
+<h4 id="tf.contrib.rnn.lstmblockcell.zero_statebatch_size-dtype"><code id="LSTMBlockCell.zero_state">tf.contrib.rnn.LSTMBlockCell.zero_state(batch_size, dtype)</code></h4>
+<p>Return zero-filled state tensor(s).</p>
+<h5 id="args-1">Args:</h5>
+<ul>
+<li><b><code>batch_size</code></b>: int, float, or unit Tensor representing the batch size.</li>
+<li><b><code>dtype</code></b>: the data type to use for the state.</li>
+</ul>
+<h5 id="returns">Returns:</h5>
+<p>If <code>state_size</code> is an int or TensorShape, then the return value is a <code>N-D</code> tensor of shape <code>[batch_size x state_size]</code> filled with zeros.</p>
+<p>If <code>state_size</code> is a nested list or tuple, then the return value is a nested list or tuple (of the same structure) of <code>2-D</code> tensors with the shapes <code>[batch_size x s]</code> for each s in <code>state_size</code>.</p>
+<hr />
+<h3 id="class-tf.contrib.rnn.grublockcell"><a name="//apple_ref/cpp/Class/GRUBlockCell" class="dashAnchor"></a><code id="GRUBlockCell">class tf.contrib.rnn.GRUBlockCell</code></h3>
+<p>Block GRU cell implementation.</p>
+<p>The implementation is based on: http://arxiv.org/abs/1406.1078 Computes the LSTM cell forward propagation for 1 time step.</p>
+<p>This kernel op implements the following mathematical equations:</p>
+<p>Biases are initialized with:</p>
+<ul>
+<li><code>b_ru</code> - constant_initializer(1.0)</li>
+<li><code>b_c</code> - constant_initializer(0.0)</li>
+</ul>
+<pre><code>x_h_prev = [x, h_prev]
+
+[r_bar u_bar] = x_h_prev * w_ru + b_ru
+
+r = sigmoid(r_bar)
+u = sigmoid(u_bar)
+
+h_prevr = h_prev \circ r
+
+x_h_prevr = [x h_prevr]
+
+c_bar = x_h_prevr * w_c + b_c
+c = tanh(c_bar)
+
+h = (1-u) \circ c + u \circ h_prev</code></pre>
+<hr />
+<h4 id="tf.contrib.rnn.grublockcell.__call__x-h_prev-scopenone"><code id="GRUBlockCell.__call__">tf.contrib.rnn.GRUBlockCell.__call__(x, h_prev, scope=None)</code></h4>
+<p>GRU cell.</p>
+<hr />
+<h4 id="tf.contrib.rnn.grublockcell.__init__cell_size"><code id="GRUBlockCell.__init__">tf.contrib.rnn.GRUBlockCell.__init__(cell_size)</code></h4>
+<p>Initialize the Block GRU cell.</p>
+<h5 id="args-2">Args:</h5>
+<ul>
+<li><b><code>cell_size</code></b>: int, GRU cell size.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.rnn.grublockcell.output_size"><code id="GRUBlockCell.output_size">tf.contrib.rnn.GRUBlockCell.output_size</code></h4>
+<hr />
+<h4 id="tf.contrib.rnn.grublockcell.state_size"><code id="GRUBlockCell.state_size">tf.contrib.rnn.GRUBlockCell.state_size</code></h4>
+<hr />
+<h4 id="tf.contrib.rnn.grublockcell.zero_statebatch_size-dtype"><code id="GRUBlockCell.zero_state">tf.contrib.rnn.GRUBlockCell.zero_state(batch_size, dtype)</code></h4>
+<p>Return zero-filled state tensor(s).</p>
+<h5 id="args-3">Args:</h5>
+<ul>
+<li><b><code>batch_size</code></b>: int, float, or unit Tensor representing the batch size.</li>
+<li><b><code>dtype</code></b>: the data type to use for the state.</li>
+</ul>
+<h5 id="returns-1">Returns:</h5>
+<p>If <code>state_size</code> is an int or TensorShape, then the return value is a <code>N-D</code> tensor of shape <code>[batch_size x state_size]</code> filled with zeros.</p>
+<p>If <code>state_size</code> is a nested list or tuple, then the return value is a nested list or tuple (of the same structure) of <code>2-D</code> tensors with the shapes <code>[batch_size x s]</code> for each s in <code>state_size</code>.</p>
+<h3 id="fused-rnncells">Fused RNNCells</h3>
+<hr />
+<h3 id="class-tf.contrib.rnn.fusedrnncell"><a name="//apple_ref/cpp/Class/FusedRNNCell" class="dashAnchor"></a><code id="FusedRNNCell">class tf.contrib.rnn.FusedRNNCell</code></h3>
+<p>Abstract object representing a fused RNN cell.</p>
+<p>A fused RNN cell represents the entire RNN expanded over the time dimension. In effect, this represents an entire recurrent network.</p>
+<p>Unlike RNN cells which are subclasses of <code>rnn_cell.RNNCell</code>, a <code>FusedRNNCell</code> operates on the entire time sequence at once, by putting the loop over time inside the cell. This usually leads to much more efficient, but more complex and less flexible implementations.</p>
+<p>Every <code>FusedRNNCell</code> must implement <code>__call__</code> with the following signature. - - -</p>
+<h4 id="tf.contrib.rnn.fusedrnncell.__call__inputs-initial_statenone-dtypenone-sequence_lengthnone-scopenone"><code id="FusedRNNCell.__call__">tf.contrib.rnn.FusedRNNCell.__call__(inputs, initial_state=None, dtype=None, sequence_length=None, scope=None)</code></h4>
+<p>Run this fused RNN on inputs, starting from the given state.</p>
+<h5 id="args-4">Args:</h5>
+<ul>
+<li><b><code>inputs</code></b>: <code>3-D</code> tensor with shape <code>[time_len x batch_size x input_size]</code> or a list of <code>time_len</code> tensors of shape <code>[batch_size x input_size]</code>.</li>
+<li><b><code>initial_state</code></b>: either a tensor with shape <code>[batch_size x state_size]</code> or a tuple with shapes <code>[batch_size x s] for s in state_size</code>, if the cell takes tuples. If this is not provided, the cell is expected to create a zero initial state of type <code>dtype</code>.</li>
+<li><b><code>dtype</code></b>: The data type for the initial state and expected output. Required if <code>initial_state</code> is not provided or RNN state has a heterogeneous dtype.</li>
+<li><b><code>sequence_length</code></b>: Specifies the length of each sequence in inputs. An <code>int32</code> or <code>int64</code> vector (tensor) size <code>[batch_size]</code>, values in <code>[0, time_len)</code>. Defaults to <code>time_len</code> for each element.</li>
+<li><b><code>scope</code></b>: <code>VariableScope</code> or <code>string</code> for the created subgraph; defaults to class name.</li>
+</ul>
+<h5 id="returns-2">Returns:</h5>
+<p>A pair containing:</p>
+<ul>
+<li>Output: A <code>3-D</code> tensor of shape <code>[time_len x batch_size x output_size]</code> or a list of <code>time_len</code> tensors of shape <code>[batch_size x output_size]</code>, to match the type of the <code>inputs</code>.</li>
+<li>Final state: Either a single <code>2-D</code> tensor, or a tuple of tensors matching the arity and shapes of <code>initial_state</code>.</li>
+</ul>
+<hr />
+<h3 id="class-tf.contrib.rnn.fusedrnncelladaptor"><a name="//apple_ref/cpp/Class/FusedRNNCellAdaptor" class="dashAnchor"></a><code id="FusedRNNCellAdaptor">class tf.contrib.rnn.FusedRNNCellAdaptor</code></h3>
+<p>This is an adaptor for RNNCell classes to be used with <code>FusedRNNCell</code>. - - -</p>
+<h4 id="tf.contrib.rnn.fusedrnncelladaptor.__call__inputs-initial_statenone-dtypenone-sequence_lengthnone-scopenone"><code id="FusedRNNCellAdaptor.__call__">tf.contrib.rnn.FusedRNNCellAdaptor.__call__(inputs, initial_state=None, dtype=None, sequence_length=None, scope=None)</code></h4>
+<hr />
+<h4 id="tf.contrib.rnn.fusedrnncelladaptor.__init__cell-use_dynamic_rnnfalse"><code id="FusedRNNCellAdaptor.__init__">tf.contrib.rnn.FusedRNNCellAdaptor.__init__(cell, use_dynamic_rnn=False)</code></h4>
+<p>Initialize the adaptor.</p>
+<h5 id="args-5">Args:</h5>
+<ul>
+<li><b><code>cell</code></b>: an instance of a subclass of a <code>rnn_cell.RNNCell</code>.</li>
+<li><b><code>use_dynamic_rnn</code></b>: whether to use dynamic (or static) RNN.</li>
+</ul>
+<hr />
+<h3 id="class-tf.contrib.rnn.timereversedfusedrnn"><a name="//apple_ref/cpp/Class/TimeReversedFusedRNN" class="dashAnchor"></a><code id="TimeReversedFusedRNN">class tf.contrib.rnn.TimeReversedFusedRNN</code></h3>
+<p>This is an adaptor to time-reverse a FusedRNNCell.</p>
+<p>For example,</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">cell <span class="op">=</span> tf.nn.rnn_cell.BasicRNNCell(<span class="dv">10</span>)
+fw_lstm <span class="op">=</span> tf.contrib.rnn.FusedRNNCellAdaptor(cell, use_dynamic_rnn<span class="op">=</span><span class="va">True</span>)
+bw_lstm <span class="op">=</span> tf.contrib.rnn.TimeReversedFusedRNN(fw_lstm)
+fw_out, fw_state <span class="op">=</span> fw_lstm(inputs)
+bw_out, bw_state <span class="op">=</span> bw_lstm(inputs)</code></pre></div>
+<hr />
+<h4 id="tf.contrib.rnn.timereversedfusedrnn.__call__inputs-initial_statenone-dtypenone-sequence_lengthnone-scopenone"><code id="TimeReversedFusedRNN.__call__">tf.contrib.rnn.TimeReversedFusedRNN.__call__(inputs, initial_state=None, dtype=None, sequence_length=None, scope=None)</code></h4>
+<hr />
+<h4 id="tf.contrib.rnn.timereversedfusedrnn.__init__cell"><code id="TimeReversedFusedRNN.__init__">tf.contrib.rnn.TimeReversedFusedRNN.__init__(cell)</code></h4>
+<hr />
+<h3 id="class-tf.contrib.rnn.lstmblockfusedcell"><a name="//apple_ref/cpp/Class/LSTMBlockFusedCell" class="dashAnchor"></a><code id="LSTMBlockFusedCell">class tf.contrib.rnn.LSTMBlockFusedCell</code></h3>
+<p>FusedRNNCell implementation of LSTM.</p>
+<p>This is an extremely efficient LSTM implementation, that uses a single TF op for the entire LSTM. It should be both faster and more memory-efficient than LSTMBlockCell defined above.</p>
+<p>The implementation is based on: http://arxiv.org/abs/1409.2329.</p>
+<p>We add forget_bias (default: 1) to the biases of the forget gate in order to reduce the scale of forgetting in the beginning of the training.</p>
+<p>The variable naming is consistent with <code>rnn_cell.LSTMCell</code>. - - -</p>
+<h4 id="tf.contrib.rnn.lstmblockfusedcell.__call__inputs-initial_statenone-dtypenone-sequence_lengthnone-scopenone"><code id="LSTMBlockFusedCell.__call__">tf.contrib.rnn.LSTMBlockFusedCell.__call__(inputs, initial_state=None, dtype=None, sequence_length=None, scope=None)</code></h4>
+<p>Run this LSTM on inputs, starting from the given state.</p>
+<h5 id="args-6">Args:</h5>
+<ul>
+<li><b><code>inputs</code></b>: <code>3-D</code> tensor with shape <code>[time_len, batch_size, input_size]</code> or a list of <code>time_len</code> tensors of shape <code>[batch_size, input_size]</code>.</li>
+<li><b><code>initial_state</code></b>: a tuple <code>(initial_cell_state, initial_output)</code> with tensors of shape <code>[batch_size, self._num_units]</code>. If this is not provided, the cell is expected to create a zero initial state of type <code>dtype</code>.</li>
+<li><b><code>dtype</code></b>: The data type for the initial state and expected output. Required if <code>initial_state</code> is not provided or RNN state has a heterogeneous dtype.</li>
+<li><b><code>sequence_length</code></b>: Specifies the length of each sequence in inputs. An <code>int32</code> or <code>int64</code> vector (tensor) size <code>[batch_size]</code>, values in <code>[0, time_len).</code> Defaults to <code>time_len</code> for each element.</li>
+<li><b><code>scope</code></b>: <code>VariableScope</code> for the created subgraph; defaults to class name.</li>
+</ul>
+<h5 id="returns-3">Returns:</h5>
+<p>A pair containing:</p>
+<ul>
+<li>Output: A <code>3-D</code> tensor of shape <code>[time_len, batch_size, output_size]</code> or a list of time_len tensors of shape <code>[batch_size, output_size]</code>, to match the type of the <code>inputs</code>.</li>
+<li>Final state: a tuple <code>(cell_state, output)</code> matching <code>initial_state</code>.</li>
+</ul>
+<h5 id="raises">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: in case of shape mismatches</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.rnn.lstmblockfusedcell.__init__num_units-forget_bias1.0-cell_clipnone-use_peepholefalse"><code id="LSTMBlockFusedCell.__init__">tf.contrib.rnn.LSTMBlockFusedCell.__init__(num_units, forget_bias=1.0, cell_clip=None, use_peephole=False)</code></h4>
+<p>Initialize the LSTM cell.</p>
+<h5 id="args-7">Args:</h5>
+<ul>
+<li><b><code>num_units</code></b>: int, The number of units in the LSTM cell.</li>
+<li><b><code>forget_bias</code></b>: float, The bias added to forget gates (see above).</li>
+<li><b><code>cell_clip</code></b>: clip the cell to this value. Defaults to <code>3</code>.</li>
+<li><b><code>use_peephole</code></b>: Whether to use peephole connections or not.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.rnn.lstmblockfusedcell.num_units"><code id="LSTMBlockFusedCell.num_units">tf.contrib.rnn.LSTMBlockFusedCell.num_units</code></h4>
+<p>Number of units in this cell (output dimension).</p>
+<h3 id="lstm-like-cells">LSTM-like cells</h3>
+<hr />
+<h3 id="class-tf.contrib.rnn.coupledinputforgetgatelstmcell"><a name="//apple_ref/cpp/Class/CoupledInputForgetGateLSTMCell" class="dashAnchor"></a><code id="CoupledInputForgetGateLSTMCell">class tf.contrib.rnn.CoupledInputForgetGateLSTMCell</code></h3>
+<p>Long short-term memory unit (LSTM) recurrent network cell.</p>
+<p>The default non-peephole implementation is based on:</p>
+<p>http://deeplearning.cs.cmu.edu/pdfs/Hochreiter97_lstm.pdf</p>
+<p>S. Hochreiter and J. Schmidhuber. &quot;Long Short-Term Memory&quot;. Neural Computation, 9(8):1735-1780, 1997.</p>
+<p>The peephole implementation is based on:</p>
+<p>https://research.google.com/pubs/archive/43905.pdf</p>
+<p>Hasim Sak, Andrew Senior, and Francoise Beaufays. &quot;Long short-term memory recurrent neural network architectures for large scale acoustic modeling.&quot; INTERSPEECH, 2014.</p>
+<p>The coupling of input and forget gate is based on:</p>
+<p>http://arxiv.org/pdf/1503.04069.pdf</p>
+<p>Greff et al. &quot;LSTM: A Search Space Odyssey&quot;</p>
+<p>The class uses optional peep-hole connections, and an optional projection layer. - - -</p>
+<h4 id="tf.contrib.rnn.coupledinputforgetgatelstmcell.__call__inputs-state-scopenone"><code id="CoupledInputForgetGateLSTMCell.__call__">tf.contrib.rnn.CoupledInputForgetGateLSTMCell.__call__(inputs, state, scope=None)</code></h4>
+<p>Run one step of LSTM.</p>
+<h5 id="args-8">Args:</h5>
+<ul>
+<li><b><code>inputs</code></b>: input Tensor, 2D, batch x num_units.</li>
+<li><b><code>state</code></b>: if <code>state_is_tuple</code> is False, this must be a state Tensor, <code>2-D, batch x state_size</code>. If <code>state_is_tuple</code> is True, this must be a tuple of state Tensors, both <code>2-D</code>, with column sizes <code>c_state</code> and <code>m_state</code>.</li>
+<li><b><code>scope</code></b>: VariableScope for the created subgraph; defaults to &quot;LSTMCell&quot;.</li>
+</ul>
+<h5 id="returns-4">Returns:</h5>
+<p>A tuple containing: - A <code>2-D, [batch x output_dim]</code>, Tensor representing the output of the LSTM after reading <code>inputs</code> when previous state was <code>state</code>. Here output_dim is: num_proj if num_proj was set, num_units otherwise. - Tensor(s) representing the new state of LSTM after reading <code>inputs</code> when the previous state was <code>state</code>. Same type and shape(s) as <code>state</code>.</p>
+<h5 id="raises-1">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If input size cannot be inferred from inputs via static shape inference.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.rnn.coupledinputforgetgatelstmcell.__init__num_units-use_peepholesfalse-initializernone-num_projnone-proj_clipnone-num_unit_shards1-num_proj_shards1-forget_bias1.0-state_is_tuplefalse-activationtanh"><code id="CoupledInputForgetGateLSTMCell.__init__">tf.contrib.rnn.CoupledInputForgetGateLSTMCell.__init__(num_units, use_peepholes=False, initializer=None, num_proj=None, proj_clip=None, num_unit_shards=1, num_proj_shards=1, forget_bias=1.0, state_is_tuple=False, activation=tanh)</code></h4>
+<p>Initialize the parameters for an LSTM cell.</p>
+<h5 id="args-9">Args:</h5>
+<ul>
+<li><b><code>num_units</code></b>: int, The number of units in the LSTM cell</li>
+<li><b><code>use_peepholes</code></b>: bool, set True to enable diagonal/peephole connections.</li>
+<li><b><code>initializer</code></b>: (optional) The initializer to use for the weight and projection matrices.</li>
+<li><b><code>num_proj</code></b>: (optional) int, The output dimensionality for the projection matrices. If None, no projection is performed.</li>
+<li><p><b><code>proj_clip</code></b>: (optional) A float value. If <code>num_proj &gt; 0</code> and <code>proj_clip</code> is provided, then the projected values are clipped elementwise to within <code>[-proj_clip, proj_clip]</code>.</p></li>
+<li><b><code>num_unit_shards</code></b>: How to split the weight matrix. If &gt;1, the weight matrix is stored across num_unit_shards.</li>
+<li><b><code>num_proj_shards</code></b>: How to split the projection matrix. If &gt;1, the projection matrix is stored across num_proj_shards.</li>
+<li><b><code>forget_bias</code></b>: Biases of the forget gate are initialized by default to 1 in order to reduce the scale of forgetting at the beginning of the training.</li>
+<li><b><code>state_is_tuple</code></b>: If True, accepted and returned states are 2-tuples of the <code>c_state</code> and <code>m_state</code>. By default (False), they are concatenated along the column axis. This default behavior will soon be deprecated.</li>
+<li><p><b><code>activation</code></b>: Activation function of the inner states.</p></li>
+</ul>
+<hr />
+<h4 id="tf.contrib.rnn.coupledinputforgetgatelstmcell.output_size"><code id="CoupledInputForgetGateLSTMCell.output_size">tf.contrib.rnn.CoupledInputForgetGateLSTMCell.output_size</code></h4>
+<hr />
+<h4 id="tf.contrib.rnn.coupledinputforgetgatelstmcell.state_size"><code id="CoupledInputForgetGateLSTMCell.state_size">tf.contrib.rnn.CoupledInputForgetGateLSTMCell.state_size</code></h4>
+<hr />
+<h4 id="tf.contrib.rnn.coupledinputforgetgatelstmcell.zero_statebatch_size-dtype"><code id="CoupledInputForgetGateLSTMCell.zero_state">tf.contrib.rnn.CoupledInputForgetGateLSTMCell.zero_state(batch_size, dtype)</code></h4>
+<p>Return zero-filled state tensor(s).</p>
+<h5 id="args-10">Args:</h5>
+<ul>
+<li><b><code>batch_size</code></b>: int, float, or unit Tensor representing the batch size.</li>
+<li><b><code>dtype</code></b>: the data type to use for the state.</li>
+</ul>
+<h5 id="returns-5">Returns:</h5>
+<p>If <code>state_size</code> is an int or TensorShape, then the return value is a <code>N-D</code> tensor of shape <code>[batch_size x state_size]</code> filled with zeros.</p>
+<p>If <code>state_size</code> is a nested list or tuple, then the return value is a nested list or tuple (of the same structure) of <code>2-D</code> tensors with the shapes <code>[batch_size x s]</code> for each s in <code>state_size</code>.</p>
+<hr />
+<h3 id="class-tf.contrib.rnn.timefreqlstmcell"><a name="//apple_ref/cpp/Class/TimeFreqLSTMCell" class="dashAnchor"></a><code id="TimeFreqLSTMCell">class tf.contrib.rnn.TimeFreqLSTMCell</code></h3>
+<p>Time-Frequency Long short-term memory unit (LSTM) recurrent network cell.</p>
+<p>This implementation is based on:</p>
+<p>Tara N. Sainath and Bo Li &quot;Modeling Time-Frequency Patterns with LSTM vs. Convolutional Architectures for LVCSR Tasks.&quot; submitted to INTERSPEECH, 2016.</p>
+<p>It uses peep-hole connections and optional cell clipping. - - -</p>
+<h4 id="tf.contrib.rnn.timefreqlstmcell.__call__inputs-state-scopenone"><code id="TimeFreqLSTMCell.__call__">tf.contrib.rnn.TimeFreqLSTMCell.__call__(inputs, state, scope=None)</code></h4>
+<p>Run one step of LSTM.</p>
+<h5 id="args-11">Args:</h5>
+<ul>
+<li><b><code>inputs</code></b>: input Tensor, 2D, batch x num_units.</li>
+<li><b><code>state</code></b>: state Tensor, 2D, batch x state_size.</li>
+<li><b><code>scope</code></b>: VariableScope for the created subgraph; defaults to &quot;TimeFreqLSTMCell&quot;.</li>
+</ul>
+<h5 id="returns-6">Returns:</h5>
+<p>A tuple containing: - A 2D, batch x output_dim, Tensor representing the output of the LSTM after reading &quot;inputs&quot; when previous state was &quot;state&quot;. Here output_dim is num_units. - A 2D, batch x state_size, Tensor representing the new state of LSTM after reading &quot;inputs&quot; when previous state was &quot;state&quot;.</p>
+<h5 id="raises-2">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if an input_size was specified and the provided inputs have a different dimension.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.rnn.timefreqlstmcell.__init__num_units-use_peepholesfalse-cell_clipnone-initializernone-num_unit_shards1-forget_bias1.0-feature_sizenone-frequency_skipnone"><code id="TimeFreqLSTMCell.__init__">tf.contrib.rnn.TimeFreqLSTMCell.__init__(num_units, use_peepholes=False, cell_clip=None, initializer=None, num_unit_shards=1, forget_bias=1.0, feature_size=None, frequency_skip=None)</code></h4>
+<p>Initialize the parameters for an LSTM cell.</p>
+<h5 id="args-12">Args:</h5>
+<ul>
+<li><b><code>num_units</code></b>: int, The number of units in the LSTM cell</li>
+<li><b><code>use_peepholes</code></b>: bool, set True to enable diagonal/peephole connections.</li>
+<li><b><code>cell_clip</code></b>: (optional) A float value, if provided the cell state is clipped by this value prior to the cell output activation.</li>
+<li><b><code>initializer</code></b>: (optional) The initializer to use for the weight and projection matrices.</li>
+<li><b><code>num_unit_shards</code></b>: int, How to split the weight matrix. If &gt;1, the weight matrix is stored across num_unit_shards.</li>
+<li><b><code>forget_bias</code></b>: float, Biases of the forget gate are initialized by default to 1 in order to reduce the scale of forgetting at the beginning of the training.</li>
+<li><b><code>feature_size</code></b>: int, The size of the input feature the LSTM spans over.</li>
+<li><b><code>frequency_skip</code></b>: int, The amount the LSTM filter is shifted by in frequency.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.rnn.timefreqlstmcell.output_size"><code id="TimeFreqLSTMCell.output_size">tf.contrib.rnn.TimeFreqLSTMCell.output_size</code></h4>
+<hr />
+<h4 id="tf.contrib.rnn.timefreqlstmcell.state_size"><code id="TimeFreqLSTMCell.state_size">tf.contrib.rnn.TimeFreqLSTMCell.state_size</code></h4>
+<hr />
+<h4 id="tf.contrib.rnn.timefreqlstmcell.zero_statebatch_size-dtype"><code id="TimeFreqLSTMCell.zero_state">tf.contrib.rnn.TimeFreqLSTMCell.zero_state(batch_size, dtype)</code></h4>
+<p>Return zero-filled state tensor(s).</p>
+<h5 id="args-13">Args:</h5>
+<ul>
+<li><b><code>batch_size</code></b>: int, float, or unit Tensor representing the batch size.</li>
+<li><b><code>dtype</code></b>: the data type to use for the state.</li>
+</ul>
+<h5 id="returns-7">Returns:</h5>
+<p>If <code>state_size</code> is an int or TensorShape, then the return value is a <code>N-D</code> tensor of shape <code>[batch_size x state_size]</code> filled with zeros.</p>
+<p>If <code>state_size</code> is a nested list or tuple, then the return value is a nested list or tuple (of the same structure) of <code>2-D</code> tensors with the shapes <code>[batch_size x s]</code> for each s in <code>state_size</code>.</p>
+<hr />
+<h3 id="class-tf.contrib.rnn.gridlstmcell"><a name="//apple_ref/cpp/Class/GridLSTMCell" class="dashAnchor"></a><code id="GridLSTMCell">class tf.contrib.rnn.GridLSTMCell</code></h3>
+<p>Grid Long short-term memory unit (LSTM) recurrent network cell.</p>
+<p>The default is based on: Nal Kalchbrenner, Ivo Danihelka and Alex Graves &quot;Grid Long Short-Term Memory,&quot; Proc. ICLR 2016. http://arxiv.org/abs/1507.01526</p>
+<p>When peephole connections are used, the implementation is based on: Tara N. Sainath and Bo Li &quot;Modeling Time-Frequency Patterns with LSTM vs. Convolutional Architectures for LVCSR Tasks.&quot; submitted to INTERSPEECH, 2016.</p>
+<p>The code uses optional peephole connections, shared_weights and cell clipping. - - -</p>
+<h4 id="tf.contrib.rnn.gridlstmcell.__call__inputs-state-scopenone"><code id="GridLSTMCell.__call__">tf.contrib.rnn.GridLSTMCell.__call__(inputs, state, scope=None)</code></h4>
+<p>Run one step of LSTM.</p>
+<h5 id="args-14">Args:</h5>
+<ul>
+<li><b><code>inputs</code></b>: input Tensor, 2D, [batch, feature_size].</li>
+<li><b><code>state</code></b>: Tensor or tuple of Tensors, 2D, [batch, state_size], depends on the flag self._state_is_tuple.</li>
+<li><b><code>scope</code></b>: (optional) VariableScope for the created subgraph; if None, it defaults to &quot;GridLSTMCell&quot;.</li>
+</ul>
+<h5 id="returns-8">Returns:</h5>
+<p>A tuple containing: - A 2D, [batch, output_dim], Tensor representing the output of the LSTM after reading &quot;inputs&quot; when previous state was &quot;state&quot;. Here output_dim is num_units. - A 2D, [batch, state_size], Tensor representing the new state of LSTM after reading &quot;inputs&quot; when previous state was &quot;state&quot;.</p>
+<h5 id="raises-3">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if an input_size was specified and the provided inputs have a different dimension.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.rnn.gridlstmcell.__init__num_units-use_peepholesfalse-share_time_frequency_weightsfalse-cell_clipnone-initializernone-num_unit_shards1-forget_bias1.0-feature_sizenone-frequency_skipnone-num_frequency_blocksnone-start_freqindex_listnone-end_freqindex_listnone-couple_input_forget_gatesfalse-state_is_tuplefalse"><code id="GridLSTMCell.__init__">tf.contrib.rnn.GridLSTMCell.__init__(num_units, use_peepholes=False, share_time_frequency_weights=False, cell_clip=None, initializer=None, num_unit_shards=1, forget_bias=1.0, feature_size=None, frequency_skip=None, num_frequency_blocks=None, start_freqindex_list=None, end_freqindex_list=None, couple_input_forget_gates=False, state_is_tuple=False)</code></h4>
+<p>Initialize the parameters for an LSTM cell.</p>
+<h5 id="args-15">Args:</h5>
+<ul>
+<li><b><code>num_units</code></b>: int, The number of units in the LSTM cell</li>
+<li><b><code>use_peepholes</code></b>: (optional) bool, default False. Set True to enable diagonal/peephole connections.</li>
+<li><b><code>share_time_frequency_weights</code></b>: (optional) bool, default False. Set True to enable shared cell weights between time and frequency LSTMs.</li>
+<li><b><code>cell_clip</code></b>: (optional) A float value, default None, if provided the cell state is clipped by this value prior to the cell output activation.</li>
+<li><b><code>initializer</code></b>: (optional) The initializer to use for the weight and projection matrices, default None.</li>
+<li><b><code>num_unit_shards</code></b>: (optional) int, defualt 1, How to split the weight matrix. If &gt; 1,the weight matrix is stored across num_unit_shards.</li>
+<li><b><code>forget_bias</code></b>: (optional) float, default 1.0, The initial bias of the forget gates, used to reduce the scale of forgetting at the beginning of the training.</li>
+<li><b><code>feature_size</code></b>: (optional) int, default None, The size of the input feature the LSTM spans over.</li>
+<li><b><code>frequency_skip</code></b>: (optional) int, default None, The amount the LSTM filter is shifted by in frequency.</li>
+<li><b><code>num_frequency_blocks</code></b>: [required] A list of frequency blocks needed to cover the whole input feature splitting defined by start_freqindex_list and end_freqindex_list.</li>
+<li><b><code>start_freqindex_list</code></b>: [optional], list of ints, default None, The starting frequency index for each frequency block.</li>
+<li><b><code>end_freqindex_list</code></b>: [optional], list of ints, default None. The ending frequency index for each frequency block.</li>
+<li><b><code>couple_input_forget_gates</code></b>: (optional) bool, default False, Whether to couple the input and forget gates, i.e. f_gate = 1.0 - i_gate, to reduce model parameters and computation cost.</li>
+<li><b><code>state_is_tuple</code></b>: If True, accepted and returned states are 2-tuples of the <code>c_state</code> and <code>m_state</code>. By default (False), they are concatenated along the column axis. This default behavior will soon be deprecated.</li>
+</ul>
+<h5 id="raises-4">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if the num_frequency_blocks list is not specified</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.rnn.gridlstmcell.output_size"><code id="GridLSTMCell.output_size">tf.contrib.rnn.GridLSTMCell.output_size</code></h4>
+<hr />
+<h4 id="tf.contrib.rnn.gridlstmcell.state_size"><code id="GridLSTMCell.state_size">tf.contrib.rnn.GridLSTMCell.state_size</code></h4>
+<hr />
+<h4 id="tf.contrib.rnn.gridlstmcell.state_tuple_type"><code id="GridLSTMCell.state_tuple_type">tf.contrib.rnn.GridLSTMCell.state_tuple_type</code></h4>
+<hr />
+<h4 id="tf.contrib.rnn.gridlstmcell.zero_statebatch_size-dtype"><code id="GridLSTMCell.zero_state">tf.contrib.rnn.GridLSTMCell.zero_state(batch_size, dtype)</code></h4>
+<p>Return zero-filled state tensor(s).</p>
+<h5 id="args-16">Args:</h5>
+<ul>
+<li><b><code>batch_size</code></b>: int, float, or unit Tensor representing the batch size.</li>
+<li><b><code>dtype</code></b>: the data type to use for the state.</li>
+</ul>
+<h5 id="returns-9">Returns:</h5>
+<p>If <code>state_size</code> is an int or TensorShape, then the return value is a <code>N-D</code> tensor of shape <code>[batch_size x state_size]</code> filled with zeros.</p>
+<p>If <code>state_size</code> is a nested list or tuple, then the return value is a nested list or tuple (of the same structure) of <code>2-D</code> tensors with the shapes <code>[batch_size x s]</code> for each s in <code>state_size</code>.</p>
+<h3 id="rnncell-wrappers">RNNCell wrappers</h3>
+<hr />
+<h3 id="class-tf.contrib.rnn.attentioncellwrapper"><a name="//apple_ref/cpp/Class/AttentionCellWrapper" class="dashAnchor"></a><code id="AttentionCellWrapper">class tf.contrib.rnn.AttentionCellWrapper</code></h3>
+<p>Basic attention cell wrapper.</p>
+<p>Implementation based on https://arxiv.org/abs/1409.0473. - - -</p>
+<h4 id="tf.contrib.rnn.attentioncellwrapper.__call__inputs-state-scopenone"><code id="AttentionCellWrapper.__call__">tf.contrib.rnn.AttentionCellWrapper.__call__(inputs, state, scope=None)</code></h4>
+<p>Long short-term memory cell with attention (LSTMA).</p>
+<hr />
+<h4 id="tf.contrib.rnn.attentioncellwrapper.__init__cell-attn_length-attn_sizenone-attn_vec_sizenone-input_sizenone-state_is_tuplefalse"><code id="AttentionCellWrapper.__init__">tf.contrib.rnn.AttentionCellWrapper.__init__(cell, attn_length, attn_size=None, attn_vec_size=None, input_size=None, state_is_tuple=False)</code></h4>
+<p>Create a cell with attention.</p>
+<h5 id="args-17">Args:</h5>
+<ul>
+<li><b><code>cell</code></b>: an RNNCell, an attention is added to it.</li>
+<li><b><code>attn_length</code></b>: integer, the size of an attention window.</li>
+<li><b><code>attn_size</code></b>: integer, the size of an attention vector. Equal to cell.output_size by default.</li>
+<li><b><code>attn_vec_size</code></b>: integer, the number of convolutional features calculated on attention state and a size of the hidden layer built from base cell state. Equal attn_size to by default.</li>
+<li><b><code>input_size</code></b>: integer, the size of a hidden linear layer, built from inputs and attention. Derived from the input tensor by default.</li>
+<li><b><code>state_is_tuple</code></b>: If True, accepted and returned states are n-tuples, where <code>n = len(cells)</code>. By default (False), the states are all concatenated along the column axis.</li>
+</ul>
+<h5 id="raises-5">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if cell is not an RNNCell.</li>
+<li><b><code>ValueError</code></b>: if cell returns a state tuple but the flag <code>state_is_tuple</code> is <code>False</code> or if attn_length is zero or less.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.rnn.attentioncellwrapper.output_size"><code id="AttentionCellWrapper.output_size">tf.contrib.rnn.AttentionCellWrapper.output_size</code></h4>
+<hr />
+<h4 id="tf.contrib.rnn.attentioncellwrapper.state_size"><code id="AttentionCellWrapper.state_size">tf.contrib.rnn.AttentionCellWrapper.state_size</code></h4>
+<hr />
+<h4 id="tf.contrib.rnn.attentioncellwrapper.zero_statebatch_size-dtype"><code id="AttentionCellWrapper.zero_state">tf.contrib.rnn.AttentionCellWrapper.zero_state(batch_size, dtype)</code></h4>
+<p>Return zero-filled state tensor(s).</p>
+<h5 id="args-18">Args:</h5>
+<ul>
+<li><b><code>batch_size</code></b>: int, float, or unit Tensor representing the batch size.</li>
+<li><b><code>dtype</code></b>: the data type to use for the state.</li>
+</ul>
+<h5 id="returns-10">Returns:</h5>
+<p>If <code>state_size</code> is an int or TensorShape, then the return value is a <code>N-D</code> tensor of shape <code>[batch_size x state_size]</code> filled with zeros.</p>
+<p>If <code>state_size</code> is a nested list or tuple, then the return value is a nested list or tuple (of the same structure) of <code>2-D</code> tensors with the shapes <code>[batch_size x s]</code> for each s in <code>state_size</code>.</p>
+<h2 id="other-functions-and-classes">Other Functions and Classes</h2>
+<hr />
+<h3 id="class-tf.contrib.rnn.bidirectionalgridlstmcell"><a name="//apple_ref/cpp/Class/BidirectionalGridLSTMCell" class="dashAnchor"></a><code id="BidirectionalGridLSTMCell">class tf.contrib.rnn.BidirectionalGridLSTMCell</code></h3>
+<p>Bidirectional GridLstm cell.</p>
+<p>The bidirection connection is only used in the frequency direction, which hence doesn't affect the time direction's real-time processing that is required for online recognition systems. The current implementation uses different weights for the two directions. - - -</p>
+<h4 id="tf.contrib.rnn.bidirectionalgridlstmcell.__call__inputs-state-scopenone"><code id="BidirectionalGridLSTMCell.__call__">tf.contrib.rnn.BidirectionalGridLSTMCell.__call__(inputs, state, scope=None)</code></h4>
+<p>Run one step of LSTM.</p>
+<h5 id="args-19">Args:</h5>
+<ul>
+<li><b><code>inputs</code></b>: input Tensor, 2D, [batch, num_units].</li>
+<li><b><code>state</code></b>: tuple of Tensors, 2D, [batch, state_size].</li>
+<li><b><code>scope</code></b>: (optional) VariableScope for the created subgraph; if None, it defaults to &quot;BidirectionalGridLSTMCell&quot;.</li>
+</ul>
+<h5 id="returns-11">Returns:</h5>
+<p>A tuple containing: - A 2D, [batch, output_dim], Tensor representing the output of the LSTM after reading &quot;inputs&quot; when previous state was &quot;state&quot;. Here output_dim is num_units. - A 2D, [batch, state_size], Tensor representing the new state of LSTM after reading &quot;inputs&quot; when previous state was &quot;state&quot;.</p>
+<h5 id="raises-6">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if an input_size was specified and the provided inputs have a different dimension.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.rnn.bidirectionalgridlstmcell.__init__num_units-use_peepholesfalse-share_time_frequency_weightsfalse-cell_clipnone-initializernone-num_unit_shards1-forget_bias1.0-feature_sizenone-frequency_skipnone-num_frequency_blocksnone-start_freqindex_listnone-end_freqindex_listnone-couple_input_forget_gatesfalse-backward_slice_offset0"><code id="BidirectionalGridLSTMCell.__init__">tf.contrib.rnn.BidirectionalGridLSTMCell.__init__(num_units, use_peepholes=False, share_time_frequency_weights=False, cell_clip=None, initializer=None, num_unit_shards=1, forget_bias=1.0, feature_size=None, frequency_skip=None, num_frequency_blocks=None, start_freqindex_list=None, end_freqindex_list=None, couple_input_forget_gates=False, backward_slice_offset=0)</code></h4>
+<p>Initialize the parameters for an LSTM cell.</p>
+<h5 id="args-20">Args:</h5>
+<ul>
+<li><b><code>num_units</code></b>: int, The number of units in the LSTM cell</li>
+<li><b><code>use_peepholes</code></b>: (optional) bool, default False. Set True to enable diagonal/peephole connections.</li>
+<li><b><code>share_time_frequency_weights</code></b>: (optional) bool, default False. Set True to enable shared cell weights between time and frequency LSTMs.</li>
+<li><b><code>cell_clip</code></b>: (optional) A float value, default None, if provided the cell state is clipped by this value prior to the cell output activation.</li>
+<li><b><code>initializer</code></b>: (optional) The initializer to use for the weight and projection matrices, default None.</li>
+<li><b><code>num_unit_shards</code></b>: (optional) int, defualt 1, How to split the weight matrix. If &gt; 1,the weight matrix is stored across num_unit_shards.</li>
+<li><b><code>forget_bias</code></b>: (optional) float, default 1.0, The initial bias of the forget gates, used to reduce the scale of forgetting at the beginning of the training.</li>
+<li><b><code>feature_size</code></b>: (optional) int, default None, The size of the input feature the LSTM spans over.</li>
+<li><b><code>frequency_skip</code></b>: (optional) int, default None, The amount the LSTM filter is shifted by in frequency.</li>
+<li><b><code>num_frequency_blocks</code></b>: [required] A list of frequency blocks needed to cover the whole input feature splitting defined by start_freqindex_list and end_freqindex_list.</li>
+<li><b><code>start_freqindex_list</code></b>: [optional], list of ints, default None, The starting frequency index for each frequency block.</li>
+<li><b><code>end_freqindex_list</code></b>: [optional], list of ints, default None. The ending frequency index for each frequency block.</li>
+<li><b><code>couple_input_forget_gates</code></b>: (optional) bool, default False, Whether to couple the input and forget gates, i.e. f_gate = 1.0 - i_gate, to reduce model parameters and computation cost.</li>
+<li><b><code>backward_slice_offset</code></b>: (optional) int32, default 0, the starting offset to slice the feature for backward processing.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.rnn.bidirectionalgridlstmcell.output_size"><code id="BidirectionalGridLSTMCell.output_size">tf.contrib.rnn.BidirectionalGridLSTMCell.output_size</code></h4>
+<hr />
+<h4 id="tf.contrib.rnn.bidirectionalgridlstmcell.state_size"><code id="BidirectionalGridLSTMCell.state_size">tf.contrib.rnn.BidirectionalGridLSTMCell.state_size</code></h4>
+<hr />
+<h4 id="tf.contrib.rnn.bidirectionalgridlstmcell.state_tuple_type"><code id="BidirectionalGridLSTMCell.state_tuple_type">tf.contrib.rnn.BidirectionalGridLSTMCell.state_tuple_type</code></h4>
+<hr />
+<h4 id="tf.contrib.rnn.bidirectionalgridlstmcell.zero_statebatch_size-dtype"><code id="BidirectionalGridLSTMCell.zero_state">tf.contrib.rnn.BidirectionalGridLSTMCell.zero_state(batch_size, dtype)</code></h4>
+<p>Return zero-filled state tensor(s).</p>
+<h5 id="args-21">Args:</h5>
+<ul>
+<li><b><code>batch_size</code></b>: int, float, or unit Tensor representing the batch size.</li>
+<li><b><code>dtype</code></b>: the data type to use for the state.</li>
+</ul>
+<h5 id="returns-12">Returns:</h5>
+<p>If <code>state_size</code> is an int or TensorShape, then the return value is a <code>N-D</code> tensor of shape <code>[batch_size x state_size]</code> filled with zeros.</p>
+<p>If <code>state_size</code> is a nested list or tuple, then the return value is a nested list or tuple (of the same structure) of <code>2-D</code> tensors with the shapes <code>[batch_size x s]</code> for each s in <code>state_size</code>.</p>
+<hr />
+<h3 id="class-tf.contrib.rnn.lstmblockwrapper"><a name="//apple_ref/cpp/Class/LSTMBlockWrapper" class="dashAnchor"></a><code id="LSTMBlockWrapper">class tf.contrib.rnn.LSTMBlockWrapper</code></h3>
+<p>This is a helper class that provides housekeeping for LSTM cells.</p>
+<p>This may be useful for alternative LSTM and similar type of cells. The subclasses must implement <code>_call_cell</code> method and <code>num_units</code> property. - - -</p>
+<h4 id="tf.contrib.rnn.lstmblockwrapper.__call__inputs-initial_statenone-dtypenone-sequence_lengthnone-scopenone"><code id="LSTMBlockWrapper.__call__">tf.contrib.rnn.LSTMBlockWrapper.__call__(inputs, initial_state=None, dtype=None, sequence_length=None, scope=None)</code></h4>
+<p>Run this LSTM on inputs, starting from the given state.</p>
+<h5 id="args-22">Args:</h5>
+<ul>
+<li><b><code>inputs</code></b>: <code>3-D</code> tensor with shape <code>[time_len, batch_size, input_size]</code> or a list of <code>time_len</code> tensors of shape <code>[batch_size, input_size]</code>.</li>
+<li><b><code>initial_state</code></b>: a tuple <code>(initial_cell_state, initial_output)</code> with tensors of shape <code>[batch_size, self._num_units]</code>. If this is not provided, the cell is expected to create a zero initial state of type <code>dtype</code>.</li>
+<li><b><code>dtype</code></b>: The data type for the initial state and expected output. Required if <code>initial_state</code> is not provided or RNN state has a heterogeneous dtype.</li>
+<li><b><code>sequence_length</code></b>: Specifies the length of each sequence in inputs. An <code>int32</code> or <code>int64</code> vector (tensor) size <code>[batch_size]</code>, values in <code>[0, time_len).</code> Defaults to <code>time_len</code> for each element.</li>
+<li><b><code>scope</code></b>: <code>VariableScope</code> for the created subgraph; defaults to class name.</li>
+</ul>
+<h5 id="returns-13">Returns:</h5>
+<p>A pair containing:</p>
+<ul>
+<li>Output: A <code>3-D</code> tensor of shape <code>[time_len, batch_size, output_size]</code> or a list of time_len tensors of shape <code>[batch_size, output_size]</code>, to match the type of the <code>inputs</code>.</li>
+<li>Final state: a tuple <code>(cell_state, output)</code> matching <code>initial_state</code>.</li>
+</ul>
+<h5 id="raises-7">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: in case of shape mismatches</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.rnn.lstmblockwrapper.num_units"><code id="LSTMBlockWrapper.num_units">tf.contrib.rnn.LSTMBlockWrapper.num_units</code></h4>
+<p>Number of units in this cell (output dimension).</p>
+<hr />
+<h3 id="class-tf.contrib.rnn.layernormbasiclstmcell"><a name="//apple_ref/cpp/Class/LayerNormBasicLSTMCell" class="dashAnchor"></a><code id="LayerNormBasicLSTMCell">class tf.contrib.rnn.LayerNormBasicLSTMCell</code></h3>
+<p>LSTM unit with layer normalization and recurrent dropout.</p>
+<p>This class adds layer normalization and recurrent dropout to a basic LSTM unit. Layer normalization implementation is based on:</p>
+<p>https://arxiv.org/abs/1607.06450.</p>
+<p>&quot;Layer Normalization&quot; Jimmy Lei Ba, Jamie Ryan Kiros, Geoffrey E. Hinton</p>
+<p>and is applied before the internal nonlinearities. Recurrent dropout is base on:</p>
+<p>https://arxiv.org/abs/1603.05118</p>
+<p>&quot;Recurrent Dropout without Memory Loss&quot; Stanislau Semeniuta, Aliaksei Severyn, Erhardt Barth. - - -</p>
+<h4 id="tf.contrib.rnn.layernormbasiclstmcell.__call__inputs-state-scopenone"><code id="LayerNormBasicLSTMCell.__call__">tf.contrib.rnn.LayerNormBasicLSTMCell.__call__(inputs, state, scope=None)</code></h4>
+<p>LSTM cell with layer normalization and recurrent dropout.</p>
+<hr />
+<h4 id="tf.contrib.rnn.layernormbasiclstmcell.__init__num_units-forget_bias1.0-input_sizenone-activationtanh-layer_normtrue-norm_gain1.0-norm_shift0.0-dropout_keep_prob1.0-dropout_prob_seednone"><code id="LayerNormBasicLSTMCell.__init__">tf.contrib.rnn.LayerNormBasicLSTMCell.__init__(num_units, forget_bias=1.0, input_size=None, activation=tanh, layer_norm=True, norm_gain=1.0, norm_shift=0.0, dropout_keep_prob=1.0, dropout_prob_seed=None)</code></h4>
+<p>Initializes the basic LSTM cell.</p>
+<h5 id="args-23">Args:</h5>
+<ul>
+<li><b><code>num_units</code></b>: int, The number of units in the LSTM cell.</li>
+<li><b><code>forget_bias</code></b>: float, The bias added to forget gates (see above).</li>
+<li><b><code>input_size</code></b>: Deprecated and unused.</li>
+<li><b><code>activation</code></b>: Activation function of the inner states.</li>
+<li><b><code>layer_norm</code></b>: If <code>True</code>, layer normalization will be applied.</li>
+<li><b><code>norm_gain</code></b>: float, The layer normalization gain initial value. If <code>layer_norm</code> has been set to <code>False</code>, this argument will be ignored.</li>
+<li><b><code>norm_shift</code></b>: float, The layer normalization shift initial value. If <code>layer_norm</code> has been set to <code>False</code>, this argument will be ignored.</li>
+<li><b><code>dropout_keep_prob</code></b>: unit Tensor or float between 0 and 1 representing the recurrent dropout probability value. If float and 1.0, no dropout will be applied.</li>
+<li><b><code>dropout_prob_seed</code></b>: (optional) integer, the randomness seed.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.rnn.layernormbasiclstmcell.output_size"><code id="LayerNormBasicLSTMCell.output_size">tf.contrib.rnn.LayerNormBasicLSTMCell.output_size</code></h4>
+<hr />
+<h4 id="tf.contrib.rnn.layernormbasiclstmcell.state_size"><code id="LayerNormBasicLSTMCell.state_size">tf.contrib.rnn.LayerNormBasicLSTMCell.state_size</code></h4>
+<hr />
+<h4 id="tf.contrib.rnn.layernormbasiclstmcell.zero_statebatch_size-dtype"><code id="LayerNormBasicLSTMCell.zero_state">tf.contrib.rnn.LayerNormBasicLSTMCell.zero_state(batch_size, dtype)</code></h4>
+<p>Return zero-filled state tensor(s).</p>
+<h5 id="args-24">Args:</h5>
+<ul>
+<li><b><code>batch_size</code></b>: int, float, or unit Tensor representing the batch size.</li>
+<li><b><code>dtype</code></b>: the data type to use for the state.</li>
+</ul>
+<h5 id="returns-14">Returns:</h5>
+<p>If <code>state_size</code> is an int or TensorShape, then the return value is a <code>N-D</code> tensor of shape <code>[batch_size x state_size]</code> filled with zeros.</p>
+<p>If <code>state_size</code> is a nested list or tuple, then the return value is a nested list or tuple (of the same structure) of <code>2-D</code> tensors with the shapes <code>[batch_size x s]</code> for each s in <code>state_size</code>.</p>
+<hr />
+<h3 id="tf.contrib.rnn.stack_bidirectional_dynamic_rnncells_fw-cells_bw-inputs-initial_states_fwnone-initial_states_bwnone-dtypenone-sequence_lengthnone-scopenone"><a name="//apple_ref/cpp/Function/stack_bidirectional_dynamic_rnn" class="dashAnchor"></a><code id="stack_bidirectional_dynamic_rnn">tf.contrib.rnn.stack_bidirectional_dynamic_rnn(cells_fw, cells_bw, inputs, initial_states_fw=None, initial_states_bw=None, dtype=None, sequence_length=None, scope=None)</code></h3>
+<p>Creates a dynamic bidirectional recurrent neural network.</p>
+<p>Stacks several bidirectional rnn layers. The combined forward and backward layer outputs are used as input of the next layer. tf.bidirectional_rnn does not allow to share forward and backward information between layers. The input_size of the first forward and backward cells must match. The initial state for both directions is zero and no intermediate states are returned.</p>
+<h5 id="args-25">Args:</h5>
+<ul>
+<li><b><code>cells_fw</code></b>: List of instances of RNNCell, one per layer, to be used for forward direction.</li>
+<li><b><code>cells_bw</code></b>: List of instances of RNNCell, one per layer, to be used for backward direction.</li>
+<li><b><code>inputs</code></b>: A length T list of inputs, each a tensor of shape [batch_size, input_size], or a nested tuple of such elements.</li>
+<li><b><code>initial_states_fw</code></b>: (optional) A list of the initial states (one per layer) for the forward RNN. Each tensor must has an appropriate type and shape <code>[batch_size, cell_fw.state_size]</code>.</li>
+<li><b><code>initial_states_bw</code></b>: (optional) Same as for <code>initial_states_fw</code>, but using the corresponding properties of <code>cells_bw</code>.</li>
+<li><b><code>dtype</code></b>: (optional) The data type for the initial state. Required if either of the initial states are not provided.</li>
+<li><b><code>sequence_length</code></b>: (optional) An int32/int64 vector, size <code>[batch_size]</code>, containing the actual lengths for each of the sequences.</li>
+<li><b><code>scope</code></b>: VariableScope for the created subgraph; defaults to None.</li>
+</ul>
+<h5 id="returns-15">Returns:</h5>
+<p>A tuple (outputs, output_state_fw, output_state_bw) where:</p>
+<ul>
+<li><b><code>outputs</code></b>: Output <code>Tensor</code> shaped: <code>batch_size, max_time, layers_output]</code>. Where layers_output are depth-concatenated forward and backward outputs. output_states_fw is the final states, one tensor per layer, of the forward rnn. output_states_bw is the final states, one tensor per layer, of the backward rnn.</li>
+</ul>
+<h5 id="raises-8">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>cell_fw</code> or <code>cell_bw</code> is not an instance of <code>RNNCell</code>.</li>
+<li><b><code>ValueError</code></b>: If inputs is <code>None</code>, not a list or an empty list.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.rnn.stack_bidirectional_rnncells_fw-cells_bw-inputs-initial_states_fwnone-initial_states_bwnone-dtypenone-sequence_lengthnone-scopenone"><a name="//apple_ref/cpp/Function/stack_bidirectional_rnn" class="dashAnchor"></a><code id="stack_bidirectional_rnn">tf.contrib.rnn.stack_bidirectional_rnn(cells_fw, cells_bw, inputs, initial_states_fw=None, initial_states_bw=None, dtype=None, sequence_length=None, scope=None)</code></h3>
+<p>Creates a bidirectional recurrent neural network.</p>
+<p>Stacks several bidirectional rnn layers. The combined forward and backward layer outputs are used as input of the next layer. tf.bidirectional_rnn does not allow to share forward and backward information between layers. The input_size of the first forward and backward cells must match. The initial state for both directions is zero and no intermediate states are returned.</p>
+<p>As described in https://arxiv.org/abs/1303.5778</p>
+<h5 id="args-26">Args:</h5>
+<ul>
+<li><b><code>cells_fw</code></b>: List of instances of RNNCell, one per layer, to be used for forward direction.</li>
+<li><b><code>cells_bw</code></b>: List of instances of RNNCell, one per layer, to be used for backward direction.</li>
+<li><b><code>inputs</code></b>: A length T list of inputs, each a tensor of shape [batch_size, input_size], or a nested tuple of such elements.</li>
+<li><b><code>initial_states_fw</code></b>: (optional) A list of the initial states (one per layer) for the forward RNN. Each tensor must has an appropriate type and shape <code>[batch_size, cell_fw.state_size]</code>.</li>
+<li><b><code>initial_states_bw</code></b>: (optional) Same as for <code>initial_states_fw</code>, but using the corresponding properties of <code>cells_bw</code>.</li>
+<li><b><code>dtype</code></b>: (optional) The data type for the initial state. Required if either of the initial states are not provided.</li>
+<li><b><code>sequence_length</code></b>: (optional) An int32/int64 vector, size <code>[batch_size]</code>, containing the actual lengths for each of the sequences.</li>
+<li><b><code>scope</code></b>: VariableScope for the created subgraph; defaults to None.</li>
+</ul>
+<h5 id="returns-16">Returns:</h5>
+<p>A tuple (outputs, output_state_fw, output_state_bw) where: outputs is a length <code>T</code> list of outputs (one for each input), which are depth-concatenated forward and backward outputs. output_states_fw is the final states, one tensor per layer, of the forward rnn. output_states_bw is the final states, one tensor per layer, of the backward rnn.</p>
+<h5 id="raises-9">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>cell_fw</code> or <code>cell_bw</code> is not an instance of <code>RNNCell</code>.</li>
+<li><b><code>ValueError</code></b>: If inputs is None, not a list or an empty list.</li>
+</ul>

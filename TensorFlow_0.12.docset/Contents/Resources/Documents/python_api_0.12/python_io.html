@@ -1,0 +1,70 @@
+<!-- This file is machine generated: DO NOT EDIT! -->
+<h1 id="data-io-python-functions">Data IO (Python functions)</h1>
+<p>[TOC]</p>
+<h2 id="data-io-python-functions-1">Data IO (Python Functions)</h2>
+<p>A TFRecords file represents a sequence of (binary) strings. The format is not random access, so it is suitable for streaming large amounts of data but not suitable if fast sharding or other non-sequential access is desired.</p>
+<hr />
+<h3 id="class-tf.python_io.tfrecordwriter"><a name="//apple_ref/cpp/Class/TFRecordWriter" class="dashAnchor"></a><code id="TFRecordWriter">class tf.python_io.TFRecordWriter</code></h3>
+<p>A class to write records to a TFRecords file.</p>
+<p>This class implements <code>__enter__</code> and <code>__exit__</code>, and can be used in <code>with</code> blocks like a normal file.</p>
+<hr />
+<h4 id="tf.python_io.tfrecordwriter.__init__path-optionsnone"><code id="TFRecordWriter.__init__">tf.python_io.TFRecordWriter.__init__(path, options=None)</code></h4>
+<p>Opens file <code>path</code> and creates a <code>TFRecordWriter</code> writing to it.</p>
+<h5 id="args">Args:</h5>
+<ul>
+<li><b><code>path</code></b>: The path to the TFRecords file.</li>
+<li><b><code>options</code></b>: (optional) A TFRecordOptions object.</li>
+</ul>
+<h5 id="raises">Raises:</h5>
+<ul>
+<li><b><code>IOError</code></b>: If <code>path</code> cannot be opened for writing.</li>
+</ul>
+<hr />
+<h4 id="tf.python_io.tfrecordwriter.writerecord"><code id="TFRecordWriter.write">tf.python_io.TFRecordWriter.write(record)</code></h4>
+<p>Write a string record to the file.</p>
+<h5 id="args-1">Args:</h5>
+<ul>
+<li><b><code>record</code></b>: str</li>
+</ul>
+<hr />
+<h4 id="tf.python_io.tfrecordwriter.close"><code id="TFRecordWriter.close">tf.python_io.TFRecordWriter.close()</code></h4>
+<p>Close the file.</p>
+<h4 id="other-methods">Other Methods</h4>
+<hr />
+<h4 id="tf.python_io.tfrecordwriter.__enter__"><code id="TFRecordWriter.__enter__">tf.python_io.TFRecordWriter.__enter__()</code></h4>
+<p>Enter a <code>with</code> block.</p>
+<hr />
+<h4 id="tf.python_io.tfrecordwriter.__exit__unused_type-unused_value-unused_traceback"><code id="TFRecordWriter.__exit__">tf.python_io.TFRecordWriter.__exit__(unused_type, unused_value, unused_traceback)</code></h4>
+<p>Exit a <code>with</code> block, closing the file.</p>
+<hr />
+<h3 id="tf.python_io.tf_record_iteratorpath-optionsnone"><a name="//apple_ref/cpp/Function/tf_record_iterator" class="dashAnchor"></a><code id="tf_record_iterator">tf.python_io.tf_record_iterator(path, options=None)</code></h3>
+<p>An iterator that read the records from a TFRecords file.</p>
+<h5 id="args-2">Args:</h5>
+<ul>
+<li><b><code>path</code></b>: The path to the TFRecords file.</li>
+<li><b><code>options</code></b>: (optional) A TFRecordOptions object.</li>
+</ul>
+<h5 id="yields">Yields:</h5>
+<p>Strings.</p>
+<h5 id="raises-1">Raises:</h5>
+<ul>
+<li><b><code>IOError</code></b>: If <code>path</code> cannot be opened for reading.</li>
+</ul>
+<hr />
+<h3 id="class-tf.python_io.tfrecordcompressiontype"><a name="//apple_ref/cpp/Class/TFRecordCompressionType" class="dashAnchor"></a><code id="TFRecordCompressionType">class tf.python_io.TFRecordCompressionType</code></h3>
+<p>The type of compression for the record.</p>
+<hr />
+<h3 id="class-tf.python_io.tfrecordoptions"><a name="//apple_ref/cpp/Class/TFRecordOptions" class="dashAnchor"></a><code id="TFRecordOptions">class tf.python_io.TFRecordOptions</code></h3>
+<p>Options used for manipulating TFRecord files. - - -</p>
+<h4 id="tf.python_io.tfrecordoptions.__init__compression_type"><code id="TFRecordOptions.__init__">tf.python_io.TFRecordOptions.__init__(compression_type)</code></h4>
+<hr />
+<h4 id="tf.python_io.tfrecordoptions.get_compression_type_stringcls-options"><code id="TFRecordOptions.get_compression_type_string">tf.python_io.TFRecordOptions.get_compression_type_string(cls, options)</code></h4>
+<hr />
+<h3 id="tfrecords-format-details">TFRecords Format Details</h3>
+<p>A TFRecords file contains a sequence of strings with CRC hashes. Each record has the format</p>
+<pre><code>uint64 length
+uint32 masked_crc32_of_length
+byte   data[length]
+uint32 masked_crc32_of_data</code></pre>
+<p>and the records are concatenated together to produce the file. The CRC32s are <a href="https://en.wikipedia.org/wiki/Cyclic_redundancy_check">described here</a>, and the mask of a CRC is</p>
+<pre><code>masked_crc = ((crc &gt;&gt; 15) | (crc &lt;&lt; 17)) + 0xa282ead8ul</code></pre>

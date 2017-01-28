@@ -1,0 +1,697 @@
+<!-- This file is machine generated: DO NOT EDIT! -->
+<h1 id="sparse-tensors">Sparse Tensors</h1>
+<p>Note: Functions taking <code>Tensor</code> arguments can also take anything accepted by <a href="framework.md#convert_to_tensor"><code>tf.convert_to_tensor</code></a>.</p>
+<p>[TOC]</p>
+<h2 id="sparse-tensor-representation">Sparse Tensor Representation</h2>
+<p>TensorFlow supports a <code>SparseTensor</code> representation for data that is sparse in multiple dimensions. Contrast this representation with <code>IndexedSlices</code>, which is efficient for representing tensors that are sparse in their first dimension, and dense along all other dimensions.</p>
+<hr />
+<h3 id="class-tf.sparsetensor"><a name="//apple_ref/cpp/Class/SparseTensor" class="dashAnchor"></a><code id="SparseTensor">class tf.SparseTensor</code></h3>
+<p>Represents a sparse tensor.</p>
+<p>TensorFlow represents a sparse tensor as three separate dense tensors: <code>indices</code>, <code>values</code>, and <code>dense_shape</code>. In Python, the three tensors are collected into a <code>SparseTensor</code> class for ease of use. If you have separate <code>indices</code>, <code>values</code>, and <code>dense_shape</code> tensors, wrap them in a <code>SparseTensor</code> object before passing to the ops below.</p>
+<p>Concretely, the sparse tensor <code>SparseTensor(indices, values, dense_shape)</code> comprises the following components, where <code>N</code> and <code>ndims</code> are the number of values and number of dimensions in the <code>SparseTensor</code>, respectively:</p>
+<ul>
+<li><p><code>indices</code>: A 2-D int64 tensor of dense_shape <code>[N, ndims]</code>, which specifies the indices of the elements in the sparse tensor that contain nonzero values (elements are zero-indexed). For example, <code>indices=[[1,3], [2,4]]</code> specifies that the elements with indexes of [1,3] and [2,4] have nonzero values.</p></li>
+<li><p><code>values</code>: A 1-D tensor of any type and dense_shape <code>[N]</code>, which supplies the values for each element in <code>indices</code>. For example, given <code>indices=[[1,3], [2,4]]</code>, the parameter <code>values=[18, 3.6]</code> specifies that element [1,3] of the sparse tensor has a value of 18, and element [2,4] of the tensor has a value of 3.6.</p></li>
+<li><p><code>dense_shape</code>: A 1-D int64 tensor of dense_shape <code>[ndims]</code>, which specifies the dense_shape of the sparse tensor. Takes a list indicating the number of elements in each dimension. For example, <code>dense_shape=[3,6]</code> specifies a two-dimensional 3x6 tensor, <code>dense_shape=[2,3,4]</code> specifies a three-dimensional 2x3x4 tensor, and <code>dense_shape=[9]</code> specifies a one-dimensional tensor with 9 elements.</p></li>
+</ul>
+<p>The corresponding dense tensor satisfies:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">dense.shape <span class="op">=</span> dense_shape
+dense[<span class="bu">tuple</span>(indices[i])] <span class="op">=</span> values[i]</code></pre></div>
+<p>By convention, <code>indices</code> should be sorted in row-major order (or equivalently lexicographic order on the tuples <code>indices[i]</code>). This is not enforced when <code>SparseTensor</code> objects are constructed, but most ops assume correct ordering. If the ordering of sparse tensor <code>st</code> is wrong, a fixed version can be obtained by calling <code>tf.sparse_reorder(st)</code>.</p>
+<p>Example: The sparse tensor</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">SparseTensor(indices<span class="op">=</span>[[<span class="dv">0</span>, <span class="dv">0</span>], [<span class="dv">1</span>, <span class="dv">2</span>]], values<span class="op">=</span>[<span class="dv">1</span>, <span class="dv">2</span>], dense_shape<span class="op">=</span>[<span class="dv">3</span>, <span class="dv">4</span>])</code></pre></div>
+<p>represents the dense tensor</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">[[<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>]
+ [<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">0</span>]
+ [<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>]]</code></pre></div>
+<hr />
+<h4 id="tf.sparsetensor.__init__indices-values-dense_shape"><code id="SparseTensor.__init__">tf.SparseTensor.__init__(indices, values, dense_shape)</code></h4>
+<p>Creates a <code>SparseTensor</code>.</p>
+<h5 id="args">Args:</h5>
+<ul>
+<li><b><code>indices</code></b>: A 2-D int64 tensor of shape <code>[N, ndims]</code>.</li>
+<li><b><code>values</code></b>: A 1-D tensor of any type and shape <code>[N]</code>.</li>
+<li><b><code>dense_shape</code></b>: A 1-D int64 tensor of shape <code>[ndims]</code>.</li>
+</ul>
+<h5 id="returns">Returns:</h5>
+<p>A <code>SparseTensor</code>.</p>
+<hr />
+<h4 id="tf.sparsetensor.get_shape"><code id="SparseTensor.get_shape">tf.SparseTensor.get_shape()</code></h4>
+<p>Get the <code>TensorShape</code> representing the shape of the dense tensor.</p>
+<h5 id="returns-1">Returns:</h5>
+<p>A <code>TensorShape</code> object.</p>
+<hr />
+<h4 id="tf.sparsetensor.indices"><code id="SparseTensor.indices">tf.SparseTensor.indices</code></h4>
+<p>The indices of non-zero values in the represented dense tensor.</p>
+<h5 id="returns-2">Returns:</h5>
+<p>A 2-D Tensor of int64 with dense_shape <code>[N, ndims]</code>, where <code>N</code> is the number of non-zero values in the tensor, and <code>ndims</code> is the rank.</p>
+<hr />
+<h4 id="tf.sparsetensor.values"><code id="SparseTensor.values">tf.SparseTensor.values</code></h4>
+<p>The non-zero values in the represented dense tensor.</p>
+<h5 id="returns-3">Returns:</h5>
+<p>A 1-D Tensor of any data type.</p>
+<hr />
+<h4 id="tf.sparsetensor.dense_shape"><code id="SparseTensor.dense_shape">tf.SparseTensor.dense_shape</code></h4>
+<p>A 1-D Tensor of int64 representing the shape of the dense tensor.</p>
+<hr />
+<h4 id="tf.sparsetensor.dtype"><code id="SparseTensor.dtype">tf.SparseTensor.dtype</code></h4>
+<p>The <code>DType</code> of elements in this tensor.</p>
+<hr />
+<h4 id="tf.sparsetensor.op"><code id="SparseTensor.op">tf.SparseTensor.op</code></h4>
+<p>The <code>Operation</code> that produces <code>values</code> as an output.</p>
+<hr />
+<h4 id="tf.sparsetensor.graph"><code id="SparseTensor.graph">tf.SparseTensor.graph</code></h4>
+<p>The <code>Graph</code> that contains the index, value, and dense_shape tensors.</p>
+<h4 id="other-methods">Other Methods</h4>
+<hr />
+<h4 id="tf.sparsetensor.__div__sp_x-y"><code id="SparseTensor.__div__">tf.SparseTensor.__div__(sp_x, y)</code></h4>
+<p>Component-wise divides a SparseTensor by a dense Tensor.</p>
+<p><em>Limitation</em>: this Op only broadcasts the dense side to the sparse side, but not the other direction.</p>
+<h5 id="args-1">Args:</h5>
+<ul>
+<li><b><code>sp_indices</code></b>: A <code>Tensor</code> of type <code>int64</code>. 2-D. <code>N x R</code> matrix with the indices of non-empty values in a SparseTensor, possibly not in canonical ordering.</li>
+<li><b><code>sp_values</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int64</code>, <code>int32</code>, <code>uint8</code>, <code>uint16</code>, <code>int16</code>, <code>int8</code>, <code>complex64</code>, <code>complex128</code>, <code>qint8</code>, <code>quint8</code>, <code>qint32</code>, <code>half</code>. 1-D. <code>N</code> non-empty values corresponding to <code>sp_indices</code>.</li>
+<li><b><code>sp_shape</code></b>: A <code>Tensor</code> of type <code>int64</code>. 1-D. Shape of the input SparseTensor.</li>
+<li><b><code>dense</code></b>: A <code>Tensor</code>. Must have the same type as <code>sp_values</code>. <code>R</code>-D. The dense Tensor operand.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-4">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>sp_values</code>. 1-D. The <code>N</code> values that are operated on.</p>
+<hr />
+<h4 id="tf.sparsetensor.__mul__sp_x-y"><code id="SparseTensor.__mul__">tf.SparseTensor.__mul__(sp_x, y)</code></h4>
+<p>Component-wise multiplies a SparseTensor by a dense Tensor.</p>
+<p>The output locations corresponding to the implicitly zero elements in the sparse tensor will be zero (i.e., will not take up storage space), regardless of the contents of the dense tensor (even if it's +/-INF and that INF*0 == NaN).</p>
+<p><em>Limitation</em>: this Op only broadcasts the dense side to the sparse side, but not the other direction.</p>
+<h5 id="args-2">Args:</h5>
+<ul>
+<li><b><code>sp_indices</code></b>: A <code>Tensor</code> of type <code>int64</code>. 2-D. <code>N x R</code> matrix with the indices of non-empty values in a SparseTensor, possibly not in canonical ordering.</li>
+<li><b><code>sp_values</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int64</code>, <code>int32</code>, <code>uint8</code>, <code>uint16</code>, <code>int16</code>, <code>int8</code>, <code>complex64</code>, <code>complex128</code>, <code>qint8</code>, <code>quint8</code>, <code>qint32</code>, <code>half</code>. 1-D. <code>N</code> non-empty values corresponding to <code>sp_indices</code>.</li>
+<li><b><code>sp_shape</code></b>: A <code>Tensor</code> of type <code>int64</code>. 1-D. Shape of the input SparseTensor.</li>
+<li><b><code>dense</code></b>: A <code>Tensor</code>. Must have the same type as <code>sp_values</code>. <code>R</code>-D. The dense Tensor operand.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-5">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>sp_values</code>. 1-D. The <code>N</code> values that are operated on.</p>
+<hr />
+<h4 id="tf.sparsetensor.__str__"><code id="SparseTensor.__str__">tf.SparseTensor.__str__()</code></h4>
+<hr />
+<h4 id="tf.sparsetensor.__truediv__sp_x-y"><code id="SparseTensor.__truediv__">tf.SparseTensor.__truediv__(sp_x, y)</code></h4>
+<p>Internal helper function for 'sp_t / dense_t'.</p>
+<hr />
+<h4 id="tf.sparsetensor.evalfeed_dictnone-sessionnone"><code id="SparseTensor.eval">tf.SparseTensor.eval(feed_dict=None, session=None)</code></h4>
+<p>Evaluates this sparse tensor in a <code>Session</code>.</p>
+<p>Calling this method will execute all preceding operations that produce the inputs needed for the operation that produces this tensor.</p>
+<p><em>N.B.</em> Before invoking <code>SparseTensor.eval()</code>, its graph must have been launched in a session, and either a default session must be available, or <code>session</code> must be specified explicitly.</p>
+<h5 id="args-3">Args:</h5>
+<ul>
+<li><b><code>feed_dict</code></b>: A dictionary that maps <code>Tensor</code> objects to feed values. See <a href="../../api_docs/python/client.md#Session.run"><code>Session.run()</code></a> for a description of the valid feed values.</li>
+<li><b><code>session</code></b>: (Optional.) The <code>Session</code> to be used to evaluate this sparse tensor. If none, the default session will be used.</li>
+</ul>
+<h5 id="returns-6">Returns:</h5>
+<p>A <code>SparseTensorValue</code> object.</p>
+<hr />
+<h4 id="tf.sparsetensor.from_valuecls-sparse_tensor_value"><code id="SparseTensor.from_value">tf.SparseTensor.from_value(cls, sparse_tensor_value)</code></h4>
+<hr />
+<h3 id="class-tf.sparsetensorvalue"><a name="//apple_ref/cpp/Class/SparseTensorValue" class="dashAnchor"></a><code id="SparseTensorValue">class tf.SparseTensorValue</code></h3>
+<p>SparseTensorValue(indices, values, dense_shape) - - -</p>
+<h4 id="tf.sparsetensorvalue.__getnewargs__"><code id="SparseTensorValue.__getnewargs__">tf.SparseTensorValue.__getnewargs__()</code></h4>
+<p>Return self as a plain tuple. Used by copy and pickle.</p>
+<hr />
+<h4 id="tf.sparsetensorvalue.__getstate__"><code id="SparseTensorValue.__getstate__">tf.SparseTensorValue.__getstate__()</code></h4>
+<p>Exclude the OrderedDict from pickling</p>
+<hr />
+<h4 id="tf.sparsetensorvalue.__new___cls-indices-values-dense_shape"><code id="SparseTensorValue.__new__">tf.SparseTensorValue.__new__(_cls, indices, values, dense_shape)</code></h4>
+<p>Create new instance of SparseTensorValue(indices, values, dense_shape)</p>
+<hr />
+<h4 id="tf.sparsetensorvalue.__repr__"><code id="SparseTensorValue.__repr__">tf.SparseTensorValue.__repr__()</code></h4>
+<p>Return a nicely formatted representation string</p>
+<hr />
+<h4 id="tf.sparsetensorvalue.dense_shape"><code id="SparseTensorValue.dense_shape">tf.SparseTensorValue.dense_shape</code></h4>
+<p>Alias for field number 2</p>
+<hr />
+<h4 id="tf.sparsetensorvalue.indices"><code id="SparseTensorValue.indices">tf.SparseTensorValue.indices</code></h4>
+<p>Alias for field number 0</p>
+<hr />
+<h4 id="tf.sparsetensorvalue.values"><code id="SparseTensorValue.values">tf.SparseTensorValue.values</code></h4>
+<p>Alias for field number 1</p>
+<h2 id="conversion">Conversion</h2>
+<hr />
+<h3 id="tf.sparse_to_densesparse_indices-output_shape-sparse_values-default_value0-validate_indicestrue-namenone"><a name="//apple_ref/cpp/Function/sparse_to_dense" class="dashAnchor"></a><code id="sparse_to_dense">tf.sparse_to_dense(sparse_indices, output_shape, sparse_values, default_value=0, validate_indices=True, name=None)</code></h3>
+<p>Converts a sparse representation into a dense tensor.</p>
+<p>Builds an array <code>dense</code> with shape <code>output_shape</code> such that</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># If sparse_indices is scalar</span>
+dense[i] <span class="op">=</span> (i <span class="op">==</span> sparse_indices ? sparse_values : default_value)
+
+<span class="co"># If sparse_indices is a vector, then for each i</span>
+dense[sparse_indices[i]] <span class="op">=</span> sparse_values[i]
+
+<span class="co"># If sparse_indices is an n by d matrix, then for each i in [0, n)</span>
+dense[sparse_indices[i][<span class="dv">0</span>], ..., sparse_indices[i][d<span class="dv">-1</span>]] <span class="op">=</span> sparse_values[i]</code></pre></div>
+<p>All other values in <code>dense</code> are set to <code>default_value</code>. If <code>sparse_values</code> is a scalar, all sparse indices are set to this single value.</p>
+<p>Indices should be sorted in lexicographic order, and indices must not contain any repeats. If <code>validate_indices</code> is True, these properties are checked during execution.</p>
+<h5 id="args-4">Args:</h5>
+<ul>
+<li><b><code>sparse_indices</code></b>: A 0-D, 1-D, or 2-D <code>Tensor</code> of type <code>int32</code> or <code>int64</code>. <code>sparse_indices[i]</code> contains the complete index where <code>sparse_values[i]</code> will be placed.</li>
+<li><b><code>output_shape</code></b>: A 1-D <code>Tensor</code> of the same type as <code>sparse_indices</code>. Shape of the dense output tensor.</li>
+<li><b><code>sparse_values</code></b>: A 0-D or 1-D <code>Tensor</code>. Values corresponding to each row of <code>sparse_indices</code>, or a scalar value to be used for all sparse indices.</li>
+<li><b><code>default_value</code></b>: A 0-D <code>Tensor</code> of the same type as <code>sparse_values</code>. Value to set for indices not specified in <code>sparse_indices</code>. Defaults to zero.</li>
+<li><b><code>validate_indices</code></b>: A boolean value. If True, indices are checked to make sure they are sorted in lexicographic order and that there are no repeats.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-7">Returns:</h5>
+<p>Dense <code>Tensor</code> of shape <code>output_shape</code>. Has the same type as <code>sparse_values</code>.</p>
+<hr />
+<h3 id="tf.sparse_tensor_to_densesp_input-default_value0-validate_indicestrue-namenone"><a name="//apple_ref/cpp/Function/sparse_tensor_to_dense" class="dashAnchor"></a><code id="sparse_tensor_to_dense">tf.sparse_tensor_to_dense(sp_input, default_value=0, validate_indices=True, name=None)</code></h3>
+<p>Converts a <code>SparseTensor</code> into a dense tensor.</p>
+<p>This op is a convenience wrapper around <code>sparse_to_dense</code> for <code>SparseTensor</code>s.</p>
+<p>For example, if <code>sp_input</code> has shape <code>[3, 5]</code> and non-empty string values:</p>
+<pre><code>[0, 1]: a
+[0, 3]: b
+[2, 0]: c</code></pre>
+<p>and <code>default_value</code> is <code>x</code>, then the output will be a dense <code>[3, 5]</code> string tensor with values:</p>
+<pre><code>[[x a x b x]
+ [x x x x x]
+ [c x x x x]]</code></pre>
+<p>Indices must be without repeats. This is only tested if validate_indices is True.</p>
+<h5 id="args-5">Args:</h5>
+<ul>
+<li><b><code>sp_input</code></b>: The input <code>SparseTensor</code>.</li>
+<li><b><code>default_value</code></b>: Scalar value to set for indices not specified in <code>sp_input</code>. Defaults to zero.</li>
+<li><b><code>validate_indices</code></b>: A boolean value. If <code>True</code>, indices are checked to make sure they are sorted in lexicographic order and that there are no repeats.</li>
+<li><b><code>name</code></b>: A name prefix for the returned tensors (optional).</li>
+</ul>
+<h5 id="returns-8">Returns:</h5>
+<p>A dense tensor with shape <code>sp_input.dense_shape</code> and values specified by the non-empty values in <code>sp_input</code>. Indices not in <code>sp_input</code> are assigned <code>default_value</code>.</p>
+<h5 id="raises">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>sp_input</code> is not a <code>SparseTensor</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.sparse_to_indicatorsp_input-vocab_size-namenone"><a name="//apple_ref/cpp/Function/sparse_to_indicator" class="dashAnchor"></a><code id="sparse_to_indicator">tf.sparse_to_indicator(sp_input, vocab_size, name=None)</code></h3>
+<p>Converts a <code>SparseTensor</code> of ids into a dense bool indicator tensor.</p>
+<p>The last dimension of <code>sp_input.indices</code> is discarded and replaced with the values of <code>sp_input</code>. If <code>sp_input.dense_shape = [D0, D1, ..., Dn, K]</code>, then <code>output.shape = [D0, D1, ..., Dn, vocab_size]</code>, where</p>
+<pre><code>output[d_0, d_1, ..., d_n, sp_input[d_0, d_1, ..., d_n, k]] = True</code></pre>
+<p>and False elsewhere in <code>output</code>.</p>
+<p>For example, if <code>sp_input.dense_shape = [2, 3, 4]</code> with non-empty values:</p>
+<pre><code>[0, 0, 0]: 0
+[0, 1, 0]: 10
+[1, 0, 3]: 103
+[1, 1, 2]: 150
+[1, 1, 3]: 149
+[1, 1, 4]: 150
+[1, 2, 1]: 121</code></pre>
+<p>and <code>vocab_size = 200</code>, then the output will be a <code>[2, 3, 200]</code> dense bool tensor with False everywhere except at positions</p>
+<pre><code>(0, 0, 0), (0, 1, 10), (1, 0, 103), (1, 1, 149), (1, 1, 150),
+(1, 2, 121).</code></pre>
+<p>Note that repeats are allowed in the input SparseTensor. This op is useful for converting <code>SparseTensor</code>s into dense formats for compatibility with ops that expect dense tensors.</p>
+<p>The input <code>SparseTensor</code> must be in row-major order.</p>
+<h5 id="args-6">Args:</h5>
+<ul>
+<li><b><code>sp_input</code></b>: A <code>SparseTensor</code> with <code>values</code> property of type <code>int32</code> or <code>int64</code>.</li>
+<li><b><code>vocab_size</code></b>: A scalar int64 Tensor (or Python int) containing the new size of the last dimension, <code>all(0 &lt;= sp_input.values &lt; vocab_size)</code>.</li>
+<li><b><code>name</code></b>: A name prefix for the returned tensors (optional)</li>
+</ul>
+<h5 id="returns-9">Returns:</h5>
+<p>A dense bool indicator tensor representing the indices with specified value.</p>
+<h5 id="raises-1">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>sp_input</code> is not a <code>SparseTensor</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.sparse_mergesp_ids-sp_values-vocab_size-namenone-already_sortedfalse"><a name="//apple_ref/cpp/Function/sparse_merge" class="dashAnchor"></a><code id="sparse_merge">tf.sparse_merge(sp_ids, sp_values, vocab_size, name=None, already_sorted=False)</code></h3>
+<p>Combines a batch of feature ids and values into a single <code>SparseTensor</code>.</p>
+<p>The most common use case for this function occurs when feature ids and their corresponding values are stored in <code>Example</code> protos on disk. <code>parse_example</code> will return a batch of ids and a batch of values, and this function joins them into a single logical <code>SparseTensor</code> for use in functions such as <code>sparse_tensor_dense_matmul</code>, <code>sparse_to_dense</code>, etc.</p>
+<p>The <code>SparseTensor</code> returned by this function has the following properties:</p>
+<ul>
+<li><code>indices</code> is equivalent to <code>sp_ids.indices</code> with the last dimension discarded and replaced with <code>sp_ids.values</code>.</li>
+<li><code>values</code> is simply <code>sp_values.values</code>.</li>
+<li>If <code>sp_ids.dense_shape = [D0, D1, ..., Dn, K]</code>, then <code>output.shape = [D0, D1, ..., Dn, vocab_size]</code>.</li>
+</ul>
+<p>For example, consider the following feature vectors:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">  vector1 <span class="op">=</span> [<span class="op">-</span><span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>]
+  vector2 <span class="op">=</span> [ <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">0</span>]
+  vector3 <span class="op">=</span> [ <span class="dv">5</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">9</span>, <span class="dv">0</span>, <span class="dv">0</span>]</code></pre></div>
+<p>These might be stored sparsely in the following Example protos by storing only the feature ids (column number if the vectors are treated as a matrix) of the non-zero elements and the corresponding values:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">  examples <span class="op">=</span> [Example(features<span class="op">=</span>{
+                  <span class="st">&quot;ids&quot;</span>: Feature(int64_list<span class="op">=</span>Int64List(value<span class="op">=</span>[<span class="dv">0</span>])),
+                  <span class="st">&quot;values&quot;</span>: Feature(float_list<span class="op">=</span>FloatList(value<span class="op">=</span>[<span class="op">-</span><span class="dv">3</span>]))}),
+              Example(features<span class="op">=</span>{
+                  <span class="st">&quot;ids&quot;</span>: Feature(int64_list<span class="op">=</span>Int64List(value<span class="op">=</span>[<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">3</span>])),
+                  <span class="st">&quot;values&quot;</span>: Feature(float_list<span class="op">=</span>FloatList(value<span class="op">=</span>[<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">4</span>]))}),
+              Example(features<span class="op">=</span>{
+                  <span class="st">&quot;ids&quot;</span>: Feature(int64_list<span class="op">=</span>Int64List(value<span class="op">=</span>[<span class="dv">0</span>, <span class="dv">3</span>])),
+                  <span class="st">&quot;values&quot;</span>: Feature(float_list<span class="op">=</span>FloatList(value<span class="op">=</span>[<span class="dv">5</span>, <span class="dv">9</span>]))})]</code></pre></div>
+<p>The result of calling parse_example on these examples will produce a dictionary with entries for &quot;ids&quot; and &quot;values&quot;. Passing those two objects to this function along with vocab_size=6, will produce a <code>SparseTensor</code> that sparsely represents all three instances. Namely, the <code>indices</code> property will contain the coordinates of the non-zero entries in the feature matrix (the first dimension is the row number in the matrix, i.e., the index within the batch, and the second dimension is the column number, i.e., the feature id); <code>values</code> will contain the actual values. <code>shape</code> will be the shape of the original matrix, i.e., (3, 6). For our example above, the output will be equal to:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">  SparseTensor(indices<span class="op">=</span>[[<span class="dv">0</span>, <span class="dv">0</span>], [<span class="dv">1</span>, <span class="dv">1</span>], [<span class="dv">1</span>, <span class="dv">3</span>], [<span class="dv">1</span>, <span class="dv">4</span>], [<span class="dv">2</span>, <span class="dv">0</span>], [<span class="dv">2</span>, <span class="dv">3</span>]],
+               values<span class="op">=</span>[<span class="op">-</span><span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">9</span>],
+               dense_shape<span class="op">=</span>[<span class="dv">3</span>, <span class="dv">6</span>])</code></pre></div>
+<h5 id="args-7">Args:</h5>
+<ul>
+<li><b><code>sp_ids</code></b>: A <code>SparseTensor</code> with <code>values</code> property of type <code>int32</code> or <code>int64</code>.</li>
+<li><b><code>sp_values</code></b>: A<code>SparseTensor</code> of any type.</li>
+<li><b><code>vocab_size</code></b>: A scalar <code>int64</code> Tensor (or Python int) containing the new size of the last dimension, <code>all(0 &lt;= sp_ids.values &lt; vocab_size)</code>.</li>
+<li><b><code>name</code></b>: A name prefix for the returned tensors (optional)</li>
+<li><b><code>already_sorted</code></b>: A boolean to specify whether the per-batch values in <code>sp_values</code> are already sorted. If so skip sorting, False by default (optional).</li>
+</ul>
+<h5 id="returns-10">Returns:</h5>
+<p>A <code>SparseTensor</code> compactly representing a batch of feature ids and values, useful for passing to functions that expect such a <code>SparseTensor</code>.</p>
+<h5 id="raises-2">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>sp_ids</code> or <code>sp_values</code> are not a <code>SparseTensor</code>.</li>
+</ul>
+<h2 id="manipulation">Manipulation</h2>
+<hr />
+<h3 id="tf.sparse_concataxis-sp_inputs-namenone-expand_nonconcat_dimfalse-concat_dimnone"><a name="//apple_ref/cpp/Function/sparse_concat" class="dashAnchor"></a><code id="sparse_concat">tf.sparse_concat(axis, sp_inputs, name=None, expand_nonconcat_dim=False, concat_dim=None)</code></h3>
+<p>Concatenates a list of <code>SparseTensor</code> along the specified dimension.</p>
+<p>Concatenation is with respect to the dense versions of each sparse input. It is assumed that each inputs is a <code>SparseTensor</code> whose elements are ordered along increasing dimension number.</p>
+<p>If expand_nonconcat_dim is False, all inputs' shapes must match, except for the concat dimension. If expand_nonconcat_dim is True, then inputs' shapes are allowed to vary among all inputs.</p>
+<p>The <code>indices</code>, <code>values</code>, and <code>shapes</code> lists must have the same length.</p>
+<p>If expand_nonconcat_dim is False, then the output shape is identical to the inputs', except along the concat dimension, where it is the sum of the inputs' sizes along that dimension.</p>
+<p>If expand_nonconcat_dim is True, then the output shape along the non-concat dimensions will be expand to be the largest among all inputs, and it is the sum of the inputs sizes along the concat dimension.</p>
+<p>The output elements will be resorted to preserve the sort order along increasing dimension number.</p>
+<p>This op runs in <code>O(M log M)</code> time, where <code>M</code> is the total number of non-empty values across all inputs. This is due to the need for an internal sort in order to concatenate efficiently across an arbitrary dimension.</p>
+<p>For example, if <code>axis = 1</code> and the inputs are</p>
+<pre><code>sp_inputs[0]: shape = [2, 3]
+[0, 2]: &quot;a&quot;
+[1, 0]: &quot;b&quot;
+[1, 1]: &quot;c&quot;
+
+sp_inputs[1]: shape = [2, 4]
+[0, 1]: &quot;d&quot;
+[0, 2]: &quot;e&quot;</code></pre>
+<p>then the output will be</p>
+<pre><code>shape = [2, 7]
+[0, 2]: &quot;a&quot;
+[0, 4]: &quot;d&quot;
+[0, 5]: &quot;e&quot;
+[1, 0]: &quot;b&quot;
+[1, 1]: &quot;c&quot;</code></pre>
+<p>Graphically this is equivalent to doing</p>
+<pre><code>[    a] concat [  d e  ] = [    a   d e  ]
+[b c  ]        [       ]   [b c          ]</code></pre>
+<p>Another example, if 'axis = 1' and the inputs are</p>
+<pre><code>sp_inputs[0]: shape = [3, 3]
+[0, 2]: &quot;a&quot;
+[1, 0]: &quot;b&quot;
+[2, 1]: &quot;c&quot;
+
+sp_inputs[1]: shape = [2, 4]
+[0, 1]: &quot;d&quot;
+[0, 2]: &quot;e&quot;</code></pre>
+<p>if expand_nonconcat_dim = False, this will result in an error. But if expand_nonconcat_dim = True, this will result in:</p>
+<pre><code>shape = [3, 7]
+[0, 2]: &quot;a&quot;
+[0, 4]: &quot;d&quot;
+[0, 5]: &quot;e&quot;
+[1, 0]: &quot;b&quot;
+[2, 1]: &quot;c&quot;</code></pre>
+<p>Graphically this is equivalent to doing</p>
+<pre><code>[    a] concat [  d e  ] = [    a   d e  ]
+[b    ]        [       ]   [b            ]
+[  c  ]                    [  c          ]</code></pre>
+<h5 id="args-8">Args:</h5>
+<ul>
+<li><b><code>axis</code></b>: Dimension to concatenate along. Must be in range [-rank, rank), where rank is the number of dimensions in each input <code>SparseTensor</code>.</li>
+<li><b><code>sp_inputs</code></b>: List of <code>SparseTensor</code> to concatenate.</li>
+<li><b><code>name</code></b>: A name prefix for the returned tensors (optional).</li>
+<li><b><code>expand_nonconcat_dim</code></b>: Whether to allow the expansion in the non-concat dimensions. Defaulted to False.</li>
+<li><b><code>concat_dim</code></b>: The old (deprecated) name for axis.</li>
+</ul>
+<h5 id="returns-11">Returns:</h5>
+<p>A <code>SparseTensor</code> with the concatenated output.</p>
+<h5 id="raises-3">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>sp_inputs</code> is not a list of <code>SparseTensor</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.sparse_reordersp_input-namenone"><a name="//apple_ref/cpp/Function/sparse_reorder" class="dashAnchor"></a><code id="sparse_reorder">tf.sparse_reorder(sp_input, name=None)</code></h3>
+<p>Reorders a <code>SparseTensor</code> into the canonical, row-major ordering.</p>
+<p>Note that by convention, all sparse ops preserve the canonical ordering along increasing dimension number. The only time ordering can be violated is during manual manipulation of the indices and values to add entries.</p>
+<p>Reordering does not affect the shape of the <code>SparseTensor</code>.</p>
+<p>For example, if <code>sp_input</code> has shape <code>[4, 5]</code> and <code>indices</code> / <code>values</code>:</p>
+<pre><code>[0, 3]: b
+[0, 1]: a
+[3, 1]: d
+[2, 0]: c</code></pre>
+<p>then the output will be a <code>SparseTensor</code> of shape <code>[4, 5]</code> and <code>indices</code> / <code>values</code>:</p>
+<pre><code>[0, 1]: a
+[0, 3]: b
+[2, 0]: c
+[3, 1]: d</code></pre>
+<h5 id="args-9">Args:</h5>
+<ul>
+<li><b><code>sp_input</code></b>: The input <code>SparseTensor</code>.</li>
+<li><b><code>name</code></b>: A name prefix for the returned tensors (optional)</li>
+</ul>
+<h5 id="returns-12">Returns:</h5>
+<p>A <code>SparseTensor</code> with the same shape and non-empty values, but in canonical ordering.</p>
+<h5 id="raises-4">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>sp_input</code> is not a <code>SparseTensor</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.sparse_reshapesp_input-shape-namenone"><a name="//apple_ref/cpp/Function/sparse_reshape" class="dashAnchor"></a><code id="sparse_reshape">tf.sparse_reshape(sp_input, shape, name=None)</code></h3>
+<p>Reshapes a <code>SparseTensor</code> to represent values in a new dense shape.</p>
+<p>This operation has the same semantics as <code>reshape</code> on the represented dense tensor. The indices of non-empty values in <code>sp_input</code> are recomputed based on the new dense shape, and a new <code>SparseTensor</code> is returned containing the new indices and new shape. The order of non-empty values in <code>sp_input</code> is unchanged.</p>
+<p>If one component of <code>shape</code> is the special value -1, the size of that dimension is computed so that the total dense size remains constant. At most one component of <code>shape</code> can be -1. The number of dense elements implied by <code>shape</code> must be the same as the number of dense elements originally represented by <code>sp_input</code>.</p>
+<p>For example, if <code>sp_input</code> has shape <code>[2, 3, 6]</code> and <code>indices</code> / <code>values</code>:</p>
+<pre><code>[0, 0, 0]: a
+[0, 0, 1]: b
+[0, 1, 0]: c
+[1, 0, 0]: d
+[1, 2, 3]: e</code></pre>
+<p>and <code>shape</code> is <code>[9, -1]</code>, then the output will be a <code>SparseTensor</code> of shape <code>[9, 4]</code> and <code>indices</code> / <code>values</code>:</p>
+<pre><code>[0, 0]: a
+[0, 1]: b
+[1, 2]: c
+[4, 2]: d
+[8, 1]: e</code></pre>
+<h5 id="args-10">Args:</h5>
+<ul>
+<li><b><code>sp_input</code></b>: The input <code>SparseTensor</code>.</li>
+<li><b><code>shape</code></b>: A 1-D (vector) int64 <code>Tensor</code> specifying the new dense shape of the represented <code>SparseTensor</code>.</li>
+<li><b><code>name</code></b>: A name prefix for the returned tensors (optional)</li>
+</ul>
+<h5 id="returns-13">Returns:</h5>
+<p>A <code>SparseTensor</code> with the same non-empty values but with indices calculated by the new dense shape.</p>
+<h5 id="raises-5">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>sp_input</code> is not a <code>SparseTensor</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.sparse_splitkeyword_requiredkeywordrequired-sp_inputnone-num_splitnone-axisnone-namenone-split_dimnone"><a name="//apple_ref/cpp/Function/sparse_split" class="dashAnchor"></a><code id="sparse_split">tf.sparse_split(keyword_required=KeywordRequired(), sp_input=None, num_split=None, axis=None, name=None, split_dim=None)</code></h3>
+<p>Split a <code>SparseTensor</code> into <code>num_split</code> tensors along <code>axis</code>.</p>
+<p>If the <code>sp_input.dense_shape[axis]</code> is not an integer multiple of <code>num_split</code> each slice starting from 0:<code>shape[axis] % num_split</code> gets extra one dimension. For example, if <code>axis = 1</code> and <code>num_split = 2</code> and the input is:</p>
+<pre><code>input_tensor = shape = [2, 7]
+[    a   d e  ]
+[b c          ]</code></pre>
+<p>Graphically the output tensors are:</p>
+<pre><code>output_tensor[0] =
+[    a ]
+[b c   ]
+
+output_tensor[1] =
+[ d e  ]
+[      ]</code></pre>
+<h5 id="args-11">Args:</h5>
+<ul>
+<li><b><code>keyword_required</code></b>: Python 2 standin for * (temporary for argument reorder)</li>
+<li><b><code>sp_input</code></b>: The <code>SparseTensor</code> to split.</li>
+<li><b><code>num_split</code></b>: A Python integer. The number of ways to split.</li>
+<li><b><code>axis</code></b>: A 0-D <code>int32</code> <code>Tensor</code>. The dimension along which to split.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+<li><b><code>split_dim</code></b>: Deprecated old name for axis.</li>
+</ul>
+<h5 id="returns-14">Returns:</h5>
+<p><code>num_split</code> <code>SparseTensor</code> objects resulting from splitting <code>value</code>.</p>
+<h5 id="raises-6">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>sp_input</code> is not a <code>SparseTensor</code>.</li>
+<li><b><code>ValueError</code></b>: If the deprecated <code>split_dim</code> and <code>axis</code> are both non None.</li>
+</ul>
+<hr />
+<h3 id="tf.sparse_retainsp_input-to_retain"><a name="//apple_ref/cpp/Function/sparse_retain" class="dashAnchor"></a><code id="sparse_retain">tf.sparse_retain(sp_input, to_retain)</code></h3>
+<p>Retains specified non-empty values within a <code>SparseTensor</code>.</p>
+<p>For example, if <code>sp_input</code> has shape <code>[4, 5]</code> and 4 non-empty string values:</p>
+<pre><code>[0, 1]: a
+[0, 3]: b
+[2, 0]: c
+[3, 1]: d</code></pre>
+<p>and <code>to_retain = [True, False, False, True]</code>, then the output will be a <code>SparseTensor</code> of shape <code>[4, 5]</code> with 2 non-empty values:</p>
+<pre><code>[0, 1]: a
+[3, 1]: d</code></pre>
+<h5 id="args-12">Args:</h5>
+<ul>
+<li><b><code>sp_input</code></b>: The input <code>SparseTensor</code> with <code>N</code> non-empty elements.</li>
+<li><b><code>to_retain</code></b>: A bool vector of length <code>N</code> with <code>M</code> true values.</li>
+</ul>
+<h5 id="returns-15">Returns:</h5>
+<p>A <code>SparseTensor</code> with the same shape as the input and <code>M</code> non-empty elements corresponding to the true positions in <code>to_retain</code>.</p>
+<h5 id="raises-7">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>sp_input</code> is not a <code>SparseTensor</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.sparse_reset_shapesp_input-new_shapenone"><a name="//apple_ref/cpp/Function/sparse_reset_shape" class="dashAnchor"></a><code id="sparse_reset_shape">tf.sparse_reset_shape(sp_input, new_shape=None)</code></h3>
+<p>Resets the shape of a <code>SparseTensor</code> with indices and values unchanged.</p>
+<p>If <code>new_shape</code> is None, returns a copy of <code>sp_input</code> with its shape reset to the tight bounding box of <code>sp_input</code>.</p>
+<p>If <code>new_shape</code> is provided, then it must be larger or equal in all dimensions compared to the shape of <code>sp_input</code>. When this condition is met, the returned SparseTensor will have its shape reset to <code>new_shape</code> and its indices and values unchanged from that of <code>sp_input.</code></p>
+<p>For example:</p>
+<p>Consider a <code>sp_input</code> with shape [2, 3, 5]:</p>
+<pre><code>[0, 0, 1]: a
+[0, 1, 0]: b
+[0, 2, 2]: c
+[1, 0, 3]: d</code></pre>
+<ul>
+<li><p>It is an error to set <code>new_shape</code> as [3, 7] since this represents a rank-2 tensor while <code>sp_input</code> is rank-3. This is either a ValueError during graph construction (if both shapes are known) or an OpError during run time.</p></li>
+<li><p>Setting <code>new_shape</code> as [2, 3, 6] will be fine as this shape is larger or equal in every dimension compared to the original shape [2, 3, 5].</p></li>
+<li><p>On the other hand, setting new_shape as [2, 3, 4] is also an error: The third dimension is smaller than the original shape [2, 3, 5] (and an <code>InvalidArgumentError</code> will be raised).</p></li>
+<li><p>If <code>new_shape</code> is None, the returned SparseTensor will have a shape [2, 3, 4], which is the tight bounding box of <code>sp_input</code>.</p></li>
+</ul>
+<h5 id="args-13">Args:</h5>
+<ul>
+<li><b><code>sp_input</code></b>: The input <code>SparseTensor</code>.</li>
+<li><b><code>new_shape</code></b>: None or a vector representing the new shape for the returned <code>SparseTensor</code>.</li>
+</ul>
+<h5 id="returns-16">Returns:</h5>
+<p>A <code>SparseTensor</code> indices and values unchanged from <code>input_sp</code>. Its shape is <code>new_shape</code> if that is set. Otherwise it is the tight bounding box of <code>input_sp</code></p>
+<h5 id="raises-8">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>sp_input</code> is not a <code>SparseTensor</code>.</li>
+<li><b><code>ValueError</code></b>: If <code>new_shape</code> represents a tensor with a different rank from that of <code>sp_input</code> (if shapes are known when graph is constructed).</li>
+<li><b><code>OpError</code></b>:
+<ul>
+<li>If <code>new_shape</code> has dimension sizes that are too small.</li>
+<li>If shapes are not known during graph construction time, and during run time it is found out that the ranks do not match.</li>
+</ul></li>
+</ul>
+<hr />
+<h3 id="tf.sparse_fill_empty_rowssp_input-default_value-namenone"><a name="//apple_ref/cpp/Function/sparse_fill_empty_rows" class="dashAnchor"></a><code id="sparse_fill_empty_rows">tf.sparse_fill_empty_rows(sp_input, default_value, name=None)</code></h3>
+<p>Fills empty rows in the input 2-D <code>SparseTensor</code> with a default value.</p>
+<p>This op adds entries with the specified <code>default_value</code> at index <code>[row, 0]</code> for any row in the input that does not already have a value.</p>
+<p>For example, suppose <code>sp_input</code> has shape <code>[5, 6]</code> and non-empty values:</p>
+<pre><code>[0, 1]: a
+[0, 3]: b
+[2, 0]: c
+[3, 1]: d</code></pre>
+<p>Rows 1 and 4 are empty, so the output will be of shape <code>[5, 6]</code> with values:</p>
+<pre><code>[0, 1]: a
+[0, 3]: b
+[1, 0]: default_value
+[2, 0]: c
+[3, 1]: d
+[4, 0]: default_value</code></pre>
+<p>Note that the input may have empty columns at the end, with no effect on this op.</p>
+<p>The output <code>SparseTensor</code> will be in row-major order and will have the same shape as the input.</p>
+<p>This op also returns an indicator vector such that</p>
+<pre><code>empty_row_indicator[i] = True iff row i was an empty row.</code></pre>
+<h5 id="args-14">Args:</h5>
+<ul>
+<li><b><code>sp_input</code></b>: A <code>SparseTensor</code> with shape <code>[N, M]</code>.</li>
+<li><b><code>default_value</code></b>: The value to fill for empty rows, with the same type as <code>sp_input.</code></li>
+<li><b><code>name</code></b>: A name prefix for the returned tensors (optional)</li>
+</ul>
+<h5 id="returns-17">Returns:</h5>
+<ul>
+<li><b><code>sp_ordered_output</code></b>: A <code>SparseTensor</code> with shape <code>[N, M]</code>, and with all empty rows filled in with <code>default_value</code>.</li>
+<li><b><code>empty_row_indicator</code></b>: A bool vector of length <code>N</code> indicating whether each input row was empty.</li>
+</ul>
+<h5 id="raises-9">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>sp_input</code> is not a <code>SparseTensor</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.sparse_transposesp_input-permnone-namenone"><a name="//apple_ref/cpp/Function/sparse_transpose" class="dashAnchor"></a><code id="sparse_transpose">tf.sparse_transpose(sp_input, perm=None, name=None)</code></h3>
+<p>Transposes a <code>SparseTensor</code></p>
+<p>The returned tensor's dimension i will correspond to the input dimension <code>perm[i]</code>. If <code>perm</code> is not given, it is set to (n-1...0), where n is the rank of the input tensor. Hence by default, this operation performs a regular matrix transpose on 2-D input Tensors.</p>
+<p>For example, if <code>sp_input</code> has shape <code>[4, 5]</code> and <code>indices</code> / <code>values</code>:</p>
+<pre><code>[0, 3]: b
+[0, 1]: a
+[3, 1]: d
+[2, 0]: c</code></pre>
+<p>then the output will be a <code>SparseTensor</code> of shape <code>[5, 4]</code> and <code>indices</code> / <code>values</code>:</p>
+<pre><code>[0, 2]: c
+[1, 0]: a
+[1, 3]: d
+[3, 0]: b</code></pre>
+<h5 id="args-15">Args:</h5>
+<ul>
+<li><b><code>sp_input</code></b>: The input <code>SparseTensor</code>.</li>
+<li><b><code>perm</code></b>: A permutation of the dimensions of <code>sp_input</code>.</li>
+<li><b><code>name</code></b>: A name prefix for the returned tensors (optional)</li>
+</ul>
+<h5 id="returns-18">Returns:</h5>
+<p>A transposed <code>SparseTensor</code>.</p>
+<h5 id="raises-10">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>sp_input</code> is not a <code>SparseTensor</code>.</li>
+</ul>
+<h2 id="reduction">Reduction</h2>
+<hr />
+<h3 id="tf.sparse_reduce_sumsp_input-axisnone-keep_dimsfalse-reduction_axesnone"><a name="//apple_ref/cpp/Function/sparse_reduce_sum" class="dashAnchor"></a><code id="sparse_reduce_sum">tf.sparse_reduce_sum(sp_input, axis=None, keep_dims=False, reduction_axes=None)</code></h3>
+<p>Computes the sum of elements across dimensions of a SparseTensor.</p>
+<p>This Op takes a SparseTensor and is the sparse counterpart to <code>tf.reduce_sum()</code>. In particular, this Op also returns a dense <code>Tensor</code> instead of a sparse one.</p>
+<p>Reduces <code>sp_input</code> along the dimensions given in <code>reduction_axes</code>. Unless <code>keep_dims</code> is true, the rank of the tensor is reduced by 1 for each entry in <code>reduction_axes</code>. If <code>keep_dims</code> is true, the reduced dimensions are retained with length 1.</p>
+<p>If <code>reduction_axes</code> has no entries, all dimensions are reduced, and a tensor with a single element is returned. Additionally, the axes can be negative, similar to the indexing rules in Python.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># &#39;x&#39; represents [[1, ?, 1]</span>
+<span class="co">#                 [?, 1, ?]]</span>
+<span class="co"># where ? is implicitly-zero.</span>
+tf.sparse_reduce_sum(x) <span class="op">==&gt;</span> <span class="dv">3</span>
+tf.sparse_reduce_sum(x, <span class="dv">0</span>) <span class="op">==&gt;</span> [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>]
+tf.sparse_reduce_sum(x, <span class="dv">1</span>) <span class="op">==&gt;</span> [<span class="dv">2</span>, <span class="dv">1</span>]  <span class="co"># Can also use -1 as the axis.</span>
+tf.sparse_reduce_sum(x, <span class="dv">1</span>, keep_dims<span class="op">=</span><span class="va">True</span>) <span class="op">==&gt;</span> [[<span class="dv">2</span>], [<span class="dv">1</span>]]
+tf.sparse_reduce_sum(x, [<span class="dv">0</span>, <span class="dv">1</span>]) <span class="op">==&gt;</span> <span class="dv">3</span></code></pre></div>
+<h5 id="args-16">Args:</h5>
+<ul>
+<li><b><code>sp_input</code></b>: The SparseTensor to reduce. Should have numeric type.</li>
+<li><b><code>axis</code></b>: The dimensions to reduce; list or scalar. If <code>None</code> (the default), reduces all dimensions.</li>
+<li><b><code>keep_dims</code></b>: If true, retain reduced dimensions with length 1.</li>
+<li><b><code>reduction_axes</code></b>: Deprecated name of axis.</li>
+</ul>
+<h5 id="returns-19">Returns:</h5>
+<p>The reduced Tensor.</p>
+<hr />
+<h3 id="tf.sparse_reduce_sum_sparsesp_input-axisnone-keep_dimsfalse-reduction_axesnone"><a name="//apple_ref/cpp/Function/sparse_reduce_sum_sparse" class="dashAnchor"></a><code id="sparse_reduce_sum_sparse">tf.sparse_reduce_sum_sparse(sp_input, axis=None, keep_dims=False, reduction_axes=None)</code></h3>
+<p>Computes the sum of elements across dimensions of a SparseTensor.</p>
+<p>This Op takes a SparseTensor and is the sparse counterpart to <code>tf.reduce_sum()</code>. In contrast to SparseReduceSum, this Op returns a SparseTensor.</p>
+<p>Reduces <code>sp_input</code> along the dimensions given in <code>reduction_axes</code>. Unless <code>keep_dims</code> is true, the rank of the tensor is reduced by 1 for each entry in <code>reduction_axes</code>. If <code>keep_dims</code> is true, the reduced dimensions are retained with length 1.</p>
+<p>If <code>reduction_axes</code> has no entries, all dimensions are reduced, and a tensor with a single element is returned. Additionally, the axes can be negative, which are interpreted according to the indexing rules in Python.</p>
+<h5 id="args-17">Args:</h5>
+<ul>
+<li><b><code>sp_input</code></b>: The SparseTensor to reduce. Should have numeric type.</li>
+<li><b><code>axis</code></b>: The dimensions to reduce; list or scalar. If <code>None</code> (the default), reduces all dimensions.</li>
+<li><b><code>keep_dims</code></b>: If true, retain reduced dimensions with length 1.</li>
+<li><b><code>reduction_axes</code></b>: Deprecated name of axis</li>
+</ul>
+<h5 id="returns-20">Returns:</h5>
+<p>The reduced SparseTensor.</p>
+<h2 id="math-operations">Math Operations</h2>
+<hr />
+<h3 id="tf.sparse_adda-b-thresh0"><a name="//apple_ref/cpp/Function/sparse_add" class="dashAnchor"></a><code id="sparse_add">tf.sparse_add(a, b, thresh=0)</code></h3>
+<p>Adds two tensors, at least one of each is a <code>SparseTensor</code>.</p>
+<p>If one <code>SparseTensor</code> and one <code>Tensor</code> are passed in, returns a <code>Tensor</code>. If both arguments are <code>SparseTensor</code>s, this returns a <code>SparseTensor</code>. The order of arguments does not matter. Use vanilla <code>tf.add()</code> for adding two dense <code>Tensor</code>s.</p>
+<p>The indices of any input <code>SparseTensor</code> are assumed ordered in standard lexicographic order. If this is not the case, before this step run <code>SparseReorder</code> to restore index ordering.</p>
+<p>If both arguments are sparse, we perform &quot;clipping&quot; as follows. By default, if two values sum to zero at some index, the output <code>SparseTensor</code> would still include that particular location in its index, storing a zero in the corresponding value slot. To override this, callers can specify <code>thresh</code>, indicating that if the sum has a magnitude strictly smaller than <code>thresh</code>, its corresponding value and index would then not be included. In particular, <code>thresh == 0.0</code> (default) means everything is kept and actual thresholding happens only for a positive value.</p>
+<p>For example, suppose the logical sum of two sparse operands is (densified):</p>
+<pre><code>[       2]
+[.1     0]
+[ 6   -.2]</code></pre>
+<p>Then,</p>
+<pre><code>* `thresh == 0` (the default): all 5 index/value pairs will be returned.
+* `thresh == 0.11`: only .1 and 0  will vanish, and the remaining three
+    index/value pairs will be returned.
+* `thresh == 0.21`: .1, 0, and -.2 will vanish.</code></pre>
+<h5 id="args-18">Args:</h5>
+<ul>
+<li><b><code>a</code></b>: The first operand; <code>SparseTensor</code> or <code>Tensor</code>.</li>
+<li><b><code>b</code></b>: The second operand; <code>SparseTensor</code> or <code>Tensor</code>. At least one operand must be sparse.</li>
+<li><b><code>thresh</code></b>: A 0-D <code>Tensor</code>. The magnitude threshold that determines if an output value/index pair takes space. Its dtype should match that of the values if they are real; if the latter are complex64/complex128, then the dtype should be float32/float64, correspondingly.</li>
+</ul>
+<h5 id="returns-21">Returns:</h5>
+<p>A <code>SparseTensor</code> or a <code>Tensor</code>, representing the sum.</p>
+<h5 id="raises-11">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If both <code>a</code> and <code>b</code> are <code>Tensor</code>s. Use <code>tf.add()</code> instead.</li>
+</ul>
+<hr />
+<h3 id="tf.sparse_softmaxsp_input-namenone"><a name="//apple_ref/cpp/Function/sparse_softmax" class="dashAnchor"></a><code id="sparse_softmax">tf.sparse_softmax(sp_input, name=None)</code></h3>
+<p>Applies softmax to a batched N-D <code>SparseTensor</code>.</p>
+<p>The inputs represent an N-D SparseTensor with logical shape <code>[..., B, C]</code> (where <code>N &gt;= 2</code>), and with indices sorted in the canonical lexicographic order.</p>
+<p>This op is equivalent to applying the normal <code>tf.nn.softmax()</code> to each innermost logical submatrix with shape <code>[B, C]</code>, but with the catch that <em>the implicitly zero elements do not participate</em>. Specifically, the algorithm is equivalent to:</p>
+<ol style="list-style-type: decimal">
+<li>Applies <code>tf.nn.softmax()</code> to a densified view of each innermost submatrix with shape <code>[B, C]</code>, along the size-C dimension;</li>
+<li>Masks out the original implicitly-zero locations;</li>
+<li>Renormalizes the remaining elements.</li>
+</ol>
+<p>Hence, the <code>SparseTensor</code> result has exactly the same non-zero indices and shape.</p>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># First batch:</span>
+<span class="co"># [?   e.]</span>
+<span class="co"># [1.  ? ]</span>
+<span class="co"># Second batch:</span>
+<span class="co"># [e   ? ]</span>
+<span class="co"># [e   e ]</span>
+shape <span class="op">=</span> [<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>]  <span class="co"># 3-D SparseTensor</span>
+values <span class="op">=</span> np.asarray([[[<span class="dv">0</span>., np.e], [<span class="dv">1</span>., <span class="dv">0</span>.]], [[np.e, <span class="dv">0</span>.], [np.e, np.e]]])
+indices <span class="op">=</span> np.vstack(np.where(values)).astype(np.int64).T
+
+result <span class="op">=</span> tf.sparse_softmax(tf.SparseTensor(indices, values, shape))
+<span class="co"># ...returning a 3-D SparseTensor, equivalent to:</span>
+<span class="co"># [?   1.]     [1    ?]</span>
+<span class="co"># [1.  ? ] and [.5  .5]</span>
+<span class="co"># where ? means implicitly zero.</span></code></pre></div>
+<h5 id="args-19">Args:</h5>
+<ul>
+<li><b><code>sp_input</code></b>: N-D <code>SparseTensor</code>, where <code>N &gt;= 2</code>.</li>
+<li><b><code>name</code></b>: optional name of the operation.</li>
+</ul>
+<h5 id="returns-22">Returns:</h5>
+<ul>
+<li><b><code>output</code></b>: N-D <code>SparseTensor</code> representing the results.</li>
+</ul>
+<hr />
+<h3 id="tf.sparse_tensor_dense_matmulsp_a-b-adjoint_afalse-adjoint_bfalse-namenone"><a name="//apple_ref/cpp/Function/sparse_tensor_dense_matmul" class="dashAnchor"></a><code id="sparse_tensor_dense_matmul">tf.sparse_tensor_dense_matmul(sp_a, b, adjoint_a=False, adjoint_b=False, name=None)</code></h3>
+<p>Multiply SparseTensor (of rank 2) &quot;A&quot; by dense matrix &quot;B&quot;.</p>
+<p>No validity checking is performed on the indices of A. However, the following input format is recommended for optimal behavior:</p>
+<p>if adjoint_a == false: A should be sorted in lexicographically increasing order. Use sparse_reorder if you're not sure. if adjoint_a == true: A should be sorted in order of increasing dimension 1 (i.e., &quot;column major&quot; order instead of &quot;row major&quot; order).</p>
+<p>Deciding when to use sparse_tensor_dense_matmul vs. matmul(sp_a=True):</p>
+<p>There are a number of questions to ask in the decision process, including:</p>
+<ul>
+<li>Will the SparseTensor A fit in memory if densified?</li>
+<li>Is the column count of the product large (&gt;&gt; 1)?</li>
+<li>Is the density of A larger than approximately 15%?</li>
+</ul>
+<p>If the answer to several of these questions is yes, consider converting the <code>SparseTensor</code> to a dense one and using <code>tf.matmul</code> with <code>sp_a=True</code>.</p>
+<p>This operation tends to perform well when A is more sparse, if the column size of the product is small (e.g. matrix-vector multiplication), if <code>sp_a.dense_shape</code> takes on large values.</p>
+<p>Below is a rough speed comparison between sparse_tensor_dense_matmul, labelled 'sparse', and matmul(sp_a=True), labelled 'dense'. For purposes of the comparison, the time spent converting from a SparseTensor to a dense Tensor is not included, so it is overly conservative with respect to the time ratio.</p>
+<p>Benchmark system: CPU: Intel Ivybridge with HyperThreading (6 cores) dL1:32KB dL2:256KB dL3:12MB GPU: NVidia Tesla k40c</p>
+<p>Compiled with: -c opt --config=cuda --copt=-mavx</p>
+<p>```tensorflow/python/sparse_tensor_dense_matmul_op_test --benchmarks A sparse [m, k] with % nonzero values between 1% and 80% B dense [k, n]</p>
+<p>% nnz n gpu m k dt(dense) dt(sparse) dt(sparse)/dt(dense) 0.01 1 True 100 100 0.000221166 0.00010154 0.459112 0.01 1 True 100 1000 0.00033858 0.000109275 0.322745 0.01 1 True 1000 100 0.000310557 9.85661e-05 0.317385 0.01 1 True 1000 1000 0.0008721 0.000100875 0.115669 0.01 1 False 100 100 0.000208085 0.000107603 0.51711 0.01 1 False 100 1000 0.000327112 9.51118e-05 0.290762 0.01 1 False 1000 100 0.000308222 0.00010345 0.335635 0.01 1 False 1000 1000 0.000865721 0.000101397 0.117124 0.01 10 True 100 100 0.000218522 0.000105537 0.482958 0.01 10 True 100 1000 0.000340882 0.000111641 0.327506 0.01 10 True 1000 100 0.000315472 0.000117376 0.372064 0.01 10 True 1000 1000 0.000905493 0.000123263 0.136128 0.01 10 False 100 100 0.000221529 9.82571e-05 0.44354 0.01 10 False 100 1000 0.000330552 0.000112615 0.340687 0.01 10 False 1000 100 0.000341277 0.000114097 0.334324 0.01 10 False 1000 1000 0.000819944 0.000120982 0.147549 0.01 25 True 100 100 0.000207806 0.000105977 0.509981 0.01 25 True 100 1000 0.000322879 0.00012921 0.400181 0.01 25 True 1000 100 0.00038262 0.00014158 0.370035 0.01 25 True 1000 1000 0.000865438 0.000202083 0.233504 0.01 25 False 100 100 0.000209401 0.000104696 0.499979 0.01 25 False 100 1000 0.000321161 0.000130737 0.407076 0.01 25 False 1000 100 0.000377012 0.000136801 0.362856 0.01 25 False 1000 1000 0.000861125 0.00020272 0.235413 0.2 1 True 100 100 0.000206952 9.69219e-05 0.46833 0.2 1 True 100 1000 0.000348674 0.000147475 0.422959 0.2 1 True 1000 100 0.000336908 0.00010122 0.300439 0.2 1 True 1000 1000 0.001022 0.000203274 0.198898 0.2 1 False 100 100 0.000207532 9.5412e-05 0.459746 0.2 1 False 100 1000 0.000356127 0.000146824 0.41228 0.2 1 False 1000 100 0.000322664 0.000100918 0.312764 0.2 1 False 1000 1000 0.000998987 0.000203442 0.203648 0.2 10 True 100 100 0.000211692 0.000109903 0.519165 0.2 10 True 100 1000 0.000372819 0.000164321 0.440753 0.2 10 True 1000 100 0.000338651 0.000144806 0.427596 0.2 10 True 1000 1000 0.00108312 0.000758876 0.70064 0.2 10 False 100 100 0.000215727 0.000110502 0.512231 0.2 10 False 100 1000 0.000375419 0.0001613 0.429653 0.2 10 False 1000 100 0.000336999 0.000145628 0.432132 0.2 10 False 1000 1000 0.00110502 0.000762043 0.689618 0.2 25 True 100 100 0.000218705 0.000129913 0.594009 0.2 25 True 100 1000 0.000394794 0.00029428 0.745402 0.2 25 True 1000 100 0.000404483 0.0002693 0.665788 0.2 25 True 1000 1000 0.0012002 0.00194494 1.62052 0.2 25 False 100 100 0.000221494 0.0001306 0.589632 0.2 25 False 100 1000 0.000396436 0.000297204 0.74969 0.2 25 False 1000 100 0.000409346 0.000270068 0.659754 0.2 25 False 1000 1000 0.00121051 0.00193737 1.60046 0.5 1 True 100 100 0.000214981 9.82111e-05 0.456836 0.5 1 True 100 1000 0.000415328 0.000223073 0.537101 0.5 1 True 1000 100 0.000358324 0.00011269 0.314492 0.5 1 True 1000 1000 0.00137612 0.000437401 0.317851 0.5 1 False 100 100 0.000224196 0.000101423 0.452386 0.5 1 False 100 1000 0.000400987 0.000223286 0.556841 0.5 1 False 1000 100 0.000368825 0.00011224 0.304318 0.5 1 False 1000 1000 0.00136036 0.000429369 0.31563 0.5 10 True 100 100 0.000222125 0.000112308 0.505608 0.5 10 True 100 1000 0.000461088 0.00032357 0.701753 0.5 10 True 1000 100 0.000394624 0.000225497 0.571422 0.5 10 True 1000 1000 0.00158027 0.00190898 1.20801 0.5 10 False 100 100 0.000232083 0.000114978 0.495418 0.5 10 False 100 1000 0.000454574 0.000324632 0.714146 0.5 10 False 1000 100 0.000379097 0.000227768 0.600817 0.5 10 False 1000 1000 0.00160292 0.00190168 1.18638 0.5 25 True 100 100 0.00023429 0.000151703 0.647501 0.5 25 True 100 1000 0.000497462 0.000598873 1.20386 0.5 25 True 1000 100 0.000460778 0.000557038 1.20891 0.5 25 True 1000 1000 0.00170036 0.00467336 2.74845 0.5 25 False 100 100 0.000228981 0.000155334 0.678371 0.5 25 False 100 1000 0.000496139 0.000620789 1.25124 0.5 25 False 1000 100 0.00045473 0.000551528 1.21287 0.5 25 False 1000 1000 0.00171793 0.00467152 2.71927 0.8 1 True 100 100 0.000222037 0.000105301 0.47425 0.8 1 True 100 1000 0.000410804 0.000329327 0.801664 0.8 1 True 1000 100 0.000349735 0.000131225 0.375212 0.8 1 True 1000 1000 0.00139219 0.000677065 0.48633 0.8 1 False 100 100 0.000214079 0.000107486 0.502085 0.8 1 False 100 1000 0.000413746 0.000323244 0.781261 0.8 1 False 1000 100 0.000348983 0.000131983 0.378193 0.8 1 False 1000 1000 0.00136296 0.000685325 0.50282 0.8 10 True 100 100 0.000229159 0.00011825 0.516017 0.8 10 True 100 1000 0.000498845 0.000532618 1.0677 0.8 10 True 1000 100 0.000383126 0.00029935 0.781336 0.8 10 True 1000 1000 0.00162866 0.00307312 1.88689 0.8 10 False 100 100 0.000230783 0.000124958 0.541452 0.8 10 False 100 1000 0.000493393 0.000550654 1.11606 0.8 10 False 1000 100 0.000377167 0.000298581 0.791642 0.8 10 False 1000 1000 0.00165795 0.00305103 1.84024 0.8 25 True 100 100 0.000233496 0.000175241 0.75051 0.8 25 True 100 1000 0.00055654 0.00102658 1.84458 0.8 25 True 1000 100 0.000463814 0.000783267 1.68875 0.8 25 True 1000 1000 0.00186905 0.00755344 4.04132 0.8 25 False 100 100 0.000240243 0.000175047 0.728625 0.8 25 False 100 1000 0.000578102 0.00104499 1.80763 0.8 25 False 1000 100 0.000485113 0.000776849 1.60138 0.8 25 False 1000 1000 0.00211448 0.00752736 3.55992 ```</p>
+<h5 id="args-20">Args:</h5>
+<ul>
+<li><b><code>sp_a</code></b>: SparseTensor A, of rank 2.</li>
+<li><b><code>b</code></b>: A dense Matrix with the same dtype as sp_a.</li>
+<li><b><code>adjoint_a</code></b>: Use the adjoint of A in the matrix multiply. If A is complex, this is transpose(conj(A)). Otherwise it's transpose(A).</li>
+<li><b><code>adjoint_b</code></b>: Use the adjoint of B in the matrix multiply. If B is complex, this is transpose(conj(B)). Otherwise it's transpose(B).</li>
+<li><b><code>name</code></b>: A name prefix for the returned tensors (optional)</li>
+</ul>
+<h5 id="returns-23">Returns:</h5>
+<p>A dense matrix (pseudo-code in dense np.matrix notation): A = A.H if adjoint_a else A B = B.H if adjoint_b else B return A*B</p>
+<hr />
+<h3 id="tf.sparse_maximumsp_a-sp_b-namenone"><a name="//apple_ref/cpp/Function/sparse_maximum" class="dashAnchor"></a><code id="sparse_maximum">tf.sparse_maximum(sp_a, sp_b, name=None)</code></h3>
+<p>Returns the element-wise max of two SparseTensors.</p>
+<p>Assumes the two SparseTensors have the same shape, i.e., no broadcasting. Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">sp_zero <span class="op">=</span> sparse_tensor.SparseTensor([[<span class="dv">0</span>]], [<span class="dv">0</span>], [<span class="dv">7</span>])
+sp_one <span class="op">=</span> sparse_tensor.SparseTensor([[<span class="dv">1</span>]], [<span class="dv">1</span>], [<span class="dv">7</span>])
+res <span class="op">=</span> tf.sparse_maximum(sp_zero, sp_one).<span class="bu">eval</span>()
+<span class="co"># &quot;res&quot; should be equal to SparseTensor([[0], [1]], [0, 1], [7]).</span></code></pre></div>
+<h5 id="args-21">Args:</h5>
+<ul>
+<li><b><code>sp_a</code></b>: a <code>SparseTensor</code> operand whose dtype is real, and indices lexicographically ordered.</li>
+<li><b><code>sp_b</code></b>: the other <code>SparseTensor</code> operand with the same requirements (and the same shape).</li>
+<li><b><code>name</code></b>: optional name of the operation.</li>
+</ul>
+<h5 id="returns-24">Returns:</h5>
+<ul>
+<li><b><code>output</code></b>: the output SparseTensor.</li>
+</ul>
+<hr />
+<h3 id="tf.sparse_minimumsp_a-sp_b-namenone"><a name="//apple_ref/cpp/Function/sparse_minimum" class="dashAnchor"></a><code id="sparse_minimum">tf.sparse_minimum(sp_a, sp_b, name=None)</code></h3>
+<p>Returns the element-wise min of two SparseTensors.</p>
+<p>Assumes the two SparseTensors have the same shape, i.e., no broadcasting. Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">sp_zero <span class="op">=</span> sparse_tensor.SparseTensor([[<span class="dv">0</span>]], [<span class="dv">0</span>], [<span class="dv">7</span>])
+sp_one <span class="op">=</span> sparse_tensor.SparseTensor([[<span class="dv">1</span>]], [<span class="dv">1</span>], [<span class="dv">7</span>])
+res <span class="op">=</span> tf.sparse_minimum(sp_zero, sp_one).<span class="bu">eval</span>()
+<span class="co"># &quot;res&quot; should be equal to SparseTensor([[0], [1]], [0, 0], [7]).</span></code></pre></div>
+<h5 id="args-22">Args:</h5>
+<ul>
+<li><b><code>sp_a</code></b>: a <code>SparseTensor</code> operand whose dtype is real, and indices lexicographically ordered.</li>
+<li><b><code>sp_b</code></b>: the other <code>SparseTensor</code> operand with the same requirements (and the same shape).</li>
+<li><b><code>name</code></b>: optional name of the operation.</li>
+</ul>
+<h5 id="returns-25">Returns:</h5>
+<ul>
+<li><b><code>output</code></b>: the output SparseTensor.</li>
+</ul>

@@ -1,0 +1,123 @@
+<!-- This file is machine generated: DO NOT EDIT! -->
+<h1 id="crf-contrib">CRF (contrib)</h1>
+<p>[TOC]</p>
+<p>Linear-chain CRF layer.</p>
+<h2 id="this-package-provides-functions-for-building-a-linear-chain-crf-layer.">This package provides functions for building a linear-chain CRF layer.</h2>
+<hr />
+<h3 id="tf.contrib.crf.crf_sequence_scoreinputs-tag_indices-sequence_lengths-transition_params"><a name="//apple_ref/cpp/Function/crf_sequence_score" class="dashAnchor"></a><code id="crf_sequence_score">tf.contrib.crf.crf_sequence_score(inputs, tag_indices, sequence_lengths, transition_params)</code></h3>
+<p>Computes the unnormalized score for a tag sequence.</p>
+<h5 id="args">Args:</h5>
+<ul>
+<li><b><code>inputs</code></b>: A [batch_size, max_seq_len, num_tags] tensor of unary potentials to use as input to the CRF layer.</li>
+<li><b><code>tag_indices</code></b>: A [batch_size, max_seq_len] matrix of tag indices for which we compute the unnormalized score.</li>
+<li><b><code>sequence_lengths</code></b>: A [batch_size] vector of true sequence lengths.</li>
+<li><b><code>transition_params</code></b>: A [num_tags, num_tags] transition matrix.</li>
+</ul>
+<h5 id="returns">Returns:</h5>
+<ul>
+<li><b><code>sequence_scores</code></b>: A [batch_size] vector of unnormalized sequence scores.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.crf.crf_log_norminputs-sequence_lengths-transition_params"><a name="//apple_ref/cpp/Function/crf_log_norm" class="dashAnchor"></a><code id="crf_log_norm">tf.contrib.crf.crf_log_norm(inputs, sequence_lengths, transition_params)</code></h3>
+<p>Computes the normalization for a CRF.</p>
+<h5 id="args-1">Args:</h5>
+<ul>
+<li><b><code>inputs</code></b>: A [batch_size, max_seq_len, num_tags] tensor of unary potentials to use as input to the CRF layer.</li>
+<li><b><code>sequence_lengths</code></b>: A [batch_size] vector of true sequence lengths.</li>
+<li><b><code>transition_params</code></b>: A [num_tags, num_tags] transition matrix.</li>
+</ul>
+<h5 id="returns-1">Returns:</h5>
+<ul>
+<li><b><code>log_norm</code></b>: A [batch_size] vector of normalizers for a CRF.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.crf.crf_log_likelihoodinputs-tag_indices-sequence_lengths-transition_paramsnone"><a name="//apple_ref/cpp/Function/crf_log_likelihood" class="dashAnchor"></a><code id="crf_log_likelihood">tf.contrib.crf.crf_log_likelihood(inputs, tag_indices, sequence_lengths, transition_params=None)</code></h3>
+<p>Computes the log-likelihood of tag sequences in a CRF.</p>
+<h5 id="args-2">Args:</h5>
+<ul>
+<li><b><code>inputs</code></b>: A [batch_size, max_seq_len, num_tags] tensor of unary potentials to use as input to the CRF layer.</li>
+<li><b><code>tag_indices</code></b>: A [batch_size, max_seq_len] matrix of tag indices for which we compute the log-likelihood.</li>
+<li><b><code>sequence_lengths</code></b>: A [batch_size] vector of true sequence lengths.</li>
+<li><b><code>transition_params</code></b>: A [num_tags, num_tags] transition matrix, if available.</li>
+</ul>
+<h5 id="returns-2">Returns:</h5>
+<ul>
+<li><b><code>log_likelihood</code></b>: A scalar containing the log-likelihood of the given sequence of tag indices.</li>
+<li><b><code>transition_params</code></b>: A [num_tags, num_tags] transition matrix. This is either provided by the caller or created in this function.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.crf.crf_unary_scoretag_indices-sequence_lengths-inputs"><a name="//apple_ref/cpp/Function/crf_unary_score" class="dashAnchor"></a><code id="crf_unary_score">tf.contrib.crf.crf_unary_score(tag_indices, sequence_lengths, inputs)</code></h3>
+<p>Computes the unary scores of tag sequences.</p>
+<h5 id="args-3">Args:</h5>
+<ul>
+<li><b><code>tag_indices</code></b>: A [batch_size, max_seq_len] matrix of tag indices.</li>
+<li><b><code>sequence_lengths</code></b>: A [batch_size] vector of true sequence lengths.</li>
+<li><b><code>inputs</code></b>: A [batch_size, max_seq_len, num_tags] tensor of unary potentials.</li>
+</ul>
+<h5 id="returns-3">Returns:</h5>
+<ul>
+<li><b><code>unary_scores</code></b>: A [batch_size] vector of unary scores.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.crf.crf_binary_scoretag_indices-sequence_lengths-transition_params"><a name="//apple_ref/cpp/Function/crf_binary_score" class="dashAnchor"></a><code id="crf_binary_score">tf.contrib.crf.crf_binary_score(tag_indices, sequence_lengths, transition_params)</code></h3>
+<p>Computes the binary scores of tag sequences.</p>
+<h5 id="args-4">Args:</h5>
+<ul>
+<li><b><code>tag_indices</code></b>: A [batch_size, max_seq_len] matrix of tag indices.</li>
+<li><b><code>sequence_lengths</code></b>: A [batch_size] vector of true sequence lengths.</li>
+<li><b><code>transition_params</code></b>: A [num_tags, num_tags] matrix of binary potentials.</li>
+</ul>
+<h5 id="returns-4">Returns:</h5>
+<ul>
+<li><b><code>binary_scores</code></b>: A [batch_size] vector of binary scores.</li>
+</ul>
+<hr />
+<h3 id="class-tf.contrib.crf.crfforwardrnncell"><a name="//apple_ref/cpp/Class/CrfForwardRnnCell" class="dashAnchor"></a><code id="CrfForwardRnnCell">class tf.contrib.crf.CrfForwardRnnCell</code></h3>
+<p>Computes the alpha values in a linear-chain CRF.</p>
+<p>See http://www.cs.columbia.edu/~mcollins/fb.pdf for reference. - - -</p>
+<h4 id="tf.contrib.crf.crfforwardrnncell.__call__inputs-state-scopenone"><code id="CrfForwardRnnCell.__call__">tf.contrib.crf.CrfForwardRnnCell.__call__(inputs, state, scope=None)</code></h4>
+<p>Build the CrfForwardRnnCell.</p>
+<h5 id="args-5">Args:</h5>
+<ul>
+<li><b><code>inputs</code></b>: A [batch_size, num_tags] matrix of unary potentials.</li>
+<li><b><code>state</code></b>: A [batch_size, num_tags] matrix containing the previous alpha values.</li>
+<li><b><code>scope</code></b>: Unused variable scope of this cell.</li>
+</ul>
+<h5 id="returns-5">Returns:</h5>
+<p>new_alphas, new_alphas: A pair of [batch_size, num_tags] matrices values containing the new alpha values.</p>
+<hr />
+<h4 id="tf.contrib.crf.crfforwardrnncell.__init__transition_params"><code id="CrfForwardRnnCell.__init__">tf.contrib.crf.CrfForwardRnnCell.__init__(transition_params)</code></h4>
+<p>Initialize the CrfForwardRnnCell.</p>
+<h5 id="args-6">Args:</h5>
+<ul>
+<li><b><code>transition_params</code></b>: A [num_tags, num_tags] matrix of binary potentials. This matrix is expanded into a [1, num_tags, num_tags] in preparation for the broadcast summation occurring within the cell.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.crf.crfforwardrnncell.output_size"><code id="CrfForwardRnnCell.output_size">tf.contrib.crf.CrfForwardRnnCell.output_size</code></h4>
+<hr />
+<h4 id="tf.contrib.crf.crfforwardrnncell.state_size"><code id="CrfForwardRnnCell.state_size">tf.contrib.crf.CrfForwardRnnCell.state_size</code></h4>
+<hr />
+<h4 id="tf.contrib.crf.crfforwardrnncell.zero_statebatch_size-dtype"><code id="CrfForwardRnnCell.zero_state">tf.contrib.crf.CrfForwardRnnCell.zero_state(batch_size, dtype)</code></h4>
+<p>Return zero-filled state tensor(s).</p>
+<h5 id="args-7">Args:</h5>
+<ul>
+<li><b><code>batch_size</code></b>: int, float, or unit Tensor representing the batch size.</li>
+<li><b><code>dtype</code></b>: the data type to use for the state.</li>
+</ul>
+<h5 id="returns-6">Returns:</h5>
+<p>If <code>state_size</code> is an int or TensorShape, then the return value is a <code>N-D</code> tensor of shape <code>[batch_size x state_size]</code> filled with zeros.</p>
+<p>If <code>state_size</code> is a nested list or tuple, then the return value is a nested list or tuple (of the same structure) of <code>2-D</code> tensors with the shapes <code>[batch_size x s]</code> for each s in <code>state_size</code>.</p>
+<hr />
+<h3 id="tf.contrib.crf.viterbi_decodescore-transition_params"><a name="//apple_ref/cpp/Function/viterbi_decode" class="dashAnchor"></a><code id="viterbi_decode">tf.contrib.crf.viterbi_decode(score, transition_params)</code></h3>
+<p>Decode the highest scoring sequence of tags outside of TensorFlow.</p>
+<p>This should only be used at test time.</p>
+<h5 id="args-8">Args:</h5>
+<ul>
+<li><b><code>score</code></b>: A [seq_len, num_tags] matrix of unary potentials.</li>
+<li><b><code>transition_params</code></b>: A [num_tags, num_tags] matrix of binary potentials.</li>
+</ul>
+<h5 id="returns-7">Returns:</h5>
+<ul>
+<li><b><code>viterbi</code></b>: A [seq_len] list of integers containing the highest scoring tag indicies.</li>
+<li><b><code>viterbi_score</code></b>: A float containing the score for the Viterbi sequence.</li>
+</ul>

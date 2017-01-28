@@ -1,0 +1,423 @@
+<!-- This file is machine generated: DO NOT EDIT! -->
+<h1 id="summary-operations">Summary Operations</h1>
+<p>[TOC]</p>
+<h2 id="generation-of-summaries.">Generation of summaries.</h2>
+<h3 id="class-for-writing-summaries">Class for writing Summaries</h3>
+<hr />
+<h3 id="class-tf.summary.filewriter"><a name="//apple_ref/cpp/Class/FileWriter" class="dashAnchor"></a><code id="FileWriter">class tf.summary.FileWriter</code></h3>
+<p>Writes <code>Summary</code> protocol buffers to event files.</p>
+<p>The <code>FileWriter</code> class provides a mechanism to create an event file in a given directory and add summaries and events to it. The class updates the file contents asynchronously. This allows a training program to call methods to add data to the file directly from the training loop, without slowing down training.</p>
+<hr />
+<h4 id="tf.summary.filewriter.__init__logdir-graphnone-max_queue10-flush_secs120-graph_defnone"><code id="FileWriter.__init__">tf.summary.FileWriter.__init__(logdir, graph=None, max_queue=10, flush_secs=120, graph_def=None)</code></h4>
+<p>Creates a <code>FileWriter</code> and an event file.</p>
+<p>On construction the summary writer creates a new event file in <code>logdir</code>. This event file will contain <code>Event</code> protocol buffers constructed when you call one of the following functions: <code>add_summary()</code>, <code>add_session_log()</code>, <code>add_event()</code>, or <code>add_graph()</code>.</p>
+<p>If you pass a <code>Graph</code> to the constructor it is added to the event file. (This is equivalent to calling <code>add_graph()</code> later).</p>
+<p>TensorBoard will pick the graph from the file and display it graphically so you can interactively explore the graph you built. You will usually pass the graph from the session in which you launched it:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">...create a graph...
+<span class="co"># Launch the graph in a session.</span>
+sess <span class="op">=</span> tf.Session()
+<span class="co"># Create a summary writer, add the &#39;graph&#39; to the event file.</span>
+writer <span class="op">=</span> tf.summary.FileWriter(<span class="op">&lt;</span>some<span class="op">-</span>directory<span class="op">&gt;</span>, sess.graph)</code></pre></div>
+<p>The other arguments to the constructor control the asynchronous writes to the event file:</p>
+<ul>
+<li><code>flush_secs</code>: How often, in seconds, to flush the added summaries and events to disk.</li>
+<li><code>max_queue</code>: Maximum number of summaries or events pending to be written to disk before one of the 'add' calls block.</li>
+</ul>
+<h5 id="args">Args:</h5>
+<ul>
+<li><b><code>logdir</code></b>: A string. Directory where event file will be written.</li>
+<li><b><code>graph</code></b>: A <code>Graph</code> object, such as <code>sess.graph</code>.</li>
+<li><b><code>max_queue</code></b>: Integer. Size of the queue for pending events and summaries.</li>
+<li><b><code>flush_secs</code></b>: Number. How often, in seconds, to flush the pending events and summaries to disk.</li>
+<li><b><code>graph_def</code></b>: DEPRECATED: Use the <code>graph</code> argument instead.</li>
+</ul>
+<hr />
+<h4 id="tf.summary.filewriter.add_summarysummary-global_stepnone"><code id="FileWriter.add_summary">tf.summary.FileWriter.add_summary(summary, global_step=None)</code></h4>
+<p>Adds a <code>Summary</code> protocol buffer to the event file.</p>
+<p>This method wraps the provided summary in an <code>Event</code> protocol buffer and adds it to the event file.</p>
+<p>You can pass the result of evaluating any summary op, using <a href="client.md#Session.run"><code>Session.run()</code></a> or <a href="framework.md#Tensor.eval"><code>Tensor.eval()</code></a>, to this function. Alternatively, you can pass a <code>tf.Summary</code> protocol buffer that you populate with your own data. The latter is commonly done to report evaluation results in event files.</p>
+<h5 id="args-1">Args:</h5>
+<ul>
+<li><b><code>summary</code></b>: A <code>Summary</code> protocol buffer, optionally serialized as a string.</li>
+<li><b><code>global_step</code></b>: Number. Optional global step value to record with the summary.</li>
+</ul>
+<hr />
+<h4 id="tf.summary.filewriter.add_session_logsession_log-global_stepnone"><code id="FileWriter.add_session_log">tf.summary.FileWriter.add_session_log(session_log, global_step=None)</code></h4>
+<p>Adds a <code>SessionLog</code> protocol buffer to the event file.</p>
+<p>This method wraps the provided session in an <code>Event</code> protocol buffer and adds it to the event file.</p>
+<h5 id="args-2">Args:</h5>
+<ul>
+<li><b><code>session_log</code></b>: A <code>SessionLog</code> protocol buffer.</li>
+<li><b><code>global_step</code></b>: Number. Optional global step value to record with the summary.</li>
+</ul>
+<hr />
+<h4 id="tf.summary.filewriter.add_eventevent"><code id="FileWriter.add_event">tf.summary.FileWriter.add_event(event)</code></h4>
+<p>Adds an event to the event file.</p>
+<h5 id="args-3">Args:</h5>
+<ul>
+<li><b><code>event</code></b>: An <code>Event</code> protocol buffer.</li>
+</ul>
+<hr />
+<h4 id="tf.summary.filewriter.add_graphgraph-global_stepnone-graph_defnone"><code id="FileWriter.add_graph">tf.summary.FileWriter.add_graph(graph, global_step=None, graph_def=None)</code></h4>
+<p>Adds a <code>Graph</code> to the event file.</p>
+<p>The graph described by the protocol buffer will be displayed by TensorBoard. Most users pass a graph in the constructor instead.</p>
+<h5 id="args-4">Args:</h5>
+<ul>
+<li><b><code>graph</code></b>: A <code>Graph</code> object, such as <code>sess.graph</code>.</li>
+<li><b><code>global_step</code></b>: Number. Optional global step counter to record with the graph.</li>
+<li><b><code>graph_def</code></b>: DEPRECATED. Use the <code>graph</code> parameter instead.</li>
+</ul>
+<h5 id="raises">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If both graph and graph_def are passed to the method.</li>
+</ul>
+<hr />
+<h4 id="tf.summary.filewriter.add_run_metadatarun_metadata-tag-global_stepnone"><code id="FileWriter.add_run_metadata">tf.summary.FileWriter.add_run_metadata(run_metadata, tag, global_step=None)</code></h4>
+<p>Adds a metadata information for a single session.run() call.</p>
+<h5 id="args-5">Args:</h5>
+<ul>
+<li><b><code>run_metadata</code></b>: A <code>RunMetadata</code> protobuf object.</li>
+<li><b><code>tag</code></b>: The tag name for this metadata.</li>
+<li><b><code>global_step</code></b>: Number. Optional global step counter to record with the StepStats.</li>
+</ul>
+<h5 id="raises-1">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If the provided tag was already used for this type of event.</li>
+</ul>
+<hr />
+<h4 id="tf.summary.filewriter.get_logdir"><code id="FileWriter.get_logdir">tf.summary.FileWriter.get_logdir()</code></h4>
+<p>Returns the directory where event file will be written.</p>
+<hr />
+<h4 id="tf.summary.filewriter.flush"><code id="FileWriter.flush">tf.summary.FileWriter.flush()</code></h4>
+<p>Flushes the event file to disk.</p>
+<p>Call this method to make sure that all pending events have been written to disk.</p>
+<hr />
+<h4 id="tf.summary.filewriter.close"><code id="FileWriter.close">tf.summary.FileWriter.close()</code></h4>
+<p>Flushes the event file to disk and close the file.</p>
+<p>Call this method when you do not need the summary writer anymore.</p>
+<h4 id="other-methods">Other Methods</h4>
+<hr />
+<h4 id="tf.summary.filewriter.reopen"><code id="FileWriter.reopen">tf.summary.FileWriter.reopen()</code></h4>
+<p>Reopens the EventFileWriter.</p>
+<p>Can be called after <code>close()</code> to add more events in the same directory. The events will go into a new events file.</p>
+<p>Does nothing if the EventFileWriter was not closed.</p>
+<hr />
+<h3 id="class-tf.summary.filewritercache"><a name="//apple_ref/cpp/Class/FileWriterCache" class="dashAnchor"></a><code id="FileWriterCache">class tf.summary.FileWriterCache</code></h3>
+<p>Cache for file writers.</p>
+<p>This class caches file writers, one per directory. - - -</p>
+<h4 id="tf.summary.filewritercache.clear"><code id="FileWriterCache.clear">tf.summary.FileWriterCache.clear()</code></h4>
+<p>Clear cached summary writers. Currently only used for unit tests.</p>
+<hr />
+<h4 id="tf.summary.filewritercache.getlogdir"><code id="FileWriterCache.get">tf.summary.FileWriterCache.get(logdir)</code></h4>
+<p>Returns the FileWriter for the specified directory.</p>
+<h5 id="args-6">Args:</h5>
+<ul>
+<li><b><code>logdir</code></b>: str, name of the directory.</li>
+</ul>
+<h5 id="returns">Returns:</h5>
+<p>A <code>FileWriter</code>.</p>
+<h3 id="summary-ops">Summary Ops</h3>
+<hr />
+<h3 id="tf.summary.tensor_summaryname-tensor-summary_descriptionnone-collectionsnone"><a name="//apple_ref/cpp/Function/tensor_summary" class="dashAnchor"></a><code id="tensor_summary">tf.summary.tensor_summary(name, tensor, summary_description=None, collections=None)</code></h3>
+<p>Outputs a <code>Summary</code> protocol buffer with a serialized tensor.proto.</p>
+<p>The generated <a href="https://www.tensorflow.org/code/tensorflow/core/framework/summary.proto"><code>Summary</code></a> has one summary value containing the input tensor.</p>
+<h5 id="args-7">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for the generated node. Will also serve as the series name in TensorBoard.</li>
+<li><b><code>tensor</code></b>: A tensor of any type and shape to serialize.</li>
+<li><b><code>summary_description</code></b>: Optional summary_pb2.SummaryDescription()</li>
+<li><b><code>collections</code></b>: Optional list of graph collections keys. The new summary op is added to these collections. Defaults to <code>[GraphKeys.SUMMARIES]</code>.</li>
+</ul>
+<h5 id="returns-1">Returns:</h5>
+<p>A scalar <code>Tensor</code> of type <code>string</code>. The serialized <code>Summary</code> protocol buffer.</p>
+<hr />
+<h3 id="tf.summary.scalarname-tensor-collectionsnone"><a name="//apple_ref/cpp/Function/scalar" class="dashAnchor"></a><code id="scalar">tf.summary.scalar(name, tensor, collections=None)</code></h3>
+<p>Outputs a <code>Summary</code> protocol buffer containing a single scalar value.</p>
+<p>The generated Summary has a Tensor.proto containing the input Tensor.</p>
+<h5 id="args-8">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for the generated node. Will also serve as the series name in TensorBoard.</li>
+<li><b><code>tensor</code></b>: A real numeric Tensor containing a single value.</li>
+<li><b><code>collections</code></b>: Optional list of graph collections keys. The new summary op is added to these collections. Defaults to <code>[GraphKeys.SUMMARIES]</code>.</li>
+</ul>
+<h5 id="returns-2">Returns:</h5>
+<p>A scalar <code>Tensor</code> of type <code>string</code>. Which contains a <code>Summary</code> protobuf.</p>
+<h5 id="raises-2">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If tensor has the wrong shape or type.</li>
+</ul>
+<hr />
+<h3 id="tf.summary.histogramname-values-collectionsnone"><a name="//apple_ref/cpp/Function/histogram" class="dashAnchor"></a><code id="histogram">tf.summary.histogram(name, values, collections=None)</code></h3>
+<p>Outputs a <code>Summary</code> protocol buffer with a histogram.</p>
+<p>The generated <a href="https://www.tensorflow.org/code/tensorflow/core/framework/summary.proto"><code>Summary</code></a> has one summary value containing a histogram for <code>values</code>.</p>
+<p>This op reports an <code>InvalidArgument</code> error if any value is not finite.</p>
+<h5 id="args-9">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for the generated node. Will also serve as a series name in TensorBoard.</li>
+<li><b><code>values</code></b>: A real numeric <code>Tensor</code>. Any shape. Values to use to build the histogram.</li>
+<li><b><code>collections</code></b>: Optional list of graph collections keys. The new summary op is added to these collections. Defaults to <code>[GraphKeys.SUMMARIES]</code>.</li>
+</ul>
+<h5 id="returns-3">Returns:</h5>
+<p>A scalar <code>Tensor</code> of type <code>string</code>. The serialized <code>Summary</code> protocol buffer.</p>
+<hr />
+<h3 id="tf.summary.audioname-tensor-sample_rate-max_outputs3-collectionsnone"><a name="//apple_ref/cpp/Function/audio" class="dashAnchor"></a><code id="audio">tf.summary.audio(name, tensor, sample_rate, max_outputs=3, collections=None)</code></h3>
+<p>Outputs a <code>Summary</code> protocol buffer with audio.</p>
+<p>The summary has up to <code>max_outputs</code> summary values containing audio. The audio is built from <code>tensor</code> which must be 3-D with shape <code>[batch_size, frames, channels]</code> or 2-D with shape <code>[batch_size, frames]</code>. The values are assumed to be in the range of <code>[-1.0, 1.0]</code> with a sample rate of <code>sample_rate</code>.</p>
+<p>The <code>tag</code> in the outputted Summary.Value protobufs is generated based on the name, with a suffix depending on the max_outputs setting:</p>
+<ul>
+<li>If <code>max_outputs</code> is 1, the summary value tag is '<em>name</em>/audio'.</li>
+<li>If <code>max_outputs</code> is greater than 1, the summary value tags are generated sequentially as '<em>name</em>/audio/0', '<em>name</em>/audio/1', etc</li>
+</ul>
+<h5 id="args-10">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for the generated node. Will also serve as a series name in TensorBoard.</li>
+<li><b><code>tensor</code></b>: A 3-D <code>float32</code> <code>Tensor</code> of shape <code>[batch_size, frames, channels]</code> or a 2-D <code>float32</code> <code>Tensor</code> of shape <code>[batch_size, frames]</code>.</li>
+<li><b><code>sample_rate</code></b>: A Scalar <code>float32</code> <code>Tensor</code> indicating the sample rate of the signal in hertz.</li>
+<li><b><code>max_outputs</code></b>: Max number of batch elements to generate audio for.</li>
+<li><b><code>collections</code></b>: Optional list of ops.GraphKeys. The collections to add the summary to. Defaults to [_ops.GraphKeys.SUMMARIES]</li>
+</ul>
+<h5 id="returns-4">Returns:</h5>
+<p>A scalar <code>Tensor</code> of type <code>string</code>. The serialized <code>Summary</code> protocol buffer.</p>
+<hr />
+<h3 id="tf.summary.imagename-tensor-max_outputs3-collectionsnone"><a name="//apple_ref/cpp/Function/image" class="dashAnchor"></a><code id="image">tf.summary.image(name, tensor, max_outputs=3, collections=None)</code></h3>
+<p>Outputs a <code>Summary</code> protocol buffer with images.</p>
+<p>The summary has up to <code>max_outputs</code> summary values containing images. The images are built from <code>tensor</code> which must be 4-D with shape <code>[batch_size, height, width, channels]</code> and where <code>channels</code> can be:</p>
+<ul>
+<li>1: <code>tensor</code> is interpreted as Grayscale.</li>
+<li>3: <code>tensor</code> is interpreted as RGB.</li>
+<li>4: <code>tensor</code> is interpreted as RGBA.</li>
+</ul>
+<p>The images have the same number of channels as the input tensor. For float input, the values are normalized one image at a time to fit in the range <code>[0, 255]</code>. <code>uint8</code> values are unchanged. The op uses two different normalization algorithms:</p>
+<ul>
+<li><p>If the input values are all positive, they are rescaled so the largest one is 255.</p></li>
+<li><p>If any input value is negative, the values are shifted so input value 0.0 is at 127. They are then rescaled so that either the smallest value is 0, or the largest one is 255.</p></li>
+</ul>
+<p>The <code>tag</code> in the outputted Summary.Value protobufs is generated based on the name, with a suffix depending on the max_outputs setting:</p>
+<ul>
+<li>If <code>max_outputs</code> is 1, the summary value tag is '<em>name</em>/image'.</li>
+<li>If <code>max_outputs</code> is greater than 1, the summary value tags are generated sequentially as '<em>name</em>/image/0', '<em>name</em>/image/1', etc.</li>
+</ul>
+<h5 id="args-11">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for the generated node. Will also serve as a series name in TensorBoard.</li>
+<li><b><code>tensor</code></b>: A 4-D <code>uint8</code> or <code>float32</code> <code>Tensor</code> of shape <code>[batch_size, height, width, channels]</code> where <code>channels</code> is 1, 3, or 4.</li>
+<li><b><code>max_outputs</code></b>: Max number of batch elements to generate images for.</li>
+<li><b><code>collections</code></b>: Optional list of ops.GraphKeys. The collections to add the summary to. Defaults to [_ops.GraphKeys.SUMMARIES]</li>
+</ul>
+<h5 id="returns-5">Returns:</h5>
+<p>A scalar <code>Tensor</code> of type <code>string</code>. The serialized <code>Summary</code> protocol buffer.</p>
+<hr />
+<h3 id="tf.summary.mergeinputs-collectionsnone-namenone"><a name="//apple_ref/cpp/Function/merge" class="dashAnchor"></a><code id="merge">tf.summary.merge(inputs, collections=None, name=None)</code></h3>
+<p>Merges summaries.</p>
+<p>This op creates a <a href="https://www.tensorflow.org/code/tensorflow/core/framework/summary.proto"><code>Summary</code></a> protocol buffer that contains the union of all the values in the input summaries.</p>
+<p>When the Op is run, it reports an <code>InvalidArgument</code> error if multiple values in the summaries to merge use the same tag.</p>
+<h5 id="args-12">Args:</h5>
+<ul>
+<li><b><code>inputs</code></b>: A list of <code>string</code> <code>Tensor</code> objects containing serialized <code>Summary</code> protocol buffers.</li>
+<li><b><code>collections</code></b>: Optional list of graph collections keys. The new summary op is added to these collections. Defaults to <code>[]</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-6">Returns:</h5>
+<p>A scalar <code>Tensor</code> of type <code>string</code>. The serialized <code>Summary</code> protocol buffer resulting from the merging.</p>
+<hr />
+<h3 id="tf.summary.merge_allkeysummaries"><a name="//apple_ref/cpp/Function/merge_all" class="dashAnchor"></a><code id="merge_all">tf.summary.merge_all(key='summaries')</code></h3>
+<p>Merges all summaries collected in the default graph.</p>
+<h5 id="args-13">Args:</h5>
+<ul>
+<li><b><code>key</code></b>: <code>GraphKey</code> used to collect the summaries. Defaults to <code>GraphKeys.SUMMARIES</code>.</li>
+</ul>
+<h5 id="returns-7">Returns:</h5>
+<p>If no summaries were collected, returns None. Otherwise returns a scalar <code>Tensor</code> of type <code>string</code> containing the serialized <code>Summary</code> protocol buffer resulting from the merging.</p>
+<h2 id="utilities">Utilities</h2>
+<hr />
+<h3 id="tf.summary.get_summary_descriptionnode_def"><a name="//apple_ref/cpp/Function/get_summary_description" class="dashAnchor"></a><code id="get_summary_description">tf.summary.get_summary_description(node_def)</code></h3>
+<p>Given a TensorSummary node_def, retrieve its SummaryDescription.</p>
+<p>When a Summary op is instantiated, a SummaryDescription of associated metadata is stored in its NodeDef. This method retrieves the description.</p>
+<h5 id="args-14">Args:</h5>
+<ul>
+<li><b><code>node_def</code></b>: the node_def_pb2.NodeDef of a TensorSummary op</li>
+</ul>
+<h5 id="returns-8">Returns:</h5>
+<p>a summary_pb2.SummaryDescription</p>
+<h5 id="raises-3">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if the node is not a summary op.</li>
+</ul>
+<h2 id="other-functions-and-classes">Other Functions and Classes</h2>
+<hr />
+<h3 id="class-tf.summary.summarydescription"><a name="//apple_ref/cpp/Class/SummaryDescription" class="dashAnchor"></a><code id="SummaryDescription">class tf.summary.SummaryDescription</code></h3>
+<hr />
+<h4 id="tf.summary.summarydescription.bytesize"><code id="SummaryDescription.ByteSize">tf.summary.SummaryDescription.ByteSize()</code></h4>
+<hr />
+<h4 id="tf.summary.summarydescription.clear"><code id="SummaryDescription.Clear">tf.summary.SummaryDescription.Clear()</code></h4>
+<hr />
+<h4 id="tf.summary.summarydescription.clearextensionextension_handle"><code id="SummaryDescription.ClearExtension">tf.summary.SummaryDescription.ClearExtension(extension_handle)</code></h4>
+<hr />
+<h4 id="tf.summary.summarydescription.clearfieldfield_name"><code id="SummaryDescription.ClearField">tf.summary.SummaryDescription.ClearField(field_name)</code></h4>
+<hr />
+<h4 id="tf.summary.summarydescription.copyfromother_msg"><code id="SummaryDescription.CopyFrom">tf.summary.SummaryDescription.CopyFrom(other_msg)</code></h4>
+<p>Copies the content of the specified message into the current message.</p>
+<p>The method clears the current message and then merges the specified message using MergeFrom.</p>
+<h5 id="args-15">Args:</h5>
+<ul>
+<li><b><code>other_msg</code></b>: Message to copy into the current one.</li>
+</ul>
+<hr />
+<h4 id="tf.summary.summarydescription.discardunknownfields"><code id="SummaryDescription.DiscardUnknownFields">tf.summary.SummaryDescription.DiscardUnknownFields()</code></h4>
+<hr />
+<h4 id="tf.summary.summarydescription.findinitializationerrors"><code id="SummaryDescription.FindInitializationErrors">tf.summary.SummaryDescription.FindInitializationErrors()</code></h4>
+<p>Finds required fields which are not initialized.</p>
+<h5 id="returns-9">Returns:</h5>
+<p>A list of strings. Each string is a path to an uninitialized field from the top-level message, e.g. &quot;foo.bar[5].baz&quot;.</p>
+<hr />
+<h4 id="tf.summary.summarydescription.fromstrings"><code id="SummaryDescription.FromString">tf.summary.SummaryDescription.FromString(s)</code></h4>
+<hr />
+<h4 id="tf.summary.summarydescription.hasextensionextension_handle"><code id="SummaryDescription.HasExtension">tf.summary.SummaryDescription.HasExtension(extension_handle)</code></h4>
+<hr />
+<h4 id="tf.summary.summarydescription.hasfieldfield_name"><code id="SummaryDescription.HasField">tf.summary.SummaryDescription.HasField(field_name)</code></h4>
+<hr />
+<h4 id="tf.summary.summarydescription.isinitializederrorsnone"><code id="SummaryDescription.IsInitialized">tf.summary.SummaryDescription.IsInitialized(errors=None)</code></h4>
+<p>Checks if all required fields of a message are set.</p>
+<h5 id="args-16">Args:</h5>
+<ul>
+<li><b><code>errors</code></b>: A list which, if provided, will be populated with the field paths of all missing required fields.</li>
+</ul>
+<h5 id="returns-10">Returns:</h5>
+<p>True iff the specified message has all required fields set.</p>
+<hr />
+<h4 id="tf.summary.summarydescription.listfields"><code id="SummaryDescription.ListFields">tf.summary.SummaryDescription.ListFields()</code></h4>
+<hr />
+<h4 id="tf.summary.summarydescription.mergefrommsg"><code id="SummaryDescription.MergeFrom">tf.summary.SummaryDescription.MergeFrom(msg)</code></h4>
+<hr />
+<h4 id="tf.summary.summarydescription.mergefromstringserialized"><code id="SummaryDescription.MergeFromString">tf.summary.SummaryDescription.MergeFromString(serialized)</code></h4>
+<hr />
+<h4 id="tf.summary.summarydescription.parsefromstringserialized"><code id="SummaryDescription.ParseFromString">tf.summary.SummaryDescription.ParseFromString(serialized)</code></h4>
+<p>Parse serialized protocol buffer data into this message.</p>
+<p>Like MergeFromString(), except we clear the object first and do not return the value that MergeFromString returns.</p>
+<hr />
+<h4 id="tf.summary.summarydescription.registerextensionextension_handle"><code id="SummaryDescription.RegisterExtension">tf.summary.SummaryDescription.RegisterExtension(extension_handle)</code></h4>
+<hr />
+<h4 id="tf.summary.summarydescription.serializepartialtostring"><code id="SummaryDescription.SerializePartialToString">tf.summary.SummaryDescription.SerializePartialToString()</code></h4>
+<hr />
+<h4 id="tf.summary.summarydescription.serializetostring"><code id="SummaryDescription.SerializeToString">tf.summary.SummaryDescription.SerializeToString()</code></h4>
+<hr />
+<h4 id="tf.summary.summarydescription.setinparent"><code id="SummaryDescription.SetInParent">tf.summary.SummaryDescription.SetInParent()</code></h4>
+<p>Sets the _cached_byte_size_dirty bit to true, and propagates this to our listener iff this was a state change.</p>
+<hr />
+<h4 id="tf.summary.summarydescription.whichoneofoneof_name"><code id="SummaryDescription.WhichOneof">tf.summary.SummaryDescription.WhichOneof(oneof_name)</code></h4>
+<p>Returns the name of the currently set field inside a oneof, or None.</p>
+<hr />
+<h4 id="tf.summary.summarydescription.__deepcopy__memonone"><code id="SummaryDescription.__deepcopy__">tf.summary.SummaryDescription.__deepcopy__(memo=None)</code></h4>
+<hr />
+<h4 id="tf.summary.summarydescription.__eq__other"><code id="SummaryDescription.__eq__">tf.summary.SummaryDescription.__eq__(other)</code></h4>
+<hr />
+<h4 id="tf.summary.summarydescription.__getstate__"><code id="SummaryDescription.__getstate__">tf.summary.SummaryDescription.__getstate__()</code></h4>
+<p>Support the pickle protocol.</p>
+<hr />
+<h4 id="tf.summary.summarydescription.__hash__"><code id="SummaryDescription.__hash__">tf.summary.SummaryDescription.__hash__()</code></h4>
+<hr />
+<h4 id="tf.summary.summarydescription.__init__kwargs"><code id="SummaryDescription.__init__">tf.summary.SummaryDescription.__init__(**kwargs)</code></h4>
+<hr />
+<h4 id="tf.summary.summarydescription.__ne__other_msg"><code id="SummaryDescription.__ne__">tf.summary.SummaryDescription.__ne__(other_msg)</code></h4>
+<hr />
+<h4 id="tf.summary.summarydescription.__repr__"><code id="SummaryDescription.__repr__">tf.summary.SummaryDescription.__repr__()</code></h4>
+<hr />
+<h4 id="tf.summary.summarydescription.__setstate__state"><code id="SummaryDescription.__setstate__">tf.summary.SummaryDescription.__setstate__(state)</code></h4>
+<p>Support the pickle protocol.</p>
+<hr />
+<h4 id="tf.summary.summarydescription.__str__"><code id="SummaryDescription.__str__">tf.summary.SummaryDescription.__str__()</code></h4>
+<hr />
+<h4 id="tf.summary.summarydescription.__unicode__"><code id="SummaryDescription.__unicode__">tf.summary.SummaryDescription.__unicode__()</code></h4>
+<hr />
+<h4 id="tf.summary.summarydescription.type_hint"><code id="SummaryDescription.type_hint">tf.summary.SummaryDescription.type_hint</code></h4>
+<p>Magic attribute generated for &quot;type_hint&quot; proto field.</p>
+<hr />
+<h3 id="class-tf.summary.taggedrunmetadata"><a name="//apple_ref/cpp/Class/TaggedRunMetadata" class="dashAnchor"></a><code id="TaggedRunMetadata">class tf.summary.TaggedRunMetadata</code></h3>
+<hr />
+<h4 id="tf.summary.taggedrunmetadata.bytesize"><code id="TaggedRunMetadata.ByteSize">tf.summary.TaggedRunMetadata.ByteSize()</code></h4>
+<hr />
+<h4 id="tf.summary.taggedrunmetadata.clear"><code id="TaggedRunMetadata.Clear">tf.summary.TaggedRunMetadata.Clear()</code></h4>
+<hr />
+<h4 id="tf.summary.taggedrunmetadata.clearextensionextension_handle"><code id="TaggedRunMetadata.ClearExtension">tf.summary.TaggedRunMetadata.ClearExtension(extension_handle)</code></h4>
+<hr />
+<h4 id="tf.summary.taggedrunmetadata.clearfieldfield_name"><code id="TaggedRunMetadata.ClearField">tf.summary.TaggedRunMetadata.ClearField(field_name)</code></h4>
+<hr />
+<h4 id="tf.summary.taggedrunmetadata.copyfromother_msg"><code id="TaggedRunMetadata.CopyFrom">tf.summary.TaggedRunMetadata.CopyFrom(other_msg)</code></h4>
+<p>Copies the content of the specified message into the current message.</p>
+<p>The method clears the current message and then merges the specified message using MergeFrom.</p>
+<h5 id="args-17">Args:</h5>
+<ul>
+<li><b><code>other_msg</code></b>: Message to copy into the current one.</li>
+</ul>
+<hr />
+<h4 id="tf.summary.taggedrunmetadata.discardunknownfields"><code id="TaggedRunMetadata.DiscardUnknownFields">tf.summary.TaggedRunMetadata.DiscardUnknownFields()</code></h4>
+<hr />
+<h4 id="tf.summary.taggedrunmetadata.findinitializationerrors"><code id="TaggedRunMetadata.FindInitializationErrors">tf.summary.TaggedRunMetadata.FindInitializationErrors()</code></h4>
+<p>Finds required fields which are not initialized.</p>
+<h5 id="returns-11">Returns:</h5>
+<p>A list of strings. Each string is a path to an uninitialized field from the top-level message, e.g. &quot;foo.bar[5].baz&quot;.</p>
+<hr />
+<h4 id="tf.summary.taggedrunmetadata.fromstrings"><code id="TaggedRunMetadata.FromString">tf.summary.TaggedRunMetadata.FromString(s)</code></h4>
+<hr />
+<h4 id="tf.summary.taggedrunmetadata.hasextensionextension_handle"><code id="TaggedRunMetadata.HasExtension">tf.summary.TaggedRunMetadata.HasExtension(extension_handle)</code></h4>
+<hr />
+<h4 id="tf.summary.taggedrunmetadata.hasfieldfield_name"><code id="TaggedRunMetadata.HasField">tf.summary.TaggedRunMetadata.HasField(field_name)</code></h4>
+<hr />
+<h4 id="tf.summary.taggedrunmetadata.isinitializederrorsnone"><code id="TaggedRunMetadata.IsInitialized">tf.summary.TaggedRunMetadata.IsInitialized(errors=None)</code></h4>
+<p>Checks if all required fields of a message are set.</p>
+<h5 id="args-18">Args:</h5>
+<ul>
+<li><b><code>errors</code></b>: A list which, if provided, will be populated with the field paths of all missing required fields.</li>
+</ul>
+<h5 id="returns-12">Returns:</h5>
+<p>True iff the specified message has all required fields set.</p>
+<hr />
+<h4 id="tf.summary.taggedrunmetadata.listfields"><code id="TaggedRunMetadata.ListFields">tf.summary.TaggedRunMetadata.ListFields()</code></h4>
+<hr />
+<h4 id="tf.summary.taggedrunmetadata.mergefrommsg"><code id="TaggedRunMetadata.MergeFrom">tf.summary.TaggedRunMetadata.MergeFrom(msg)</code></h4>
+<hr />
+<h4 id="tf.summary.taggedrunmetadata.mergefromstringserialized"><code id="TaggedRunMetadata.MergeFromString">tf.summary.TaggedRunMetadata.MergeFromString(serialized)</code></h4>
+<hr />
+<h4 id="tf.summary.taggedrunmetadata.parsefromstringserialized"><code id="TaggedRunMetadata.ParseFromString">tf.summary.TaggedRunMetadata.ParseFromString(serialized)</code></h4>
+<p>Parse serialized protocol buffer data into this message.</p>
+<p>Like MergeFromString(), except we clear the object first and do not return the value that MergeFromString returns.</p>
+<hr />
+<h4 id="tf.summary.taggedrunmetadata.registerextensionextension_handle"><code id="TaggedRunMetadata.RegisterExtension">tf.summary.TaggedRunMetadata.RegisterExtension(extension_handle)</code></h4>
+<hr />
+<h4 id="tf.summary.taggedrunmetadata.serializepartialtostring"><code id="TaggedRunMetadata.SerializePartialToString">tf.summary.TaggedRunMetadata.SerializePartialToString()</code></h4>
+<hr />
+<h4 id="tf.summary.taggedrunmetadata.serializetostring"><code id="TaggedRunMetadata.SerializeToString">tf.summary.TaggedRunMetadata.SerializeToString()</code></h4>
+<hr />
+<h4 id="tf.summary.taggedrunmetadata.setinparent"><code id="TaggedRunMetadata.SetInParent">tf.summary.TaggedRunMetadata.SetInParent()</code></h4>
+<p>Sets the _cached_byte_size_dirty bit to true, and propagates this to our listener iff this was a state change.</p>
+<hr />
+<h4 id="tf.summary.taggedrunmetadata.whichoneofoneof_name"><code id="TaggedRunMetadata.WhichOneof">tf.summary.TaggedRunMetadata.WhichOneof(oneof_name)</code></h4>
+<p>Returns the name of the currently set field inside a oneof, or None.</p>
+<hr />
+<h4 id="tf.summary.taggedrunmetadata.__deepcopy__memonone"><code id="TaggedRunMetadata.__deepcopy__">tf.summary.TaggedRunMetadata.__deepcopy__(memo=None)</code></h4>
+<hr />
+<h4 id="tf.summary.taggedrunmetadata.__eq__other"><code id="TaggedRunMetadata.__eq__">tf.summary.TaggedRunMetadata.__eq__(other)</code></h4>
+<hr />
+<h4 id="tf.summary.taggedrunmetadata.__getstate__"><code id="TaggedRunMetadata.__getstate__">tf.summary.TaggedRunMetadata.__getstate__()</code></h4>
+<p>Support the pickle protocol.</p>
+<hr />
+<h4 id="tf.summary.taggedrunmetadata.__hash__"><code id="TaggedRunMetadata.__hash__">tf.summary.TaggedRunMetadata.__hash__()</code></h4>
+<hr />
+<h4 id="tf.summary.taggedrunmetadata.__init__kwargs"><code id="TaggedRunMetadata.__init__">tf.summary.TaggedRunMetadata.__init__(**kwargs)</code></h4>
+<hr />
+<h4 id="tf.summary.taggedrunmetadata.__ne__other_msg"><code id="TaggedRunMetadata.__ne__">tf.summary.TaggedRunMetadata.__ne__(other_msg)</code></h4>
+<hr />
+<h4 id="tf.summary.taggedrunmetadata.__repr__"><code id="TaggedRunMetadata.__repr__">tf.summary.TaggedRunMetadata.__repr__()</code></h4>
+<hr />
+<h4 id="tf.summary.taggedrunmetadata.__setstate__state"><code id="TaggedRunMetadata.__setstate__">tf.summary.TaggedRunMetadata.__setstate__(state)</code></h4>
+<p>Support the pickle protocol.</p>
+<hr />
+<h4 id="tf.summary.taggedrunmetadata.__str__"><code id="TaggedRunMetadata.__str__">tf.summary.TaggedRunMetadata.__str__()</code></h4>
+<hr />
+<h4 id="tf.summary.taggedrunmetadata.__unicode__"><code id="TaggedRunMetadata.__unicode__">tf.summary.TaggedRunMetadata.__unicode__()</code></h4>
+<hr />
+<h4 id="tf.summary.taggedrunmetadata.run_metadata"><code id="TaggedRunMetadata.run_metadata">tf.summary.TaggedRunMetadata.run_metadata</code></h4>
+<p>Magic attribute generated for &quot;run_metadata&quot; proto field.</p>
+<hr />
+<h4 id="tf.summary.taggedrunmetadata.tag"><code id="TaggedRunMetadata.tag">tf.summary.TaggedRunMetadata.tag</code></h4>
+<p>Magic attribute generated for &quot;tag&quot; proto field.</p>

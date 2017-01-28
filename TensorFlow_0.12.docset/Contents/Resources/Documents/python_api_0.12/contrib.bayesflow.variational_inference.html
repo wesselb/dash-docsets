@@ -1,0 +1,87 @@
+<!-- This file is machine generated: DO NOT EDIT! -->
+<h1 id="bayesflow-variational-inference-contrib">BayesFlow Variational Inference (contrib)</h1>
+<p>[TOC]</p>
+<p>Variational inference.</p>
+<h2 id="ops">Ops</h2>
+<hr />
+<h3 id="tf.contrib.bayesflow.variational_inference.elbolog_likelihood-variational_with_priornone-keep_batch_dimtrue-formnone-nameelbo"><a name="//apple_ref/cpp/Function/elbo" class="dashAnchor"></a><code id="elbo">tf.contrib.bayesflow.variational_inference.elbo(log_likelihood, variational_with_prior=None, keep_batch_dim=True, form=None, name='ELBO')</code></h3>
+<p>Evidence Lower BOund. <code>log p(x) &gt;= ELBO</code>.</p>
+<p>Optimization objective for inference of hidden variables by variational inference.</p>
+<p>This function is meant to be used in conjunction with <code>StochasticTensor</code>. The user should build out the inference network, using <code>StochasticTensor</code>s as latent variables, and the generative network. <code>elbo</code> at minimum needs <code>p(x|Z)</code> and assumes that all <code>StochasticTensor</code>s upstream of <code>p(x|Z)</code> are the variational distributions. Use <code>register_prior</code> to register <code>Distribution</code> priors for each <code>StochasticTensor</code>. Alternatively, pass in <code>variational_with_prior</code> specifying all variational distributions and their priors.</p>
+<p>Mathematical details:</p>
+<pre><code>log p(x) =  log \int p(x, Z) dZ
+         =  log \int \frac {q(Z)p(x, Z)}{q(Z)} dZ
+         =  log E_q[\frac {p(x, Z)}{q(Z)}]
+         &gt;= E_q[log \frac {p(x, Z)}{q(Z)}] = L[q; p, x]  # ELBO
+
+L[q; p, x] = E_q[log p(x|Z)p(Z)] - E_q[log q(Z)]
+           = E_q[log p(x|Z)p(Z)] + H[q]           (1)
+           = E_q[log p(x|Z)] - KL(q || p)         (2)
+
+H - Entropy
+KL - Kullback-Leibler divergence</code></pre>
+<p>See section 2.2 of Stochastic Variational Inference by Hoffman et al. for more, including the ELBO's equivalence to minimizing <code>KL(q(Z)||p(Z|x))</code> in the fully Bayesian setting. https://arxiv.org/pdf/1206.7051.pdf.</p>
+<p><code>form</code> specifies which form of the ELBO is used. <code>form=ELBOForms.default</code> tries, in order of preference: analytic KL, analytic entropy, sampling.</p>
+<p>Multiple entries in the <code>variational_with_prior</code> dict implies a factorization. e.g. <code>q(Z) = q(z1)q(z2)q(z3)</code>.</p>
+<h5 id="args">Args:</h5>
+<ul>
+<li><b><code>log_likelihood</code></b>: <code>Tensor</code> log p(x|Z).</li>
+<li><b><code>variational_with_prior</code></b>: dict from <code>StochasticTensor</code> q(Z) to <code>Distribution</code> p(Z). If <code>None</code>, defaults to all <code>StochasticTensor</code> objects upstream of <code>log_likelihood</code> with priors registered with <code>register_prior</code>.</li>
+<li><b><code>keep_batch_dim</code></b>: bool. Whether to keep the batch dimension when summing entropy/KL term. When the sample is per data point, this should be True; otherwise (e.g. in a Bayesian NN), this should be False.</li>
+<li><b><code>form</code></b>: ELBOForms constant. Controls how the ELBO is computed. Defaults to ELBOForms.default.</li>
+<li><b><code>name</code></b>: name to prefix ops with.</li>
+</ul>
+<h5 id="returns">Returns:</h5>
+<p><code>Tensor</code> ELBO of the same type and shape as <code>log_likelihood</code>.</p>
+<h5 id="raises">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if variationals in <code>variational_with_prior</code> are not <code>StochasticTensor</code>s or if priors are not <code>Distribution</code>s.</li>
+<li><b><code>TypeError</code></b>: if form is not a valid ELBOForms constant.</li>
+<li><b><code>ValueError</code></b>: if <code>variational_with_prior</code> is None and there are no <code>StochasticTensor</code>s upstream of <code>log_likelihood</code>.</li>
+<li><b><code>ValueError</code></b>: if any variational does not have a prior passed or registered.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.bayesflow.variational_inference.elbo_with_log_jointlog_joint-variationalnone-keep_batch_dimtrue-formnone-nameelbo"><a name="//apple_ref/cpp/Function/elbo_with_log_joint" class="dashAnchor"></a><code id="elbo_with_log_joint">tf.contrib.bayesflow.variational_inference.elbo_with_log_joint(log_joint, variational=None, keep_batch_dim=True, form=None, name='ELBO')</code></h3>
+<p>Evidence Lower BOund. <code>log p(x) &gt;= ELBO</code>.</p>
+<p>This method is for models that have computed <code>p(x,Z)</code> instead of <code>p(x|Z)</code>. See <code>elbo</code> for further details.</p>
+<p>Because only the joint is specified, analytic KL is not available.</p>
+<h5 id="args-1">Args:</h5>
+<ul>
+<li><b><code>log_joint</code></b>: <code>Tensor</code> log p(x, Z).</li>
+<li><b><code>variational</code></b>: list of <code>StochasticTensor</code> q(Z). If <code>None</code>, defaults to all <code>StochasticTensor</code> objects upstream of <code>log_joint</code>.</li>
+<li><b><code>keep_batch_dim</code></b>: bool. Whether to keep the batch dimension when summing entropy term. When the sample is per data point, this should be True; otherwise (e.g. in a Bayesian NN), this should be False.</li>
+<li><b><code>form</code></b>: ELBOForms constant. Controls how the ELBO is computed. Defaults to ELBOForms.default.</li>
+<li><b><code>name</code></b>: name to prefix ops with.</li>
+</ul>
+<h5 id="returns-1">Returns:</h5>
+<p><code>Tensor</code> ELBO of the same type and shape as <code>log_joint</code>.</p>
+<h5 id="raises-1">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if variationals in <code>variational</code> are not <code>StochasticTensor</code>s.</li>
+<li><b><code>TypeError</code></b>: if form is not a valid ELBOForms constant.</li>
+<li><b><code>ValueError</code></b>: if <code>variational</code> is None and there are no <code>StochasticTensor</code>s upstream of <code>log_joint</code>.</li>
+<li><b><code>ValueError</code></b>: if form is ELBOForms.analytic_kl.</li>
+</ul>
+<hr />
+<h3 id="class-tf.contrib.bayesflow.variational_inference.elboforms"><a name="//apple_ref/cpp/Class/ELBOForms" class="dashAnchor"></a><code id="ELBOForms">class tf.contrib.bayesflow.variational_inference.ELBOForms</code></h3>
+<p>Constants to control the <code>elbo</code> calculation.</p>
+<p><code>analytic_kl</code> uses the analytic KL divergence between the variational distribution(s) and the prior(s).</p>
+<p><code>analytic_entropy</code> uses the analytic entropy of the variational distribution(s).</p>
+<p><code>sample</code> uses the sample KL or the sample entropy is the joint is provided.</p>
+<p>See <code>elbo</code> for what is used with <code>default</code>. - - -</p>
+<h4 id="tf.contrib.bayesflow.variational_inference.elboforms.check_formform"><code id="ELBOForms.check_form">tf.contrib.bayesflow.variational_inference.ELBOForms.check_form(form)</code></h4>
+<hr />
+<h3 id="tf.contrib.bayesflow.variational_inference.register_priorvariational-prior"><a name="//apple_ref/cpp/Function/register_prior" class="dashAnchor"></a><code id="register_prior">tf.contrib.bayesflow.variational_inference.register_prior(variational, prior)</code></h3>
+<p>Associate a variational <code>StochasticTensor</code> with a <code>Distribution</code> prior.</p>
+<p>This is a helper function used in conjunction with <code>elbo</code> that allows users to specify the mapping between variational distributions and their priors without having to pass in <code>variational_with_prior</code> explicitly.</p>
+<h5 id="args-2">Args:</h5>
+<ul>
+<li><b><code>variational</code></b>: <code>StochasticTensor</code> q(Z). Approximating distribution.</li>
+<li><b><code>prior</code></b>: <code>Distribution</code> p(Z). Prior distribution.</li>
+</ul>
+<h5 id="returns-2">Returns:</h5>
+<p>None</p>
+<h5 id="raises-2">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if variational is not a <code>StochasticTensor</code> or <code>prior</code> is not a <code>Distribution</code>.</li>
+</ul>

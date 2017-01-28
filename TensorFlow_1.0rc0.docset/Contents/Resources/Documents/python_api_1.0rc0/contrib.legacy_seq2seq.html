@@ -1,0 +1,311 @@
+<!-- This file is machine generated: DO NOT EDIT! -->
+<h1 id="sequence-to-sequence-contrib">Sequence to Sequence (contrib)</h1>
+<p>[TOC]</p>
+<p>Deprecated library for creating sequence-to-sequence models in TensorFlow.</p>
+<hr />
+<h3 id="tf.contrib.legacy_seq2seq.attention_decoderdecoder_inputs-initial_state-attention_states-cell-output_sizenone-num_heads1-loop_functionnone-dtypenone-scopenone-initial_state_attentionfalse"><a name="//apple_ref/cpp/Function/attention_decoder" class="dashAnchor"></a><code id="attention_decoder">tf.contrib.legacy_seq2seq.attention_decoder(decoder_inputs, initial_state, attention_states, cell, output_size=None, num_heads=1, loop_function=None, dtype=None, scope=None, initial_state_attention=False)</code></h3>
+<p>RNN decoder with attention for the sequence-to-sequence model.</p>
+<p>In this context &quot;attention&quot; means that, during decoding, the RNN can look up information in the additional tensor attention_states, and it does this by focusing on a few entries from the tensor. This model has proven to yield especially good results in a number of sequence-to-sequence tasks. This implementation is based on http://arxiv.org/abs/1412.7449 (see below for details). It is recommended for complex sequence-to-sequence tasks.</p>
+<h5 id="args">Args:</h5>
+<ul>
+<li><b><code>decoder_inputs</code></b>: A list of 2D Tensors [batch_size x input_size].</li>
+<li><b><code>initial_state</code></b>: 2D Tensor [batch_size x cell.state_size].</li>
+<li><b><code>attention_states</code></b>: 3D Tensor [batch_size x attn_length x attn_size].</li>
+<li><b><code>cell</code></b>: core_rnn_cell.RNNCell defining the cell function and size.</li>
+<li><b><code>output_size</code></b>: Size of the output vectors; if None, we use cell.output_size.</li>
+<li><b><code>num_heads</code></b>: Number of attention heads that read from attention_states.</li>
+<li><b><code>loop_function</code></b>: If not None, this function will be applied to i-th output in order to generate i+1-th input, and decoder_inputs will be ignored, except for the first element (&quot;GO&quot; symbol). This can be used for decoding, but also for training to emulate http://arxiv.org/abs/1506.03099. Signature -- loop_function(prev, i) = next
+<ul>
+<li>prev is a 2D Tensor of shape [batch_size x output_size],</li>
+<li>i is an integer, the step number (when advanced control is needed),</li>
+<li>next is a 2D Tensor of shape [batch_size x input_size].</li>
+</ul></li>
+<li><b><code>dtype</code></b>: The dtype to use for the RNN initial state (default: tf.float32).</li>
+<li><b><code>scope</code></b>: VariableScope for the created subgraph; default: &quot;attention_decoder&quot;.</li>
+<li><b><code>initial_state_attention</code></b>: If False (default), initial attentions are zero. If True, initialize the attentions from the initial state and attention states -- useful when we wish to resume decoding from a previously stored decoder state and attention states.</li>
+</ul>
+<h5 id="returns">Returns:</h5>
+<p>A tuple of the form (outputs, state), where:</p>
+<ul>
+<li><b><code>outputs</code></b>: A list of the same length as decoder_inputs of 2D Tensors of shape [batch_size x output_size]. These represent the generated outputs. Output i is computed from input i (which is either the i-th element of decoder_inputs or loop_function(output {i-1}, i)) as follows. First, we run the cell on a combination of the input and previous attention masks: cell_output, new_state = cell(linear(input, prev_attn), prev_state). Then, we calculate new attention masks: new_attn = softmax(V^T * tanh(W * attention_states + U * new_state)) and then we calculate the output: output = linear(cell_output, new_attn).</li>
+<li><b><code>state</code></b>: The state of each decoder cell the final time-step. It is a 2D Tensor of shape [batch_size x cell.state_size].</li>
+</ul>
+<h5 id="raises">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: when num_heads is not positive, there are no inputs, shapes of attention_states are not set, or input size cannot be inferred from the input.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.legacy_seq2seq.basic_rnn_seq2seqencoder_inputs-decoder_inputs-cell-dtypetf.float32-scopenone"><a name="//apple_ref/cpp/Function/basic_rnn_seq2seq" class="dashAnchor"></a><code id="basic_rnn_seq2seq">tf.contrib.legacy_seq2seq.basic_rnn_seq2seq(encoder_inputs, decoder_inputs, cell, dtype=tf.float32, scope=None)</code></h3>
+<p>Basic RNN sequence-to-sequence model.</p>
+<p>This model first runs an RNN to encode encoder_inputs into a state vector, then runs decoder, initialized with the last encoder state, on decoder_inputs. Encoder and decoder use the same RNN cell type, but don't share parameters.</p>
+<h5 id="args-1">Args:</h5>
+<ul>
+<li><b><code>encoder_inputs</code></b>: A list of 2D Tensors [batch_size x input_size].</li>
+<li><b><code>decoder_inputs</code></b>: A list of 2D Tensors [batch_size x input_size].</li>
+<li><b><code>cell</code></b>: core_rnn_cell.RNNCell defining the cell function and size.</li>
+<li><b><code>dtype</code></b>: The dtype of the initial state of the RNN cell (default: tf.float32).</li>
+<li><b><code>scope</code></b>: VariableScope for the created subgraph; default: &quot;basic_rnn_seq2seq&quot;.</li>
+</ul>
+<h5 id="returns-1">Returns:</h5>
+<p>A tuple of the form (outputs, state), where:</p>
+<ul>
+<li><b><code>outputs</code></b>: A list of the same length as decoder_inputs of 2D Tensors with shape [batch_size x output_size] containing the generated outputs.</li>
+<li><b><code>state</code></b>: The state of each decoder cell in the final time-step. It is a 2D Tensor of shape [batch_size x cell.state_size].</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.legacy_seq2seq.embedding_attention_decoderdecoder_inputs-initial_state-attention_states-cell-num_symbols-embedding_size-num_heads1-output_sizenone-output_projectionnone-feed_previousfalse-update_embedding_for_previoustrue-dtypenone-scopenone-initial_state_attentionfalse"><a name="//apple_ref/cpp/Function/embedding_attention_decoder" class="dashAnchor"></a><code id="embedding_attention_decoder">tf.contrib.legacy_seq2seq.embedding_attention_decoder(decoder_inputs, initial_state, attention_states, cell, num_symbols, embedding_size, num_heads=1, output_size=None, output_projection=None, feed_previous=False, update_embedding_for_previous=True, dtype=None, scope=None, initial_state_attention=False)</code></h3>
+<p>RNN decoder with embedding and attention and a pure-decoding option.</p>
+<h5 id="args-2">Args:</h5>
+<ul>
+<li><b><code>decoder_inputs</code></b>: A list of 1D batch-sized int32 Tensors (decoder inputs).</li>
+<li><b><code>initial_state</code></b>: 2D Tensor [batch_size x cell.state_size].</li>
+<li><b><code>attention_states</code></b>: 3D Tensor [batch_size x attn_length x attn_size].</li>
+<li><b><code>cell</code></b>: core_rnn_cell.RNNCell defining the cell function.</li>
+<li><b><code>num_symbols</code></b>: Integer, how many symbols come into the embedding.</li>
+<li><b><code>embedding_size</code></b>: Integer, the length of the embedding vector for each symbol.</li>
+<li><b><code>num_heads</code></b>: Number of attention heads that read from attention_states.</li>
+<li><b><code>output_size</code></b>: Size of the output vectors; if None, use output_size.</li>
+<li><b><code>output_projection</code></b>: None or a pair (W, B) of output projection weights and biases; W has shape [output_size x num_symbols] and B has shape [num_symbols]; if provided and feed_previous=True, each fed previous output will first be multiplied by W and added B.</li>
+<li><b><code>feed_previous</code></b>: Boolean; if True, only the first of decoder_inputs will be used (the &quot;GO&quot; symbol), and all other decoder inputs will be generated by: next = embedding_lookup(embedding, argmax(previous_output)), In effect, this implements a greedy decoder. It can also be used during training to emulate http://arxiv.org/abs/1506.03099. If False, decoder_inputs are used as given (the standard decoder case).</li>
+<li><b><code>update_embedding_for_previous</code></b>: Boolean; if False and feed_previous=True, only the embedding for the first symbol of decoder_inputs (the &quot;GO&quot; symbol) will be updated by back propagation. Embeddings for the symbols generated from the decoder itself remain unchanged. This parameter has no effect if feed_previous=False.</li>
+<li><b><code>dtype</code></b>: The dtype to use for the RNN initial states (default: tf.float32).</li>
+<li><b><code>scope</code></b>: VariableScope for the created subgraph; defaults to &quot;embedding_attention_decoder&quot;.</li>
+<li><b><code>initial_state_attention</code></b>: If False (default), initial attentions are zero. If True, initialize the attentions from the initial state and attention states -- useful when we wish to resume decoding from a previously stored decoder state and attention states.</li>
+</ul>
+<h5 id="returns-2">Returns:</h5>
+<p>A tuple of the form (outputs, state), where:</p>
+<ul>
+<li><b><code>outputs</code></b>: A list of the same length as decoder_inputs of 2D Tensors with shape [batch_size x output_size] containing the generated outputs.</li>
+<li><b><code>state</code></b>: The state of each decoder cell at the final time-step. It is a 2D Tensor of shape [batch_size x cell.state_size].</li>
+</ul>
+<h5 id="raises-1">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: When output_projection has the wrong shape.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.legacy_seq2seq.embedding_attention_seq2seqencoder_inputs-decoder_inputs-cell-num_encoder_symbols-num_decoder_symbols-embedding_size-num_heads1-output_projectionnone-feed_previousfalse-dtypenone-scopenone-initial_state_attentionfalse"><a name="//apple_ref/cpp/Function/embedding_attention_seq2seq" class="dashAnchor"></a><code id="embedding_attention_seq2seq">tf.contrib.legacy_seq2seq.embedding_attention_seq2seq(encoder_inputs, decoder_inputs, cell, num_encoder_symbols, num_decoder_symbols, embedding_size, num_heads=1, output_projection=None, feed_previous=False, dtype=None, scope=None, initial_state_attention=False)</code></h3>
+<p>Embedding sequence-to-sequence model with attention.</p>
+<p>This model first embeds encoder_inputs by a newly created embedding (of shape [num_encoder_symbols x input_size]). Then it runs an RNN to encode embedded encoder_inputs into a state vector. It keeps the outputs of this RNN at every step to use for attention later. Next, it embeds decoder_inputs by another newly created embedding (of shape [num_decoder_symbols x input_size]). Then it runs attention decoder, initialized with the last encoder state, on embedded decoder_inputs and attending to encoder outputs.</p>
+<p>Warning: when output_projection is None, the size of the attention vectors and variables will be made proportional to num_decoder_symbols, can be large.</p>
+<h5 id="args-3">Args:</h5>
+<ul>
+<li><b><code>encoder_inputs</code></b>: A list of 1D int32 Tensors of shape [batch_size].</li>
+<li><b><code>decoder_inputs</code></b>: A list of 1D int32 Tensors of shape [batch_size].</li>
+<li><b><code>cell</code></b>: core_rnn_cell.RNNCell defining the cell function and size.</li>
+<li><b><code>num_encoder_symbols</code></b>: Integer; number of symbols on the encoder side.</li>
+<li><b><code>num_decoder_symbols</code></b>: Integer; number of symbols on the decoder side.</li>
+<li><b><code>embedding_size</code></b>: Integer, the length of the embedding vector for each symbol.</li>
+<li><b><code>num_heads</code></b>: Number of attention heads that read from attention_states.</li>
+<li><b><code>output_projection</code></b>: None or a pair (W, B) of output projection weights and biases; W has shape [output_size x num_decoder_symbols] and B has shape [num_decoder_symbols]; if provided and feed_previous=True, each fed previous output will first be multiplied by W and added B.</li>
+<li><b><code>feed_previous</code></b>: Boolean or scalar Boolean Tensor; if True, only the first of decoder_inputs will be used (the &quot;GO&quot; symbol), and all other decoder inputs will be taken from previous outputs (as in embedding_rnn_decoder). If False, decoder_inputs are used as given (the standard decoder case).</li>
+<li><b><code>dtype</code></b>: The dtype of the initial RNN state (default: tf.float32).</li>
+<li><b><code>scope</code></b>: VariableScope for the created subgraph; defaults to &quot;embedding_attention_seq2seq&quot;.</li>
+<li><b><code>initial_state_attention</code></b>: If False (default), initial attentions are zero. If True, initialize the attentions from the initial state and attention states.</li>
+</ul>
+<h5 id="returns-3">Returns:</h5>
+<p>A tuple of the form (outputs, state), where:</p>
+<ul>
+<li><b><code>outputs</code></b>: A list of the same length as decoder_inputs of 2D Tensors with shape [batch_size x num_decoder_symbols] containing the generated outputs.</li>
+<li><b><code>state</code></b>: The state of each decoder cell at the final time-step. It is a 2D Tensor of shape [batch_size x cell.state_size].</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.legacy_seq2seq.embedding_rnn_decoderdecoder_inputs-initial_state-cell-num_symbols-embedding_size-output_projectionnone-feed_previousfalse-update_embedding_for_previoustrue-scopenone"><a name="//apple_ref/cpp/Function/embedding_rnn_decoder" class="dashAnchor"></a><code id="embedding_rnn_decoder">tf.contrib.legacy_seq2seq.embedding_rnn_decoder(decoder_inputs, initial_state, cell, num_symbols, embedding_size, output_projection=None, feed_previous=False, update_embedding_for_previous=True, scope=None)</code></h3>
+<p>RNN decoder with embedding and a pure-decoding option.</p>
+<h5 id="args-4">Args:</h5>
+<ul>
+<li><b><code>decoder_inputs</code></b>: A list of 1D batch-sized int32 Tensors (decoder inputs).</li>
+<li><b><code>initial_state</code></b>: 2D Tensor [batch_size x cell.state_size].</li>
+<li><b><code>cell</code></b>: core_rnn_cell.RNNCell defining the cell function.</li>
+<li><b><code>num_symbols</code></b>: Integer, how many symbols come into the embedding.</li>
+<li><b><code>embedding_size</code></b>: Integer, the length of the embedding vector for each symbol.</li>
+<li><b><code>output_projection</code></b>: None or a pair (W, B) of output projection weights and biases; W has shape [output_size x num_symbols] and B has shape [num_symbols]; if provided and feed_previous=True, each fed previous output will first be multiplied by W and added B.</li>
+<li><b><code>feed_previous</code></b>: Boolean; if True, only the first of decoder_inputs will be used (the &quot;GO&quot; symbol), and all other decoder inputs will be generated by: next = embedding_lookup(embedding, argmax(previous_output)), In effect, this implements a greedy decoder. It can also be used during training to emulate http://arxiv.org/abs/1506.03099. If False, decoder_inputs are used as given (the standard decoder case).</li>
+<li><b><code>update_embedding_for_previous</code></b>: Boolean; if False and feed_previous=True, only the embedding for the first symbol of decoder_inputs (the &quot;GO&quot; symbol) will be updated by back propagation. Embeddings for the symbols generated from the decoder itself remain unchanged. This parameter has no effect if feed_previous=False.</li>
+<li><b><code>scope</code></b>: VariableScope for the created subgraph; defaults to &quot;embedding_rnn_decoder&quot;.</li>
+</ul>
+<h5 id="returns-4">Returns:</h5>
+<p>A tuple of the form (outputs, state), where:</p>
+<ul>
+<li><b><code>outputs</code></b>: A list of the same length as decoder_inputs of 2D Tensors. The output is of shape [batch_size x cell.output_size] when output_projection is not None (and represents the dense representation of predicted tokens). It is of shape [batch_size x num_decoder_symbols] when output_projection is None.</li>
+<li><b><code>state</code></b>: The state of each decoder cell in each time-step. This is a list with length len(decoder_inputs) -- one item for each time-step. It is a 2D Tensor of shape [batch_size x cell.state_size].</li>
+</ul>
+<h5 id="raises-2">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: When output_projection has the wrong shape.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.legacy_seq2seq.embedding_rnn_seq2seqencoder_inputs-decoder_inputs-cell-num_encoder_symbols-num_decoder_symbols-embedding_size-output_projectionnone-feed_previousfalse-dtypenone-scopenone"><a name="//apple_ref/cpp/Function/embedding_rnn_seq2seq" class="dashAnchor"></a><code id="embedding_rnn_seq2seq">tf.contrib.legacy_seq2seq.embedding_rnn_seq2seq(encoder_inputs, decoder_inputs, cell, num_encoder_symbols, num_decoder_symbols, embedding_size, output_projection=None, feed_previous=False, dtype=None, scope=None)</code></h3>
+<p>Embedding RNN sequence-to-sequence model.</p>
+<p>This model first embeds encoder_inputs by a newly created embedding (of shape [num_encoder_symbols x input_size]). Then it runs an RNN to encode embedded encoder_inputs into a state vector. Next, it embeds decoder_inputs by another newly created embedding (of shape [num_decoder_symbols x input_size]). Then it runs RNN decoder, initialized with the last encoder state, on embedded decoder_inputs.</p>
+<h5 id="args-5">Args:</h5>
+<ul>
+<li><b><code>encoder_inputs</code></b>: A list of 1D int32 Tensors of shape [batch_size].</li>
+<li><b><code>decoder_inputs</code></b>: A list of 1D int32 Tensors of shape [batch_size].</li>
+<li><b><code>cell</code></b>: core_rnn_cell.RNNCell defining the cell function and size.</li>
+<li><b><code>num_encoder_symbols</code></b>: Integer; number of symbols on the encoder side.</li>
+<li><b><code>num_decoder_symbols</code></b>: Integer; number of symbols on the decoder side.</li>
+<li><b><code>embedding_size</code></b>: Integer, the length of the embedding vector for each symbol.</li>
+<li><b><code>output_projection</code></b>: None or a pair (W, B) of output projection weights and biases; W has shape [output_size x num_decoder_symbols] and B has shape [num_decoder_symbols]; if provided and feed_previous=True, each fed previous output will first be multiplied by W and added B.</li>
+<li><b><code>feed_previous</code></b>: Boolean or scalar Boolean Tensor; if True, only the first of decoder_inputs will be used (the &quot;GO&quot; symbol), and all other decoder inputs will be taken from previous outputs (as in embedding_rnn_decoder). If False, decoder_inputs are used as given (the standard decoder case).</li>
+<li><b><code>dtype</code></b>: The dtype of the initial state for both the encoder and encoder rnn cells (default: tf.float32).</li>
+<li><b><code>scope</code></b>: VariableScope for the created subgraph; defaults to &quot;embedding_rnn_seq2seq&quot;</li>
+</ul>
+<h5 id="returns-5">Returns:</h5>
+<p>A tuple of the form (outputs, state), where:</p>
+<ul>
+<li><b><code>outputs</code></b>: A list of the same length as decoder_inputs of 2D Tensors. The output is of shape [batch_size x cell.output_size] when output_projection is not None (and represents the dense representation of predicted tokens). It is of shape [batch_size x num_decoder_symbols] when output_projection is None.</li>
+<li><b><code>state</code></b>: The state of each decoder cell in each time-step. This is a list with length len(decoder_inputs) -- one item for each time-step. It is a 2D Tensor of shape [batch_size x cell.state_size].</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.legacy_seq2seq.embedding_tied_rnn_seq2seqencoder_inputs-decoder_inputs-cell-num_symbols-embedding_size-num_decoder_symbolsnone-output_projectionnone-feed_previousfalse-dtypenone-scopenone"><a name="//apple_ref/cpp/Function/embedding_tied_rnn_seq2seq" class="dashAnchor"></a><code id="embedding_tied_rnn_seq2seq">tf.contrib.legacy_seq2seq.embedding_tied_rnn_seq2seq(encoder_inputs, decoder_inputs, cell, num_symbols, embedding_size, num_decoder_symbols=None, output_projection=None, feed_previous=False, dtype=None, scope=None)</code></h3>
+<p>Embedding RNN sequence-to-sequence model with tied (shared) parameters.</p>
+<p>This model first embeds encoder_inputs by a newly created embedding (of shape [num_symbols x input_size]). Then it runs an RNN to encode embedded encoder_inputs into a state vector. Next, it embeds decoder_inputs using the same embedding. Then it runs RNN decoder, initialized with the last encoder state, on embedded decoder_inputs. The decoder output is over symbols from 0 to num_decoder_symbols - 1 if num_decoder_symbols is none; otherwise it is over 0 to num_symbols - 1.</p>
+<h5 id="args-6">Args:</h5>
+<ul>
+<li><b><code>encoder_inputs</code></b>: A list of 1D int32 Tensors of shape [batch_size].</li>
+<li><b><code>decoder_inputs</code></b>: A list of 1D int32 Tensors of shape [batch_size].</li>
+<li><b><code>cell</code></b>: core_rnn_cell.RNNCell defining the cell function and size.</li>
+<li><b><code>num_symbols</code></b>: Integer; number of symbols for both encoder and decoder.</li>
+<li><b><code>embedding_size</code></b>: Integer, the length of the embedding vector for each symbol.</li>
+<li><b><code>num_decoder_symbols</code></b>: Integer; number of output symbols for decoder. If provided, the decoder output is over symbols 0 to num_decoder_symbols - 1. Otherwise, decoder output is over symbols 0 to num_symbols - 1. Note that this assumes that the vocabulary is set up such that the first num_decoder_symbols of num_symbols are part of decoding.</li>
+<li><b><code>output_projection</code></b>: None or a pair (W, B) of output projection weights and biases; W has shape [output_size x num_symbols] and B has shape [num_symbols]; if provided and feed_previous=True, each fed previous output will first be multiplied by W and added B.</li>
+<li><b><code>feed_previous</code></b>: Boolean or scalar Boolean Tensor; if True, only the first of decoder_inputs will be used (the &quot;GO&quot; symbol), and all other decoder inputs will be taken from previous outputs (as in embedding_rnn_decoder). If False, decoder_inputs are used as given (the standard decoder case).</li>
+<li><b><code>dtype</code></b>: The dtype to use for the initial RNN states (default: tf.float32).</li>
+<li><b><code>scope</code></b>: VariableScope for the created subgraph; defaults to &quot;embedding_tied_rnn_seq2seq&quot;.</li>
+</ul>
+<h5 id="returns-6">Returns:</h5>
+<p>A tuple of the form (outputs, state), where:</p>
+<ul>
+<li><b><code>outputs</code></b>: A list of the same length as decoder_inputs of 2D Tensors with shape [batch_size x output_symbols] containing the generated outputs where output_symbols = num_decoder_symbols if num_decoder_symbols is not None otherwise output_symbols = num_symbols.</li>
+<li><b><code>state</code></b>: The state of each decoder cell at the final time-step. It is a 2D Tensor of shape [batch_size x cell.state_size].</li>
+</ul>
+<h5 id="raises-3">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: When output_projection has the wrong shape.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.legacy_seq2seq.model_with_bucketsencoder_inputs-decoder_inputs-targets-weights-buckets-seq2seq-softmax_loss_functionnone-per_example_lossfalse-namenone"><a name="//apple_ref/cpp/Function/model_with_buckets" class="dashAnchor"></a><code id="model_with_buckets">tf.contrib.legacy_seq2seq.model_with_buckets(encoder_inputs, decoder_inputs, targets, weights, buckets, seq2seq, softmax_loss_function=None, per_example_loss=False, name=None)</code></h3>
+<p>Create a sequence-to-sequence model with support for bucketing.</p>
+<p>The seq2seq argument is a function that defines a sequence-to-sequence model, e.g., seq2seq = lambda x, y: basic_rnn_seq2seq( x, y, core_rnn_cell.GRUCell(24))</p>
+<h5 id="args-7">Args:</h5>
+<ul>
+<li><b><code>encoder_inputs</code></b>: A list of Tensors to feed the encoder; first seq2seq input.</li>
+<li><b><code>decoder_inputs</code></b>: A list of Tensors to feed the decoder; second seq2seq input.</li>
+<li><b><code>targets</code></b>: A list of 1D batch-sized int32 Tensors (desired output sequence).</li>
+<li><b><code>weights</code></b>: List of 1D batch-sized float-Tensors to weight the targets.</li>
+<li><b><code>buckets</code></b>: A list of pairs of (input size, output size) for each bucket.</li>
+<li><b><code>seq2seq</code></b>: A sequence-to-sequence model function; it takes 2 input that agree with encoder_inputs and decoder_inputs, and returns a pair consisting of outputs and states (as, e.g., basic_rnn_seq2seq).</li>
+<li><b><code>softmax_loss_function</code></b>: Function (inputs-batch, labels-batch) -&gt; loss-batch to be used instead of the standard softmax (the default if this is None).</li>
+<li><b><code>per_example_loss</code></b>: Boolean. If set, the returned loss will be a batch-sized tensor of losses for each sequence in the batch. If unset, it will be a scalar with the averaged loss from all examples.</li>
+<li><b><code>name</code></b>: Optional name for this operation, defaults to &quot;model_with_buckets&quot;.</li>
+</ul>
+<h5 id="returns-7">Returns:</h5>
+<p>A tuple of the form (outputs, losses), where:</p>
+<ul>
+<li><b><code>outputs</code></b>: The outputs for each bucket. Its j'th element consists of a list of 2D Tensors. The shape of output tensors can be either [batch_size x output_size] or [batch_size x num_decoder_symbols] depending on the seq2seq model used.</li>
+<li><b><code>losses</code></b>: List of scalar Tensors, representing losses for each bucket, or, if per_example_loss is set, a list of 1D batch-sized float Tensors.</li>
+</ul>
+<h5 id="raises-4">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If length of encoder_inputsut, targets, or weights is smaller than the largest (last) bucket.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.legacy_seq2seq.one2many_rnn_seq2seqencoder_inputs-decoder_inputs_dict-cell-num_encoder_symbols-num_decoder_symbols_dict-embedding_size-feed_previousfalse-dtypenone-scopenone"><a name="//apple_ref/cpp/Function/one2many_rnn_seq2seq" class="dashAnchor"></a><code id="one2many_rnn_seq2seq">tf.contrib.legacy_seq2seq.one2many_rnn_seq2seq(encoder_inputs, decoder_inputs_dict, cell, num_encoder_symbols, num_decoder_symbols_dict, embedding_size, feed_previous=False, dtype=None, scope=None)</code></h3>
+<p>One-to-many RNN sequence-to-sequence model (multi-task).</p>
+<p>This is a multi-task sequence-to-sequence model with one encoder and multiple decoders. Reference to multi-task sequence-to-sequence learning can be found here: http://arxiv.org/abs/1511.06114</p>
+<h5 id="args-8">Args:</h5>
+<ul>
+<li><b><code>encoder_inputs</code></b>: A list of 1D int32 Tensors of shape [batch_size].</li>
+<li><b><code>decoder_inputs_dict</code></b>: A dictionany mapping decoder name (string) to the corresponding decoder_inputs; each decoder_inputs is a list of 1D Tensors of shape [batch_size]; num_decoders is defined as len(decoder_inputs_dict).</li>
+<li><b><code>cell</code></b>: core_rnn_cell.RNNCell defining the cell function and size.</li>
+<li><b><code>num_encoder_symbols</code></b>: Integer; number of symbols on the encoder side.</li>
+<li><b><code>num_decoder_symbols_dict</code></b>: A dictionary mapping decoder name (string) to an integer specifying number of symbols for the corresponding decoder; len(num_decoder_symbols_dict) must be equal to num_decoders.</li>
+<li><b><code>embedding_size</code></b>: Integer, the length of the embedding vector for each symbol.</li>
+<li><b><code>feed_previous</code></b>: Boolean or scalar Boolean Tensor; if True, only the first of decoder_inputs will be used (the &quot;GO&quot; symbol), and all other decoder inputs will be taken from previous outputs (as in embedding_rnn_decoder). If False, decoder_inputs are used as given (the standard decoder case).</li>
+<li><b><code>dtype</code></b>: The dtype of the initial state for both the encoder and encoder rnn cells (default: tf.float32).</li>
+<li><b><code>scope</code></b>: VariableScope for the created subgraph; defaults to &quot;one2many_rnn_seq2seq&quot;</li>
+</ul>
+<h5 id="returns-8">Returns:</h5>
+<p>A tuple of the form (outputs_dict, state_dict), where:</p>
+<ul>
+<li><b><code>outputs_dict</code></b>: A mapping from decoder name (string) to a list of the same length as decoder_inputs_dict[name]; each element in the list is a 2D Tensors with shape [batch_size x num_decoder_symbol_list[name]] containing the generated outputs.</li>
+<li><b><code>state_dict</code></b>: A mapping from decoder name (string) to the final state of the corresponding decoder RNN; it is a 2D Tensor of shape [batch_size x cell.state_size].</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.legacy_seq2seq.rnn_decoderdecoder_inputs-initial_state-cell-loop_functionnone-scopenone"><a name="//apple_ref/cpp/Function/rnn_decoder" class="dashAnchor"></a><code id="rnn_decoder">tf.contrib.legacy_seq2seq.rnn_decoder(decoder_inputs, initial_state, cell, loop_function=None, scope=None)</code></h3>
+<p>RNN decoder for the sequence-to-sequence model.</p>
+<h5 id="args-9">Args:</h5>
+<ul>
+<li><b><code>decoder_inputs</code></b>: A list of 2D Tensors [batch_size x input_size].</li>
+<li><b><code>initial_state</code></b>: 2D Tensor with shape [batch_size x cell.state_size].</li>
+<li><b><code>cell</code></b>: core_rnn_cell.RNNCell defining the cell function and size.</li>
+<li><b><code>loop_function</code></b>: If not None, this function will be applied to the i-th output in order to generate the i+1-st input, and decoder_inputs will be ignored, except for the first element (&quot;GO&quot; symbol). This can be used for decoding, but also for training to emulate http://arxiv.org/abs/1506.03099. Signature -- loop_function(prev, i) = next
+<ul>
+<li>prev is a 2D Tensor of shape [batch_size x output_size],</li>
+<li>i is an integer, the step number (when advanced control is needed),</li>
+<li>next is a 2D Tensor of shape [batch_size x input_size].</li>
+</ul></li>
+<li><b><code>scope</code></b>: VariableScope for the created subgraph; defaults to &quot;rnn_decoder&quot;.</li>
+</ul>
+<h5 id="returns-9">Returns:</h5>
+<p>A tuple of the form (outputs, state), where:</p>
+<ul>
+<li><b><code>outputs</code></b>: A list of the same length as decoder_inputs of 2D Tensors with shape [batch_size x output_size] containing generated outputs.</li>
+<li><b><code>state</code></b>: The state of each cell at the final time-step. It is a 2D Tensor of shape [batch_size x cell.state_size]. (Note that in some cases, like basic RNN cell or GRU cell, outputs and states can be the same. They are different for LSTM cells though.)</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.legacy_seq2seq.sequence_losslogits-targets-weights-average_across_timestepstrue-average_across_batchtrue-softmax_loss_functionnone-namenone"><a name="//apple_ref/cpp/Function/sequence_loss" class="dashAnchor"></a><code id="sequence_loss">tf.contrib.legacy_seq2seq.sequence_loss(logits, targets, weights, average_across_timesteps=True, average_across_batch=True, softmax_loss_function=None, name=None)</code></h3>
+<p>Weighted cross-entropy loss for a sequence of logits, batch-collapsed.</p>
+<h5 id="args-10">Args:</h5>
+<ul>
+<li><b><code>logits</code></b>: List of 2D Tensors of shape [batch_size x num_decoder_symbols].</li>
+<li><b><code>targets</code></b>: List of 1D batch-sized int32 Tensors of the same length as logits.</li>
+<li><b><code>weights</code></b>: List of 1D batch-sized float-Tensors of the same length as logits.</li>
+<li><b><code>average_across_timesteps</code></b>: If set, divide the returned cost by the total label weight.</li>
+<li><b><code>average_across_batch</code></b>: If set, divide the returned cost by the batch size.</li>
+<li><b><code>softmax_loss_function</code></b>: Function (inputs-batch, labels-batch) -&gt; loss-batch to be used instead of the standard softmax (the default if this is None).</li>
+<li><b><code>name</code></b>: Optional name for this operation, defaults to &quot;sequence_loss&quot;.</li>
+</ul>
+<h5 id="returns-10">Returns:</h5>
+<p>A scalar float Tensor: The average log-perplexity per symbol (weighted).</p>
+<h5 id="raises-5">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If len(logits) is different from len(targets) or len(weights).</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.legacy_seq2seq.sequence_loss_by_examplelogits-targets-weights-average_across_timestepstrue-softmax_loss_functionnone-namenone"><a name="//apple_ref/cpp/Function/sequence_loss_by_example" class="dashAnchor"></a><code id="sequence_loss_by_example">tf.contrib.legacy_seq2seq.sequence_loss_by_example(logits, targets, weights, average_across_timesteps=True, softmax_loss_function=None, name=None)</code></h3>
+<p>Weighted cross-entropy loss for a sequence of logits (per example).</p>
+<h5 id="args-11">Args:</h5>
+<ul>
+<li><b><code>logits</code></b>: List of 2D Tensors of shape [batch_size x num_decoder_symbols].</li>
+<li><b><code>targets</code></b>: List of 1D batch-sized int32 Tensors of the same length as logits.</li>
+<li><b><code>weights</code></b>: List of 1D batch-sized float-Tensors of the same length as logits.</li>
+<li><b><code>average_across_timesteps</code></b>: If set, divide the returned cost by the total label weight.</li>
+<li><b><code>softmax_loss_function</code></b>: Function (labels-batch, inputs-batch) -&gt; loss-batch to be used instead of the standard softmax (the default if this is None).</li>
+<li><b><code>name</code></b>: Optional name for this operation, default: &quot;sequence_loss_by_example&quot;.</li>
+</ul>
+<h5 id="returns-11">Returns:</h5>
+<p>1D batch-sized float Tensor: The log-perplexity for each sequence.</p>
+<h5 id="raises-6">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If len(logits) is different from len(targets) or len(weights).</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.legacy_seq2seq.tied_rnn_seq2seqencoder_inputs-decoder_inputs-cell-loop_functionnone-dtypetf.float32-scopenone"><a name="//apple_ref/cpp/Function/tied_rnn_seq2seq" class="dashAnchor"></a><code id="tied_rnn_seq2seq">tf.contrib.legacy_seq2seq.tied_rnn_seq2seq(encoder_inputs, decoder_inputs, cell, loop_function=None, dtype=tf.float32, scope=None)</code></h3>
+<p>RNN sequence-to-sequence model with tied encoder and decoder parameters.</p>
+<p>This model first runs an RNN to encode encoder_inputs into a state vector, and then runs decoder, initialized with the last encoder state, on decoder_inputs. Encoder and decoder use the same RNN cell and share parameters.</p>
+<h5 id="args-12">Args:</h5>
+<ul>
+<li><b><code>encoder_inputs</code></b>: A list of 2D Tensors [batch_size x input_size].</li>
+<li><b><code>decoder_inputs</code></b>: A list of 2D Tensors [batch_size x input_size].</li>
+<li><b><code>cell</code></b>: core_rnn_cell.RNNCell defining the cell function and size.</li>
+<li><b><code>loop_function</code></b>: If not None, this function will be applied to i-th output in order to generate i+1-th input, and decoder_inputs will be ignored, except for the first element (&quot;GO&quot; symbol), see rnn_decoder for details.</li>
+<li><b><code>dtype</code></b>: The dtype of the initial state of the rnn cell (default: tf.float32).</li>
+<li><b><code>scope</code></b>: VariableScope for the created subgraph; default: &quot;tied_rnn_seq2seq&quot;.</li>
+</ul>
+<h5 id="returns-12">Returns:</h5>
+<p>A tuple of the form (outputs, state), where:</p>
+<ul>
+<li><b><code>outputs</code></b>: A list of the same length as decoder_inputs of 2D Tensors with shape [batch_size x output_size] containing the generated outputs.</li>
+<li><b><code>state</code></b>: The state of each decoder cell in each time-step. This is a list with length len(decoder_inputs) -- one item for each time-step. It is a 2D Tensor of shape [batch_size x cell.state_size].</li>
+</ul>

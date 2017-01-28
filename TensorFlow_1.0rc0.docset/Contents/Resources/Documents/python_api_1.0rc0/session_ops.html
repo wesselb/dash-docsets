@@ -1,0 +1,66 @@
+<!-- This file is machine generated: DO NOT EDIT! -->
+<h1 id="tensor-handle-operations">Tensor Handle Operations</h1>
+<p>Note: Functions taking <code>Tensor</code> arguments can also take anything accepted by <a href="framework.md#convert_to_tensor"><code>tf.convert_to_tensor</code></a>.</p>
+<p>[TOC]</p>
+<h2 id="tensor-handle-operations.">Tensor Handle Operations.</h2>
+<p>TensorFlow provides several operators that allows the user to keep tensors &quot;in-place&quot; across run calls.</p>
+<hr />
+<h3 id="tf.get_session_handledata-namenone"><a name="//apple_ref/cpp/Function/get_session_handle" class="dashAnchor"></a><code id="get_session_handle">tf.get_session_handle(data, name=None)</code></h3>
+<p>Return the handle of <code>data</code>.</p>
+<p>This is EXPERIMENTAL and subject to change.</p>
+<p>Keep <code>data</code> &quot;in-place&quot; in the runtime and create a handle that can be used to retrieve <code>data</code> in a subsequent run().</p>
+<p>Combined with <code>get_session_tensor</code>, we can keep a tensor produced in one run call in place, and use it as the input in a future run call.</p>
+<h5 id="args">Args:</h5>
+<ul>
+<li><b><code>data</code></b>: A tensor to be stored in the session.</li>
+<li><b><code>name</code></b>: Optional name prefix for the return tensor.</li>
+</ul>
+<h5 id="returns">Returns:</h5>
+<p>A scalar string tensor representing a unique handle for <code>data</code>.</p>
+<h5 id="raises">Raises:</h5>
+<ul>
+<li><p><b><code>TypeError</code></b>: if <code>data</code> is not a Tensor.</p></li>
+<li><p><b><code>Example</code></b>:</p></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">c <span class="op">=</span> tf.multiply(a, b)
+h <span class="op">=</span> tf.get_session_handle(c)
+h <span class="op">=</span> sess.run(h)
+
+p, a <span class="op">=</span> tf.get_session_tensor(h.handle, tf.float32)
+b <span class="op">=</span> tf.multiply(a, <span class="dv">10</span>)
+c <span class="op">=</span> sess.run(b, feed_dict<span class="op">=</span>{p: h.handle})</code></pre></div>
+<hr />
+<h3 id="tf.get_session_tensorhandle-dtype-namenone"><a name="//apple_ref/cpp/Function/get_session_tensor" class="dashAnchor"></a><code id="get_session_tensor">tf.get_session_tensor(handle, dtype, name=None)</code></h3>
+<p>Get the tensor of type <code>dtype</code> by feeding a tensor handle.</p>
+<p>This is EXPERIMENTAL and subject to change.</p>
+<p>Get the value of the tensor from a tensor handle. The tensor is produced in a previous run() and stored in the state of the session.</p>
+<h5 id="args-1">Args:</h5>
+<ul>
+<li><b><code>handle</code></b>: The string representation of a persistent tensor handle.</li>
+<li><b><code>dtype</code></b>: The type of the output tensor.</li>
+<li><b><code>name</code></b>: Optional name prefix for the return tensor.</li>
+</ul>
+<h5 id="returns-1">Returns:</h5>
+<p>A pair of tensors. The first is a placeholder for feeding a tensor handle and the second is the tensor in the session state keyed by the tensor handle.</p>
+<ul>
+<li><b><code>Example</code></b>:</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">c <span class="op">=</span> tf.multiply(a, b)
+h <span class="op">=</span> tf.get_session_handle(c)
+h <span class="op">=</span> sess.run(h)
+
+p, a <span class="op">=</span> tf.get_session_tensor(h.handle, tf.float32)
+b <span class="op">=</span> tf.multiply(a, <span class="dv">10</span>)
+c <span class="op">=</span> sess.run(b, feed_dict<span class="op">=</span>{p: h.handle})</code></pre></div>
+<hr />
+<h3 id="tf.delete_session_tensorhandle-namenone"><a name="//apple_ref/cpp/Function/delete_session_tensor" class="dashAnchor"></a><code id="delete_session_tensor">tf.delete_session_tensor(handle, name=None)</code></h3>
+<p>Delete the tensor for the given tensor handle.</p>
+<p>This is EXPERIMENTAL and subject to change.</p>
+<p>Delete the tensor of a given tensor handle. The tensor is produced in a previous run() and stored in the state of the session.</p>
+<h5 id="args-2">Args:</h5>
+<ul>
+<li><b><code>handle</code></b>: The string representation of a persistent tensor handle.</li>
+<li><b><code>name</code></b>: Optional name prefix for the return tensor.</li>
+</ul>
+<h5 id="returns-2">Returns:</h5>
+<p>A pair of graph elements. The first is a placeholder for feeding a tensor handle and the second is a deletion operation.</p>

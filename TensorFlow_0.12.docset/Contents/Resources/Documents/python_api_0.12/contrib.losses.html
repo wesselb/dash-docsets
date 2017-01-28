@@ -1,0 +1,132 @@
+<!-- This file is machine generated: DO NOT EDIT! -->
+<h1 id="losses-contrib">Losses (contrib)</h1>
+<p>[TOC]</p>
+<p>Ops for building neural network losses.</p>
+<h2 id="other-functions-and-classes">Other Functions and Classes</h2>
+<hr />
+<h3 id="tf.contrib.losses.absolute_differenceargs-kwargs"><a name="//apple_ref/cpp/Function/absolute_difference" class="dashAnchor"></a><code id="absolute_difference">tf.contrib.losses.absolute_difference(*args, **kwargs)</code></h3>
+<p>Adds an Absolute Difference loss to the training procedure. (deprecated arguments)</p>
+<p>SOME ARGUMENTS ARE DEPRECATED. They will be removed after 2016-11-25. Instructions for updating: <code>targets</code> is being deprecated, use <code>labels</code>. <code>weight</code> is being deprecated, use <code>weights</code>.</p>
+<p><code>weight</code> acts as a coefficient for the loss. If a scalar is provided, then the loss is simply scaled by the given value. If <code>weight</code> is a tensor of size [batch_size], then the total loss for each sample of the batch is rescaled by the corresponding element in the <code>weight</code> vector. If the shape of <code>weight</code> matches the shape of <code>predictions</code>, then the loss of each measurable element of <code>predictions</code> is scaled by the corresponding value of <code>weight</code>.</p>
+<p>Args: predictions: The predicted outputs. labels: The ground truth output tensor, same dimensions as 'predictions'. weights: Coefficients for the loss a scalar, a tensor of shape [batch_size] or a tensor whose shape matches <code>predictions</code>. scope: The scope for the operations performed in computing the loss. targets: Deprecated alias for <code>labels</code>. weight: Deprecated alias for <code>weights</code>.</p>
+<p>Returns: A scalar <code>Tensor</code> representing the loss value.</p>
+<p>Raises: ValueError: If the shape of <code>predictions</code> doesn't match that of <code>labels</code> or if the shape of <code>weight</code> is invalid.</p>
+<hr />
+<h3 id="tf.contrib.losses.add_lossargs-kwargs"><a name="//apple_ref/cpp/Function/add_loss" class="dashAnchor"></a><code id="add_loss">tf.contrib.losses.add_loss(*args, **kwargs)</code></h3>
+<p>Adds a externally defined loss to the collection of losses.</p>
+<h5 id="args">Args:</h5>
+<ul>
+<li><b><code>loss</code></b>: A loss <code>Tensor</code>.</li>
+<li><b><code>loss_collection</code></b>: Optional collection to add the loss to.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.losses.compute_weighted_lossargs-kwargs"><a name="//apple_ref/cpp/Function/compute_weighted_loss" class="dashAnchor"></a><code id="compute_weighted_loss">tf.contrib.losses.compute_weighted_loss(*args, **kwargs)</code></h3>
+<p>Computes the weighted loss. (deprecated arguments)</p>
+<p>SOME ARGUMENTS ARE DEPRECATED. They will be removed after 2016-11-25. Instructions for updating: <code>weight</code> is being deprecated, use <code>weights</code>.</p>
+<p>Args: losses: A tensor of size [batch_size, d1, ... dN]. weights: A tensor of size [1] or [batch_size, d1, ... dK] where K &lt; N. weight: Deprecated alias for <code>weights</code>.</p>
+<p>Returns: A scalar <code>Tensor</code> that returns the weighted loss.</p>
+<p>Raises: ValueError: If <code>weights</code> is <code>None</code> or the shape is not compatible with <code>losses</code>, or if the number of dimensions (rank) of either <code>losses</code> or <code>weights</code> is missing.</p>
+<hr />
+<h3 id="tf.contrib.losses.cosine_distanceargs-kwargs"><a name="//apple_ref/cpp/Function/cosine_distance" class="dashAnchor"></a><code id="cosine_distance">tf.contrib.losses.cosine_distance(*args, **kwargs)</code></h3>
+<p>Adds a cosine-distance loss to the training procedure. (deprecated arguments)</p>
+<p>SOME ARGUMENTS ARE DEPRECATED. They will be removed after 2016-11-25. Instructions for updating: <code>targets</code> is being deprecated, use <code>labels</code>. <code>weight</code> is being deprecated, use <code>weights</code>.</p>
+<p>Note that the function assumes that <code>predictions</code> and <code>labels</code> are already unit-normalized.</p>
+<p>Args: predictions: An arbitrary matrix. labels: A <code>Tensor</code> whose shape matches 'predictions' dim: The dimension along which the cosine distance is computed. weights: Coefficients for the loss a scalar, a tensor of shape [batch_size] or a tensor whose shape matches <code>predictions</code>. scope: The scope for the operations performed in computing the loss. targets: Deprecated alias for <code>labels</code>. weight: Deprecated alias for <code>weights</code>.</p>
+<p>Returns: A scalar <code>Tensor</code> representing the loss value.</p>
+<p>Raises: ValueError: If <code>predictions</code> shape doesn't match <code>labels</code> shape, or <code>weights</code> is <code>None</code>.</p>
+<hr />
+<h3 id="tf.contrib.losses.get_lossesscopenone-loss_collectionlosses"><a name="//apple_ref/cpp/Function/get_losses" class="dashAnchor"></a><code id="get_losses">tf.contrib.losses.get_losses(scope=None, loss_collection='losses')</code></h3>
+<p>Gets the list of losses from the loss_collection.</p>
+<h5 id="args-1">Args:</h5>
+<ul>
+<li><b><code>scope</code></b>: an optional scope for filtering the losses to return.</li>
+<li><b><code>loss_collection</code></b>: Optional losses collection.</li>
+</ul>
+<h5 id="returns">Returns:</h5>
+<p>a list of loss tensors.</p>
+<hr />
+<h3 id="tf.contrib.losses.get_regularization_lossesscopenone"><a name="//apple_ref/cpp/Function/get_regularization_losses" class="dashAnchor"></a><code id="get_regularization_losses">tf.contrib.losses.get_regularization_losses(scope=None)</code></h3>
+<p>Gets the regularization losses.</p>
+<h5 id="args-2">Args:</h5>
+<ul>
+<li><b><code>scope</code></b>: an optional scope for filtering the losses to return.</li>
+</ul>
+<h5 id="returns-1">Returns:</h5>
+<p>A list of loss variables.</p>
+<hr />
+<h3 id="tf.contrib.losses.get_total_lossadd_regularization_lossestrue-nametotal_loss"><a name="//apple_ref/cpp/Function/get_total_loss" class="dashAnchor"></a><code id="get_total_loss">tf.contrib.losses.get_total_loss(add_regularization_losses=True, name='total_loss')</code></h3>
+<p>Returns a tensor whose value represents the total loss.</p>
+<p>Notice that the function adds the given losses to the regularization losses.</p>
+<h5 id="args-3">Args:</h5>
+<ul>
+<li><b><code>add_regularization_losses</code></b>: A boolean indicating whether or not to use the regularization losses in the sum.</li>
+<li><b><code>name</code></b>: The name of the returned tensor.</li>
+</ul>
+<h5 id="returns-2">Returns:</h5>
+<p>A <code>Tensor</code> whose value represents the total loss.</p>
+<h5 id="raises">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>losses</code> is not iterable.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.losses.hinge_lossargs-kwargs"><a name="//apple_ref/cpp/Function/hinge_loss" class="dashAnchor"></a><code id="hinge_loss">tf.contrib.losses.hinge_loss(*args, **kwargs)</code></h3>
+<p>Method that returns the loss tensor for hinge loss. (deprecated arguments)</p>
+<p>SOME ARGUMENTS ARE DEPRECATED. They will be removed after 2016-11-25. Instructions for updating: <code>target</code> is being deprecated, use <code>labels</code>.</p>
+<p>Args: logits: The logits, a float tensor. labels: The ground truth output tensor. Its shape should match the shape of logits. The values of the tensor are expected to be 0.0 or 1.0. scope: The scope for the operations performed in computing the loss. target: Deprecated alias for <code>labels</code>.</p>
+<p>Returns: A <code>Tensor</code> of same shape as logits and target representing the loss values across the batch.</p>
+<p>Raises: ValueError: If the shapes of <code>logits</code> and <code>labels</code> don't match.</p>
+<hr />
+<h3 id="tf.contrib.losses.log_lossargs-kwargs"><a name="//apple_ref/cpp/Function/log_loss" class="dashAnchor"></a><code id="log_loss">tf.contrib.losses.log_loss(*args, **kwargs)</code></h3>
+<p>Adds a Log Loss term to the training procedure. (deprecated arguments)</p>
+<p>SOME ARGUMENTS ARE DEPRECATED. They will be removed after 2016-11-25. Instructions for updating: <code>targets</code> is being deprecated, use <code>labels</code>. <code>weight</code> is being deprecated, use <code>weights</code>.</p>
+<p><code>weight</code> acts as a coefficient for the loss. If a scalar is provided, then the loss is simply scaled by the given value. If <code>weight</code> is a tensor of size [batch_size], then the total loss for each sample of the batch is rescaled by the corresponding element in the <code>weight</code> vector. If the shape of <code>weight</code> matches the shape of <code>predictions</code>, then the loss of each measurable element of <code>predictions</code> is scaled by the corresponding value of <code>weight</code>.</p>
+<p>Args: predictions: The predicted outputs. labels: The ground truth output tensor, same dimensions as 'predictions'. weights: Coefficients for the loss a scalar, a tensor of shape [batch_size] or a tensor whose shape matches <code>predictions</code>. epsilon: A small increment to add to avoid taking a log of zero. scope: The scope for the operations performed in computing the loss. targets: Deprecated alias for <code>labels</code>. weight: Deprecated alias for <code>weights</code>.</p>
+<p>Returns: A scalar <code>Tensor</code> representing the loss value.</p>
+<p>Raises: ValueError: If the shape of <code>predictions</code> doesn't match that of <code>labels</code> or if the shape of <code>weight</code> is invalid.</p>
+<hr />
+<h3 id="tf.contrib.losses.mean_pairwise_squared_errorargs-kwargs"><a name="//apple_ref/cpp/Function/mean_pairwise_squared_error" class="dashAnchor"></a><code id="mean_pairwise_squared_error">tf.contrib.losses.mean_pairwise_squared_error(*args, **kwargs)</code></h3>
+<p>Adds a pairwise-errors-squared loss to the training procedure. (deprecated arguments)</p>
+<p>SOME ARGUMENTS ARE DEPRECATED. They will be removed after 2016-11-25. Instructions for updating: <code>targets</code> is being deprecated, use <code>labels</code>. <code>weight</code> is being deprecated, use <code>weights</code>.</p>
+<p>Unlike <code>mean_squared_error</code>, which is a measure of the differences between corresponding elements of <code>predictions</code> and <code>labels</code>, <code>mean_pairwise_squared_error</code> is a measure of the differences between pairs of corresponding elements of <code>predictions</code> and <code>labels</code>.</p>
+<p>For example, if <code>labels</code>=[a, b, c] and <code>predictions</code>=[x, y, z], there are three pairs of differences are summed to compute the loss: loss = [ ((a-b) - (x-y)).^2 + ((a-c) - (x-z)).^2 + ((b-c) - (y-z)).^2 ] / 3</p>
+<p>Note that since the inputs are of size [batch_size, d0, ... dN], the corresponding pairs are computed within each batch sample but not across samples within a batch. For example, if <code>predictions</code> represents a batch of 16 grayscale images of dimension [batch_size, 100, 200], then the set of pairs is drawn from each image, but not across images.</p>
+<p><code>weight</code> acts as a coefficient for the loss. If a scalar is provided, then the loss is simply scaled by the given value. If <code>weight</code> is a tensor of size [batch_size], then the total loss for each sample of the batch is rescaled by the corresponding element in the <code>weight</code> vector.</p>
+<p>Args: predictions: The predicted outputs, a tensor of size [batch_size, d0, .. dN] where N+1 is the total number of dimensions in <code>predictions</code>. labels: The ground truth output tensor, whose shape must match the shape of the <code>predictions</code> tensor. weights: Coefficients for the loss a scalar, a tensor of shape [batch_size] or a tensor whose shape matches <code>predictions</code>. scope: The scope for the operations performed in computing the loss. targets: Deprecated alias for <code>labels</code>. weight: Deprecated alias for <code>weights</code>.</p>
+<p>Returns: A scalar <code>Tensor</code> representing the loss value.</p>
+<p>Raises: ValueError: If the shape of <code>predictions</code> doesn't match that of <code>labels</code> or if the shape of <code>weight</code> is invalid.</p>
+<hr />
+<h3 id="tf.contrib.losses.mean_squared_errorargs-kwargs"><a name="//apple_ref/cpp/Function/mean_squared_error" class="dashAnchor"></a><code id="mean_squared_error">tf.contrib.losses.mean_squared_error(*args, **kwargs)</code></h3>
+<p>Adds a Sum-of-Squares loss to the training procedure. (deprecated arguments)</p>
+<p>SOME ARGUMENTS ARE DEPRECATED. They will be removed after 2016-11-25. Instructions for updating: <code>targets</code> is being deprecated, use <code>labels</code>. <code>weight</code> is being deprecated, use <code>weights</code>.</p>
+<p><code>weight</code> acts as a coefficient for the loss. If a scalar is provided, then the loss is simply scaled by the given value. If <code>weight</code> is a tensor of size [batch_size], then the total loss for each sample of the batch is rescaled by the corresponding element in the <code>weight</code> vector. If the shape of <code>weight</code> matches the shape of <code>predictions</code>, then the loss of each measurable element of <code>predictions</code> is scaled by the corresponding value of <code>weight</code>.</p>
+<p>Args: predictions: The predicted outputs. labels: The ground truth output tensor, same dimensions as 'predictions'. weights: Coefficients for the loss a scalar, a tensor of shape [batch_size] or a tensor whose shape matches <code>predictions</code>. scope: The scope for the operations performed in computing the loss. targets: Deprecated alias for <code>labels</code>. weight: Deprecated alias for <code>weights</code>.</p>
+<p>Returns: A scalar <code>Tensor</code> representing the loss value.</p>
+<p>Raises: ValueError: If the shape of <code>predictions</code> doesn't match that of <code>labels</code> or if the shape of <code>weight</code> is invalid.</p>
+<hr />
+<h3 id="tf.contrib.losses.sigmoid_cross_entropyargs-kwargs"><a name="//apple_ref/cpp/Function/sigmoid_cross_entropy" class="dashAnchor"></a><code id="sigmoid_cross_entropy">tf.contrib.losses.sigmoid_cross_entropy(*args, **kwargs)</code></h3>
+<p>Creates a cross-entropy loss using tf.nn.sigmoid_cross_entropy_with_logits. (deprecated arguments)</p>
+<p>SOME ARGUMENTS ARE DEPRECATED. They will be removed after 2016-11-25. Instructions for updating: <code>weight</code> is being deprecated, use <code>weights</code></p>
+<p><code>weight</code> acts as a coefficient for the loss. If a scalar is provided, then the loss is simply scaled by the given value. If <code>weight</code> is a tensor of size [<code>batch_size</code>], then the loss weights apply to each corresponding sample.</p>
+<p>If <code>label_smoothing</code> is nonzero, smooth the labels towards 1/2:</p>
+<pre><code>  new_multiclass_labels = multiclass_labels * (1 - label_smoothing)
+                          + 0.5 * label_smoothing</code></pre>
+<p>Args: logits: [batch_size, num_classes] logits outputs of the network . multi_class_labels: [batch_size, num_classes] target labels in (0, 1). weights: Coefficients for the loss. The tensor must be a scalar, a tensor of shape [batch_size] or shape [batch_size, num_classes]. label_smoothing: If greater than 0 then smooth the labels. scope: The scope for the operations performed in computing the loss. weight: Deprecated alias for <code>weights</code>.</p>
+<p>Returns: A scalar <code>Tensor</code> representing the loss value.</p>
+<p>Raises: ValueError: If the shape of <code>logits</code> doesn't match that of <code>multi_class_labels</code> or if the shape of <code>weight</code> is invalid, or if <code>weight</code> is None.</p>
+<hr />
+<h3 id="tf.contrib.losses.softmax_cross_entropyargs-kwargs"><a name="//apple_ref/cpp/Function/softmax_cross_entropy" class="dashAnchor"></a><code id="softmax_cross_entropy">tf.contrib.losses.softmax_cross_entropy(*args, **kwargs)</code></h3>
+<p>Creates a cross-entropy loss using tf.nn.softmax_cross_entropy_with_logits. (deprecated arguments)</p>
+<p>SOME ARGUMENTS ARE DEPRECATED. They will be removed after 2016-11-25. Instructions for updating: <code>weight</code> is being deprecated, use <code>weights</code></p>
+<p><code>weight</code> acts as a coefficient for the loss. If a scalar is provided, then the loss is simply scaled by the given value. If <code>weight</code> is a tensor of size [<code>batch_size</code>], then the loss weights apply to each corresponding sample.</p>
+<p>If <code>label_smoothing</code> is nonzero, smooth the labels towards 1/num_classes: new_onehot_labels = onehot_labels * (1 - label_smoothing) + label_smoothing / num_classes</p>
+<p>Args: logits: [batch_size, num_classes] logits outputs of the network . onehot_labels: [batch_size, num_classes] target one_hot_encoded labels. weights: Coefficients for the loss. The tensor must be a scalar or a tensor of shape [batch_size]. label_smoothing: If greater than 0 then smooth the labels. scope: the scope for the operations performed in computing the loss. weight: Deprecated alias for <code>weights</code>.</p>
+<p>Returns: A scalar <code>Tensor</code> representing the loss value.</p>
+<p>Raises: ValueError: If the shape of <code>logits</code> doesn't match that of <code>onehot_labels</code> or if the shape of <code>weight</code> is invalid or if <code>weight</code> is None.</p>
+<hr />
+<h3 id="tf.contrib.losses.sparse_softmax_cross_entropyargs-kwargs"><a name="//apple_ref/cpp/Function/sparse_softmax_cross_entropy" class="dashAnchor"></a><code id="sparse_softmax_cross_entropy">tf.contrib.losses.sparse_softmax_cross_entropy(*args, **kwargs)</code></h3>
+<p>Cross-entropy loss using <code>tf.nn.sparse_softmax_cross_entropy_with_logits</code>. (deprecated arguments)</p>
+<p>SOME ARGUMENTS ARE DEPRECATED. They will be removed after 2016-11-25. Instructions for updating: <code>weight</code> is being deprecated, use <code>weights</code></p>
+<p><code>weight</code> acts as a coefficient for the loss. If a scalar is provided, then the loss is simply scaled by the given value. If <code>weight</code> is a tensor of size [<code>batch_size</code>], then the loss weights apply to each corresponding sample.</p>
+<p>Args: logits: [batch_size, num_classes] logits outputs of the network . labels: [batch_size, 1] or [batch_size] target labels of dtype <code>int32</code> or <code>int64</code> in the range <code>[0, num_classes)</code>. weights: Coefficients for the loss. The tensor must be a scalar or a tensor of shape [batch_size] or [batch_size, 1]. scope: the scope for the operations performed in computing the loss. weight: Deprecated alias for <code>weights</code>.</p>
+<p>Returns: A scalar <code>Tensor</code> representing the loss value.</p>
+<p>Raises: ValueError: If the shapes of logits, labels, and weight are incompatible, or if <code>weight</code> is None.</p>

@@ -1,0 +1,202 @@
+<!-- This file is machine generated: DO NOT EDIT! -->
+<h1 id="strings">Strings</h1>
+<p>Note: Functions taking <code>Tensor</code> arguments can also take anything accepted by <a href="framework.md#convert_to_tensor"><code>tf.convert_to_tensor</code></a>.</p>
+<p>[TOC]</p>
+<h2 id="hashing">Hashing</h2>
+<p>String hashing ops take a string input tensor and map each element to an integer.</p>
+<hr />
+<h3 id="tf.string_to_hash_bucket_fastinput-num_buckets-namenone"><a name="//apple_ref/cpp/Function/string_to_hash_bucket_fast" class="dashAnchor"></a><code id="string_to_hash_bucket_fast">tf.string_to_hash_bucket_fast(input, num_buckets, name=None)</code></h3>
+<p>Converts each string in the input Tensor to its hash mod by a number of buckets.</p>
+<p>The hash function is deterministic on the content of the string within the process and will never change. However, it is not suitable for cryptography. This function may be used when CPU time is scarce and inputs are trusted or unimportant. There is a risk of adversaries constructing inputs that all hash to the same bucket. To prevent this problem, use a strong hash function with <code>tf.string_to_hash_bucket_strong</code>.</p>
+<h5 id="args">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code> of type <code>string</code>. The strings to assign a hash bucket.</li>
+<li><b><code>num_buckets</code></b>: An <code>int</code> that is <code>&gt;= 1</code>. The number of buckets.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>int64</code>. A Tensor of the same shape as the input <code>string_tensor</code>.</p>
+<hr />
+<h3 id="tf.string_to_hash_bucket_stronginput-num_buckets-key-namenone"><a name="//apple_ref/cpp/Function/string_to_hash_bucket_strong" class="dashAnchor"></a><code id="string_to_hash_bucket_strong">tf.string_to_hash_bucket_strong(input, num_buckets, key, name=None)</code></h3>
+<p>Converts each string in the input Tensor to its hash mod by a number of buckets.</p>
+<p>The hash function is deterministic on the content of the string within the process. The hash function is a keyed hash function, where attribute <code>key</code> defines the key of the hash function. <code>key</code> is an array of 2 elements.</p>
+<p>A strong hash is important when inputs may be malicious, e.g. URLs with additional components. Adversaries could try to make their inputs hash to the same bucket for a denial-of-service attack or to skew the results. A strong hash prevents this by making it dificult, if not infeasible, to compute inputs that hash to the same bucket. This comes at a cost of roughly 4x higher compute time than <code>tf.string_to_hash_bucket_fast</code>.</p>
+<h5 id="args-1">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code> of type <code>string</code>. The strings to assign a hash bucket.</li>
+<li><b><code>num_buckets</code></b>: An <code>int</code> that is <code>&gt;= 1</code>. The number of buckets.</li>
+<li><b><code>key</code></b>: A list of <code>ints</code>. The key for the keyed hash function passed as a list of two uint64 elements.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-1">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>int64</code>. A Tensor of the same shape as the input <code>string_tensor</code>.</p>
+<hr />
+<h3 id="tf.string_to_hash_bucketstring_tensor-num_buckets-namenone"><a name="//apple_ref/cpp/Function/string_to_hash_bucket" class="dashAnchor"></a><code id="string_to_hash_bucket">tf.string_to_hash_bucket(string_tensor, num_buckets, name=None)</code></h3>
+<p>Converts each string in the input Tensor to its hash mod by a number of buckets.</p>
+<p>The hash function is deterministic on the content of the string within the process.</p>
+<p>Note that the hash function may change from time to time. This functionality will be deprecated and it's recommended to use <code>tf.string_to_hash_bucket_fast()</code> or <code>tf.string_to_hash_bucket_strong()</code>.</p>
+<h5 id="args-2">Args:</h5>
+<ul>
+<li><b><code>string_tensor</code></b>: A <code>Tensor</code> of type <code>string</code>.</li>
+<li><b><code>num_buckets</code></b>: An <code>int</code> that is <code>&gt;= 1</code>. The number of buckets.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-2">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>int64</code>. A Tensor of the same shape as the input <code>string_tensor</code>.</p>
+<h2 id="joining">Joining</h2>
+<p>String joining ops concatenate elements of input string tensors to produce a new string tensor.</p>
+<hr />
+<h3 id="tf.reduce_joininputs-reduction_indices-keep_dimsnone-separatornone-namenone"><a name="//apple_ref/cpp/Function/reduce_join" class="dashAnchor"></a><code id="reduce_join">tf.reduce_join(inputs, reduction_indices, keep_dims=None, separator=None, name=None)</code></h3>
+<p>Joins a string Tensor across the given dimensions.</p>
+<p>Computes the string join across dimensions in the given string Tensor of shape <code>[d_0, d_1, ..., d_n-1]</code>. Returns a new Tensor created by joining the input strings with the given separator (default: empty string). Negative indices are counted backwards from the end, with <code>-1</code> being equivalent to <code>n - 1</code>. Passing an empty <code>reduction_indices</code> joins all strings in linear index order and outputs a scalar string.</p>
+<p>For example:</p>
+<pre><code># tensor `a` is [[&quot;a&quot;, &quot;b&quot;], [&quot;c&quot;, &quot;d&quot;]]
+tf.reduce_join(a, 0) ==&gt; [&quot;ac&quot;, &quot;bd&quot;]
+tf.reduce_join(a, 1) ==&gt; [&quot;ab&quot;, &quot;cd&quot;]
+tf.reduce_join(a, -2) = tf.reduce_join(a, 0) ==&gt; [&quot;ac&quot;, &quot;bd&quot;]
+tf.reduce_join(a, -1) = tf.reduce_join(a, 1) ==&gt; [&quot;ab&quot;, &quot;cd&quot;]
+tf.reduce_join(a, 0, keep_dims=True) ==&gt; [[&quot;ac&quot;, &quot;bd&quot;]]
+tf.reduce_join(a, 1, keep_dims=True) ==&gt; [[&quot;ab&quot;], [&quot;cd&quot;]]
+tf.reduce_join(a, 0, separator=&quot;.&quot;) ==&gt; [&quot;a.c&quot;, &quot;b.d&quot;]
+tf.reduce_join(a, [0, 1]) ==&gt; [&quot;acbd&quot;]
+tf.reduce_join(a, [1, 0]) ==&gt; [&quot;abcd&quot;]
+tf.reduce_join(a, []) ==&gt; [&quot;abcd&quot;]</code></pre>
+<h5 id="args-3">Args:</h5>
+<ul>
+<li><b><code>inputs</code></b>: A <code>Tensor</code> of type <code>string</code>. The input to be joined. All reduced indices must have non-zero size.</li>
+<li><b><code>reduction_indices</code></b>: A <code>Tensor</code> of type <code>int32</code>. The dimensions to reduce over. Dimensions are reduced in the order specified. Omitting <code>reduction_indices</code> is equivalent to passing <code>[n-1, n-2, ..., 0]</code>. Negative indices from <code>-n</code> to <code>-1</code> are supported.</li>
+<li><b><code>keep_dims</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>. If <code>True</code>, retain reduced dimensions with length <code>1</code>.</li>
+<li><b><code>separator</code></b>: An optional <code>string</code>. Defaults to <code>&quot;&quot;</code>. The separator to use when joining.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-3">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>string</code>. Has shape equal to that of the input with reduced dimensions removed or set to <code>1</code> depending on <code>keep_dims</code>.</p>
+<hr />
+<h3 id="tf.string_joininputs-separatornone-namenone"><a name="//apple_ref/cpp/Function/string_join" class="dashAnchor"></a><code id="string_join">tf.string_join(inputs, separator=None, name=None)</code></h3>
+<p>Joins the strings in the given list of string tensors into one tensor;</p>
+<p>with the given separator (default is an empty separator).</p>
+<h5 id="args-4">Args:</h5>
+<ul>
+<li><b><code>inputs</code></b>: A list of at least 1 <code>Tensor</code> objects of type <code>string</code>. A list of string tensors. The tensors must all have the same shape, or be scalars. Scalars may be mixed in; these will be broadcast to the shape of non-scalar inputs.</li>
+<li><b><code>separator</code></b>: An optional <code>string</code>. Defaults to <code>&quot;&quot;</code>. string, an optional join separator.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-4">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>string</code>.</p>
+<h2 id="splitting">Splitting</h2>
+<hr />
+<h3 id="tf.string_splitsource-delimiter"><a name="//apple_ref/cpp/Function/string_split" class="dashAnchor"></a><code id="string_split">tf.string_split(source, delimiter=' ')</code></h3>
+<p>Split elements of <code>source</code> based on <code>delimiter</code> into a <code>SparseTensor</code>.</p>
+<p>Let N be the size of source (typically N will be the batch size). Split each element of <code>source</code> based on <code>delimiter</code> and return a <code>SparseTensor</code> containing the splitted tokens. Empty tokens are ignored.</p>
+<p>If <code>delimiter</code> is an empty string, each element of the <code>source</code> is split into individual strings, each containing one byte. (This includes splitting multibyte sequences of UTF-8.)</p>
+<p>For example: N = 2, source[0] is 'hello world' and source[1] is 'a b c', then the output will be</p>
+<p>st.indices = [0, 0; 0, 1; 1, 0; 1, 1; 1, 2] st.shape = [2, 3] st.values = ['hello', 'world', 'a', 'b', 'c']</p>
+<h5 id="args-5">Args:</h5>
+<ul>
+<li><b><code>source</code></b>: <code>1-D</code> string <code>Tensor</code>, the strings to split.</li>
+<li><b><code>delimiter</code></b>: <code>0-D</code> string <code>Tensor</code>, the delimiter character, the string should be length 0 or 1.</li>
+</ul>
+<h5 id="returns-5">Returns:</h5>
+<p>A <code>SparseTensor</code> of rank <code>2</code>, the strings split according to the delimiter. The first column of the indices corresponds to the row in <code>source</code> and the second column corresponds to the index of the split component in this row.</p>
+<h5 id="raises">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If delimiter is not a single-byte character.</li>
+</ul>
+<hr />
+<h3 id="tf.substrinput-pos-len-namenone"><a name="//apple_ref/cpp/Function/substr" class="dashAnchor"></a><code id="substr">tf.substr(input, pos, len, name=None)</code></h3>
+<p>Return substrings from <code>Tensor</code> of strings.</p>
+<p>For each string in the input <code>Tensor</code>, creates a substring starting at index <code>pos</code> with a total length of <code>len</code>.</p>
+<p>If <code>len</code> defines a substring that would extend beyond the length of the input string, then as many characters as possible are used.</p>
+<p>If <code>pos</code> is negative or specifies a character index larger than any of the input strings, then an <code>InvalidArgumentError</code> is thrown.</p>
+<p><code>pos</code> and <code>len</code> must have the same shape, otherwise a <code>ValueError</code> is thrown on Op creation.</p>
+<p><em>NOTE</em>: <code>Substr</code> supports broadcasting up to two dimensions. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<hr />
+<p>Examples</p>
+<p>Using scalar <code>pos</code> and <code>len</code>:</p>
+<pre><code>input = [b&#39;Hello&#39;, b&#39;World&#39;]
+position = 1
+length = 3
+
+output = [b&#39;ell&#39;, b&#39;orl&#39;]</code></pre>
+<p>Using <code>pos</code> and <code>len</code> with same shape as <code>input</code>:</p>
+<pre><code>input = [[b&#39;ten&#39;, b&#39;eleven&#39;, b&#39;twelve&#39;],
+         [b&#39;thirteen&#39;, b&#39;fourteen&#39;, b&#39;fifteen&#39;],
+         [b&#39;sixteen&#39;, b&#39;seventeen&#39;, b&#39;eighteen&#39;]]
+position = [[1, 2, 3],
+            [1, 2, 3],
+            [1, 2, 3]]
+length =   [[2, 3, 4],
+            [4, 3, 2],
+            [5, 5, 5]]
+
+output = [[b&#39;en&#39;, b&#39;eve&#39;, b&#39;lve&#39;],
+          [b&#39;hirt&#39;, b&#39;urt&#39;, b&#39;te&#39;],
+          [b&#39;ixtee&#39;, b&#39;vente&#39;, b&#39;hteen&#39;]]</code></pre>
+<p>Broadcasting <code>pos</code> and <code>len</code> onto <code>input</code>:</p>
+<pre><code>input = [[b&#39;ten&#39;, b&#39;eleven&#39;, b&#39;twelve&#39;],
+         [b&#39;thirteen&#39;, b&#39;fourteen&#39;, b&#39;fifteen&#39;],
+         [b&#39;sixteen&#39;, b&#39;seventeen&#39;, b&#39;eighteen&#39;],
+         [b&#39;nineteen&#39;, b&#39;twenty&#39;, b&#39;twentyone&#39;]]
+position = [1, 2, 3]
+length =   [1, 2, 3]
+
+output = [[b&#39;e&#39;, b&#39;ev&#39;, b&#39;lve&#39;],
+          [b&#39;h&#39;, b&#39;ur&#39;, b&#39;tee&#39;],
+          [b&#39;i&#39;, b&#39;ve&#39;, b&#39;hte&#39;],
+          [b&#39;i&#39;, b&#39;en&#39;, b&#39;nty&#39;]]</code></pre>
+<p>Broadcasting <code>input</code> onto <code>pos</code> and <code>len</code>:</p>
+<pre><code>input = b&#39;thirteen&#39;
+position = [1, 5, 7]
+length =   [3, 2, 1]
+
+output = [b&#39;hir&#39;, b&#39;ee&#39;, b&#39;n&quot;]</code></pre>
+<h5 id="args-6">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code> of type <code>string</code>. Tensor of strings</li>
+<li><b><code>pos</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. Scalar defining the position of first character in each substring</li>
+<li><b><code>len</code></b>: A <code>Tensor</code>. Must have the same type as <code>pos</code>. Scalar defining the number of characters to include in each substring</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-6">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>string</code>. Tensor of substrings</p>
+<h2 id="conversion">Conversion</h2>
+<hr />
+<h3 id="tf.as_stringinput-precisionnone-scientificnone-shortestnone-widthnone-fillnone-namenone"><a name="//apple_ref/cpp/Function/as_string" class="dashAnchor"></a><code id="as_string">tf.as_string(input, precision=None, scientific=None, shortest=None, width=None, fill=None, name=None)</code></h3>
+<p>Converts each entry in the given tensor to strings. Supports many numeric</p>
+<p>types and boolean.</p>
+<h5 id="args-7">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>float32</code>, <code>float64</code>, <code>bool</code>, <code>int8</code>.</li>
+<li><b><code>precision</code></b>: An optional <code>int</code>. Defaults to <code>-1</code>. The post-decimal precision to use for floating point numbers. Only used if precision &gt; -1.</li>
+<li><b><code>scientific</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>. Use scientific notation for floating point numbers.</li>
+<li><b><code>shortest</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>. Use shortest representation (either scientific or standard) for floating point numbers.</li>
+<li><b><code>width</code></b>: An optional <code>int</code>. Defaults to <code>-1</code>. Pad pre-decimal numbers to this width. Applies to both floating point and integer numbers. Only used if width &gt; -1.</li>
+<li><b><code>fill</code></b>: An optional <code>string</code>. Defaults to <code>&quot;&quot;</code>. The value to pad if width &gt; -1. If empty, pads with spaces. Another typical value is '0'. String cannot be longer than 1 character.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-7">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>string</code>.</p>
+<hr />
+<h3 id="tf.encode_base64input-padnone-namenone"><a name="//apple_ref/cpp/Function/encode_base64" class="dashAnchor"></a><code id="encode_base64">tf.encode_base64(input, pad=None, name=None)</code></h3>
+<p>Encode strings into web-safe base64 format.</p>
+<p>Refer to the following article for more information on base64 format: en.wikipedia.org/wiki/Base64. Base64 strings may have padding with '=' at the end so that the encoded has length multiple of 4. See Padding section of the link above.</p>
+<p>Web-safe means that the encoder uses - and _ instead of + and /.</p>
+<h5 id="args-8">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code> of type <code>string</code>. Strings to be encoded.</li>
+<li><b><code>pad</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>. Bool whether padding is applied at the ends.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-8">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>string</code>. Input strings encoded in base64.</p>
+<hr />
+<h3 id="tf.decode_base64input-namenone"><a name="//apple_ref/cpp/Function/decode_base64" class="dashAnchor"></a><code id="decode_base64">tf.decode_base64(input, name=None)</code></h3>
+<p>Decode web-safe base64-encoded strings.</p>
+<p>Input may or may not have padding at the end. See EncodeBase64 for padding. Web-safe means that input must use - and _ instead of + and /.</p>
+<h5 id="args-9">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code> of type <code>string</code>. Base64 strings to decode.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-9">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>string</code>. Decoded strings.</p>

@@ -1,0 +1,616 @@
+<!-- This file is machine generated: DO NOT EDIT! -->
+<h1 id="framework-contrib">Framework (contrib)</h1>
+<p>[TOC]</p>
+<p>Framework utilities.</p>
+<hr />
+<h3 id="tf.contrib.framework.assert_same_float_dtypetensorsnone-dtypenone"><a name="//apple_ref/cpp/Function/assert_same_float_dtype" class="dashAnchor"></a><code id="assert_same_float_dtype">tf.contrib.framework.assert_same_float_dtype(tensors=None, dtype=None)</code></h3>
+<p>Validate and return float type based on <code>tensors</code> and <code>dtype</code>.</p>
+<p>For ops such as matrix multiplication, inputs and weights must be of the same float type. This function validates that all <code>tensors</code> are the same type, validates that type is <code>dtype</code> (if supplied), and returns the type. Type must be <code>dtypes.float32</code> or <code>dtypes.float64</code>. If neither <code>tensors</code> nor <code>dtype</code> is supplied, default to <code>dtypes.float32</code>.</p>
+<h5 id="args">Args:</h5>
+<ul>
+<li><b><code>tensors</code></b>: Tensors of input values. Can include <code>None</code> elements, which will be ignored.</li>
+<li><b><code>dtype</code></b>: Expected type.</li>
+</ul>
+<h5 id="returns">Returns:</h5>
+<p>Validated type.</p>
+<h5 id="raises">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if neither <code>tensors</code> nor <code>dtype</code> is supplied, or result is not float.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.framework.assert_scalar_inttensor-namenone"><a name="//apple_ref/cpp/Function/assert_scalar_int" class="dashAnchor"></a><code id="assert_scalar_int">tf.contrib.framework.assert_scalar_int(tensor, name=None)</code></h3>
+<p>Assert <code>tensor</code> is 0-D, of type <code>tf.int32</code> or <code>tf.int64</code>.</p>
+<h5 id="args-1">Args:</h5>
+<ul>
+<li><b><code>tensor</code></b>: <code>Tensor</code> to test.</li>
+<li><b><code>name</code></b>: Name of the op and of the new <code>Tensor</code> if one is created.</li>
+</ul>
+<h5 id="returns-1">Returns:</h5>
+<p><code>tensor</code>, for chaining.</p>
+<h5 id="raises-1">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>tensor</code> is not 0-D, of type <code>tf.int32</code> or <code>tf.int64</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.convert_to_tensor_or_sparse_tensorvalue-dtypenone-namenone"><a name="//apple_ref/cpp/Function/convert_to_tensor_or_sparse_tensor" class="dashAnchor"></a><code id="convert_to_tensor_or_sparse_tensor">tf.convert_to_tensor_or_sparse_tensor(value, dtype=None, name=None)</code></h3>
+<p>Converts value to a <code>SparseTensor</code> or <code>Tensor</code>.</p>
+<h5 id="args-2">Args:</h5>
+<ul>
+<li><b><code>value</code></b>: A <code>SparseTensor</code>, <code>SparseTensorValue</code>, or an object whose type has a registered <code>Tensor</code> conversion function.</li>
+<li><b><code>dtype</code></b>: Optional element type for the returned tensor. If missing, the type is inferred from the type of <code>value</code>.</li>
+<li><b><code>name</code></b>: Optional name to use if a new <code>Tensor</code> is created.</li>
+</ul>
+<h5 id="returns-2">Returns:</h5>
+<p>A <code>SparseTensor</code> or <code>Tensor</code> based on <code>value</code>.</p>
+<h5 id="raises-2">Raises:</h5>
+<ul>
+<li><b><code>RuntimeError</code></b>: If result type is incompatible with <code>dtype</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.framework.get_graph_from_inputsop_input_list-graphnone"><a name="//apple_ref/cpp/Function/get_graph_from_inputs" class="dashAnchor"></a><code id="get_graph_from_inputs">tf.contrib.framework.get_graph_from_inputs(op_input_list, graph=None)</code></h3>
+<p>Returns the appropriate graph to use for the given inputs.</p>
+<ol style="list-style-type: decimal">
+<li>If <code>graph</code> is provided, we validate that all inputs in <code>op_input_list</code> are from the same graph.</li>
+<li>Otherwise, we attempt to select a graph from the first Operation- or Tensor-valued input in <code>op_input_list</code>, and validate that all other such inputs are in the same graph.</li>
+<li>If the graph was not specified and it could not be inferred from <code>op_input_list</code>, we attempt to use the default graph.</li>
+</ol>
+<h5 id="args-3">Args:</h5>
+<ul>
+<li><b><code>op_input_list</code></b>: A list of inputs to an operation, which may include <code>Tensor</code>, <code>Operation</code>, and other objects that may be converted to a graph element.</li>
+<li><b><code>graph</code></b>: (Optional) The explicit graph to use.</li>
+</ul>
+<h5 id="raises-3">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>op_input_list</code> is not a list or tuple, or if graph is not a Graph.</li>
+<li><b><code>ValueError</code></b>: If a graph is explicitly passed and not all inputs are from it, or if the inputs are from multiple graphs, or we could not find a graph and there was no default graph.</li>
+</ul>
+<h5 id="returns-3">Returns:</h5>
+<p>The appropriate graph to use for the given inputs.</p>
+<hr />
+<h3 id="tf.is_numeric_tensortensor"><a name="//apple_ref/cpp/Function/is_numeric_tensor" class="dashAnchor"></a><code id="is_numeric_tensor">tf.is_numeric_tensor(tensor)</code></h3>
+<hr />
+<h3 id="tf.is_non_decreasingx-namenone"><a name="//apple_ref/cpp/Function/is_non_decreasing" class="dashAnchor"></a><code id="is_non_decreasing">tf.is_non_decreasing(x, name=None)</code></h3>
+<p>Returns <code>True</code> if <code>x</code> is non-decreasing.</p>
+<p>Elements of <code>x</code> are compared in row-major order. The tensor <code>[x[0],...]</code> is non-decreasing if for every adjacent pair we have <code>x[i] &lt;= x[i+1]</code>. If <code>x</code> has less than two elements, it is trivially non-decreasing.</p>
+<p>See also: <code>is_strictly_increasing</code></p>
+<h5 id="args-4">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: Numeric <code>Tensor</code>.</li>
+<li><b><code>name</code></b>: A name for this operation (optional). Defaults to &quot;is_non_decreasing&quot;</li>
+</ul>
+<h5 id="returns-4">Returns:</h5>
+<p>Boolean <code>Tensor</code>, equal to <code>True</code> iff <code>x</code> is non-decreasing.</p>
+<h5 id="raises-4">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>x</code> is not a numeric tensor.</li>
+</ul>
+<hr />
+<h3 id="tf.is_strictly_increasingx-namenone"><a name="//apple_ref/cpp/Function/is_strictly_increasing" class="dashAnchor"></a><code id="is_strictly_increasing">tf.is_strictly_increasing(x, name=None)</code></h3>
+<p>Returns <code>True</code> if <code>x</code> is strictly increasing.</p>
+<p>Elements of <code>x</code> are compared in row-major order. The tensor <code>[x[0],...]</code> is strictly increasing if for every adjacent pair we have <code>x[i] &lt; x[i+1]</code>. If <code>x</code> has less than two elements, it is trivially strictly increasing.</p>
+<p>See also: <code>is_non_decreasing</code></p>
+<h5 id="args-5">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: Numeric <code>Tensor</code>.</li>
+<li><b><code>name</code></b>: A name for this operation (optional). Defaults to &quot;is_strictly_increasing&quot;</li>
+</ul>
+<h5 id="returns-5">Returns:</h5>
+<p>Boolean <code>Tensor</code>, equal to <code>True</code> iff <code>x</code> is strictly increasing.</p>
+<h5 id="raises-5">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>x</code> is not a numeric tensor.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.framework.is_tensorx"><a name="//apple_ref/cpp/Function/is_tensor" class="dashAnchor"></a><code id="is_tensor">tf.contrib.framework.is_tensor(x)</code></h3>
+<p>Check for tensor types.</p>
+<p>Check whether an object is a tensor. Equivalent to <code>isinstance(x, [tf.Tensor, tf.SparseTensor, tf.Variable])</code>.</p>
+<h5 id="args-6">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: An python object to check.</li>
+</ul>
+<h5 id="returns-6">Returns:</h5>
+<p><code>True</code> if <code>x</code> is a tensor, <code>False</code> if not.</p>
+<hr />
+<h3 id="tf.contrib.framework.reduce_sum_ntensors-namenone"><a name="//apple_ref/cpp/Function/reduce_sum_n" class="dashAnchor"></a><code id="reduce_sum_n">tf.contrib.framework.reduce_sum_n(tensors, name=None)</code></h3>
+<p>Reduce tensors to a scalar sum.</p>
+<p>This reduces each tensor in <code>tensors</code> to a scalar via <code>tf.reduce_sum</code>, then adds them via <code>tf.add_n</code>.</p>
+<h5 id="args-7">Args:</h5>
+<ul>
+<li><b><code>tensors</code></b>: List of tensors, all of the same numeric type.</li>
+<li><b><code>name</code></b>: Tensor name, and scope for all other ops.</li>
+</ul>
+<h5 id="returns-7">Returns:</h5>
+<p>Total loss tensor, or None if no losses have been configured.</p>
+<h5 id="raises-6">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>losses</code> is missing or empty.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.framework.with_shapeexpected_shape-tensor"><a name="//apple_ref/cpp/Function/with_shape" class="dashAnchor"></a><code id="with_shape">tf.contrib.framework.with_shape(expected_shape, tensor)</code></h3>
+<p>Asserts tensor has expected shape.</p>
+<p>If tensor shape and expected_shape, are fully defined, assert they match. Otherwise, add assert op that will validate the shape when tensor is evaluated, and set shape on tensor.</p>
+<h5 id="args-8">Args:</h5>
+<ul>
+<li><b><code>expected_shape</code></b>: Expected shape to assert, as a 1D array of ints, or tensor of same.</li>
+<li><b><code>tensor</code></b>: Tensor whose shape we're validating.</li>
+</ul>
+<h5 id="returns-8">Returns:</h5>
+<p>tensor, perhaps with a dependent assert operation.</p>
+<h5 id="raises-7">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if tensor has an invalid shape.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.framework.with_same_shapeexpected_tensor-tensor"><a name="//apple_ref/cpp/Function/with_same_shape" class="dashAnchor"></a><code id="with_same_shape">tf.contrib.framework.with_same_shape(expected_tensor, tensor)</code></h3>
+<p>Assert tensors are the same shape, from the same graph.</p>
+<h5 id="args-9">Args:</h5>
+<ul>
+<li><b><code>expected_tensor</code></b>: Tensor with expected shape.</li>
+<li><b><code>tensor</code></b>: Tensor of actual values.</li>
+</ul>
+<h5 id="returns-9">Returns:</h5>
+<p>Tuple of (actual_tensor, label_tensor), possibly with assert ops added.</p>
+<h2 id="deprecation">Deprecation</h2>
+<hr />
+<h3 id="tf.contrib.framework.deprecateddate-instructions"><a name="//apple_ref/cpp/Function/deprecated" class="dashAnchor"></a><code id="deprecated">tf.contrib.framework.deprecated(date, instructions)</code></h3>
+<p>Decorator for marking functions or methods deprecated.</p>
+<p>This decorator logs a deprecation warning whenever the decorated function is called. It has the following format:</p>
+<p><function> (from <module>) is deprecated and will be removed after <date>. Instructions for updating: <instructions></p>
+<p><function> will include the class name if it is a method.</p>
+<p>It also edits the docstring of the function: ' (deprecated)' is appended to the first line of the docstring and a deprecation notice is prepended to the rest of the docstring.</p>
+<h5 id="args-10">Args:</h5>
+<ul>
+<li><b><code>date</code></b>: String. The date the function is scheduled to be removed. Must be ISO 8601 (YYYY-MM-DD).</li>
+<li><b><code>instructions</code></b>: String. Instructions on how to update code using the deprecated function.</li>
+</ul>
+<h5 id="returns-10">Returns:</h5>
+<p>Decorated function or method.</p>
+<h5 id="raises-8">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If date is not in ISO 8601 format, or instructions are empty.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.framework.deprecated_argsdate-instructions-deprecated_arg_names_or_tuples"><a name="//apple_ref/cpp/Function/deprecated_args" class="dashAnchor"></a><code id="deprecated_args">tf.contrib.framework.deprecated_args(date, instructions, *deprecated_arg_names_or_tuples)</code></h3>
+<p>Decorator for marking specific function arguments as deprecated.</p>
+<p>This decorator logs a deprecation warning whenever the decorated function is called with the deprecated argument. It has the following format:</p>
+<p>Calling <function> (from <module>) with <arg> is deprecated and will be removed after <date>. Instructions for updating: <instructions></p>
+<p><function> will include the class name if it is a method.</p>
+<p>It also edits the docstring of the function: ' (deprecated arguments)' is appended to the first line of the docstring and a deprecation notice is prepended to the rest of the docstring.</p>
+<h5 id="args-11">Args:</h5>
+<ul>
+<li><b><code>date</code></b>: String. The date the function is scheduled to be removed. Must be ISO 8601 (YYYY-MM-DD).</li>
+<li><b><code>instructions</code></b>: String. Instructions on how to update code using the deprecated function.</li>
+<li><b><code>*deprecated_arg_names_or_tuples</code></b>: String. or 2-Tuple(String, [ok_vals]). The string is the deprecated argument name. Optionally, an ok-value may be provided. If the user provided argument equals this value, the warning is suppressed.</li>
+</ul>
+<h5 id="returns-11">Returns:</h5>
+<p>Decorated function or method.</p>
+<h5 id="raises-9">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If date is not in ISO 8601 format, instructions are empty, the deprecated arguments are not present in the function signature, or the second element of a deprecated_tuple is not a list.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.framework.deprecated_arg_valuesdate-instructions-deprecated_kwargs"><a name="//apple_ref/cpp/Function/deprecated_arg_values" class="dashAnchor"></a><code id="deprecated_arg_values">tf.contrib.framework.deprecated_arg_values(date, instructions, **deprecated_kwargs)</code></h3>
+<p>Decorator for marking specific function argument values as deprecated.</p>
+<p>This decorator logs a deprecation warning whenever the decorated function is called with the deprecated argument values. It has the following format:</p>
+<p>Calling <function> (from <module>) with <arg>=<value> is deprecated and will be removed after <date>. Instructions for updating: <instructions></p>
+<p><function> will include the class name if it is a method.</p>
+<p>It also edits the docstring of the function: ' (deprecated arguments)' is appended to the first line of the docstring and a deprecation notice is prepended to the rest of the docstring.</p>
+<h5 id="args-12">Args:</h5>
+<ul>
+<li><b><code>date</code></b>: String. The date the function is scheduled to be removed. Must be ISO 8601 (YYYY-MM-DD).</li>
+<li><b><code>instructions</code></b>: String. Instructions on how to update code using the deprecated function.</li>
+<li><b><code>**deprecated_kwargs</code></b>: The deprecated argument values.</li>
+</ul>
+<h5 id="returns-12">Returns:</h5>
+<p>Decorated function or method.</p>
+<h5 id="raises-10">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If date is not in ISO 8601 format, or instructions are empty.</li>
+</ul>
+<h2 id="arg_scope">Arg_Scope</h2>
+<hr />
+<h3 id="tf.contrib.framework.arg_scopelist_ops_or_scope-kwargs"><a name="//apple_ref/cpp/Function/arg_scope" class="dashAnchor"></a><code id="arg_scope">tf.contrib.framework.arg_scope(list_ops_or_scope, **kwargs)</code></h3>
+<p>Stores the default arguments for the given set of list_ops.</p>
+<p>For usage, please see examples at top of the file.</p>
+<h5 id="args-13">Args:</h5>
+<ul>
+<li><b><code>list_ops_or_scope</code></b>: List or tuple of operations to set argument scope for or a dictionary containing the current scope. When list_ops_or_scope is a dict, kwargs must be empty. When list_ops_or_scope is a list or tuple, then every op in it need to be decorated with <span class="citation">@add_arg_scope</span> to work.</li>
+<li><b><code>**kwargs</code></b>: keyword=value that will define the defaults for each op in list_ops. All the ops need to accept the given set of arguments.</li>
+</ul>
+<h5 id="yields">Yields:</h5>
+<p>the current_scope, which is a dictionary of {op: {arg: value}}</p>
+<h5 id="raises-11">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if list_ops is not a list or a tuple.</li>
+<li><b><code>ValueError</code></b>: if any op in list_ops has not be decorated with <span class="citation">@add_arg_scope</span>.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.framework.add_arg_scopefunc"><a name="//apple_ref/cpp/Function/add_arg_scope" class="dashAnchor"></a><code id="add_arg_scope">tf.contrib.framework.add_arg_scope(func)</code></h3>
+<p>Decorates a function with args so it can be used within an arg_scope.</p>
+<h5 id="args-14">Args:</h5>
+<ul>
+<li><b><code>func</code></b>: function to decorate.</li>
+</ul>
+<h5 id="returns-13">Returns:</h5>
+<p>A tuple with the decorated function func_with_args().</p>
+<hr />
+<h3 id="tf.contrib.framework.has_arg_scopefunc"><a name="//apple_ref/cpp/Function/has_arg_scope" class="dashAnchor"></a><code id="has_arg_scope">tf.contrib.framework.has_arg_scope(func)</code></h3>
+<p>Checks whether a func has been decorated with <span class="citation">@add_arg_scope</span> or not.</p>
+<h5 id="args-15">Args:</h5>
+<ul>
+<li><b><code>func</code></b>: function to check.</li>
+</ul>
+<h5 id="returns-14">Returns:</h5>
+<p>a boolean.</p>
+<hr />
+<h3 id="tf.contrib.framework.arg_scoped_argumentsfunc"><a name="//apple_ref/cpp/Function/arg_scoped_arguments" class="dashAnchor"></a><code id="arg_scoped_arguments">tf.contrib.framework.arg_scoped_arguments(func)</code></h3>
+<p>Returns the list kwargs that arg_scope can set for a func.</p>
+<h5 id="args-16">Args:</h5>
+<ul>
+<li><b><code>func</code></b>: function which has been decorated with <span class="citation">@add_arg_scope</span>.</li>
+</ul>
+<h5 id="returns-15">Returns:</h5>
+<p>a list of kwargs names.</p>
+<h2 id="variables">Variables</h2>
+<hr />
+<h3 id="tf.contrib.framework.add_model_variablevar"><a name="//apple_ref/cpp/Function/add_model_variable" class="dashAnchor"></a><code id="add_model_variable">tf.contrib.framework.add_model_variable(var)</code></h3>
+<p>Adds a variable to the <code>GraphKeys.MODEL_VARIABLES</code> collection.</p>
+<h5 id="args-17">Args:</h5>
+<ul>
+<li><b><code>var</code></b>: a variable.</li>
+</ul>
+<hr />
+<h3 id="tf.train.assert_global_stepglobal_step_tensor"><a name="//apple_ref/cpp/Function/assert_global_step" class="dashAnchor"></a><code id="assert_global_step">tf.train.assert_global_step(global_step_tensor)</code></h3>
+<p>Asserts <code>global_step_tensor</code> is a scalar int <code>Variable</code> or <code>Tensor</code>.</p>
+<h5 id="args-18">Args:</h5>
+<ul>
+<li><b><code>global_step_tensor</code></b>: <code>Tensor</code> to test.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.framework.assert_or_get_global_stepgraphnone-global_step_tensornone"><a name="//apple_ref/cpp/Function/assert_or_get_global_step" class="dashAnchor"></a><code id="assert_or_get_global_step">tf.contrib.framework.assert_or_get_global_step(graph=None, global_step_tensor=None)</code></h3>
+<p>Verifies that a global step tensor is valid or gets one if None is given.</p>
+<p>If <code>global_step_tensor</code> is not None, check that it is a valid global step tensor (using <code>assert_global_step</code>). Otherwise find a global step tensor using <code>get_global_step</code> and return it.</p>
+<h5 id="args-19">Args:</h5>
+<ul>
+<li><b><code>graph</code></b>: The graph to find the global step tensor for.</li>
+<li><b><code>global_step_tensor</code></b>: The tensor to check for suitability as a global step. If None is given (the default), find a global step tensor.</li>
+</ul>
+<h5 id="returns-16">Returns:</h5>
+<p>A tensor suitable as a global step, or <code>None</code> if none was provided and none was found.</p>
+<hr />
+<h3 id="tf.contrib.framework.assign_from_checkpointmodel_path-var_list"><a name="//apple_ref/cpp/Function/assign_from_checkpoint" class="dashAnchor"></a><code id="assign_from_checkpoint">tf.contrib.framework.assign_from_checkpoint(model_path, var_list)</code></h3>
+<p>Creates an operation to assign specific variables from a checkpoint.</p>
+<h5 id="args-20">Args:</h5>
+<ul>
+<li><b><code>model_path</code></b>: The full path to the model checkpoint. To get latest checkpoint use <code>model_path = tf.train.latest_checkpoint(checkpoint_dir)</code></li>
+<li><b><code>var_list</code></b>: A list of <code>Variable</code> objects or a dictionary mapping names in the checkpoint to the corresponding variables to initialize. If empty or None, it would return no_op(), None.</li>
+</ul>
+<h5 id="returns-17">Returns:</h5>
+<p>the restore_op and the feed_dict that need to be run to restore var_list.</p>
+<h5 id="raises-12">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If the checkpoint specified at <code>model_path</code> is missing one of the variables in <code>var_list</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.framework.assign_from_checkpoint_fnmodel_path-var_list-ignore_missing_varsfalse-reshape_variablesfalse"><a name="//apple_ref/cpp/Function/assign_from_checkpoint_fn" class="dashAnchor"></a><code id="assign_from_checkpoint_fn">tf.contrib.framework.assign_from_checkpoint_fn(model_path, var_list, ignore_missing_vars=False, reshape_variables=False)</code></h3>
+<p>Returns a function that assigns specific variables from a checkpoint.</p>
+<h5 id="args-21">Args:</h5>
+<ul>
+<li><b><code>model_path</code></b>: The full path to the model checkpoint. To get latest checkpoint use <code>model_path = tf.train.latest_checkpoint(checkpoint_dir)</code></li>
+<li><b><code>var_list</code></b>: A list of <code>Variable</code> objects or a dictionary mapping names in the checkpoint to the correspoing variables to initialize. If empty or None, it would return no_op(), None.</li>
+<li><b><code>ignore_missing_vars</code></b>: Boolean, if True it would ignore variables missing in the checkpoint with a warning instead of failing.</li>
+<li><b><code>reshape_variables</code></b>: Boolean, if True it would automatically reshape variables which are of different shape then the ones stored in the checkpoint but which have the same number of elements.</li>
+</ul>
+<h5 id="returns-18">Returns:</h5>
+<p>A function that takes a single argument, a <code>tf.Session</code>, that applies the assignment operation.</p>
+<h5 id="raises-13">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If the checkpoint specified at <code>model_path</code> is missing one of the variables in <code>var_list</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.framework.assign_from_valuesvar_names_to_values"><a name="//apple_ref/cpp/Function/assign_from_values" class="dashAnchor"></a><code id="assign_from_values">tf.contrib.framework.assign_from_values(var_names_to_values)</code></h3>
+<p>Creates an assignment operation from a given mapping.</p>
+<p>This function provides a mechanism for performing assignment of variables to values in a way that does not fill the graph with large assignment values.</p>
+<h5 id="args-22">Args:</h5>
+<ul>
+<li><b><code>var_names_to_values</code></b>: A map from variable names to values.</li>
+</ul>
+<h5 id="returns-19">Returns:</h5>
+<ul>
+<li><b><code>assign_op</code></b>: An <code>Operation</code> that assigns each of the given variables to the requested values.</li>
+<li><b><code>feed_dict</code></b>: The feed dictionary to use when evaluating <code>assign_op</code>.</li>
+</ul>
+<h5 id="raises-14">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if any of the given variable names were not found.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.framework.assign_from_values_fnvar_names_to_values"><a name="//apple_ref/cpp/Function/assign_from_values_fn" class="dashAnchor"></a><code id="assign_from_values_fn">tf.contrib.framework.assign_from_values_fn(var_names_to_values)</code></h3>
+<p>Returns a function that assigns specific variables from the given values.</p>
+<p>This function provides a mechanism for performing assignment of variables to values in a way that does not fill the graph with large assignment values.</p>
+<h5 id="args-23">Args:</h5>
+<ul>
+<li><b><code>var_names_to_values</code></b>: A map from variable names to values.</li>
+</ul>
+<h5 id="returns-20">Returns:</h5>
+<p>A function that takes a single argument, a <code>tf.Session</code>, that applies the assignment operation.</p>
+<h5 id="raises-15">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if any of the given variable names were not found.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.framework.create_global_stepgraphnone"><a name="//apple_ref/cpp/Function/create_global_step" class="dashAnchor"></a><code id="create_global_step">tf.contrib.framework.create_global_step(graph=None)</code></h3>
+<p>Create global step tensor in graph.</p>
+<h5 id="args-24">Args:</h5>
+<ul>
+<li><b><code>graph</code></b>: The graph in which to create the global step. If missing, use default graph.</li>
+</ul>
+<h5 id="returns-21">Returns:</h5>
+<p>Global step tensor.</p>
+<h5 id="raises-16">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if global step key is already defined.</li>
+</ul>
+<hr />
+<h3 id="tf.train.get_global_stepgraphnone"><a name="//apple_ref/cpp/Function/get_global_step" class="dashAnchor"></a><code id="get_global_step">tf.train.get_global_step(graph=None)</code></h3>
+<p>Get the global step tensor.</p>
+<p>The global step tensor must be an integer variable. We first try to find it in the collection <code>GLOBAL_STEP</code>, or by name <code>global_step:0</code>.</p>
+<h5 id="args-25">Args:</h5>
+<ul>
+<li><b><code>graph</code></b>: The graph to find the global step in. If missing, use default graph.</li>
+</ul>
+<h5 id="returns-22">Returns:</h5>
+<p>The global step variable, or <code>None</code> if none was found.</p>
+<h5 id="raises-17">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If the global step tensor has a non-integer type, or if it is not a <code>Variable</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.framework.get_or_create_global_stepgraphnone"><a name="//apple_ref/cpp/Function/get_or_create_global_step" class="dashAnchor"></a><code id="get_or_create_global_step">tf.contrib.framework.get_or_create_global_step(graph=None)</code></h3>
+<p>Returns and create (if necessary) the global step variable.</p>
+<h5 id="args-26">Args:</h5>
+<ul>
+<li><b><code>graph</code></b>: The graph in which to create the global step. If missing, use default graph.</li>
+</ul>
+<h5 id="returns-23">Returns:</h5>
+<p>the tensor representing the global step variable.</p>
+<hr />
+<h3 id="tf.contrib.framework.get_local_variablesscopenone-suffixnone"><a name="//apple_ref/cpp/Function/get_local_variables" class="dashAnchor"></a><code id="get_local_variables">tf.contrib.framework.get_local_variables(scope=None, suffix=None)</code></h3>
+<p>Gets the list of local variables, filtered by scope and/or suffix.</p>
+<h5 id="args-27">Args:</h5>
+<ul>
+<li><b><code>scope</code></b>: an optional scope for filtering the variables to return.</li>
+<li><b><code>suffix</code></b>: an optional suffix for filtering the variables to return.</li>
+</ul>
+<h5 id="returns-24">Returns:</h5>
+<p>a list of variables in collection with scope and suffix.</p>
+<hr />
+<h3 id="tf.contrib.framework.get_model_variablesscopenone-suffixnone"><a name="//apple_ref/cpp/Function/get_model_variables" class="dashAnchor"></a><code id="get_model_variables">tf.contrib.framework.get_model_variables(scope=None, suffix=None)</code></h3>
+<p>Gets the list of model variables, filtered by scope and/or suffix.</p>
+<h5 id="args-28">Args:</h5>
+<ul>
+<li><b><code>scope</code></b>: an optional scope for filtering the variables to return.</li>
+<li><b><code>suffix</code></b>: an optional suffix for filtering the variables to return.</li>
+</ul>
+<h5 id="returns-25">Returns:</h5>
+<p>a list of variables in collection with scope and suffix.</p>
+<hr />
+<h3 id="tf.contrib.framework.get_unique_variablevar_op_name"><a name="//apple_ref/cpp/Function/get_unique_variable" class="dashAnchor"></a><code id="get_unique_variable">tf.contrib.framework.get_unique_variable(var_op_name)</code></h3>
+<p>Gets the variable uniquely identified by that var_op_name.</p>
+<h5 id="args-29">Args:</h5>
+<ul>
+<li><b><code>var_op_name</code></b>: the full name of the variable op, including the scope.</li>
+</ul>
+<h5 id="returns-26">Returns:</h5>
+<p>a tensorflow variable.</p>
+<h5 id="raises-18">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if no variable uniquely identified by the name exists.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.framework.get_variables_by_namegiven_name-scopenone"><a name="//apple_ref/cpp/Function/get_variables_by_name" class="dashAnchor"></a><code id="get_variables_by_name">tf.contrib.framework.get_variables_by_name(given_name, scope=None)</code></h3>
+<p>Gets the list of variables that were given that name.</p>
+<h5 id="args-30">Args:</h5>
+<ul>
+<li><b><code>given_name</code></b>: name given to the variable without any scope.</li>
+<li><b><code>scope</code></b>: an optional scope for filtering the variables to return.</li>
+</ul>
+<h5 id="returns-27">Returns:</h5>
+<p>a copied list of variables with the given name and scope.</p>
+<hr />
+<h3 id="tf.contrib.framework.get_variables_by_suffixsuffix-scopenone"><a name="//apple_ref/cpp/Function/get_variables_by_suffix" class="dashAnchor"></a><code id="get_variables_by_suffix">tf.contrib.framework.get_variables_by_suffix(suffix, scope=None)</code></h3>
+<p>Gets the list of variables that end with the given suffix.</p>
+<h5 id="args-31">Args:</h5>
+<ul>
+<li><b><code>suffix</code></b>: suffix for filtering the variables to return.</li>
+<li><b><code>scope</code></b>: an optional scope for filtering the variables to return.</li>
+</ul>
+<h5 id="returns-28">Returns:</h5>
+<p>a copied list of variables with the given name and prefix.</p>
+<hr />
+<h3 id="tf.contrib.framework.get_variables_to_restoreincludenone-excludenone"><a name="//apple_ref/cpp/Function/get_variables_to_restore" class="dashAnchor"></a><code id="get_variables_to_restore">tf.contrib.framework.get_variables_to_restore(include=None, exclude=None)</code></h3>
+<p>Gets the list of the variables to restore.</p>
+<h5 id="args-32">Args:</h5>
+<ul>
+<li><b><code>include</code></b>: an optional list/tuple of scope strings for filtering which variables from the VARIABLES collection to include. None would include all the variables.</li>
+<li><b><code>exclude</code></b>: an optional list/tuple of scope strings for filtering which variables from the VARIABLES collection to exclude. None it would not exclude any.</li>
+</ul>
+<h5 id="returns-29">Returns:</h5>
+<p>a list of variables to restore.</p>
+<h5 id="raises-19">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: include or exclude is provided but is not a list or a tuple.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.framework.get_variablesscopenone-suffixnone-collectionvariables"><a name="//apple_ref/cpp/Function/get_variables" class="dashAnchor"></a><code id="get_variables">tf.contrib.framework.get_variables(scope=None, suffix=None, collection='variables')</code></h3>
+<p>Gets the list of variables, filtered by scope and/or suffix.</p>
+<h5 id="args-33">Args:</h5>
+<ul>
+<li><b><code>scope</code></b>: an optional scope for filtering the variables to return. Can be a variable scope or a string.</li>
+<li><b><code>suffix</code></b>: an optional suffix for filtering the variables to return.</li>
+<li><b><code>collection</code></b>: in which collection search for. Defaults to <code>GraphKeys.GLOBAL_VARIABLES</code>.</li>
+</ul>
+<h5 id="returns-30">Returns:</h5>
+<p>a list of variables in collection with scope and suffix.</p>
+<hr />
+<h3 id="tf.contrib.framework.local_variableinitial_value-validate_shapetrue-namenone"><a name="//apple_ref/cpp/Function/local_variable" class="dashAnchor"></a><code id="local_variable">tf.contrib.framework.local_variable(initial_value, validate_shape=True, name=None)</code></h3>
+<p>Create variable and add it to <code>GraphKeys.LOCAL_VARIABLES</code> collection.</p>
+<h5 id="args-34">Args:</h5>
+<ul>
+<li><b><code>initial_value</code></b>: See variables.Variable.<strong>init</strong>.</li>
+<li><b><code>validate_shape</code></b>: See variables.Variable.<strong>init</strong>.</li>
+<li><b><code>name</code></b>: See variables.Variable.<strong>init</strong>.</li>
+</ul>
+<h5 id="returns-31">Returns:</h5>
+<p>New variable.</p>
+<hr />
+<h3 id="tf.contrib.framework.model_variableargs-kwargs"><a name="//apple_ref/cpp/Function/model_variable" class="dashAnchor"></a><code id="model_variable">tf.contrib.framework.model_variable(*args, **kwargs)</code></h3>
+<p>Gets an existing model variable with these parameters or creates a new one.</p>
+<h5 id="args-35">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: the name of the new or existing variable.</li>
+<li><b><code>shape</code></b>: shape of the new or existing variable.</li>
+<li><b><code>dtype</code></b>: type of the new or existing variable (defaults to <code>DT_FLOAT</code>).</li>
+<li><b><code>initializer</code></b>: initializer for the variable if one is created.</li>
+<li><b><code>regularizer</code></b>: a (Tensor -&gt; Tensor or None) function; the result of applying it on a newly created variable will be added to the collection GraphKeys.REGULARIZATION_LOSSES and can be used for regularization.</li>
+<li><b><code>trainable</code></b>: If <code>True</code> also add the variable to the graph collection <code>GraphKeys.TRAINABLE_VARIABLES</code> (see <code>tf.Variable</code>).</li>
+<li><b><code>collections</code></b>: A list of collection names to which the Variable will be added. Note that the variable is always also added to the <code>GraphKeys.GLOBAL_VARIABLES</code> and <code>GraphKeys.MODEL_VARIABLES</code> collections.</li>
+<li><b><code>caching_device</code></b>: Optional device string or function describing where the Variable should be cached for reading. Defaults to the Variable's device.</li>
+<li><b><code>device</code></b>: Optional device to place the variable. It can be an string or a function that is called to get the device for the variable.</li>
+<li><b><code>partitioner</code></b>: Optional callable that accepts a fully defined <code>TensorShape</code> and dtype of the <code>Variable</code> to be created, and returns a list of partitions for each axis (currently only one axis can be partitioned).</li>
+<li><b><code>custom_getter</code></b>: Callable that allows overwriting the internal get_variable method and has to have the same signature.</li>
+</ul>
+<h5 id="returns-32">Returns:</h5>
+<p>The created or existing variable.</p>
+<hr />
+<h3 id="tf.contrib.framework.variableargs-kwargs"><a name="//apple_ref/cpp/Function/variable" class="dashAnchor"></a><code id="variable">tf.contrib.framework.variable(*args, **kwargs)</code></h3>
+<p>Gets an existing variable with these parameters or creates a new one.</p>
+<h5 id="args-36">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: the name of the new or existing variable.</li>
+<li><b><code>shape</code></b>: shape of the new or existing variable.</li>
+<li><b><code>dtype</code></b>: type of the new or existing variable (defaults to <code>DT_FLOAT</code>).</li>
+<li><b><code>initializer</code></b>: initializer for the variable if one is created.</li>
+<li><b><code>regularizer</code></b>: a (Tensor -&gt; Tensor or None) function; the result of applying it on a newly created variable will be added to the collection GraphKeys.REGULARIZATION_LOSSES and can be used for regularization.</li>
+<li><b><code>trainable</code></b>: If <code>True</code> also add the variable to the graph collection <code>GraphKeys.TRAINABLE_VARIABLES</code> (see <code>tf.Variable</code>).</li>
+<li><b><code>collections</code></b>: A list of collection names to which the Variable will be added. If None it would default to <code>tf.GraphKeys.GLOBAL_VARIABLES</code>.</li>
+<li><b><code>caching_device</code></b>: Optional device string or function describing where the Variable should be cached for reading. Defaults to the Variable's device.</li>
+<li><b><code>device</code></b>: Optional device to place the variable. It can be an string or a function that is called to get the device for the variable.</li>
+<li><b><code>partitioner</code></b>: Optional callable that accepts a fully defined <code>TensorShape</code> and dtype of the <code>Variable</code> to be created, and returns a list of partitions for each axis (currently only one axis can be partitioned).</li>
+<li><b><code>custom_getter</code></b>: Callable that allows overwriting the internal get_variable method and has to have the same signature.</li>
+</ul>
+<h5 id="returns-33">Returns:</h5>
+<p>The created or existing variable.</p>
+<hr />
+<h3 id="class-tf.contrib.framework.variabledevicechooser"><a name="//apple_ref/cpp/Class/VariableDeviceChooser" class="dashAnchor"></a><code id="VariableDeviceChooser">class tf.contrib.framework.VariableDeviceChooser</code></h3>
+<p>Device chooser for variables.</p>
+<p>When using a parameter server it will assign them in a round-robin fashion. When not using a parameter server it allows GPU or CPU placement. - - -</p>
+<h4 id="tf.contrib.framework.variabledevicechooser.__call__op"><code id="VariableDeviceChooser.__call__">tf.contrib.framework.VariableDeviceChooser.__call__(op)</code></h4>
+<hr />
+<h4 id="tf.contrib.framework.variabledevicechooser.__init__num_tasks0-job_nameps-device_typecpu-device_index0"><code id="VariableDeviceChooser.__init__">tf.contrib.framework.VariableDeviceChooser.__init__(num_tasks=0, job_name='ps', device_type='CPU', device_index=0)</code></h4>
+<p>Initialize VariableDeviceChooser.</p>
+<h5 id="usage">Usage:</h5>
+<p>To use with 2 parameter servers: VariableDeviceChooser(2)</p>
+<p>To use without parameter servers: VariableDeviceChooser() VariableDeviceChooser(device_type='GPU') # For GPU placement</p>
+<h5 id="args-37">Args:</h5>
+<ul>
+<li><b><code>num_tasks</code></b>: number of tasks.</li>
+<li><b><code>job_name</code></b>: String, a name for the parameter server job.</li>
+<li><b><code>device_type</code></b>: Optional device type string (e.g. &quot;CPU&quot; or &quot;GPU&quot;)</li>
+<li><b><code>device_index</code></b>: int. Optional device index. If left unspecified, device represents 'any' device_index.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.framework.zero_initializerref-use_lockingtrue-namezero_initializer"><a name="//apple_ref/cpp/Function/zero_initializer" class="dashAnchor"></a><code id="zero_initializer">tf.contrib.framework.zero_initializer(ref, use_locking=True, name='zero_initializer')</code></h3>
+<p>Initialize 'ref' with all zeros, ref tensor should be uninitialized. If already initialized, you will get ValueError. This op is intended to save memory during initialization.</p>
+<h5 id="args-38">Args:</h5>
+<ul>
+<li><b><code>ref</code></b>: ref of the tensor need to be zero initialized.</li>
+<li><b><code>name</code></b>: optional name for this operation.</li>
+</ul>
+<h5 id="returns-34">Returns:</h5>
+<p>ref that initialized.</p>
+<h5 id="raises-20">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If ref tensor is initialized.</li>
+</ul>
+<h2 id="checkpoint-utilities">Checkpoint utilities</h2>
+<hr />
+<h3 id="tf.contrib.framework.load_checkpointfilepattern"><a name="//apple_ref/cpp/Function/load_checkpoint" class="dashAnchor"></a><code id="load_checkpoint">tf.contrib.framework.load_checkpoint(filepattern)</code></h3>
+<p>Returns CheckpointReader for latest checkpoint.</p>
+<h5 id="args-39">Args:</h5>
+<ul>
+<li><b><code>filepattern</code></b>: Directory with checkpoints file or path to checkpoint.</li>
+</ul>
+<h5 id="returns-35">Returns:</h5>
+<p><code>CheckpointReader</code> object.</p>
+<h5 id="raises-21">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if checkpoint_dir doesn't have 'checkpoint' file or checkpoints.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.framework.list_variablescheckpoint_dir"><a name="//apple_ref/cpp/Function/list_variables" class="dashAnchor"></a><code id="list_variables">tf.contrib.framework.list_variables(checkpoint_dir)</code></h3>
+<p>Returns list of all variables in the latest checkpoint.</p>
+<h5 id="args-40">Args:</h5>
+<ul>
+<li><b><code>checkpoint_dir</code></b>: Directory with checkpoints file or path to checkpoint.</li>
+</ul>
+<h5 id="returns-36">Returns:</h5>
+<p>List of tuples <code>(name, shape)</code>.</p>
+<hr />
+<h3 id="tf.contrib.framework.load_variablecheckpoint_dir-name"><a name="//apple_ref/cpp/Function/load_variable" class="dashAnchor"></a><code id="load_variable">tf.contrib.framework.load_variable(checkpoint_dir, name)</code></h3>
+<p>Returns a Tensor with the contents of the given variable in the checkpoint.</p>
+<h5 id="args-41">Args:</h5>
+<ul>
+<li><b><code>checkpoint_dir</code></b>: Directory with checkpoints file or path to checkpoint.</li>
+<li><b><code>name</code></b>: Name of the tensor to return.</li>
+</ul>
+<h5 id="returns-37">Returns:</h5>
+<p><code>Tensor</code> object.</p>
+<hr />
+<h3 id="tf.contrib.framework.init_from_checkpointcheckpoint_dir-assignment_map"><a name="//apple_ref/cpp/Function/init_from_checkpoint" class="dashAnchor"></a><code id="init_from_checkpoint">tf.contrib.framework.init_from_checkpoint(checkpoint_dir, assignment_map)</code></h3>
+<p>Using assingment map initializes current variables with loaded tensors.</p>
+<p>Note: This overrides default initialization ops of specified variables and redefines dtype.</p>
+<h5 id="assignment-map-supports-following-syntax">Assignment map supports following syntax:</h5>
+<p><code>'checkpoint_scope_name/': 'scope_name/'</code> - will load all variables in current <code>scope_name</code> from <code>checkpoint_scope_name</code> with matching variable names. <code>'checkpoint_scope_name/some_other_variable': 'scope_name/variable_name'</code> - will initalize <code>scope_name/variable_name</code> variable from <code>checkpoint_scope_name/some_other_variable</code>. <code>'scope_variable_name': variable</code> - will initialize given <code>tf.Variable</code> object with variable from the checkpoint. <code>'scope_variable_name': list(variable)</code> - will initialize list of partitioned variables with variable from the checkpoint. <code>'/': 'scope_name/'</code> - will load all variables in current <code>scope_name</code> from checkpoint's root (e.g. no scope).</p>
+<p>Supports loading into partitioned variables, which are represented as '<variable>/part_<part #>'.</p>
+<ul>
+<li><p><b><code>Example</code></b>:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">  <span class="co"># Create variables.</span>
+  <span class="cf">with</span> tf.variable_scope(<span class="st">&#39;test&#39;</span>):
+m <span class="op">=</span> tf.get_variable(<span class="st">&#39;my_var&#39;</span>)
+  <span class="cf">with</span> tf.variable_scope(<span class="st">&#39;test2&#39;</span>):
+var2 <span class="op">=</span> tf.get_variable(<span class="st">&#39;my_var&#39;</span>)
+  var3 <span class="op">=</span> tf.get_variable(name<span class="op">=</span><span class="st">&quot;my1&quot;</span>, shape<span class="op">=</span>[<span class="dv">100</span>, <span class="dv">100</span>],
+                     partitioner<span class="op">=</span><span class="kw">lambda</span> shape, dtype: [<span class="dv">5</span>, <span class="dv">1</span>])
+  ...
+  <span class="co"># Specify which variables to intialize from checkpoint.</span>
+  init_from_checkpoint(checkpoint_dir, {
+<span class="st">&#39;some_var&#39;</span>: <span class="st">&#39;test/my_var&#39;</span>,
+<span class="co">&#39;some_scope/&#39;</span>: <span class="st">&#39;test2/&#39;</span>})
+  ...
+  <span class="co"># Or use `Variable` objects to identify what to initialize.</span>
+  init_from_checkpoint(checkpoint_dir, {
+<span class="st">&#39;some_scope/var2&#39;</span>: var2,
+  })
+  <span class="co"># Initialize partitioned variables</span>
+  init_from_checkpoint(checkpoint_dir, {
+<span class="st">&#39;some_var_from_ckpt&#39;</span>: <span class="st">&#39;part_var&#39;</span>,
+  })
+  <span class="co"># Or specifying the list of `Variable` objects.</span>
+  init_from_checkpoint(checkpoint_dir, {
+<span class="st">&#39;some_var_from_ckpt&#39;</span>: var3._get_variable_list(),
+  })
+  ...
+  <span class="co"># Initialize variables as usual.</span>
+  session.run(tf.get_all_variables())</code></pre></div></li>
+</ul>
+<h5 id="args-42">Args:</h5>
+<ul>
+<li><b><code>checkpoint_dir</code></b>: Directory with checkpoints file or path to checkpoint.</li>
+<li><b><code>assignment_map</code></b>: Dict, where keys are names of the variables in the checkpoint and values are current variables or names of current variables (in default graph).</li>
+</ul>
+<h5 id="raises-22">Raises:</h5>
+<p>tf.errors.OpError: If missing checkpoints or tensors in checkpoints.</p>
+<ul>
+<li><b><code>ValueError</code></b>: If missing variables in current graph.</li>
+</ul>

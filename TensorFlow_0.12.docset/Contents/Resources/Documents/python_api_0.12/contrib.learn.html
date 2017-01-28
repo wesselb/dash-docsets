@@ -1,0 +1,1346 @@
+<!-- This file is machine generated: DO NOT EDIT! -->
+<h1 id="learn-contrib">Learn (contrib)</h1>
+<p>[TOC]</p>
+<p>High level API for learning with TensorFlow.</p>
+<h2 id="estimators">Estimators</h2>
+<p>Train and evaluate TensorFlow models.</p>
+<hr />
+<h3 id="class-tf.contrib.learn.baseestimator"><a name="//apple_ref/cpp/Class/BaseEstimator" class="dashAnchor"></a><code id="BaseEstimator">class tf.contrib.learn.BaseEstimator</code></h3>
+<p>Abstract BaseEstimator class to train and evaluate TensorFlow models.</p>
+<p>Concrete implementation of this class should provide the following functions:</p>
+<ul>
+<li>_get_train_ops</li>
+<li>_get_eval_ops</li>
+<li>_get_predict_ops</li>
+</ul>
+<p><code>Estimator</code> implemented below is a good example of how to use this class. - - -</p>
+<h4 id="tf.contrib.learn.baseestimator.__init__model_dirnone-confignone"><code id="BaseEstimator.__init__">tf.contrib.learn.BaseEstimator.__init__(model_dir=None, config=None)</code></h4>
+<p>Initializes a BaseEstimator instance.</p>
+<h5 id="args">Args:</h5>
+<ul>
+<li><b><code>model_dir</code></b>: Directory to save model parameters, graph and etc. This can also be used to load checkpoints from the directory into a estimator to continue training a previously saved model.</li>
+<li><b><code>config</code></b>: A RunConfig instance.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.baseestimator.__repr__"><code id="BaseEstimator.__repr__">tf.contrib.learn.BaseEstimator.__repr__()</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.baseestimator.config"><code id="BaseEstimator.config">tf.contrib.learn.BaseEstimator.config</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.baseestimator.evaluateargs-kwargs"><code id="BaseEstimator.evaluate">tf.contrib.learn.BaseEstimator.evaluate(*args, **kwargs)</code></h4>
+<p>See <code>Evaluable</code>. (deprecated arguments)</p>
+<p>SOME ARGUMENTS ARE DEPRECATED. They will be removed after 2016-12-01. Instructions for updating: Estimator is decoupled from Scikit Learn interface by moving into separate class SKCompat. Arguments x, y and batch_size are only available in the SKCompat class, Estimator will only accept input_fn.</p>
+<h5 id="example-conversion">Example conversion:</h5>
+<p>est = Estimator(...) -&gt; est = SKCompat(Estimator(...))</p>
+<ul>
+<li><b><code>Raises</code></b>:</li>
+<li><b><code>ValueError</code></b>: If at least one of <code>x</code> or <code>y</code> is provided, and at least one of <code>input_fn</code> or <code>feed_fn</code> is provided. Or if <code>metrics</code> is not <code>None</code> or <code>dict</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.baseestimator.exportargs-kwargs"><code id="BaseEstimator.export">tf.contrib.learn.BaseEstimator.export(*args, **kwargs)</code></h4>
+<p>Exports inference graph into given dir. (deprecated arguments)</p>
+<p>SOME ARGUMENTS ARE DEPRECATED. They will be removed after 2016-09-23. Instructions for updating: The signature of the input_fn accepted by export is changing to be consistent with what's used by tf.Learn Estimator's train/evaluate. input_fn (and in most cases, input_feature_key) will become required args, and use_deprecated_input_fn will default to False and be removed altogether.</p>
+<pre><code>Args:
+  export_dir: A string containing a directory to write the exported graph
+    and checkpoints.
+  input_fn: If `use_deprecated_input_fn` is true, then a function that given
+    `Tensor` of `Example` strings, parses it into features that are then
+    passed to the model. Otherwise, a function that takes no argument and
+    returns a tuple of (features, labels), where features is a dict of
+    string key to `Tensor` and labels is a `Tensor` that&#39;s currently not
+    used (and so can be `None`).
+  input_feature_key: Only used if `use_deprecated_input_fn` is false. String
+    key into the features dict returned by `input_fn` that corresponds to a
+    the raw `Example` strings `Tensor` that the exported model will take as
+    input. Can only be `None` if you&#39;re using a custom `signature_fn` that
+    does not use the first arg (examples).
+  use_deprecated_input_fn: Determines the signature format of `input_fn`.
+  signature_fn: Function that returns a default signature and a named
+    signature map, given `Tensor` of `Example` strings, `dict` of `Tensor`s
+    for features and `Tensor` or `dict` of `Tensor`s for predictions.
+  prediction_key: The key for a tensor in the `predictions` dict (output
+    from the `model_fn`) to use as the `predictions` input to the
+    `signature_fn`. Optional. If `None`, predictions will pass to
+    `signature_fn` without filtering.
+  default_batch_size: Default batch size of the `Example` placeholder.
+  exports_to_keep: Number of exports to keep.
+
+Returns:
+  The string path to the exported directory. NB: this functionality was
+  added ca. 2016/09/25; clients that depend on the return value may need
+  to handle the case where this function returns None because subclasses
+  are not returning a value.</code></pre>
+<hr />
+<h4 id="tf.contrib.learn.baseestimator.fitargs-kwargs"><code id="BaseEstimator.fit">tf.contrib.learn.BaseEstimator.fit(*args, **kwargs)</code></h4>
+<p>See <code>Trainable</code>. (deprecated arguments)</p>
+<p>SOME ARGUMENTS ARE DEPRECATED. They will be removed after 2016-12-01. Instructions for updating: Estimator is decoupled from Scikit Learn interface by moving into separate class SKCompat. Arguments x, y and batch_size are only available in the SKCompat class, Estimator will only accept input_fn.</p>
+<h5 id="example-conversion-1">Example conversion:</h5>
+<p>est = Estimator(...) -&gt; est = SKCompat(Estimator(...))</p>
+<ul>
+<li><b><code>Raises</code></b>:</li>
+<li><b><code>ValueError</code></b>: If <code>x</code> or <code>y</code> are not <code>None</code> while <code>input_fn</code> is not <code>None</code>.</li>
+<li><b><code>ValueError</code></b>: If both <code>steps</code> and <code>max_steps</code> are not <code>None</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.baseestimator.get_paramsdeeptrue"><code id="BaseEstimator.get_params">tf.contrib.learn.BaseEstimator.get_params(deep=True)</code></h4>
+<p>Get parameters for this estimator.</p>
+<h5 id="args-1">Args:</h5>
+<ul>
+<li><p><b><code>deep</code></b>: boolean, optional</p>
+<p>If <code>True</code>, will return the parameters for this estimator and contained subobjects that are estimators.</p></li>
+</ul>
+<h5 id="returns">Returns:</h5>
+<p>params : mapping of string to any Parameter names mapped to their values.</p>
+<hr />
+<h4 id="tf.contrib.learn.baseestimator.get_variable_names"><code id="BaseEstimator.get_variable_names">tf.contrib.learn.BaseEstimator.get_variable_names()</code></h4>
+<p>Returns list of all variable names in this model.</p>
+<h5 id="returns-1">Returns:</h5>
+<p>List of names.</p>
+<hr />
+<h4 id="tf.contrib.learn.baseestimator.get_variable_valuename"><code id="BaseEstimator.get_variable_value">tf.contrib.learn.BaseEstimator.get_variable_value(name)</code></h4>
+<p>Returns value of the variable given by name.</p>
+<h5 id="args-2">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: string, name of the tensor.</li>
+</ul>
+<h5 id="returns-2">Returns:</h5>
+<p>Numpy array - value of the tensor.</p>
+<hr />
+<h4 id="tf.contrib.learn.baseestimator.model_dir"><code id="BaseEstimator.model_dir">tf.contrib.learn.BaseEstimator.model_dir</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.baseestimator.partial_fitargs-kwargs"><code id="BaseEstimator.partial_fit">tf.contrib.learn.BaseEstimator.partial_fit(*args, **kwargs)</code></h4>
+<p>Incremental fit on a batch of samples. (deprecated arguments)</p>
+<p>SOME ARGUMENTS ARE DEPRECATED. They will be removed after 2016-12-01. Instructions for updating: Estimator is decoupled from Scikit Learn interface by moving into separate class SKCompat. Arguments x, y and batch_size are only available in the SKCompat class, Estimator will only accept input_fn.</p>
+<h5 id="example-conversion-2">Example conversion:</h5>
+<p>est = Estimator(...) -&gt; est = SKCompat(Estimator(...))</p>
+<pre><code>This method is expected to be called several times consecutively
+on different or the same chunks of the dataset. This either can
+implement iterative training or out-of-core/online training.
+
+This is especially useful when the whole dataset is too big to
+fit in memory at the same time. Or when model is taking long time
+to converge, and you want to split up training into subparts.</code></pre>
+<ul>
+<li><b><code>Args</code></b>:</li>
+<li><b><code>x</code></b>: Matrix of shape [n_samples, n_features...]. Can be iterator that returns arrays of features. The training input samples for fitting the model. If set, <code>input_fn</code> must be <code>None</code>.</li>
+<li><b><code>y</code></b>: Vector or matrix [n_samples] or [n_samples, n_outputs]. Can be iterator that returns array of labels. The training label values (class labels in classification, real numbers in regression). If set, <code>input_fn</code> must be <code>None</code>.</li>
+<li><b><code>input_fn</code></b>: Input function. If set, <code>x</code>, <code>y</code>, and <code>batch_size</code> must be <code>None</code>.</li>
+<li><b><code>steps</code></b>: Number of steps for which to train model. If <code>None</code>, train forever.</li>
+<li><b><code>batch_size</code></b>: minibatch size to use on the input, defaults to first dimension of <code>x</code>. Must be <code>None</code> if <code>input_fn</code> is provided.</li>
+<li><p><b><code>monitors</code></b>: List of <code>BaseMonitor</code> subclass instances. Used for callbacks inside the training loop.</p></li>
+<li><p><b><code>Returns</code></b>: <code>self</code>, for chaining.</p></li>
+<li><b><code>Raises</code></b>:</li>
+<li><p><b><code>ValueError</code></b>: If at least one of <code>x</code> and <code>y</code> is provided, and <code>input_fn</code> is provided.</p></li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.baseestimator.predictargs-kwargs"><code id="BaseEstimator.predict">tf.contrib.learn.BaseEstimator.predict(*args, **kwargs)</code></h4>
+<p>Returns predictions for given features. (deprecated arguments)</p>
+<p>SOME ARGUMENTS ARE DEPRECATED. They will be removed after 2016-12-01. Instructions for updating: Estimator is decoupled from Scikit Learn interface by moving into separate class SKCompat. Arguments x, y and batch_size are only available in the SKCompat class, Estimator will only accept input_fn.</p>
+<h5 id="example-conversion-3">Example conversion:</h5>
+<p>est = Estimator(...) -&gt; est = SKCompat(Estimator(...))</p>
+<ul>
+<li><b><code>Args</code></b>:</li>
+<li><b><code>x</code></b>: Matrix of shape [n_samples, n_features...]. Can be iterator that returns arrays of features. The training input samples for fitting the model. If set, <code>input_fn</code> must be <code>None</code>.</li>
+<li><b><code>input_fn</code></b>: Input function. If set, <code>x</code> and 'batch_size' must be <code>None</code>.</li>
+<li><b><code>batch_size</code></b>: Override default batch size. If set, 'input_fn' must be 'None'.</li>
+<li><b><code>outputs</code></b>: list of <code>str</code>, name of the output to predict. If <code>None</code>, returns all.</li>
+<li><p><b><code>as_iterable</code></b>: If True, return an iterable which keeps yielding predictions for each example until inputs are exhausted. Note: The inputs must terminate if you want the iterable to terminate (e.g. be sure to pass num_epochs=1 if you are using something like read_batch_features).</p></li>
+<li><p><b><code>Returns</code></b>: A numpy array of predicted classes or regression values if the constructor's <code>model_fn</code> returns a <code>Tensor</code> for <code>predictions</code> or a <code>dict</code> of numpy arrays if <code>model_fn</code> returns a <code>dict</code>. Returns an iterable of predictions if as_iterable is True.</p></li>
+<li><b><code>Raises</code></b>:</li>
+<li><p><b><code>ValueError</code></b>: If x and input_fn are both provided or both <code>None</code>.</p></li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.baseestimator.set_paramsparams"><code id="BaseEstimator.set_params">tf.contrib.learn.BaseEstimator.set_params(**params)</code></h4>
+<p>Set the parameters of this estimator.</p>
+<p>The method works on simple estimators as well as on nested objects (such as pipelines). The former have parameters of the form <code>&lt;component&gt;__&lt;parameter&gt;</code> so that it's possible to update each component of a nested object.</p>
+<h5 id="args-3">Args:</h5>
+<ul>
+<li><b><code>**params</code></b>: Parameters.</li>
+</ul>
+<h5 id="returns-3">Returns:</h5>
+<p>self</p>
+<h5 id="raises">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If params contain invalid names.</li>
+</ul>
+<hr />
+<h3 id="class-tf.contrib.learn.estimator"><a name="//apple_ref/cpp/Class/Estimator" class="dashAnchor"></a><code id="Estimator">class tf.contrib.learn.Estimator</code></h3>
+<p>Estimator class is the basic TensorFlow model trainer/evaluator. - - -</p>
+<h4 id="tf.contrib.learn.estimator.__init__model_fnnone-model_dirnone-confignone-paramsnone-feature_engineering_fnnone"><code id="Estimator.__init__">tf.contrib.learn.Estimator.__init__(model_fn=None, model_dir=None, config=None, params=None, feature_engineering_fn=None)</code></h4>
+<p>Constructs an <code>Estimator</code> instance.</p>
+<h5 id="args-4">Args:</h5>
+<ul>
+<li><b><code>model_fn</code></b>: Model function. Follows the signature:
+<ul>
+<li>Args:</li>
+<li><code>features</code> are single <code>Tensor</code> or <code>dict</code> of <code>Tensor</code>s (depending on data passed to <code>fit</code>),</li>
+<li><code>labels</code> are <code>Tensor</code> or <code>dict</code> of <code>Tensor</code>s (for multi-head models). If mode is <code>ModeKeys.INFER</code>, <code>labels=None</code> will be passed. If the <code>model_fn</code>'s signature does not accept <code>mode</code>, the <code>model_fn</code> must still be able to handle <code>labels=None</code>.</li>
+<li><code>mode</code> specifies if this training, evaluation or prediction. See <code>ModeKeys</code>.</li>
+<li><p><code>params</code> is a <code>dict</code> of hyperparameters. Will receive what is passed to Estimator in <code>params</code> parameter. This allows to configure Estimators from hyper parameter tuning.</p></li>
+<li><p>Returns: <code>ModelFnOps</code></p></li>
+</ul>
+<p>Also supports a legacy signature which returns tuple of:</p>
+<ul>
+<li>predictions: <code>Tensor</code>, <code>SparseTensor</code> or dictionary of same. Can also be any type that is convertible to a <code>Tensor</code> or <code>SparseTensor</code>, or dictionary of same.</li>
+<li>loss: Scalar loss <code>Tensor</code>.</li>
+<li>train_op: Training update <code>Tensor</code> or <code>Operation</code>.</li>
+</ul>
+<p>Supports next three signatures for the function:</p>
+<ul>
+<li><code>(features, labels) -&gt; (predictions, loss, train_op)</code></li>
+<li><code>(features, labels, mode) -&gt; (predictions, loss, train_op)</code></li>
+<li><code>(features, labels, mode, params) -&gt; (predictions, loss, train_op)</code></li>
+</ul></li>
+<li><b><code>model_dir</code></b>: Directory to save model parameters, graph and etc. This can also be used to load checkpoints from the directory into a estimator to continue training a previously saved model.</li>
+<li><b><code>config</code></b>: Configuration object.</li>
+<li><b><code>params</code></b>: <code>dict</code> of hyper parameters that will be passed into <code>model_fn</code>. Keys are names of parameters, values are basic python types.</li>
+<li><p><b><code>feature_engineering_fn</code></b>: Feature engineering function. Takes features and labels which are the output of <code>input_fn</code> and returns features and labels which will be fed into <code>model_fn</code>. Please check <code>model_fn</code> for a definition of features and labels.</p></li>
+</ul>
+<h5 id="raises-1">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: parameters of <code>model_fn</code> don't match <code>params</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.estimator.__repr__"><code id="Estimator.__repr__">tf.contrib.learn.Estimator.__repr__()</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.estimator.config"><code id="Estimator.config">tf.contrib.learn.Estimator.config</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.estimator.evaluateargs-kwargs"><code id="Estimator.evaluate">tf.contrib.learn.Estimator.evaluate(*args, **kwargs)</code></h4>
+<p>See <code>Evaluable</code>. (deprecated arguments)</p>
+<p>SOME ARGUMENTS ARE DEPRECATED. They will be removed after 2016-12-01. Instructions for updating: Estimator is decoupled from Scikit Learn interface by moving into separate class SKCompat. Arguments x, y and batch_size are only available in the SKCompat class, Estimator will only accept input_fn.</p>
+<h5 id="example-conversion-4">Example conversion:</h5>
+<p>est = Estimator(...) -&gt; est = SKCompat(Estimator(...))</p>
+<ul>
+<li><b><code>Raises</code></b>:</li>
+<li><b><code>ValueError</code></b>: If at least one of <code>x</code> or <code>y</code> is provided, and at least one of <code>input_fn</code> or <code>feed_fn</code> is provided. Or if <code>metrics</code> is not <code>None</code> or <code>dict</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.estimator.exportargs-kwargs"><code id="Estimator.export">tf.contrib.learn.Estimator.export(*args, **kwargs)</code></h4>
+<p>Exports inference graph into given dir. (deprecated arguments)</p>
+<p>SOME ARGUMENTS ARE DEPRECATED. They will be removed after 2016-09-23. Instructions for updating: The signature of the input_fn accepted by export is changing to be consistent with what's used by tf.Learn Estimator's train/evaluate. input_fn (and in most cases, input_feature_key) will become required args, and use_deprecated_input_fn will default to False and be removed altogether.</p>
+<pre><code>Args:
+  export_dir: A string containing a directory to write the exported graph
+    and checkpoints.
+  input_fn: If `use_deprecated_input_fn` is true, then a function that given
+    `Tensor` of `Example` strings, parses it into features that are then
+    passed to the model. Otherwise, a function that takes no argument and
+    returns a tuple of (features, labels), where features is a dict of
+    string key to `Tensor` and labels is a `Tensor` that&#39;s currently not
+    used (and so can be `None`).
+  input_feature_key: Only used if `use_deprecated_input_fn` is false. String
+    key into the features dict returned by `input_fn` that corresponds to a
+    the raw `Example` strings `Tensor` that the exported model will take as
+    input. Can only be `None` if you&#39;re using a custom `signature_fn` that
+    does not use the first arg (examples).
+  use_deprecated_input_fn: Determines the signature format of `input_fn`.
+  signature_fn: Function that returns a default signature and a named
+    signature map, given `Tensor` of `Example` strings, `dict` of `Tensor`s
+    for features and `Tensor` or `dict` of `Tensor`s for predictions.
+  prediction_key: The key for a tensor in the `predictions` dict (output
+    from the `model_fn`) to use as the `predictions` input to the
+    `signature_fn`. Optional. If `None`, predictions will pass to
+    `signature_fn` without filtering.
+  default_batch_size: Default batch size of the `Example` placeholder.
+  exports_to_keep: Number of exports to keep.
+
+Returns:
+  The string path to the exported directory. NB: this functionality was
+  added ca. 2016/09/25; clients that depend on the return value may need
+  to handle the case where this function returns None because subclasses
+  are not returning a value.</code></pre>
+<hr />
+<h4 id="tf.contrib.learn.estimator.fitargs-kwargs"><code id="Estimator.fit">tf.contrib.learn.Estimator.fit(*args, **kwargs)</code></h4>
+<p>See <code>Trainable</code>. (deprecated arguments)</p>
+<p>SOME ARGUMENTS ARE DEPRECATED. They will be removed after 2016-12-01. Instructions for updating: Estimator is decoupled from Scikit Learn interface by moving into separate class SKCompat. Arguments x, y and batch_size are only available in the SKCompat class, Estimator will only accept input_fn.</p>
+<h5 id="example-conversion-5">Example conversion:</h5>
+<p>est = Estimator(...) -&gt; est = SKCompat(Estimator(...))</p>
+<ul>
+<li><b><code>Raises</code></b>:</li>
+<li><b><code>ValueError</code></b>: If <code>x</code> or <code>y</code> are not <code>None</code> while <code>input_fn</code> is not <code>None</code>.</li>
+<li><b><code>ValueError</code></b>: If both <code>steps</code> and <code>max_steps</code> are not <code>None</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.estimator.get_paramsdeeptrue"><code id="Estimator.get_params">tf.contrib.learn.Estimator.get_params(deep=True)</code></h4>
+<p>Get parameters for this estimator.</p>
+<h5 id="args-5">Args:</h5>
+<ul>
+<li><p><b><code>deep</code></b>: boolean, optional</p>
+<p>If <code>True</code>, will return the parameters for this estimator and contained subobjects that are estimators.</p></li>
+</ul>
+<h5 id="returns-4">Returns:</h5>
+<p>params : mapping of string to any Parameter names mapped to their values.</p>
+<hr />
+<h4 id="tf.contrib.learn.estimator.get_variable_names"><code id="Estimator.get_variable_names">tf.contrib.learn.Estimator.get_variable_names()</code></h4>
+<p>Returns list of all variable names in this model.</p>
+<h5 id="returns-5">Returns:</h5>
+<p>List of names.</p>
+<hr />
+<h4 id="tf.contrib.learn.estimator.get_variable_valuename"><code id="Estimator.get_variable_value">tf.contrib.learn.Estimator.get_variable_value(name)</code></h4>
+<p>Returns value of the variable given by name.</p>
+<h5 id="args-6">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: string, name of the tensor.</li>
+</ul>
+<h5 id="returns-6">Returns:</h5>
+<p>Numpy array - value of the tensor.</p>
+<hr />
+<h4 id="tf.contrib.learn.estimator.model_dir"><code id="Estimator.model_dir">tf.contrib.learn.Estimator.model_dir</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.estimator.partial_fitargs-kwargs"><code id="Estimator.partial_fit">tf.contrib.learn.Estimator.partial_fit(*args, **kwargs)</code></h4>
+<p>Incremental fit on a batch of samples. (deprecated arguments)</p>
+<p>SOME ARGUMENTS ARE DEPRECATED. They will be removed after 2016-12-01. Instructions for updating: Estimator is decoupled from Scikit Learn interface by moving into separate class SKCompat. Arguments x, y and batch_size are only available in the SKCompat class, Estimator will only accept input_fn.</p>
+<h5 id="example-conversion-6">Example conversion:</h5>
+<p>est = Estimator(...) -&gt; est = SKCompat(Estimator(...))</p>
+<pre><code>This method is expected to be called several times consecutively
+on different or the same chunks of the dataset. This either can
+implement iterative training or out-of-core/online training.
+
+This is especially useful when the whole dataset is too big to
+fit in memory at the same time. Or when model is taking long time
+to converge, and you want to split up training into subparts.</code></pre>
+<ul>
+<li><b><code>Args</code></b>:</li>
+<li><b><code>x</code></b>: Matrix of shape [n_samples, n_features...]. Can be iterator that returns arrays of features. The training input samples for fitting the model. If set, <code>input_fn</code> must be <code>None</code>.</li>
+<li><b><code>y</code></b>: Vector or matrix [n_samples] or [n_samples, n_outputs]. Can be iterator that returns array of labels. The training label values (class labels in classification, real numbers in regression). If set, <code>input_fn</code> must be <code>None</code>.</li>
+<li><b><code>input_fn</code></b>: Input function. If set, <code>x</code>, <code>y</code>, and <code>batch_size</code> must be <code>None</code>.</li>
+<li><b><code>steps</code></b>: Number of steps for which to train model. If <code>None</code>, train forever.</li>
+<li><b><code>batch_size</code></b>: minibatch size to use on the input, defaults to first dimension of <code>x</code>. Must be <code>None</code> if <code>input_fn</code> is provided.</li>
+<li><p><b><code>monitors</code></b>: List of <code>BaseMonitor</code> subclass instances. Used for callbacks inside the training loop.</p></li>
+<li><p><b><code>Returns</code></b>: <code>self</code>, for chaining.</p></li>
+<li><b><code>Raises</code></b>:</li>
+<li><p><b><code>ValueError</code></b>: If at least one of <code>x</code> and <code>y</code> is provided, and <code>input_fn</code> is provided.</p></li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.estimator.predictargs-kwargs"><code id="Estimator.predict">tf.contrib.learn.Estimator.predict(*args, **kwargs)</code></h4>
+<p>Returns predictions for given features. (deprecated arguments)</p>
+<p>SOME ARGUMENTS ARE DEPRECATED. They will be removed after 2016-12-01. Instructions for updating: Estimator is decoupled from Scikit Learn interface by moving into separate class SKCompat. Arguments x, y and batch_size are only available in the SKCompat class, Estimator will only accept input_fn.</p>
+<h5 id="example-conversion-7">Example conversion:</h5>
+<p>est = Estimator(...) -&gt; est = SKCompat(Estimator(...))</p>
+<ul>
+<li><b><code>Args</code></b>:</li>
+<li><b><code>x</code></b>: Matrix of shape [n_samples, n_features...]. Can be iterator that returns arrays of features. The training input samples for fitting the model. If set, <code>input_fn</code> must be <code>None</code>.</li>
+<li><b><code>input_fn</code></b>: Input function. If set, <code>x</code> and 'batch_size' must be <code>None</code>.</li>
+<li><b><code>batch_size</code></b>: Override default batch size. If set, 'input_fn' must be 'None'.</li>
+<li><b><code>outputs</code></b>: list of <code>str</code>, name of the output to predict. If <code>None</code>, returns all.</li>
+<li><p><b><code>as_iterable</code></b>: If True, return an iterable which keeps yielding predictions for each example until inputs are exhausted. Note: The inputs must terminate if you want the iterable to terminate (e.g. be sure to pass num_epochs=1 if you are using something like read_batch_features).</p></li>
+<li><p><b><code>Returns</code></b>: A numpy array of predicted classes or regression values if the constructor's <code>model_fn</code> returns a <code>Tensor</code> for <code>predictions</code> or a <code>dict</code> of numpy arrays if <code>model_fn</code> returns a <code>dict</code>. Returns an iterable of predictions if as_iterable is True.</p></li>
+<li><b><code>Raises</code></b>:</li>
+<li><p><b><code>ValueError</code></b>: If x and input_fn are both provided or both <code>None</code>.</p></li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.estimator.set_paramsparams"><code id="Estimator.set_params">tf.contrib.learn.Estimator.set_params(**params)</code></h4>
+<p>Set the parameters of this estimator.</p>
+<p>The method works on simple estimators as well as on nested objects (such as pipelines). The former have parameters of the form <code>&lt;component&gt;__&lt;parameter&gt;</code> so that it's possible to update each component of a nested object.</p>
+<h5 id="args-7">Args:</h5>
+<ul>
+<li><b><code>**params</code></b>: Parameters.</li>
+</ul>
+<h5 id="returns-7">Returns:</h5>
+<p>self</p>
+<h5 id="raises-2">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If params contain invalid names.</li>
+</ul>
+<hr />
+<h3 id="class-tf.contrib.learn.trainable"><a name="//apple_ref/cpp/Class/Trainable" class="dashAnchor"></a><code id="Trainable">class tf.contrib.learn.Trainable</code></h3>
+<p>Interface for objects that are trainable by, e.g., <code>Experiment</code>. - - -</p>
+<h4 id="tf.contrib.learn.trainable.fitxnone-ynone-input_fnnone-stepsnone-batch_sizenone-monitorsnone-max_stepsnone"><code id="Trainable.fit">tf.contrib.learn.Trainable.fit(x=None, y=None, input_fn=None, steps=None, batch_size=None, monitors=None, max_steps=None)</code></h4>
+<p>Trains a model given training data <code>x</code> predictions and <code>y</code> labels.</p>
+<h5 id="args-8">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: Matrix of shape [n_samples, n_features...]. Can be iterator that returns arrays of features. The training input samples for fitting the model. If set, <code>input_fn</code> must be <code>None</code>.</li>
+<li><b><code>y</code></b>: Vector or matrix [n_samples] or [n_samples, n_outputs]. Can be iterator that returns array of labels. The training label values (class labels in classification, real numbers in regression). If set, <code>input_fn</code> must be <code>None</code>. Note: For classification, label values must be integers representing the class index (i.e. values from 0 to n_classes-1).</li>
+<li><b><code>input_fn</code></b>: Input function returning a tuple of: features - Dictionary of string feature name to <code>Tensor</code> or <code>Tensor</code>. labels - <code>Tensor</code> or dictionary of <code>Tensor</code> with labels. If input_fn is set, <code>x</code>, <code>y</code>, and <code>batch_size</code> must be <code>None</code>.</li>
+<li><b><code>steps</code></b>: Number of steps for which to train model. If <code>None</code>, train forever. 'steps' works incrementally. If you call two times fit(steps=10) then training occurs in total 20 steps. If you don't want to have incremental behaviour please set <code>max_steps</code> instead. If set, <code>max_steps</code> must be <code>None</code>.</li>
+<li><b><code>batch_size</code></b>: minibatch size to use on the input, defaults to first dimension of <code>x</code>. Must be <code>None</code> if <code>input_fn</code> is provided.</li>
+<li><b><code>monitors</code></b>: List of <code>BaseMonitor</code> subclass instances. Used for callbacks inside the training loop.</li>
+<li><p><b><code>max_steps</code></b>: Number of total steps for which to train model. If <code>None</code>, train forever. If set, <code>steps</code> must be <code>None</code>.</p>
+<p>Two calls to <code>fit(steps=100)</code> means 200 training iterations. On the other hand, two calls to <code>fit(max_steps=100)</code> means that the second call will not do any iteration since first call did all 100 steps.</p></li>
+</ul>
+<h5 id="returns-8">Returns:</h5>
+<p><code>self</code>, for chaining.</p>
+<hr />
+<h3 id="class-tf.contrib.learn.evaluable"><a name="//apple_ref/cpp/Class/Evaluable" class="dashAnchor"></a><code id="Evaluable">class tf.contrib.learn.Evaluable</code></h3>
+<p>Interface for objects that are evaluatable by, e.g., <code>Experiment</code>. - - -</p>
+<h4 id="tf.contrib.learn.evaluable.evaluatexnone-ynone-input_fnnone-feed_fnnone-batch_sizenone-stepsnone-metricsnone-namenone"><code id="Evaluable.evaluate">tf.contrib.learn.Evaluable.evaluate(x=None, y=None, input_fn=None, feed_fn=None, batch_size=None, steps=None, metrics=None, name=None)</code></h4>
+<p>Evaluates given model with provided evaluation data.</p>
+<p>Stop conditions - we evaluate on the given input data until one of the following: - If <code>steps</code> is provided, and <code>steps</code> batches of size <code>batch_size</code> are processed. - If <code>input_fn</code> is provided, and it raises an end-of-input exception (<code>OutOfRangeError</code> or <code>StopIteration</code>). - If <code>x</code> is provided, and all items in <code>x</code> have been processed.</p>
+<p>The return value is a dict containing the metrics specified in <code>metrics</code>, as well as an entry <code>global_step</code> which contains the value of the global step for which this evaluation was performed.</p>
+<h5 id="args-9">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: Matrix of shape [n_samples, n_features...] containing the input samples for fitting the model. Can be iterator that returns arrays of features. If set, <code>input_fn</code> must be <code>None</code>.</li>
+<li><b><code>y</code></b>: Vector or matrix [n_samples] or [n_samples, n_outputs] containing the label values (class labels in classification, real numbers in regression). Can be iterator that returns array of labels. If set, <code>input_fn</code> must be <code>None</code>. Note: For classification, label values must be integers representing the class index (i.e. values from 0 to n_classes-1).</li>
+<li><b><code>input_fn</code></b>: Input function returning a tuple of: features - Dictionary of string feature name to <code>Tensor</code> or <code>Tensor</code>. labels - <code>Tensor</code> or dictionary of <code>Tensor</code> with labels. If input_fn is set, <code>x</code>, <code>y</code>, and <code>batch_size</code> must be <code>None</code>. If <code>steps</code> is not provided, this should raise <code>OutOfRangeError</code> or <code>StopIteration</code> after the desired amount of data (e.g., one epoch) has been provided. See &quot;Stop conditions&quot; above for specifics.</li>
+<li><b><code>feed_fn</code></b>: Function creating a feed dict every time it is called. Called once per iteration. Must be <code>None</code> if <code>input_fn</code> is provided.</li>
+<li><b><code>batch_size</code></b>: minibatch size to use on the input, defaults to first dimension of <code>x</code>, if specified. Must be <code>None</code> if <code>input_fn</code> is provided.</li>
+<li><b><code>steps</code></b>: Number of steps for which to evaluate model. If <code>None</code>, evaluate until <code>x</code> is consumed or <code>input_fn</code> raises an end-of-input exception. See &quot;Stop conditions&quot; above for specifics.</li>
+<li><p><b><code>metrics</code></b>: Dict of metrics to run. If None, the default metric functions are used; if {}, no metrics are used. Otherwise, <code>metrics</code> should map friendly names for the metric to a <code>MetricSpec</code> object defining which model outputs to evaluate against which labels with which metric function.</p>
+<p>Metric ops should support streaming, e.g., returning <code>update_op</code> and <code>value</code> tensors. For example, see the options defined in <code>../../../metrics/python/ops/metrics_ops.py</code>.</p></li>
+<li><p><b><code>name</code></b>: Name of the evaluation if user needs to run multiple evaluations on different data sets, such as on training data vs test data.</p></li>
+</ul>
+<h5 id="returns-9">Returns:</h5>
+<p>Returns <code>dict</code> with evaluation results.</p>
+<hr />
+<h3 id="class-tf.contrib.learn.modekeys"><a name="//apple_ref/cpp/Class/ModeKeys" class="dashAnchor"></a><code id="ModeKeys">class tf.contrib.learn.ModeKeys</code></h3>
+<p>Standard names for model modes.</p>
+<p>The following standard keys are defined:</p>
+<ul>
+<li><code>TRAIN</code>: training mode.</li>
+<li><code>EVAL</code>: evaluation mode.</li>
+<li><code>INFER</code>: inference mode.</li>
+</ul>
+<hr />
+<h3 id="class-tf.contrib.learn.dnnclassifier"><a name="//apple_ref/cpp/Class/DNNClassifier" class="dashAnchor"></a><code id="DNNClassifier">class tf.contrib.learn.DNNClassifier</code></h3>
+<p>A classifier for TensorFlow DNN models.</p>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">sparse_feature_a <span class="op">=</span> sparse_column_with_hash_bucket(...)
+sparse_feature_b <span class="op">=</span> sparse_column_with_hash_bucket(...)
+
+sparse_feature_a_emb <span class="op">=</span> embedding_column(sparse_id_column<span class="op">=</span>sparse_feature_a,
+                                        ...)
+sparse_feature_b_emb <span class="op">=</span> embedding_column(sparse_id_column<span class="op">=</span>sparse_feature_b,
+                                        ...)
+
+estimator <span class="op">=</span> DNNClassifier(
+    feature_columns<span class="op">=</span>[sparse_feature_a_emb, sparse_feature_b_emb],
+    hidden_units<span class="op">=</span>[<span class="dv">1024</span>, <span class="dv">512</span>, <span class="dv">256</span>])
+
+<span class="co"># Or estimator using the ProximalAdagradOptimizer optimizer with</span>
+<span class="co"># regularization.</span>
+estimator <span class="op">=</span> DNNClassifier(
+    feature_columns<span class="op">=</span>[sparse_feature_a_emb, sparse_feature_b_emb],
+    hidden_units<span class="op">=</span>[<span class="dv">1024</span>, <span class="dv">512</span>, <span class="dv">256</span>],
+    optimizer<span class="op">=</span>tf.train.ProximalAdagradOptimizer(
+      learning_rate<span class="op">=</span><span class="fl">0.1</span>,
+      l1_regularization_strength<span class="op">=</span><span class="fl">0.001</span>
+    ))
+
+<span class="co"># Input builders</span>
+<span class="kw">def</span> input_fn_train: <span class="co"># returns x, y (where y represents label&#39;s class index).</span>
+  <span class="cf">pass</span>
+estimator.fit(input_fn<span class="op">=</span>input_fn_train)
+
+<span class="kw">def</span> input_fn_eval: <span class="co"># returns x, y (where y represents label&#39;s class index).</span>
+  <span class="cf">pass</span>
+estimator.evaluate(input_fn<span class="op">=</span>input_fn_eval)
+estimator.predict(x<span class="op">=</span>x) <span class="co"># returns predicted labels (i.e. label&#39;s class index).</span></code></pre></div>
+<p>Input of <code>fit</code> and <code>evaluate</code> should have following features, otherwise there will be a <code>KeyError</code>:</p>
+<ul>
+<li>if <code>weight_column_name</code> is not <code>None</code>, a feature with <code>key=weight_column_name</code> whose value is a <code>Tensor</code>.</li>
+<li>for each <code>column</code> in <code>feature_columns</code>:</li>
+<li>if <code>column</code> is a <code>SparseColumn</code>, a feature with <code>key=column.name</code> whose <code>value</code> is a <code>SparseTensor</code>.</li>
+<li>if <code>column</code> is a <code>WeightedSparseColumn</code>, two features: the first with <code>key</code> the id column name, the second with <code>key</code> the weight column name. Both features' <code>value</code> must be a <code>SparseTensor</code>.</li>
+<li>if <code>column</code> is a <code>RealValuedColumn</code>, a feature with <code>key=column.name</code> whose <code>value</code> is a <code>Tensor</code>. - - -</li>
+</ul>
+<h4 id="tf.contrib.learn.dnnclassifier.__init__hidden_units-feature_columns-model_dirnone-n_classes2-weight_column_namenone-optimizernone-activation_fnrelu-dropoutnone-gradient_clip_normnone-enable_centered_biasfalse-confignone-feature_engineering_fnnone"><code id="DNNClassifier.__init__">tf.contrib.learn.DNNClassifier.__init__(hidden_units, feature_columns, model_dir=None, n_classes=2, weight_column_name=None, optimizer=None, activation_fn=relu, dropout=None, gradient_clip_norm=None, enable_centered_bias=False, config=None, feature_engineering_fn=None)</code></h4>
+<p>Initializes a DNNClassifier instance.</p>
+<h5 id="args-10">Args:</h5>
+<ul>
+<li><b><code>hidden_units</code></b>: List of hidden units per layer. All layers are fully connected. Ex. <code>[64, 32]</code> means first layer has 64 nodes and second one has 32.</li>
+<li><b><code>feature_columns</code></b>: An iterable containing all the feature columns used by the model. All items in the set should be instances of classes derived from <code>FeatureColumn</code>.</li>
+<li><b><code>model_dir</code></b>: Directory to save model parameters, graph and etc. This can also be used to load checkpoints from the directory into a estimator to continue training a previously saved model.</li>
+<li><b><code>n_classes</code></b>: number of label classes. Default is binary classification. It must be greater than 1. Note: Class labels are integers representing the class index (i.e. values from 0 to n_classes-1). For arbitrary label values (e.g. string labels), convert to class indices first.</li>
+<li><b><code>weight_column_name</code></b>: A string defining feature column name representing weights. It is used to down weight or boost examples during training. It will be multiplied by the loss of the example.</li>
+<li><b><code>optimizer</code></b>: An instance of <code>tf.Optimizer</code> used to train the model. If <code>None</code>, will use an Adagrad optimizer.</li>
+<li><b><code>activation_fn</code></b>: Activation function applied to each layer. If <code>None</code>, will use <code>tf.nn.relu</code>.</li>
+<li><b><code>dropout</code></b>: When not <code>None</code>, the probability we will drop out a given coordinate.</li>
+<li><b><code>gradient_clip_norm</code></b>: A float &gt; 0. If provided, gradients are clipped to their global norm with this clipping ratio. See <code>tf.clip_by_global_norm</code> for more details.</li>
+<li><b><code>enable_centered_bias</code></b>: A bool. If True, estimator will learn a centered bias variable for each class. Rest of the model structure learns the residual after centered bias.</li>
+<li><b><code>config</code></b>: <code>RunConfig</code> object to configure the runtime settings.</li>
+<li><b><code>feature_engineering_fn</code></b>: Feature engineering function. Takes features and labels which are the output of <code>input_fn</code> and returns features and labels which will be fed into the model.</li>
+</ul>
+<h5 id="returns-10">Returns:</h5>
+<p>A <code>DNNClassifier</code> estimator.</p>
+<h5 id="raises-3">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>n_classes</code> &lt; 2.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.dnnclassifier.bias_"><code id="DNNClassifier.bias_">tf.contrib.learn.DNNClassifier.bias_</code></h4>
+<p>DEPRECATED FUNCTION</p>
+<p>THIS FUNCTION IS DEPRECATED. It will be removed after 2016-10-30. Instructions for updating: This method will be removed after the deprecation date. To inspect variables, use get_variable_names() and get_variable_value().</p>
+<hr />
+<h4 id="tf.contrib.learn.dnnclassifier.config"><code id="DNNClassifier.config">tf.contrib.learn.DNNClassifier.config</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.dnnclassifier.evaluatexnone-ynone-input_fnnone-feed_fnnone-batch_sizenone-stepsnone-metricsnone-namenone"><code id="DNNClassifier.evaluate">tf.contrib.learn.DNNClassifier.evaluate(x=None, y=None, input_fn=None, feed_fn=None, batch_size=None, steps=None, metrics=None, name=None)</code></h4>
+<p>See evaluable.Evaluable. Note: Labels must be integer class indices.</p>
+<hr />
+<h4 id="tf.contrib.learn.dnnclassifier.exportexport_dir-input_fnnone-input_feature_keynone-use_deprecated_input_fntrue-signature_fnnone-default_batch_size1-exports_to_keepnone"><code id="DNNClassifier.export">tf.contrib.learn.DNNClassifier.export(export_dir, input_fn=None, input_feature_key=None, use_deprecated_input_fn=True, signature_fn=None, default_batch_size=1, exports_to_keep=None)</code></h4>
+<p>See BaseEstimator.export.</p>
+<hr />
+<h4 id="tf.contrib.learn.dnnclassifier.fitxnone-ynone-input_fnnone-stepsnone-batch_sizenone-monitorsnone-max_stepsnone"><code id="DNNClassifier.fit">tf.contrib.learn.DNNClassifier.fit(x=None, y=None, input_fn=None, steps=None, batch_size=None, monitors=None, max_steps=None)</code></h4>
+<p>See trainable.Trainable. Note: Labels must be integer class indices.</p>
+<hr />
+<h4 id="tf.contrib.learn.dnnclassifier.get_variable_names"><code id="DNNClassifier.get_variable_names">tf.contrib.learn.DNNClassifier.get_variable_names()</code></h4>
+<p>Returns list of all variable names in this model.</p>
+<h5 id="returns-11">Returns:</h5>
+<p>List of names.</p>
+<hr />
+<h4 id="tf.contrib.learn.dnnclassifier.get_variable_valuename"><code id="DNNClassifier.get_variable_value">tf.contrib.learn.DNNClassifier.get_variable_value(name)</code></h4>
+<p>Returns value of the variable given by name.</p>
+<h5 id="args-11">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: string, name of the tensor.</li>
+</ul>
+<h5 id="returns-12">Returns:</h5>
+<p><code>Tensor</code> object.</p>
+<hr />
+<h4 id="tf.contrib.learn.dnnclassifier.model_dir"><code id="DNNClassifier.model_dir">tf.contrib.learn.DNNClassifier.model_dir</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.dnnclassifier.predictargs-kwargs"><code id="DNNClassifier.predict">tf.contrib.learn.DNNClassifier.predict(*args, **kwargs)</code></h4>
+<p>Returns predicted classes for given features. (deprecated arguments)</p>
+<p>SOME ARGUMENTS ARE DEPRECATED. They will be removed after 2016-09-15. Instructions for updating: The default behavior of predict() is changing. The default value for as_iterable will change to True, and then the flag will be removed altogether. The behavior of this flag is described below.</p>
+<pre><code>Args:
+  x: features.
+  input_fn: Input function. If set, x must be None.
+  batch_size: Override default batch size.
+  as_iterable: If True, return an iterable which keeps yielding predictions
+    for each example until inputs are exhausted. Note: The inputs must
+    terminate if you want the iterable to terminate (e.g. be sure to pass
+    num_epochs=1 if you are using something like read_batch_features).
+
+Returns:
+  Numpy array of predicted classes (or an iterable of predicted classes if
+  as_iterable is True). Each predicted class is represented by its class
+  index (i.e. integer from 0 to n_classes-1).</code></pre>
+<hr />
+<h4 id="tf.contrib.learn.dnnclassifier.predict_probaargs-kwargs"><code id="DNNClassifier.predict_proba">tf.contrib.learn.DNNClassifier.predict_proba(*args, **kwargs)</code></h4>
+<p>Returns prediction probabilities for given features. (deprecated arguments)</p>
+<p>SOME ARGUMENTS ARE DEPRECATED. They will be removed after 2016-09-15. Instructions for updating: The default behavior of predict() is changing. The default value for as_iterable will change to True, and then the flag will be removed altogether. The behavior of this flag is described below.</p>
+<pre><code>Args:
+  x: features.
+  input_fn: Input function. If set, x and y must be None.
+  batch_size: Override default batch size.
+  as_iterable: If True, return an iterable which keeps yielding predictions
+    for each example until inputs are exhausted. Note: The inputs must
+    terminate if you want the iterable to terminate (e.g. be sure to pass
+    num_epochs=1 if you are using something like read_batch_features).
+
+Returns:
+  Numpy array of predicted probabilities (or an iterable of predicted
+  probabilities if as_iterable is True). Each predicted class is represented
+  by its class index (i.e. integer from 0 to n_classes-1).</code></pre>
+<hr />
+<h4 id="tf.contrib.learn.dnnclassifier.weights_"><code id="DNNClassifier.weights_">tf.contrib.learn.DNNClassifier.weights_</code></h4>
+<p>DEPRECATED FUNCTION</p>
+<p>THIS FUNCTION IS DEPRECATED. It will be removed after 2016-10-30. Instructions for updating: This method will be removed after the deprecation date. To inspect variables, use get_variable_names() and get_variable_value().</p>
+<hr />
+<h3 id="class-tf.contrib.learn.dnnregressor"><a name="//apple_ref/cpp/Class/DNNRegressor" class="dashAnchor"></a><code id="DNNRegressor">class tf.contrib.learn.DNNRegressor</code></h3>
+<p>A regressor for TensorFlow DNN models.</p>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">sparse_feature_a <span class="op">=</span> sparse_column_with_hash_bucket(...)
+sparse_feature_b <span class="op">=</span> sparse_column_with_hash_bucket(...)
+
+sparse_feature_a_emb <span class="op">=</span> embedding_column(sparse_id_column<span class="op">=</span>sparse_feature_a,
+                                        ...)
+sparse_feature_b_emb <span class="op">=</span> embedding_column(sparse_id_column<span class="op">=</span>sparse_feature_b,
+                                        ...)
+
+estimator <span class="op">=</span> DNNRegressor(
+    feature_columns<span class="op">=</span>[sparse_feature_a, sparse_feature_b],
+    hidden_units<span class="op">=</span>[<span class="dv">1024</span>, <span class="dv">512</span>, <span class="dv">256</span>])
+
+<span class="co"># Or estimator using the ProximalAdagradOptimizer optimizer with</span>
+<span class="co"># regularization.</span>
+estimator <span class="op">=</span> DNNRegressor(
+    feature_columns<span class="op">=</span>[sparse_feature_a, sparse_feature_b],
+    hidden_units<span class="op">=</span>[<span class="dv">1024</span>, <span class="dv">512</span>, <span class="dv">256</span>],
+    optimizer<span class="op">=</span>tf.train.ProximalAdagradOptimizer(
+      learning_rate<span class="op">=</span><span class="fl">0.1</span>,
+      l1_regularization_strength<span class="op">=</span><span class="fl">0.001</span>
+    ))
+
+<span class="co"># Input builders</span>
+<span class="kw">def</span> input_fn_train: <span class="co"># returns x, y</span>
+  <span class="cf">pass</span>
+estimator.fit(input_fn<span class="op">=</span>input_fn_train)
+
+<span class="kw">def</span> input_fn_eval: <span class="co"># returns x, y</span>
+  <span class="cf">pass</span>
+estimator.evaluate(input_fn<span class="op">=</span>input_fn_eval)
+estimator.predict(x<span class="op">=</span>x)</code></pre></div>
+<p>Input of <code>fit</code> and <code>evaluate</code> should have following features, otherwise there will be a <code>KeyError</code>:</p>
+<ul>
+<li>if <code>weight_column_name</code> is not <code>None</code>, a feature with <code>key=weight_column_name</code> whose value is a <code>Tensor</code>.</li>
+<li>for each <code>column</code> in <code>feature_columns</code>:</li>
+<li>if <code>column</code> is a <code>SparseColumn</code>, a feature with <code>key=column.name</code> whose <code>value</code> is a <code>SparseTensor</code>.</li>
+<li>if <code>column</code> is a <code>WeightedSparseColumn</code>, two features: the first with <code>key</code> the id column name, the second with <code>key</code> the weight column name. Both features' <code>value</code> must be a <code>SparseTensor</code>.</li>
+<li>if <code>column</code> is a <code>RealValuedColumn</code>, a feature with <code>key=column.name</code> whose <code>value</code> is a <code>Tensor</code>. - - -</li>
+</ul>
+<h4 id="tf.contrib.learn.dnnregressor.__init__hidden_units-feature_columns-model_dirnone-weight_column_namenone-optimizernone-activation_fnrelu-dropoutnone-gradient_clip_normnone-enable_centered_biasfalse-confignone-feature_engineering_fnnone-label_dimension1"><code id="DNNRegressor.__init__">tf.contrib.learn.DNNRegressor.__init__(hidden_units, feature_columns, model_dir=None, weight_column_name=None, optimizer=None, activation_fn=relu, dropout=None, gradient_clip_norm=None, enable_centered_bias=False, config=None, feature_engineering_fn=None, label_dimension=1)</code></h4>
+<p>Initializes a <code>DNNRegressor</code> instance.</p>
+<h5 id="args-12">Args:</h5>
+<ul>
+<li><b><code>hidden_units</code></b>: List of hidden units per layer. All layers are fully connected. Ex. <code>[64, 32]</code> means first layer has 64 nodes and second one has 32.</li>
+<li><b><code>feature_columns</code></b>: An iterable containing all the feature columns used by the model. All items in the set should be instances of classes derived from <code>FeatureColumn</code>.</li>
+<li><b><code>model_dir</code></b>: Directory to save model parameters, graph and etc. This can also be used to load checkpoints from the directory into a estimator to continue training a previously saved model.</li>
+<li><b><code>weight_column_name</code></b>: A string defining feature column name representing weights. It is used to down weight or boost examples during training. It will be multiplied by the loss of the example.</li>
+<li><b><code>optimizer</code></b>: An instance of <code>tf.Optimizer</code> used to train the model. If <code>None</code>, will use an Adagrad optimizer.</li>
+<li><b><code>activation_fn</code></b>: Activation function applied to each layer. If <code>None</code>, will use <code>tf.nn.relu</code>.</li>
+<li><b><code>dropout</code></b>: When not <code>None</code>, the probability we will drop out a given coordinate.</li>
+<li><b><code>gradient_clip_norm</code></b>: A <code>float</code> &gt; 0. If provided, gradients are clipped to their global norm with this clipping ratio. See <code>tf.clip_by_global_norm</code> for more details.</li>
+<li><b><code>enable_centered_bias</code></b>: A bool. If True, estimator will learn a centered bias variable for each class. Rest of the model structure learns the residual after centered bias.</li>
+<li><b><code>config</code></b>: <code>RunConfig</code> object to configure the runtime settings.</li>
+<li><b><code>feature_engineering_fn</code></b>: Feature engineering function. Takes features and labels which are the output of <code>input_fn</code> and returns features and labels which will be fed into the model.</li>
+<li><b><code>label_dimension</code></b>: Dimension of the label for multilabels. Defaults to 1.</li>
+</ul>
+<h5 id="returns-13">Returns:</h5>
+<p>A <code>DNNRegressor</code> estimator.</p>
+<hr />
+<h4 id="tf.contrib.learn.dnnregressor.__repr__"><code id="DNNRegressor.__repr__">tf.contrib.learn.DNNRegressor.__repr__()</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.dnnregressor.bias_"><code id="DNNRegressor.bias_">tf.contrib.learn.DNNRegressor.bias_</code></h4>
+<p>DEPRECATED FUNCTION</p>
+<p>THIS FUNCTION IS DEPRECATED. It will be removed after 2016-10-30. Instructions for updating: This method will be removed after the deprecation date. To inspect variables, use get_variable_names() and get_variable_value().</p>
+<hr />
+<h4 id="tf.contrib.learn.dnnregressor.config"><code id="DNNRegressor.config">tf.contrib.learn.DNNRegressor.config</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.dnnregressor.dnn_bias_"><code id="DNNRegressor.dnn_bias_">tf.contrib.learn.DNNRegressor.dnn_bias_</code></h4>
+<p>Returns bias of deep neural network part. (deprecated)</p>
+<p>THIS FUNCTION IS DEPRECATED. It will be removed after 2016-10-30. Instructions for updating: This method will be removed after the deprecation date. To inspect variables, use get_variable_names() and get_variable_value().</p>
+<hr />
+<h4 id="tf.contrib.learn.dnnregressor.dnn_weights_"><code id="DNNRegressor.dnn_weights_">tf.contrib.learn.DNNRegressor.dnn_weights_</code></h4>
+<p>Returns weights of deep neural network part. (deprecated)</p>
+<p>THIS FUNCTION IS DEPRECATED. It will be removed after 2016-10-30. Instructions for updating: This method will be removed after the deprecation date. To inspect variables, use get_variable_names() and get_variable_value().</p>
+<hr />
+<h4 id="tf.contrib.learn.dnnregressor.evaluateargs-kwargs"><code id="DNNRegressor.evaluate">tf.contrib.learn.DNNRegressor.evaluate(*args, **kwargs)</code></h4>
+<p>See <code>Evaluable</code>. (deprecated arguments)</p>
+<p>SOME ARGUMENTS ARE DEPRECATED. They will be removed after 2016-12-01. Instructions for updating: Estimator is decoupled from Scikit Learn interface by moving into separate class SKCompat. Arguments x, y and batch_size are only available in the SKCompat class, Estimator will only accept input_fn.</p>
+<h5 id="example-conversion-8">Example conversion:</h5>
+<p>est = Estimator(...) -&gt; est = SKCompat(Estimator(...))</p>
+<ul>
+<li><b><code>Raises</code></b>:</li>
+<li><b><code>ValueError</code></b>: If at least one of <code>x</code> or <code>y</code> is provided, and at least one of <code>input_fn</code> or <code>feed_fn</code> is provided. Or if <code>metrics</code> is not <code>None</code> or <code>dict</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.dnnregressor.exportexport_dir-input_fnnone-input_feature_keynone-use_deprecated_input_fntrue-signature_fnnone-default_batch_sizenone-exports_to_keepnone"><code id="DNNRegressor.export">tf.contrib.learn.DNNRegressor.export(export_dir, input_fn=None, input_feature_key=None, use_deprecated_input_fn=True, signature_fn=None, default_batch_size=None, exports_to_keep=None)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.dnnregressor.fitargs-kwargs"><code id="DNNRegressor.fit">tf.contrib.learn.DNNRegressor.fit(*args, **kwargs)</code></h4>
+<p>See <code>Trainable</code>. (deprecated arguments)</p>
+<p>SOME ARGUMENTS ARE DEPRECATED. They will be removed after 2016-12-01. Instructions for updating: Estimator is decoupled from Scikit Learn interface by moving into separate class SKCompat. Arguments x, y and batch_size are only available in the SKCompat class, Estimator will only accept input_fn.</p>
+<h5 id="example-conversion-9">Example conversion:</h5>
+<p>est = Estimator(...) -&gt; est = SKCompat(Estimator(...))</p>
+<ul>
+<li><b><code>Raises</code></b>:</li>
+<li><b><code>ValueError</code></b>: If <code>x</code> or <code>y</code> are not <code>None</code> while <code>input_fn</code> is not <code>None</code>.</li>
+<li><b><code>ValueError</code></b>: If both <code>steps</code> and <code>max_steps</code> are not <code>None</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.dnnregressor.get_paramsdeeptrue"><code id="DNNRegressor.get_params">tf.contrib.learn.DNNRegressor.get_params(deep=True)</code></h4>
+<p>Get parameters for this estimator.</p>
+<h5 id="args-13">Args:</h5>
+<ul>
+<li><p><b><code>deep</code></b>: boolean, optional</p>
+<p>If <code>True</code>, will return the parameters for this estimator and contained subobjects that are estimators.</p></li>
+</ul>
+<h5 id="returns-14">Returns:</h5>
+<p>params : mapping of string to any Parameter names mapped to their values.</p>
+<hr />
+<h4 id="tf.contrib.learn.dnnregressor.get_variable_names"><code id="DNNRegressor.get_variable_names">tf.contrib.learn.DNNRegressor.get_variable_names()</code></h4>
+<p>Returns list of all variable names in this model.</p>
+<h5 id="returns-15">Returns:</h5>
+<p>List of names.</p>
+<hr />
+<h4 id="tf.contrib.learn.dnnregressor.get_variable_valuename"><code id="DNNRegressor.get_variable_value">tf.contrib.learn.DNNRegressor.get_variable_value(name)</code></h4>
+<p>Returns value of the variable given by name.</p>
+<h5 id="args-14">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: string, name of the tensor.</li>
+</ul>
+<h5 id="returns-16">Returns:</h5>
+<p>Numpy array - value of the tensor.</p>
+<hr />
+<h4 id="tf.contrib.learn.dnnregressor.linear_bias_"><code id="DNNRegressor.linear_bias_">tf.contrib.learn.DNNRegressor.linear_bias_</code></h4>
+<p>Returns bias of the linear part. (deprecated)</p>
+<p>THIS FUNCTION IS DEPRECATED. It will be removed after 2016-10-30. Instructions for updating: This method will be removed after the deprecation date. To inspect variables, use get_variable_names() and get_variable_value().</p>
+<hr />
+<h4 id="tf.contrib.learn.dnnregressor.linear_weights_"><code id="DNNRegressor.linear_weights_">tf.contrib.learn.DNNRegressor.linear_weights_</code></h4>
+<p>Returns weights per feature of the linear part. (deprecated)</p>
+<p>THIS FUNCTION IS DEPRECATED. It will be removed after 2016-10-30. Instructions for updating: This method will be removed after the deprecation date. To inspect variables, use get_variable_names() and get_variable_value().</p>
+<hr />
+<h4 id="tf.contrib.learn.dnnregressor.model_dir"><code id="DNNRegressor.model_dir">tf.contrib.learn.DNNRegressor.model_dir</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.dnnregressor.partial_fitargs-kwargs"><code id="DNNRegressor.partial_fit">tf.contrib.learn.DNNRegressor.partial_fit(*args, **kwargs)</code></h4>
+<p>Incremental fit on a batch of samples. (deprecated arguments)</p>
+<p>SOME ARGUMENTS ARE DEPRECATED. They will be removed after 2016-12-01. Instructions for updating: Estimator is decoupled from Scikit Learn interface by moving into separate class SKCompat. Arguments x, y and batch_size are only available in the SKCompat class, Estimator will only accept input_fn.</p>
+<h5 id="example-conversion-10">Example conversion:</h5>
+<p>est = Estimator(...) -&gt; est = SKCompat(Estimator(...))</p>
+<pre><code>This method is expected to be called several times consecutively
+on different or the same chunks of the dataset. This either can
+implement iterative training or out-of-core/online training.
+
+This is especially useful when the whole dataset is too big to
+fit in memory at the same time. Or when model is taking long time
+to converge, and you want to split up training into subparts.</code></pre>
+<ul>
+<li><b><code>Args</code></b>:</li>
+<li><b><code>x</code></b>: Matrix of shape [n_samples, n_features...]. Can be iterator that returns arrays of features. The training input samples for fitting the model. If set, <code>input_fn</code> must be <code>None</code>.</li>
+<li><b><code>y</code></b>: Vector or matrix [n_samples] or [n_samples, n_outputs]. Can be iterator that returns array of labels. The training label values (class labels in classification, real numbers in regression). If set, <code>input_fn</code> must be <code>None</code>.</li>
+<li><b><code>input_fn</code></b>: Input function. If set, <code>x</code>, <code>y</code>, and <code>batch_size</code> must be <code>None</code>.</li>
+<li><b><code>steps</code></b>: Number of steps for which to train model. If <code>None</code>, train forever.</li>
+<li><b><code>batch_size</code></b>: minibatch size to use on the input, defaults to first dimension of <code>x</code>. Must be <code>None</code> if <code>input_fn</code> is provided.</li>
+<li><p><b><code>monitors</code></b>: List of <code>BaseMonitor</code> subclass instances. Used for callbacks inside the training loop.</p></li>
+<li><p><b><code>Returns</code></b>: <code>self</code>, for chaining.</p></li>
+<li><b><code>Raises</code></b>:</li>
+<li><p><b><code>ValueError</code></b>: If at least one of <code>x</code> and <code>y</code> is provided, and <code>input_fn</code> is provided.</p></li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.dnnregressor.predictargs-kwargs"><code id="DNNRegressor.predict">tf.contrib.learn.DNNRegressor.predict(*args, **kwargs)</code></h4>
+<p>Runs inference to determine the predicted class. (deprecated arguments)</p>
+<p>SOME ARGUMENTS ARE DEPRECATED. They will be removed after 2016-09-15. Instructions for updating: The default behavior of predict() is changing. The default value for as_iterable will change to True, and then the flag will be removed altogether. The behavior of this flag is described below.</p>
+<hr />
+<h4 id="tf.contrib.learn.dnnregressor.set_paramsparams"><code id="DNNRegressor.set_params">tf.contrib.learn.DNNRegressor.set_params(**params)</code></h4>
+<p>Set the parameters of this estimator.</p>
+<p>The method works on simple estimators as well as on nested objects (such as pipelines). The former have parameters of the form <code>&lt;component&gt;__&lt;parameter&gt;</code> so that it's possible to update each component of a nested object.</p>
+<h5 id="args-15">Args:</h5>
+<ul>
+<li><b><code>**params</code></b>: Parameters.</li>
+</ul>
+<h5 id="returns-17">Returns:</h5>
+<p>self</p>
+<h5 id="raises-4">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If params contain invalid names.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.dnnregressor.weights_"><code id="DNNRegressor.weights_">tf.contrib.learn.DNNRegressor.weights_</code></h4>
+<p>DEPRECATED FUNCTION</p>
+<p>THIS FUNCTION IS DEPRECATED. It will be removed after 2016-10-30. Instructions for updating: This method will be removed after the deprecation date. To inspect variables, use get_variable_names() and get_variable_value().</p>
+<hr />
+<h3 id="class-tf.contrib.learn.linearclassifier"><a name="//apple_ref/cpp/Class/LinearClassifier" class="dashAnchor"></a><code id="LinearClassifier">class tf.contrib.learn.LinearClassifier</code></h3>
+<p>Linear classifier model.</p>
+<p>Train a linear model to classify instances into one of multiple possible classes. When number of possible classes is 2, this is binary classification.</p>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">sparse_column_a <span class="op">=</span> sparse_column_with_hash_bucket(...)
+sparse_column_b <span class="op">=</span> sparse_column_with_hash_bucket(...)
+
+sparse_feature_a_x_sparse_feature_b <span class="op">=</span> crossed_column(...)
+
+<span class="co"># Estimator using the default optimizer.</span>
+estimator <span class="op">=</span> LinearClassifier(
+    feature_columns<span class="op">=</span>[sparse_column_a, sparse_feature_a_x_sparse_feature_b])
+
+<span class="co"># Or estimator using the FTRL optimizer with regularization.</span>
+estimator <span class="op">=</span> LinearClassifier(
+    feature_columns<span class="op">=</span>[sparse_column_a, sparse_feature_a_x_sparse_feature_b],
+    optimizer<span class="op">=</span>tf.train.FtrlOptimizer(
+      learning_rate<span class="op">=</span><span class="fl">0.1</span>,
+      l1_regularization_strength<span class="op">=</span><span class="fl">0.001</span>
+    ))
+
+<span class="co"># Or estimator using the SDCAOptimizer.</span>
+estimator <span class="op">=</span> LinearClassifier(
+   feature_columns<span class="op">=</span>[sparse_column_a, sparse_feature_a_x_sparse_feature_b],
+   optimizer<span class="op">=</span>tf.contrib.linear_optimizer.SDCAOptimizer(
+     example_id_column<span class="op">=</span><span class="st">&#39;example_id&#39;</span>,
+     num_loss_partitions<span class="op">=</span>...,
+     symmetric_l2_regularization<span class="op">=</span><span class="fl">2.0</span>
+   ))
+
+<span class="co"># Input builders</span>
+<span class="kw">def</span> input_fn_train: <span class="co"># returns x, y (where y represents label&#39;s class index).</span>
+  ...
+<span class="kw">def</span> input_fn_eval: <span class="co"># returns x, y (where y represents label&#39;s class index).</span>
+  ...
+estimator.fit(input_fn<span class="op">=</span>input_fn_train)
+estimator.evaluate(input_fn<span class="op">=</span>input_fn_eval)
+estimator.predict(x<span class="op">=</span>x) <span class="co"># returns predicted labels (i.e. label&#39;s class index).</span></code></pre></div>
+<p>Input of <code>fit</code> and <code>evaluate</code> should have following features, otherwise there will be a <code>KeyError</code>:</p>
+<ul>
+<li>if <code>weight_column_name</code> is not <code>None</code>, a feature with <code>key=weight_column_name</code> whose value is a <code>Tensor</code>.</li>
+<li>for each <code>column</code> in <code>feature_columns</code>:</li>
+<li>if <code>column</code> is a <code>SparseColumn</code>, a feature with <code>key=column.name</code> whose <code>value</code> is a <code>SparseTensor</code>.</li>
+<li>if <code>column</code> is a <code>WeightedSparseColumn</code>, two features: the first with <code>key</code> the id column name, the second with <code>key</code> the weight column name. Both features' <code>value</code> must be a <code>SparseTensor</code>.</li>
+<li>if <code>column</code> is a <code>RealValuedColumn</code>, a feature with <code>key=column.name</code> whose <code>value</code> is a <code>Tensor</code>. - - -</li>
+</ul>
+<h4 id="tf.contrib.learn.linearclassifier.__init__feature_columns-model_dirnone-n_classes2-weight_column_namenone-optimizernone-gradient_clip_normnone-enable_centered_biasfalse-_joint_weightfalse-confignone-feature_engineering_fnnone"><code id="LinearClassifier.__init__">tf.contrib.learn.LinearClassifier.__init__(feature_columns, model_dir=None, n_classes=2, weight_column_name=None, optimizer=None, gradient_clip_norm=None, enable_centered_bias=False, _joint_weight=False, config=None, feature_engineering_fn=None)</code></h4>
+<p>Construct a <code>LinearClassifier</code> estimator object.</p>
+<h5 id="args-16">Args:</h5>
+<ul>
+<li><b><code>feature_columns</code></b>: An iterable containing all the feature columns used by the model. All items in the set should be instances of classes derived from <code>FeatureColumn</code>.</li>
+<li><b><code>model_dir</code></b>: Directory to save model parameters, graph and etc. This can also be used to load checkpoints from the directory into a estimator to continue training a previously saved model.</li>
+<li><b><code>n_classes</code></b>: number of label classes. Default is binary classification. Note that class labels are integers representing the class index (i.e. values from 0 to n_classes-1). For arbitrary label values (e.g. string labels), convert to class indices first.</li>
+<li><b><code>weight_column_name</code></b>: A string defining feature column name representing weights. It is used to down weight or boost examples during training. It will be multiplied by the loss of the example.</li>
+<li><b><code>optimizer</code></b>: The optimizer used to train the model. If specified, it should be either an instance of <code>tf.Optimizer</code> or the SDCAOptimizer. If <code>None</code>, the Ftrl optimizer will be used.</li>
+<li><b><code>gradient_clip_norm</code></b>: A <code>float</code> &gt; 0. If provided, gradients are clipped to their global norm with this clipping ratio. See <code>tf.clip_by_global_norm</code> for more details.</li>
+<li><p><b><code>enable_centered_bias</code></b>: A bool. If True, estimator will learn a centered bias variable for each class. Rest of the model structure learns the residual after centered bias. _joint_weight: If True, the weights for all columns will be stored in a single (possibly partitioned) variable. It's more efficient, but it's incompatible with SDCAOptimizer, and requires all feature columns are sparse and use the 'sum' combiner.</p></li>
+<li><b><code>config</code></b>: <code>RunConfig</code> object to configure the runtime settings.</li>
+<li><p><b><code>feature_engineering_fn</code></b>: Feature engineering function. Takes features and labels which are the output of <code>input_fn</code> and returns features and labels which will be fed into the model.</p></li>
+</ul>
+<h5 id="returns-18">Returns:</h5>
+<p>A <code>LinearClassifier</code> estimator.</p>
+<h5 id="raises-5">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if n_classes &lt; 2.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.linearclassifier.bias_"><code id="LinearClassifier.bias_">tf.contrib.learn.LinearClassifier.bias_</code></h4>
+<p>DEPRECATED FUNCTION</p>
+<p>THIS FUNCTION IS DEPRECATED. It will be removed after 2016-10-30. Instructions for updating: This method will be removed after the deprecation date. To inspect variables, use get_variable_names() and get_variable_value().</p>
+<hr />
+<h4 id="tf.contrib.learn.linearclassifier.config"><code id="LinearClassifier.config">tf.contrib.learn.LinearClassifier.config</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.linearclassifier.evaluatexnone-ynone-input_fnnone-feed_fnnone-batch_sizenone-stepsnone-metricsnone-namenone"><code id="LinearClassifier.evaluate">tf.contrib.learn.LinearClassifier.evaluate(x=None, y=None, input_fn=None, feed_fn=None, batch_size=None, steps=None, metrics=None, name=None)</code></h4>
+<p>See evaluable.Evaluable. Note: Labels must be integer class indices.</p>
+<hr />
+<h4 id="tf.contrib.learn.linearclassifier.exportexport_dir-input_fnnone-input_feature_keynone-use_deprecated_input_fntrue-signature_fnnone-default_batch_size1-exports_to_keepnone"><code id="LinearClassifier.export">tf.contrib.learn.LinearClassifier.export(export_dir, input_fn=None, input_feature_key=None, use_deprecated_input_fn=True, signature_fn=None, default_batch_size=1, exports_to_keep=None)</code></h4>
+<p>See BaseEstimator.export.</p>
+<hr />
+<h4 id="tf.contrib.learn.linearclassifier.fitxnone-ynone-input_fnnone-stepsnone-batch_sizenone-monitorsnone-max_stepsnone"><code id="LinearClassifier.fit">tf.contrib.learn.LinearClassifier.fit(x=None, y=None, input_fn=None, steps=None, batch_size=None, monitors=None, max_steps=None)</code></h4>
+<p>See trainable.Trainable. Note: Labels must be integer class indices.</p>
+<hr />
+<h4 id="tf.contrib.learn.linearclassifier.get_estimator"><code id="LinearClassifier.get_estimator">tf.contrib.learn.LinearClassifier.get_estimator()</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.linearclassifier.get_variable_names"><code id="LinearClassifier.get_variable_names">tf.contrib.learn.LinearClassifier.get_variable_names()</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.linearclassifier.get_variable_valuename"><code id="LinearClassifier.get_variable_value">tf.contrib.learn.LinearClassifier.get_variable_value(name)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.linearclassifier.model_dir"><code id="LinearClassifier.model_dir">tf.contrib.learn.LinearClassifier.model_dir</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.linearclassifier.predictargs-kwargs"><code id="LinearClassifier.predict">tf.contrib.learn.LinearClassifier.predict(*args, **kwargs)</code></h4>
+<p>Runs inference to determine the predicted class (i.e. class index). (deprecated arguments)</p>
+<p>SOME ARGUMENTS ARE DEPRECATED. They will be removed after 2016-09-15. Instructions for updating: The default behavior of predict() is changing. The default value for as_iterable will change to True, and then the flag will be removed altogether. The behavior of this flag is described below.</p>
+<hr />
+<h4 id="tf.contrib.learn.linearclassifier.predict_probaargs-kwargs"><code id="LinearClassifier.predict_proba">tf.contrib.learn.LinearClassifier.predict_proba(*args, **kwargs)</code></h4>
+<p>Runs inference to determine the class probability predictions. (deprecated arguments)</p>
+<p>SOME ARGUMENTS ARE DEPRECATED. They will be removed after 2016-09-15. Instructions for updating: The default behavior of predict() is changing. The default value for as_iterable will change to True, and then the flag will be removed altogether. The behavior of this flag is described below.</p>
+<hr />
+<h4 id="tf.contrib.learn.linearclassifier.weights_"><code id="LinearClassifier.weights_">tf.contrib.learn.LinearClassifier.weights_</code></h4>
+<p>DEPRECATED FUNCTION</p>
+<p>THIS FUNCTION IS DEPRECATED. It will be removed after 2016-10-30. Instructions for updating: This method will be removed after the deprecation date. To inspect variables, use get_variable_names() and get_variable_value().</p>
+<hr />
+<h3 id="class-tf.contrib.learn.linearregressor"><a name="//apple_ref/cpp/Class/LinearRegressor" class="dashAnchor"></a><code id="LinearRegressor">class tf.contrib.learn.LinearRegressor</code></h3>
+<p>Linear regressor model.</p>
+<p>Train a linear regression model to predict label value given observation of feature values.</p>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">sparse_column_a <span class="op">=</span> sparse_column_with_hash_bucket(...)
+sparse_column_b <span class="op">=</span> sparse_column_with_hash_bucket(...)
+
+sparse_feature_a_x_sparse_feature_b <span class="op">=</span> crossed_column(...)
+
+estimator <span class="op">=</span> LinearRegressor(
+    feature_columns<span class="op">=</span>[sparse_column_a, sparse_feature_a_x_sparse_feature_b])
+
+<span class="co"># Input builders</span>
+<span class="kw">def</span> input_fn_train: <span class="co"># returns x, y</span>
+  ...
+<span class="kw">def</span> input_fn_eval: <span class="co"># returns x, y</span>
+  ...
+estimator.fit(input_fn<span class="op">=</span>input_fn_train)
+estimator.evaluate(input_fn<span class="op">=</span>input_fn_eval)
+estimator.predict(x<span class="op">=</span>x)</code></pre></div>
+<p>Input of <code>fit</code> and <code>evaluate</code> should have following features, otherwise there will be a KeyError:</p>
+<ul>
+<li>if <code>weight_column_name</code> is not <code>None</code>: key=weight_column_name, value=a <code>Tensor</code></li>
+<li>for column in <code>feature_columns</code>:</li>
+<li>if isinstance(column, <code>SparseColumn</code>): key=column.name, value=a <code>SparseTensor</code></li>
+<li>if isinstance(column, <code>WeightedSparseColumn</code>): {key=id column name, value=a <code>SparseTensor</code>, key=weight column name, value=a <code>SparseTensor</code>}</li>
+<li>if isinstance(column, <code>RealValuedColumn</code>): key=column.name, value=a <code>Tensor</code> - - -</li>
+</ul>
+<h4 id="tf.contrib.learn.linearregressor.__init__feature_columns-model_dirnone-weight_column_namenone-optimizernone-gradient_clip_normnone-enable_centered_biasfalse-label_dimension1-_joint_weightsfalse-confignone-feature_engineering_fnnone"><code id="LinearRegressor.__init__">tf.contrib.learn.LinearRegressor.__init__(feature_columns, model_dir=None, weight_column_name=None, optimizer=None, gradient_clip_norm=None, enable_centered_bias=False, label_dimension=1, _joint_weights=False, config=None, feature_engineering_fn=None)</code></h4>
+<p>Construct a <code>LinearRegressor</code> estimator object.</p>
+<h5 id="args-17">Args:</h5>
+<ul>
+<li><b><code>feature_columns</code></b>: An iterable containing all the feature columns used by the model. All items in the set should be instances of classes derived from <code>FeatureColumn</code>.</li>
+<li><b><code>model_dir</code></b>: Directory to save model parameters, graph, etc. This can also be used to load checkpoints from the directory into a estimator to continue training a previously saved model.</li>
+<li><b><code>weight_column_name</code></b>: A string defining feature column name representing weights. It is used to down weight or boost examples during training. It will be multiplied by the loss of the example.</li>
+<li><b><code>optimizer</code></b>: An instance of <code>tf.Optimizer</code> used to train the model. If <code>None</code>, will use an Ftrl optimizer.</li>
+<li><b><code>gradient_clip_norm</code></b>: A <code>float</code> &gt; 0. If provided, gradients are clipped to their global norm with this clipping ratio. See <code>tf.clip_by_global_norm</code> for more details.</li>
+<li><b><code>enable_centered_bias</code></b>: A bool. If True, estimator will learn a centered bias variable for each class. Rest of the model structure learns the residual after centered bias.</li>
+<li><p><b><code>label_dimension</code></b>: Dimension of the label for multilabels. Defaults to 1. _joint_weights: If True use a single (possibly partitioned) variable to store the weights. It's faster, but requires all feature columns are sparse and have the 'sum' combiner. Incompatible with SDCAOptimizer.</p></li>
+<li><b><code>config</code></b>: <code>RunConfig</code> object to configure the runtime settings.</li>
+<li><p><b><code>feature_engineering_fn</code></b>: Feature engineering function. Takes features and labels which are the output of <code>input_fn</code> and returns features and labels which will be fed into the model.</p></li>
+</ul>
+<h5 id="returns-19">Returns:</h5>
+<p>A <code>LinearRegressor</code> estimator.</p>
+<hr />
+<h4 id="tf.contrib.learn.linearregressor.bias_"><code id="LinearRegressor.bias_">tf.contrib.learn.LinearRegressor.bias_</code></h4>
+<p>DEPRECATED FUNCTION</p>
+<p>THIS FUNCTION IS DEPRECATED. It will be removed after 2016-10-30. Instructions for updating: This method will be removed after the deprecation date. To inspect variables, use get_variable_names() and get_variable_value().</p>
+<hr />
+<h4 id="tf.contrib.learn.linearregressor.config"><code id="LinearRegressor.config">tf.contrib.learn.LinearRegressor.config</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.linearregressor.evaluatexnone-ynone-input_fnnone-feed_fnnone-batch_sizenone-stepsnone-metricsnone-namenone"><code id="LinearRegressor.evaluate">tf.contrib.learn.LinearRegressor.evaluate(x=None, y=None, input_fn=None, feed_fn=None, batch_size=None, steps=None, metrics=None, name=None)</code></h4>
+<p>See evaluable.Evaluable.</p>
+<hr />
+<h4 id="tf.contrib.learn.linearregressor.exportexport_dir-input_fnnone-input_feature_keynone-use_deprecated_input_fntrue-signature_fnnone-default_batch_size1-exports_to_keepnone"><code id="LinearRegressor.export">tf.contrib.learn.LinearRegressor.export(export_dir, input_fn=None, input_feature_key=None, use_deprecated_input_fn=True, signature_fn=None, default_batch_size=1, exports_to_keep=None)</code></h4>
+<p>See BaseEstimator.export.</p>
+<hr />
+<h4 id="tf.contrib.learn.linearregressor.fitxnone-ynone-input_fnnone-stepsnone-batch_sizenone-monitorsnone-max_stepsnone"><code id="LinearRegressor.fit">tf.contrib.learn.LinearRegressor.fit(x=None, y=None, input_fn=None, steps=None, batch_size=None, monitors=None, max_steps=None)</code></h4>
+<p>See trainable.Trainable.</p>
+<hr />
+<h4 id="tf.contrib.learn.linearregressor.get_variable_names"><code id="LinearRegressor.get_variable_names">tf.contrib.learn.LinearRegressor.get_variable_names()</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.linearregressor.get_variable_valuename"><code id="LinearRegressor.get_variable_value">tf.contrib.learn.LinearRegressor.get_variable_value(name)</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.linearregressor.model_dir"><code id="LinearRegressor.model_dir">tf.contrib.learn.LinearRegressor.model_dir</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.linearregressor.predictargs-kwargs"><code id="LinearRegressor.predict">tf.contrib.learn.LinearRegressor.predict(*args, **kwargs)</code></h4>
+<p>Runs inference to determine the predicted class. (deprecated arguments)</p>
+<p>SOME ARGUMENTS ARE DEPRECATED. They will be removed after 2016-09-15. Instructions for updating: The default behavior of predict() is changing. The default value for as_iterable will change to True, and then the flag will be removed altogether. The behavior of this flag is described below.</p>
+<hr />
+<h4 id="tf.contrib.learn.linearregressor.weights_"><code id="LinearRegressor.weights_">tf.contrib.learn.LinearRegressor.weights_</code></h4>
+<p>DEPRECATED FUNCTION</p>
+<p>THIS FUNCTION IS DEPRECATED. It will be removed after 2016-10-30. Instructions for updating: This method will be removed after the deprecation date. To inspect variables, use get_variable_names() and get_variable_value().</p>
+<hr />
+<h3 id="class-tf.contrib.learn.logisticregressor"><a name="//apple_ref/cpp/Class/LogisticRegressor" class="dashAnchor"></a><code id="LogisticRegressor">class tf.contrib.learn.LogisticRegressor</code></h3>
+<p>Logistic regression Estimator for binary classification.</p>
+<p>This class provides a basic Estimator with some additional metrics for custom binary classification models, including AUC, precision/recall and accuracy.</p>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">  <span class="co"># See tf.contrib.learn.Estimator(...) for details on model_fn structure</span>
+  <span class="kw">def</span> my_model_fn(...):
+    <span class="cf">pass</span>
+
+  estimator <span class="op">=</span> LogisticRegressor(model_fn<span class="op">=</span>my_model_fn)
+
+  <span class="co"># Input builders</span>
+  <span class="kw">def</span> input_fn_train:
+    <span class="cf">pass</span>
+
+  estimator.fit(input_fn<span class="op">=</span>input_fn_train)
+  estimator.predict(x<span class="op">=</span>x)</code></pre></div>
+<hr />
+<h4 id="tf.contrib.learn.logisticregressor.__init__model_fn-thresholdsnone-model_dirnone-confignone-feature_engineering_fnnone"><code id="LogisticRegressor.__init__">tf.contrib.learn.LogisticRegressor.__init__(model_fn, thresholds=None, model_dir=None, config=None, feature_engineering_fn=None)</code></h4>
+<p>Initializes a LogisticRegressor.</p>
+<h5 id="args-18">Args:</h5>
+<ul>
+<li><b><code>model_fn</code></b>: Model function. See superclass Estimator for more details. This expects the returned predictions to be probabilities in [0.0, 1.0].</li>
+<li><b><code>thresholds</code></b>: List of floating point thresholds to use for accuracy, precision, and recall metrics. If <code>None</code>, defaults to <code>[0.5]</code>.</li>
+<li><b><code>model_dir</code></b>: Directory to save model parameters, graphs, etc. This can also be used to load checkpoints from the directory into a estimator to continue training a previously saved model.</li>
+<li><b><code>config</code></b>: A RunConfig configuration object.</li>
+<li><b><code>feature_engineering_fn</code></b>: Feature engineering function. Takes features and labels which are the output of <code>input_fn</code> and returns features and labels which will be fed into the model.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.logisticregressor.__repr__"><code id="LogisticRegressor.__repr__">tf.contrib.learn.LogisticRegressor.__repr__()</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.logisticregressor.config"><code id="LogisticRegressor.config">tf.contrib.learn.LogisticRegressor.config</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.logisticregressor.evaluatexnone-ynone-input_fnnone-feed_fnnone-batch_sizenone-stepsnone-metricsnone-namenone"><code id="LogisticRegressor.evaluate">tf.contrib.learn.LogisticRegressor.evaluate(x=None, y=None, input_fn=None, feed_fn=None, batch_size=None, steps=None, metrics=None, name=None)</code></h4>
+<p>Evaluates given model with provided evaluation data.</p>
+<p>See superclass Estimator for more details.</p>
+<h5 id="args-19">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: features.</li>
+<li><b><code>y</code></b>: labels (must be 0 or 1).</li>
+<li><b><code>input_fn</code></b>: Input function.</li>
+<li><b><code>feed_fn</code></b>: Function creating a feed dict every time it is called.</li>
+<li><b><code>batch_size</code></b>: minibatch size to use on the input.</li>
+<li><b><code>steps</code></b>: Number of steps for which to evaluate model.</li>
+<li><b><code>metrics</code></b>: Dict of metric ops to run. If None, the default metrics are used.</li>
+<li><b><code>name</code></b>: Name of the evaluation.</li>
+</ul>
+<h5 id="returns-20">Returns:</h5>
+<p>Returns <code>dict</code> with evaluation results.</p>
+<hr />
+<h4 id="tf.contrib.learn.logisticregressor.exportargs-kwargs"><code id="LogisticRegressor.export">tf.contrib.learn.LogisticRegressor.export(*args, **kwargs)</code></h4>
+<p>Exports inference graph into given dir. (deprecated arguments)</p>
+<p>SOME ARGUMENTS ARE DEPRECATED. They will be removed after 2016-09-23. Instructions for updating: The signature of the input_fn accepted by export is changing to be consistent with what's used by tf.Learn Estimator's train/evaluate. input_fn (and in most cases, input_feature_key) will become required args, and use_deprecated_input_fn will default to False and be removed altogether.</p>
+<pre><code>Args:
+  export_dir: A string containing a directory to write the exported graph
+    and checkpoints.
+  input_fn: If `use_deprecated_input_fn` is true, then a function that given
+    `Tensor` of `Example` strings, parses it into features that are then
+    passed to the model. Otherwise, a function that takes no argument and
+    returns a tuple of (features, labels), where features is a dict of
+    string key to `Tensor` and labels is a `Tensor` that&#39;s currently not
+    used (and so can be `None`).
+  input_feature_key: Only used if `use_deprecated_input_fn` is false. String
+    key into the features dict returned by `input_fn` that corresponds to a
+    the raw `Example` strings `Tensor` that the exported model will take as
+    input. Can only be `None` if you&#39;re using a custom `signature_fn` that
+    does not use the first arg (examples).
+  use_deprecated_input_fn: Determines the signature format of `input_fn`.
+  signature_fn: Function that returns a default signature and a named
+    signature map, given `Tensor` of `Example` strings, `dict` of `Tensor`s
+    for features and `Tensor` or `dict` of `Tensor`s for predictions.
+  prediction_key: The key for a tensor in the `predictions` dict (output
+    from the `model_fn`) to use as the `predictions` input to the
+    `signature_fn`. Optional. If `None`, predictions will pass to
+    `signature_fn` without filtering.
+  default_batch_size: Default batch size of the `Example` placeholder.
+  exports_to_keep: Number of exports to keep.
+
+Returns:
+  The string path to the exported directory. NB: this functionality was
+  added ca. 2016/09/25; clients that depend on the return value may need
+  to handle the case where this function returns None because subclasses
+  are not returning a value.</code></pre>
+<hr />
+<h4 id="tf.contrib.learn.logisticregressor.fitargs-kwargs"><code id="LogisticRegressor.fit">tf.contrib.learn.LogisticRegressor.fit(*args, **kwargs)</code></h4>
+<p>See <code>Trainable</code>. (deprecated arguments)</p>
+<p>SOME ARGUMENTS ARE DEPRECATED. They will be removed after 2016-12-01. Instructions for updating: Estimator is decoupled from Scikit Learn interface by moving into separate class SKCompat. Arguments x, y and batch_size are only available in the SKCompat class, Estimator will only accept input_fn.</p>
+<h5 id="example-conversion-11">Example conversion:</h5>
+<p>est = Estimator(...) -&gt; est = SKCompat(Estimator(...))</p>
+<ul>
+<li><b><code>Raises</code></b>:</li>
+<li><b><code>ValueError</code></b>: If <code>x</code> or <code>y</code> are not <code>None</code> while <code>input_fn</code> is not <code>None</code>.</li>
+<li><b><code>ValueError</code></b>: If both <code>steps</code> and <code>max_steps</code> are not <code>None</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.logisticregressor.get_default_metricscls-thresholdsnone"><code id="LogisticRegressor.get_default_metrics">tf.contrib.learn.LogisticRegressor.get_default_metrics(cls, thresholds=None)</code></h4>
+<p>Returns a dictionary of basic metrics for logistic regression.</p>
+<h5 id="args-20">Args:</h5>
+<ul>
+<li><b><code>thresholds</code></b>: List of floating point thresholds to use for accuracy, precision, and recall metrics. If None, defaults to [0.5].</li>
+</ul>
+<h5 id="returns-21">Returns:</h5>
+<p>Dictionary mapping metrics string names to metrics functions.</p>
+<hr />
+<h4 id="tf.contrib.learn.logisticregressor.get_paramsdeeptrue"><code id="LogisticRegressor.get_params">tf.contrib.learn.LogisticRegressor.get_params(deep=True)</code></h4>
+<p>Get parameters for this estimator.</p>
+<h5 id="args-21">Args:</h5>
+<ul>
+<li><p><b><code>deep</code></b>: boolean, optional</p>
+<p>If <code>True</code>, will return the parameters for this estimator and contained subobjects that are estimators.</p></li>
+</ul>
+<h5 id="returns-22">Returns:</h5>
+<p>params : mapping of string to any Parameter names mapped to their values.</p>
+<hr />
+<h4 id="tf.contrib.learn.logisticregressor.get_variable_names"><code id="LogisticRegressor.get_variable_names">tf.contrib.learn.LogisticRegressor.get_variable_names()</code></h4>
+<p>Returns list of all variable names in this model.</p>
+<h5 id="returns-23">Returns:</h5>
+<p>List of names.</p>
+<hr />
+<h4 id="tf.contrib.learn.logisticregressor.get_variable_valuename"><code id="LogisticRegressor.get_variable_value">tf.contrib.learn.LogisticRegressor.get_variable_value(name)</code></h4>
+<p>Returns value of the variable given by name.</p>
+<h5 id="args-22">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: string, name of the tensor.</li>
+</ul>
+<h5 id="returns-24">Returns:</h5>
+<p>Numpy array - value of the tensor.</p>
+<hr />
+<h4 id="tf.contrib.learn.logisticregressor.model_dir"><code id="LogisticRegressor.model_dir">tf.contrib.learn.LogisticRegressor.model_dir</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.logisticregressor.partial_fitargs-kwargs"><code id="LogisticRegressor.partial_fit">tf.contrib.learn.LogisticRegressor.partial_fit(*args, **kwargs)</code></h4>
+<p>Incremental fit on a batch of samples. (deprecated arguments)</p>
+<p>SOME ARGUMENTS ARE DEPRECATED. They will be removed after 2016-12-01. Instructions for updating: Estimator is decoupled from Scikit Learn interface by moving into separate class SKCompat. Arguments x, y and batch_size are only available in the SKCompat class, Estimator will only accept input_fn.</p>
+<h5 id="example-conversion-12">Example conversion:</h5>
+<p>est = Estimator(...) -&gt; est = SKCompat(Estimator(...))</p>
+<pre><code>This method is expected to be called several times consecutively
+on different or the same chunks of the dataset. This either can
+implement iterative training or out-of-core/online training.
+
+This is especially useful when the whole dataset is too big to
+fit in memory at the same time. Or when model is taking long time
+to converge, and you want to split up training into subparts.</code></pre>
+<ul>
+<li><b><code>Args</code></b>:</li>
+<li><b><code>x</code></b>: Matrix of shape [n_samples, n_features...]. Can be iterator that returns arrays of features. The training input samples for fitting the model. If set, <code>input_fn</code> must be <code>None</code>.</li>
+<li><b><code>y</code></b>: Vector or matrix [n_samples] or [n_samples, n_outputs]. Can be iterator that returns array of labels. The training label values (class labels in classification, real numbers in regression). If set, <code>input_fn</code> must be <code>None</code>.</li>
+<li><b><code>input_fn</code></b>: Input function. If set, <code>x</code>, <code>y</code>, and <code>batch_size</code> must be <code>None</code>.</li>
+<li><b><code>steps</code></b>: Number of steps for which to train model. If <code>None</code>, train forever.</li>
+<li><b><code>batch_size</code></b>: minibatch size to use on the input, defaults to first dimension of <code>x</code>. Must be <code>None</code> if <code>input_fn</code> is provided.</li>
+<li><p><b><code>monitors</code></b>: List of <code>BaseMonitor</code> subclass instances. Used for callbacks inside the training loop.</p></li>
+<li><p><b><code>Returns</code></b>: <code>self</code>, for chaining.</p></li>
+<li><b><code>Raises</code></b>:</li>
+<li><p><b><code>ValueError</code></b>: If at least one of <code>x</code> and <code>y</code> is provided, and <code>input_fn</code> is provided.</p></li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.logisticregressor.predictargs-kwargs"><code id="LogisticRegressor.predict">tf.contrib.learn.LogisticRegressor.predict(*args, **kwargs)</code></h4>
+<p>Returns predictions for given features. (deprecated arguments)</p>
+<p>SOME ARGUMENTS ARE DEPRECATED. They will be removed after 2016-12-01. Instructions for updating: Estimator is decoupled from Scikit Learn interface by moving into separate class SKCompat. Arguments x, y and batch_size are only available in the SKCompat class, Estimator will only accept input_fn.</p>
+<h5 id="example-conversion-13">Example conversion:</h5>
+<p>est = Estimator(...) -&gt; est = SKCompat(Estimator(...))</p>
+<ul>
+<li><b><code>Args</code></b>:</li>
+<li><b><code>x</code></b>: Matrix of shape [n_samples, n_features...]. Can be iterator that returns arrays of features. The training input samples for fitting the model. If set, <code>input_fn</code> must be <code>None</code>.</li>
+<li><b><code>input_fn</code></b>: Input function. If set, <code>x</code> and 'batch_size' must be <code>None</code>.</li>
+<li><b><code>batch_size</code></b>: Override default batch size. If set, 'input_fn' must be 'None'.</li>
+<li><b><code>outputs</code></b>: list of <code>str</code>, name of the output to predict. If <code>None</code>, returns all.</li>
+<li><p><b><code>as_iterable</code></b>: If True, return an iterable which keeps yielding predictions for each example until inputs are exhausted. Note: The inputs must terminate if you want the iterable to terminate (e.g. be sure to pass num_epochs=1 if you are using something like read_batch_features).</p></li>
+<li><p><b><code>Returns</code></b>: A numpy array of predicted classes or regression values if the constructor's <code>model_fn</code> returns a <code>Tensor</code> for <code>predictions</code> or a <code>dict</code> of numpy arrays if <code>model_fn</code> returns a <code>dict</code>. Returns an iterable of predictions if as_iterable is True.</p></li>
+<li><b><code>Raises</code></b>:</li>
+<li><p><b><code>ValueError</code></b>: If x and input_fn are both provided or both <code>None</code>.</p></li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.logisticregressor.set_paramsparams"><code id="LogisticRegressor.set_params">tf.contrib.learn.LogisticRegressor.set_params(**params)</code></h4>
+<p>Set the parameters of this estimator.</p>
+<p>The method works on simple estimators as well as on nested objects (such as pipelines). The former have parameters of the form <code>&lt;component&gt;__&lt;parameter&gt;</code> so that it's possible to update each component of a nested object.</p>
+<h5 id="args-23">Args:</h5>
+<ul>
+<li><b><code>**params</code></b>: Parameters.</li>
+</ul>
+<h5 id="returns-25">Returns:</h5>
+<p>self</p>
+<h5 id="raises-6">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If params contain invalid names.</li>
+</ul>
+<h2 id="graph-actions">Graph actions</h2>
+<p>Perform various training, evaluation, and inference actions on a graph.</p>
+<hr />
+<h3 id="class-tf.train.nanlossduringtrainingerror"><a name="//apple_ref/cpp/Class/NanLossDuringTrainingError" class="dashAnchor"></a><code id="NanLossDuringTrainingError">class tf.train.NanLossDuringTrainingError</code></h3>
+<hr />
+<h4 id="tf.train.nanlossduringtrainingerror.__str__"><code id="NanLossDuringTrainingError.__str__">tf.train.NanLossDuringTrainingError.__str__()</code></h4>
+<hr />
+<h3 id="class-tf.contrib.learn.runconfig"><a name="//apple_ref/cpp/Class/RunConfig" class="dashAnchor"></a><code id="RunConfig">class tf.contrib.learn.RunConfig</code></h3>
+<p>This class specifies the configurations for an <code>Estimator</code> run.</p>
+<p>If you're a Google-internal user using command line flags with <code>learn_runner.py</code> (for instance, to do distributed training or to use parameter servers), you probably want to use <code>learn_runner.EstimatorConfig</code> instead. - - -</p>
+<h4 id="tf.contrib.learn.runconfig.__init__masternone-num_cores0-log_device_placementfalse-gpu_memory_fraction1-tf_random_seednone-save_summary_steps100-save_checkpoints_secs600-save_checkpoints_stepsnone-keep_checkpoint_max5-keep_checkpoint_every_n_hours10000-evaluation_master"><code id="RunConfig.__init__">tf.contrib.learn.RunConfig.__init__(master=None, num_cores=0, log_device_placement=False, gpu_memory_fraction=1, tf_random_seed=None, save_summary_steps=100, save_checkpoints_secs=600, save_checkpoints_steps=None, keep_checkpoint_max=5, keep_checkpoint_every_n_hours=10000, evaluation_master='')</code></h4>
+<p>Constructor.</p>
+<p>Note that the superclass <code>ClusterConfig</code> may set properties like <code>cluster_spec</code>, <code>is_chief</code>, <code>master</code> (if <code>None</code> in the args), <code>num_ps_replicas</code>, <code>task_id</code>, and <code>task_type</code> based on the <code>TF_CONFIG</code> environment variable. See <code>ClusterConfig</code> for more details.</p>
+<h5 id="args-24">Args:</h5>
+<ul>
+<li><b><code>master</code></b>: TensorFlow master. Defaults to empty string for local.</li>
+<li><b><code>num_cores</code></b>: Number of cores to be used. If 0, the system picks an appropriate number (default: 0).</li>
+<li><b><code>log_device_placement</code></b>: Log the op placement to devices (default: False).</li>
+<li><b><code>gpu_memory_fraction</code></b>: Fraction of GPU memory used by the process on each GPU uniformly on the same machine.</li>
+<li><b><code>tf_random_seed</code></b>: Random seed for TensorFlow initializers. Setting this value allows consistency between reruns.</li>
+<li><b><code>save_summary_steps</code></b>: Save summaries every this many steps.</li>
+<li><b><code>save_checkpoints_secs</code></b>: Save checkpoints every this many seconds. Can not be specified with <code>save_checkpoints_steps</code>.</li>
+<li><b><code>save_checkpoints_steps</code></b>: Save checkpoints every this many steps. Can not be specified with <code>save_checkpoints_secs</code>.</li>
+<li><b><code>keep_checkpoint_max</code></b>: The maximum number of recent checkpoint files to keep. As new files are created, older files are deleted. If None or 0, all checkpoint files are kept. Defaults to 5 (that is, the 5 most recent checkpoint files are kept.)</li>
+<li><b><code>keep_checkpoint_every_n_hours</code></b>: Number of hours between each checkpoint to be saved. The default value of 10,000 hours effectively disables the feature.</li>
+<li><b><code>evaluation_master</code></b>: the master on which to perform evaluation.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.learn.runconfig.cluster_spec"><code id="RunConfig.cluster_spec">tf.contrib.learn.RunConfig.cluster_spec</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.runconfig.environment"><code id="RunConfig.environment">tf.contrib.learn.RunConfig.environment</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.runconfig.evaluation_master"><code id="RunConfig.evaluation_master">tf.contrib.learn.RunConfig.evaluation_master</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.runconfig.get_task_id"><code id="RunConfig.get_task_id">tf.contrib.learn.RunConfig.get_task_id()</code></h4>
+<p>Returns task index from <code>TF_CONFIG</code> environmental variable.</p>
+<p>If you have a ClusterConfig instance, you can just access its task_id property instead of calling this function and re-parsing the environmental variable.</p>
+<h5 id="returns-26">Returns:</h5>
+<p><code>TF_CONFIG['task']['index']</code>. Defaults to 0.</p>
+<hr />
+<h4 id="tf.contrib.learn.runconfig.is_chief"><code id="RunConfig.is_chief">tf.contrib.learn.RunConfig.is_chief</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.runconfig.master"><code id="RunConfig.master">tf.contrib.learn.RunConfig.master</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.runconfig.num_ps_replicas"><code id="RunConfig.num_ps_replicas">tf.contrib.learn.RunConfig.num_ps_replicas</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.runconfig.task_id"><code id="RunConfig.task_id">tf.contrib.learn.RunConfig.task_id</code></h4>
+<hr />
+<h4 id="tf.contrib.learn.runconfig.task_type"><code id="RunConfig.task_type">tf.contrib.learn.RunConfig.task_type</code></h4>
+<hr />
+<h3 id="tf.contrib.learn.evaluategraph-output_dir-checkpoint_path-eval_dict-update_opnone-global_step_tensornone-supervisor_master-log_every_steps10-feed_fnnone-max_stepsnone"><a name="//apple_ref/cpp/Function/evaluate" class="dashAnchor"></a><code id="evaluate">tf.contrib.learn.evaluate(graph, output_dir, checkpoint_path, eval_dict, update_op=None, global_step_tensor=None, supervisor_master='', log_every_steps=10, feed_fn=None, max_steps=None)</code></h3>
+<p>Evaluate a model loaded from a checkpoint.</p>
+<p>Given <code>graph</code>, a directory to write summaries to (<code>output_dir</code>), a checkpoint to restore variables from, and a <code>dict</code> of <code>Tensor</code>s to evaluate, run an eval loop for <code>max_steps</code> steps, or until an exception (generally, an end-of-input signal from a reader operation) is raised from running <code>eval_dict</code>.</p>
+<p>In each step of evaluation, all tensors in the <code>eval_dict</code> are evaluated, and every <code>log_every_steps</code> steps, they are logged. At the very end of evaluation, a summary is evaluated (finding the summary ops using <code>Supervisor</code>'s logic) and written to <code>output_dir</code>.</p>
+<h5 id="args-25">Args:</h5>
+<ul>
+<li><b><code>graph</code></b>: A <code>Graph</code> to train. It is expected that this graph is not in use elsewhere.</li>
+<li><b><code>output_dir</code></b>: A string containing the directory to write a summary to.</li>
+<li><b><code>checkpoint_path</code></b>: A string containing the path to a checkpoint to restore. Can be <code>None</code> if the graph doesn't require loading any variables.</li>
+<li><b><code>eval_dict</code></b>: A <code>dict</code> mapping string names to tensors to evaluate. It is evaluated in every logging step. The result of the final evaluation is returned. If <code>update_op</code> is None, then it's evaluated in every step. If <code>max_steps</code> is <code>None</code>, this should depend on a reader that will raise an end-of-input exception when the inputs are exhausted.</li>
+<li><b><code>update_op</code></b>: A <code>Tensor</code> which is run in every step.</li>
+<li><b><code>global_step_tensor</code></b>: A <code>Variable</code> containing the global step. If <code>None</code>, one is extracted from the graph using the same logic as in <code>Supervisor</code>. Used to place eval summaries on training curves.</li>
+<li><b><code>supervisor_master</code></b>: The master string to use when preparing the session.</li>
+<li><b><code>log_every_steps</code></b>: Integer. Output logs every <code>log_every_steps</code> evaluation steps. The logs contain the <code>eval_dict</code> and timing information.</li>
+<li><b><code>feed_fn</code></b>: A function that is called every iteration to produce a <code>feed_dict</code> passed to <code>session.run</code> calls. Optional.</li>
+<li><b><code>max_steps</code></b>: Integer. Evaluate <code>eval_dict</code> this many times.</li>
+</ul>
+<h5 id="returns-27">Returns:</h5>
+<p>A tuple <code>(eval_results, global_step)</code>:</p>
+<ul>
+<li><b><code>eval_results</code></b>: A <code>dict</code> mapping <code>string</code> to numeric values (<code>int</code>, <code>float</code>) that are the result of running eval_dict in the last step. <code>None</code> if no eval steps were run.</li>
+<li><b><code>global_step</code></b>: The global step this evaluation corresponds to.</li>
+</ul>
+<h5 id="raises-7">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>output_dir</code> is empty.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.learn.inferrestore_checkpoint_path-output_dict-feed_dictnone"><a name="//apple_ref/cpp/Function/infer" class="dashAnchor"></a><code id="infer">tf.contrib.learn.infer(restore_checkpoint_path, output_dict, feed_dict=None)</code></h3>
+<p>Restore graph from <code>restore_checkpoint_path</code> and run <code>output_dict</code> tensors.</p>
+<p>If <code>restore_checkpoint_path</code> is supplied, restore from checkpoint. Otherwise, init all variables.</p>
+<h5 id="args-26">Args:</h5>
+<ul>
+<li><b><code>restore_checkpoint_path</code></b>: A string containing the path to a checkpoint to restore.</li>
+<li><b><code>output_dict</code></b>: A <code>dict</code> mapping string names to <code>Tensor</code> objects to run. Tensors must all be from the same graph.</li>
+<li><b><code>feed_dict</code></b>: <code>dict</code> object mapping <code>Tensor</code> objects to input values to feed.</li>
+</ul>
+<h5 id="returns-28">Returns:</h5>
+<p>Dict of values read from <code>output_dict</code> tensors. Keys are the same as <code>output_dict</code>, values are the results read from the corresponding <code>Tensor</code> in <code>output_dict</code>.</p>
+<h5 id="raises-8">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>output_dict</code> or <code>feed_dicts</code> is None or empty.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.learn.run_feedsargs-kwargs"><a name="//apple_ref/cpp/Function/run_feeds" class="dashAnchor"></a><code id="run_feeds">tf.contrib.learn.run_feeds(*args, **kwargs)</code></h3>
+<p>See run_feeds_iter(). Returns a <code>list</code> instead of an iterator.</p>
+<hr />
+<h3 id="tf.contrib.learn.run_noutput_dict-feed_dictnone-restore_checkpoint_pathnone-n1"><a name="//apple_ref/cpp/Function/run_n" class="dashAnchor"></a><code id="run_n">tf.contrib.learn.run_n(output_dict, feed_dict=None, restore_checkpoint_path=None, n=1)</code></h3>
+<p>Run <code>output_dict</code> tensors <code>n</code> times, with the same <code>feed_dict</code> each run.</p>
+<h5 id="args-27">Args:</h5>
+<ul>
+<li><b><code>output_dict</code></b>: A <code>dict</code> mapping string names to tensors to run. Must all be from the same graph.</li>
+<li><b><code>feed_dict</code></b>: <code>dict</code> of input values to feed each run.</li>
+<li><b><code>restore_checkpoint_path</code></b>: A string containing the path to a checkpoint to restore.</li>
+<li><b><code>n</code></b>: Number of times to repeat.</li>
+</ul>
+<h5 id="returns-29">Returns:</h5>
+<p>A list of <code>n</code> <code>dict</code> objects, each containing values read from <code>output_dict</code> tensors.</p>
+<hr />
+<h3 id="tf.contrib.learn.traingraph-output_dir-train_op-loss_op-global_step_tensornone-init_opnone-init_feed_dictnone-init_fnnone-log_every_steps10-supervisor_is_chieftrue-supervisor_master-supervisor_save_model_secs600-keep_checkpoint_max5-supervisor_save_summaries_steps100-feed_fnnone-stepsnone-fail_on_nan_losstrue-monitorsnone-max_stepsnone"><a name="//apple_ref/cpp/Function/train" class="dashAnchor"></a><code id="train">tf.contrib.learn.train(graph, output_dir, train_op, loss_op, global_step_tensor=None, init_op=None, init_feed_dict=None, init_fn=None, log_every_steps=10, supervisor_is_chief=True, supervisor_master='', supervisor_save_model_secs=600, keep_checkpoint_max=5, supervisor_save_summaries_steps=100, feed_fn=None, steps=None, fail_on_nan_loss=True, monitors=None, max_steps=None)</code></h3>
+<p>Train a model.</p>
+<p>Given <code>graph</code>, a directory to write outputs to (<code>output_dir</code>), and some ops, run a training loop. The given <code>train_op</code> performs one step of training on the model. The <code>loss_op</code> represents the objective function of the training. It is expected to increment the <code>global_step_tensor</code>, a scalar integer tensor counting training steps. This function uses <code>Supervisor</code> to initialize the graph (from a checkpoint if one is available in <code>output_dir</code>), write summaries defined in the graph, and write regular checkpoints as defined by <code>supervisor_save_model_secs</code>.</p>
+<p>Training continues until <code>global_step_tensor</code> evaluates to <code>max_steps</code>, or, if <code>fail_on_nan_loss</code>, until <code>loss_op</code> evaluates to <code>NaN</code>. In that case the program is terminated with exit code 1.</p>
+<h5 id="args-28">Args:</h5>
+<ul>
+<li><b><code>graph</code></b>: A graph to train. It is expected that this graph is not in use elsewhere.</li>
+<li><b><code>output_dir</code></b>: A directory to write outputs to.</li>
+<li><b><code>train_op</code></b>: An op that performs one training step when run.</li>
+<li><b><code>loss_op</code></b>: A scalar loss tensor.</li>
+<li><b><code>global_step_tensor</code></b>: A tensor representing the global step. If none is given, one is extracted from the graph using the same logic as in <code>Supervisor</code>.</li>
+<li><b><code>init_op</code></b>: An op that initializes the graph. If <code>None</code>, use <code>Supervisor</code>'s default.</li>
+<li><b><code>init_feed_dict</code></b>: A dictionary that maps <code>Tensor</code> objects to feed values. This feed dictionary will be used when <code>init_op</code> is evaluated.</li>
+<li><b><code>init_fn</code></b>: Optional callable passed to Supervisor to initialize the model.</li>
+<li><b><code>log_every_steps</code></b>: Output logs regularly. The logs contain timing data and the current loss.</li>
+<li><b><code>supervisor_is_chief</code></b>: Whether the current process is the chief supervisor in charge of restoring the model and running standard services.</li>
+<li><b><code>supervisor_master</code></b>: The master string to use when preparing the session.</li>
+<li><b><code>supervisor_save_model_secs</code></b>: Save a checkpoint every <code>supervisor_save_model_secs</code> seconds when training.</li>
+<li><b><code>keep_checkpoint_max</code></b>: The maximum number of recent checkpoint files to keep. As new files are created, older files are deleted. If None or 0, all checkpoint files are kept. This is simply passed as the max_to_keep arg to tf.Saver constructor.</li>
+<li><b><code>supervisor_save_summaries_steps</code></b>: Save summaries every <code>supervisor_save_summaries_steps</code> seconds when training.</li>
+<li><b><code>feed_fn</code></b>: A function that is called every iteration to produce a <code>feed_dict</code> passed to <code>session.run</code> calls. Optional.</li>
+<li><b><code>steps</code></b>: Trains for this many steps (e.g. current global step + <code>steps</code>).</li>
+<li><b><code>fail_on_nan_loss</code></b>: If true, raise <code>NanLossDuringTrainingError</code> if <code>loss_op</code> evaluates to <code>NaN</code>. If false, continue training as if nothing happened.</li>
+<li><b><code>monitors</code></b>: List of <code>BaseMonitor</code> subclass instances. Used for callbacks inside the training loop.</li>
+<li><b><code>max_steps</code></b>: Number of total steps for which to train model. If <code>None</code>, train forever. Two calls fit(steps=100) means 200 training iterations. On the other hand two calls of fit(max_steps=100) means, second call will not do any iteration since first call did all 100 steps.</li>
+</ul>
+<h5 id="returns-30">Returns:</h5>
+<p>The final loss value.</p>
+<h5 id="raises-9">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>output_dir</code>, <code>train_op</code>, <code>loss_op</code>, or <code>global_step_tensor</code> is not provided. See <code>tf.contrib.framework.get_global_step</code> for how we look up the latter if not provided explicitly.</li>
+<li><b><code>NanLossDuringTrainingError</code></b>: If <code>fail_on_nan_loss</code> is <code>True</code>, and loss ever evaluates to <code>NaN</code>.</li>
+<li><b><code>ValueError</code></b>: If both <code>steps</code> and <code>max_steps</code> are not <code>None</code>.</li>
+</ul>
+<h2 id="input-processing">Input processing</h2>
+<p>Queue and read batched input data.</p>
+<hr />
+<h3 id="tf.contrib.learn.extract_dask_datadata"><a name="//apple_ref/cpp/Function/extract_dask_data" class="dashAnchor"></a><code id="extract_dask_data">tf.contrib.learn.extract_dask_data(data)</code></h3>
+<p>Extract data from dask.Series or dask.DataFrame for predictors.</p>
+<p>Given a distributed dask.DataFrame or dask.Series containing columns or names for one or more predictors, this operation returns a single dask.DataFrame or dask.Series that can be iterated over.</p>
+<h5 id="args-29">Args:</h5>
+<ul>
+<li><b><code>data</code></b>: A distributed dask.DataFrame or dask.Series.</li>
+</ul>
+<h5 id="returns-31">Returns:</h5>
+<p>A dask.DataFrame or dask.Series that can be iterated over. If the supplied argument is neither a dask.DataFrame nor a dask.Series this operation returns it without modification.</p>
+<hr />
+<h3 id="tf.contrib.learn.extract_dask_labelslabels"><a name="//apple_ref/cpp/Function/extract_dask_labels" class="dashAnchor"></a><code id="extract_dask_labels">tf.contrib.learn.extract_dask_labels(labels)</code></h3>
+<p>Extract data from dask.Series or dask.DataFrame for labels.</p>
+<p>Given a distributed dask.DataFrame or dask.Series containing exactly one column or name, this operation returns a single dask.DataFrame or dask.Series that can be iterated over.</p>
+<h5 id="args-30">Args:</h5>
+<ul>
+<li><b><code>labels</code></b>: A distributed dask.DataFrame or dask.Series with exactly one column or name.</li>
+</ul>
+<h5 id="returns-32">Returns:</h5>
+<p>A dask.DataFrame or dask.Series that can be iterated over. If the supplied argument is neither a dask.DataFrame nor a dask.Series this operation returns it without modification.</p>
+<h5 id="raises-10">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If the supplied dask.DataFrame contains more than one column or the supplied dask.Series contains more than one name.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.learn.extract_pandas_datadata"><a name="//apple_ref/cpp/Function/extract_pandas_data" class="dashAnchor"></a><code id="extract_pandas_data">tf.contrib.learn.extract_pandas_data(data)</code></h3>
+<p>Extract data from pandas.DataFrame for predictors.</p>
+<p>Given a DataFrame, will extract the values and cast them to float. The DataFrame is expected to contain values of type int, float or bool.</p>
+<h5 id="args-31">Args:</h5>
+<ul>
+<li><b><code>data</code></b>: <code>pandas.DataFrame</code> containing the data to be extracted.</li>
+</ul>
+<h5 id="returns-33">Returns:</h5>
+<p>A numpy <code>ndarray</code> of the DataFrame's values as floats.</p>
+<h5 id="raises-11">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if data contains types other than int, float or bool.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.learn.extract_pandas_labelslabels"><a name="//apple_ref/cpp/Function/extract_pandas_labels" class="dashAnchor"></a><code id="extract_pandas_labels">tf.contrib.learn.extract_pandas_labels(labels)</code></h3>
+<p>Extract data from pandas.DataFrame for labels.</p>
+<h5 id="args-32">Args:</h5>
+<ul>
+<li><b><code>labels</code></b>: <code>pandas.DataFrame</code> or <code>pandas.Series</code> containing one column of labels to be extracted.</li>
+</ul>
+<h5 id="returns-34">Returns:</h5>
+<p>A numpy <code>ndarray</code> of labels from the DataFrame.</p>
+<h5 id="raises-12">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if more than one column is found or type is not int, float or bool.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.learn.extract_pandas_matrixdata"><a name="//apple_ref/cpp/Function/extract_pandas_matrix" class="dashAnchor"></a><code id="extract_pandas_matrix">tf.contrib.learn.extract_pandas_matrix(data)</code></h3>
+<p>Extracts numpy matrix from pandas DataFrame.</p>
+<h5 id="args-33">Args:</h5>
+<ul>
+<li><b><code>data</code></b>: <code>pandas.DataFrame</code> containing the data to be extracted.</li>
+</ul>
+<h5 id="returns-35">Returns:</h5>
+<p>A numpy <code>ndarray</code> of the DataFrame's values.</p>
+<hr />
+<h3 id="tf.contrib.learn.read_batch_examplesfile_pattern-batch_size-reader-randomize_inputtrue-num_epochsnone-queue_capacity10000-num_threads1-read_batch_size1-parse_fnnone-namenone"><a name="//apple_ref/cpp/Function/read_batch_examples" class="dashAnchor"></a><code id="read_batch_examples">tf.contrib.learn.read_batch_examples(file_pattern, batch_size, reader, randomize_input=True, num_epochs=None, queue_capacity=10000, num_threads=1, read_batch_size=1, parse_fn=None, name=None)</code></h3>
+<p>Adds operations to read, queue, batch <code>Example</code> protos.</p>
+<p>Given file pattern (or list of files), will setup a queue for file names, read <code>Example</code> proto using provided <code>reader</code>, use batch queue to create batches of examples of size <code>batch_size</code>.</p>
+<p>All queue runners are added to the queue runners collection, and may be started via <code>start_queue_runners</code>.</p>
+<p>All ops are added to the default graph.</p>
+<p>Use <code>parse_fn</code> if you need to do parsing / processing on single examples.</p>
+<h5 id="args-34">Args:</h5>
+<ul>
+<li><b><code>file_pattern</code></b>: List of files or pattern of file paths containing <code>Example</code> records. See <code>tf.gfile.Glob</code> for pattern rules.</li>
+<li><b><code>batch_size</code></b>: An int or scalar <code>Tensor</code> specifying the batch size to use.</li>
+<li><b><code>reader</code></b>: A function or class that returns an object with <code>read</code> method, (filename tensor) -&gt; (example tensor).</li>
+<li><b><code>randomize_input</code></b>: Whether the input should be randomized.</li>
+<li><b><code>num_epochs</code></b>: Integer specifying the number of times to read through the dataset. If <code>None</code>, cycles through the dataset forever. NOTE - If specified, creates a variable that must be initialized, so call <code>tf.global_variables_initializer()</code> as shown in the tests.</li>
+<li><b><code>queue_capacity</code></b>: Capacity for input queue.</li>
+<li><b><code>num_threads</code></b>: The number of threads enqueuing examples.</li>
+<li><b><code>read_batch_size</code></b>: An int or scalar <code>Tensor</code> specifying the number of records to read at once</li>
+<li><b><code>parse_fn</code></b>: Parsing function, takes <code>Example</code> Tensor returns parsed representation. If <code>None</code>, no parsing is done.</li>
+<li><b><code>name</code></b>: Name of resulting op.</li>
+</ul>
+<h5 id="returns-36">Returns:</h5>
+<p>String <code>Tensor</code> of batched <code>Example</code> proto.</p>
+<h5 id="raises-13">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: for invalid inputs.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.learn.read_batch_featuresfile_pattern-batch_size-features-reader-randomize_inputtrue-num_epochsnone-queue_capacity10000-feature_queue_capacity100-reader_num_threads1-parse_fnnone-namenone"><a name="//apple_ref/cpp/Function/read_batch_features" class="dashAnchor"></a><code id="read_batch_features">tf.contrib.learn.read_batch_features(file_pattern, batch_size, features, reader, randomize_input=True, num_epochs=None, queue_capacity=10000, feature_queue_capacity=100, reader_num_threads=1, parse_fn=None, name=None)</code></h3>
+<p>Adds operations to read, queue, batch and parse <code>Example</code> protos.</p>
+<p>Given file pattern (or list of files), will setup a queue for file names, read <code>Example</code> proto using provided <code>reader</code>, use batch queue to create batches of examples of size <code>batch_size</code> and parse example given <code>features</code> specification.</p>
+<p>All queue runners are added to the queue runners collection, and may be started via <code>start_queue_runners</code>.</p>
+<p>All ops are added to the default graph.</p>
+<h5 id="args-35">Args:</h5>
+<ul>
+<li><b><code>file_pattern</code></b>: List of files or pattern of file paths containing <code>Example</code> records. See <code>tf.gfile.Glob</code> for pattern rules.</li>
+<li><b><code>batch_size</code></b>: An int or scalar <code>Tensor</code> specifying the batch size to use.</li>
+<li><b><code>features</code></b>: A <code>dict</code> mapping feature keys to <code>FixedLenFeature</code> or <code>VarLenFeature</code> values.</li>
+<li><b><code>reader</code></b>: A function or class that returns an object with <code>read</code> method, (filename tensor) -&gt; (example tensor).</li>
+<li><b><code>randomize_input</code></b>: Whether the input should be randomized.</li>
+<li><b><code>num_epochs</code></b>: Integer specifying the number of times to read through the dataset. If None, cycles through the dataset forever. NOTE - If specified, creates a variable that must be initialized, so call tf.local_variables_initializer() as shown in the tests.</li>
+<li><b><code>queue_capacity</code></b>: Capacity for input queue.</li>
+<li><b><code>feature_queue_capacity</code></b>: Capacity of the parsed features queue. Set this value to a small number, for example 5 if the parsed features are large.</li>
+<li><b><code>reader_num_threads</code></b>: The number of threads to read examples.</li>
+<li><b><code>parse_fn</code></b>: Parsing function, takes <code>Example</code> Tensor returns parsed representation. If <code>None</code>, no parsing is done.</li>
+<li><b><code>name</code></b>: Name of resulting op.</li>
+</ul>
+<h5 id="returns-37">Returns:</h5>
+<p>A dict of <code>Tensor</code> or <code>SparseTensor</code> objects for each in <code>features</code>.</p>
+<h5 id="raises-14">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: for invalid inputs.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.learn.read_batch_record_featuresfile_pattern-batch_size-features-randomize_inputtrue-num_epochsnone-queue_capacity10000-reader_num_threads1-namedequeue_record_examples"><a name="//apple_ref/cpp/Function/read_batch_record_features" class="dashAnchor"></a><code id="read_batch_record_features">tf.contrib.learn.read_batch_record_features(file_pattern, batch_size, features, randomize_input=True, num_epochs=None, queue_capacity=10000, reader_num_threads=1, name='dequeue_record_examples')</code></h3>
+<p>Reads TFRecord, queues, batches and parses <code>Example</code> proto.</p>
+<p>See more detailed description in <code>read_examples</code>.</p>
+<h5 id="args-36">Args:</h5>
+<ul>
+<li><b><code>file_pattern</code></b>: List of files or pattern of file paths containing <code>Example</code> records. See <code>tf.gfile.Glob</code> for pattern rules.</li>
+<li><b><code>batch_size</code></b>: An int or scalar <code>Tensor</code> specifying the batch size to use.</li>
+<li><b><code>features</code></b>: A <code>dict</code> mapping feature keys to <code>FixedLenFeature</code> or <code>VarLenFeature</code> values.</li>
+<li><b><code>randomize_input</code></b>: Whether the input should be randomized.</li>
+<li><b><code>num_epochs</code></b>: Integer specifying the number of times to read through the dataset. If None, cycles through the dataset forever. NOTE - If specified, creates a variable that must be initialized, so call tf.local_variables_initializer() as shown in the tests.</li>
+<li><b><code>queue_capacity</code></b>: Capacity for input queue.</li>
+<li><b><code>reader_num_threads</code></b>: The number of threads to read examples.</li>
+<li><b><code>name</code></b>: Name of resulting op.</li>
+</ul>
+<h5 id="returns-38">Returns:</h5>
+<p>A dict of <code>Tensor</code> or <code>SparseTensor</code> objects for each in <code>features</code>.</p>
+<h5 id="raises-15">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: for invalid inputs.</li>
+</ul>

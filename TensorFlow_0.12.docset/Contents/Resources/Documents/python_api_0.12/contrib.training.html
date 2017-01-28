@@ -1,0 +1,458 @@
+<!-- This file is machine generated: DO NOT EDIT! -->
+<h1 id="training-contrib">Training (contrib)</h1>
+<p>[TOC]</p>
+<p>Training and input utilities.</p>
+<h2 id="splitting-sequence-inputs-into-minibatches-with-state-saving">Splitting sequence inputs into minibatches with state saving</h2>
+<p>Use <a href="#SequenceQueueingStateSaver"><code>SequenceQueueingStateSaver</code></a> or its wrapper <a href="#batch_sequences_with_states"><code>batch_sequences_with_states</code></a> if you have input data with a dynamic primary time / frame count axis which you'd like to convert into fixed size segments during minibatching, and would like to store state in the forward direction across segments of an example.</p>
+<hr />
+<h3 id="tf.contrib.training.batch_sequences_with_statesinput_key-input_sequences-input_context-input_length-initial_states-num_unroll-batch_size-num_threads3-capacity1000-allow_small_batchtrue-padtrue-namenone"><a name="//apple_ref/cpp/Function/batch_sequences_with_states" class="dashAnchor"></a><code id="batch_sequences_with_states">tf.contrib.training.batch_sequences_with_states(input_key, input_sequences, input_context, input_length, initial_states, num_unroll, batch_size, num_threads=3, capacity=1000, allow_small_batch=True, pad=True, name=None)</code></h3>
+<p>Creates batches of segments of sequential input.</p>
+<p>This method creates a <code>SequenceQueueingStateSaver</code> (SQSS) and adds it to the queuerunners. It returns a <code>NextQueuedSequenceBatch</code>.</p>
+<p>It accepts one example at a time identified by a unique <code>input_key</code>. <code>input_sequence</code> is a dict with values that are tensors with time as first dimension. This time dimension must be the same across those tensors of an example. It can vary across examples. Although it always has to be a multiple of <code>num_unroll</code>. Hence, padding may be necessary and it is turned on by default by <code>pad=True</code>.</p>
+<p><code>input_length</code> is a Tensor scalar or an int recording the time dimension prior to padding. It should be between 0 and the time dimension. One reason we want to keep track of it is so that we can take it into consideration when computing the loss. If <code>pad=True</code> then <code>input_length</code> can be <code>None</code> and will be inferred.</p>
+<p>This methods segments <code>input_sequence</code> into segments of length <code>num_unroll</code>. It batches input sequences from <code>batch_size</code> many examples. These mini-batches are available through the <code>sequence</code> property of the output. Moreover, for each entry in the batch we can access its original <code>input_key</code> in <code>key</code> and its input length in <code>total_length</code>. <code>length</code> records within this segment how many non-padded time steps there are.</p>
+<p>Static features of an example that do not vary across time can be part of the <code>input_context</code>, a dict with Tensor values. This method copies the context for each segment and makes it available in the <code>context</code> of the output.</p>
+<p>This method can maintain and update a state for each example. It accepts some initial_states as a dict with Tensor values. The first mini-batch an example is contained has initial_states as entry of the <code>state</code>. If save_state is called then the next segment will have the updated entry of the <code>state</code>. See <code>NextQueuedSequenceBatch</code> for a complete list of properties and methods.</p>
+<p>Example usage:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">batch_size <span class="op">=</span> <span class="dv">32</span>
+num_unroll <span class="op">=</span> <span class="dv">20</span>
+num_enqueue_threads <span class="op">=</span> <span class="dv">3</span>
+lstm_size <span class="op">=</span> <span class="dv">8</span>
+cell <span class="op">=</span> tf.nn.rnn_cell.BasicLSTMCell(num_units<span class="op">=</span>lstm_size)
+
+key, sequences, context <span class="op">=</span> my_parser(raw_data)
+initial_state_values <span class="op">=</span> tf.zeros((state_size,), dtype<span class="op">=</span>tf.float32)
+initial_states <span class="op">=</span> {<span class="st">&quot;lstm_state&quot;</span>: initial_state_values}
+batch <span class="op">=</span> tf.batch_sequences_with_states(
+    input_key<span class="op">=</span>key,
+    input_sequences<span class="op">=</span>sequences,
+    input_context<span class="op">=</span>context,
+    initial_states<span class="op">=</span>initial_states,
+    num_unroll<span class="op">=</span>num_unroll,
+    batch_size<span class="op">=</span>batch_size,
+    num_threads<span class="op">=</span>num_enqueue_threads,
+    capacity<span class="op">=</span>batch_size <span class="op">*</span> num_enqueue_threads <span class="op">*</span> <span class="dv">2</span>)
+
+inputs <span class="op">=</span> batch.sequences[<span class="st">&quot;input&quot;</span>]
+context_label <span class="op">=</span> batch.context[<span class="st">&quot;label&quot;</span>]
+
+inputs_by_time <span class="op">=</span> tf.split(<span class="dv">1</span>, num_unroll, inputs)
+<span class="cf">assert</span> <span class="bu">len</span>(inputs_by_time) <span class="op">==</span> num_unroll
+
+lstm_output, _ <span class="op">=</span> tf.nn.state_saving_rnn(
+  cell,
+  inputs_by_time,
+  state_saver<span class="op">=</span>batch,
+  state_name<span class="op">=</span><span class="st">&quot;lstm_state&quot;</span>)
+
+<span class="co"># Start a prefetcher in the background</span>
+sess <span class="op">=</span> tf.Session()
+
+tf.train.start_queue_runners(sess<span class="op">=</span>session)
+
+<span class="cf">while</span> <span class="va">True</span>:
+  <span class="co"># Step through batches, perform training or inference...</span>
+  session.run([lstm_output])</code></pre></div>
+<h5 id="args">Args:</h5>
+<ul>
+<li><b><code>input_key</code></b>: A string scalar <code>Tensor</code>, the <strong>unique</strong> key for the given input example. This is used to keep track of the split minibatch elements of this input. Batched keys of the current iteration are made accessible via the <code>key</code> property. The shape of <code>input_key</code> (scalar) must be fully specified.</li>
+<li><p><b><code>input_sequences</code></b>: A dict mapping string names to <code>Tensor</code> values. The values must all have matching first dimension, called <code>value_length</code>. They may vary from input to input. The remainder of the shape (other than the first dimension) must be fully specified. The <code>SequenceQueueingStateSaver</code> will split these tensors along this first dimension into minibatch elements of dimension <code>num_unrolled</code>. Batched and segmented sequences of the current iteration are made accessible via the <code>sequences</code> property.</p>
+<p><strong>Note</strong>: if <code>pad=False</code>, then <code>value_length</code> must always be a multiple of <code>num_unroll</code>.</p></li>
+<li><p><b><code>input_context</code></b>: A dict mapping string names to <code>Tensor</code> values. The values are treated as &quot;global&quot; across all time splits of the given input example, and will be copied across for all minibatch elements accordingly. Batched and copied context of the current iteration are made accessible via the <code>context</code> property.</p>
+<p><strong>Note</strong>: All input_context values must have fully defined shapes.</p></li>
+<li><b><code>input_length</code></b>: None or an int32 scalar <code>Tensor</code>, the length of the sequence prior to padding. If <code>input_length=None</code> and <code>pad=True</code> then the length will be inferred and will be equal to <code>value_length</code>. If <code>pad=False</code> then <code>input_length</code> cannot be <code>None</code>: <code>input_length</code> must be specified. Its shape of <code>input_length</code> (scalar) must be fully specified. Its value may be at most <code>value_length</code> for any given input (see above for the definition of <code>value_length</code>). Batched and total lengths of the current iteration are made accessible via the <code>length</code> and <code>total_length</code> properties.</li>
+<li><p><b><code>initial_states</code></b>: A dict mapping string state names to multi-dimensional values (e.g. constants or tensors). This input defines the set of states that will be kept track of during computing iterations, and which can be accessed via the <code>state</code> and <code>save_state</code> methods.</p>
+<p><strong>Note</strong>: All initial_state values must have fully defined shapes.</p></li>
+<li><b><code>num_unroll</code></b>: Python integer, how many time steps to unroll at a time. The input sequences of length k are then split into k / num_unroll many segments.</li>
+<li><b><code>batch_size</code></b>: int or int32 scalar <code>Tensor</code>, how large minibatches should be when accessing the <code>state()</code> method and <code>context</code>, <code>sequences</code>, etc, properties.</li>
+<li><b><code>num_threads</code></b>: The int number of threads enqueuing input examples into a queue.</li>
+<li><b><code>capacity</code></b>: The max capacity of the queue in number of examples. Needs to be at least <code>batch_size</code>. Defaults to 1000. When iterating over the same input example multiple times reusing their keys the <code>capacity</code> must be smaller than the number of examples.</li>
+<li><b><code>allow_small_batch</code></b>: If true, the queue will return smaller batches when there aren't enough input examples to fill a whole batch and the end of the input has been reached.</li>
+<li><b><code>pad</code></b>: If <code>True</code>, <code>input_sequences</code> will be padded to multiple of <code>num_unroll</code>. In that case <code>input_length</code> may be <code>None</code> and is assumed to be the length of first dimension of values in <code>input_sequences</code> (i.e. <code>value_length</code>).</li>
+<li><p><b><code>name</code></b>: An op name string (optional).</p></li>
+</ul>
+<h5 id="returns">Returns:</h5>
+<p>A NextQueuedSequenceBatch with segmented and batched inputs and their states.</p>
+<h5 id="raises">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if any of the inputs is not an expected type.</li>
+<li><b><code>ValueError</code></b>: if any of the input values is inconsistent, e.g. if not enough shape information is available from inputs to build the state saver.</li>
+</ul>
+<hr />
+<h3 id="class-tf.contrib.training.nextqueuedsequencebatch"><a name="//apple_ref/cpp/Class/NextQueuedSequenceBatch" class="dashAnchor"></a><code id="NextQueuedSequenceBatch">class tf.contrib.training.NextQueuedSequenceBatch</code></h3>
+<p>NextQueuedSequenceBatch stores deferred SequenceQueueingStateSaver data.</p>
+<p>This class is instantiated by <code>SequenceQueueingStateSaver</code> and is accessible via its <code>next_batch</code> property. - - -</p>
+<h4 id="tf.contrib.training.nextqueuedsequencebatch.__init__state_saver"><code id="NextQueuedSequenceBatch.__init__">tf.contrib.training.NextQueuedSequenceBatch.__init__(state_saver)</code></h4>
+<hr />
+<h4 id="tf.contrib.training.nextqueuedsequencebatch.batch_size"><code id="NextQueuedSequenceBatch.batch_size">tf.contrib.training.NextQueuedSequenceBatch.batch_size</code></h4>
+<p>The batch_size of the given batch.</p>
+<p>Usually, this is the batch_size requested when initializing the SQSS, but if allow_small_batch=True this will become smaller when inputs are exhausted.</p>
+<h5 id="returns-1">Returns:</h5>
+<p>A scalar integer tensor, the batch_size</p>
+<hr />
+<h4 id="tf.contrib.training.nextqueuedsequencebatch.context"><code id="NextQueuedSequenceBatch.context">tf.contrib.training.NextQueuedSequenceBatch.context</code></h4>
+<p>A dict mapping keys of <code>input_context</code> to batched context.</p>
+<h5 id="returns-2">Returns:</h5>
+<p>A dict mapping keys of <code>input_context</code> to tensors. If we had at input:</p>
+<p><code>python   context[&quot;name&quot;].get_shape() == [d1, d2, ...]</code></p>
+<p>then for this property:</p>
+<p><code>python   context[&quot;name&quot;].get_shape() == [batch_size, d1, d2, ...]</code></p>
+<hr />
+<h4 id="tf.contrib.training.nextqueuedsequencebatch.insertion_index"><code id="NextQueuedSequenceBatch.insertion_index">tf.contrib.training.NextQueuedSequenceBatch.insertion_index</code></h4>
+<p>The insertion indices of the examples (when they were first added).</p>
+<p>These indices start with the value -2**63 and increase with every call to the prefetch op. Each whole example gets its own insertion index, and this is used to prioritize the example so that its truncated segments appear in adjacent iterations, even if new examples are inserted by the prefetch op between iterations.</p>
+<h5 id="returns-3">Returns:</h5>
+<p>An int64 vector of length <code>batch_size</code>, the insertion indices.</p>
+<hr />
+<h4 id="tf.contrib.training.nextqueuedsequencebatch.key"><code id="NextQueuedSequenceBatch.key">tf.contrib.training.NextQueuedSequenceBatch.key</code></h4>
+<p>The key names of the given truncated unrolled examples.</p>
+<p>The format of the key is:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co">&quot;%05d_of_%05d:%s&quot;</span> <span class="op">%</span> (sequence, sequence_count, original_key)</code></pre></div>
+<p>where <code>original_key</code> is the unique key read in by the prefetcher.</p>
+<h5 id="returns-4">Returns:</h5>
+<p>A string vector of length <code>batch_size</code>, the keys.</p>
+<hr />
+<h4 id="tf.contrib.training.nextqueuedsequencebatch.length"><code id="NextQueuedSequenceBatch.length">tf.contrib.training.NextQueuedSequenceBatch.length</code></h4>
+<p>The lengths of the given truncated unrolled examples.</p>
+<p>For initial iterations, for which <code>sequence * num_unroll &lt; length</code>, this number is <code>num_unroll</code>. For the remainder, this number is between <code>0</code> and <code>num_unroll</code>.</p>
+<h5 id="returns-5">Returns:</h5>
+<p>An integer vector of length <code>batch_size</code>, the lengths.</p>
+<hr />
+<h4 id="tf.contrib.training.nextqueuedsequencebatch.next_key"><code id="NextQueuedSequenceBatch.next_key">tf.contrib.training.NextQueuedSequenceBatch.next_key</code></h4>
+<p>The key names of the next (in iteration) truncated unrolled examples.</p>
+<p>The format of the key is:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co">&quot;%05d_of_%05d:%s&quot;</span> <span class="op">%</span> (sequence <span class="op">+</span> <span class="dv">1</span>, sequence_count, original_key)</code></pre></div>
+<p>if <code>sequence + 1 &lt; sequence_count</code>, otherwise:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co">&quot;STOP:%s&quot;</span> <span class="op">%</span> original_key</code></pre></div>
+<p>where <code>original_key</code> is the unique key read in by the prefetcher.</p>
+<h5 id="returns-6">Returns:</h5>
+<p>A string vector of length <code>batch_size</code>, the keys.</p>
+<hr />
+<h4 id="tf.contrib.training.nextqueuedsequencebatch.save_statestate_name-value-namenone"><code id="NextQueuedSequenceBatch.save_state">tf.contrib.training.NextQueuedSequenceBatch.save_state(state_name, value, name=None)</code></h4>
+<p>Returns an op to save the current batch of state <code>state_name</code>.</p>
+<h5 id="args-1">Args:</h5>
+<ul>
+<li><b><code>state_name</code></b>: string, matches a key provided in <code>initial_states</code>.</li>
+<li><p><b><code>value</code></b>: A <code>Tensor</code>. Its type must match that of <code>initial_states[state_name].dtype</code>. If we had at input:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">initial_states[state_name].get_shape() <span class="op">==</span> [d1, d2, ...]</code></pre></div>
+<p>then the shape of <code>value</code> must match:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.shape(value) <span class="op">==</span> [batch_size, d1, d2, ...]</code></pre></div></li>
+<li><p><b><code>name</code></b>: string (optional). The name scope for newly created ops.</p></li>
+</ul>
+<h5 id="returns-7">Returns:</h5>
+<p>A control flow op that stores the new state of each entry into the state saver. This op must be run for every iteration that accesses data from the state saver (otherwise the state saver will never progress through its states and run out of capacity).</p>
+<h5 id="raises-1">Raises:</h5>
+<ul>
+<li><b><code>KeyError</code></b>: if <code>state_name</code> does not match any of the initial states declared in <code>initial_states</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.training.nextqueuedsequencebatch.sequence"><code id="NextQueuedSequenceBatch.sequence">tf.contrib.training.NextQueuedSequenceBatch.sequence</code></h4>
+<p>An int32 vector, length <code>batch_size</code>: the sequence index of each entry.</p>
+<p>When an input is split up, the sequence values</p>
+<pre><code>0, 1, ..., sequence_count - 1</code></pre>
+<p>are assigned to each split.</p>
+<h5 id="returns-8">Returns:</h5>
+<p>An int32 vector <code>Tensor</code>.</p>
+<hr />
+<h4 id="tf.contrib.training.nextqueuedsequencebatch.sequence_count"><code id="NextQueuedSequenceBatch.sequence_count">tf.contrib.training.NextQueuedSequenceBatch.sequence_count</code></h4>
+<p>An int32 vector, length <code>batch_size</code>: the sequence count of each entry.</p>
+<p>When an input is split up, the number of splits is equal to: <code>padded_length / num_unroll</code>. This is the sequence_count.</p>
+<h5 id="returns-9">Returns:</h5>
+<p>An int32 vector <code>Tensor</code>.</p>
+<hr />
+<h4 id="tf.contrib.training.nextqueuedsequencebatch.sequences"><code id="NextQueuedSequenceBatch.sequences">tf.contrib.training.NextQueuedSequenceBatch.sequences</code></h4>
+<p>A dict mapping keys of <code>input_sequences</code> to split and rebatched data.</p>
+<h5 id="returns-10">Returns:</h5>
+<p>A dict mapping keys of <code>input_sequences</code> to tensors. If we had at input:</p>
+<p><code>python   sequences[&quot;name&quot;].get_shape() == [None, d1, d2, ...]</code></p>
+<p>where <code>None</code> meant the sequence time was dynamic, then for this property:</p>
+<p><code>python   sequences[&quot;name&quot;].get_shape() == [batch_size, num_unroll, d1, d2, ...].</code></p>
+<hr />
+<h4 id="tf.contrib.training.nextqueuedsequencebatch.statestate_name"><code id="NextQueuedSequenceBatch.state">tf.contrib.training.NextQueuedSequenceBatch.state(state_name)</code></h4>
+<p>Returns batched state tensors.</p>
+<h5 id="args-2">Args:</h5>
+<ul>
+<li><b><code>state_name</code></b>: string, matches a key provided in <code>initial_states</code>.</li>
+</ul>
+<h5 id="returns-11">Returns:</h5>
+<p>A <code>Tensor</code>: a batched set of states, either initial states (if this is the first run of the given example), or a value as stored during a previous iteration via <code>save_state</code> control flow. Its type is the same as <code>initial_states[&quot;state_name&quot;].dtype</code>. If we had at input:</p>
+<p><code>python   initial_states[state_name].get_shape() == [d1, d2, ...],</code></p>
+<p>then</p>
+<p><code>python   state(state_name).get_shape() == [batch_size, d1, d2, ...]</code></p>
+<h5 id="raises-2">Raises:</h5>
+<ul>
+<li><b><code>KeyError</code></b>: if <code>state_name</code> does not match any of the initial states declared in <code>initial_states</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.training.nextqueuedsequencebatch.total_length"><code id="NextQueuedSequenceBatch.total_length">tf.contrib.training.NextQueuedSequenceBatch.total_length</code></h4>
+<p>The lengths of the original (non-truncated) unrolled examples.</p>
+<h5 id="returns-12">Returns:</h5>
+<p>An integer vector of length <code>batch_size</code>, the total lengths.</p>
+<hr />
+<h3 id="class-tf.contrib.training.sequencequeueingstatesaver"><a name="//apple_ref/cpp/Class/SequenceQueueingStateSaver" class="dashAnchor"></a><code id="SequenceQueueingStateSaver">class tf.contrib.training.SequenceQueueingStateSaver</code></h3>
+<p>SequenceQueueingStateSaver provides access to stateful values from input.</p>
+<p>This class is meant to be used instead of, e.g., a <code>Queue</code>, for splitting variable-length sequence inputs into segments of sequences with fixed length and batching them into mini-batches. It maintains contexts and state for a sequence across the segments. It can be used in conjunction with a <code>QueueRunner</code> (see the example below).</p>
+<p>The <code>SequenceQueueingStateSaver</code> (SQSS) accepts one example at a time via the inputs <code>input_length</code>, <code>input_key</code>, <code>input_sequences</code> (a dict), <code>input_context</code> (a dict), and <code>initial_states</code> (a dict). The sequences, values in <code>input_sequences</code>, may have variable first dimension (the <code>padded_length</code>), though this dimension must always be a multiple of <code>num_unroll</code>. All other dimensions must be fixed and accessible via <code>get_shape</code> calls. The length prior to padding can be recorded in <code>input_length</code>. The context values in <code>input_context</code> must all have fixed and well defined dimensions. The initial state values must all have fixed and well defined dimensions.</p>
+<p>The SQSS splits the sequences of an input example into segments of length <code>num_unroll</code>. Across examples minibatches of size <code>batch_size</code> are formed. These minibatches contain a segment of the sequences, copy the context values, and maintain state, length, and key information of the original input examples. In the first segment of an example the state is still the initial state. It can then be updated; and updated state values are accessible in subsequent segments of the same example. After each segment <code>batch.save_state()</code> must be called which is done by the state_saving_rnn. Without this call, the dequeue op associated with the SQSS will not run. Internally, SQSS has a queue for the input examples. Its <code>capacity</code> is configurable. If set smaller than <code>batch_size</code> then the dequeue op will block indefinitely. A small multiple of <code>batch_size</code> is a good rule of thumb to prevent that queue from becoming a bottleneck and slowing down training. If set too large (and note that it defaults to unbounded) memory consumption goes up. Moreover, when iterating over the same input examples multiple times reusing the same <code>key</code> the <code>capacity</code> must be smaller than the number of examples.</p>
+<p>The prefetcher, which reads one unrolled, variable-length input sequence at a time, is accessible via <code>prefetch_op</code>. The underlying <code>Barrier</code> object is accessible via <code>barrier</code>. Processed minibatches, as well as state read and write capabilities are accessible via <code>next_batch</code>. Specifically, <code>next_batch</code> provides access to all of the minibatched data, including the following, see <code>NextQueuedSequenceBatch</code> for details:</p>
+<ul>
+<li><code>total_length</code>, <code>length</code>, <code>insertion_index</code>, <code>key</code>, <code>next_key</code>,</li>
+<li><code>sequence</code> (the index each minibatch entry's time segment index),</li>
+<li><code>sequence_count</code> (the total time segment count for each minibatch entry),</li>
+<li><code>context</code> (a dict of the copied minibatched context values),</li>
+<li><code>sequences</code> (a dict of the split minibatched variable-length sequences),</li>
+<li><code>state</code> (to access the states of the current segments of these entries)</li>
+<li><code>save_state</code> (to save the states for the next segments of these entries)</li>
+</ul>
+<p>Example usage:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">batch_size <span class="op">=</span> <span class="dv">32</span>
+num_unroll <span class="op">=</span> <span class="dv">20</span>
+lstm_size <span class="op">=</span> <span class="dv">8</span>
+cell <span class="op">=</span> tf.nn.rnn_cell.BasicLSTMCell(num_units<span class="op">=</span>lstm_size)
+initial_state_values <span class="op">=</span> tf.zeros(cell.state_size, dtype<span class="op">=</span>tf.float32)
+
+raw_data <span class="op">=</span> get_single_input_from_input_reader()
+length, key, sequences, context <span class="op">=</span> my_parser(raw_data)
+<span class="cf">assert</span> <span class="st">&quot;input&quot;</span> <span class="op">in</span> sequences.keys()
+<span class="cf">assert</span> <span class="st">&quot;label&quot;</span> <span class="op">in</span> context.keys()
+initial_states <span class="op">=</span> {<span class="st">&quot;lstm_state&quot;</span>: initial_state_value}
+
+stateful_reader <span class="op">=</span> tf.SequenceQueueingStateSaver(
+    batch_size, num_unroll,
+    length<span class="op">=</span>length, input_key<span class="op">=</span>key, input_sequences<span class="op">=</span>sequences,
+    input_context<span class="op">=</span>context, initial_states<span class="op">=</span>initial_states,
+    capacity<span class="op">=</span>batch_size<span class="op">*</span><span class="dv">100</span>)
+
+batch <span class="op">=</span> stateful_reader.next_batch
+inputs <span class="op">=</span> batch.sequences[<span class="st">&quot;input&quot;</span>]
+context_label <span class="op">=</span> batch.context[<span class="st">&quot;label&quot;</span>]
+
+inputs_by_time <span class="op">=</span> tf.split(<span class="dv">1</span>, num_unroll, inputs)
+<span class="cf">assert</span> <span class="bu">len</span>(inputs_by_time) <span class="op">==</span> num_unroll
+
+lstm_output, _ <span class="op">=</span> tf.nn.state_saving_rnn(
+  cell,
+  inputs_by_time,
+  state_saver<span class="op">=</span>batch,
+  state_name<span class="op">=</span><span class="st">&quot;lstm_state&quot;</span>)
+
+<span class="co"># Start a prefetcher in the background</span>
+sess <span class="op">=</span> tf.Session()
+num_threads <span class="op">=</span> <span class="dv">3</span>
+queue_runner <span class="op">=</span> tf.train.QueueRunner(
+    stateful_reader, [stateful_reader.prefetch_op] <span class="op">*</span> num_threads)
+tf.train.add_queue_runner(queue_runner)
+tf.train.start_queue_runners(sess<span class="op">=</span>session)
+
+<span class="cf">while</span> <span class="va">True</span>:
+  <span class="co"># Step through batches, perform training or inference...</span>
+  session.run([lstm_output])</code></pre></div>
+<p><strong>Note</strong>: Usually the barrier is given to a QueueRunner as in the examples above. The QueueRunner will close the barrier if the prefetch_op receives an OutOfRange Error from upstream input queues (i.e., reaches the end of the input). If the barrier is closed no further new examples are added to the SQSS. The underlying barrier might, however, still contain further unroll-steps of examples that have not undergone all iterations. To gracefully finish all examples, the flag <code>allow_small_batch</code> must be set to true, which causes the SQSS to issue progressively smaller mini-batches with the remaining examples. - - -</p>
+<h4 id="tf.contrib.training.sequencequeueingstatesaver.__init__batch_size-num_unroll-input_length-input_key-input_sequences-input_context-initial_states-capacitynone-allow_small_batchfalse-namenone"><code id="SequenceQueueingStateSaver.__init__">tf.contrib.training.SequenceQueueingStateSaver.__init__(batch_size, num_unroll, input_length, input_key, input_sequences, input_context, initial_states, capacity=None, allow_small_batch=False, name=None)</code></h4>
+<p>Creates the SequenceQueueingStateSaver.</p>
+<h5 id="args-3">Args:</h5>
+<ul>
+<li><b><code>batch_size</code></b>: int or int32 scalar <code>Tensor</code>, how large minibatches should be when accessing the <code>state()</code> method and <code>context</code>, <code>sequences</code>, etc, properties.</li>
+<li><b><code>num_unroll</code></b>: Python integer, how many time steps to unroll at a time. The input sequences of length <code>k</code> are then split into <code>k / num_unroll</code> many segments.</li>
+<li><b><code>input_length</code></b>: An int32 scalar <code>Tensor</code>, the length of the sequence prior to padding. This value may be at most <code>padded_length</code> for any given input (see below for the definition of <code>padded_length</code>). Batched and total lengths of the current iteration are made accessible via the <code>length</code> and <code>total_length</code> properties. The shape of input_length (scalar) must be fully specified.</li>
+<li><b><code>input_key</code></b>: A string scalar <code>Tensor</code>, the <strong>unique</strong> key for the given input. This is used to keep track of the split minibatch elements of this input. Batched keys of the current iteration are made accessible via the <code>key</code> property. The shape of <code>input_key</code> (scalar) must be fully specified.</li>
+<li><p><b><code>input_sequences</code></b>: A dict mapping string names to <code>Tensor</code> values. The values must all have matching first dimension, called <code>padded_length</code>. The <code>SequenceQueueingStateSaver</code> will split these tensors along this first dimension into minibatch elements of dimension <code>num_unroll</code>. Batched and segmented sequences of the current iteration are made accessible via the <code>sequences</code> property.</p>
+<p><strong>Note</strong>: <code>padded_length</code> may be dynamic, and may vary from input to input, but must always be a multiple of <code>num_unroll</code>. The remainder of the shape (other than the first dimension) must be fully specified.</p></li>
+<li><p><b><code>input_context</code></b>: A dict mapping string names to <code>Tensor</code> values. The values are treated as &quot;global&quot; across all time splits of the given input, and will be copied across for all minibatch elements accordingly. Batched and copied context of the current iteration are made accessible via the <code>context</code> property.</p>
+<p><strong>Note</strong>: All input_context values must have fully defined shapes.</p></li>
+<li><p><b><code>initial_states</code></b>: A dict mapping string state names to multi-dimensional values (e.g. constants or tensors). This input defines the set of states that will be kept track of during computing iterations, and which can be accessed via the <code>state</code> and <code>save_state</code> methods.</p>
+<p><strong>Note</strong>: All initial_state values must have fully defined shapes.</p></li>
+<li><b><code>capacity</code></b>: The max capacity of the SQSS in number of examples. Needs to be at least <code>batch_size</code>. Defaults to unbounded.</li>
+<li><b><code>allow_small_batch</code></b>: If true, the SQSS will return smaller batches when there aren't enough input examples to fill a whole batch and the end of the input has been reached (i.e., the underlying barrier has been closed).</li>
+<li><p><b><code>name</code></b>: An op name string (optional).</p></li>
+</ul>
+<h5 id="raises-3">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if any of the inputs is not an expected type.</li>
+<li><b><code>ValueError</code></b>: if any of the input values is inconsistent, e.g. if not enough shape information is available from inputs to build the state saver.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.training.sequencequeueingstatesaver.barrier"><code id="SequenceQueueingStateSaver.barrier">tf.contrib.training.SequenceQueueingStateSaver.barrier</code></h4>
+<hr />
+<h4 id="tf.contrib.training.sequencequeueingstatesaver.batch_size"><code id="SequenceQueueingStateSaver.batch_size">tf.contrib.training.SequenceQueueingStateSaver.batch_size</code></h4>
+<hr />
+<h4 id="tf.contrib.training.sequencequeueingstatesaver.closecancel_pending_enqueuesfalse-namenone"><code id="SequenceQueueingStateSaver.close">tf.contrib.training.SequenceQueueingStateSaver.close(cancel_pending_enqueues=False, name=None)</code></h4>
+<p>Closes the barrier and the FIFOQueue.</p>
+<p>This operation signals that no more segments of new sequences will be enqueued. New segments of already inserted sequences may still be enqueued and dequeued if there is a sufficient number filling a batch or allow_small_batch is true. Otherwise dequeue operations will fail immediately.</p>
+<h5 id="args-4">Args:</h5>
+<ul>
+<li><b><code>cancel_pending_enqueues</code></b>: (Optional.) A boolean, defaulting to <code>False</code>. If <code>True</code>, all pending enqueues to the underlying queues will be cancelled, and completing already started sequences is not possible.</li>
+<li><b><code>name</code></b>: Optional name for the op.</li>
+</ul>
+<h5 id="returns-13">Returns:</h5>
+<p>The operation that closes the barrier and the FIFOQueue.</p>
+<hr />
+<h4 id="tf.contrib.training.sequencequeueingstatesaver.name"><code id="SequenceQueueingStateSaver.name">tf.contrib.training.SequenceQueueingStateSaver.name</code></h4>
+<hr />
+<h4 id="tf.contrib.training.sequencequeueingstatesaver.next_batch"><code id="SequenceQueueingStateSaver.next_batch">tf.contrib.training.SequenceQueueingStateSaver.next_batch</code></h4>
+<p>The <code>NextQueuedSequenceBatch</code> providing access to batched output data.</p>
+<p>Also provides access to the <code>state</code> and <code>save_state</code> methods. The first time this gets called, it additionally prepares barrier reads and creates <code>NextQueuedSequenceBatch</code> / next_batch objects. Subsequent calls simply return the previously created <code>next_batch</code>.</p>
+<p>In order to access data in <code>next_batch</code> without blocking, the <code>prefetch_op</code> must have been run at least <code>batch_size</code> times (ideally in a separate thread, or launched via a <code>QueueRunner</code>). After processing a segment in <code>next_batch()</code>, <code>batch.save_state()</code> must be called which is done by the state_saving_rnn. Without this call, the dequeue op associated with the SQSS will not run.</p>
+<h5 id="returns-14">Returns:</h5>
+<p>A cached <code>NextQueuedSequenceBatch</code> instance.</p>
+<hr />
+<h4 id="tf.contrib.training.sequencequeueingstatesaver.num_unroll"><code id="SequenceQueueingStateSaver.num_unroll">tf.contrib.training.SequenceQueueingStateSaver.num_unroll</code></h4>
+<hr />
+<h4 id="tf.contrib.training.sequencequeueingstatesaver.prefetch_op"><code id="SequenceQueueingStateSaver.prefetch_op">tf.contrib.training.SequenceQueueingStateSaver.prefetch_op</code></h4>
+<p>The op used to prefetch new data into the state saver.</p>
+<p>Running it once enqueues one new input example into the state saver. The first time this gets called, it additionally creates the prefetch_op. Subsequent calls simply return the previously created <code>prefetch_op</code>.</p>
+<p>It should be run in a separate thread via e.g. a <code>QueueRunner</code>.</p>
+<h5 id="returns-15">Returns:</h5>
+<p>An <code>Operation</code> that performs prefetching.</p>
+<h2 id="online-data-resampling">Online data resampling</h2>
+<p>To resample data with replacement on a per-example basis, use <a href="#rejection_sample">'rejection_sample'</a> or <a href="#resample_at_rate">'resample_at_rate'</a>. For <code>rejection_sample</code>, provide a boolean Tensor describing whether to accept or reject. Resulting batch sizes are always the same. For <code>resample_at_rate</code>, provide the desired rate for each example. Resulting batch sizes may vary. If you wish to specify relative rates, rather than absolute ones, use <a href="#weighted_resample">'weighted_resample'</a> (which also returns the actual resampling rate used for each output example).</p>
+<p>Use <a href="#stratified_sample">'stratified_sample'</a> to resample without replacement from the data to achieve a desired mix of class proportions that the Tensorflow graph sees. For instance, if you have a binary classification dataset that is 99.9% class 1, a common approach is to resample from the data so that the data is more balanced.</p>
+<hr />
+<h3 id="tf.contrib.training.rejection_sampletensors-accept_prob_fn-batch_size-queue_threads1-enqueue_manyfalse-prebatch_capacity16-prebatch_threads1-runtime_checksfalse-namenone"><a name="//apple_ref/cpp/Function/rejection_sample" class="dashAnchor"></a><code id="rejection_sample">tf.contrib.training.rejection_sample(tensors, accept_prob_fn, batch_size, queue_threads=1, enqueue_many=False, prebatch_capacity=16, prebatch_threads=1, runtime_checks=False, name=None)</code></h3>
+<p>Stochastically creates batches by rejection sampling.</p>
+<p>Each list of non-batched tensors is evaluated by <code>accept_prob_fn</code>, to produce a scalar tensor between 0 and 1. This tensor corresponds to the probability of being accepted. When <code>batch_size</code> tensor groups have been accepted, the batch queue will return a mini-batch.</p>
+<h5 id="args-5">Args:</h5>
+<ul>
+<li><b><code>tensors</code></b>: List of tensors for data. All tensors are either one item or a batch, according to enqueue_many.</li>
+<li><b><code>accept_prob_fn</code></b>: A python lambda that takes a non-batch tensor from each item in <code>tensors</code>, and produces a scalar tensor.</li>
+<li><b><code>batch_size</code></b>: Size of batch to be returned.</li>
+<li><b><code>queue_threads</code></b>: The number of threads for the queue that will hold the final batch.</li>
+<li><b><code>enqueue_many</code></b>: Bool. If true, interpret input tensors as having a batch dimension.</li>
+<li><b><code>prebatch_capacity</code></b>: Capacity for the large queue that is used to convert batched tensors to single examples.</li>
+<li><b><code>prebatch_threads</code></b>: Number of threads for the large queue that is used to convert batched tensors to single examples.</li>
+<li><b><code>runtime_checks</code></b>: Bool. If true, insert runtime checks on the output of <code>accept_prob_fn</code>. Using <code>True</code> might have a performance impact.</li>
+<li><b><code>name</code></b>: Optional prefix for ops created by this function.</li>
+</ul>
+<h5 id="raises-4">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: enqueue_many is True and labels doesn't have a batch dimension, or if enqueue_many is False and labels isn't a scalar.</li>
+<li><b><code>ValueError</code></b>: enqueue_many is True, and batch dimension on data and labels don't match.</li>
+<li><b><code>ValueError</code></b>: if a zero initial probability class has a nonzero target probability.</li>
+</ul>
+<h5 id="returns-16">Returns:</h5>
+<p>A list of tensors of the same length as <code>tensors</code>, with batch dimension <code>batch_size</code>.</p>
+<h5 id="example">Example:</h5>
+<p># Get tensor for a single data and label example. data, label = data_provider.Get(['data', 'label'])</p>
+<p># Get stratified batch according to data tensor. accept_prob_fn = lambda x: (tf.tanh(x[0]) + 1) / 2 data_batch = tf.contrib.training.rejection_sample( [data, label], accept_prob_fn, 16)</p>
+<p># Run batch through network. ...</p>
+<hr />
+<h3 id="tf.contrib.training.resample_at_rateinputs-rates-scopenone-seednone-back_propfalse"><a name="//apple_ref/cpp/Function/resample_at_rate" class="dashAnchor"></a><code id="resample_at_rate">tf.contrib.training.resample_at_rate(inputs, rates, scope=None, seed=None, back_prop=False)</code></h3>
+<p>Given <code>inputs</code> tensors, stochastically resamples each at a given rate.</p>
+<p>For example, if the inputs are <code>[[a1, a2], [b1, b2]]</code> and the rates tensor contains <code>[3, 1]</code>, then the return value may look like <code>[[a1, a2, a1, a1], [b1, b2, b1, b1]]</code>. However, many other outputs are possible, since this is stochastic -- averaged over many repeated calls, each set of inputs should appear in the output <code>rate</code> times the number of invocations.</p>
+<p>Uses Knuth's method to generate samples from the poisson distribution (but instead of just incrementing a count, actually emits the input); this is described at https://en.wikipedia.org/wiki/Poisson_distribution in the section on generating Poisson-distributed random variables.</p>
+<p>Note that this method is not appropriate for large rate values: with float16 it will stop performing correctly for rates above 9.17; float32, 87; and float64, 708. (These are the base-e versions of the minimum representable exponent for each type.)</p>
+<h5 id="args-6">Args:</h5>
+<ul>
+<li><b><code>inputs</code></b>: A list of tensors, each of which has a shape of <code>[batch_size, ...]</code></li>
+<li><b><code>rates</code></b>: A tensor of shape <code>[batch_size]</code> contiaining the resampling rates for each input.</li>
+<li><b><code>scope</code></b>: Scope for the op.</li>
+<li><b><code>seed</code></b>: Random seed to use.</li>
+<li><b><code>back_prop</code></b>: Whether to allow back-propagation through this op.</li>
+</ul>
+<h5 id="returns-17">Returns:</h5>
+<p>Selections from the input tensors.</p>
+<hr />
+<h3 id="tf.contrib.training.stratified_sampletensors-labels-target_probs-batch_size-init_probsnone-enqueue_manyfalse-queue_capacity16-threads_per_queue1-namenone"><a name="//apple_ref/cpp/Function/stratified_sample" class="dashAnchor"></a><code id="stratified_sample">tf.contrib.training.stratified_sample(tensors, labels, target_probs, batch_size, init_probs=None, enqueue_many=False, queue_capacity=16, threads_per_queue=1, name=None)</code></h3>
+<p>Stochastically creates batches based on per-class probabilities.</p>
+<p>This method discards examples. Internally, it creates one queue to amortize the cost of disk reads, and one queue to hold the properly-proportioned batch.</p>
+<h5 id="args-7">Args:</h5>
+<ul>
+<li><b><code>tensors</code></b>: List of tensors for data. All tensors are either one item or a batch, according to enqueue_many.</li>
+<li><b><code>labels</code></b>: Tensor for label of data. Label is a single integer or a batch, depending on enqueue_many. It is not a one-hot vector.</li>
+<li><b><code>target_probs</code></b>: Target class proportions in batch. An object whose type has a registered Tensor conversion function.</li>
+<li><b><code>batch_size</code></b>: Size of batch to be returned.</li>
+<li><b><code>init_probs</code></b>: Class proportions in the data. An object whose type has a registered Tensor conversion function, or <code>None</code> for estimating the initial distribution.</li>
+<li><b><code>enqueue_many</code></b>: Bool. If true, interpret input tensors as having a batch dimension.</li>
+<li><b><code>queue_capacity</code></b>: Capacity of the large queue that holds input examples.</li>
+<li><b><code>threads_per_queue</code></b>: Number of threads for the large queue that holds input examples and for the final queue with the proper class proportions.</li>
+<li><b><code>name</code></b>: Optional prefix for ops created by this function.</li>
+</ul>
+<h5 id="raises-5">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: enqueue_many is True and labels doesn't have a batch dimension, or if enqueue_many is False and labels isn't a scalar.</li>
+<li><b><code>ValueError</code></b>: enqueue_many is True, and batch dimension on data and labels don't match.</li>
+<li><b><code>ValueError</code></b>: if probs don't sum to one.</li>
+<li><b><code>ValueError</code></b>: if a zero initial probability class has a nonzero target probability.</li>
+<li><b><code>TFAssertion</code></b>: if labels aren't integers in [0, num classes).</li>
+</ul>
+<h5 id="returns-18">Returns:</h5>
+<p>(data_batch, label_batch), where data_batch is a list of tensors of the same length as <code>tensors</code></p>
+<h5 id="example-1">Example:</h5>
+<p># Get tensor for a single data and label example. data, label = data_provider.Get(['data', 'label'])</p>
+<p># Get stratified batch according to per-class probabilities. target_probs = [...distribution you want...][data_batch], labels = tf.contrib.training.stratified_sample( [data], label, target_probs)</p>
+<p># Run batch through network. ...</p>
+<hr />
+<h3 id="tf.contrib.training.weighted_resampleinputs-weights-overall_rate-scopenone-mean_decay0.999-warmup10-seednone"><a name="//apple_ref/cpp/Function/weighted_resample" class="dashAnchor"></a><code id="weighted_resample">tf.contrib.training.weighted_resample(inputs, weights, overall_rate, scope=None, mean_decay=0.999, warmup=10, seed=None)</code></h3>
+<p>Performs an approximate weighted resampling of <code>inputs</code>.</p>
+<p>This method chooses elements from <code>inputs</code> where each item's rate of selection is proportional to its value in <code>weights</code>, and the average rate of selection across all inputs (and many invocations!) is <code>overall_rate</code>.</p>
+<h5 id="args-8">Args:</h5>
+<ul>
+<li><b><code>inputs</code></b>: A list of tensors whose first dimension is <code>batch_size</code>.</li>
+<li><b><code>weights</code></b>: A <code>[batch_size]</code>-shaped tensor with each batch member's weight.</li>
+<li><b><code>overall_rate</code></b>: Desired overall rate of resampling.</li>
+<li><b><code>scope</code></b>: Scope to use for the op.</li>
+<li><b><code>mean_decay</code></b>: How quickly to decay the running estimate of the mean weight.</li>
+<li><b><code>warmup</code></b>: Until the resulting tensor has been evaluated <code>warmup</code> times, the resampling menthod uses the true mean over all calls as its weight estimate, rather than a decayed mean.</li>
+<li><b><code>seed</code></b>: Random seed.</li>
+</ul>
+<h5 id="returns-19">Returns:</h5>
+<p>A list of tensors exactly like <code>inputs</code>, but with an unknown (and possibly zero) first dimension. A tensor containing the effective resampling rate used for each output.</p>
+<h2 id="bucketing">Bucketing</h2>
+<p>Use <a href="#bucket">'bucket'</a> or <a href="#bucket_by_sequence_length">'bucket_by_sequence_length'</a> to stratify minibatches into groups (&quot;buckets&quot;). Use <code>bucket_by_sequence_length</code> with the argument <code>dynamic_pad=True</code> to receive minibatches of similarly sized sequences for efficient training via <code>dynamic_rnn</code>.</p>
+<hr />
+<h3 id="tf.contrib.training.buckettensors-which_bucket-batch_size-num_buckets-num_threads1-capacity32-shapesnone-dynamic_padfalse-allow_smaller_final_batchfalse-keep_inputnone-shared_namenone-namenone"><a name="//apple_ref/cpp/Function/bucket" class="dashAnchor"></a><code id="bucket">tf.contrib.training.bucket(tensors, which_bucket, batch_size, num_buckets, num_threads=1, capacity=32, shapes=None, dynamic_pad=False, allow_smaller_final_batch=False, keep_input=None, shared_name=None, name=None)</code></h3>
+<p>Lazy bucketing of input tensors according to <code>which_bucket</code>.</p>
+<p>The argument <code>tensors</code> can be a list or a dictionary of tensors. The value returned by the function will be of the same type as <code>tensors</code>.</p>
+<p>The tensors entering this function are put into the bucket given by <code>which_bucket</code>. Each bucket has its own queue. When a bucket contains <code>batch_size</code> elements, this minibatch is pushed onto a top queue. The tensors returned from this function are a the result of dequeueing the next minibatch from this top queue.</p>
+<p>This function is implemented using several queues. A <code>QueueRunner</code> for the queues is added to the current <code>Graph</code>'s <code>QUEUE_RUNNER</code> collection.</p>
+<p>As the returned tensors are the result of of a dequeue operation, evaluating them will throw a <code>tf.errors.OutOfRangeError</code> when the input queue is exhausted. If these tensors are feeding another input queue, its queue runner will catch this exception, however, if they are used in your main thread you are responsible for catching this yourself.</p>
+<p><em>N.B.:</em> If <code>dynamic_pad</code> is <code>False</code>, you must ensure that either (i) the <code>shapes</code> argument is passed, or (ii) all of the tensors in <code>tensors</code> must have fully-defined shapes. <code>ValueError</code> will be raised if neither of these conditions holds.</p>
+<p>If <code>dynamic_pad</code> is <code>True</code>, it is sufficient that the <em>rank</em> of the tensors is known, but individual dimensions may have shape <code>None</code>. In this case, for each enqueue the dimensions with value <code>None</code> may have a variable length; upon dequeue, the output tensors will be padded on the right to the maximum shape of the tensors in the current minibatch. For numbers, this padding takes value 0. For strings, this padding is the empty string. See <code>PaddingFIFOQueue</code> for more info.</p>
+<p>If <code>allow_smaller_final_batch</code> is <code>True</code>, a smaller batch value than <code>batch_size</code> is returned when the queues are closed and there are not enough elements to fill the batch, otherwise the pending elements are discarded. In addition, all output tensors' static shapes, as accessed via the <code>get_shape()</code> method will have a 0th <code>Dimension</code> value of <code>None</code>, and operations that depend on fixed batch_size would fail.</p>
+<h5 id="args-9">Args:</h5>
+<ul>
+<li><b><code>tensors</code></b>: The list or dictionary of tensors, representing a single element, to bucket. Nested lists are not supported.</li>
+<li><b><code>which_bucket</code></b>: An <code>int32</code> scalar Tensor taking a value in <code>[0, num_buckets)</code>.</li>
+<li><b><code>batch_size</code></b>: The new batch size pulled from the queue (python int or int32 scalar).</li>
+<li><b><code>num_buckets</code></b>: A python integer, the number of buckets.</li>
+<li><b><code>num_threads</code></b>: An integer. The number of threads enqueuing <code>tensors</code>.</li>
+<li><b><code>capacity</code></b>: An integer. The maximum number of minibatches in the top queue, and also the maximum number of elements within each bucket.</li>
+<li><b><code>shapes</code></b>: (Optional) The shapes for each example. Defaults to the inferred shapes for <code>tensors</code>.</li>
+<li><b><code>dynamic_pad</code></b>: Boolean. Allow variable dimensions in input shapes. The given dimensions are padded upon dequeue so that tensors within a batch have the same shapes.</li>
+<li><b><code>allow_smaller_final_batch</code></b>: (Optional) Boolean. If <code>True</code>, allow the final batches to be smaller if there are insufficient items left in the queues.</li>
+<li><b><code>keep_input</code></b>: (Optional). A <code>bool</code> scalar Tensor. If provided, this tensor controls whether the input is added to the queue or not. If it evaluates <code>True</code>, then <code>tensors</code> are added to the bucket; otherwise they are dropped. This tensor essentially acts as a filtering mechanism. The default behavior is to assume <code>keep_input=True</code>.</li>
+<li><b><code>shared_name</code></b>: (Optional). If set, the queues will be shared under the given name across multiple sessions.</li>
+<li><b><code>name</code></b>: (Optional) A name for the operations.</li>
+</ul>
+<h5 id="returns-20">Returns:</h5>
+<p>A tuple <code>(bucket, outputs)</code> where <code>bucket</code> is a <code>int32</code> scalar tensor and <code>outputs</code> is a list or dictionary of batched outputs corresponding to elements of <code>tensors</code>. Every step will receive a new bucket of outputs.</p>
+<h5 id="raises-6">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If the <code>shapes</code> are not specified, and cannot be inferred from the elements of <code>tensors</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.training.bucket_by_sequence_lengthinput_length-tensors-batch_size-bucket_boundaries-num_threads1-capacity32-shapesnone-dynamic_padfalse-allow_smaller_final_batchfalse-keep_inputnone-shared_namenone-namenone"><a name="//apple_ref/cpp/Function/bucket_by_sequence_length" class="dashAnchor"></a><code id="bucket_by_sequence_length">tf.contrib.training.bucket_by_sequence_length(input_length, tensors, batch_size, bucket_boundaries, num_threads=1, capacity=32, shapes=None, dynamic_pad=False, allow_smaller_final_batch=False, keep_input=None, shared_name=None, name=None)</code></h3>
+<p>Lazy bucketing of inputs according to their length.</p>
+<p>This method calls <code>tf.contrib.training.bucket</code> under the hood, after first subdividing the bucket boundaries into separate buckets and identifying which bucket the given <code>input_length</code> belongs to. See the documentation for <code>which_bucket</code> for details of the other arguments.</p>
+<h5 id="args-10">Args:</h5>
+<ul>
+<li><b><code>input_length</code></b>: <code>int32</code> scalar <code>Tensor</code>, the sequence length of tensors.</li>
+<li><b><code>tensors</code></b>: The list or dictionary of tensors, representing a single element, to bucket. Nested lists are not supported.</li>
+<li><b><code>batch_size</code></b>: The new batch size pulled from the queue (python int or int32 scalar).</li>
+<li><b><code>bucket_boundaries</code></b>: int list, increasing non-negative numbers. The edges of the buckets to use when bucketing tensors. Two extra buckets are created, one for <code>input_length &lt; bucket_boundaries[0]</code> and one for <code>input_length &gt;= bucket_boundaries[-1]</code>.</li>
+<li><b><code>num_threads</code></b>: An integer. The number of threads enqueuing <code>tensors</code>.</li>
+<li><b><code>capacity</code></b>: An integer. The maximum number of minibatches in the top queue, and also the maximum number of elements within each bucket.</li>
+<li><b><code>shapes</code></b>: (Optional) The shapes for each example. Defaults to the inferred shapes for <code>tensors</code>.</li>
+<li><b><code>dynamic_pad</code></b>: Boolean. Allow variable dimensions in input shapes. The given dimensions are padded upon dequeue so that tensors within a batch have the same shapes.</li>
+<li><b><code>allow_smaller_final_batch</code></b>: (Optional) Boolean. If <code>True</code>, allow the final batches to be smaller if there are insufficient items left in the queues.</li>
+<li><b><code>keep_input</code></b>: (Optional). A <code>bool</code> scalar Tensor. If provided, this tensor controls whether the input is added to the queue or not. If it evaluates <code>True</code>, then <code>tensors</code> are added to the bucket; otherwise they are dropped. This tensor essentially acts as a filtering mechanism. The default behavior is to assume <code>keep_input=True</code>.</li>
+<li><b><code>shared_name</code></b>: (Optional). If set, the queues will be shared under the given name across multiple sessions.</li>
+<li><b><code>name</code></b>: (Optional) A name for the operations.</li>
+</ul>
+<h5 id="returns-21">Returns:</h5>
+<p>A tuple <code>(sequence_length, outputs)</code> where <code>sequence_length</code> is a 1-D <code>Tensor</code> of size <code>batch_size</code> and <code>outputs</code> is a list or dictionary of batched, bucketed, outputs corresponding to elements of <code>tensors</code>.</p>
+<h5 id="raises-7">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>bucket_boundaries</code> is not a list of python integers.</li>
+<li><b><code>ValueError</code></b>: if <code>bucket_boundaries</code> is empty or contains non-increasing values.</li>
+</ul>

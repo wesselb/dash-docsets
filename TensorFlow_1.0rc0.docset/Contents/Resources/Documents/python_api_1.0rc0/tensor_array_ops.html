@@ -1,0 +1,157 @@
+<!-- This file is machine generated: DO NOT EDIT! -->
+<h1 id="tensorarray-operations">TensorArray Operations</h1>
+<p>Note: Functions taking <code>Tensor</code> arguments can also take anything accepted by <a href="framework.md#convert_to_tensor"><code>tf.convert_to_tensor</code></a>.</p>
+<p>[TOC]</p>
+<p>TensorArray operations.</p>
+<h2 id="classes-containing-dynamically-sized-arrays-of-tensors.">Classes containing dynamically sized arrays of Tensors.</h2>
+<hr />
+<h3 id="class-tf.tensorarray"><a name="//apple_ref/cpp/Class/TensorArray" class="dashAnchor"></a><code id="TensorArray">class tf.TensorArray</code></h3>
+<p>Class wrapping dynamic-sized, per-time-step, write-once Tensor arrays.</p>
+<p>This class is meant to be used with dynamic iteration primitives such as <code>while_loop</code> and <code>map_fn</code>. It supports gradient back-propagation via special &quot;flow&quot; control flow dependencies.</p>
+<hr />
+<h4 id="tf.tensorarray.handle"><code id="TensorArray.handle">tf.TensorArray.handle</code></h4>
+<p>The reference to the TensorArray.</p>
+<hr />
+<h4 id="tf.tensorarray.flow"><code id="TensorArray.flow">tf.TensorArray.flow</code></h4>
+<p>The flow <code>Tensor</code> forcing ops leading to this TensorArray state.</p>
+<hr />
+<h4 id="tf.tensorarray.dtype"><code id="TensorArray.dtype">tf.TensorArray.dtype</code></h4>
+<p>The data type of this TensorArray.</p>
+<hr />
+<h4 id="tf.tensorarray.readindex-namenone"><code id="TensorArray.read">tf.TensorArray.read(index, name=None)</code></h4>
+<p>Read the value at location <code>index</code> in the TensorArray.</p>
+<h5 id="args">Args:</h5>
+<ul>
+<li><b><code>index</code></b>: 0-D. int32 tensor with the index to read from.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns">Returns:</h5>
+<p>The tensor at index <code>index</code>.</p>
+<hr />
+<h4 id="tf.tensorarray.gatherindices-namenone"><code id="TensorArray.gather">tf.TensorArray.gather(indices, name=None)</code></h4>
+<p>Return selected values in the TensorArray as a packed <code>Tensor</code>.</p>
+<p>All of selected values must have been written and their shapes must all match.</p>
+<h5 id="args-1">Args:</h5>
+<ul>
+<li><b><code>indices</code></b>: A <code>1-D</code> <code>Tensor</code> taking values in <code>[0, max_value)</code>. If the <code>TensorArray</code> is not dynamic, <code>max_value=size()</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-1">Returns:</h5>
+<p>The in the <code>TensorArray</code> selected by <code>indices</code>, packed into one tensor.</p>
+<hr />
+<h4 id="tf.tensorarray.stacknamenone"><code id="TensorArray.stack">tf.TensorArray.stack(name=None)</code></h4>
+<p>Return the values in the TensorArray as a stacked <code>Tensor</code>.</p>
+<p>All of the values must have been written and their shapes must all match. If input shapes have rank-<code>R</code>, then output shape will have rank-<code>(R+1)</code>.</p>
+<h5 id="args-2">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-2">Returns:</h5>
+<p>All the tensors in the TensorArray stacked into one tensor.</p>
+<hr />
+<h4 id="tf.tensorarray.concatnamenone"><code id="TensorArray.concat">tf.TensorArray.concat(name=None)</code></h4>
+<p>Return the values in the TensorArray as a concatenated <code>Tensor</code>.</p>
+<p>All of the values must have been written, their ranks must match, and and their shapes must all match for all dimensions except the first.</p>
+<h5 id="args-3">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-3">Returns:</h5>
+<p>All the tensors in the TensorArray concatenated into one tensor.</p>
+<hr />
+<h4 id="tf.tensorarray.writeindex-value-namenone"><code id="TensorArray.write">tf.TensorArray.write(index, value, name=None)</code></h4>
+<p>Write <code>value</code> into index <code>index</code> of the TensorArray.</p>
+<h5 id="args-4">Args:</h5>
+<ul>
+<li><b><code>index</code></b>: 0-D. int32 scalar with the index to write to.</li>
+<li><b><code>value</code></b>: N-D. Tensor of type <code>dtype</code>. The Tensor to write to this index.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-4">Returns:</h5>
+<p>A new TensorArray object with flow that ensures the write occurs. Use this object all for subsequent operations.</p>
+<h5 id="raises">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if there are more writers than specified.</li>
+</ul>
+<hr />
+<h4 id="tf.tensorarray.scatterindices-value-namenone"><code id="TensorArray.scatter">tf.TensorArray.scatter(indices, value, name=None)</code></h4>
+<p>Scatter the values of a <code>Tensor</code> in specific indices of a <code>TensorArray</code>.</p>
+<h5 id="args-5">Args:</h5>
+<ul>
+<li><b><code>indices</code></b>: A <code>1-D</code> <code>Tensor</code> taking values in <code>[0, max_value)</code>. If the <code>TensorArray</code> is not dynamic, <code>max_value=size()</code>.</li>
+<li><b><code>value</code></b>: (N+1)-D. Tensor of type <code>dtype</code>. The Tensor to unpack.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-5">Returns:</h5>
+<p>A new TensorArray object with flow that ensures the scatter occurs. Use this object all for subsequent operations.</p>
+<h5 id="raises-1">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if the shape inference fails.</li>
+</ul>
+<hr />
+<h4 id="tf.tensorarray.unstackvalue-namenone"><code id="TensorArray.unstack">tf.TensorArray.unstack(value, name=None)</code></h4>
+<p>Unstack the values of a <code>Tensor</code> in the TensorArray.</p>
+<p>If input value shapes have rank-<code>R</code>, then the output TensorArray will contain elements whose shapes are rank-<code>(R-1)</code>.</p>
+<h5 id="args-6">Args:</h5>
+<ul>
+<li><b><code>value</code></b>: (N+1)-D. Tensor of type <code>dtype</code>. The Tensor to unstack.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-6">Returns:</h5>
+<p>A new TensorArray object with flow that ensures the unstack occurs. Use this object all for subsequent operations.</p>
+<h5 id="raises-2">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if the shape inference fails.</li>
+</ul>
+<hr />
+<h4 id="tf.tensorarray.splitvalue-lengths-namenone"><code id="TensorArray.split">tf.TensorArray.split(value, lengths, name=None)</code></h4>
+<p>Split the values of a <code>Tensor</code> into the TensorArray.</p>
+<h5 id="args-7">Args:</h5>
+<ul>
+<li><b><code>value</code></b>: (N+1)-D. Tensor of type <code>dtype</code>. The Tensor to split.</li>
+<li><b><code>lengths</code></b>: 1-D. int32 vector with the lengths to use when splitting <code>value</code> along its first dimension.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-7">Returns:</h5>
+<p>A new TensorArray object with flow that ensures the split occurs. Use this object all for subsequent operations.</p>
+<h5 id="raises-3">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if the shape inference fails.</li>
+</ul>
+<hr />
+<h4 id="tf.tensorarray.identity"><code id="TensorArray.identity">tf.TensorArray.identity()</code></h4>
+<p>Returns a TensorArray with the same content and properties.</p>
+<h5 id="returns-8">Returns:</h5>
+<p>A new TensorArray object with flow that ensures the control dependencies from the contexts will become control dependencies for writes, reads, etc. Use this object all for subsequent operations.</p>
+<hr />
+<h4 id="tf.tensorarray.gradsource-flownone-namenone"><code id="TensorArray.grad">tf.TensorArray.grad(source, flow=None, name=None)</code></h4>
+<h4 id="other-methods">Other Methods</h4>
+<hr />
+<h4 id="tf.tensorarray.__init__dtype-sizenone-dynamic_sizenone-clear_after_readnone-tensor_array_namenone-handlenone-flownone-infer_shapetrue-element_shapenone-namenone"><code id="TensorArray.__init__">tf.TensorArray.__init__(dtype, size=None, dynamic_size=None, clear_after_read=None, tensor_array_name=None, handle=None, flow=None, infer_shape=True, element_shape=None, name=None)</code></h4>
+<p>Construct a new TensorArray or wrap an existing TensorArray handle.</p>
+<p>A note about the parameter <code>name</code>:</p>
+<p>The name of the <code>TensorArray</code> (even if passed in) is uniquified: each time a new <code>TensorArray</code> is created at runtime it is assigned its own name for the duration of the run. This avoids name collisions if a <code>TensorArray</code> is created within a <code>while_loop</code>.</p>
+<h5 id="args-8">Args:</h5>
+<ul>
+<li><b><code>dtype</code></b>: (required) data type of the TensorArray.</li>
+<li><b><code>size</code></b>: (optional) int32 scalar <code>Tensor</code>: the size of the TensorArray. Required if handle is not provided.</li>
+<li><b><code>dynamic_size</code></b>: (optional) Python bool: If true, writes to the TensorArray can grow the TensorArray past its initial size. Default: False.</li>
+<li><b><code>clear_after_read</code></b>: Boolean (optional, default: True). If True, clear TensorArray values after reading them. This disables read-many semantics, but allows early release of memory.</li>
+<li><b><code>tensor_array_name</code></b>: (optional) Python string: the name of the TensorArray. This is used when creating the TensorArray handle. If this value is set, handle should be None.</li>
+<li><b><code>handle</code></b>: (optional) A <code>Tensor</code> handle to an existing TensorArray. If this is set, tensor_array_name should be None.</li>
+<li><b><code>flow</code></b>: (optional) A float <code>Tensor</code> scalar coming from an existing <code>TensorArray.flow</code>.</li>
+<li><b><code>infer_shape</code></b>: (optional, default: True) If True, shape inference is enabled. In this case, all elements must have the same shape.</li>
+<li><b><code>element_shape</code></b>: (optional, default: None) A <code>TensorShape</code> object specifying the shape constraints of each of the elements of the TensorArray. Need not be fully defined.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="raises-4">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if both handle and tensor_array_name are provided.</li>
+<li><b><code>TypeError</code></b>: if handle is provided but is not a Tensor.</li>
+</ul>
+<hr />
+<h4 id="tf.tensorarray.closenamenone"><code id="TensorArray.close">tf.TensorArray.close(name=None)</code></h4>
+<p>Close the current TensorArray.</p>
+<hr />
+<h4 id="tf.tensorarray.sizenamenone"><code id="TensorArray.size">tf.TensorArray.size(name=None)</code></h4>
+<p>Return the size of the TensorArray.</p>

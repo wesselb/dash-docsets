@@ -1,0 +1,34 @@
+<!-- This file is machine generated: DO NOT EDIT! -->
+<h1 id="copying-graph-elements-contrib">Copying Graph Elements (contrib)</h1>
+<p>[TOC]</p>
+<p>Functions for copying elements from one graph to another.</p>
+<h2 id="other-functions-and-classes">Other Functions and Classes</h2>
+<hr />
+<h3 id="tf.contrib.copy_graph.copy_op_to_graphorg_instance-to_graph-variables-scope"><a name="//apple_ref/cpp/Function/copy_op_to_graph" class="dashAnchor"></a><code id="copy_op_to_graph">tf.contrib.copy_graph.copy_op_to_graph(org_instance, to_graph, variables, scope='')</code></h3>
+<p>Given an <code>Operation</code> 'org_instance<code>from one</code>Graph<code>, initializes and returns a copy of it from another</code>Graph<code>, under the specified scope (default</code>&quot;&quot;`).</p>
+<p>The copying is done recursively, so any <code>Operation</code> whose output is required to evaluate the <code>org_instance</code>, is also copied (unless already done).</p>
+<p>Since <code>Variable</code> instances are copied separately, those required to evaluate <code>org_instance</code> must be provided as input.</p>
+<p>Args: org_instance: An <code>Operation</code> from some <code>Graph</code>. Could be a <code>Placeholder</code> as well. to_graph: The <code>Graph</code> to copy <code>org_instance</code> to. variables: An iterable of <code>Variable</code> instances to copy <code>org_instance</code> to. scope: A scope for the new <code>Variable</code> (default <code>&quot;&quot;</code>).</p>
+<h5 id="returns">Returns:</h5>
+<pre><code>The copied `Operation` from `to_graph`.</code></pre>
+<h5 id="raises">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>org_instance</code> is not an <code>Operation</code> or <code>Tensor</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.copy_graph.copy_variable_to_graphorg_instance-to_graph-scope"><a name="//apple_ref/cpp/Function/copy_variable_to_graph" class="dashAnchor"></a><code id="copy_variable_to_graph">tf.contrib.copy_graph.copy_variable_to_graph(org_instance, to_graph, scope='')</code></h3>
+<p>Given a <code>Variable</code> instance from one <code>Graph</code>, initializes and returns a copy of it from another <code>Graph</code>, under the specified scope (default <code>&quot;&quot;</code>).</p>
+<p>Args: org_instance: A <code>Variable</code> from some <code>Graph</code>. to_graph: The <code>Graph</code> to copy the <code>Variable</code> to. scope: A scope for the new <code>Variable</code> (default <code>&quot;&quot;</code>).</p>
+<h5 id="returns-1">Returns:</h5>
+<pre><code>The copied `Variable` from `to_graph`.</code></pre>
+<h5 id="raises-1">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>org_instance</code> is not a <code>Variable</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.copy_graph.get_copied_oporg_instance-graph-scope"><a name="//apple_ref/cpp/Function/get_copied_op" class="dashAnchor"></a><code id="get_copied_op">tf.contrib.copy_graph.get_copied_op(org_instance, graph, scope='')</code></h3>
+<p>Given an <code>Operation</code> instance from some <code>Graph</code>, returns its namesake from <code>graph</code>, under the specified scope (default <code>&quot;&quot;</code>).</p>
+<p>If a copy of <code>org_instance</code> is present in <code>graph</code> under the given <code>scope</code>, it will be returned.</p>
+<p>Args: org_instance: An <code>Operation</code> from some <code>Graph</code>. graph: The <code>Graph</code> to be searched for a copr of <code>org_instance</code>. scope: The scope <code>org_instance</code> is present in.</p>
+<h5 id="returns-2">Returns:</h5>
+<pre><code>The `Operation` copy from `graph`.</code></pre>

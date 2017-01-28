@@ -1,1 +1,1 @@
-# dash-docsets
+# Precompiled Docsets for Dash

@@ -1,0 +1,1970 @@
+<!-- This file is machine generated: DO NOT EDIT! -->
+<h1 id="building-graphs">Building Graphs</h1>
+<p>[TOC]</p>
+<p>Classes and functions for building TensorFlow graphs.</p>
+<h2 id="core-graph-data-structures">Core graph data structures</h2>
+<hr />
+<h3 id="class-tf.graph"><a name="//apple_ref/cpp/Class/Graph" class="dashAnchor"></a><code id="Graph">class tf.Graph</code></h3>
+<p>A TensorFlow computation, represented as a dataflow graph.</p>
+<p>A <code>Graph</code> contains a set of <a href="../../api_docs/python/framework.md#Operation"><code>Operation</code></a> objects, which represent units of computation; and <a href="../../api_docs/python/framework.md#Tensor"><code>Tensor</code></a> objects, which represent the units of data that flow between operations.</p>
+<p>A default <code>Graph</code> is always registered, and accessible by calling <a href="../../api_docs/python/framework.md#get_default_graph"><code>tf.get_default_graph()</code></a>. To add an operation to the default graph, simply call one of the functions that defines a new <code>Operation</code>:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">c <span class="op">=</span> tf.constant(<span class="fl">4.0</span>)
+<span class="cf">assert</span> c.graph <span class="op">is</span> tf.get_default_graph()</code></pre></div>
+<p>Another typical usage involves the <a href="../../api_docs/python/framework.md#Graph.as_default"><code>Graph.as_default()</code></a> context manager, which overrides the current default graph for the lifetime of the context:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">g <span class="op">=</span> tf.Graph()
+<span class="cf">with</span> g.as_default():
+  <span class="co"># Define operations and tensors in `g`.</span>
+  c <span class="op">=</span> tf.constant(<span class="fl">30.0</span>)
+  <span class="cf">assert</span> c.graph <span class="op">is</span> g</code></pre></div>
+<p>Important note: This class <em>is not</em> thread-safe for graph construction. All operations should be created from a single thread, or external synchronization must be provided. Unless otherwise specified, all methods are not thread-safe.</p>
+<hr />
+<h4 id="tf.graph.__init__"><code id="Graph.__init__">tf.Graph.__init__()</code></h4>
+<p>Creates a new, empty Graph.</p>
+<hr />
+<h4 id="tf.graph.as_default"><code id="Graph.as_default">tf.Graph.as_default()</code></h4>
+<p>Returns a context manager that makes this <code>Graph</code> the default graph.</p>
+<p>This method should be used if you want to create multiple graphs in the same process. For convenience, a global default graph is provided, and all ops will be added to this graph if you do not create a new graph explicitly. Use this method with the <code>with</code> keyword to specify that ops created within the scope of a block should be added to this graph.</p>
+<p>The default graph is a property of the current thread. If you create a new thread, and wish to use the default graph in that thread, you must explicitly add a <code>with g.as_default():</code> in that thread's function.</p>
+<p>The following code examples are equivalent:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># 1. Using Graph.as_default():</span>
+g <span class="op">=</span> tf.Graph()
+<span class="cf">with</span> g.as_default():
+  c <span class="op">=</span> tf.constant(<span class="fl">5.0</span>)
+  <span class="cf">assert</span> c.graph <span class="op">is</span> g
+
+<span class="co"># 2. Constructing and making default:</span>
+<span class="cf">with</span> tf.Graph().as_default() <span class="im">as</span> g:
+  c <span class="op">=</span> tf.constant(<span class="fl">5.0</span>)
+  <span class="cf">assert</span> c.graph <span class="op">is</span> g</code></pre></div>
+<h5 id="returns">Returns:</h5>
+<p>A context manager for using this graph as the default graph.</p>
+<hr />
+<h4 id="tf.graph.as_graph_deffrom_versionnone-add_shapesfalse"><code id="Graph.as_graph_def">tf.Graph.as_graph_def(from_version=None, add_shapes=False)</code></h4>
+<p>Returns a serialized <code>GraphDef</code> representation of this graph.</p>
+<p>The serialized <code>GraphDef</code> can be imported into another <code>Graph</code> (using <a href="#import_graph_def"><code>import_graph_def()</code></a>) or used with the <a href="../../api_docs/cc/index.md">C++ Session API</a>.</p>
+<p>This method is thread-safe.</p>
+<h5 id="args">Args:</h5>
+<ul>
+<li><b><code>from_version</code></b>: Optional. If this is set, returns a <code>GraphDef</code> containing only the nodes that were added to this graph since its <code>version</code> property had the given value.</li>
+<li><b><code>add_shapes</code></b>: If true, adds an &quot;_output_shapes&quot; list attr to each node with the inferred shapes of each of its outputs.</li>
+</ul>
+<h5 id="returns-1">Returns:</h5>
+<p>A <a href="https://www.tensorflow.org/code/tensorflow/core/framework/graph.proto"><code>GraphDef</code></a> protocol buffer.</p>
+<h5 id="raises">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If the <code>graph_def</code> would be too large.</li>
+</ul>
+<hr />
+<h4 id="tf.graph.finalize"><code id="Graph.finalize">tf.Graph.finalize()</code></h4>
+<p>Finalizes this graph, making it read-only.</p>
+<p>After calling <code>g.finalize()</code>, no new operations can be added to <code>g</code>. This method is used to ensure that no operations are added to a graph when it is shared between multiple threads, for example when using a <a href="../../api_docs/python/train.md#QueueRunner"><code>QueueRunner</code></a>.</p>
+<hr />
+<h4 id="tf.graph.finalized"><code id="Graph.finalized">tf.Graph.finalized</code></h4>
+<p>True if this graph has been finalized.</p>
+<hr />
+<h4 id="tf.graph.control_dependenciescontrol_inputs"><code id="Graph.control_dependencies">tf.Graph.control_dependencies(control_inputs)</code></h4>
+<p>Returns a context manager that specifies control dependencies.</p>
+<p>Use with the <code>with</code> keyword to specify that all operations constructed within the context should have control dependencies on <code>control_inputs</code>. For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> g.control_dependencies([a, b, c]):
+  <span class="co"># `d` and `e` will only run after `a`, `b`, and `c` have executed.</span>
+  d <span class="op">=</span> ...
+  e <span class="op">=</span> ...</code></pre></div>
+<p>Multiple calls to <code>control_dependencies()</code> can be nested, and in that case a new <code>Operation</code> will have control dependencies on the union of <code>control_inputs</code> from all active contexts.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> g.control_dependencies([a, b]):
+  <span class="co"># Ops constructed here run after `a` and `b`.</span>
+  <span class="cf">with</span> g.control_dependencies([c, d]):
+    <span class="co"># Ops constructed here run after `a`, `b`, `c`, and `d`.</span></code></pre></div>
+<p>You can pass None to clear the control dependencies:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> g.control_dependencies([a, b]):
+  <span class="co"># Ops constructed here run after `a` and `b`.</span>
+  <span class="cf">with</span> g.control_dependencies(<span class="va">None</span>):
+    <span class="co"># Ops constructed here run normally, not waiting for either `a` or `b`.</span>
+    <span class="cf">with</span> g.control_dependencies([c, d]):
+      <span class="co"># Ops constructed here run after `c` and `d`, also not waiting</span>
+      <span class="co"># for either `a` or `b`.</span></code></pre></div>
+<p><em>N.B.</em> The control dependencies context applies <em>only</em> to ops that are constructed within the context. Merely using an op or tensor in the context does not add a control dependency. The following example illustrates this point:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># WRONG</span>
+<span class="kw">def</span> my_func(pred, tensor):
+  t <span class="op">=</span> tf.matmul(tensor, tensor)
+  <span class="cf">with</span> tf.control_dependencies([pred]):
+    <span class="co"># The matmul op is created outside the context, so no control</span>
+    <span class="co"># dependency will be added.</span>
+    <span class="cf">return</span> t
+
+<span class="co"># RIGHT</span>
+<span class="kw">def</span> my_func(pred, tensor):
+  <span class="cf">with</span> tf.control_dependencies([pred]):
+    <span class="co"># The matmul op is created in the context, so a control dependency</span>
+    <span class="co"># will be added.</span>
+    <span class="cf">return</span> tf.matmul(tensor, tensor)</code></pre></div>
+<h5 id="args-1">Args:</h5>
+<ul>
+<li><b><code>control_inputs</code></b>: A list of <code>Operation</code> or <code>Tensor</code> objects which must be executed or computed before running the operations defined in the context. Can also be <code>None</code> to clear the control dependencies.</li>
+</ul>
+<h5 id="returns-2">Returns:</h5>
+<p>A context manager that specifies control dependencies for all operations constructed within the context.</p>
+<h5 id="raises-1">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>control_inputs</code> is not a list of <code>Operation</code> or <code>Tensor</code> objects.</li>
+</ul>
+<hr />
+<h4 id="tf.graph.devicedevice_name_or_function"><code id="Graph.device">tf.Graph.device(device_name_or_function)</code></h4>
+<p>Returns a context manager that specifies the default device to use.</p>
+<p>The <code>device_name_or_function</code> argument may either be a device name string, a device function, or None:</p>
+<ul>
+<li>If it is a device name string, all operations constructed in this context will be assigned to the device with that name, unless overridden by a nested <code>device()</code> context.</li>
+<li>If it is a function, it will be treated as a function from Operation objects to device name strings, and invoked each time a new Operation is created. The Operation will be assigned to the device with the returned name.</li>
+<li>If it is None, all <code>device()</code> invocations from the enclosing context will be ignored.</li>
+</ul>
+<p>For information about the valid syntax of device name strings, see the documentation in <a href="https://www.tensorflow.org/code/tensorflow/core/util/device_name_utils.h"><code>DeviceNameUtils</code></a>.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> g.device(<span class="st">&#39;/gpu:0&#39;</span>):
+  <span class="co"># All operations constructed in this context will be placed</span>
+  <span class="co"># on GPU 0.</span>
+  <span class="cf">with</span> g.device(<span class="va">None</span>):
+    <span class="co"># All operations constructed in this context will have no</span>
+    <span class="co"># assigned device.</span>
+
+<span class="co"># Defines a function from `Operation` to device string.</span>
+<span class="kw">def</span> matmul_on_gpu(n):
+  <span class="cf">if</span> n.<span class="bu">type</span> <span class="op">==</span> <span class="st">&quot;MatMul&quot;</span>:
+    <span class="cf">return</span> <span class="st">&quot;/gpu:0&quot;</span>
+  <span class="cf">else</span>:
+    <span class="cf">return</span> <span class="st">&quot;/cpu:0&quot;</span>
+
+<span class="cf">with</span> g.device(matmul_on_gpu):
+  <span class="co"># All operations of type &quot;MatMul&quot; constructed in this context</span>
+  <span class="co"># will be placed on GPU 0; all other operations will be placed</span>
+  <span class="co"># on CPU 0.</span></code></pre></div>
+<p><strong>N.B.</strong> The device scope may be overridden by op wrappers or other library code. For example, a variable assignment op <code>v.assign()</code> must be colocated with the <code>tf.Variable</code> <code>v</code>, and incompatible device scopes will be ignored.</p>
+<h5 id="args-2">Args:</h5>
+<ul>
+<li><b><code>device_name_or_function</code></b>: The device name or function to use in the context.</li>
+</ul>
+<h5 id="returns-3">Returns:</h5>
+<p>A context manager that specifies the default device to use for newly created ops.</p>
+<hr />
+<h4 id="tf.graph.name_scopename"><code id="Graph.name_scope">tf.Graph.name_scope(name)</code></h4>
+<p>Returns a context manager that creates hierarchical names for operations.</p>
+<p>A graph maintains a stack of name scopes. A <code>with name_scope(...):</code> statement pushes a new name onto the stack for the lifetime of the context.</p>
+<p>The <code>name</code> argument will be interpreted as follows:</p>
+<ul>
+<li>A string (not ending with '/') will create a new name scope, in which <code>name</code> is appended to the prefix of all operations created in the context. If <code>name</code> has been used before, it will be made unique by calling <code>self.unique_name(name)</code>.</li>
+<li>A scope previously captured from a <code>with g.name_scope(...) as   scope:</code> statement will be treated as an &quot;absolute&quot; name scope, which makes it possible to re-enter existing scopes.</li>
+<li>A value of <code>None</code> or the empty string will reset the current name scope to the top-level (empty) name scope.</li>
+</ul>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> tf.Graph().as_default() <span class="im">as</span> g:
+  c <span class="op">=</span> tf.constant(<span class="fl">5.0</span>, name<span class="op">=</span><span class="st">&quot;c&quot;</span>)
+  <span class="cf">assert</span> c.op.name <span class="op">==</span> <span class="st">&quot;c&quot;</span>
+  c_1 <span class="op">=</span> tf.constant(<span class="fl">6.0</span>, name<span class="op">=</span><span class="st">&quot;c&quot;</span>)
+  <span class="cf">assert</span> c_1.op.name <span class="op">==</span> <span class="st">&quot;c_1&quot;</span>
+
+  <span class="co"># Creates a scope called &quot;nested&quot;</span>
+  <span class="cf">with</span> g.name_scope(<span class="st">&quot;nested&quot;</span>) <span class="im">as</span> scope:
+    nested_c <span class="op">=</span> tf.constant(<span class="fl">10.0</span>, name<span class="op">=</span><span class="st">&quot;c&quot;</span>)
+    <span class="cf">assert</span> nested_c.op.name <span class="op">==</span> <span class="st">&quot;nested/c&quot;</span>
+
+    <span class="co"># Creates a nested scope called &quot;inner&quot;.</span>
+    <span class="cf">with</span> g.name_scope(<span class="st">&quot;inner&quot;</span>):
+      nested_inner_c <span class="op">=</span> tf.constant(<span class="fl">20.0</span>, name<span class="op">=</span><span class="st">&quot;c&quot;</span>)
+      <span class="cf">assert</span> nested_inner_c.op.name <span class="op">==</span> <span class="st">&quot;nested/inner/c&quot;</span>
+
+    <span class="co"># Create a nested scope called &quot;inner_1&quot;.</span>
+    <span class="cf">with</span> g.name_scope(<span class="st">&quot;inner&quot;</span>):
+      nested_inner_1_c <span class="op">=</span> tf.constant(<span class="fl">30.0</span>, name<span class="op">=</span><span class="st">&quot;c&quot;</span>)
+      <span class="cf">assert</span> nested_inner_1_c.op.name <span class="op">==</span> <span class="st">&quot;nested/inner_1/c&quot;</span>
+
+      <span class="co"># Treats `scope` as an absolute name scope, and</span>
+      <span class="co"># switches to the &quot;nested/&quot; scope.</span>
+      <span class="cf">with</span> g.name_scope(scope):
+        nested_d <span class="op">=</span> tf.constant(<span class="fl">40.0</span>, name<span class="op">=</span><span class="st">&quot;d&quot;</span>)
+        <span class="cf">assert</span> nested_d.op.name <span class="op">==</span> <span class="st">&quot;nested/d&quot;</span>
+
+        <span class="cf">with</span> g.name_scope(<span class="st">&quot;&quot;</span>):
+          e <span class="op">=</span> tf.constant(<span class="fl">50.0</span>, name<span class="op">=</span><span class="st">&quot;e&quot;</span>)
+          <span class="cf">assert</span> e.op.name <span class="op">==</span> <span class="st">&quot;e&quot;</span></code></pre></div>
+<p>The name of the scope itself can be captured by <code>with g.name_scope(...) as scope:</code>, which stores the name of the scope in the variable <code>scope</code>. This value can be used to name an operation that represents the overall result of executing the ops in a scope. For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">inputs <span class="op">=</span> tf.constant(...)
+<span class="cf">with</span> g.name_scope(<span class="st">&#39;my_layer&#39;</span>) <span class="im">as</span> scope:
+  weights <span class="op">=</span> tf.Variable(..., name<span class="op">=</span><span class="st">&quot;weights&quot;</span>)
+  biases <span class="op">=</span> tf.Variable(..., name<span class="op">=</span><span class="st">&quot;biases&quot;</span>)
+  affine <span class="op">=</span> tf.matmul(inputs, weights) <span class="op">+</span> biases
+  output <span class="op">=</span> tf.nn.relu(affine, name<span class="op">=</span>scope)</code></pre></div>
+<p>NOTE: This constructor validates the given <code>name</code>. Valid scope names match one of the following regular expressions:</p>
+<pre><code>[A-Za-z0-9.][A-Za-z0-9_.\\-/]* (for scopes at the root)
+[A-Za-z0-9_.\\-/]* (for other scopes)</code></pre>
+<h5 id="args-3">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for the scope.</li>
+</ul>
+<h5 id="returns-4">Returns:</h5>
+<p>A context manager that installs <code>name</code> as a new name scope.</p>
+<h5 id="raises-2">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>name</code> is not a valid scope name. The rules are the</li>
+</ul>
+<p>A <code>Graph</code> instance supports an arbitrary number of &quot;collections&quot; that are identified by name. For convenience when building a large graph, collections can store groups of related objects: for example, the <code>tf.Variable</code> uses a collection (named <a href="../../api_docs/python/framework.md#GraphKeys"><code>tf.GraphKeys.GLOBAL_VARIABLES</code></a>) for all variables that are created during the construction of a graph. The caller may define additional collections by specifying a new name.</p>
+<hr />
+<h4 id="tf.graph.add_to_collectionname-value"><code id="Graph.add_to_collection">tf.Graph.add_to_collection(name, value)</code></h4>
+<p>Stores <code>value</code> in the collection with the given <code>name</code>.</p>
+<p>Note that collections are not sets, so it is possible to add a value to a collection several times.</p>
+<h5 id="args-4">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: The key for the collection. The <code>GraphKeys</code> class contains many standard names for collections.</li>
+<li><b><code>value</code></b>: The value to add to the collection.</li>
+</ul>
+<hr />
+<h4 id="tf.graph.add_to_collectionsnames-value"><code id="Graph.add_to_collections">tf.Graph.add_to_collections(names, value)</code></h4>
+<p>Stores <code>value</code> in the collections given by <code>names</code>.</p>
+<p>Note that collections are not sets, so it is possible to add a value to a collection several times. This function makes sure that duplicates in <code>names</code> are ignored, but it will not check for pre-existing membership of <code>value</code> in any of the collections in <code>names</code>.</p>
+<p><code>names</code> can be any iterable, but if <code>names</code> is a string, it is treated as a single collection name.</p>
+<h5 id="args-5">Args:</h5>
+<ul>
+<li><b><code>names</code></b>: The keys for the collections to add to. The <code>GraphKeys</code> class contains many standard names for collections.</li>
+<li><b><code>value</code></b>: The value to add to the collections.</li>
+</ul>
+<hr />
+<h4 id="tf.graph.get_collectionname-scopenone"><code id="Graph.get_collection">tf.Graph.get_collection(name, scope=None)</code></h4>
+<p>Returns a list of values in the collection with the given <code>name</code>.</p>
+<p>This is different from <code>get_collection_ref()</code> which always returns the actual collection list if it exists in that it returns a new list each time it is called.</p>
+<h5 id="args-6">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: The key for the collection. For example, the <code>GraphKeys</code> class contains many standard names for collections.</li>
+<li><b><code>scope</code></b>: (Optional.) If supplied, the resulting list is filtered to include only items whose <code>name</code> attribute matches using <code>re.match</code>. Items without a <code>name</code> attribute are never returned if a scope is supplied and the choice or <code>re.match</code> means that a <code>scope</code> without special tokens filters by prefix.</li>
+</ul>
+<h5 id="returns-5">Returns:</h5>
+<p>The list of values in the collection with the given <code>name</code>, or an empty list if no value has been added to that collection. The list contains the values in the order under which they were collected.</p>
+<hr />
+<h4 id="tf.graph.get_collection_refname"><code id="Graph.get_collection_ref">tf.Graph.get_collection_ref(name)</code></h4>
+<p>Returns a list of values in the collection with the given <code>name</code>.</p>
+<p>If the collection exists, this returns the list itself, which can be modified in place to change the collection. If the collection does not exist, it is created as an empty list and the list is returned.</p>
+<p>This is different from <code>get_collection()</code> which always returns a copy of the collection list if it exists and never creates an empty collection.</p>
+<h5 id="args-7">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: The key for the collection. For example, the <code>GraphKeys</code> class contains many standard names for collections.</li>
+</ul>
+<h5 id="returns-6">Returns:</h5>
+<p>The list of values in the collection with the given <code>name</code>, or an empty list if no value has been added to that collection.</p>
+<hr />
+<h4 id="tf.graph.as_graph_elementobj-allow_tensortrue-allow_operationtrue"><code id="Graph.as_graph_element">tf.Graph.as_graph_element(obj, allow_tensor=True, allow_operation=True)</code></h4>
+<p>Returns the object referred to by <code>obj</code>, as an <code>Operation</code> or <code>Tensor</code>.</p>
+<p>This function validates that <code>obj</code> represents an element of this graph, and gives an informative error message if it is not.</p>
+<p>This function is the canonical way to get/validate an object of one of the allowed types from an external argument reference in the Session API.</p>
+<p>This method may be called concurrently from multiple threads.</p>
+<h5 id="args-8">Args:</h5>
+<ul>
+<li><b><code>obj</code></b>: A <code>Tensor</code>, an <code>Operation</code>, or the name of a tensor or operation. Can also be any object with an <code>_as_graph_element()</code> method that returns a value of one of these types.</li>
+<li><b><code>allow_tensor</code></b>: If true, <code>obj</code> may refer to a <code>Tensor</code>.</li>
+<li><b><code>allow_operation</code></b>: If true, <code>obj</code> may refer to an <code>Operation</code>.</li>
+</ul>
+<h5 id="returns-7">Returns:</h5>
+<p>The <code>Tensor</code> or <code>Operation</code> in the Graph corresponding to <code>obj</code>.</p>
+<h5 id="raises-3">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>obj</code> is not a type we support attempting to convert to types.</li>
+<li><b><code>ValueError</code></b>: If <code>obj</code> is of an appropriate type but invalid. For example, an invalid string.</li>
+<li><b><code>KeyError</code></b>: If <code>obj</code> is not an object in the graph.</li>
+</ul>
+<hr />
+<h4 id="tf.graph.get_operation_by_namename"><code id="Graph.get_operation_by_name">tf.Graph.get_operation_by_name(name)</code></h4>
+<p>Returns the <code>Operation</code> with the given <code>name</code>.</p>
+<p>This method may be called concurrently from multiple threads.</p>
+<h5 id="args-9">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: The name of the <code>Operation</code> to return.</li>
+</ul>
+<h5 id="returns-8">Returns:</h5>
+<p>The <code>Operation</code> with the given <code>name</code>.</p>
+<h5 id="raises-4">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>name</code> is not a string.</li>
+<li><b><code>KeyError</code></b>: If <code>name</code> does not correspond to an operation in this graph.</li>
+</ul>
+<hr />
+<h4 id="tf.graph.get_tensor_by_namename"><code id="Graph.get_tensor_by_name">tf.Graph.get_tensor_by_name(name)</code></h4>
+<p>Returns the <code>Tensor</code> with the given <code>name</code>.</p>
+<p>This method may be called concurrently from multiple threads.</p>
+<h5 id="args-10">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: The name of the <code>Tensor</code> to return.</li>
+</ul>
+<h5 id="returns-9">Returns:</h5>
+<p>The <code>Tensor</code> with the given <code>name</code>.</p>
+<h5 id="raises-5">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>name</code> is not a string.</li>
+<li><b><code>KeyError</code></b>: If <code>name</code> does not correspond to a tensor in this graph.</li>
+</ul>
+<hr />
+<h4 id="tf.graph.get_operations"><code id="Graph.get_operations">tf.Graph.get_operations()</code></h4>
+<p>Return the list of operations in the graph.</p>
+<p>You can modify the operations in place, but modifications to the list such as inserts/delete have no effect on the list of operations known to the graph.</p>
+<p>This method may be called concurrently from multiple threads.</p>
+<h5 id="returns-10">Returns:</h5>
+<p>A list of Operations.</p>
+<hr />
+<h4 id="tf.graph.seed"><code id="Graph.seed">tf.Graph.seed</code></h4>
+<p>The graph-level random seed of this graph.</p>
+<hr />
+<h4 id="tf.graph.unique_namename-mark_as_usedtrue"><code id="Graph.unique_name">tf.Graph.unique_name(name, mark_as_used=True)</code></h4>
+<p>Return a unique operation name for <code>name</code>.</p>
+<p>Note: You rarely need to call <code>unique_name()</code> directly. Most of the time you just need to create <code>with g.name_scope()</code> blocks to generate structured names.</p>
+<p><code>unique_name</code> is used to generate structured names, separated by <code>&quot;/&quot;</code>, to help identify operations when debugging a graph. Operation names are displayed in error messages reported by the TensorFlow runtime, and in various visualization tools such as TensorBoard.</p>
+<p>If <code>mark_as_used</code> is set to <code>True</code>, which is the default, a new unique name is created and marked as in use. If it's set to <code>False</code>, the unique name is returned without actually being marked as used. This is useful when the caller simply wants to know what the name to be created will be.</p>
+<h5 id="args-11">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: The name for an operation.</li>
+<li><b><code>mark_as_used</code></b>: Whether to mark this name as being used.</li>
+</ul>
+<h5 id="returns-11">Returns:</h5>
+<p>A string to be passed to <code>create_op()</code> that will be used to name the operation being created.</p>
+<hr />
+<h4 id="tf.graph.version"><code id="Graph.version">tf.Graph.version</code></h4>
+<p>Returns a version number that increases as ops are added to the graph.</p>
+<p>Note that this is unrelated to the <a href="#Graph.graph_def_version">GraphDef version</a>.</p>
+<hr />
+<h4 id="tf.graph.graph_def_versions"><code id="Graph.graph_def_versions">tf.Graph.graph_def_versions</code></h4>
+<p>The GraphDef version information of this graph.</p>
+<p>For details on the meaning of each version, see <a href="https://www.tensorflow.org/code/tensorflow/core/framework/graph.proto"><code>GraphDef</code></a>.</p>
+<h5 id="returns-12">Returns:</h5>
+<p>A <code>VersionDef</code>.</p>
+<hr />
+<h4 id="tf.graph.create_opop_type-inputs-dtypes-input_typesnone-namenone-attrsnone-op_defnone-compute_shapestrue-compute_devicetrue"><code id="Graph.create_op">tf.Graph.create_op(op_type, inputs, dtypes, input_types=None, name=None, attrs=None, op_def=None, compute_shapes=True, compute_device=True)</code></h4>
+<p>Creates an <code>Operation</code> in this graph.</p>
+<p>This is a low-level interface for creating an <code>Operation</code>. Most programs will not call this method directly, and instead use the Python op constructors, such as <code>tf.constant()</code>, which add ops to the default graph.</p>
+<h5 id="args-12">Args:</h5>
+<ul>
+<li><b><code>op_type</code></b>: The <code>Operation</code> type to create. This corresponds to the <code>OpDef.name</code> field for the proto that defines the operation.</li>
+<li><b><code>inputs</code></b>: A list of <code>Tensor</code> objects that will be inputs to the <code>Operation</code>.</li>
+<li><b><code>dtypes</code></b>: A list of <code>DType</code> objects that will be the types of the tensors that the operation produces.</li>
+<li><b><code>input_types</code></b>: (Optional.) A list of <code>DType</code>s that will be the types of the tensors that the operation consumes. By default, uses the base <code>DType</code> of each input in <code>inputs</code>. Operations that expect reference-typed inputs must specify <code>input_types</code> explicitly.</li>
+<li><b><code>name</code></b>: (Optional.) A string name for the operation. If not specified, a name is generated based on <code>op_type</code>.</li>
+<li><b><code>attrs</code></b>: (Optional.) A dictionary where the key is the attribute name (a string) and the value is the respective <code>attr</code> attribute of the <code>NodeDef</code> proto that will represent the operation (an <code>AttrValue</code> proto).</li>
+<li><b><code>op_def</code></b>: (Optional.) The <code>OpDef</code> proto that describes the <code>op_type</code> that the operation will have.</li>
+<li><b><code>compute_shapes</code></b>: (Optional.) If True, shape inference will be performed to compute the shapes of the outputs.</li>
+<li><b><code>compute_device</code></b>: (Optional.) If True, device functions will be executed to compute the device property of the Operation.</li>
+</ul>
+<h5 id="raises-6">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if any of the inputs is not a <code>Tensor</code>.</li>
+<li><b><code>ValueError</code></b>: if colocation conflicts with existing device assignment.</li>
+</ul>
+<h5 id="returns-13">Returns:</h5>
+<p>An <code>Operation</code> object.</p>
+<hr />
+<h4 id="tf.graph.gradient_override_mapop_type_map"><code id="Graph.gradient_override_map">tf.Graph.gradient_override_map(op_type_map)</code></h4>
+<p>EXPERIMENTAL: A context manager for overriding gradient functions.</p>
+<p>This context manager can be used to override the gradient function that will be used for ops within the scope of the context.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="at">@tf.RegisterGradient</span>(<span class="st">&quot;CustomSquare&quot;</span>)
+<span class="kw">def</span> _custom_square_grad(op, grad):
+  <span class="co"># ...</span>
+
+<span class="cf">with</span> tf.Graph().as_default() <span class="im">as</span> g:
+  c <span class="op">=</span> tf.constant(<span class="fl">5.0</span>)
+  s_1 <span class="op">=</span> tf.square(c)  <span class="co"># Uses the default gradient for tf.square.</span>
+  <span class="cf">with</span> g.gradient_override_map({<span class="st">&quot;Square&quot;</span>: <span class="st">&quot;CustomSquare&quot;</span>}):
+    s_2 <span class="op">=</span> tf.square(s_2)  <span class="co"># Uses _custom_square_grad to compute the</span>
+                          <span class="co"># gradient of s_2.</span></code></pre></div>
+<h5 id="args-13">Args:</h5>
+<ul>
+<li><b><code>op_type_map</code></b>: A dictionary mapping op type strings to alternative op type strings.</li>
+</ul>
+<h5 id="returns-14">Returns:</h5>
+<p>A context manager that sets the alternative op type to be used for one or more ops created in that context.</p>
+<h5 id="raises-7">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>op_type_map</code> is not a dictionary mapping strings to strings.</li>
+</ul>
+<h4 id="other-methods">Other Methods</h4>
+<hr />
+<h4 id="tf.graph.building_function"><code id="Graph.building_function">tf.Graph.building_function</code></h4>
+<p>Returns True iff this graph represents a function.</p>
+<hr />
+<h4 id="tf.graph.clear_collectionname"><code id="Graph.clear_collection">tf.Graph.clear_collection(name)</code></h4>
+<p>Clears all values in a collection.</p>
+<h5 id="args-14">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: The key for the collection. The <code>GraphKeys</code> class contains many standard names for collections.</li>
+</ul>
+<hr />
+<h4 id="tf.graph.colocate_withop-ignore_existingfalse"><code id="Graph.colocate_with">tf.Graph.colocate_with(op, ignore_existing=False)</code></h4>
+<p>Returns a context manager that specifies an op to colocate with.</p>
+<p>Note: this function is not for public use, only for internal libraries.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">a <span class="op">=</span> tf.Variable([<span class="fl">1.0</span>])
+<span class="cf">with</span> g.colocate_with(a):
+  b <span class="op">=</span> tf.constant(<span class="fl">1.0</span>)
+  c <span class="op">=</span> tf.add(a, b)</code></pre></div>
+<p><code>b</code> and <code>c</code> will always be colocated with <code>a</code>, no matter where <code>a</code> is eventually placed.</p>
+<p><strong>NOTE</strong> Using a colocation scope resets any existing device constraints.</p>
+<p>If <code>op</code> is <code>None</code> then <code>ignore_existing</code> must be <code>True</code> and the new scope resets all colocation and device constraints.</p>
+<h5 id="args-15">Args:</h5>
+<ul>
+<li><b><code>op</code></b>: The op to colocate all created ops with, or <code>None</code>.</li>
+<li><b><code>ignore_existing</code></b>: If true, only applies colocation of this op within the context, rather than applying all colocation properties on the stack. If <code>op</code> is <code>None</code>, this value must be <code>True</code>.</li>
+</ul>
+<h5 id="raises-8">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if op is None but ignore_existing is False.</li>
+</ul>
+<h5 id="yields">Yields:</h5>
+<p>A context manager that specifies the op with which to colocate newly created ops.</p>
+<hr />
+<h4 id="tf.graph.containercontainer_name"><code id="Graph.container">tf.Graph.container(container_name)</code></h4>
+<p>Returns a context manager that specifies the resource container to use.</p>
+<p>Stateful operations, such as variables and queues, can maintain their states on devices so that they can be shared by multiple processes. A resource container is a string name under which these stateful operations are tracked. These resources can be released or cleared with <code>tf.Session.reset()</code>.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> g.container(<span class="st">&#39;experiment0&#39;</span>):
+  <span class="co"># All stateful Operations constructed in this context will be placed</span>
+  <span class="co"># in resource container &quot;experiment0&quot;.</span>
+  v1 <span class="op">=</span> tf.Variable([<span class="fl">1.0</span>])
+  v2 <span class="op">=</span> tf.Variable([<span class="fl">2.0</span>])
+  <span class="cf">with</span> g.container(<span class="st">&quot;experiment1&quot;</span>):
+    <span class="co"># All stateful Operations constructed in this context will be</span>
+    <span class="co"># placed in resource container &quot;experiment1&quot;.</span>
+    v3 <span class="op">=</span> tf.Variable([<span class="fl">3.0</span>])
+    q1 <span class="op">=</span> tf.FIFOQueue(<span class="dv">10</span>, tf.float32)
+  <span class="co"># All stateful Operations constructed in this context will be</span>
+  <span class="co"># be created in the &quot;experiment0&quot;.</span>
+  v4 <span class="op">=</span> tf.Variable([<span class="fl">4.0</span>])
+  q1 <span class="op">=</span> tf.FIFOQueue(<span class="dv">20</span>, tf.float32)
+  <span class="cf">with</span> g.container(<span class="st">&quot;&quot;</span>):
+    <span class="co"># All stateful Operations constructed in this context will be</span>
+    <span class="co"># be placed in the default resource container.</span>
+    v5 <span class="op">=</span> tf.Variable([<span class="fl">5.0</span>])
+    q3 <span class="op">=</span> tf.FIFOQueue(<span class="dv">30</span>, tf.float32)
+
+<span class="co"># Resets container &quot;experiment0&quot;, after which the state of v1, v2, v4, q1</span>
+<span class="co"># will become undefined (such as uninitialized).</span>
+tf.Session.reset(target, [<span class="st">&quot;experiment0&quot;</span>])</code></pre></div>
+<h5 id="args-16">Args:</h5>
+<ul>
+<li><b><code>container_name</code></b>: container name string.</li>
+</ul>
+<h5 id="returns-15">Returns:</h5>
+<p>A context manager for defining resource containers for stateful ops, yields the container name.</p>
+<hr />
+<h4 id="tf.graph.get_all_collection_keys"><code id="Graph.get_all_collection_keys">tf.Graph.get_all_collection_keys()</code></h4>
+<p>Returns a list of collections used in this graph.</p>
+<hr />
+<h4 id="tf.graph.is_feedabletensor"><code id="Graph.is_feedable">tf.Graph.is_feedable(tensor)</code></h4>
+<p>Returns <code>True</code> if and only if <code>tensor</code> is feedable.</p>
+<hr />
+<h4 id="tf.graph.is_fetchabletensor_or_op"><code id="Graph.is_fetchable">tf.Graph.is_fetchable(tensor_or_op)</code></h4>
+<p>Returns <code>True</code> if and only if <code>tensor_or_op</code> is fetchable.</p>
+<hr />
+<h4 id="tf.graph.prevent_feedingtensor"><code id="Graph.prevent_feeding">tf.Graph.prevent_feeding(tensor)</code></h4>
+<p>Marks the given <code>tensor</code> as unfeedable in this graph.</p>
+<hr />
+<h4 id="tf.graph.prevent_fetchingop"><code id="Graph.prevent_fetching">tf.Graph.prevent_fetching(op)</code></h4>
+<p>Marks the given <code>op</code> as unfetchable in this graph.</p>
+<hr />
+<h3 id="class-tf.operation"><a name="//apple_ref/cpp/Class/Operation" class="dashAnchor"></a><code id="Operation">class tf.Operation</code></h3>
+<p>Represents a graph node that performs computation on tensors.</p>
+<p>An <code>Operation</code> is a node in a TensorFlow <code>Graph</code> that takes zero or more <code>Tensor</code> objects as input, and produces zero or more <code>Tensor</code> objects as output. Objects of type <code>Operation</code> are created by calling a Python op constructor (such as <a href="../../api_docs/python/math_ops.md#matmul"><code>tf.matmul()</code></a>) or <a href="../../api_docs/python/framework.md#Graph.create_op"><code>Graph.create_op()</code></a>.</p>
+<p>For example <code>c = tf.matmul(a, b)</code> creates an <code>Operation</code> of type &quot;MatMul&quot; that takes tensors <code>a</code> and <code>b</code> as input, and produces <code>c</code> as output.</p>
+<p>After the graph has been launched in a session, an <code>Operation</code> can be executed by passing it to <a href="../../api_docs/python/client.md#Session.run"><code>Session.run()</code></a>. <code>op.run()</code> is a shortcut for calling <code>tf.get_default_session().run(op)</code>.</p>
+<hr />
+<h4 id="tf.operation.name"><code id="Operation.name">tf.Operation.name</code></h4>
+<p>The full name of this operation.</p>
+<hr />
+<h4 id="tf.operation.type"><code id="Operation.type">tf.Operation.type</code></h4>
+<p>The type of the op (e.g. <code>&quot;MatMul&quot;</code>).</p>
+<hr />
+<h4 id="tf.operation.inputs"><code id="Operation.inputs">tf.Operation.inputs</code></h4>
+<p>The list of <code>Tensor</code> objects representing the data inputs of this op.</p>
+<hr />
+<h4 id="tf.operation.control_inputs"><code id="Operation.control_inputs">tf.Operation.control_inputs</code></h4>
+<p>The <code>Operation</code> objects on which this op has a control dependency.</p>
+<p>Before this op is executed, TensorFlow will ensure that the operations in <code>self.control_inputs</code> have finished executing. This mechanism can be used to run ops sequentially for performance reasons, or to ensure that the side effects of an op are observed in the correct order.</p>
+<h5 id="returns-16">Returns:</h5>
+<p>A list of <code>Operation</code> objects.</p>
+<hr />
+<h4 id="tf.operation.outputs"><code id="Operation.outputs">tf.Operation.outputs</code></h4>
+<p>The list of <code>Tensor</code> objects representing the outputs of this op.</p>
+<hr />
+<h4 id="tf.operation.device"><code id="Operation.device">tf.Operation.device</code></h4>
+<p>The name of the device to which this op has been assigned, if any.</p>
+<h5 id="returns-17">Returns:</h5>
+<p>The string name of the device to which this op has been assigned, or an empty string if it has not been assigned to a device.</p>
+<hr />
+<h4 id="tf.operation.graph"><code id="Operation.graph">tf.Operation.graph</code></h4>
+<p>The <code>Graph</code> that contains this operation.</p>
+<hr />
+<h4 id="tf.operation.runfeed_dictnone-sessionnone"><code id="Operation.run">tf.Operation.run(feed_dict=None, session=None)</code></h4>
+<p>Runs this operation in a <code>Session</code>.</p>
+<p>Calling this method will execute all preceding operations that produce the inputs needed for this operation.</p>
+<p><em>N.B.</em> Before invoking <code>Operation.run()</code>, its graph must have been launched in a session, and either a default session must be available, or <code>session</code> must be specified explicitly.</p>
+<h5 id="args-17">Args:</h5>
+<ul>
+<li><b><code>feed_dict</code></b>: A dictionary that maps <code>Tensor</code> objects to feed values. See <a href="../../api_docs/python/client.md#Session.run"><code>Session.run()</code></a> for a description of the valid feed values.</li>
+<li><b><code>session</code></b>: (Optional.) The <code>Session</code> to be used to run to this operation. If none, the default session will be used.</li>
+</ul>
+<hr />
+<h4 id="tf.operation.get_attrname"><code id="Operation.get_attr">tf.Operation.get_attr(name)</code></h4>
+<p>Returns the value of the attr of this op with the given <code>name</code>.</p>
+<h5 id="args-18">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: The name of the attr to fetch.</li>
+</ul>
+<h5 id="returns-18">Returns:</h5>
+<p>The value of the attr, as a Python object.</p>
+<h5 id="raises-9">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If this op does not have an attr with the given <code>name</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.operation.traceback"><code id="Operation.traceback">tf.Operation.traceback</code></h4>
+<p>Returns the call stack from when this operation was constructed.</p>
+<h4 id="other-methods-1">Other Methods</h4>
+<hr />
+<h4 id="tf.operation.__init__node_def-g-inputsnone-output_typesnone-control_inputsnone-input_typesnone-original_opnone-op_defnone"><code id="Operation.__init__">tf.Operation.__init__(node_def, g, inputs=None, output_types=None, control_inputs=None, input_types=None, original_op=None, op_def=None)</code></h4>
+<p>Creates an <code>Operation</code>.</p>
+<p>NOTE: This constructor validates the name of the <code>Operation</code> (passed as <code>node_def.name</code>). Valid <code>Operation</code> names match the following regular expression:</p>
+<pre><code>[A-Za-z0-9.][A-Za-z0-9_.\\-/]*</code></pre>
+<h5 id="args-19">Args:</h5>
+<ul>
+<li><b><code>node_def</code></b>: <code>node_def_pb2.NodeDef</code>. <code>NodeDef</code> for the <code>Operation</code>. Used for attributes of <code>node_def_pb2.NodeDef</code>, typically <code>name</code>, <code>op</code>, and <code>device</code>. The <code>input</code> attribute is irrelevant here as it will be computed when generating the model.</li>
+<li><b><code>g</code></b>: <code>Graph</code>. The parent graph.</li>
+<li><b><code>inputs</code></b>: list of <code>Tensor</code> objects. The inputs to this <code>Operation</code>.</li>
+<li><b><code>output_types</code></b>: list of <code>DType</code> objects. List of the types of the <code>Tensors</code> computed by this operation. The length of this list indicates the number of output endpoints of the <code>Operation</code>.</li>
+<li><b><code>control_inputs</code></b>: list of operations or tensors from which to have a control dependency.</li>
+<li><b><code>input_types</code></b>: List of <code>DType</code> objects representing the types of the tensors accepted by the <code>Operation</code>. By default uses <code>[x.dtype.base_dtype for x in inputs]</code>. Operations that expect reference-typed inputs must specify these explicitly.</li>
+<li><b><code>original_op</code></b>: Optional. Used to associate the new <code>Operation</code> with an existing <code>Operation</code> (for example, a replica with the op that was replicated).</li>
+<li><b><code>op_def</code></b>: Optional. The <code>op_def_pb2.OpDef</code> proto that describes the op type that this <code>Operation</code> represents.</li>
+</ul>
+<h5 id="raises-10">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if control inputs are not Operations or Tensors, or if <code>node_def</code> is not a <code>NodeDef</code>, or if <code>g</code> is not a <code>Graph</code>, or if <code>inputs</code> are not tensors, or if <code>inputs</code> and <code>input_types</code> are incompatible.</li>
+<li><b><code>ValueError</code></b>: if the <code>node_def</code> name is not valid.</li>
+</ul>
+<hr />
+<h4 id="tf.operation.__repr__"><code id="Operation.__repr__">tf.Operation.__repr__()</code></h4>
+<hr />
+<h4 id="tf.operation.__str__"><code id="Operation.__str__">tf.Operation.__str__()</code></h4>
+<hr />
+<h4 id="tf.operation.colocation_groups"><code id="Operation.colocation_groups">tf.Operation.colocation_groups()</code></h4>
+<p>Returns the list of colocation groups of the op.</p>
+<hr />
+<h4 id="tf.operation.node_def"><code id="Operation.node_def">tf.Operation.node_def</code></h4>
+<p>Returns a serialized <code>NodeDef</code> representation of this operation.</p>
+<h5 id="returns-19">Returns:</h5>
+<p>A <a href="https://www.tensorflow.org/code/tensorflow/core/framework/node_def.proto"><code>NodeDef</code></a> protocol buffer.</p>
+<hr />
+<h4 id="tf.operation.op_def"><code id="Operation.op_def">tf.Operation.op_def</code></h4>
+<p>Returns the <code>OpDef</code> proto that represents the type of this op.</p>
+<h5 id="returns-20">Returns:</h5>
+<p>An <a href="https://www.tensorflow.org/code/tensorflow/core/framework/op_def.proto"><code>OpDef</code></a> protocol buffer.</p>
+<hr />
+<h4 id="tf.operation.values"><code id="Operation.values">tf.Operation.values()</code></h4>
+<p>DEPRECATED: Use outputs.</p>
+<hr />
+<h3 id="class-tf.tensor"><a name="//apple_ref/cpp/Class/Tensor" class="dashAnchor"></a><code id="Tensor">class tf.Tensor</code></h3>
+<p>Represents one of the outputs of an <code>Operation</code>.</p>
+<p>A <code>Tensor</code> is a symbolic handle to one of the outputs of an <code>Operation</code>. It does not hold the values of that operation's output, but instead provides a means of computing those values in a TensorFlow <a href="../../api_docs/python/client.md#Session"><code>Session</code></a>.</p>
+<p>This class has two primary purposes:</p>
+<ol style="list-style-type: decimal">
+<li><p>A <code>Tensor</code> can be passed as an input to another <code>Operation</code>. This builds a dataflow connection between operations, which enables TensorFlow to execute an entire <code>Graph</code> that represents a large, multi-step computation.</p></li>
+<li><p>After the graph has been launched in a session, the value of the <code>Tensor</code> can be computed by passing it to <a href="../../api_docs/python/client.md#Session.run"><code>Session.run()</code></a>. <code>t.eval()</code> is a shortcut for calling <code>tf.get_default_session().run(t)</code>.</p></li>
+</ol>
+<p>In the following example, <code>c</code>, <code>d</code>, and <code>e</code> are symbolic <code>Tensor</code> objects, whereas <code>result</code> is a numpy array that stores a concrete value:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Build a dataflow graph.</span>
+c <span class="op">=</span> tf.constant([[<span class="fl">1.0</span>, <span class="fl">2.0</span>], [<span class="fl">3.0</span>, <span class="fl">4.0</span>]])
+d <span class="op">=</span> tf.constant([[<span class="fl">1.0</span>, <span class="fl">1.0</span>], [<span class="fl">0.0</span>, <span class="fl">1.0</span>]])
+e <span class="op">=</span> tf.matmul(c, d)
+
+<span class="co"># Construct a `Session` to execute the graph.</span>
+sess <span class="op">=</span> tf.Session()
+
+<span class="co"># Execute the graph and store the value that `e` represents in `result`.</span>
+result <span class="op">=</span> sess.run(e)</code></pre></div>
+<hr />
+<h4 id="tf.tensor.dtype"><code id="Tensor.dtype">tf.Tensor.dtype</code></h4>
+<p>The <code>DType</code> of elements in this tensor.</p>
+<hr />
+<h4 id="tf.tensor.name"><code id="Tensor.name">tf.Tensor.name</code></h4>
+<p>The string name of this tensor.</p>
+<hr />
+<h4 id="tf.tensor.value_index"><code id="Tensor.value_index">tf.Tensor.value_index</code></h4>
+<p>The index of this tensor in the outputs of its <code>Operation</code>.</p>
+<hr />
+<h4 id="tf.tensor.graph"><code id="Tensor.graph">tf.Tensor.graph</code></h4>
+<p>The <code>Graph</code> that contains this tensor.</p>
+<hr />
+<h4 id="tf.tensor.op"><code id="Tensor.op">tf.Tensor.op</code></h4>
+<p>The <code>Operation</code> that produces this tensor as an output.</p>
+<hr />
+<h4 id="tf.tensor.consumers"><code id="Tensor.consumers">tf.Tensor.consumers()</code></h4>
+<p>Returns a list of <code>Operation</code>s that consume this tensor.</p>
+<h5 id="returns-21">Returns:</h5>
+<p>A list of <code>Operation</code>s.</p>
+<hr />
+<h4 id="tf.tensor.evalfeed_dictnone-sessionnone"><code id="Tensor.eval">tf.Tensor.eval(feed_dict=None, session=None)</code></h4>
+<p>Evaluates this tensor in a <code>Session</code>.</p>
+<p>Calling this method will execute all preceding operations that produce the inputs needed for the operation that produces this tensor.</p>
+<p><em>N.B.</em> Before invoking <code>Tensor.eval()</code>, its graph must have been launched in a session, and either a default session must be available, or <code>session</code> must be specified explicitly.</p>
+<h5 id="args-20">Args:</h5>
+<ul>
+<li><b><code>feed_dict</code></b>: A dictionary that maps <code>Tensor</code> objects to feed values. See <a href="../../api_docs/python/client.md#Session.run"><code>Session.run()</code></a> for a description of the valid feed values.</li>
+<li><b><code>session</code></b>: (Optional.) The <code>Session</code> to be used to evaluate this tensor. If none, the default session will be used.</li>
+</ul>
+<h5 id="returns-22">Returns:</h5>
+<p>A numpy array corresponding to the value of this tensor.</p>
+<hr />
+<h4 id="tf.tensor.get_shape"><code id="Tensor.get_shape">tf.Tensor.get_shape()</code></h4>
+<p>Alias of Tensor.shape.</p>
+<hr />
+<h4 id="tf.tensor.shape"><code id="Tensor.shape">tf.Tensor.shape</code></h4>
+<p>Returns the <code>TensorShape</code> that represents the shape of this tensor.</p>
+<p>The shape is computed using shape inference functions that are registered in the Op for each <code>Operation</code>. See <a href="../../api_docs/python/framework.md#TensorShape"><code>TensorShape</code></a> for more details of what a shape represents.</p>
+<p>The inferred shape of a tensor is used to provide shape information without having to launch the graph in a session. This can be used for debugging, and providing early error messages. For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">c <span class="op">=</span> tf.constant([[<span class="fl">1.0</span>, <span class="fl">2.0</span>, <span class="fl">3.0</span>], [<span class="fl">4.0</span>, <span class="fl">5.0</span>, <span class="fl">6.0</span>]])
+
+<span class="bu">print</span>(c.shape)
+<span class="op">==&gt;</span> TensorShape([Dimension(<span class="dv">2</span>), Dimension(<span class="dv">3</span>)])
+
+d <span class="op">=</span> tf.constant([[<span class="fl">1.0</span>, <span class="fl">0.0</span>], [<span class="fl">0.0</span>, <span class="fl">1.0</span>], [<span class="fl">1.0</span>, <span class="fl">0.0</span>], [<span class="fl">0.0</span>, <span class="fl">1.0</span>]])
+
+<span class="bu">print</span>(d.shape)
+<span class="op">==&gt;</span> TensorShape([Dimension(<span class="dv">4</span>), Dimension(<span class="dv">2</span>)])
+
+<span class="co"># Raises a ValueError, because `c` and `d` do not have compatible</span>
+<span class="co"># inner dimensions.</span>
+e <span class="op">=</span> tf.matmul(c, d)
+
+f <span class="op">=</span> tf.matmul(c, d, transpose_a<span class="op">=</span><span class="va">True</span>, transpose_b<span class="op">=</span><span class="va">True</span>)
+
+<span class="bu">print</span>(f.shape)
+<span class="op">==&gt;</span> TensorShape([Dimension(<span class="dv">3</span>), Dimension(<span class="dv">4</span>)])</code></pre></div>
+<p>In some cases, the inferred shape may have unknown dimensions. If the caller has additional information about the values of these dimensions, <code>Tensor.set_shape()</code> can be used to augment the inferred shape.</p>
+<h5 id="returns-23">Returns:</h5>
+<p>A <code>TensorShape</code> representing the shape of this tensor.</p>
+<hr />
+<h4 id="tf.tensor.set_shapeshape"><code id="Tensor.set_shape">tf.Tensor.set_shape(shape)</code></h4>
+<p>Updates the shape of this tensor.</p>
+<p>This method can be called multiple times, and will merge the given <code>shape</code> with the current shape of this tensor. It can be used to provide additional information about the shape of this tensor that cannot be inferred from the graph alone. For example, this can be used to provide additional information about the shapes of images:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">_, image_data <span class="op">=</span> tf.TFRecordReader(...).read(...)
+image <span class="op">=</span> tf.image.decode_png(image_data, channels<span class="op">=</span><span class="dv">3</span>)
+
+<span class="co"># The height and width dimensions of `image` are data dependent, and</span>
+<span class="co"># cannot be computed without executing the op.</span>
+<span class="bu">print</span>(image.shape)
+<span class="op">==&gt;</span> TensorShape([Dimension(<span class="va">None</span>), Dimension(<span class="va">None</span>), Dimension(<span class="dv">3</span>)])
+
+<span class="co"># We know that each image in this dataset is 28 x 28 pixels.</span>
+image.set_shape([<span class="dv">28</span>, <span class="dv">28</span>, <span class="dv">3</span>])
+<span class="bu">print</span>(image.shape)
+<span class="op">==&gt;</span> TensorShape([Dimension(<span class="dv">28</span>), Dimension(<span class="dv">28</span>), Dimension(<span class="dv">3</span>)])</code></pre></div>
+<h5 id="args-21">Args:</h5>
+<ul>
+<li><b><code>shape</code></b>: A <code>TensorShape</code> representing the shape of this tensor.</li>
+</ul>
+<h5 id="raises-11">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>shape</code> is not compatible with the current shape of this tensor.</li>
+</ul>
+<h4 id="other-methods-2">Other Methods</h4>
+<hr />
+<h4 id="tf.tensor.__abs__x-namenone"><code id="Tensor.__abs__">tf.Tensor.__abs__(x, name=None)</code></h4>
+<p>Computes the absolute value of a tensor.</p>
+<p>Given a tensor of real numbers <code>x</code>, this operation returns a tensor containing the absolute value of each element in <code>x</code>. For example, if x is an input element and y is an output element, this operation computes \(y = |x|\).</p>
+<h5 id="args-22">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> or <code>SparseTensor</code> of type <code>float32</code>, <code>float64</code>, <code>int32</code>, or <code>int64</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-24">Returns:</h5>
+<p>A <code>Tensor</code> or <code>SparseTensor</code> the same size and type as <code>x</code> with absolute values.</p>
+<hr />
+<h4 id="tf.tensor.__add__x-y"><code id="Tensor.__add__">tf.Tensor.__add__(x, y)</code></h4>
+<p>Returns x + y element-wise.</p>
+<p><em>NOTE</em>: <code>Add</code> supports broadcasting. <code>AddN</code> does not. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-23">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>uint8</code>, <code>int8</code>, <code>int16</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>complex128</code>, <code>string</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-25">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h4 id="tf.tensor.__and__x-y"><code id="Tensor.__and__">tf.Tensor.__and__(x, y)</code></h4>
+<p>Returns the truth value of x AND y element-wise.</p>
+<p><em>NOTE</em>: <code>LogicalAnd</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-24">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> of type <code>bool</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code> of type <code>bool</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-26">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>bool</code>.</p>
+<hr />
+<h4 id="tf.tensor.__bool__"><code id="Tensor.__bool__">tf.Tensor.__bool__()</code></h4>
+<p>Dummy method to prevent a tensor from being used as a Python <code>bool</code>.</p>
+<p>This overload raises a <code>TypeError</code> when the user inadvertently treats a <code>Tensor</code> as a boolean (e.g. in an <code>if</code> statement). For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">if</span> tf.constant(<span class="va">True</span>):  <span class="co"># Will raise.</span>
+  <span class="co"># ...</span>
+
+<span class="cf">if</span> tf.constant(<span class="dv">5</span>) <span class="op">&lt;</span> tf.constant(<span class="dv">7</span>):  <span class="co"># Will raise.</span>
+  <span class="co"># ...</span></code></pre></div>
+<p>This disallows ambiguities between testing the Python value vs testing the dynamic condition of the <code>Tensor</code>.</p>
+<h5 id="raises-12">Raises:</h5>
+<p><code>TypeError</code>.</p>
+<hr />
+<h4 id="tf.tensor.__div__x-y"><code id="Tensor.__div__">tf.Tensor.__div__(x, y)</code></h4>
+<p>Divide two values using Python 2 semantics. Used for Tensor.<strong>div</strong>.</p>
+<h5 id="args-25">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code> numerator of real numeric type.</li>
+<li><b><code>y</code></b>: <code>Tensor</code> denominator of real numeric type.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-27">Returns:</h5>
+<p><code>x / y</code> returns the quotient of x and y.</p>
+<hr />
+<h4 id="tf.tensor.__eq__other"><code id="Tensor.__eq__">tf.Tensor.__eq__(other)</code></h4>
+<hr />
+<h4 id="tf.tensor.__floordiv__x-y"><code id="Tensor.__floordiv__">tf.Tensor.__floordiv__(x, y)</code></h4>
+<p>Divides <code>x / y</code> elementwise, rounding toward the most negative integer.</p>
+<p>The same as <code>tf.div(x,y)</code> for integers, but uses <code>tf.floor(tf.div(x,y))</code> for floating point arguments so that the result is always an integer (though possibly an integer represented as floating point). This op is generated by <code>x // y</code> floor division in Python 3 and in Python 2.7 with <code>from __future__ import division</code>.</p>
+<p>Note that for efficiency, <code>floordiv</code> uses C semantics for negative numbers (unlike Python and Numpy).</p>
+<p><code>x</code> and <code>y</code> must have the same type, and the result will have the same type as well.</p>
+<h5 id="args-26">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code> numerator of real numeric type.</li>
+<li><b><code>y</code></b>: <code>Tensor</code> denominator of real numeric type.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-28">Returns:</h5>
+<p><code>x / y</code> rounded down (except possibly towards zero for negative integers).</p>
+<h5 id="raises-13">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If the inputs are complex.</li>
+</ul>
+<hr />
+<h4 id="tf.tensor.__ge__x-y-namenone"><code id="Tensor.__ge__">tf.Tensor.__ge__(x, y, name=None)</code></h4>
+<p>Returns the truth value of (x &gt;= y) element-wise.</p>
+<p><em>NOTE</em>: <code>GreaterEqual</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-27">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>uint8</code>, <code>int16</code>, <code>int8</code>, <code>uint16</code>, <code>half</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-29">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>bool</code>.</p>
+<hr />
+<h4 id="tf.tensor.__getitem__tensor-slice_spec-varnone"><code id="Tensor.__getitem__">tf.Tensor.__getitem__(tensor, slice_spec, var=None)</code></h4>
+<p>Overload for Tensor.<strong>getitem</strong>.</p>
+<p>This operation extracts the specified region from the tensor. The notation is similar to NumPy with the restriction that currently only support basic indexing. That means that using a tensor as input is not currently allowed</p>
+<p>Some useful examples:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># strip leading and trailing 2 elements</span>
+foo <span class="op">=</span> tf.constant([<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>])
+<span class="bu">print</span>(foo[<span class="dv">2</span>:<span class="op">-</span><span class="dv">2</span>].<span class="bu">eval</span>()) <span class="co"># =&gt; [3,4]</span>
+
+<span class="co"># skip every row and reverse every column</span>
+foo <span class="op">=</span> tf.constant([[<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>], [<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>], [<span class="dv">7</span>,<span class="dv">8</span>,<span class="dv">9</span>]])
+<span class="bu">print</span>(foo[::<span class="dv">2</span>,::<span class="op">-</span><span class="dv">1</span>].<span class="bu">eval</span>()) <span class="co"># =&gt; [[3,2,1], [9,8,7]]</span>
+
+<span class="co"># Insert another dimension</span>
+foo <span class="op">=</span> tf.constant([[<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>], [<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>], [<span class="dv">7</span>,<span class="dv">8</span>,<span class="dv">9</span>]])
+<span class="bu">print</span>(foo[tf.newaxis, :, :].<span class="bu">eval</span>()) <span class="co"># =&gt; [[[3,2,1], [9,8,7]]]</span>
+<span class="bu">print</span>(foo[:, tf.newaxis, :].<span class="bu">eval</span>()) <span class="co"># =&gt; [[[3,2,1]], [[9,8,7]]]</span>
+<span class="bu">print</span>(foo[:, :, tf.newaxis].<span class="bu">eval</span>()) <span class="co"># =&gt; [[[3],[2],[1]], [[9],[8],[7]]]</span>
+
+<span class="co"># Ellipses (3 equivalent operations)</span>
+<span class="bu">print</span>(foo[tf.newaxis, :, :].<span class="bu">eval</span>()) <span class="co"># =&gt; [[[3,2,1], [9,8,7]]]</span>
+<span class="bu">print</span>(foo[tf.newaxis, ...].<span class="bu">eval</span>()) <span class="co"># =&gt; [[[3,2,1], [9,8,7]]]</span>
+<span class="bu">print</span>(foo[tf.newaxis].<span class="bu">eval</span>()) <span class="co"># =&gt; [[[3,2,1], [9,8,7]]]</span></code></pre></div>
+<h5 id="notes">Notes:</h5>
+<ul>
+<li><code>tf.newaxis</code> is <code>None</code> as in NumPy.</li>
+<li>An implicit ellipsis is placed at the end of the <code>slice_spec</code></li>
+<li>NumPy advanced indexing is currently not supported.</li>
+</ul>
+<h5 id="args-28">Args:</h5>
+<ul>
+<li><b><code>tensor</code></b>: An ops.Tensor object.</li>
+<li><b><code>slice_spec</code></b>: The arguments to Tensor.<strong>getitem</strong>.</li>
+<li><b><code>var</code></b>: In the case of variable slice assignment, the Variable object to slice (i.e. tensor is the read-only view of this variable).</li>
+</ul>
+<h5 id="returns-30">Returns:</h5>
+<p>The appropriate slice of &quot;tensor&quot;, based on &quot;slice_spec&quot;.</p>
+<h5 id="raises-14">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If a slice range is negative size.</li>
+<li><b><code>TypeError</code></b>: If the slice indices aren't int, slice, or Ellipsis.</li>
+</ul>
+<hr />
+<h4 id="tf.tensor.__gt__x-y-namenone"><code id="Tensor.__gt__">tf.Tensor.__gt__(x, y, name=None)</code></h4>
+<p>Returns the truth value of (x &gt; y) element-wise.</p>
+<p><em>NOTE</em>: <code>Greater</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-29">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>uint8</code>, <code>int16</code>, <code>int8</code>, <code>uint16</code>, <code>half</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-31">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>bool</code>.</p>
+<hr />
+<h4 id="tf.tensor.__hash__"><code id="Tensor.__hash__">tf.Tensor.__hash__()</code></h4>
+<hr />
+<h4 id="tf.tensor.__init__op-value_index-dtype"><code id="Tensor.__init__">tf.Tensor.__init__(op, value_index, dtype)</code></h4>
+<p>Creates a new <code>Tensor</code>.</p>
+<h5 id="args-30">Args:</h5>
+<ul>
+<li><b><code>op</code></b>: An <code>Operation</code>. <code>Operation</code> that computes this tensor.</li>
+<li><b><code>value_index</code></b>: An <code>int</code>. Index of the operation's endpoint that produces this tensor.</li>
+<li><b><code>dtype</code></b>: A <code>DType</code>. Type of elements stored in this tensor.</li>
+</ul>
+<h5 id="raises-15">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If the op is not an <code>Operation</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.tensor.__invert__x-namenone"><code id="Tensor.__invert__">tf.Tensor.__invert__(x, name=None)</code></h4>
+<p>Returns the truth value of NOT x element-wise.</p>
+<h5 id="args-31">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> of type <code>bool</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-32">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>bool</code>.</p>
+<hr />
+<h4 id="tf.tensor.__iter__"><code id="Tensor.__iter__">tf.Tensor.__iter__()</code></h4>
+<p>Dummy method to prevent iteration. Do not call.</p>
+<p>NOTE(mrry): If we register <strong>getitem</strong> as an overloaded operator, Python will valiantly attempt to iterate over the Tensor from 0 to infinity. Declaring this method prevents this unintended behavior.</p>
+<h5 id="raises-16">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: when invoked.</li>
+</ul>
+<hr />
+<h4 id="tf.tensor.__le__x-y-namenone"><code id="Tensor.__le__">tf.Tensor.__le__(x, y, name=None)</code></h4>
+<p>Returns the truth value of (x &lt;= y) element-wise.</p>
+<p><em>NOTE</em>: <code>LessEqual</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-32">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>uint8</code>, <code>int16</code>, <code>int8</code>, <code>uint16</code>, <code>half</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-33">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>bool</code>.</p>
+<hr />
+<h4 id="tf.tensor.__lt__x-y-namenone"><code id="Tensor.__lt__">tf.Tensor.__lt__(x, y, name=None)</code></h4>
+<p>Returns the truth value of (x &lt; y) element-wise.</p>
+<p><em>NOTE</em>: <code>Less</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-33">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>uint8</code>, <code>int16</code>, <code>int8</code>, <code>uint16</code>, <code>half</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-34">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>bool</code>.</p>
+<hr />
+<h4 id="tf.tensor.__mod__x-y"><code id="Tensor.__mod__">tf.Tensor.__mod__(x, y)</code></h4>
+<p>Returns element-wise remainder of division. When <code>x &lt; 0</code> xor <code>y &lt; 0</code> is</p>
+<p>true, this follows Python semantics in that the result here is consistent with a flooring divide. E.g. <code>floor(x / y) * y + mod(x, y) = x</code>.</p>
+<p><em>NOTE</em>: <code>FloorMod</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-34">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>, <code>float32</code>, <code>float64</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-35">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h4 id="tf.tensor.__mul__x-y"><code id="Tensor.__mul__">tf.Tensor.__mul__(x, y)</code></h4>
+<p>Dispatches cwise mul for &quot;Dense<em>Dense&quot; and &quot;Dense</em>Sparse&quot;.</p>
+<hr />
+<h4 id="tf.tensor.__neg__x-namenone"><code id="Tensor.__neg__">tf.Tensor.__neg__(x, name=None)</code></h4>
+<p>Computes numerical negative value element-wise.</p>
+<p>I.e., \(y = -x\).</p>
+<h5 id="args-35">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>complex128</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-36">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h4 id="tf.tensor.__nonzero__"><code id="Tensor.__nonzero__">tf.Tensor.__nonzero__()</code></h4>
+<p>Dummy method to prevent a tensor from being used as a Python <code>bool</code>.</p>
+<p>This is the Python 2.x counterpart to <code>__bool__()</code> above.</p>
+<h5 id="raises-17">Raises:</h5>
+<p><code>TypeError</code>.</p>
+<hr />
+<h4 id="tf.tensor.__or__x-y"><code id="Tensor.__or__">tf.Tensor.__or__(x, y)</code></h4>
+<p>Returns the truth value of x OR y element-wise.</p>
+<p><em>NOTE</em>: <code>LogicalOr</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-36">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> of type <code>bool</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code> of type <code>bool</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-37">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>bool</code>.</p>
+<hr />
+<h4 id="tf.tensor.__pow__x-y"><code id="Tensor.__pow__">tf.Tensor.__pow__(x, y)</code></h4>
+<p>Computes the power of one value to another.</p>
+<p>Given a tensor <code>x</code> and a tensor <code>y</code>, this operation computes \(x^y\) for corresponding elements in <code>x</code> and <code>y</code>. For example:</p>
+<pre><code># tensor &#39;x&#39; is [[2, 2], [3, 3]]
+# tensor &#39;y&#39; is [[8, 16], [2, 3]]
+tf.pow(x, y) ==&gt; [[256, 65536], [9, 27]]</code></pre>
+<h5 id="args-37">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> of type <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, or <code>complex128</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code> of type <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, or <code>complex128</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-38">Returns:</h5>
+<p>A <code>Tensor</code>.</p>
+<hr />
+<h4 id="tf.tensor.__radd__y-x"><code id="Tensor.__radd__">tf.Tensor.__radd__(y, x)</code></h4>
+<p>Returns x + y element-wise.</p>
+<p><em>NOTE</em>: <code>Add</code> supports broadcasting. <code>AddN</code> does not. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-38">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>uint8</code>, <code>int8</code>, <code>int16</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>complex128</code>, <code>string</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-39">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h4 id="tf.tensor.__rand__y-x"><code id="Tensor.__rand__">tf.Tensor.__rand__(y, x)</code></h4>
+<p>Returns the truth value of x AND y element-wise.</p>
+<p><em>NOTE</em>: <code>LogicalAnd</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-39">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> of type <code>bool</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code> of type <code>bool</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-40">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>bool</code>.</p>
+<hr />
+<h4 id="tf.tensor.__rdiv__y-x"><code id="Tensor.__rdiv__">tf.Tensor.__rdiv__(y, x)</code></h4>
+<p>Divide two values using Python 2 semantics. Used for Tensor.<strong>div</strong>.</p>
+<h5 id="args-40">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code> numerator of real numeric type.</li>
+<li><b><code>y</code></b>: <code>Tensor</code> denominator of real numeric type.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-41">Returns:</h5>
+<p><code>x / y</code> returns the quotient of x and y.</p>
+<hr />
+<h4 id="tf.tensor.__repr__"><code id="Tensor.__repr__">tf.Tensor.__repr__()</code></h4>
+<hr />
+<h4 id="tf.tensor.__rfloordiv__y-x"><code id="Tensor.__rfloordiv__">tf.Tensor.__rfloordiv__(y, x)</code></h4>
+<p>Divides <code>x / y</code> elementwise, rounding toward the most negative integer.</p>
+<p>The same as <code>tf.div(x,y)</code> for integers, but uses <code>tf.floor(tf.div(x,y))</code> for floating point arguments so that the result is always an integer (though possibly an integer represented as floating point). This op is generated by <code>x // y</code> floor division in Python 3 and in Python 2.7 with <code>from __future__ import division</code>.</p>
+<p>Note that for efficiency, <code>floordiv</code> uses C semantics for negative numbers (unlike Python and Numpy).</p>
+<p><code>x</code> and <code>y</code> must have the same type, and the result will have the same type as well.</p>
+<h5 id="args-41">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code> numerator of real numeric type.</li>
+<li><b><code>y</code></b>: <code>Tensor</code> denominator of real numeric type.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-42">Returns:</h5>
+<p><code>x / y</code> rounded down (except possibly towards zero for negative integers).</p>
+<h5 id="raises-18">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If the inputs are complex.</li>
+</ul>
+<hr />
+<h4 id="tf.tensor.__rmod__y-x"><code id="Tensor.__rmod__">tf.Tensor.__rmod__(y, x)</code></h4>
+<p>Returns element-wise remainder of division. When <code>x &lt; 0</code> xor <code>y &lt; 0</code> is</p>
+<p>true, this follows Python semantics in that the result here is consistent with a flooring divide. E.g. <code>floor(x / y) * y + mod(x, y) = x</code>.</p>
+<p><em>NOTE</em>: <code>FloorMod</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-42">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>, <code>float32</code>, <code>float64</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-43">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h4 id="tf.tensor.__rmul__y-x"><code id="Tensor.__rmul__">tf.Tensor.__rmul__(y, x)</code></h4>
+<p>Dispatches cwise mul for &quot;Dense<em>Dense&quot; and &quot;Dense</em>Sparse&quot;.</p>
+<hr />
+<h4 id="tf.tensor.__ror__y-x"><code id="Tensor.__ror__">tf.Tensor.__ror__(y, x)</code></h4>
+<p>Returns the truth value of x OR y element-wise.</p>
+<p><em>NOTE</em>: <code>LogicalOr</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-43">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> of type <code>bool</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code> of type <code>bool</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-44">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>bool</code>.</p>
+<hr />
+<h4 id="tf.tensor.__rpow__y-x"><code id="Tensor.__rpow__">tf.Tensor.__rpow__(y, x)</code></h4>
+<p>Computes the power of one value to another.</p>
+<p>Given a tensor <code>x</code> and a tensor <code>y</code>, this operation computes \(x^y\) for corresponding elements in <code>x</code> and <code>y</code>. For example:</p>
+<pre><code># tensor &#39;x&#39; is [[2, 2], [3, 3]]
+# tensor &#39;y&#39; is [[8, 16], [2, 3]]
+tf.pow(x, y) ==&gt; [[256, 65536], [9, 27]]</code></pre>
+<h5 id="args-44">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> of type <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, or <code>complex128</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code> of type <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, or <code>complex128</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-45">Returns:</h5>
+<p>A <code>Tensor</code>.</p>
+<hr />
+<h4 id="tf.tensor.__rsub__y-x"><code id="Tensor.__rsub__">tf.Tensor.__rsub__(y, x)</code></h4>
+<p>Returns x - y element-wise.</p>
+<p><em>NOTE</em>: <code>Sub</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-45">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>complex128</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-46">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h4 id="tf.tensor.__rtruediv__y-x"><code id="Tensor.__rtruediv__">tf.Tensor.__rtruediv__(y, x)</code></h4>
+<hr />
+<h4 id="tf.tensor.__rxor__y-x"><code id="Tensor.__rxor__">tf.Tensor.__rxor__(y, x)</code></h4>
+<p>x ^ y = (x | y) &amp; ~(x &amp; y).</p>
+<hr />
+<h4 id="tf.tensor.__str__"><code id="Tensor.__str__">tf.Tensor.__str__()</code></h4>
+<hr />
+<h4 id="tf.tensor.__sub__x-y"><code id="Tensor.__sub__">tf.Tensor.__sub__(x, y)</code></h4>
+<p>Returns x - y element-wise.</p>
+<p><em>NOTE</em>: <code>Sub</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-46">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>complex128</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-47">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h4 id="tf.tensor.__truediv__x-y"><code id="Tensor.__truediv__">tf.Tensor.__truediv__(x, y)</code></h4>
+<hr />
+<h4 id="tf.tensor.__xor__x-y"><code id="Tensor.__xor__">tf.Tensor.__xor__(x, y)</code></h4>
+<p>x ^ y = (x | y) &amp; ~(x &amp; y).</p>
+<hr />
+<h4 id="tf.tensor.device"><code id="Tensor.device">tf.Tensor.device</code></h4>
+<p>The name of the device on which this tensor will be produced, or None.</p>
+<h2 id="tensor-types">Tensor types</h2>
+<hr />
+<h3 id="class-tf.dtype"><a name="//apple_ref/cpp/Class/DType" class="dashAnchor"></a><code id="DType">class tf.DType</code></h3>
+<p>Represents the type of the elements in a <code>Tensor</code>.</p>
+<p>The following <code>DType</code> objects are defined:</p>
+<ul>
+<li><code>tf.float16</code>: 16-bit half-precision floating-point.</li>
+<li><code>tf.float32</code>: 32-bit single-precision floating-point.</li>
+<li><code>tf.float64</code>: 64-bit double-precision floating-point.</li>
+<li><code>tf.bfloat16</code>: 16-bit truncated floating-point.</li>
+<li><code>tf.complex64</code>: 64-bit single-precision complex.</li>
+<li><code>tf.complex128</code>: 128-bit double-precision complex.</li>
+<li><code>tf.int8</code>: 8-bit signed integer.</li>
+<li><code>tf.uint8</code>: 8-bit unsigned integer.</li>
+<li><code>tf.uint16</code>: 16-bit unsigned integer.</li>
+<li><code>tf.int16</code>: 16-bit signed integer.</li>
+<li><code>tf.int32</code>: 32-bit signed integer.</li>
+<li><code>tf.int64</code>: 64-bit signed integer.</li>
+<li><code>tf.bool</code>: Boolean.</li>
+<li><code>tf.string</code>: String.</li>
+<li><code>tf.qint8</code>: Quantized 8-bit signed integer.</li>
+<li><code>tf.quint8</code>: Quantized 8-bit unsigned integer.</li>
+<li><code>tf.qint16</code>: Quantized 16-bit signed integer.</li>
+<li><code>tf.quint16</code>: Quantized 16-bit unsigned integer.</li>
+<li><code>tf.qint32</code>: Quantized 32-bit signed integer.</li>
+<li><code>tf.resource</code>: Handle to a mutable resource.</li>
+</ul>
+<p>In addition, variants of these types with the <code>_ref</code> suffix are defined for reference-typed tensors.</p>
+<p>The <code>tf.as_dtype()</code> function converts numpy types and string type names to a <code>DType</code> object.</p>
+<hr />
+<h4 id="tf.dtype.is_compatible_withother"><code id="DType.is_compatible_with">tf.DType.is_compatible_with(other)</code></h4>
+<p>Returns True if the <code>other</code> DType will be converted to this DType.</p>
+<p>The conversion rules are as follows:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">DType(T)       .is_compatible_with(DType(T))        <span class="op">==</span> <span class="va">True</span>
+DType(T)       .is_compatible_with(DType(T).as_ref) <span class="op">==</span> <span class="va">True</span>
+DType(T).as_ref.is_compatible_with(DType(T))        <span class="op">==</span> <span class="va">False</span>
+DType(T).as_ref.is_compatible_with(DType(T).as_ref) <span class="op">==</span> <span class="va">True</span></code></pre></div>
+<h5 id="args-47">Args:</h5>
+<ul>
+<li><b><code>other</code></b>: A <code>DType</code> (or object that may be converted to a <code>DType</code>).</li>
+</ul>
+<h5 id="returns-48">Returns:</h5>
+<p>True if a Tensor of the <code>other</code> <code>DType</code> will be implicitly converted to this <code>DType</code>.</p>
+<hr />
+<h4 id="tf.dtype.name"><code id="DType.name">tf.DType.name</code></h4>
+<p>Returns the string name for this <code>DType</code>.</p>
+<hr />
+<h4 id="tf.dtype.base_dtype"><code id="DType.base_dtype">tf.DType.base_dtype</code></h4>
+<p>Returns a non-reference <code>DType</code> based on this <code>DType</code>.</p>
+<hr />
+<h4 id="tf.dtype.real_dtype"><code id="DType.real_dtype">tf.DType.real_dtype</code></h4>
+<p>Returns the dtype correspond to this dtype's real part.</p>
+<hr />
+<h4 id="tf.dtype.is_bool"><code id="DType.is_bool">tf.DType.is_bool</code></h4>
+<p>Returns whether this is a boolean data type</p>
+<hr />
+<h4 id="tf.dtype.is_floating"><code id="DType.is_floating">tf.DType.is_floating</code></h4>
+<p>Returns whether this is a (non-quantized, real) floating point type.</p>
+<hr />
+<h4 id="tf.dtype.is_complex"><code id="DType.is_complex">tf.DType.is_complex</code></h4>
+<p>Returns whether this is a complex floating point type.</p>
+<hr />
+<h4 id="tf.dtype.is_integer"><code id="DType.is_integer">tf.DType.is_integer</code></h4>
+<p>Returns whether this is a (non-quantized) integer type.</p>
+<hr />
+<h4 id="tf.dtype.is_quantized"><code id="DType.is_quantized">tf.DType.is_quantized</code></h4>
+<p>Returns whether this is a quantized data type.</p>
+<hr />
+<h4 id="tf.dtype.is_unsigned"><code id="DType.is_unsigned">tf.DType.is_unsigned</code></h4>
+<p>Returns whether this type is unsigned.</p>
+<p>Non-numeric, unordered, and quantized types are not considered unsigned, and this function returns <code>False</code>.</p>
+<h5 id="returns-49">Returns:</h5>
+<p>Whether a <code>DType</code> is unsigned.</p>
+<hr />
+<h4 id="tf.dtype.as_numpy_dtype"><code id="DType.as_numpy_dtype">tf.DType.as_numpy_dtype</code></h4>
+<p>Returns a <code>numpy.dtype</code> based on this <code>DType</code>.</p>
+<hr />
+<h4 id="tf.dtype.as_datatype_enum"><code id="DType.as_datatype_enum">tf.DType.as_datatype_enum</code></h4>
+<p>Returns a <code>types_pb2.DataType</code> enum value based on this <code>DType</code>.</p>
+<hr />
+<h4 id="tf.dtype.limits"><code id="DType.limits">tf.DType.limits</code></h4>
+<p>Return intensity limits, i.e. (min, max) tuple, of the dtype.</p>
+<h5 id="args-48">Args:</h5>
+<p>clip_negative : bool, optional If True, clip the negative range (i.e. return 0 for min intensity) even if the image dtype allows negative values. Returns min, max : tuple Lower and upper intensity limits.</p>
+<h4 id="other-methods-3">Other Methods</h4>
+<hr />
+<h4 id="tf.dtype.__eq__other"><code id="DType.__eq__">tf.DType.__eq__(other)</code></h4>
+<p>Returns True iff this DType refers to the same type as <code>other</code>.</p>
+<hr />
+<h4 id="tf.dtype.__hash__"><code id="DType.__hash__">tf.DType.__hash__()</code></h4>
+<hr />
+<h4 id="tf.dtype.__init__type_enum"><code id="DType.__init__">tf.DType.__init__(type_enum)</code></h4>
+<p>Creates a new <code>DataType</code>.</p>
+<p>NOTE(mrry): In normal circumstances, you should not need to construct a <code>DataType</code> object directly. Instead, use the <code>tf.as_dtype()</code> function.</p>
+<h5 id="args-49">Args:</h5>
+<ul>
+<li><b><code>type_enum</code></b>: A <code>types_pb2.DataType</code> enum value.</li>
+</ul>
+<h5 id="raises-19">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>type_enum</code> is not a value <code>types_pb2.DataType</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.dtype.__ne__other"><code id="DType.__ne__">tf.DType.__ne__(other)</code></h4>
+<p>Returns True iff self != other.</p>
+<hr />
+<h4 id="tf.dtype.__repr__"><code id="DType.__repr__">tf.DType.__repr__()</code></h4>
+<hr />
+<h4 id="tf.dtype.__str__"><code id="DType.__str__">tf.DType.__str__()</code></h4>
+<hr />
+<h4 id="tf.dtype.is_numpy_compatible"><code id="DType.is_numpy_compatible">tf.DType.is_numpy_compatible</code></h4>
+<hr />
+<h4 id="tf.dtype.max"><code id="DType.max">tf.DType.max</code></h4>
+<p>Returns the maximum representable value in this data type.</p>
+<h5 id="raises-20">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if this is a non-numeric, unordered, or quantized type.</li>
+</ul>
+<hr />
+<h4 id="tf.dtype.min"><code id="DType.min">tf.DType.min</code></h4>
+<p>Returns the minimum representable value in this data type.</p>
+<h5 id="raises-21">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if this is a non-numeric, unordered, or quantized type.</li>
+</ul>
+<hr />
+<h4 id="tf.dtype.size"><code id="DType.size">tf.DType.size</code></h4>
+<hr />
+<h3 id="tf.as_dtypetype_value"><a name="//apple_ref/cpp/Function/as_dtype" class="dashAnchor"></a><code id="as_dtype">tf.as_dtype(type_value)</code></h3>
+<p>Converts the given <code>type_value</code> to a <code>DType</code>.</p>
+<h5 id="args-50">Args:</h5>
+<ul>
+<li><b><code>type_value</code></b>: A value that can be converted to a <code>tf.DType</code> object. This may currently be a <code>tf.DType</code> object, a <a href="https://www.tensorflow.org/code/tensorflow/core/framework/types.proto"><code>DataType</code> enum</a>, a string type name, or a <code>numpy.dtype</code>.</li>
+</ul>
+<h5 id="returns-50">Returns:</h5>
+<p>A <code>DType</code> corresponding to <code>type_value</code>.</p>
+<h5 id="raises-22">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>type_value</code> cannot be converted to a <code>DType</code>.</li>
+</ul>
+<h2 id="utility-functions">Utility functions</h2>
+<hr />
+<h3 id="tf.devicedevice_name_or_function"><a name="//apple_ref/cpp/Function/device" class="dashAnchor"></a><code id="device">tf.device(device_name_or_function)</code></h3>
+<p>Wrapper for <code>Graph.device()</code> using the default graph.</p>
+<p>See <a href="../../api_docs/python/framework.md#Graph.device"><code>Graph.device()</code></a> for more details.</p>
+<h5 id="args-51">Args:</h5>
+<ul>
+<li><b><code>device_name_or_function</code></b>: The device name or function to use in the context.</li>
+</ul>
+<h5 id="returns-51">Returns:</h5>
+<p>A context manager that specifies the default device to use for newly created ops.</p>
+<hr />
+<h3 id="tf.containercontainer_name"><a name="//apple_ref/cpp/Function/container" class="dashAnchor"></a><code id="container">tf.container(container_name)</code></h3>
+<p>Wrapper for <code>Graph.container()</code> using the default graph.</p>
+<h5 id="args-52">Args:</h5>
+<ul>
+<li><b><code>container_name</code></b>: The container string to use in the context.</li>
+</ul>
+<h5 id="returns-52">Returns:</h5>
+<p>A context manager that specifies the default container to use for newly created stateful ops.</p>
+<hr />
+<h3 id="tf.name_scopename-default_namenone-valuesnone"><a name="//apple_ref/cpp/Function/name_scope" class="dashAnchor"></a><code id="name_scope">tf.name_scope(name, default_name=None, values=None)</code></h3>
+<p>Returns a context manager for use when defining a Python op.</p>
+<p>This context manager validates that the given <code>values</code> are from the same graph, makes that graph the default graph, and pushes a name scope in that graph (see <a href="../../api_docs/python/framework.md#Graph.name_scope"><code>Graph.name_scope()</code></a> for more details on that).</p>
+<p>For example, to define a new Python op called <code>my_op</code>:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="kw">def</span> my_op(a, b, c, name<span class="op">=</span><span class="va">None</span>):
+  <span class="cf">with</span> tf.name_scope(name, <span class="st">&quot;MyOp&quot;</span>, [a, b, c]) <span class="im">as</span> scope:
+    a <span class="op">=</span> tf.convert_to_tensor(a, name<span class="op">=</span><span class="st">&quot;a&quot;</span>)
+    b <span class="op">=</span> tf.convert_to_tensor(b, name<span class="op">=</span><span class="st">&quot;b&quot;</span>)
+    c <span class="op">=</span> tf.convert_to_tensor(c, name<span class="op">=</span><span class="st">&quot;c&quot;</span>)
+    <span class="co"># Define some computation that uses `a`, `b`, and `c`.</span>
+    <span class="cf">return</span> foo_op(..., name<span class="op">=</span>scope)</code></pre></div>
+<h5 id="args-53">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: The name argument that is passed to the op function.</li>
+<li><b><code>default_name</code></b>: The default name to use if the <code>name</code> argument is <code>None</code>.</li>
+<li><b><code>values</code></b>: The list of <code>Tensor</code> arguments that are passed to the op function.</li>
+</ul>
+<h5 id="returns-53">Returns:</h5>
+<p>A context manager for use in defining Python ops. Yields the name scope.</p>
+<h5 id="raises-23">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if neither <code>name</code> nor <code>default_name</code> is provided but <code>values</code> are.</li>
+</ul>
+<hr />
+<h3 id="tf.control_dependenciescontrol_inputs"><a name="//apple_ref/cpp/Function/control_dependencies" class="dashAnchor"></a><code id="control_dependencies">tf.control_dependencies(control_inputs)</code></h3>
+<p>Wrapper for <code>Graph.control_dependencies()</code> using the default graph.</p>
+<p>See <a href="../../api_docs/python/framework.md#Graph.control_dependencies"><code>Graph.control_dependencies()</code></a> for more details.</p>
+<h5 id="args-54">Args:</h5>
+<ul>
+<li><b><code>control_inputs</code></b>: A list of <code>Operation</code> or <code>Tensor</code> objects which must be executed or computed before running the operations defined in the context. Can also be <code>None</code> to clear the control dependencies.</li>
+</ul>
+<h5 id="returns-54">Returns:</h5>
+<p>A context manager that specifies control dependencies for all operations constructed within the context.</p>
+<hr />
+<h3 id="tf.convert_to_tensorvalue-dtypenone-namenone-preferred_dtypenone"><a name="//apple_ref/cpp/Function/convert_to_tensor" class="dashAnchor"></a><code id="convert_to_tensor">tf.convert_to_tensor(value, dtype=None, name=None, preferred_dtype=None)</code></h3>
+<p>Converts the given <code>value</code> to a <code>Tensor</code>.</p>
+<p>This function converts Python objects of various types to <code>Tensor</code> objects. It accepts <code>Tensor</code> objects, numpy arrays, Python lists, and Python scalars. For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">import</span> numpy <span class="im">as</span> np
+
+<span class="kw">def</span> my_func(arg):
+  arg <span class="op">=</span> tf.convert_to_tensor(arg, dtype<span class="op">=</span>tf.float32)
+  <span class="cf">return</span> tf.matmul(arg, arg) <span class="op">+</span> arg
+
+<span class="co"># The following calls are equivalent.</span>
+value_1 <span class="op">=</span> my_func(tf.constant([[<span class="fl">1.0</span>, <span class="fl">2.0</span>], [<span class="fl">3.0</span>, <span class="fl">4.0</span>]]))
+value_2 <span class="op">=</span> my_func([[<span class="fl">1.0</span>, <span class="fl">2.0</span>], [<span class="fl">3.0</span>, <span class="fl">4.0</span>]])
+value_3 <span class="op">=</span> my_func(np.array([[<span class="fl">1.0</span>, <span class="fl">2.0</span>], [<span class="fl">3.0</span>, <span class="fl">4.0</span>]], dtype<span class="op">=</span>np.float32))</code></pre></div>
+<p>This function can be useful when composing a new operation in Python (such as <code>my_func</code> in the example above). All standard Python op constructors apply this function to each of their Tensor-valued inputs, which allows those ops to accept numpy arrays, Python lists, and scalars in addition to <code>Tensor</code> objects.</p>
+<h5 id="args-55">Args:</h5>
+<ul>
+<li><b><code>value</code></b>: An object whose type has a registered <code>Tensor</code> conversion function.</li>
+<li><b><code>dtype</code></b>: Optional element type for the returned tensor. If missing, the type is inferred from the type of <code>value</code>.</li>
+<li><b><code>name</code></b>: Optional name to use if a new <code>Tensor</code> is created.</li>
+<li><b><code>preferred_dtype</code></b>: Optional element type for the returned tensor, used when dtype is None. In some cases, a caller may not have a dtype in mind when converting to a tensor, so preferred_dtype can be used as a soft preference. If the conversion to <code>preferred_dtype</code> is not possible, this argument has no effect.</li>
+</ul>
+<h5 id="returns-55">Returns:</h5>
+<p>An <code>Output</code> based on <code>value</code>.</p>
+<h5 id="raises-24">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If no conversion function is registered for <code>value</code>.</li>
+<li><b><code>RuntimeError</code></b>: If a registered conversion function returns an invalid value.</li>
+</ul>
+<hr />
+<h3 id="tf.convert_to_tensor_or_indexed_slicesvalue-dtypenone-namenone"><a name="//apple_ref/cpp/Function/convert_to_tensor_or_indexed_slices" class="dashAnchor"></a><code id="convert_to_tensor_or_indexed_slices">tf.convert_to_tensor_or_indexed_slices(value, dtype=None, name=None)</code></h3>
+<p>Converts the given object to a <code>Tensor</code> or an <code>IndexedSlices</code>.</p>
+<p>If <code>value</code> is an <code>IndexedSlices</code> or <code>SparseTensor</code> it is returned unmodified. Otherwise, it is converted to a <code>Tensor</code> using <code>convert_to_tensor()</code>.</p>
+<h5 id="args-56">Args:</h5>
+<ul>
+<li><b><code>value</code></b>: An <code>IndexedSlices</code>, <code>SparseTensor</code>, or an object that can be consumed by <code>convert_to_tensor()</code>.</li>
+<li><b><code>dtype</code></b>: (Optional.) The required <code>DType</code> of the returned <code>Tensor</code> or <code>IndexedSlices</code>.</li>
+<li><b><code>name</code></b>: (Optional.) A name to use if a new <code>Tensor</code> is created.</li>
+</ul>
+<h5 id="returns-56">Returns:</h5>
+<p>An <code>Tensor</code>, <code>IndexedSlices</code>, or <code>SparseTensor</code> based on <code>value</code>.</p>
+<h5 id="raises-25">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>dtype</code> does not match the element type of <code>value</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.convert_to_tensor_or_sparse_tensorvalue-dtypenone-namenone"><a name="//apple_ref/cpp/Function/convert_to_tensor_or_sparse_tensor" class="dashAnchor"></a><code id="convert_to_tensor_or_sparse_tensor">tf.convert_to_tensor_or_sparse_tensor(value, dtype=None, name=None)</code></h3>
+<p>Converts value to a <code>SparseTensor</code> or <code>Tensor</code>.</p>
+<h5 id="args-57">Args:</h5>
+<ul>
+<li><b><code>value</code></b>: A <code>SparseTensor</code>, <code>SparseTensorValue</code>, or an object whose type has a registered <code>Tensor</code> conversion function.</li>
+<li><b><code>dtype</code></b>: Optional element type for the returned tensor. If missing, the type is inferred from the type of <code>value</code>.</li>
+<li><b><code>name</code></b>: Optional name to use if a new <code>Tensor</code> is created.</li>
+</ul>
+<h5 id="returns-57">Returns:</h5>
+<p>A <code>SparseTensor</code> or <code>Tensor</code> based on <code>value</code>.</p>
+<h5 id="raises-26">Raises:</h5>
+<ul>
+<li><b><code>RuntimeError</code></b>: If result type is incompatible with <code>dtype</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.get_default_graph"><a name="//apple_ref/cpp/Function/get_default_graph" class="dashAnchor"></a><code id="get_default_graph">tf.get_default_graph()</code></h3>
+<p>Returns the default graph for the current thread.</p>
+<p>The returned graph will be the innermost graph on which a <code>Graph.as_default()</code> context has been entered, or a global default graph if none has been explicitly created.</p>
+<p>NOTE: The default graph is a property of the current thread. If you create a new thread, and wish to use the default graph in that thread, you must explicitly add a <code>with g.as_default():</code> in that thread's function.</p>
+<h5 id="returns-58">Returns:</h5>
+<p>The default <code>Graph</code> being used in the current thread.</p>
+<hr />
+<h3 id="tf.reset_default_graph"><a name="//apple_ref/cpp/Function/reset_default_graph" class="dashAnchor"></a><code id="reset_default_graph">tf.reset_default_graph()</code></h3>
+<p>Clears the default graph stack and resets the global default graph.</p>
+<p>NOTE: The default graph is a property of the current thread. This function applies only to the current thread. Calling this function while a <code>tf.Session</code> or <code>tf.InteractiveSession</code> is active will result in undefined behavior. Using any previously created <code>tf.Operation</code> or <code>tf.Tensor</code> objects after calling this function will result in undefined behavior.</p>
+<hr />
+<h3 id="tf.import_graph_defgraph_def-input_mapnone-return_elementsnone-namenone-op_dictnone-producer_op_listnone"><a name="//apple_ref/cpp/Function/import_graph_def" class="dashAnchor"></a><code id="import_graph_def">tf.import_graph_def(graph_def, input_map=None, return_elements=None, name=None, op_dict=None, producer_op_list=None)</code></h3>
+<p>Imports the TensorFlow graph in <code>graph_def</code> into the Python <code>Graph</code>.</p>
+<p>This function provides a way to import a serialized TensorFlow <a href="https://www.tensorflow.org/code/tensorflow/core/framework/graph.proto"><code>GraphDef</code></a> protocol buffer, and extract individual objects in the <code>GraphDef</code> as <a href="#Tensor"><code>Tensor</code></a> and <a href="#Operation"><code>Operation</code></a> objects. See <a href="#Graph.as_graph_def"><code>Graph.as_graph_def()</code></a> for a way to create a <code>GraphDef</code> proto.</p>
+<h5 id="args-58">Args:</h5>
+<ul>
+<li><b><code>graph_def</code></b>: A <code>GraphDef</code> proto containing operations to be imported into the default graph.</li>
+<li><b><code>input_map</code></b>: A dictionary mapping input names (as strings) in <code>graph_def</code> to <code>Tensor</code> objects. The values of the named input tensors in the imported graph will be re-mapped to the respective <code>Tensor</code> values.</li>
+<li><b><code>return_elements</code></b>: A list of strings containing operation names in <code>graph_def</code> that will be returned as <code>Operation</code> objects; and/or tensor names in <code>graph_def</code> that will be returned as <code>Tensor</code> objects.</li>
+<li><b><code>name</code></b>: (Optional.) A prefix that will be prepended to the names in <code>graph_def</code>. Defaults to <code>&quot;import&quot;</code>.</li>
+<li><b><code>op_dict</code></b>: (Optional.) A dictionary mapping op type names to <code>OpDef</code> protos. Must contain an <code>OpDef</code> proto for each op type named in <code>graph_def</code>. If omitted, uses the <code>OpDef</code> protos registered in the global registry.</li>
+<li><b><code>producer_op_list</code></b>: (Optional.) An <code>OpList</code> proto with the (possibly stripped) list of <code>OpDef</code>s used by the producer of the graph. If provided, attrs for ops in <code>graph_def</code> that are not in <code>op_dict</code> that have their default value according to <code>producer_op_list</code> will be removed. This will allow some more <code>GraphDef</code>s produced by later binaries to be accepted by earlier binaries.</li>
+</ul>
+<h5 id="returns-59">Returns:</h5>
+<p>A list of <code>Operation</code> and/or <code>Tensor</code> objects from the imported graph, corresponding to the names in <code>return_elements</code>.</p>
+<h5 id="raises-27">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>graph_def</code> is not a <code>GraphDef</code> proto, <code>input_map</code> is not a dictionary mapping strings to <code>Tensor</code> objects, or <code>return_elements</code> is not a list of strings.</li>
+<li><b><code>ValueError</code></b>: If <code>input_map</code>, or <code>return_elements</code> contains names that do not appear in <code>graph_def</code>, or <code>graph_def</code> is not well-formed (e.g. it refers to an unknown tensor).</li>
+</ul>
+<hr />
+<h3 id="tf.load_file_system_librarylibrary_filename"><a name="//apple_ref/cpp/Function/load_file_system_library" class="dashAnchor"></a><code id="load_file_system_library">tf.load_file_system_library(library_filename)</code></h3>
+<p>Loads a TensorFlow plugin, containing file system implementation.</p>
+<p>Pass <code>library_filename</code> to a platform-specific mechanism for dynamically loading a library. The rules for determining the exact location of the library are platform-specific and are not documented here.</p>
+<h5 id="args-59">Args:</h5>
+<ul>
+<li><b><code>library_filename</code></b>: Path to the plugin. Relative or absolute filesystem path to a dynamic library file.</li>
+</ul>
+<h5 id="returns-60">Returns:</h5>
+<p>None.</p>
+<h5 id="raises-28">Raises:</h5>
+<ul>
+<li><b><code>RuntimeError</code></b>: when unable to load the library.</li>
+</ul>
+<hr />
+<h3 id="tf.load_op_librarylibrary_filename"><a name="//apple_ref/cpp/Function/load_op_library" class="dashAnchor"></a><code id="load_op_library">tf.load_op_library(library_filename)</code></h3>
+<p>Loads a TensorFlow plugin, containing custom ops and kernels.</p>
+<p>Pass &quot;library_filename&quot; to a platform-specific mechanism for dynamically loading a library. The rules for determining the exact location of the library are platform-specific and are not documented here. When the library is loaded, ops and kernels registered in the library via the <code>REGISTER_*</code> macros are made available in the TensorFlow process. Note that ops with the same name as an existing op are rejected and not registered with the process.</p>
+<h5 id="args-60">Args:</h5>
+<ul>
+<li><b><code>library_filename</code></b>: Path to the plugin. Relative or absolute filesystem path to a dynamic library file.</li>
+</ul>
+<h5 id="returns-61">Returns:</h5>
+<p>A python module containing the Python wrappers for Ops defined in the plugin.</p>
+<h5 id="raises-29">Raises:</h5>
+<ul>
+<li><b><code>RuntimeError</code></b>: when unable to load the library or get the python wrappers.</li>
+</ul>
+<h2 id="graph-collections">Graph collections</h2>
+<hr />
+<h3 id="tf.add_to_collectionname-value"><a name="//apple_ref/cpp/Function/add_to_collection" class="dashAnchor"></a><code id="add_to_collection">tf.add_to_collection(name, value)</code></h3>
+<p>Wrapper for <code>Graph.add_to_collection()</code> using the default graph.</p>
+<p>See <a href="../../api_docs/python/framework.md#Graph.add_to_collection"><code>Graph.add_to_collection()</code></a> for more details.</p>
+<h5 id="args-61">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: The key for the collection. For example, the <code>GraphKeys</code> class contains many standard names for collections.</li>
+<li><b><code>value</code></b>: The value to add to the collection.</li>
+</ul>
+<hr />
+<h3 id="tf.get_collectionkey-scopenone"><a name="//apple_ref/cpp/Function/get_collection" class="dashAnchor"></a><code id="get_collection">tf.get_collection(key, scope=None)</code></h3>
+<p>Wrapper for <code>Graph.get_collection()</code> using the default graph.</p>
+<p>See <a href="../../api_docs/python/framework.md#Graph.get_collection"><code>Graph.get_collection()</code></a> for more details.</p>
+<h5 id="args-62">Args:</h5>
+<ul>
+<li><b><code>key</code></b>: The key for the collection. For example, the <code>GraphKeys</code> class contains many standard names for collections.</li>
+<li><b><code>scope</code></b>: (Optional.) If supplied, the resulting list is filtered to include only items whose <code>name</code> attribute matches using <code>re.match</code>. Items without a <code>name</code> attribute are never returned if a scope is supplied and the choice or <code>re.match</code> means that a <code>scope</code> without special tokens filters by prefix.</li>
+</ul>
+<h5 id="returns-62">Returns:</h5>
+<p>The list of values in the collection with the given <code>name</code>, or an empty list if no value has been added to that collection. The list contains the values in the order under which they were collected.</p>
+<hr />
+<h3 id="tf.get_collection_refkey"><a name="//apple_ref/cpp/Function/get_collection_ref" class="dashAnchor"></a><code id="get_collection_ref">tf.get_collection_ref(key)</code></h3>
+<p>Wrapper for <code>Graph.get_collection_ref()</code> using the default graph.</p>
+<p>See <a href="../../api_docs/python/framework.md#Graph.get_collection_ref"><code>Graph.get_collection_ref()</code></a> for more details.</p>
+<h5 id="args-63">Args:</h5>
+<ul>
+<li><b><code>key</code></b>: The key for the collection. For example, the <code>GraphKeys</code> class contains many standard names for collections.</li>
+</ul>
+<h5 id="returns-63">Returns:</h5>
+<p>The list of values in the collection with the given <code>name</code>, or an empty list if no value has been added to that collection. Note that this returns the collection list itself, which can be modified in place to change the collection.</p>
+<hr />
+<h3 id="class-tf.graphkeys"><a name="//apple_ref/cpp/Class/GraphKeys" class="dashAnchor"></a><code id="GraphKeys">class tf.GraphKeys</code></h3>
+<p>Standard names to use for graph collections.</p>
+<p>The standard library uses various well-known names to collect and retrieve values associated with a graph. For example, the <code>tf.Optimizer</code> subclasses default to optimizing the variables collected under <code>tf.GraphKeys.TRAINABLE_VARIABLES</code> if none is specified, but it is also possible to pass an explicit list of variables.</p>
+<p>The following standard keys are defined:</p>
+<ul>
+<li><code>GLOBAL_VARIABLES</code>: the default collection of <code>Variable</code> objects, shared across distributed environment (model variables are subset of these). See <a href="../../api_docs/python/state_ops.md#global_variables"><code>tf.global_variables()</code></a> for more details. Commonly, all <code>TRAINABLE_VARIABLES</code> variables will be in <code>MODEL_VARIABLES</code>, and all <code>MODEL_VARIABLES</code> variables will be in <code>GLOBAL_VARIABLES</code>.</li>
+<li><code>LOCAL_VARIABLES</code>: the subset of <code>Variable</code> objects that are local to each machine. Usually used for temporarily variables, like counters. Note: use <code>tf.contrib.framework.local_variable</code> to add to this collection.</li>
+<li><code>MODEL_VARIABLES</code>: the subset of <code>Variable</code> objects that are used in the model for inference (feed forward). Note: use <code>tf.contrib.framework.model_variable</code> to add to this collection.</li>
+<li><code>TRAINABLE_VARIABLES</code>: the subset of <code>Variable</code> objects that will be trained by an optimizer. See <a href="../../api_docs/python/state_ops.md#trainable_variables"><code>tf.trainable_variables()</code></a> for more details.</li>
+<li><code>SUMMARIES</code>: the summary <code>Tensor</code> objects that have been created in the graph. See <a href="../../api_docs/python/summary.md#merge_all"><code>tf.summary.merge_all()</code></a> for more details.</li>
+<li><code>QUEUE_RUNNERS</code>: the <code>QueueRunner</code> objects that are used to produce input for a computation. See <a href="../../api_docs/python/train.md#start_queue_runners"><code>tf.start_queue_runners()</code></a> for more details.</li>
+<li><code>MOVING_AVERAGE_VARIABLES</code>: the subset of <code>Variable</code> objects that will also keep moving averages. See <a href="../../api_docs/python/state_ops.md#moving_average_variables"><code>tf.moving_average_variables()</code></a> for more details.</li>
+<li><code>REGULARIZATION_LOSSES</code>: regularization losses collected during graph construction.</li>
+<li><code>WEIGHTS</code>: weights inside neural network layers</li>
+<li><code>BIASES</code>: biases inside neural network layers</li>
+<li><code>ACTIVATIONS</code>: activations of neural network layers</li>
+</ul>
+<h2 id="defining-new-operations">Defining new operations</h2>
+<hr />
+<h3 id="class-tf.registergradient"><a name="//apple_ref/cpp/Class/RegisterGradient" class="dashAnchor"></a><code id="RegisterGradient">class tf.RegisterGradient</code></h3>
+<p>A decorator for registering the gradient function for an op type.</p>
+<p>This decorator is only used when defining a new op type. For an op with <code>m</code> inputs and <code>n</code> outputs, the gradient function is a function that takes the original <code>Operation</code> and <code>n</code> <code>Tensor</code> objects (representing the gradients with respect to each output of the op), and returns <code>m</code> <code>Tensor</code> objects (representing the partial gradients with respect to each input of the op).</p>
+<p>For example, assuming that operations of type <code>&quot;Sub&quot;</code> take two inputs <code>x</code> and <code>y</code>, and return a single output <code>x - y</code>, the following gradient function would be registered:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="at">@tf.RegisterGradient</span>(<span class="st">&quot;Sub&quot;</span>)
+<span class="kw">def</span> _sub_grad(unused_op, grad):
+  <span class="cf">return</span> grad, tf.negative(grad)</code></pre></div>
+<p>The decorator argument <code>op_type</code> is the string type of an operation. This corresponds to the <code>OpDef.name</code> field for the proto that defines the operation.</p>
+<hr />
+<h4 id="tf.registergradient.__init__op_type"><code id="RegisterGradient.__init__">tf.RegisterGradient.__init__(op_type)</code></h4>
+<p>Creates a new decorator with <code>op_type</code> as the Operation type.</p>
+<h5 id="args-64">Args:</h5>
+<ul>
+<li><b><code>op_type</code></b>: The string type of an operation. This corresponds to the <code>OpDef.name</code> field for the proto that defines the operation.</li>
+</ul>
+<h4 id="other-methods-4">Other Methods</h4>
+<hr />
+<h4 id="tf.registergradient.__call__f"><code id="RegisterGradient.__call__">tf.RegisterGradient.__call__(f)</code></h4>
+<p>Registers the function <code>f</code> as gradient function for <code>op_type</code>.</p>
+<hr />
+<h3 id="tf.notdifferentiableop_type"><a name="//apple_ref/cpp/Class/NotDifferentiable" class="dashAnchor"></a><code id="NotDifferentiable">tf.NotDifferentiable(op_type)</code></h3>
+<p>Specifies that ops of type <code>op_type</code> is not differentiable.</p>
+<p>This function should <em>not</em> be used for operations that have a well-defined gradient that is not yet implemented.</p>
+<p>This function is only used when defining a new op type. It may be used for ops such as <code>tf.size()</code> that are not differentiable. For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.NotDifferentiable(<span class="st">&quot;Size&quot;</span>)</code></pre></div>
+<p>The gradient computed for 'op_type' will then propagate zeros.</p>
+<p>For ops that have a well-defined gradient but are not yet implemented, no declaration should be made, and an error <em>must</em> be thrown if an attempt to request its gradient is made.</p>
+<h5 id="args-65">Args:</h5>
+<ul>
+<li><b><code>op_type</code></b>: The string type of an operation. This corresponds to the <code>OpDef.name</code> field for the proto that defines the operation.</li>
+</ul>
+<h5 id="raises-30">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>op_type</code> is not a string.</li>
+</ul>
+<hr />
+<h3 id="tf.nogradientop_type"><a name="//apple_ref/cpp/Class/NoGradient" class="dashAnchor"></a><code id="NoGradient">tf.NoGradient(op_type)</code></h3>
+<p>Specifies that ops of type <code>op_type</code> is not differentiable.</p>
+<p>This function should <em>not</em> be used for operations that have a well-defined gradient that is not yet implemented.</p>
+<p>This function is only used when defining a new op type. It may be used for ops such as <code>tf.size()</code> that are not differentiable. For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.NotDifferentiable(<span class="st">&quot;Size&quot;</span>)</code></pre></div>
+<p>The gradient computed for 'op_type' will then propagate zeros.</p>
+<p>For ops that have a well-defined gradient but are not yet implemented, no declaration should be made, and an error <em>must</em> be thrown if an attempt to request its gradient is made.</p>
+<h5 id="args-66">Args:</h5>
+<ul>
+<li><b><code>op_type</code></b>: The string type of an operation. This corresponds to the <code>OpDef.name</code> field for the proto that defines the operation.</li>
+</ul>
+<h5 id="raises-31">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>op_type</code> is not a string.</li>
+</ul>
+<hr />
+<h3 id="class-tf.tensorshape"><a name="//apple_ref/cpp/Class/TensorShape" class="dashAnchor"></a><code id="TensorShape">class tf.TensorShape</code></h3>
+<p>Represents the shape of a <code>Tensor</code>.</p>
+<p>A <code>TensorShape</code> represents a possibly-partial shape specification for a <code>Tensor</code>. It may be one of the following:</p>
+<ul>
+<li><em>Fully-known shape:</em> has a known number of dimensions and a known size for each dimension.</li>
+<li><em>Partially-known shape:</em> has a known number of dimensions, and an unknown size for one or more dimension.</li>
+<li><em>Unknown shape:</em> has an unknown number of dimensions, and an unknown size in all dimensions.</li>
+</ul>
+<p>If a tensor is produced by an operation of type <code>&quot;Foo&quot;</code>, its shape may be inferred if there is a registered shape function for <code>&quot;Foo&quot;</code>. See <a href="../../how_tos/adding_an_op/index.md#shape-functions-in-c"><code>Shape functions in C++</code></a> for details of shape functions and how to register them. Alternatively, the shape may be set explicitly using <a href="../../api_docs/python/framework.md#Tensor.set_shape"><code>Tensor.set_shape()</code></a>.</p>
+<hr />
+<h4 id="tf.tensorshape.merge_withother"><code id="TensorShape.merge_with">tf.TensorShape.merge_with(other)</code></h4>
+<p>Returns a <code>TensorShape</code> combining the information in <code>self</code> and <code>other</code>.</p>
+<p>The dimensions in <code>self</code> and <code>other</code> are merged elementwise, according to the rules defined for <code>Dimension.merge_with()</code>.</p>
+<h5 id="args-67">Args:</h5>
+<ul>
+<li><b><code>other</code></b>: Another <code>TensorShape</code>.</li>
+</ul>
+<h5 id="returns-64">Returns:</h5>
+<p>A <code>TensorShape</code> containing the combined information of <code>self</code> and <code>other</code>.</p>
+<h5 id="raises-32">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>self</code> and <code>other</code> are not compatible.</li>
+</ul>
+<hr />
+<h4 id="tf.tensorshape.concatenateother"><code id="TensorShape.concatenate">tf.TensorShape.concatenate(other)</code></h4>
+<p>Returns the concatenation of the dimension in <code>self</code> and <code>other</code>.</p>
+<p><em>N.B.</em> If either <code>self</code> or <code>other</code> is completely unknown, concatenation will discard information about the other shape. In future, we might support concatenation that preserves this information for use with slicing.</p>
+<h5 id="args-68">Args:</h5>
+<ul>
+<li><b><code>other</code></b>: Another <code>TensorShape</code>.</li>
+</ul>
+<h5 id="returns-65">Returns:</h5>
+<p>A <code>TensorShape</code> whose dimensions are the concatenation of the dimensions in <code>self</code> and <code>other</code>.</p>
+<hr />
+<h4 id="tf.tensorshape.ndims"><code id="TensorShape.ndims">tf.TensorShape.ndims</code></h4>
+<p>Returns the rank of this shape, or None if it is unspecified.</p>
+<hr />
+<h4 id="tf.tensorshape.dims"><code id="TensorShape.dims">tf.TensorShape.dims</code></h4>
+<p>Returns a list of Dimensions, or None if the shape is unspecified.</p>
+<hr />
+<h4 id="tf.tensorshape.as_list"><code id="TensorShape.as_list">tf.TensorShape.as_list()</code></h4>
+<p>Returns a list of integers or <code>None</code> for each dimension.</p>
+<h5 id="returns-66">Returns:</h5>
+<p>A list of integers or <code>None</code> for each dimension.</p>
+<h5 id="raises-33">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>self</code> is an unknown shape with an unknown rank.</li>
+</ul>
+<hr />
+<h4 id="tf.tensorshape.as_proto"><code id="TensorShape.as_proto">tf.TensorShape.as_proto()</code></h4>
+<p>Returns this shape as a <code>TensorShapeProto</code>.</p>
+<hr />
+<h4 id="tf.tensorshape.is_compatible_withother"><code id="TensorShape.is_compatible_with">tf.TensorShape.is_compatible_with(other)</code></h4>
+<p>Returns True iff <code>self</code> is compatible with <code>other</code>.</p>
+<p>Two possibly-partially-defined shapes are compatible if there exists a fully-defined shape that both shapes can represent. Thus, compatibility allows the shape inference code to reason about partially-defined shapes. For example:</p>
+<ul>
+<li><p>TensorShape(None) is compatible with all shapes.</p></li>
+<li><p>TensorShape([None, None]) is compatible with all two-dimensional shapes, such as TensorShape([32, 784]), and also TensorShape(None). It is not compatible with, for example, TensorShape([None]) or TensorShape([None, None, None]).</p></li>
+<li><p>TensorShape([32, None]) is compatible with all two-dimensional shapes with size 32 in the 0th dimension, and also TensorShape([None, None]) and TensorShape(None). It is not compatible with, for example, TensorShape([32]), TensorShape([32, None, 1]) or TensorShape([64, None]).</p></li>
+<li><p>TensorShape([32, 784]) is compatible with itself, and also TensorShape([32, None]), TensorShape([None, 784]), TensorShape([None, None]) and TensorShape(None). It is not compatible with, for example, TensorShape([32, 1, 784]) or TensorShape([None]).</p></li>
+</ul>
+<p>The compatibility relation is reflexive and symmetric, but not transitive. For example, TensorShape([32, 784]) is compatible with TensorShape(None), and TensorShape(None) is compatible with TensorShape([4, 4]), but TensorShape([32, 784]) is not compatible with TensorShape([4, 4]).</p>
+<h5 id="args-69">Args:</h5>
+<ul>
+<li><b><code>other</code></b>: Another TensorShape.</li>
+</ul>
+<h5 id="returns-67">Returns:</h5>
+<p>True iff <code>self</code> is compatible with <code>other</code>.</p>
+<hr />
+<h4 id="tf.tensorshape.is_fully_defined"><code id="TensorShape.is_fully_defined">tf.TensorShape.is_fully_defined()</code></h4>
+<p>Returns True iff <code>self</code> is fully defined in every dimension.</p>
+<hr />
+<h4 id="tf.tensorshape.with_rankrank"><code id="TensorShape.with_rank">tf.TensorShape.with_rank(rank)</code></h4>
+<p>Returns a shape based on <code>self</code> with the given rank.</p>
+<p>This method promotes a completely unknown shape to one with a known rank.</p>
+<h5 id="args-70">Args:</h5>
+<ul>
+<li><b><code>rank</code></b>: An integer.</li>
+</ul>
+<h5 id="returns-68">Returns:</h5>
+<p>A shape that is at least as specific as <code>self</code> with the given rank.</p>
+<h5 id="raises-34">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>self</code> does not represent a shape with the given <code>rank</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.tensorshape.with_rank_at_leastrank"><code id="TensorShape.with_rank_at_least">tf.TensorShape.with_rank_at_least(rank)</code></h4>
+<p>Returns a shape based on <code>self</code> with at least the given rank.</p>
+<h5 id="args-71">Args:</h5>
+<ul>
+<li><b><code>rank</code></b>: An integer.</li>
+</ul>
+<h5 id="returns-69">Returns:</h5>
+<p>A shape that is at least as specific as <code>self</code> with at least the given rank.</p>
+<h5 id="raises-35">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>self</code> does not represent a shape with at least the given <code>rank</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.tensorshape.with_rank_at_mostrank"><code id="TensorShape.with_rank_at_most">tf.TensorShape.with_rank_at_most(rank)</code></h4>
+<p>Returns a shape based on <code>self</code> with at most the given rank.</p>
+<h5 id="args-72">Args:</h5>
+<ul>
+<li><b><code>rank</code></b>: An integer.</li>
+</ul>
+<h5 id="returns-70">Returns:</h5>
+<p>A shape that is at least as specific as <code>self</code> with at most the given rank.</p>
+<h5 id="raises-36">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>self</code> does not represent a shape with at most the given <code>rank</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.tensorshape.assert_has_rankrank"><code id="TensorShape.assert_has_rank">tf.TensorShape.assert_has_rank(rank)</code></h4>
+<p>Raises an exception if <code>self</code> is not compatible with the given <code>rank</code>.</p>
+<h5 id="args-73">Args:</h5>
+<ul>
+<li><b><code>rank</code></b>: An integer.</li>
+</ul>
+<h5 id="raises-37">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>self</code> does not represent a shape with the given <code>rank</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.tensorshape.assert_same_rankother"><code id="TensorShape.assert_same_rank">tf.TensorShape.assert_same_rank(other)</code></h4>
+<p>Raises an exception if <code>self</code> and <code>other</code> do not have compatible ranks.</p>
+<h5 id="args-74">Args:</h5>
+<ul>
+<li><b><code>other</code></b>: Another <code>TensorShape</code>.</li>
+</ul>
+<h5 id="raises-38">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>self</code> and <code>other</code> do not represent shapes with the same rank.</li>
+</ul>
+<hr />
+<h4 id="tf.tensorshape.assert_is_compatible_withother"><code id="TensorShape.assert_is_compatible_with">tf.TensorShape.assert_is_compatible_with(other)</code></h4>
+<p>Raises exception if <code>self</code> and <code>other</code> do not represent the same shape.</p>
+<p>This method can be used to assert that there exists a shape that both <code>self</code> and <code>other</code> represent.</p>
+<h5 id="args-75">Args:</h5>
+<ul>
+<li><b><code>other</code></b>: Another TensorShape.</li>
+</ul>
+<h5 id="raises-39">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>self</code> and <code>other</code> do not represent the same shape.</li>
+</ul>
+<hr />
+<h4 id="tf.tensorshape.assert_is_fully_defined"><code id="TensorShape.assert_is_fully_defined">tf.TensorShape.assert_is_fully_defined()</code></h4>
+<p>Raises an exception if <code>self</code> is not fully defined in every dimension.</p>
+<h5 id="raises-40">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>self</code> does not have a known value for every dimension.</li>
+</ul>
+<h4 id="other-methods-5">Other Methods</h4>
+<hr />
+<h4 id="tf.tensorshape.__bool__"><code id="TensorShape.__bool__">tf.TensorShape.__bool__()</code></h4>
+<p>Returns True if this shape contains non-zero information.</p>
+<hr />
+<h4 id="tf.tensorshape.__eq__other"><code id="TensorShape.__eq__">tf.TensorShape.__eq__(other)</code></h4>
+<p>Returns True if <code>self</code> is equivalent to <code>other</code>.</p>
+<hr />
+<h4 id="tf.tensorshape.__getitem__key"><code id="TensorShape.__getitem__">tf.TensorShape.__getitem__(key)</code></h4>
+<p>Returns the value of a dimension or a shape, depending on the key.</p>
+<h5 id="args-76">Args:</h5>
+<ul>
+<li><b><code>key</code></b>: If <code>key</code> is an integer, returns the dimension at that index; otherwise if <code>key</code> is a slice, returns a TensorShape whose dimensions are those selected by the slice from <code>self</code>.</li>
+</ul>
+<h5 id="returns-71">Returns:</h5>
+<p>A dimension if <code>key</code> is an integer, or a <code>TensorShape</code> if <code>key</code> is a slice.</p>
+<h5 id="raises-41">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>key</code> is a slice, and any of its elements are negative, or if <code>self</code> is completely unknown and the step is set.</li>
+</ul>
+<hr />
+<h4 id="tf.tensorshape.__init__dims"><code id="TensorShape.__init__">tf.TensorShape.__init__(dims)</code></h4>
+<p>Creates a new TensorShape with the given dimensions.</p>
+<h5 id="args-77">Args:</h5>
+<ul>
+<li><b><code>dims</code></b>: A list of Dimensions, or None if the shape is unspecified.</li>
+<li><b><code>DEPRECATED</code></b>: A single integer is treated as a singleton list.</li>
+</ul>
+<h5 id="raises-42">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If dims cannot be converted to a list of dimensions.</li>
+</ul>
+<hr />
+<h4 id="tf.tensorshape.__iter__"><code id="TensorShape.__iter__">tf.TensorShape.__iter__()</code></h4>
+<p>Returns <code>self.dims</code> if the rank is known, otherwise raises ValueError.</p>
+<hr />
+<h4 id="tf.tensorshape.__len__"><code id="TensorShape.__len__">tf.TensorShape.__len__()</code></h4>
+<p>Returns the rank of this shape, or raises ValueError if unspecified.</p>
+<hr />
+<h4 id="tf.tensorshape.__ne__other"><code id="TensorShape.__ne__">tf.TensorShape.__ne__(other)</code></h4>
+<p>Returns True if <code>self</code> is known to be different from <code>other</code>.</p>
+<hr />
+<h4 id="tf.tensorshape.__nonzero__"><code id="TensorShape.__nonzero__">tf.TensorShape.__nonzero__()</code></h4>
+<p>Returns True if this shape contains non-zero information.</p>
+<hr />
+<h4 id="tf.tensorshape.__repr__"><code id="TensorShape.__repr__">tf.TensorShape.__repr__()</code></h4>
+<hr />
+<h4 id="tf.tensorshape.__str__"><code id="TensorShape.__str__">tf.TensorShape.__str__()</code></h4>
+<hr />
+<h4 id="tf.tensorshape.num_elements"><code id="TensorShape.num_elements">tf.TensorShape.num_elements()</code></h4>
+<p>Returns the total number of elements, or none for incomplete shapes.</p>
+<hr />
+<h3 id="class-tf.dimension"><a name="//apple_ref/cpp/Class/Dimension" class="dashAnchor"></a><code id="Dimension">class tf.Dimension</code></h3>
+<p>Represents the value of one dimension in a TensorShape. - - -</p>
+<h4 id="tf.dimension.__add__other"><code id="Dimension.__add__">tf.Dimension.__add__(other)</code></h4>
+<p>Returns the sum of <code>self</code> and <code>other</code>.</p>
+<p>Dimensions are summed as follows:</p>
+<p>Dimension(m) + Dimension(n) == Dimension(m + n) Dimension(m) + Dimension(None) == Dimension(None) Dimension(None) + Dimension(n) == Dimension(None) Dimension(None) + Dimension(None) == Dimension(None)</p>
+<h5 id="args-78">Args:</h5>
+<ul>
+<li><b><code>other</code></b>: Another Dimension.</li>
+</ul>
+<h5 id="returns-72">Returns:</h5>
+<p>A Dimension whose value is the sum of <code>self</code> and <code>other</code>.</p>
+<hr />
+<h4 id="tf.dimension.__div__other"><code id="Dimension.__div__">tf.Dimension.__div__(other)</code></h4>
+<p>DEPRECATED: Use <code>__floordiv__</code> via <code>x // y</code> instead.</p>
+<p>This function exists only for backwards compatibility purposes; new code should use <code>__floordiv__</code> via the syntax <code>x // y</code>. Using <code>x // y</code> communicates clearly that the result rounds down, and is forward compatible to Python 3.</p>
+<h5 id="args-79">Args:</h5>
+<ul>
+<li><b><code>other</code></b>: Another <code>Dimension</code>.</li>
+</ul>
+<h5 id="returns-73">Returns:</h5>
+<p>A <code>Dimension</code> whose value is the integer quotient of <code>self</code> and <code>other</code>.</p>
+<hr />
+<h4 id="tf.dimension.__eq__other"><code id="Dimension.__eq__">tf.Dimension.__eq__(other)</code></h4>
+<p>Returns true if <code>other</code> has the same known value as this Dimension.</p>
+<hr />
+<h4 id="tf.dimension.__floordiv__other"><code id="Dimension.__floordiv__">tf.Dimension.__floordiv__(other)</code></h4>
+<p>Returns the quotient of <code>self</code> and <code>other</code> rounded down.</p>
+<p>Dimensions are divided as follows:</p>
+<p>Dimension(m) // Dimension(n) == Dimension(m // n) Dimension(m) // Dimension(None) == Dimension(None) Dimension(None) // Dimension(n) == Dimension(None) Dimension(None) // Dimension(None) == Dimension(None)</p>
+<h5 id="args-80">Args:</h5>
+<ul>
+<li><b><code>other</code></b>: Another <code>Dimension</code>.</li>
+</ul>
+<h5 id="returns-74">Returns:</h5>
+<p>A <code>Dimension</code> whose value is the integer quotient of <code>self</code> and <code>other</code>.</p>
+<hr />
+<h4 id="tf.dimension.__ge__other"><code id="Dimension.__ge__">tf.Dimension.__ge__(other)</code></h4>
+<p>Returns True if <code>self</code> is known to be greater than or equal to <code>other</code>.</p>
+<p>Dimensions are compared as follows:</p>
+<p>Dimension(m) &gt;= Dimension(n) == m &gt;= n Dimension(m) &gt;= Dimension(None) == None Dimension(None) &gt;= Dimension(n) == None Dimension(None) &gt;= Dimension(None) == None</p>
+<h5 id="args-81">Args:</h5>
+<ul>
+<li><b><code>other</code></b>: Another Dimension.</li>
+</ul>
+<h5 id="returns-75">Returns:</h5>
+<p>The value of <code>self.value &gt;= other.value</code> if both are known, otherwise None.</p>
+<hr />
+<h4 id="tf.dimension.__gt__other"><code id="Dimension.__gt__">tf.Dimension.__gt__(other)</code></h4>
+<p>Returns True if <code>self</code> is known to be greater than <code>other</code>.</p>
+<p>Dimensions are compared as follows:</p>
+<p>Dimension(m) &gt; Dimension(n) == m &gt; n Dimension(m) &gt; Dimension(None) == None Dimension(None) &gt; Dimension(n) == None Dimension(None) &gt; Dimension(None) == None</p>
+<h5 id="args-82">Args:</h5>
+<ul>
+<li><b><code>other</code></b>: Another Dimension.</li>
+</ul>
+<h5 id="returns-76">Returns:</h5>
+<p>The value of <code>self.value &gt; other.value</code> if both are known, otherwise None.</p>
+<hr />
+<h4 id="tf.dimension.__index__"><code id="Dimension.__index__">tf.Dimension.__index__()</code></h4>
+<hr />
+<h4 id="tf.dimension.__init__value"><code id="Dimension.__init__">tf.Dimension.__init__(value)</code></h4>
+<p>Creates a new Dimension with the given value.</p>
+<hr />
+<h4 id="tf.dimension.__int__"><code id="Dimension.__int__">tf.Dimension.__int__()</code></h4>
+<hr />
+<h4 id="tf.dimension.__le__other"><code id="Dimension.__le__">tf.Dimension.__le__(other)</code></h4>
+<p>Returns True if <code>self</code> is known to be less than or equal to <code>other</code>.</p>
+<p>Dimensions are compared as follows:</p>
+<p>Dimension(m) &lt;= Dimension(n) == m &lt;= n Dimension(m) &lt;= Dimension(None) == None Dimension(None) &lt;= Dimension(n) == None Dimension(None) &lt;= Dimension(None) == None</p>
+<h5 id="args-83">Args:</h5>
+<ul>
+<li><b><code>other</code></b>: Another Dimension.</li>
+</ul>
+<h5 id="returns-77">Returns:</h5>
+<p>The value of <code>self.value &lt;= other.value</code> if both are known, otherwise None.</p>
+<hr />
+<h4 id="tf.dimension.__lt__other"><code id="Dimension.__lt__">tf.Dimension.__lt__(other)</code></h4>
+<p>Returns True if <code>self</code> is known to be less than <code>other</code>.</p>
+<p>Dimensions are compared as follows:</p>
+<p>Dimension(m) &lt; Dimension(n) == m &lt; n Dimension(m) &lt; Dimension(None) == None Dimension(None) &lt; Dimension(n) == None Dimension(None) &lt; Dimension(None) == None</p>
+<h5 id="args-84">Args:</h5>
+<ul>
+<li><b><code>other</code></b>: Another Dimension.</li>
+</ul>
+<h5 id="returns-78">Returns:</h5>
+<p>The value of <code>self.value &lt; other.value</code> if both are known, otherwise None.</p>
+<hr />
+<h4 id="tf.dimension.__mod__other"><code id="Dimension.__mod__">tf.Dimension.__mod__(other)</code></h4>
+<p>Returns <code>self</code> modulo `other.</p>
+<p>Dimension moduli are computed as follows:</p>
+<p>Dimension(m) % Dimension(n) == Dimension(m % n) Dimension(m) % Dimension(None) == Dimension(None) Dimension(None) % Dimension(n) == Dimension(None) Dimension(None) % Dimension(None) == Dimension(None)</p>
+<h5 id="args-85">Args:</h5>
+<ul>
+<li><b><code>other</code></b>: Another Dimension.</li>
+</ul>
+<h5 id="returns-79">Returns:</h5>
+<p>A Dimension whose value is <code>self</code> modulo <code>other</code>.</p>
+<hr />
+<h4 id="tf.dimension.__mul__other"><code id="Dimension.__mul__">tf.Dimension.__mul__(other)</code></h4>
+<p>Returns the product of <code>self</code> and <code>other</code>.</p>
+<p>Dimensions are summed as follows:</p>
+<pre><code>  Dimension(m)    * Dimension(n)    == Dimension(m * n)
+  Dimension(m)    * Dimension(None) == Dimension(None)
+  Dimension(None) * Dimension(n)    == Dimension(None)
+  Dimension(None) * Dimension(None) == Dimension(None)</code></pre>
+<h5 id="args-86">Args:</h5>
+<ul>
+<li><b><code>other</code></b>: Another Dimension.</li>
+</ul>
+<h5 id="returns-80">Returns:</h5>
+<p>A Dimension whose value is the product of <code>self</code> and <code>other</code>.</p>
+<hr />
+<h4 id="tf.dimension.__ne__other"><code id="Dimension.__ne__">tf.Dimension.__ne__(other)</code></h4>
+<p>Returns true if <code>other</code> has a different known value from <code>self</code>.</p>
+<hr />
+<h4 id="tf.dimension.__repr__"><code id="Dimension.__repr__">tf.Dimension.__repr__()</code></h4>
+<hr />
+<h4 id="tf.dimension.__str__"><code id="Dimension.__str__">tf.Dimension.__str__()</code></h4>
+<hr />
+<h4 id="tf.dimension.__sub__other"><code id="Dimension.__sub__">tf.Dimension.__sub__(other)</code></h4>
+<p>Returns the subtraction of <code>other</code> from <code>self</code>.</p>
+<p>Dimensions are subtracted as follows:</p>
+<p>Dimension(m) - Dimension(n) == Dimension(m - n) Dimension(m) - Dimension(None) == Dimension(None) Dimension(None) - Dimension(n) == Dimension(None) Dimension(None) - Dimension(None) == Dimension(None)</p>
+<h5 id="args-87">Args:</h5>
+<ul>
+<li><b><code>other</code></b>: Another Dimension.</li>
+</ul>
+<h5 id="returns-81">Returns:</h5>
+<p>A Dimension whose value is the subtraction of sum of <code>other</code> from <code>self</code>.</p>
+<hr />
+<h4 id="tf.dimension.assert_is_compatible_withother"><code id="Dimension.assert_is_compatible_with">tf.Dimension.assert_is_compatible_with(other)</code></h4>
+<p>Raises an exception if <code>other</code> is not compatible with this Dimension.</p>
+<h5 id="args-88">Args:</h5>
+<ul>
+<li><b><code>other</code></b>: Another Dimension.</li>
+</ul>
+<h5 id="raises-43">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>self</code> and <code>other</code> are not compatible (see is_compatible_with).</li>
+</ul>
+<hr />
+<h4 id="tf.dimension.is_compatible_withother"><code id="Dimension.is_compatible_with">tf.Dimension.is_compatible_with(other)</code></h4>
+<p>Returns true if <code>other</code> is compatible with this Dimension.</p>
+<p>Two known Dimensions are compatible if they have the same value. An unknown Dimension is compatible with all other Dimensions.</p>
+<h5 id="args-89">Args:</h5>
+<ul>
+<li><b><code>other</code></b>: Another Dimension.</li>
+</ul>
+<h5 id="returns-82">Returns:</h5>
+<p>True if this Dimension and <code>other</code> are compatible.</p>
+<hr />
+<h4 id="tf.dimension.merge_withother"><code id="Dimension.merge_with">tf.Dimension.merge_with(other)</code></h4>
+<p>Returns a Dimension that combines the information in <code>self</code> and <code>other</code>.</p>
+<p>Dimensions are combined as follows:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    Dimension(n)   .merge_with(Dimension(n))    <span class="op">==</span> Dimension(n)
+    Dimension(n)   .merge_with(Dimension(<span class="va">None</span>)) <span class="op">==</span> Dimension(n)
+    Dimension(<span class="va">None</span>).merge_with(Dimension(n))    <span class="op">==</span> Dimension(n)
+    Dimension(<span class="va">None</span>).merge_with(Dimension(<span class="va">None</span>)) <span class="op">==</span> Dimension(<span class="va">None</span>)
+    Dimension(n)   .merge_with(Dimension(m)) raises <span class="pp">ValueError</span> <span class="cf">for</span> n <span class="op">!=</span> m</code></pre></div>
+<h5 id="args-90">Args:</h5>
+<ul>
+<li><b><code>other</code></b>: Another Dimension.</li>
+</ul>
+<h5 id="returns-83">Returns:</h5>
+<p>A Dimension containing the combined information of <code>self</code> and <code>other</code>.</p>
+<h5 id="raises-44">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>self</code> and <code>other</code> are not compatible (see is_compatible_with).</li>
+</ul>
+<hr />
+<h4 id="tf.dimension.value"><code id="Dimension.value">tf.Dimension.value</code></h4>
+<p>The value of this dimension, or None if it is unknown.</p>
+<hr />
+<h3 id="tf.op_scopevalues-name-default_namenone"><a name="//apple_ref/cpp/Function/op_scope" class="dashAnchor"></a><code id="op_scope">tf.op_scope(values, name, default_name=None)</code></h3>
+<p>DEPRECATED. Same as name_scope above, just different argument order.</p>
+<hr />
+<h3 id="tf.get_seedop_seed"><a name="//apple_ref/cpp/Function/get_seed" class="dashAnchor"></a><code id="get_seed">tf.get_seed(op_seed)</code></h3>
+<p>Returns the local seeds an operation should use given an op-specific seed.</p>
+<p>Given operation-specific seed, <code>op_seed</code>, this helper function returns two seeds derived from graph-level and op-level seeds. Many random operations internally use the two seeds to allow user to change the seed globally for a graph, or for only specific operations.</p>
+<p>For details on how the graph-level seed interacts with op seeds, see <a href="../../api_docs/python/constant_op.md#set_random_seed"><code>set_random_seed</code></a>.</p>
+<h5 id="args-91">Args:</h5>
+<ul>
+<li><b><code>op_seed</code></b>: integer.</li>
+</ul>
+<h5 id="returns-84">Returns:</h5>
+<p>A tuple of two integers that should be used for the local seed of this operation.</p>
+<h2 id="for-libraries-building-on-tensorflow">For libraries building on TensorFlow</h2>
+<hr />
+<h3 id="tf.register_tensor_conversion_functionbase_type-conversion_func-priority100"><a name="//apple_ref/cpp/Function/register_tensor_conversion_function" class="dashAnchor"></a><code id="register_tensor_conversion_function">tf.register_tensor_conversion_function(base_type, conversion_func, priority=100)</code></h3>
+<p>Registers a function for converting objects of <code>base_type</code> to <code>Tensor</code>.</p>
+<p>The conversion function must have the following signature:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    <span class="kw">def</span> conversion_func(value, dtype<span class="op">=</span><span class="va">None</span>, name<span class="op">=</span><span class="va">None</span>, as_ref<span class="op">=</span><span class="va">False</span>):
+      <span class="co"># ...</span></code></pre></div>
+<p>It must return a <code>Tensor</code> with the given <code>dtype</code> if specified. If the conversion function creates a new <code>Tensor</code>, it should use the given <code>name</code> if specified. All exceptions will be propagated to the caller.</p>
+<p>The conversion function may return <code>NotImplemented</code> for some inputs. In this case, the conversion process will continue to try subsequent conversion functions.</p>
+<p>If <code>as_ref</code> is true, the function must return a <code>Tensor</code> reference, such as a <code>Variable</code>.</p>
+<p>NOTE: The conversion functions will execute in order of priority, followed by order of registration. To ensure that a conversion function <code>F</code> runs before another conversion function <code>G</code>, ensure that <code>F</code> is registered with a smaller priority than <code>G</code>.</p>
+<h5 id="args-92">Args:</h5>
+<ul>
+<li><b><code>base_type</code></b>: The base type or tuple of base types for all objects that <code>conversion_func</code> accepts.</li>
+<li><b><code>conversion_func</code></b>: A function that converts instances of <code>base_type</code> to <code>Tensor</code>.</li>
+<li><b><code>priority</code></b>: Optional integer that indicates the priority for applying this conversion function. Conversion functions with smaller priority values run earlier than conversion functions with larger priority values. Defaults to 100.</li>
+</ul>
+<h5 id="raises-45">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If the arguments do not have the appropriate type.</li>
+</ul>
+<h2 id="other-functions-and-classes">Other Functions and Classes</h2>
+<hr />
+<h3 id="class-tf.devicespec"><a name="//apple_ref/cpp/Class/DeviceSpec" class="dashAnchor"></a><code id="DeviceSpec">class tf.DeviceSpec</code></h3>
+<p>Represents a (possibly partial) specification for a TensorFlow device.</p>
+<p><code>DeviceSpec</code>s are used throughout TensorFlow to describe where state is stored and computations occur. Using <code>DeviceSpec</code> allows you to parse device spec strings to verify their validity, merge them or compose them programmatically.</p>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Place the operations on device &quot;GPU:0&quot; in the &quot;ps&quot; job.</span>
+device_spec <span class="op">=</span> DeviceSpec(job<span class="op">=</span><span class="st">&quot;ps&quot;</span>, device_type<span class="op">=</span><span class="st">&quot;GPU&quot;</span>, device_index<span class="op">=</span><span class="dv">0</span>)
+<span class="cf">with</span> tf.device(device_spec):
+  <span class="co"># Both my_var and squared_var will be placed on /job:ps/device:GPU:0.</span>
+  my_var <span class="op">=</span> tf.Variable(..., name<span class="op">=</span><span class="st">&quot;my_variable&quot;</span>)
+  squared_var <span class="op">=</span> tf.square(my_var)</code></pre></div>
+<p>If a <code>DeviceSpec</code> is partially specified, it will be merged with other <code>DeviceSpec</code>s according to the scope in which it is defined. <code>DeviceSpec</code> components defined in inner scopes take precedence over those defined in outer scopes.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> tf.device(DeviceSpec(job<span class="op">=</span><span class="st">&quot;train&quot;</span>, )):
+  <span class="cf">with</span> tf.device(DeviceSpec(job<span class="op">=</span><span class="st">&quot;ps&quot;</span>, device_type<span class="op">=</span><span class="st">&quot;GPU&quot;</span>, device_index<span class="op">=</span><span class="dv">0</span>):
+    <span class="co"># Nodes created here will be assigned to /job:ps/device:GPU:0.</span>
+  <span class="cf">with</span> tf.device(DeviceSpec(device_type<span class="op">=</span><span class="st">&quot;GPU&quot;</span>, device_index<span class="op">=</span><span class="dv">1</span>):
+    <span class="co"># Nodes created here will be assigned to /job:train/device:GPU:1.</span></code></pre></div>
+<p>A <code>DeviceSpec</code> consists of 5 components -- each of which is optionally specified:</p>
+<ul>
+<li>Job: The job name.</li>
+<li>Replica: The replica index.</li>
+<li>Task: The task index.</li>
+<li>Device type: The device type string (e.g. &quot;CPU&quot; or &quot;GPU&quot;).</li>
+<li>Device index: The device index. - - -</li>
+</ul>
+<h4 id="tf.devicespec.__init__jobnone-replicanone-tasknone-device_typenone-device_indexnone"><code id="DeviceSpec.__init__">tf.DeviceSpec.__init__(job=None, replica=None, task=None, device_type=None, device_index=None)</code></h4>
+<p>Create a new <code>DeviceSpec</code> object.</p>
+<h5 id="args-93">Args:</h5>
+<ul>
+<li><b><code>job</code></b>: string. Optional job name.</li>
+<li><b><code>replica</code></b>: int. Optional replica index.</li>
+<li><b><code>task</code></b>: int. Optional task index.</li>
+<li><b><code>device_type</code></b>: Optional device type string (e.g. &quot;CPU&quot; or &quot;GPU&quot;)</li>
+<li><b><code>device_index</code></b>: int. Optional device index. If left unspecified, device represents 'any' device_index.</li>
+</ul>
+<hr />
+<h4 id="tf.devicespec.from_stringspec"><code id="DeviceSpec.from_string">tf.DeviceSpec.from_string(spec)</code></h4>
+<p>Construct a <code>DeviceSpec</code> from a string.</p>
+<h5 id="args-94">Args:</h5>
+<ul>
+<li><b><code>spec</code></b>: a string of the form /job:<name>/replica:<id>/task:<id>/device:CPU:<id> or /job:<name>/replica:<id>/task:<id>/device:GPU:<id> as cpu and gpu are mutually exclusive. All entries are optional.</li>
+</ul>
+<h5 id="returns-85">Returns:</h5>
+<p>A DeviceSpec.</p>
+<hr />
+<h4 id="tf.devicespec.job"><code id="DeviceSpec.job">tf.DeviceSpec.job</code></h4>
+<hr />
+<h4 id="tf.devicespec.merge_fromdev"><code id="DeviceSpec.merge_from">tf.DeviceSpec.merge_from(dev)</code></h4>
+<p>Merge the properties of &quot;dev&quot; into this <code>DeviceSpec</code>.</p>
+<h5 id="args-95">Args:</h5>
+<ul>
+<li><b><code>dev</code></b>: a <code>DeviceSpec</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.devicespec.parse_from_stringspec"><code id="DeviceSpec.parse_from_string">tf.DeviceSpec.parse_from_string(spec)</code></h4>
+<p>Parse a <code>DeviceSpec</code> name into its components.</p>
+<h5 id="args-96">Args:</h5>
+<ul>
+<li><b><code>spec</code></b>: a string of the form /job:<name>/replica:<id>/task:<id>/device:CPU:<id> or /job:<name>/replica:<id>/task:<id>/device:GPU:<id> as cpu and gpu are mutually exclusive. All entries are optional.</li>
+</ul>
+<h5 id="returns-86">Returns:</h5>
+<p>The <code>DeviceSpec</code>.</p>
+<h5 id="raises-46">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if the spec was not valid.</li>
+</ul>
+<hr />
+<h4 id="tf.devicespec.replica"><code id="DeviceSpec.replica">tf.DeviceSpec.replica</code></h4>
+<hr />
+<h4 id="tf.devicespec.task"><code id="DeviceSpec.task">tf.DeviceSpec.task</code></h4>
+<hr />
+<h4 id="tf.devicespec.to_string"><code id="DeviceSpec.to_string">tf.DeviceSpec.to_string()</code></h4>
+<p>Return a string representation of this <code>DeviceSpec</code>.</p>
+<h5 id="returns-87">Returns:</h5>
+<p>a string of the form /job:<name>/replica:<id>/task:<id>/device:<device_type>:<id>.</p>

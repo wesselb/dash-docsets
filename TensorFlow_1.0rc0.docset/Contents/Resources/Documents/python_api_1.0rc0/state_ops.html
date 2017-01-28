@@ -1,0 +1,1736 @@
+<!-- This file is machine generated: DO NOT EDIT! -->
+<h1 id="variables">Variables</h1>
+<p>Note: Functions taking <code>Tensor</code> arguments can also take anything accepted by <a href="framework.md#convert_to_tensor"><code>tf.convert_to_tensor</code></a>.</p>
+<p>[TOC]</p>
+<h2 id="variables-1">Variables</h2>
+<hr />
+<h3 id="class-tf.variable"><a name="//apple_ref/cpp/Class/Variable" class="dashAnchor"></a><code id="Variable">class tf.Variable</code></h3>
+<p>See the <a href="../../how_tos/variables/index.md">Variables How To</a> for a high level overview.</p>
+<p>A variable maintains state in the graph across calls to <code>run()</code>. You add a variable to the graph by constructing an instance of the class <code>Variable</code>.</p>
+<p>The <code>Variable()</code> constructor requires an initial value for the variable, which can be a <code>Tensor</code> of any type and shape. The initial value defines the type and shape of the variable. After construction, the type and shape of the variable are fixed. The value can be changed using one of the assign methods.</p>
+<p>If you want to change the shape of a variable later you have to use an <code>assign</code> Op with <code>validate_shape=False</code>.</p>
+<p>Just like any <code>Tensor</code>, variables created with <code>Variable()</code> can be used as inputs for other Ops in the graph. Additionally, all the operators overloaded for the <code>Tensor</code> class are carried over to variables, so you can also add nodes to the graph by just doing arithmetic on variables.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">import</span> tensorflow <span class="im">as</span> tf
+
+<span class="co"># Create a variable.</span>
+w <span class="op">=</span> tf.Variable(<span class="op">&lt;</span>initial<span class="op">-</span>value<span class="op">&gt;</span>, name<span class="op">=&lt;</span>optional<span class="op">-</span>name<span class="op">&gt;</span>)
+
+<span class="co"># Use the variable in the graph like any Tensor.</span>
+y <span class="op">=</span> tf.matmul(w, ...another variable <span class="op">or</span> tensor...)
+
+<span class="co"># The overloaded operators are available too.</span>
+z <span class="op">=</span> tf.sigmoid(w <span class="op">+</span> y)
+
+<span class="co"># Assign a new value to the variable with `assign()` or a related method.</span>
+w.assign(w <span class="op">+</span> <span class="fl">1.0</span>)
+w.assign_add(<span class="fl">1.0</span>)</code></pre></div>
+<p>When you launch the graph, variables have to be explicitly initialized before you can run Ops that use their value. You can initialize a variable by running its <em>initializer op</em>, restoring the variable from a save file, or simply running an <code>assign</code> Op that assigns a value to the variable. In fact, the variable <em>initializer op</em> is just an <code>assign</code> Op that assigns the variable's initial value to the variable itself.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Launch the graph in a session.</span>
+<span class="cf">with</span> tf.Session() <span class="im">as</span> sess:
+    <span class="co"># Run the variable initializer.</span>
+    sess.run(w.initializer)
+    <span class="co"># ...you now can run ops that use the value of &#39;w&#39;...</span></code></pre></div>
+<p>The most common initialization pattern is to use the convenience function <code>global_variables_initializer()</code> to add an Op to the graph that initializes all the variables. You then run that Op after launching the graph.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Add an Op to initialize global variables.</span>
+init_op <span class="op">=</span> tf.global_variables_initializer()
+
+<span class="co"># Launch the graph in a session.</span>
+<span class="cf">with</span> tf.Session() <span class="im">as</span> sess:
+    <span class="co"># Run the Op that initializes global variables.</span>
+    sess.run(init_op)
+    <span class="co"># ...you can now run any Op that uses variable values...</span></code></pre></div>
+<p>If you need to create a variable with an initial value dependent on another variable, use the other variable's <code>initialized_value()</code>. This ensures that variables are initialized in the right order.</p>
+<p>All variables are automatically collected in the graph where they are created. By default, the constructor adds the new variable to the graph collection <code>GraphKeys.GLOBAL_VARIABLES</code>. The convenience function <code>global_variables()</code> returns the contents of that collection.</p>
+<p>When building a machine learning model it is often convenient to distinguish between variables holding the trainable model parameters and other variables such as a <code>global step</code> variable used to count training steps. To make this easier, the variable constructor supports a <code>trainable=&lt;bool&gt;</code> parameter. If <code>True</code>, the new variable is also added to the graph collection <code>GraphKeys.TRAINABLE_VARIABLES</code>. The convenience function <code>trainable_variables()</code> returns the contents of this collection. The various <code>Optimizer</code> classes use this collection as the default list of variables to optimize.</p>
+<p>Creating a variable.</p>
+<hr />
+<h4 id="tf.variable.__init__initial_valuenone-trainabletrue-collectionsnone-validate_shapetrue-caching_devicenone-namenone-variable_defnone-dtypenone-expected_shapenone-import_scopenone"><code id="Variable.__init__">tf.Variable.__init__(initial_value=None, trainable=True, collections=None, validate_shape=True, caching_device=None, name=None, variable_def=None, dtype=None, expected_shape=None, import_scope=None)</code></h4>
+<p>Creates a new variable with value <code>initial_value</code>.</p>
+<p>The new variable is added to the graph collections listed in <code>collections</code>, which defaults to <code>[GraphKeys.GLOBAL_VARIABLES]</code>.</p>
+<p>If <code>trainable</code> is <code>True</code> the variable is also added to the graph collection <code>GraphKeys.TRAINABLE_VARIABLES</code>.</p>
+<p>This constructor creates both a <code>variable</code> Op and an <code>assign</code> Op to set the variable to its initial value.</p>
+<h5 id="args">Args:</h5>
+<ul>
+<li><b><code>initial_value</code></b>: A <code>Tensor</code>, or Python object convertible to a <code>Tensor</code>, which is the initial value for the Variable. The initial value must have a shape specified unless <code>validate_shape</code> is set to False. Can also be a callable with no argument that returns the initial value when called. In that case, <code>dtype</code> must be specified. (Note that initializer functions from init_ops.py must first be bound to a shape before being used here.)</li>
+<li><b><code>trainable</code></b>: If <code>True</code>, the default, also adds the variable to the graph collection <code>GraphKeys.TRAINABLE_VARIABLES</code>. This collection is used as the default list of variables to use by the <code>Optimizer</code> classes.</li>
+<li><b><code>collections</code></b>: List of graph collections keys. The new variable is added to these collections. Defaults to <code>[GraphKeys.GLOBAL_VARIABLES]</code>.</li>
+<li><b><code>validate_shape</code></b>: If <code>False</code>, allows the variable to be initialized with a value of unknown shape. If <code>True</code>, the default, the shape of <code>initial_value</code> must be known.</li>
+<li><b><code>caching_device</code></b>: Optional device string describing where the Variable should be cached for reading. Defaults to the Variable's device. If not <code>None</code>, caches on another device. Typical use is to cache on the device where the Ops using the Variable reside, to deduplicate copying through <code>Switch</code> and other conditional statements.</li>
+<li><b><code>name</code></b>: Optional name for the variable. Defaults to <code>'Variable'</code> and gets uniquified automatically.</li>
+<li><b><code>variable_def</code></b>: <code>VariableDef</code> protocol buffer. If not <code>None</code>, recreates the Variable object with its contents. <code>variable_def</code> and the other arguments are mutually exclusive.</li>
+<li><b><code>dtype</code></b>: If set, initial_value will be converted to the given type. If <code>None</code>, either the datatype will be kept (if <code>initial_value</code> is a Tensor), or <code>convert_to_tensor</code> will decide.</li>
+<li><b><code>expected_shape</code></b>: A TensorShape. If set, initial_value is expected to have this shape.</li>
+<li><b><code>import_scope</code></b>: Optional <code>string</code>. Name scope to add to the <code>Variable.</code> Only used when initializing from protocol buffer.</li>
+</ul>
+<h5 id="raises">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If both <code>variable_def</code> and initial_value are specified.</li>
+<li><b><code>ValueError</code></b>: If the initial value is not specified, or does not have a shape and <code>validate_shape</code> is <code>True</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.variable.initialized_value"><code id="Variable.initialized_value">tf.Variable.initialized_value()</code></h4>
+<p>Returns the value of the initialized variable.</p>
+<p>You should use this instead of the variable itself to initialize another variable with a value that depends on the value of this variable.</p>
+<p>Beware of using initialized_value except during initialization: initialized_value causes the Variable's initializer op to be run, so running this op resets the variable to the initial value.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Initialize &#39;v&#39; with a random tensor.</span>
+v <span class="op">=</span> tf.Variable(tf.truncated_normal([<span class="dv">10</span>, <span class="dv">40</span>]))
+<span class="co"># Use `initialized_value` to guarantee that `v` has been</span>
+<span class="co"># initialized before its value is used to initialize `w`.</span>
+<span class="co"># The random values are picked only once.</span>
+w <span class="op">=</span> tf.Variable(v.initialized_value() <span class="op">*</span> <span class="fl">2.0</span>)</code></pre></div>
+<h5 id="returns">Returns:</h5>
+<p>A <code>Tensor</code> holding the value of this variable after its initializer has run.</p>
+<p>Changing a variable value.</p>
+<hr />
+<h4 id="tf.variable.assignvalue-use_lockingfalse"><code id="Variable.assign">tf.Variable.assign(value, use_locking=False)</code></h4>
+<p>Assigns a new value to the variable.</p>
+<p>This is essentially a shortcut for <code>assign(self, value)</code>.</p>
+<h5 id="args-1">Args:</h5>
+<ul>
+<li><b><code>value</code></b>: A <code>Tensor</code>. The new value for this variable.</li>
+<li><b><code>use_locking</code></b>: If <code>True</code>, use locking during the assignment.</li>
+</ul>
+<h5 id="returns-1">Returns:</h5>
+<p>A <code>Tensor</code> that will hold the new value of this variable after the assignment has completed.</p>
+<hr />
+<h4 id="tf.variable.assign_adddelta-use_lockingfalse"><code id="Variable.assign_add">tf.Variable.assign_add(delta, use_locking=False)</code></h4>
+<p>Adds a value to this variable.</p>
+<p>This is essentially a shortcut for <code>assign_add(self, delta)</code>.</p>
+<h5 id="args-2">Args:</h5>
+<ul>
+<li><b><code>delta</code></b>: A <code>Tensor</code>. The value to add to this variable.</li>
+<li><b><code>use_locking</code></b>: If <code>True</code>, use locking during the operation.</li>
+</ul>
+<h5 id="returns-2">Returns:</h5>
+<p>A <code>Tensor</code> that will hold the new value of this variable after the addition has completed.</p>
+<hr />
+<h4 id="tf.variable.assign_subdelta-use_lockingfalse"><code id="Variable.assign_sub">tf.Variable.assign_sub(delta, use_locking=False)</code></h4>
+<p>Subtracts a value from this variable.</p>
+<p>This is essentially a shortcut for <code>assign_sub(self, delta)</code>.</p>
+<h5 id="args-3">Args:</h5>
+<ul>
+<li><b><code>delta</code></b>: A <code>Tensor</code>. The value to subtract from this variable.</li>
+<li><b><code>use_locking</code></b>: If <code>True</code>, use locking during the operation.</li>
+</ul>
+<h5 id="returns-3">Returns:</h5>
+<p>A <code>Tensor</code> that will hold the new value of this variable after the subtraction has completed.</p>
+<hr />
+<h4 id="tf.variable.scatter_subsparse_delta-use_lockingfalse"><code id="Variable.scatter_sub">tf.Variable.scatter_sub(sparse_delta, use_locking=False)</code></h4>
+<p>Subtracts <code>IndexedSlices</code> from this variable.</p>
+<p>This is essentially a shortcut for <code>scatter_sub(self, sparse_delta.indices, sparse_delta.values)</code>.</p>
+<h5 id="args-4">Args:</h5>
+<ul>
+<li><b><code>sparse_delta</code></b>: <code>IndexedSlices</code> to be subtracted from this variable.</li>
+<li><b><code>use_locking</code></b>: If <code>True</code>, use locking during the operation.</li>
+</ul>
+<h5 id="returns-4">Returns:</h5>
+<p>A <code>Tensor</code> that will hold the new value of this variable after the scattered subtraction has completed.</p>
+<h5 id="raises-1">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>sparse_delta</code> is not an <code>IndexedSlices</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.variable.count_up_tolimit"><code id="Variable.count_up_to">tf.Variable.count_up_to(limit)</code></h4>
+<p>Increments this variable until it reaches <code>limit</code>.</p>
+<p>When that Op is run it tries to increment the variable by <code>1</code>. If incrementing the variable would bring it above <code>limit</code> then the Op raises the exception <code>OutOfRangeError</code>.</p>
+<p>If no error is raised, the Op outputs the value of the variable before the increment.</p>
+<p>This is essentially a shortcut for <code>count_up_to(self, limit)</code>.</p>
+<h5 id="args-5">Args:</h5>
+<ul>
+<li><b><code>limit</code></b>: value at which incrementing the variable raises an error.</li>
+</ul>
+<h5 id="returns-5">Returns:</h5>
+<p>A <code>Tensor</code> that will hold the variable value before the increment. If no other Op modifies this variable, the values produced will all be distinct.</p>
+<hr />
+<h4 id="tf.variable.evalsessionnone"><code id="Variable.eval">tf.Variable.eval(session=None)</code></h4>
+<p>In a session, computes and returns the value of this variable.</p>
+<p>This is not a graph construction method, it does not add ops to the graph.</p>
+<p>This convenience method requires a session where the graph containing this variable has been launched. If no session is passed, the default session is used. See the <a href="../../api_docs/python/client.md#Session">Session class</a> for more information on launching a graph and on sessions.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">v <span class="op">=</span> tf.Variable([<span class="dv">1</span>, <span class="dv">2</span>])
+init <span class="op">=</span> tf.global_variables_initializer()
+
+<span class="cf">with</span> tf.Session() <span class="im">as</span> sess:
+    sess.run(init)
+    <span class="co"># Usage passing the session explicitly.</span>
+    <span class="bu">print</span>(v.<span class="bu">eval</span>(sess))
+    <span class="co"># Usage with the default session.  The &#39;with&#39; block</span>
+    <span class="co"># above makes &#39;sess&#39; the default session.</span>
+    <span class="bu">print</span>(v.<span class="bu">eval</span>())</code></pre></div>
+<h5 id="args-6">Args:</h5>
+<ul>
+<li><b><code>session</code></b>: The session to use to evaluate this variable. If none, the default session is used.</li>
+</ul>
+<h5 id="returns-6">Returns:</h5>
+<p>A numpy <code>ndarray</code> with a copy of the value of this variable.</p>
+<p>Properties.</p>
+<hr />
+<h4 id="tf.variable.name"><code id="Variable.name">tf.Variable.name</code></h4>
+<p>The name of this variable.</p>
+<hr />
+<h4 id="tf.variable.dtype"><code id="Variable.dtype">tf.Variable.dtype</code></h4>
+<p>The <code>DType</code> of this variable.</p>
+<hr />
+<h4 id="tf.variable.get_shape"><code id="Variable.get_shape">tf.Variable.get_shape()</code></h4>
+<p>The <code>TensorShape</code> of this variable.</p>
+<h5 id="returns-7">Returns:</h5>
+<p>A <code>TensorShape</code>.</p>
+<hr />
+<h4 id="tf.variable.device"><code id="Variable.device">tf.Variable.device</code></h4>
+<p>The device of this variable.</p>
+<hr />
+<h4 id="tf.variable.initializer"><code id="Variable.initializer">tf.Variable.initializer</code></h4>
+<p>The initializer operation for this variable.</p>
+<hr />
+<h4 id="tf.variable.graph"><code id="Variable.graph">tf.Variable.graph</code></h4>
+<p>The <code>Graph</code> of this variable.</p>
+<hr />
+<h4 id="tf.variable.op"><code id="Variable.op">tf.Variable.op</code></h4>
+<p>The <code>Operation</code> of this variable.</p>
+<h4 id="other-methods">Other Methods</h4>
+<hr />
+<h4 id="tf.variable.__abs__a-args"><code id="Variable.__abs__">tf.Variable.__abs__(a, *args)</code></h4>
+<p>Computes the absolute value of a tensor.</p>
+<p>Given a tensor of real numbers <code>x</code>, this operation returns a tensor containing the absolute value of each element in <code>x</code>. For example, if x is an input element and y is an output element, this operation computes \(y = |x|\).</p>
+<h5 id="args-7">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> or <code>SparseTensor</code> of type <code>float32</code>, <code>float64</code>, <code>int32</code>, or <code>int64</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-8">Returns:</h5>
+<p>A <code>Tensor</code> or <code>SparseTensor</code> the same size and type as <code>x</code> with absolute values.</p>
+<hr />
+<h4 id="tf.variable.__add__a-args"><code id="Variable.__add__">tf.Variable.__add__(a, *args)</code></h4>
+<p>Returns x + y element-wise.</p>
+<p><em>NOTE</em>: <code>Add</code> supports broadcasting. <code>AddN</code> does not. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-8">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>uint8</code>, <code>int8</code>, <code>int16</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>complex128</code>, <code>string</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-9">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h4 id="tf.variable.__and__a-args"><code id="Variable.__and__">tf.Variable.__and__(a, *args)</code></h4>
+<p>Returns the truth value of x AND y element-wise.</p>
+<p><em>NOTE</em>: <code>LogicalAnd</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-9">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> of type <code>bool</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code> of type <code>bool</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-10">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>bool</code>.</p>
+<hr />
+<h4 id="tf.variable.__div__a-args"><code id="Variable.__div__">tf.Variable.__div__(a, *args)</code></h4>
+<p>Divide two values using Python 2 semantics. Used for Tensor.<strong>div</strong>.</p>
+<h5 id="args-10">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code> numerator of real numeric type.</li>
+<li><b><code>y</code></b>: <code>Tensor</code> denominator of real numeric type.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-11">Returns:</h5>
+<p><code>x / y</code> returns the quotient of x and y.</p>
+<hr />
+<h4 id="tf.variable.__floordiv__a-args"><code id="Variable.__floordiv__">tf.Variable.__floordiv__(a, *args)</code></h4>
+<p>Divides <code>x / y</code> elementwise, rounding toward the most negative integer.</p>
+<p>The same as <code>tf.div(x,y)</code> for integers, but uses <code>tf.floor(tf.div(x,y))</code> for floating point arguments so that the result is always an integer (though possibly an integer represented as floating point). This op is generated by <code>x // y</code> floor division in Python 3 and in Python 2.7 with <code>from __future__ import division</code>.</p>
+<p>Note that for efficiency, <code>floordiv</code> uses C semantics for negative numbers (unlike Python and Numpy).</p>
+<p><code>x</code> and <code>y</code> must have the same type, and the result will have the same type as well.</p>
+<h5 id="args-11">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code> numerator of real numeric type.</li>
+<li><b><code>y</code></b>: <code>Tensor</code> denominator of real numeric type.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-12">Returns:</h5>
+<p><code>x / y</code> rounded down (except possibly towards zero for negative integers).</p>
+<h5 id="raises-2">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If the inputs are complex.</li>
+</ul>
+<hr />
+<h4 id="tf.variable.__ge__a-args"><code id="Variable.__ge__">tf.Variable.__ge__(a, *args)</code></h4>
+<p>Returns the truth value of (x &gt;= y) element-wise.</p>
+<p><em>NOTE</em>: <code>GreaterEqual</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-12">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>uint8</code>, <code>int16</code>, <code>int8</code>, <code>uint16</code>, <code>half</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-13">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>bool</code>.</p>
+<hr />
+<h4 id="tf.variable.__getitem__var-slice_spec"><code id="Variable.__getitem__">tf.Variable.__getitem__(var, slice_spec)</code></h4>
+<p>Creates a slice helper object given a variable.</p>
+<p>This allows creating a sub-tensor from part of the current contents of a variable. See <a href="../../api_docs/python/framework.md#Tensor.__getitem__"><code>Tensor.__getitem__</code></a> for detailed examples of slicing.</p>
+<p>This function in addition also allows assignment to a sliced range. This is similar to <code>__setitem__</code> functionality in Python. However, the syntax is different so that the user can capture the assignment operation for grouping or passing to <code>sess.run()</code>. For example,</p>
+<pre class="prettyprint"><code>import tensorflow as tf
+A = tf.Variable([[1,2,3], [4,5,6], [7,8,9]], dtype=tf.float32)
+with tf.Session() as sess:
+  sess.run(tf.global_variables_initializer())
+  print sess.run(A[:2, :2]) # =&gt; [[1,2], [4,5]]
+
+  op = A[:2,:2].assign(22. * tf.ones((2, 2)))
+  print sess.run(op) # =&gt; [[22, 22, 3], [22, 22, 6], [7,8,9]]</code></pre>
+<p>Note that assignments currently do not support NumPy broadcasting semantics.</p>
+<h5 id="args-13">Args:</h5>
+<ul>
+<li><b><code>var</code></b>: An <code>ops.Variable</code> object.</li>
+<li><b><code>slice_spec</code></b>: The arguments to <code>Tensor.__getitem__</code>.</li>
+</ul>
+<h5 id="returns-14">Returns:</h5>
+<p>The appropriate slice of &quot;tensor&quot;, based on &quot;slice_spec&quot;. As an operator. The operator also has a <code>assign()</code> method that can be used to generate an assignment operator.</p>
+<h5 id="raises-3">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If a slice range is negative size.</li>
+<li><b><code>TypeError</code></b>: If the slice indices aren't int, slice, or Ellipsis.</li>
+</ul>
+<hr />
+<h4 id="tf.variable.__gt__a-args"><code id="Variable.__gt__">tf.Variable.__gt__(a, *args)</code></h4>
+<p>Returns the truth value of (x &gt; y) element-wise.</p>
+<p><em>NOTE</em>: <code>Greater</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-14">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>uint8</code>, <code>int16</code>, <code>int8</code>, <code>uint16</code>, <code>half</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-15">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>bool</code>.</p>
+<hr />
+<h4 id="tf.variable.__invert__a-args"><code id="Variable.__invert__">tf.Variable.__invert__(a, *args)</code></h4>
+<p>Returns the truth value of NOT x element-wise.</p>
+<h5 id="args-15">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> of type <code>bool</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-16">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>bool</code>.</p>
+<hr />
+<h4 id="tf.variable.__iter__"><code id="Variable.__iter__">tf.Variable.__iter__()</code></h4>
+<p>Dummy method to prevent iteration. Do not call.</p>
+<p>NOTE(mrry): If we register <strong>getitem</strong> as an overloaded operator, Python will valiantly attempt to iterate over the variable's Tensor from 0 to infinity. Declaring this method prevents this unintended behavior.</p>
+<h5 id="raises-4">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: when invoked.</li>
+</ul>
+<hr />
+<h4 id="tf.variable.__le__a-args"><code id="Variable.__le__">tf.Variable.__le__(a, *args)</code></h4>
+<p>Returns the truth value of (x &lt;= y) element-wise.</p>
+<p><em>NOTE</em>: <code>LessEqual</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-16">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>uint8</code>, <code>int16</code>, <code>int8</code>, <code>uint16</code>, <code>half</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-17">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>bool</code>.</p>
+<hr />
+<h4 id="tf.variable.__lt__a-args"><code id="Variable.__lt__">tf.Variable.__lt__(a, *args)</code></h4>
+<p>Returns the truth value of (x &lt; y) element-wise.</p>
+<p><em>NOTE</em>: <code>Less</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-17">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>uint8</code>, <code>int16</code>, <code>int8</code>, <code>uint16</code>, <code>half</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-18">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>bool</code>.</p>
+<hr />
+<h4 id="tf.variable.__mod__a-args"><code id="Variable.__mod__">tf.Variable.__mod__(a, *args)</code></h4>
+<p>Returns element-wise remainder of division. When <code>x &lt; 0</code> xor <code>y &lt; 0</code> is</p>
+<p>true, this follows Python semantics in that the result here is consistent with a flooring divide. E.g. <code>floor(x / y) * y + mod(x, y) = x</code>.</p>
+<p><em>NOTE</em>: <code>FloorMod</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-18">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>, <code>float32</code>, <code>float64</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-19">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h4 id="tf.variable.__mul__a-args"><code id="Variable.__mul__">tf.Variable.__mul__(a, *args)</code></h4>
+<p>Dispatches cwise mul for &quot;Dense<em>Dense&quot; and &quot;Dense</em>Sparse&quot;.</p>
+<hr />
+<h4 id="tf.variable.__neg__a-args"><code id="Variable.__neg__">tf.Variable.__neg__(a, *args)</code></h4>
+<p>Computes numerical negative value element-wise.</p>
+<p>I.e., \(y = -x\).</p>
+<h5 id="args-19">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>complex128</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-20">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h4 id="tf.variable.__or__a-args"><code id="Variable.__or__">tf.Variable.__or__(a, *args)</code></h4>
+<p>Returns the truth value of x OR y element-wise.</p>
+<p><em>NOTE</em>: <code>LogicalOr</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-20">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> of type <code>bool</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code> of type <code>bool</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-21">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>bool</code>.</p>
+<hr />
+<h4 id="tf.variable.__pow__a-args"><code id="Variable.__pow__">tf.Variable.__pow__(a, *args)</code></h4>
+<p>Computes the power of one value to another.</p>
+<p>Given a tensor <code>x</code> and a tensor <code>y</code>, this operation computes \(x^y\) for corresponding elements in <code>x</code> and <code>y</code>. For example:</p>
+<pre><code># tensor &#39;x&#39; is [[2, 2], [3, 3]]
+# tensor &#39;y&#39; is [[8, 16], [2, 3]]
+tf.pow(x, y) ==&gt; [[256, 65536], [9, 27]]</code></pre>
+<h5 id="args-21">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> of type <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, or <code>complex128</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code> of type <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, or <code>complex128</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-22">Returns:</h5>
+<p>A <code>Tensor</code>.</p>
+<hr />
+<h4 id="tf.variable.__radd__a-args"><code id="Variable.__radd__">tf.Variable.__radd__(a, *args)</code></h4>
+<p>Returns x + y element-wise.</p>
+<p><em>NOTE</em>: <code>Add</code> supports broadcasting. <code>AddN</code> does not. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-22">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>uint8</code>, <code>int8</code>, <code>int16</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>complex128</code>, <code>string</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-23">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h4 id="tf.variable.__rand__a-args"><code id="Variable.__rand__">tf.Variable.__rand__(a, *args)</code></h4>
+<p>Returns the truth value of x AND y element-wise.</p>
+<p><em>NOTE</em>: <code>LogicalAnd</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-23">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> of type <code>bool</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code> of type <code>bool</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-24">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>bool</code>.</p>
+<hr />
+<h4 id="tf.variable.__rdiv__a-args"><code id="Variable.__rdiv__">tf.Variable.__rdiv__(a, *args)</code></h4>
+<p>Divide two values using Python 2 semantics. Used for Tensor.<strong>div</strong>.</p>
+<h5 id="args-24">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code> numerator of real numeric type.</li>
+<li><b><code>y</code></b>: <code>Tensor</code> denominator of real numeric type.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-25">Returns:</h5>
+<p><code>x / y</code> returns the quotient of x and y.</p>
+<hr />
+<h4 id="tf.variable.__rfloordiv__a-args"><code id="Variable.__rfloordiv__">tf.Variable.__rfloordiv__(a, *args)</code></h4>
+<p>Divides <code>x / y</code> elementwise, rounding toward the most negative integer.</p>
+<p>The same as <code>tf.div(x,y)</code> for integers, but uses <code>tf.floor(tf.div(x,y))</code> for floating point arguments so that the result is always an integer (though possibly an integer represented as floating point). This op is generated by <code>x // y</code> floor division in Python 3 and in Python 2.7 with <code>from __future__ import division</code>.</p>
+<p>Note that for efficiency, <code>floordiv</code> uses C semantics for negative numbers (unlike Python and Numpy).</p>
+<p><code>x</code> and <code>y</code> must have the same type, and the result will have the same type as well.</p>
+<h5 id="args-25">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code> numerator of real numeric type.</li>
+<li><b><code>y</code></b>: <code>Tensor</code> denominator of real numeric type.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-26">Returns:</h5>
+<p><code>x / y</code> rounded down (except possibly towards zero for negative integers).</p>
+<h5 id="raises-5">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If the inputs are complex.</li>
+</ul>
+<hr />
+<h4 id="tf.variable.__rmod__a-args"><code id="Variable.__rmod__">tf.Variable.__rmod__(a, *args)</code></h4>
+<p>Returns element-wise remainder of division. When <code>x &lt; 0</code> xor <code>y &lt; 0</code> is</p>
+<p>true, this follows Python semantics in that the result here is consistent with a flooring divide. E.g. <code>floor(x / y) * y + mod(x, y) = x</code>.</p>
+<p><em>NOTE</em>: <code>FloorMod</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-26">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>, <code>float32</code>, <code>float64</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-27">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h4 id="tf.variable.__rmul__a-args"><code id="Variable.__rmul__">tf.Variable.__rmul__(a, *args)</code></h4>
+<p>Dispatches cwise mul for &quot;Dense<em>Dense&quot; and &quot;Dense</em>Sparse&quot;.</p>
+<hr />
+<h4 id="tf.variable.__ror__a-args"><code id="Variable.__ror__">tf.Variable.__ror__(a, *args)</code></h4>
+<p>Returns the truth value of x OR y element-wise.</p>
+<p><em>NOTE</em>: <code>LogicalOr</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-27">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> of type <code>bool</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code> of type <code>bool</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-28">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>bool</code>.</p>
+<hr />
+<h4 id="tf.variable.__rpow__a-args"><code id="Variable.__rpow__">tf.Variable.__rpow__(a, *args)</code></h4>
+<p>Computes the power of one value to another.</p>
+<p>Given a tensor <code>x</code> and a tensor <code>y</code>, this operation computes \(x^y\) for corresponding elements in <code>x</code> and <code>y</code>. For example:</p>
+<pre><code># tensor &#39;x&#39; is [[2, 2], [3, 3]]
+# tensor &#39;y&#39; is [[8, 16], [2, 3]]
+tf.pow(x, y) ==&gt; [[256, 65536], [9, 27]]</code></pre>
+<h5 id="args-28">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> of type <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, or <code>complex128</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code> of type <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, or <code>complex128</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-29">Returns:</h5>
+<p>A <code>Tensor</code>.</p>
+<hr />
+<h4 id="tf.variable.__rsub__a-args"><code id="Variable.__rsub__">tf.Variable.__rsub__(a, *args)</code></h4>
+<p>Returns x - y element-wise.</p>
+<p><em>NOTE</em>: <code>Sub</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-29">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>complex128</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-30">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h4 id="tf.variable.__rtruediv__a-args"><code id="Variable.__rtruediv__">tf.Variable.__rtruediv__(a, *args)</code></h4>
+<hr />
+<h4 id="tf.variable.__rxor__a-args"><code id="Variable.__rxor__">tf.Variable.__rxor__(a, *args)</code></h4>
+<p>x ^ y = (x | y) &amp; ~(x &amp; y).</p>
+<hr />
+<h4 id="tf.variable.__str__"><code id="Variable.__str__">tf.Variable.__str__()</code></h4>
+<hr />
+<h4 id="tf.variable.__sub__a-args"><code id="Variable.__sub__">tf.Variable.__sub__(a, *args)</code></h4>
+<p>Returns x - y element-wise.</p>
+<p><em>NOTE</em>: <code>Sub</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h5 id="args-30">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>complex128</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-31">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<hr />
+<h4 id="tf.variable.__truediv__a-args"><code id="Variable.__truediv__">tf.Variable.__truediv__(a, *args)</code></h4>
+<hr />
+<h4 id="tf.variable.__xor__a-args"><code id="Variable.__xor__">tf.Variable.__xor__(a, *args)</code></h4>
+<p>x ^ y = (x | y) &amp; ~(x &amp; y).</p>
+<hr />
+<h4 id="tf.variable.from_protovariable_def-import_scopenone"><code id="Variable.from_proto">tf.Variable.from_proto(variable_def, import_scope=None)</code></h4>
+<p>Returns a <code>Variable</code> object created from <code>variable_def</code>.</p>
+<hr />
+<h4 id="tf.variable.initial_value"><code id="Variable.initial_value">tf.Variable.initial_value</code></h4>
+<p>Returns the Tensor used as the initial value for the variable.</p>
+<p>Note that this is different from <code>initialized_value()</code> which runs the op that initializes the variable before returning its value. This method returns the tensor that is used by the op that initializes the variable.</p>
+<h5 id="returns-32">Returns:</h5>
+<p>A <code>Tensor</code>.</p>
+<hr />
+<h4 id="tf.variable.loadvalue-sessionnone"><code id="Variable.load">tf.Variable.load(value, session=None)</code></h4>
+<p>Load new value into this variable</p>
+<p>Writes new value to variable's memory. Doesn't add ops to the graph.</p>
+<p>This convenience method requires a session where the graph containing this variable has been launched. If no session is passed, the default session is used. See the <a href="../../api_docs/python/client.md#Session">Session class</a> for more information on launching a graph and on sessions.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">v <span class="op">=</span> tf.Variable([<span class="dv">1</span>, <span class="dv">2</span>])
+init <span class="op">=</span> tf.global_variables_initializer()
+
+<span class="cf">with</span> tf.Session() <span class="im">as</span> sess:
+    sess.run(init)
+    <span class="co"># Usage passing the session explicitly.</span>
+    v.load([<span class="dv">2</span>, <span class="dv">3</span>], sess)
+    <span class="bu">print</span>(v.<span class="bu">eval</span>(sess)) <span class="co"># prints [2 3]</span>
+    <span class="co"># Usage with the default session.  The &#39;with&#39; block</span>
+    <span class="co"># above makes &#39;sess&#39; the default session.</span>
+    v.load([<span class="dv">3</span>, <span class="dv">4</span>], sess)
+    <span class="bu">print</span>(v.<span class="bu">eval</span>()) <span class="co"># prints [3 4]</span></code></pre></div>
+<h5 id="args-31">Args:</h5>
+<ul>
+<li><b><code>value</code></b>: New variable value</li>
+<li><b><code>session</code></b>: The session to use to evaluate this variable. If none, the default session is used.</li>
+</ul>
+<h5 id="raises-6">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: Session is not passed and no default session</li>
+</ul>
+<hr />
+<h4 id="tf.variable.read_value"><code id="Variable.read_value">tf.Variable.read_value()</code></h4>
+<p>Returns the value of this variable, read in the current context.</p>
+<p>Can be different from value() if it's on another device, with control dependencies, etc.</p>
+<h5 id="returns-33">Returns:</h5>
+<p>A <code>Tensor</code> containing the value of the variable.</p>
+<hr />
+<h4 id="tf.variable.set_shapeshape"><code id="Variable.set_shape">tf.Variable.set_shape(shape)</code></h4>
+<p>Overrides the shape for this variable.</p>
+<h5 id="args-32">Args:</h5>
+<ul>
+<li><b><code>shape</code></b>: the <code>TensorShape</code> representing the overridden shape.</li>
+</ul>
+<hr />
+<h4 id="tf.variable.to_protoexport_scopenone"><code id="Variable.to_proto">tf.Variable.to_proto(export_scope=None)</code></h4>
+<p>Converts a <code>Variable</code> to a <code>VariableDef</code> protocol buffer.</p>
+<h5 id="args-33">Args:</h5>
+<ul>
+<li><b><code>export_scope</code></b>: Optional <code>string</code>. Name scope to remove.</li>
+</ul>
+<h5 id="returns-34">Returns:</h5>
+<p>A <code>VariableDef</code> protocol buffer, or <code>None</code> if the <code>Variable</code> is not in the specified name scope.</p>
+<hr />
+<h4 id="tf.variable.value"><code id="Variable.value">tf.Variable.value()</code></h4>
+<p>Returns the last snapshot of this variable.</p>
+<p>You usually do not need to call this method as all ops that need the value of the variable call it automatically through a <code>convert_to_tensor()</code> call.</p>
+<p>Returns a <code>Tensor</code> which holds the value of the variable. You can not assign a new value to this tensor as it is not a reference to the variable.</p>
+<p>To avoid copies, if the consumer of the returned value is on the same device as the variable, this actually returns the live value of the variable, not a copy. Updates to the variable are seen by the consumer. If the consumer is on a different device it will get a copy of the variable.</p>
+<h5 id="returns-35">Returns:</h5>
+<p>A <code>Tensor</code> containing the value of the variable.</p>
+<h2 id="variable-helper-functions">Variable helper functions</h2>
+<p>TensorFlow provides a set of functions to help manage the set of variables collected in the graph.</p>
+<hr />
+<h3 id="tf.global_variables"><a name="//apple_ref/cpp/Function/global_variables" class="dashAnchor"></a><code id="global_variables">tf.global_variables()</code></h3>
+<p>Returns global variables.</p>
+<p>Global variables are variables that are shared across machines in a distributed environment. The <code>Variable()</code> constructor or <code>get_variable()</code> automatically adds new variables to the graph collection <code>GraphKeys.GLOBAL_VARIABLES</code>. This convenience function returns the contents of that collection.</p>
+<p>An alternative to global variables are local variables. See <a href="../../api_docs/python/state_ops.md#local_variables"><code>tf.local_variables()</code></a></p>
+<h5 id="returns-36">Returns:</h5>
+<p>A list of <code>Variable</code> objects.</p>
+<hr />
+<h3 id="tf.local_variables"><a name="//apple_ref/cpp/Function/local_variables" class="dashAnchor"></a><code id="local_variables">tf.local_variables()</code></h3>
+<p>Returns local variables.</p>
+<p>Local variables - per process variables, usually not saved/restored to checkpoint and used for temporary or intermediate values. For example, they can be used as counters for metrics computation or number of epochs this machine has read data. The <code>local_variable()</code> automatically adds new variable to <code>GraphKeys.LOCAL_VARIABLES</code>. This convenience function returns the contents of that collection.</p>
+<p>An alternative to local variables are global variables. See <a href="../../api_docs/python/state_ops.md#global_variables"><code>tf.global_variables()</code></a></p>
+<h5 id="returns-37">Returns:</h5>
+<p>A list of local <code>Variable</code> objects.</p>
+<hr />
+<h3 id="tf.model_variables"><a name="//apple_ref/cpp/Function/model_variables" class="dashAnchor"></a><code id="model_variables">tf.model_variables()</code></h3>
+<p>Returns all variables in the MODEL_VARIABLES collection.</p>
+<h5 id="returns-38">Returns:</h5>
+<p>A list of local Variable objects.</p>
+<hr />
+<h3 id="tf.trainable_variables"><a name="//apple_ref/cpp/Function/trainable_variables" class="dashAnchor"></a><code id="trainable_variables">tf.trainable_variables()</code></h3>
+<p>Returns all variables created with <code>trainable=True</code>.</p>
+<p>When passed <code>trainable=True</code>, the <code>Variable()</code> constructor automatically adds new variables to the graph collection <code>GraphKeys.TRAINABLE_VARIABLES</code>. This convenience function returns the contents of that collection.</p>
+<h5 id="returns-39">Returns:</h5>
+<p>A list of Variable objects.</p>
+<hr />
+<h3 id="tf.moving_average_variables"><a name="//apple_ref/cpp/Function/moving_average_variables" class="dashAnchor"></a><code id="moving_average_variables">tf.moving_average_variables()</code></h3>
+<p>Returns all variables that maintain their moving averages.</p>
+<p>If an <code>ExponentialMovingAverage</code> object is created and the <code>apply()</code> method is called on a list of variables, these variables will be added to the <code>GraphKeys.MOVING_AVERAGE_VARIABLES</code> collection. This convenience function returns the contents of that collection.</p>
+<h5 id="returns-40">Returns:</h5>
+<p>A list of Variable objects.</p>
+<hr />
+<h3 id="tf.global_variables_initializer"><a name="//apple_ref/cpp/Function/global_variables_initializer" class="dashAnchor"></a><code id="global_variables_initializer">tf.global_variables_initializer()</code></h3>
+<p>Returns an Op that initializes global variables.</p>
+<p>This is just a shortcut for <code>variable_initializers(global_variables())</code></p>
+<h5 id="returns-41">Returns:</h5>
+<p>An Op that initializes global variables in the graph.</p>
+<hr />
+<h3 id="tf.local_variables_initializer"><a name="//apple_ref/cpp/Function/local_variables_initializer" class="dashAnchor"></a><code id="local_variables_initializer">tf.local_variables_initializer()</code></h3>
+<p>Returns an Op that initializes all local variables.</p>
+<p>This is just a shortcut for <code>variable_initializers(local_variables())</code></p>
+<h5 id="returns-42">Returns:</h5>
+<p>An Op that initializes all local variables in the graph.</p>
+<hr />
+<h3 id="tf.variables_initializervar_list-nameinit"><a name="//apple_ref/cpp/Function/variables_initializer" class="dashAnchor"></a><code id="variables_initializer">tf.variables_initializer(var_list, name='init')</code></h3>
+<p>Returns an Op that initializes a list of variables.</p>
+<p>After you launch the graph in a session, you can run the returned Op to initialize all the variables in <code>var_list</code>. This Op runs all the initializers of the variables in <code>var_list</code> in parallel.</p>
+<p>Calling <code>initialize_variables()</code> is equivalent to passing the list of initializers to <code>Group()</code>.</p>
+<p>If <code>var_list</code> is empty, however, the function still returns an Op that can be run. That Op just has no effect.</p>
+<h5 id="args-34">Args:</h5>
+<ul>
+<li><b><code>var_list</code></b>: List of <code>Variable</code> objects to initialize.</li>
+<li><b><code>name</code></b>: Optional name for the returned operation.</li>
+</ul>
+<h5 id="returns-43">Returns:</h5>
+<p>An Op that run the initializers of all the specified variables.</p>
+<hr />
+<h3 id="tf.is_variable_initializedvariable"><a name="//apple_ref/cpp/Function/is_variable_initialized" class="dashAnchor"></a><code id="is_variable_initialized">tf.is_variable_initialized(variable)</code></h3>
+<p>Tests if a variable has been initialized.</p>
+<h5 id="args-35">Args:</h5>
+<ul>
+<li><b><code>variable</code></b>: A <code>Variable</code>.</li>
+</ul>
+<h5 id="returns-44">Returns:</h5>
+<p>Returns a scalar boolean Tensor, <code>True</code> if the variable has been initialized, <code>False</code> otherwise.</p>
+<hr />
+<h3 id="tf.report_uninitialized_variablesvar_listnone-namereport_uninitialized_variables"><a name="//apple_ref/cpp/Function/report_uninitialized_variables" class="dashAnchor"></a><code id="report_uninitialized_variables">tf.report_uninitialized_variables(var_list=None, name='report_uninitialized_variables')</code></h3>
+<p>Adds ops to list the names of uninitialized variables.</p>
+<p>When run, it returns a 1-D tensor containing the names of uninitialized variables if there are any, or an empty array if there are none.</p>
+<h5 id="args-36">Args:</h5>
+<ul>
+<li><b><code>var_list</code></b>: List of <code>Variable</code> objects to check. Defaults to the value of <code>global_variables() + local_variables()</code></li>
+<li><b><code>name</code></b>: Optional name of the <code>Operation</code>.</li>
+</ul>
+<h5 id="returns-45">Returns:</h5>
+<p>A 1-D tensor containing names of the uninitialized variables, or an empty 1-D tensor if there are no variables or no uninitialized variables.</p>
+<hr />
+<h3 id="tf.assert_variables_initializedvar_listnone"><a name="//apple_ref/cpp/Function/assert_variables_initialized" class="dashAnchor"></a><code id="assert_variables_initialized">tf.assert_variables_initialized(var_list=None)</code></h3>
+<p>Returns an Op to check if variables are initialized.</p>
+<p>NOTE: This function is obsolete and will be removed in 6 months. Please change your implementation to use <code>report_uninitialized_variables()</code>.</p>
+<p>When run, the returned Op will raise the exception <code>FailedPreconditionError</code> if any of the variables has not yet been initialized.</p>
+<p>Note: This function is implemented by trying to fetch the values of the variables. If one of the variables is not initialized a message may be logged by the C++ runtime. This is expected.</p>
+<h5 id="args-37">Args:</h5>
+<ul>
+<li><b><code>var_list</code></b>: List of <code>Variable</code> objects to check. Defaults to the value of <code>global_variables().</code></li>
+</ul>
+<h5 id="returns-46">Returns:</h5>
+<p>An Op, or None if there are no variables.</p>
+<hr />
+<h3 id="tf.assignref-value-validate_shapenone-use_lockingnone-namenone"><a name="//apple_ref/cpp/Function/assign" class="dashAnchor"></a><code id="assign">tf.assign(ref, value, validate_shape=None, use_locking=None, name=None)</code></h3>
+<p>Update 'ref' by assigning 'value' to it.</p>
+<p>This operation outputs &quot;ref&quot; after the assignment is done. This makes it easier to chain operations that need to use the reset value.</p>
+<h5 id="args-38">Args:</h5>
+<ul>
+<li><b><code>ref</code></b>: A mutable <code>Tensor</code>. Should be from a <code>Variable</code> node. May be uninitialized.</li>
+<li><b><code>value</code></b>: A <code>Tensor</code>. Must have the same type as <code>ref</code>. The value to be assigned to the variable.</li>
+<li><b><code>validate_shape</code></b>: An optional <code>bool</code>. Defaults to <code>True</code>. If true, the operation will validate that the shape of 'value' matches the shape of the Tensor being assigned to. If false, 'ref' will take on the shape of 'value'.</li>
+<li><b><code>use_locking</code></b>: An optional <code>bool</code>. Defaults to <code>True</code>. If True, the assignment will be protected by a lock; otherwise the behavior is undefined, but may exhibit less contention.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-47">Returns:</h5>
+<p>Same as &quot;ref&quot;. Returned as a convenience for operations that want to use the new value after the variable has been reset.</p>
+<hr />
+<h3 id="tf.assign_addref-value-use_lockingnone-namenone"><a name="//apple_ref/cpp/Function/assign_add" class="dashAnchor"></a><code id="assign_add">tf.assign_add(ref, value, use_locking=None, name=None)</code></h3>
+<p>Update 'ref' by adding 'value' to it.</p>
+<p>This operation outputs &quot;ref&quot; after the update is done. This makes it easier to chain operations that need to use the reset value.</p>
+<h5 id="args-39">Args:</h5>
+<ul>
+<li><b><code>ref</code></b>: A mutable <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int64</code>, <code>int32</code>, <code>uint8</code>, <code>uint16</code>, <code>int16</code>, <code>int8</code>, <code>complex64</code>, <code>complex128</code>, <code>qint8</code>, <code>quint8</code>, <code>qint32</code>, <code>half</code>. Should be from a <code>Variable</code> node.</li>
+<li><b><code>value</code></b>: A <code>Tensor</code>. Must have the same type as <code>ref</code>. The value to be added to the variable.</li>
+<li><b><code>use_locking</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>. If True, the addition will be protected by a lock; otherwise the behavior is undefined, but may exhibit less contention.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-48">Returns:</h5>
+<p>Same as &quot;ref&quot;. Returned as a convenience for operations that want to use the new value after the variable has been updated.</p>
+<hr />
+<h3 id="tf.assign_subref-value-use_lockingnone-namenone"><a name="//apple_ref/cpp/Function/assign_sub" class="dashAnchor"></a><code id="assign_sub">tf.assign_sub(ref, value, use_locking=None, name=None)</code></h3>
+<p>Update 'ref' by subtracting 'value' from it.</p>
+<p>This operation outputs &quot;ref&quot; after the update is done. This makes it easier to chain operations that need to use the reset value.</p>
+<h5 id="args-40">Args:</h5>
+<ul>
+<li><b><code>ref</code></b>: A mutable <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int64</code>, <code>int32</code>, <code>uint8</code>, <code>uint16</code>, <code>int16</code>, <code>int8</code>, <code>complex64</code>, <code>complex128</code>, <code>qint8</code>, <code>quint8</code>, <code>qint32</code>, <code>half</code>. Should be from a <code>Variable</code> node.</li>
+<li><b><code>value</code></b>: A <code>Tensor</code>. Must have the same type as <code>ref</code>. The value to be subtracted to the variable.</li>
+<li><b><code>use_locking</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>. If True, the subtraction will be protected by a lock; otherwise the behavior is undefined, but may exhibit less contention.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-49">Returns:</h5>
+<p>Same as &quot;ref&quot;. Returned as a convenience for operations that want to use the new value after the variable has been updated.</p>
+<h2 id="saving-and-restoring-variables">Saving and Restoring Variables</h2>
+<hr />
+<h3 id="class-tf.train.saver"><a name="//apple_ref/cpp/Class/Saver" class="dashAnchor"></a><code id="Saver">class tf.train.Saver</code></h3>
+<p>Saves and restores variables.</p>
+<p>See <a href="../../how_tos/variables/index.md">Variables</a> for an overview of variables, saving and restoring.</p>
+<p>The <code>Saver</code> class adds ops to save and restore variables to and from <em>checkpoints</em>. It also provides convenience methods to run these ops.</p>
+<p>Checkpoints are binary files in a proprietary format which map variable names to tensor values. The best way to examine the contents of a checkpoint is to load it using a <code>Saver</code>.</p>
+<p>Savers can automatically number checkpoint filenames with a provided counter. This lets you keep multiple checkpoints at different steps while training a model. For example you can number the checkpoint filenames with the training step number. To avoid filling up disks, savers manage checkpoint files automatically. For example, they can keep only the N most recent files, or one checkpoint for every N hours of training.</p>
+<p>You number checkpoint filenames by passing a value to the optional <code>global_step</code> argument to <code>save()</code>:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">saver.save(sess, <span class="st">&#39;my-model&#39;</span>, global_step<span class="op">=</span><span class="dv">0</span>) <span class="op">==&gt;</span> filename: <span class="st">&#39;my-model-0&#39;</span>
+...
+saver.save(sess, <span class="st">&#39;my-model&#39;</span>, global_step<span class="op">=</span><span class="dv">1000</span>) <span class="op">==&gt;</span> filename: <span class="st">&#39;my-model-1000&#39;</span></code></pre></div>
+<p>Additionally, optional arguments to the <code>Saver()</code> constructor let you control the proliferation of checkpoint files on disk:</p>
+<ul>
+<li><p><code>max_to_keep</code> indicates the maximum number of recent checkpoint files to keep. As new files are created, older files are deleted. If None or 0, all checkpoint files are kept. Defaults to 5 (that is, the 5 most recent checkpoint files are kept.)</p></li>
+<li><p><code>keep_checkpoint_every_n_hours</code>: In addition to keeping the most recent <code>max_to_keep</code> checkpoint files, you might want to keep one checkpoint file for every N hours of training. This can be useful if you want to later analyze how a model progressed during a long training session. For example, passing <code>keep_checkpoint_every_n_hours=2</code> ensures that you keep one checkpoint file for every 2 hours of training. The default value of 10,000 hours effectively disables the feature.</p></li>
+</ul>
+<p>Note that you still have to call the <code>save()</code> method to save the model. Passing these arguments to the constructor will not save variables automatically for you.</p>
+<p>A training program that saves regularly looks like:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">...
+<span class="co"># Create a saver.</span>
+saver <span class="op">=</span> tf.train.Saver(...variables...)
+<span class="co"># Launch the graph and train, saving the model every 1,000 steps.</span>
+sess <span class="op">=</span> tf.Session()
+<span class="cf">for</span> step <span class="op">in</span> <span class="bu">xrange</span>(<span class="dv">1000000</span>):
+    sess.run(..training_op..)
+    <span class="cf">if</span> step <span class="op">%</span> <span class="dv">1000</span> <span class="op">==</span> <span class="dv">0</span>:
+        <span class="co"># Append the step number to the checkpoint name:</span>
+        saver.save(sess, <span class="st">&#39;my-model&#39;</span>, global_step<span class="op">=</span>step)</code></pre></div>
+<p>In addition to checkpoint files, savers keep a protocol buffer on disk with the list of recent checkpoints. This is used to manage numbered checkpoint files and by <code>latest_checkpoint()</code>, which makes it easy to discover the path to the most recent checkpoint. That protocol buffer is stored in a file named 'checkpoint' next to the checkpoint files.</p>
+<p>If you create several savers, you can specify a different filename for the protocol buffer file in the call to <code>save()</code>.</p>
+<hr />
+<h4 id="tf.train.saver.__init__var_listnone-reshapefalse-shardedfalse-max_to_keep5-keep_checkpoint_every_n_hours10000.0-namenone-restore_sequentiallyfalse-saver_defnone-buildernone-defer_buildfalse-allow_emptyfalse-write_version2-pad_step_numberfalse"><code id="Saver.__init__">tf.train.Saver.__init__(var_list=None, reshape=False, sharded=False, max_to_keep=5, keep_checkpoint_every_n_hours=10000.0, name=None, restore_sequentially=False, saver_def=None, builder=None, defer_build=False, allow_empty=False, write_version=2, pad_step_number=False)</code></h4>
+<p>Creates a <code>Saver</code>.</p>
+<p>The constructor adds ops to save and restore variables.</p>
+<p><code>var_list</code> specifies the variables that will be saved and restored. It can be passed as a <code>dict</code> or a list:</p>
+<ul>
+<li>A <code>dict</code> of names to variables: The keys are the names that will be used to save or restore the variables in the checkpoint files.</li>
+<li>A list of variables: The variables will be keyed with their op name in the checkpoint files.</li>
+</ul>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">v1 <span class="op">=</span> tf.Variable(..., name<span class="op">=</span><span class="st">&#39;v1&#39;</span>)
+v2 <span class="op">=</span> tf.Variable(..., name<span class="op">=</span><span class="st">&#39;v2&#39;</span>)
+
+<span class="co"># Pass the variables as a dict:</span>
+saver <span class="op">=</span> tf.train.Saver({<span class="st">&#39;v1&#39;</span>: v1, <span class="st">&#39;v2&#39;</span>: v2})
+
+<span class="co"># Or pass them as a list.</span>
+saver <span class="op">=</span> tf.train.Saver([v1, v2])
+<span class="co"># Passing a list is equivalent to passing a dict with the variable op names</span>
+<span class="co"># as keys:</span>
+saver <span class="op">=</span> tf.train.Saver({v.op.name: v <span class="cf">for</span> v <span class="op">in</span> [v1, v2]})</code></pre></div>
+<p>The optional <code>reshape</code> argument, if <code>True</code>, allows restoring a variable from a save file where the variable had a different shape, but the same number of elements and type. This is useful if you have reshaped a variable and want to reload it from an older checkpoint.</p>
+<p>The optional <code>sharded</code> argument, if <code>True</code>, instructs the saver to shard checkpoints per device.</p>
+<h5 id="args-41">Args:</h5>
+<ul>
+<li><b><code>var_list</code></b>: A list of <code>Variable</code>/<code>SaveableObject</code>, or a dictionary mapping names to <code>SaveableObject</code>s. If <code>None</code>, defaults to the list of all saveable objects.</li>
+<li><b><code>reshape</code></b>: If <code>True</code>, allows restoring parameters from a checkpoint where the variables have a different shape.</li>
+<li><b><code>sharded</code></b>: If <code>True</code>, shard the checkpoints, one per device.</li>
+<li><b><code>max_to_keep</code></b>: Maximum number of recent checkpoints to keep. Defaults to 5.</li>
+<li><b><code>keep_checkpoint_every_n_hours</code></b>: How often to keep checkpoints. Defaults to 10,000 hours.</li>
+<li><b><code>name</code></b>: String. Optional name to use as a prefix when adding operations.</li>
+<li><b><code>restore_sequentially</code></b>: A <code>Bool</code>, which if true, causes restore of different variables to happen sequentially within each device. This can lower memory usage when restoring very large models.</li>
+<li><b><code>saver_def</code></b>: Optional <code>SaverDef</code> proto to use instead of running the builder. This is only useful for specialty code that wants to recreate a <code>Saver</code> object for a previously built <code>Graph</code> that had a <code>Saver</code>. The <code>saver_def</code> proto should be the one returned by the <code>as_saver_def()</code> call of the <code>Saver</code> that was created for that <code>Graph</code>.</li>
+<li><b><code>builder</code></b>: Optional <code>SaverBuilder</code> to use if a <code>saver_def</code> was not provided. Defaults to <code>BaseSaverBuilder()</code>.</li>
+<li><b><code>defer_build</code></b>: If <code>True</code>, defer adding the save and restore ops to the <code>build()</code> call. In that case <code>build()</code> should be called before finalizing the graph or using the saver.</li>
+<li><b><code>allow_empty</code></b>: If <code>False</code> (default) raise an error if there are no variables in the graph. Otherwise, construct the saver anyway and make it a no-op.</li>
+<li><b><code>write_version</code></b>: controls what format to use when saving checkpoints. It also affects certain filepath matching logic. The V2 format is the recommended choice: it is much more optimized than V1 in terms of memory required and latency incurred during restore. Regardless of this flag, the Saver is able to restore from both V2 and V1 checkpoints.</li>
+<li><b><code>pad_step_number</code></b>: if True, pads the global step number in the checkpoint filepaths to some fixed width (8 by default). This is turned off by default.</li>
+</ul>
+<h5 id="raises-7">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>var_list</code> is invalid.</li>
+<li><b><code>ValueError</code></b>: If any of the keys or values in <code>var_list</code> are not unique.</li>
+</ul>
+<hr />
+<h4 id="tf.train.saver.savesess-save_path-global_stepnone-latest_filenamenone-meta_graph_suffixmeta-write_meta_graphtrue-write_statetrue"><code id="Saver.save">tf.train.Saver.save(sess, save_path, global_step=None, latest_filename=None, meta_graph_suffix='meta', write_meta_graph=True, write_state=True)</code></h4>
+<p>Saves variables.</p>
+<p>This method runs the ops added by the constructor for saving variables. It requires a session in which the graph was launched. The variables to save must also have been initialized.</p>
+<p>The method returns the path of the newly created checkpoint file. This path can be passed directly to a call to <code>restore()</code>.</p>
+<h5 id="args-42">Args:</h5>
+<ul>
+<li><b><code>sess</code></b>: A Session to use to save the variables.</li>
+<li><b><code>save_path</code></b>: String. Path to the checkpoint filename. If the saver is <code>sharded</code>, this is the prefix of the sharded checkpoint filename.</li>
+<li><b><code>global_step</code></b>: If provided the global step number is appended to <code>save_path</code> to create the checkpoint filename. The optional argument can be a <code>Tensor</code>, a <code>Tensor</code> name or an integer.</li>
+<li><b><code>latest_filename</code></b>: Optional name for the protocol buffer file that will contains the list of most recent checkpoint filenames. That file, kept in the same directory as the checkpoint files, is automatically managed by the saver to keep track of recent checkpoints. Defaults to 'checkpoint'.</li>
+<li><b><code>meta_graph_suffix</code></b>: Suffix for <code>MetaGraphDef</code> file. Defaults to 'meta'.</li>
+<li><b><code>write_meta_graph</code></b>: <code>Boolean</code> indicating whether or not to write the meta graph file.</li>
+<li><b><code>write_state</code></b>: <code>Boolean</code> indicating whether or not to write the <code>CheckpointStateProto</code>.</li>
+</ul>
+<h5 id="returns-50">Returns:</h5>
+<p>A string: path at which the variables were saved. If the saver is sharded, this string ends with: '-?????-of-nnnnn' where 'nnnnn' is the number of shards created. If the saver is empty, returns None.</p>
+<h5 id="raises-8">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>sess</code> is not a <code>Session</code>.</li>
+<li><b><code>ValueError</code></b>: If <code>latest_filename</code> contains path components, or if it collides with <code>save_path</code>.</li>
+<li><b><code>RuntimeError</code></b>: If save and restore ops weren't built.</li>
+</ul>
+<hr />
+<h4 id="tf.train.saver.restoresess-save_path"><code id="Saver.restore">tf.train.Saver.restore(sess, save_path)</code></h4>
+<p>Restores previously saved variables.</p>
+<p>This method runs the ops added by the constructor for restoring variables. It requires a session in which the graph was launched. The variables to restore do not have to have been initialized, as restoring is itself a way to initialize variables.</p>
+<p>The <code>save_path</code> argument is typically a value previously returned from a <code>save()</code> call, or a call to <code>latest_checkpoint()</code>.</p>
+<h5 id="args-43">Args:</h5>
+<ul>
+<li><b><code>sess</code></b>: A <code>Session</code> to use to restore the parameters.</li>
+<li><b><code>save_path</code></b>: Path where parameters were previously saved.</li>
+</ul>
+<p>Other utility methods.</p>
+<hr />
+<h4 id="tf.train.saver.last_checkpoints"><code id="Saver.last_checkpoints">tf.train.Saver.last_checkpoints</code></h4>
+<p>List of not-yet-deleted checkpoint filenames.</p>
+<p>You can pass any of the returned values to <code>restore()</code>.</p>
+<h5 id="returns-51">Returns:</h5>
+<p>A list of checkpoint filenames, sorted from oldest to newest.</p>
+<hr />
+<h4 id="tf.train.saver.set_last_checkpoints_with_timelast_checkpoints_with_time"><code id="Saver.set_last_checkpoints_with_time">tf.train.Saver.set_last_checkpoints_with_time(last_checkpoints_with_time)</code></h4>
+<p>Sets the list of old checkpoint filenames and timestamps.</p>
+<h5 id="args-44">Args:</h5>
+<ul>
+<li><b><code>last_checkpoints_with_time</code></b>: A list of tuples of checkpoint filenames and timestamps.</li>
+</ul>
+<h5 id="raises-9">Raises:</h5>
+<ul>
+<li><b><code>AssertionError</code></b>: If last_checkpoints_with_time is not a list.</li>
+</ul>
+<hr />
+<h4 id="tf.train.saver.recover_last_checkpointscheckpoint_paths"><code id="Saver.recover_last_checkpoints">tf.train.Saver.recover_last_checkpoints(checkpoint_paths)</code></h4>
+<p>Recovers the internal saver state after a crash.</p>
+<p>This method is useful for recovering the &quot;self._last_checkpoints&quot; state.</p>
+<p>Globs for the checkpoints pointed to by <code>checkpoint_paths</code>. If the files exist, use their mtime as the checkpoint timestamp.</p>
+<h5 id="args-45">Args:</h5>
+<ul>
+<li><b><code>checkpoint_paths</code></b>: a list of checkpoint paths.</li>
+</ul>
+<hr />
+<h4 id="tf.train.saver.as_saver_def"><code id="Saver.as_saver_def">tf.train.Saver.as_saver_def()</code></h4>
+<p>Generates a <code>SaverDef</code> representation of this saver.</p>
+<h5 id="returns-52">Returns:</h5>
+<p>A <code>SaverDef</code> proto.</p>
+<h4 id="other-methods-1">Other Methods</h4>
+<hr />
+<h4 id="tf.train.saver.build"><code id="Saver.build">tf.train.Saver.build()</code></h4>
+<p>Builds saver_def.</p>
+<hr />
+<h4 id="tf.train.saver.export_meta_graphfilenamenone-collection_listnone-as_textfalse-export_scopenone-clear_devicesfalse"><code id="Saver.export_meta_graph">tf.train.Saver.export_meta_graph(filename=None, collection_list=None, as_text=False, export_scope=None, clear_devices=False)</code></h4>
+<p>Writes <code>MetaGraphDef</code> to save_path/filename.</p>
+<h5 id="args-46">Args:</h5>
+<ul>
+<li><b><code>filename</code></b>: Optional meta_graph filename including the path.</li>
+<li><b><code>collection_list</code></b>: List of string keys to collect.</li>
+<li><b><code>as_text</code></b>: If <code>True</code>, writes the meta_graph as an ASCII proto.</li>
+<li><b><code>export_scope</code></b>: Optional <code>string</code>. Name scope to remove.</li>
+<li><b><code>clear_devices</code></b>: Whether or not to clear the device field for an <code>Operation</code> or <code>Tensor</code> during export.</li>
+</ul>
+<h5 id="returns-53">Returns:</h5>
+<p>A <code>MetaGraphDef</code> proto.</p>
+<hr />
+<h4 id="tf.train.saver.from_protosaver_def-import_scopenone"><code id="Saver.from_proto">tf.train.Saver.from_proto(saver_def, import_scope=None)</code></h4>
+<p>Returns a <code>Saver</code> object created from <code>saver_def</code>.</p>
+<h5 id="args-47">Args:</h5>
+<ul>
+<li><b><code>saver_def</code></b>: a <code>SaveDef</code> protocol buffer.</li>
+<li><b><code>import_scope</code></b>: Optional <code>string</code>. Name scope to use.</li>
+</ul>
+<h5 id="returns-54">Returns:</h5>
+<p>A <code>Saver</code> built from saver_def.</p>
+<hr />
+<h4 id="tf.train.saver.set_last_checkpointslast_checkpoints"><code id="Saver.set_last_checkpoints">tf.train.Saver.set_last_checkpoints(last_checkpoints)</code></h4>
+<p>DEPRECATED: Use set_last_checkpoints_with_time.</p>
+<p>Sets the list of old checkpoint filenames.</p>
+<h5 id="args-48">Args:</h5>
+<ul>
+<li><b><code>last_checkpoints</code></b>: A list of checkpoint filenames.</li>
+</ul>
+<h5 id="raises-10">Raises:</h5>
+<ul>
+<li><b><code>AssertionError</code></b>: If last_checkpoints is not a list.</li>
+</ul>
+<hr />
+<h4 id="tf.train.saver.to_protoexport_scopenone"><code id="Saver.to_proto">tf.train.Saver.to_proto(export_scope=None)</code></h4>
+<p>Converts this <code>Saver</code> to a <code>SaverDef</code> protocol buffer.</p>
+<h5 id="args-49">Args:</h5>
+<ul>
+<li><b><code>export_scope</code></b>: Optional <code>string</code>. Name scope to remove.</li>
+</ul>
+<h5 id="returns-55">Returns:</h5>
+<p>A <code>SaverDef</code> protocol buffer.</p>
+<hr />
+<h3 id="tf.train.latest_checkpointcheckpoint_dir-latest_filenamenone"><a name="//apple_ref/cpp/Function/latest_checkpoint" class="dashAnchor"></a><code id="latest_checkpoint">tf.train.latest_checkpoint(checkpoint_dir, latest_filename=None)</code></h3>
+<p>Finds the filename of latest saved checkpoint file.</p>
+<h5 id="args-50">Args:</h5>
+<ul>
+<li><b><code>checkpoint_dir</code></b>: Directory where the variables were saved.</li>
+<li><b><code>latest_filename</code></b>: Optional name for the protocol buffer file that contains the list of most recent checkpoint filenames. See the corresponding argument to <code>Saver.save()</code>.</li>
+</ul>
+<h5 id="returns-56">Returns:</h5>
+<p>The full path to the latest checkpoint or <code>None</code> if no checkpoint was found.</p>
+<hr />
+<h3 id="tf.train.get_checkpoint_statecheckpoint_dir-latest_filenamenone"><a name="//apple_ref/cpp/Function/get_checkpoint_state" class="dashAnchor"></a><code id="get_checkpoint_state">tf.train.get_checkpoint_state(checkpoint_dir, latest_filename=None)</code></h3>
+<p>Returns CheckpointState proto from the &quot;checkpoint&quot; file.</p>
+<p>If the &quot;checkpoint&quot; file contains a valid CheckpointState proto, returns it.</p>
+<h5 id="args-51">Args:</h5>
+<ul>
+<li><b><code>checkpoint_dir</code></b>: The directory of checkpoints.</li>
+<li><b><code>latest_filename</code></b>: Optional name of the checkpoint file. Default to 'checkpoint'.</li>
+</ul>
+<h5 id="returns-57">Returns:</h5>
+<p>A CheckpointState if the state was available, None otherwise.</p>
+<h5 id="raises-11">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if the checkpoint read doesn't have model_checkpoint_path set.</li>
+</ul>
+<hr />
+<h3 id="tf.train.update_checkpoint_statesave_dir-model_checkpoint_path-all_model_checkpoint_pathsnone-latest_filenamenone"><a name="//apple_ref/cpp/Function/update_checkpoint_state" class="dashAnchor"></a><code id="update_checkpoint_state">tf.train.update_checkpoint_state(save_dir, model_checkpoint_path, all_model_checkpoint_paths=None, latest_filename=None)</code></h3>
+<p>Updates the content of the 'checkpoint' file.</p>
+<p>This updates the checkpoint file containing a CheckpointState proto.</p>
+<h5 id="args-52">Args:</h5>
+<ul>
+<li><b><code>save_dir</code></b>: Directory where the model was saved.</li>
+<li><b><code>model_checkpoint_path</code></b>: The checkpoint file.</li>
+<li><b><code>all_model_checkpoint_paths</code></b>: List of strings. Paths to all not-yet-deleted checkpoints, sorted from oldest to newest. If this is a non-empty list, the last element must be equal to model_checkpoint_path. These paths are also saved in the CheckpointState proto.</li>
+<li><b><code>latest_filename</code></b>: Optional name of the checkpoint file. Default to 'checkpoint'.</li>
+</ul>
+<h5 id="raises-12">Raises:</h5>
+<ul>
+<li><b><code>RuntimeError</code></b>: If the save paths conflict.</li>
+</ul>
+<h2 id="sharing-variables">Sharing Variables</h2>
+<p>TensorFlow provides several classes and operations that you can use to create variables contingent on certain conditions.</p>
+<hr />
+<h3 id="tf.get_variablename-shapenone-dtypenone-initializernone-regularizernone-trainabletrue-collectionsnone-caching_devicenone-partitionernone-validate_shapetrue-custom_getternone"><a name="//apple_ref/cpp/Function/get_variable" class="dashAnchor"></a><code id="get_variable">tf.get_variable(name, shape=None, dtype=None, initializer=None, regularizer=None, trainable=True, collections=None, caching_device=None, partitioner=None, validate_shape=True, custom_getter=None)</code></h3>
+<p>Gets an existing variable with these parameters or create a new one.</p>
+<p>This function prefixes the name with the current variable scope and performs reuse checks. See the <a href="../../how_tos/variable_scope/index.md">Variable Scope How To</a> for an extensive description of how reusing works. Here is a basic example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> tf.variable_scope(<span class="st">&quot;foo&quot;</span>):
+    v <span class="op">=</span> tf.get_variable(<span class="st">&quot;v&quot;</span>, [<span class="dv">1</span>])  <span class="co"># v.name == &quot;foo/v:0&quot;</span>
+    w <span class="op">=</span> tf.get_variable(<span class="st">&quot;w&quot;</span>, [<span class="dv">1</span>])  <span class="co"># w.name == &quot;foo/w:0&quot;</span>
+<span class="cf">with</span> tf.variable_scope(<span class="st">&quot;foo&quot;</span>, reuse<span class="op">=</span><span class="va">True</span>):
+    v1 <span class="op">=</span> tf.get_variable(<span class="st">&quot;v&quot;</span>)  <span class="co"># The same as v above.</span></code></pre></div>
+<p>If initializer is <code>None</code> (the default), the default initializer passed in the variable scope will be used. If that one is <code>None</code> too, a <code>glorot_uniform_initializer</code> will be used. The initializer can also be a Tensor, in which case the variable is initialized to this value and shape.</p>
+<p>Similarly, if the regularizer is <code>None</code> (the default), the default regularizer passed in the variable scope will be used (if that is <code>None</code> too, then by default no regularization is performed).</p>
+<p>If a partitioner is provided, a <code>PartitionedVariable</code> is returned. Accessing this object as a <code>Tensor</code> returns the shards concatenated along the partition axis.</p>
+<p>Some useful partitioners are available. See, e.g., <code>variable_axis_size_partitioner</code> and <code>min_max_variable_partitioner</code>.</p>
+<h5 id="args-53">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: The name of the new or existing variable.</li>
+<li><b><code>shape</code></b>: Shape of the new or existing variable.</li>
+<li><b><code>dtype</code></b>: Type of the new or existing variable (defaults to <code>DT_FLOAT</code>).</li>
+<li><b><code>initializer</code></b>: Initializer for the variable if one is created.</li>
+<li><b><code>regularizer</code></b>: A (Tensor -&gt; Tensor or None) function; the result of applying it on a newly created variable will be added to the collection GraphKeys.REGULARIZATION_LOSSES and can be used for regularization.</li>
+<li><b><code>trainable</code></b>: If <code>True</code> also add the variable to the graph collection <code>GraphKeys.TRAINABLE_VARIABLES</code> (see <code>tf.Variable</code>).</li>
+<li><b><code>collections</code></b>: List of graph collections keys to add the Variable to. Defaults to <code>[GraphKeys.GLOBAL_VARIABLES]</code> (see <code>tf.Variable</code>).</li>
+<li><b><code>caching_device</code></b>: Optional device string or function describing where the Variable should be cached for reading. Defaults to the Variable's device. If not <code>None</code>, caches on another device. Typical use is to cache on the device where the Ops using the Variable reside, to deduplicate copying through <code>Switch</code> and other conditional statements.</li>
+<li><b><code>partitioner</code></b>: Optional callable that accepts a fully defined <code>TensorShape</code> and <code>dtype</code> of the Variable to be created, and returns a list of partitions for each axis (currently only one axis can be partitioned).</li>
+<li><b><code>validate_shape</code></b>: If False, allows the variable to be initialized with a value of unknown shape. If True, the default, the shape of initial_value must be known.</li>
+<li><p><b><code>custom_getter</code></b>: Callable that takes as a first argument the true getter, and allows overwriting the internal get_variable method. The signature of <code>custom_getter</code> should match that of this method, but the most future-proof version will allow for changes: <code>def custom_getter(getter, *args, **kwargs)</code>. Direct access to all <code>get_variable</code> parameters is also allowed: <code>def custom_getter(getter, name, *args, **kwargs)</code>. A simple identity custom getter that simply creates variables with modified names is:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="kw">def</span> custom_getter(getter, name, <span class="op">*</span>args, <span class="op">**</span>kwargs):
+  <span class="cf">return</span> getter(name <span class="op">+</span> <span class="st">&#39;_suffix&#39;</span>, <span class="op">*</span>args, <span class="op">**</span>kwargs)</code></pre></div></li>
+</ul>
+<h5 id="returns-58">Returns:</h5>
+<p>The created or existing <code>Variable</code> (or <code>PartitionedVariable</code>, if a partitioner was used).</p>
+<h5 id="raises-13">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: when creating a new variable and shape is not declared, when violating reuse during variable creation, or when <code>initializer</code> dtype and <code>dtype</code> don't match. Reuse is set inside <code>variable_scope</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.get_local_variableargs-kwargs"><a name="//apple_ref/cpp/Function/get_local_variable" class="dashAnchor"></a><code id="get_local_variable">tf.get_local_variable(*args, **kwargs)</code></h3>
+<p>Gets an existing <em>local</em> variable or creates a new one.</p>
+<p>Behavior is the same as in <code>get_variable</code>, except that variables are added to the <code>LOCAL_VARIABLES</code> collection and <code>trainable</code> is set to <code>False</code>. This function prefixes the name with the current variable scope and performs reuse checks. See the <a href="../../how_tos/variable_scope/index.md">Variable Scope How To</a> for an extensive description of how reusing works. Here is a basic example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> tf.variable_scope(<span class="st">&quot;foo&quot;</span>):
+    v <span class="op">=</span> tf.get_variable(<span class="st">&quot;v&quot;</span>, [<span class="dv">1</span>])  <span class="co"># v.name == &quot;foo/v:0&quot;</span>
+    w <span class="op">=</span> tf.get_variable(<span class="st">&quot;w&quot;</span>, [<span class="dv">1</span>])  <span class="co"># w.name == &quot;foo/w:0&quot;</span>
+<span class="cf">with</span> tf.variable_scope(<span class="st">&quot;foo&quot;</span>, reuse<span class="op">=</span><span class="va">True</span>):
+    v1 <span class="op">=</span> tf.get_variable(<span class="st">&quot;v&quot;</span>)  <span class="co"># The same as v above.</span></code></pre></div>
+<p>If initializer is <code>None</code> (the default), the default initializer passed in the variable scope will be used. If that one is <code>None</code> too, a <code>glorot_uniform_initializer</code> will be used. The initializer can also be a Tensor, in which case the variable is initialized to this value and shape.</p>
+<p>Similarly, if the regularizer is <code>None</code> (the default), the default regularizer passed in the variable scope will be used (if that is <code>None</code> too, then by default no regularization is performed).</p>
+<p>If a partitioner is provided, a <code>PartitionedVariable</code> is returned. Accessing this object as a <code>Tensor</code> returns the shards concatenated along the partition axis.</p>
+<p>Some useful partitioners are available. See, e.g., <code>variable_axis_size_partitioner</code> and <code>min_max_variable_partitioner</code>.</p>
+<h5 id="args-54">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: The name of the new or existing variable.</li>
+<li><b><code>shape</code></b>: Shape of the new or existing variable.</li>
+<li><b><code>dtype</code></b>: Type of the new or existing variable (defaults to <code>DT_FLOAT</code>).</li>
+<li><b><code>initializer</code></b>: Initializer for the variable if one is created.</li>
+<li><b><code>regularizer</code></b>: A (Tensor -&gt; Tensor or None) function; the result of applying it on a newly created variable will be added to the collection GraphKeys.REGULARIZATION_LOSSES and can be used for regularization.</li>
+<li><b><code>collections</code></b>: List of graph collections keys to add the Variable to. Defaults to <code>[GraphKeys.LOCAL_VARIABLES]</code> (see <code>tf.Variable</code>).</li>
+<li><b><code>caching_device</code></b>: Optional device string or function describing where the Variable should be cached for reading. Defaults to the Variable's device. If not <code>None</code>, caches on another device. Typical use is to cache on the device where the Ops using the Variable reside, to deduplicate copying through <code>Switch</code> and other conditional statements.</li>
+<li><b><code>partitioner</code></b>: Optional callable that accepts a fully defined <code>TensorShape</code> and <code>dtype</code> of the Variable to be created, and returns a list of partitions for each axis (currently only one axis can be partitioned).</li>
+<li><b><code>validate_shape</code></b>: If False, allows the variable to be initialized with a value of unknown shape. If True, the default, the shape of initial_value must be known.</li>
+<li><p><b><code>custom_getter</code></b>: Callable that takes as a first argument the true getter, and allows overwriting the internal get_variable method. The signature of <code>custom_getter</code> should match that of this method, but the most future-proof version will allow for changes: <code>def custom_getter(getter, *args, **kwargs)</code>. Direct access to all <code>get_variable</code> parameters is also allowed: <code>def custom_getter(getter, name, *args, **kwargs)</code>. A simple identity custom getter that simply creates variables with modified names is:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="kw">def</span> custom_getter(getter, name, <span class="op">*</span>args, <span class="op">**</span>kwargs):
+  <span class="cf">return</span> getter(name <span class="op">+</span> <span class="st">&#39;_suffix&#39;</span>, <span class="op">*</span>args, <span class="op">**</span>kwargs)</code></pre></div></li>
+</ul>
+<h5 id="returns-59">Returns:</h5>
+<p>The created or existing <code>Variable</code> (or <code>PartitionedVariable</code>, if a partitioner was used).</p>
+<h5 id="raises-14">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: when creating a new variable and shape is not declared, when violating reuse during variable creation, or when <code>initializer</code> dtype and <code>dtype</code> don't match. Reuse is set inside <code>variable_scope</code>.</li>
+</ul>
+<hr />
+<h3 id="class-tf.variablescope"><a name="//apple_ref/cpp/Class/VariableScope" class="dashAnchor"></a><code id="VariableScope">class tf.VariableScope</code></h3>
+<p>Variable scope object to carry defaults to provide to get_variable.</p>
+<p>Many of the arguments we need for get_variable in a variable store are most easily handled with a context. This object is used for the defaults.</p>
+<p>Attributes: name: name of the current scope, used as prefix in get_variable. initializer: default initializer passed to get_variable. regularizer: default regularizer passed to get_variable. reuse: Boolean or None, setting the reuse in get_variable. caching_device: string, callable, or None: the caching device passed to get_variable. partitioner: callable or <code>None</code>: the partitioner passed to <code>get_variable</code>. custom_getter: default custom getter passed to get_variable. name_scope: The name passed to <code>tf.name_scope</code>. dtype: default type passed to get_variable (defaults to DT_FLOAT). - - -</p>
+<h4 id="tf.variablescope.__init__reuse-name-initializernone-regularizernone-caching_devicenone-partitionernone-custom_getternone-name_scope-dtypetf.float32"><code id="VariableScope.__init__">tf.VariableScope.__init__(reuse, name='', initializer=None, regularizer=None, caching_device=None, partitioner=None, custom_getter=None, name_scope='', dtype=tf.float32)</code></h4>
+<p>Creates a new VariableScope with the given properties.</p>
+<hr />
+<h4 id="tf.variablescope.caching_device"><code id="VariableScope.caching_device">tf.VariableScope.caching_device</code></h4>
+<hr />
+<h4 id="tf.variablescope.custom_getter"><code id="VariableScope.custom_getter">tf.VariableScope.custom_getter</code></h4>
+<hr />
+<h4 id="tf.variablescope.dtype"><code id="VariableScope.dtype">tf.VariableScope.dtype</code></h4>
+<hr />
+<h4 id="tf.variablescope.get_variablevar_store-name-shapenone-dtypenone-initializernone-regularizernone-trainabletrue-collectionsnone-caching_devicenone-partitionernone-validate_shapetrue-custom_getternone"><code id="VariableScope.get_variable">tf.VariableScope.get_variable(var_store, name, shape=None, dtype=None, initializer=None, regularizer=None, trainable=True, collections=None, caching_device=None, partitioner=None, validate_shape=True, custom_getter=None)</code></h4>
+<p>Gets an existing variable with this name or create a new one.</p>
+<hr />
+<h4 id="tf.variablescope.initializer"><code id="VariableScope.initializer">tf.VariableScope.initializer</code></h4>
+<hr />
+<h4 id="tf.variablescope.name"><code id="VariableScope.name">tf.VariableScope.name</code></h4>
+<hr />
+<h4 id="tf.variablescope.original_name_scope"><code id="VariableScope.original_name_scope">tf.VariableScope.original_name_scope</code></h4>
+<hr />
+<h4 id="tf.variablescope.partitioner"><code id="VariableScope.partitioner">tf.VariableScope.partitioner</code></h4>
+<hr />
+<h4 id="tf.variablescope.regularizer"><code id="VariableScope.regularizer">tf.VariableScope.regularizer</code></h4>
+<hr />
+<h4 id="tf.variablescope.reuse"><code id="VariableScope.reuse">tf.VariableScope.reuse</code></h4>
+<hr />
+<h4 id="tf.variablescope.reuse_variables"><code id="VariableScope.reuse_variables">tf.VariableScope.reuse_variables()</code></h4>
+<p>Reuse variables in this scope.</p>
+<hr />
+<h4 id="tf.variablescope.set_caching_devicecaching_device"><code id="VariableScope.set_caching_device">tf.VariableScope.set_caching_device(caching_device)</code></h4>
+<p>Set caching_device for this scope.</p>
+<hr />
+<h4 id="tf.variablescope.set_custom_gettercustom_getter"><code id="VariableScope.set_custom_getter">tf.VariableScope.set_custom_getter(custom_getter)</code></h4>
+<p>Set custom getter for this scope.</p>
+<hr />
+<h4 id="tf.variablescope.set_dtypedtype"><code id="VariableScope.set_dtype">tf.VariableScope.set_dtype(dtype)</code></h4>
+<p>Set data type for this scope.</p>
+<hr />
+<h4 id="tf.variablescope.set_initializerinitializer"><code id="VariableScope.set_initializer">tf.VariableScope.set_initializer(initializer)</code></h4>
+<p>Set initializer for this scope.</p>
+<hr />
+<h4 id="tf.variablescope.set_partitionerpartitioner"><code id="VariableScope.set_partitioner">tf.VariableScope.set_partitioner(partitioner)</code></h4>
+<p>Set partitioner for this scope.</p>
+<hr />
+<h4 id="tf.variablescope.set_regularizerregularizer"><code id="VariableScope.set_regularizer">tf.VariableScope.set_regularizer(regularizer)</code></h4>
+<p>Set regularizer for this scope.</p>
+<hr />
+<h3 id="tf.variable_scopename_or_scope-default_namenone-valuesnone-initializernone-regularizernone-caching_devicenone-partitionernone-custom_getternone-reusenone-dtypenone"><a name="//apple_ref/cpp/Function/variable_scope" class="dashAnchor"></a><code id="variable_scope">tf.variable_scope(name_or_scope, default_name=None, values=None, initializer=None, regularizer=None, caching_device=None, partitioner=None, custom_getter=None, reuse=None, dtype=None)</code></h3>
+<p>Returns a context manager for defining ops that creates variables (layers).</p>
+<p>This context manager validates that the (optional) <code>values</code> are from the same graph, ensures that graph is the default graph, and pushes a name scope and a variable scope.</p>
+<p>If <code>name_or_scope</code> is not None, it is used as is. If <code>scope</code> is None, then <code>default_name</code> is used. In that case, if the same name has been previously used in the same scope, it will made unique be appending <code>_N</code> to it.</p>
+<p>Variable scope allows to create new variables and to share already created ones while providing checks to not create or share by accident. For details, see the <a href="../../how_tos/variable_scope/index.md">Variable Scope How To</a>, here we present only a few basic examples.</p>
+<p>Simple example of how to create a new variable:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> tf.variable_scope(<span class="st">&quot;foo&quot;</span>):
+    <span class="cf">with</span> tf.variable_scope(<span class="st">&quot;bar&quot;</span>):
+        v <span class="op">=</span> tf.get_variable(<span class="st">&quot;v&quot;</span>, [<span class="dv">1</span>])
+        <span class="cf">assert</span> v.name <span class="op">==</span> <span class="st">&quot;foo/bar/v:0&quot;</span></code></pre></div>
+<p>Basic example of sharing a variable:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> tf.variable_scope(<span class="st">&quot;foo&quot;</span>):
+    v <span class="op">=</span> tf.get_variable(<span class="st">&quot;v&quot;</span>, [<span class="dv">1</span>])
+<span class="cf">with</span> tf.variable_scope(<span class="st">&quot;foo&quot;</span>, reuse<span class="op">=</span><span class="va">True</span>):
+    v1 <span class="op">=</span> tf.get_variable(<span class="st">&quot;v&quot;</span>, [<span class="dv">1</span>])
+<span class="cf">assert</span> v1 <span class="op">==</span> v</code></pre></div>
+<p>Sharing a variable by capturing a scope and setting reuse:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> tf.variable_scope(<span class="st">&quot;foo&quot;</span>) <span class="im">as</span> scope:
+    v <span class="op">=</span> tf.get_variable(<span class="st">&quot;v&quot;</span>, [<span class="dv">1</span>])
+    scope.reuse_variables()
+    v1 <span class="op">=</span> tf.get_variable(<span class="st">&quot;v&quot;</span>, [<span class="dv">1</span>])
+<span class="cf">assert</span> v1 <span class="op">==</span> v</code></pre></div>
+<p>To prevent accidental sharing of variables, we raise an exception when getting an existing variable in a non-reusing scope.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> tf.variable_scope(<span class="st">&quot;foo&quot;</span>):
+    v <span class="op">=</span> tf.get_variable(<span class="st">&quot;v&quot;</span>, [<span class="dv">1</span>])
+    v1 <span class="op">=</span> tf.get_variable(<span class="st">&quot;v&quot;</span>, [<span class="dv">1</span>])
+    <span class="co">#  Raises ValueError(&quot;... v already exists ...&quot;).</span></code></pre></div>
+<p>Similarly, we raise an exception when trying to get a variable that does not exist in reuse mode.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> tf.variable_scope(<span class="st">&quot;foo&quot;</span>, reuse<span class="op">=</span><span class="va">True</span>):
+    v <span class="op">=</span> tf.get_variable(<span class="st">&quot;v&quot;</span>, [<span class="dv">1</span>])
+    <span class="co">#  Raises ValueError(&quot;... v does not exists ...&quot;).</span></code></pre></div>
+<p>Note that the <code>reuse</code> flag is inherited: if we open a reusing scope, then all its sub-scopes become reusing as well.</p>
+<h5 id="args-55">Args:</h5>
+<ul>
+<li><b><code>name_or_scope</code></b>: <code>string</code> or <code>VariableScope</code>: the scope to open.</li>
+<li><b><code>default_name</code></b>: The default name to use if the <code>name_or_scope</code> argument is <code>None</code>, this name will be uniquified. If name_or_scope is provided it won't be used and therefore it is not required and can be None.</li>
+<li><b><code>values</code></b>: The list of <code>Tensor</code> arguments that are passed to the op function.</li>
+<li><b><code>initializer</code></b>: default initializer for variables within this scope.</li>
+<li><b><code>regularizer</code></b>: default regularizer for variables within this scope.</li>
+<li><b><code>caching_device</code></b>: default caching device for variables within this scope.</li>
+<li><b><code>partitioner</code></b>: default partitioner for variables within this scope.</li>
+<li><b><code>custom_getter</code></b>: default custom getter for variables within this scope.</li>
+<li><b><code>reuse</code></b>: <code>True</code> or <code>None</code>; if <code>True</code>, we go into reuse mode for this scope as well as all sub-scopes; if <code>None</code>, we just inherit the parent scope reuse.</li>
+<li><b><code>dtype</code></b>: type of variables created in this scope (defaults to the type in the passed scope, or inherited from parent scope).</li>
+</ul>
+<h5 id="returns-60">Returns:</h5>
+<p>A scope that can be to captured and reused.</p>
+<h5 id="raises-15">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: when trying to reuse within a create scope, or create within a reuse scope, or if reuse is not <code>None</code> or <code>True</code>.</li>
+<li><b><code>TypeError</code></b>: when the types of some arguments are not appropriate.</li>
+</ul>
+<hr />
+<h3 id="tf.variable_op_scopevalues-name_or_scope-default_namenone-initializernone-regularizernone-caching_devicenone-partitionernone-custom_getternone-reusenone-dtypenone"><a name="//apple_ref/cpp/Function/variable_op_scope" class="dashAnchor"></a><code id="variable_op_scope">tf.variable_op_scope(values, name_or_scope, default_name=None, initializer=None, regularizer=None, caching_device=None, partitioner=None, custom_getter=None, reuse=None, dtype=None)</code></h3>
+<p>Deprecated: context manager for defining an op that creates variables.</p>
+<hr />
+<h3 id="tf.get_variable_scope"><a name="//apple_ref/cpp/Function/get_variable_scope" class="dashAnchor"></a><code id="get_variable_scope">tf.get_variable_scope()</code></h3>
+<p>Returns the current variable scope.</p>
+<hr />
+<h3 id="tf.make_templatename_-func_-create_scope_now_false-unique_name_none-custom_getter_none-kwargs"><a name="//apple_ref/cpp/Function/make_template" class="dashAnchor"></a><code id="make_template">tf.make_template(name_, func_, create_scope_now_=False, unique_name_=None, custom_getter_=None, **kwargs)</code></h3>
+<p>Given an arbitrary function, wrap it so that it does variable sharing.</p>
+<p>This wraps <code>func_</code> in a Template and partially evaluates it. Templates are functions that create variables the first time they are called and reuse them thereafter. In order for <code>func_</code> to be compatible with a <code>Template</code> it must have the following properties:</p>
+<ul>
+<li>The function should create all trainable variables and any variables that should be reused by calling <code>tf.get_variable</code>. If a trainable variable is created using <code>tf.Variable</code>, then a ValueError will be thrown. Variables that are intended to be locals can be created by specifying <code>tf.Variable(..., trainable=false)</code>.</li>
+<li>The function may use variable scopes and other templates internally to create and reuse variables, but it shouldn't use <code>tf.global_variables</code> to capture variables that are defined outside of the scope of the function.</li>
+<li>Internal scopes and variable names should not depend on any arguments that are not supplied to <code>make_template</code>. In general you will get a ValueError telling you that you are trying to reuse a variable that doesn't exist if you make a mistake.</li>
+</ul>
+<p>In the following example, both <code>z</code> and <code>w</code> will be scaled by the same <code>y</code>. It is important to note that if we didn't assign <code>scalar_name</code> and used a different name for z and w that a <code>ValueError</code> would be thrown because it couldn't reuse the variable.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="kw">def</span> my_op(x, scalar_name):
+  var1 <span class="op">=</span> tf.get_variable(scalar_name,
+                         shape<span class="op">=</span>[],
+                         initializer<span class="op">=</span>tf.constant_initializer(<span class="dv">1</span>))
+  <span class="cf">return</span> x <span class="op">*</span> var1
+
+scale_by_y <span class="op">=</span> tf.make_template(<span class="st">&#39;scale_by_y&#39;</span>, my_op, scalar_name<span class="op">=</span><span class="st">&#39;y&#39;</span>)
+
+z <span class="op">=</span> scale_by_y(input1)
+w <span class="op">=</span> scale_by_y(input2)</code></pre></div>
+<p>As a safe-guard, the returned function will raise a <code>ValueError</code> after the first call if trainable variables are created by calling <code>tf.Variable</code>.</p>
+<p>If all of these are true, then 2 properties are enforced by the template:</p>
+<ol style="list-style-type: decimal">
+<li>Calling the same template multiple times will share all non-local variables.</li>
+<li>Two different templates are guaranteed to be unique, unless you reenter the same variable scope as the initial definition of a template and redefine it. An examples of this exception:</li>
+</ol>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="kw">def</span> my_op(x, scalar_name):
+  var1 <span class="op">=</span> tf.get_variable(scalar_name,
+                         shape<span class="op">=</span>[],
+                         initializer<span class="op">=</span>tf.constant_initializer(<span class="dv">1</span>))
+  <span class="cf">return</span> x <span class="op">*</span> var1
+
+<span class="cf">with</span> tf.variable_scope(<span class="st">&#39;scope&#39;</span>) <span class="im">as</span> vs:
+  scale_by_y <span class="op">=</span> tf.make_template(<span class="st">&#39;scale_by_y&#39;</span>, my_op, scalar_name<span class="op">=</span><span class="st">&#39;y&#39;</span>)
+  z <span class="op">=</span> scale_by_y(input1)
+  w <span class="op">=</span> scale_by_y(input2)
+
+<span class="co"># Creates a template that reuses the variables above.</span>
+<span class="cf">with</span> tf.variable_scope(vs, reuse<span class="op">=</span><span class="va">True</span>):
+  scale_by_y2 <span class="op">=</span> tf.make_template(<span class="st">&#39;scale_by_y&#39;</span>, my_op, scalar_name<span class="op">=</span><span class="st">&#39;y&#39;</span>)
+  z2 <span class="op">=</span> scale_by_y2(input1)
+  w2 <span class="op">=</span> scale_by_y2(input2)</code></pre></div>
+<p>Depending on the value of <code>create_scope_now_</code>, the full variable scope may be captured either at the time of first call or at the time of construction. If this option is set to True, then all Tensors created by repeated calls to the template will have an extra trailing _N+1 to their name, as the first time the scope is entered in the Template constructor no Tensors are created.</p>
+<p>Note: <code>name_</code>, <code>func_</code> and <code>create_scope_now_</code> have a trailing underscore to reduce the likelihood of collisions with kwargs.</p>
+<h5 id="args-56">Args:</h5>
+<ul>
+<li><b><code>name_</code></b>: A name for the scope created by this template. If necessary, the name will be made unique by appending <code>_N</code> to the name.</li>
+<li><b><code>func_</code></b>: The function to wrap.</li>
+<li><b><code>create_scope_now_</code></b>: Boolean controlling whether the scope should be created when the template is constructed or when the template is called. Default is False, meaning the scope is created when the template is called.</li>
+<li><b><code>unique_name_</code></b>: When used, it overrides name_ and is not made unique. If a template of the same scope/unique_name already exists and reuse is false, an error is raised. Defaults to None.</li>
+<li><b><code>custom_getter_</code></b>: Optional custom getter for variables used in <code>func_</code>. See the <a href="#get_variable"><code>get_variable</code></a> <code>custom_getter</code> documentation for more information.</li>
+<li><b><code>**kwargs</code></b>: Keyword arguments to apply to <code>func_</code>.</li>
+</ul>
+<h5 id="returns-61">Returns:</h5>
+<p>A function to encapsulate a set of variables which should be created once and reused. An enclosing scope will created, either where <code>make_template</code> is called, or wherever the result is called, depending on the value of <code>create_scope_now_</code>. Regardless of the value, the first time the template is called it will enter the scope with no reuse, and call <code>func_</code> to create variables, which are guaranteed to be unique. All subsequent calls will re-enter the scope and reuse those variables.</p>
+<h5 id="raises-16">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if the name is None.</li>
+</ul>
+<hr />
+<h3 id="tf.no_regularizer_"><a name="//apple_ref/cpp/Function/no_regularizer" class="dashAnchor"></a><code id="no_regularizer">tf.no_regularizer(_)</code></h3>
+<p>Use this function to prevent regularization of variables.</p>
+<hr />
+<h3 id="class-tf.constant_initializer"><a name="//apple_ref/cpp/Function/constant_initializer" class="dashAnchor"></a><code id="constant_initializer">class tf.constant_initializer</code></h3>
+<p>Initializer that generates tensors with constant values.</p>
+<p>The resulting tensor is populated with values of type <code>dtype</code>, as specified by arguments <code>value</code> following the desired <code>shape</code> of the new tensor (see examples below).</p>
+<p>The argument <code>value</code> can be a constant value, or a list of values of type <code>dtype</code>. If <code>value</code> is a list, then the length of the list must be less than or equal to the number of elements implied by the desired shape of the tensor. In the case where the total number of elements in <code>value</code> is less than the number of elements required by the tensor shape, the last element in <code>value</code> will be used to fill the remaining entries. If the total number of elements in <code>value</code> is greater than the number of elements required by the tensor shape, the initializer will raise a <code>ValueError</code>.</p>
+<p>Args: value: A Python scalar, list of values, or a N-dimensional numpy array. All elements of the initialized variable will be set to the corresponding value in the <code>value</code> argument. dtype: The data type.</p>
+<p>Examples: The following example can be rewritten using a numpy.ndarray instead of the <code>value</code> list, even reshaped, as shown in the two commented lines below the <code>value</code> list initialization.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">  <span class="op">&gt;&gt;&gt;</span> <span class="im">import</span> numpy <span class="im">as</span> np
+  <span class="op">&gt;&gt;&gt;</span> <span class="im">import</span> tensorflow <span class="im">as</span> tf
+
+  <span class="op">&gt;&gt;&gt;</span> value <span class="op">=</span> [<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>]
+  <span class="op">&gt;&gt;&gt;</span> <span class="co"># value = np.array(value)</span>
+  <span class="op">&gt;&gt;&gt;</span> <span class="co"># value = value.reshape([2, 4])</span>
+  <span class="op">&gt;&gt;&gt;</span> init <span class="op">=</span> tf.constant_initializer(value)
+
+  <span class="op">&gt;&gt;&gt;</span> <span class="bu">print</span>(<span class="st">&#39;fitting shape:&#39;</span>)
+  <span class="op">&gt;&gt;&gt;</span> tf.reset_default_graph()
+  <span class="op">&gt;&gt;&gt;</span> <span class="cf">with</span> tf.Session():
+  <span class="op">&gt;&gt;&gt;</span>   x <span class="op">=</span> tf.get_variable(<span class="st">&#39;x&#39;</span>, shape<span class="op">=</span>[<span class="dv">2</span>, <span class="dv">4</span>], initializer<span class="op">=</span>init)
+  <span class="op">&gt;&gt;&gt;</span>   x.initializer.run()
+  <span class="op">&gt;&gt;&gt;</span>   <span class="bu">print</span>(x.<span class="bu">eval</span>())
+
+  fitting shape:
+  [[ <span class="dv">0</span>.  <span class="dv">1</span>.  <span class="dv">2</span>.  <span class="dv">3</span>.]
+   [ <span class="dv">4</span>.  <span class="dv">5</span>.  <span class="dv">6</span>.  <span class="dv">7</span>.]]
+
+  <span class="op">&gt;&gt;&gt;</span> <span class="bu">print</span>(<span class="st">&#39;larger shape:&#39;</span>)
+  <span class="op">&gt;&gt;&gt;</span> tf.reset_default_graph()
+  <span class="op">&gt;&gt;&gt;</span> <span class="cf">with</span> tf.Session():
+  <span class="op">&gt;&gt;&gt;</span>   x <span class="op">=</span> tf.get_variable(<span class="st">&#39;x&#39;</span>, shape<span class="op">=</span>[<span class="dv">3</span>, <span class="dv">4</span>], initializer<span class="op">=</span>init)
+  <span class="op">&gt;&gt;&gt;</span>   x.initializer.run()
+  <span class="op">&gt;&gt;&gt;</span>   <span class="bu">print</span>(x.<span class="bu">eval</span>())
+
+  larger shape:
+  [[ <span class="dv">0</span>.  <span class="dv">1</span>.  <span class="dv">2</span>.  <span class="dv">3</span>.]
+   [ <span class="dv">4</span>.  <span class="dv">5</span>.  <span class="dv">6</span>.  <span class="dv">7</span>.]
+   [ <span class="dv">7</span>.  <span class="dv">7</span>.  <span class="dv">7</span>.  <span class="dv">7</span>.]]
+
+  <span class="op">&gt;&gt;&gt;</span> <span class="bu">print</span>(<span class="st">&#39;smaller shape:&#39;</span>)
+  <span class="op">&gt;&gt;&gt;</span> tf.reset_default_graph()
+  <span class="op">&gt;&gt;&gt;</span> <span class="cf">with</span> tf.Session():
+  <span class="op">&gt;&gt;&gt;</span>   x <span class="op">=</span> tf.get_variable(<span class="st">&#39;x&#39;</span>, shape<span class="op">=</span>[<span class="dv">2</span>, <span class="dv">3</span>], initializer<span class="op">=</span>init)
+
+  <span class="pp">ValueError</span>: Too many elements provided. Needed at most <span class="dv">6</span>, but received <span class="dv">8</span></code></pre></div>
+<hr />
+<h4 id="tf.constant_initializer.__call__shape-dtypenone-partition_infonone"><code id="constant_initializer.__call__">tf.constant_initializer.__call__(shape, dtype=None, partition_info=None)</code></h4>
+<hr />
+<h4 id="tf.constant_initializer.__init__value0-dtypetf.float32"><code id="constant_initializer.__init__">tf.constant_initializer.__init__(value=0, dtype=tf.float32)</code></h4>
+<hr />
+<h3 id="class-tf.random_normal_initializer"><a name="//apple_ref/cpp/Function/random_normal_initializer" class="dashAnchor"></a><code id="random_normal_initializer">class tf.random_normal_initializer</code></h3>
+<p>Initializer that generates tensors with a normal distribution.</p>
+<p>Args: mean: a python scalar or a scalar tensor. Mean of the random values to generate. stddev: a python scalar or a scalar tensor. Standard deviation of the random values to generate. seed: A Python integer. Used to create random seeds. See <a href="../../api_docs/python/constant_op.md#set_random_seed"><code>set_random_seed</code></a> for behavior. dtype: The data type. Only floating point types are supported. - - -</p>
+<h4 id="tf.random_normal_initializer.__call__shape-dtypenone-partition_infonone"><code id="random_normal_initializer.__call__">tf.random_normal_initializer.__call__(shape, dtype=None, partition_info=None)</code></h4>
+<hr />
+<h4 id="tf.random_normal_initializer.__init__mean0.0-stddev1.0-seednone-dtypetf.float32"><code id="random_normal_initializer.__init__">tf.random_normal_initializer.__init__(mean=0.0, stddev=1.0, seed=None, dtype=tf.float32)</code></h4>
+<hr />
+<h3 id="class-tf.truncated_normal_initializer"><a name="//apple_ref/cpp/Function/truncated_normal_initializer" class="dashAnchor"></a><code id="truncated_normal_initializer">class tf.truncated_normal_initializer</code></h3>
+<p>Initializer that generates a truncated normal distribution.</p>
+<p>These values are similar to values from a <code>random_normal_initializer</code> except that values more than two standard deviations from the mean are discarded and re-drawn. This is the recommended initializer for neural network weights and filters.</p>
+<p>Args: mean: a python scalar or a scalar tensor. Mean of the random values to generate. stddev: a python scalar or a scalar tensor. Standard deviation of the random values to generate. seed: A Python integer. Used to create random seeds. See <a href="../../api_docs/python/constant_op.md#set_random_seed"><code>set_random_seed</code></a> for behavior. dtype: The data type. Only floating point types are supported. - - -</p>
+<h4 id="tf.truncated_normal_initializer.__call__shape-dtypenone-partition_infonone"><code id="truncated_normal_initializer.__call__">tf.truncated_normal_initializer.__call__(shape, dtype=None, partition_info=None)</code></h4>
+<hr />
+<h4 id="tf.truncated_normal_initializer.__init__mean0.0-stddev1.0-seednone-dtypetf.float32"><code id="truncated_normal_initializer.__init__">tf.truncated_normal_initializer.__init__(mean=0.0, stddev=1.0, seed=None, dtype=tf.float32)</code></h4>
+<hr />
+<h3 id="class-tf.random_uniform_initializer"><a name="//apple_ref/cpp/Function/random_uniform_initializer" class="dashAnchor"></a><code id="random_uniform_initializer">class tf.random_uniform_initializer</code></h3>
+<p>Initializer that generates tensors with a uniform distribution.</p>
+<p>Args: minval: A python scalar or a scalar tensor. Lower bound of the range of random values to generate. maxval: A python scalar or a scalar tensor. Upper bound of the range of random values to generate. Defaults to 1 for float types. seed: A Python integer. Used to create random seeds. See <a href="../../api_docs/python/constant_op.md#set_random_seed"><code>set_random_seed</code></a> for behavior. dtype: The data type. - - -</p>
+<h4 id="tf.random_uniform_initializer.__call__shape-dtypenone-partition_infonone"><code id="random_uniform_initializer.__call__">tf.random_uniform_initializer.__call__(shape, dtype=None, partition_info=None)</code></h4>
+<hr />
+<h4 id="tf.random_uniform_initializer.__init__minval0-maxvalnone-seednone-dtypetf.float32"><code id="random_uniform_initializer.__init__">tf.random_uniform_initializer.__init__(minval=0, maxval=None, seed=None, dtype=tf.float32)</code></h4>
+<hr />
+<h3 id="class-tf.uniform_unit_scaling_initializer"><a name="//apple_ref/cpp/Function/uniform_unit_scaling_initializer" class="dashAnchor"></a><code id="uniform_unit_scaling_initializer">class tf.uniform_unit_scaling_initializer</code></h3>
+<p>Initializer that generates tensors without scaling variance.</p>
+<p>When initializing a deep network, it is in principle advantageous to keep the scale of the input variance constant, so it does not explode or diminish by reaching the final layer. If the input is <code>x</code> and the operation <code>x * W</code>, and we want to initialize <code>W</code> uniformly at random, we need to pick <code>W</code> from</p>
+<pre><code>[-sqrt(3) / sqrt(dim), sqrt(3) / sqrt(dim)]</code></pre>
+<p>to keep the scale intact, where <code>dim = W.shape[0]</code> (the size of the input). A similar calculation for convolutional networks gives an analogous result with <code>dim</code> equal to the product of the first 3 dimensions. When nonlinearities are present, we need to multiply this by a constant <code>factor</code>. See <a href="https://arxiv.org/abs/1412.6558">Sussillo et al., 2014</a> (<a href="http://arxiv.org/pdf/1412.6558.pdf">pdf</a>) for deeper motivation, experiments and the calculation of constants. In section 2.3 there, the constants were numerically computed: for a linear layer it's 1.0, relu: ~1.43, tanh: ~1.15.</p>
+<p>Args: factor: Float. A multiplicative factor by which the values will be scaled. seed: A Python integer. Used to create random seeds. See <a href="../../api_docs/python/constant_op.md#set_random_seed"><code>set_random_seed</code></a> for behavior. dtype: The data type. Only floating point types are supported. - - -</p>
+<h4 id="tf.uniform_unit_scaling_initializer.__call__shape-dtypenone-partition_infonone"><code id="uniform_unit_scaling_initializer.__call__">tf.uniform_unit_scaling_initializer.__call__(shape, dtype=None, partition_info=None)</code></h4>
+<hr />
+<h4 id="tf.uniform_unit_scaling_initializer.__init__factor1.0-seednone-dtypetf.float32"><code id="uniform_unit_scaling_initializer.__init__">tf.uniform_unit_scaling_initializer.__init__(factor=1.0, seed=None, dtype=tf.float32)</code></h4>
+<hr />
+<h3 id="class-tf.zeros_initializer"><a name="//apple_ref/cpp/Function/zeros_initializer" class="dashAnchor"></a><code id="zeros_initializer">class tf.zeros_initializer</code></h3>
+<p>Initializer that generates tensors initialized to 0. - - -</p>
+<h4 id="tf.zeros_initializer.__call__shape-dtypenone-partition_infonone"><code id="zeros_initializer.__call__">tf.zeros_initializer.__call__(shape, dtype=None, partition_info=None)</code></h4>
+<hr />
+<h4 id="tf.zeros_initializer.__init__dtypetf.float32"><code id="zeros_initializer.__init__">tf.zeros_initializer.__init__(dtype=tf.float32)</code></h4>
+<hr />
+<h3 id="class-tf.ones_initializer"><a name="//apple_ref/cpp/Function/ones_initializer" class="dashAnchor"></a><code id="ones_initializer">class tf.ones_initializer</code></h3>
+<p>Initializer that generates tensors initialized to 1. - - -</p>
+<h4 id="tf.ones_initializer.__call__shape-dtypenone-partition_infonone"><code id="ones_initializer.__call__">tf.ones_initializer.__call__(shape, dtype=None, partition_info=None)</code></h4>
+<hr />
+<h4 id="tf.ones_initializer.__init__dtypetf.float32"><code id="ones_initializer.__init__">tf.ones_initializer.__init__(dtype=tf.float32)</code></h4>
+<hr />
+<h3 id="class-tf.orthogonal_initializer"><a name="//apple_ref/cpp/Function/orthogonal_initializer" class="dashAnchor"></a><code id="orthogonal_initializer">class tf.orthogonal_initializer</code></h3>
+<p>Initializer that generates an orthogonal matrix.</p>
+<p>If the shape of the tensor to initialize is two-dimensional, i is initialized with an orthogonal matrix obtained from the singular value decomposition of a matrix of uniform random numbers.</p>
+<p>If the shape of the tensor to initialize is more than two-dimensional, a matrix of shape <code>(shape[0] * ... * shape[n - 2], shape[n - 1])</code> is initialized, where <code>n</code> is the length of the shape vector. The matrix is subsequently reshaped to give a tensor of the desired shape.</p>
+<p>Args: gain: multiplicative factor to apply to the orthogonal matrix dtype: The type of the output. seed: A Python integer. Used to create random seeds. See <a href="../../api_docs/python/constant_op.md#set_random_seed"><code>set_random_seed</code></a> for behavior. - - -</p>
+<h4 id="tf.orthogonal_initializer.__call__shape-dtypenone-partition_infonone"><code id="orthogonal_initializer.__call__">tf.orthogonal_initializer.__call__(shape, dtype=None, partition_info=None)</code></h4>
+<hr />
+<h4 id="tf.orthogonal_initializer.__init__gain1.0-dtypetf.float32-seednone"><code id="orthogonal_initializer.__init__">tf.orthogonal_initializer.__init__(gain=1.0, dtype=tf.float32, seed=None)</code></h4>
+<h2 id="variable-partitioners-for-sharding">Variable Partitioners for Sharding</h2>
+<hr />
+<h3 id="tf.fixed_size_partitionernum_shards-axis0"><a name="//apple_ref/cpp/Function/fixed_size_partitioner" class="dashAnchor"></a><code id="fixed_size_partitioner">tf.fixed_size_partitioner(num_shards, axis=0)</code></h3>
+<p>Partitioner to specify a fixed number of shards along given axis.</p>
+<h5 id="args-57">Args:</h5>
+<ul>
+<li><b><code>num_shards</code></b>: <code>int</code>, number of shards to partition variable.</li>
+<li><b><code>axis</code></b>: <code>int</code>, axis to partition on.</li>
+</ul>
+<h5 id="returns-62">Returns:</h5>
+<p>A partition function usable as the <code>partitioner</code> argument to <code>variable_scope</code>, <code>get_variable</code>, and <code>get_partitioned_variable_list</code>.</p>
+<hr />
+<h3 id="tf.variable_axis_size_partitionermax_shard_bytes-axis0-bytes_per_string_element16-max_shardsnone"><a name="//apple_ref/cpp/Function/variable_axis_size_partitioner" class="dashAnchor"></a><code id="variable_axis_size_partitioner">tf.variable_axis_size_partitioner(max_shard_bytes, axis=0, bytes_per_string_element=16, max_shards=None)</code></h3>
+<p>Get a partitioner for VariableScope to keep shards below <code>max_shard_bytes</code>.</p>
+<p>This partitioner will shard a Variable along one axis, attempting to keep the maximum shard size below <code>max_shard_bytes</code>. In practice, this is not always possible when sharding along only one axis. When this happens, this axis is sharded as much as possible (i.e., every dimension becomes a separate shard).</p>
+<p>If the partitioner hits the <code>max_shards</code> limit, then each shard may end up larger than <code>max_shard_bytes</code>. By default <code>max_shards</code> equals <code>None</code> and no limit on the number of shards is enforced.</p>
+<p>One reasonable value for <code>max_shard_bytes</code> is <code>(64 &lt;&lt; 20) - 1</code>, or almost <code>64MB</code>, to keep below the protobuf byte limit.</p>
+<h5 id="args-58">Args:</h5>
+<ul>
+<li><b><code>max_shard_bytes</code></b>: The maximum size any given shard is allowed to be.</li>
+<li><b><code>axis</code></b>: The axis to partition along. Default: outermost axis.</li>
+<li><b><code>bytes_per_string_element</code></b>: If the <code>Variable</code> is of type string, this provides an estimate of how large each scalar in the <code>Variable</code> is.</li>
+<li><b><code>max_shards</code></b>: The maximum number of shards in int created taking precedence over <code>max_shard_bytes</code>.</li>
+</ul>
+<h5 id="returns-63">Returns:</h5>
+<p>A partition function usable as the <code>partitioner</code> argument to <code>variable_scope</code>, <code>get_variable</code>, and <code>get_partitioned_variable_list</code>.</p>
+<h5 id="raises-17">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If any of the byte counts are non-positive.</li>
+</ul>
+<hr />
+<h3 id="tf.min_max_variable_partitionermax_partitions1-axis0-min_slice_size262144-bytes_per_string_element16"><a name="//apple_ref/cpp/Function/min_max_variable_partitioner" class="dashAnchor"></a><code id="min_max_variable_partitioner">tf.min_max_variable_partitioner(max_partitions=1, axis=0, min_slice_size=262144, bytes_per_string_element=16)</code></h3>
+<p>Partitioner to allocate minimum size per slice.</p>
+<p>Returns a partitioner that partitions the variable of given shape and dtype such that each partition has a minimum of <code>min_slice_size</code> slice of the variable. The maximum number of such partitions (upper bound) is given by <code>max_partitions</code>.</p>
+<h5 id="args-59">Args:</h5>
+<ul>
+<li><b><code>max_partitions</code></b>: Upper bound on the number of partitions. Defaults to 1.</li>
+<li><b><code>axis</code></b>: Axis along which to partition the variable. Defaults to 0.</li>
+<li><b><code>min_slice_size</code></b>: Minimum size of the variable slice per partition. Defaults to 256K.</li>
+<li><b><code>bytes_per_string_element</code></b>: If the <code>Variable</code> is of type string, this provides an estimate of how large each scalar in the <code>Variable</code> is.</li>
+</ul>
+<h5 id="returns-64">Returns:</h5>
+<p>A partition function usable as the <code>partitioner</code> argument to <code>variable_scope</code>, <code>get_variable</code>, and <code>get_partitioned_variable_list</code>.</p>
+<h2 id="sparse-variable-updates">Sparse Variable Updates</h2>
+<p>The sparse update ops modify a subset of the entries in a dense <code>Variable</code>, either overwriting the entries or adding / subtracting a delta. These are useful for training embedding models and similar lookup-based networks, since only a small subset of embedding vectors change in any given step.</p>
+<p>Since a sparse update of a large tensor may be generated automatically during gradient computation (as in the gradient of <a href="../../api_docs/python/array_ops.md#gather"><code>tf.gather</code></a>), an <a href="#IndexedSlices"><code>IndexedSlices</code></a> class is provided that encapsulates a set of sparse indices and values. <code>IndexedSlices</code> objects are detected and handled automatically by the optimizers in most cases.</p>
+<hr />
+<h3 id="tf.scatter_updateref-indices-updates-use_lockingnone-namenone"><a name="//apple_ref/cpp/Function/scatter_update" class="dashAnchor"></a><code id="scatter_update">tf.scatter_update(ref, indices, updates, use_locking=None, name=None)</code></h3>
+<p>Applies sparse updates to a variable reference.</p>
+<p>This operation computes</p>
+<pre><code># Scalar indices
+ref[indices, ...] = updates[...]
+
+# Vector indices (for each i)
+ref[indices[i], ...] = updates[i, ...]
+
+# High rank indices (for each i, ..., j)
+ref[indices[i, ..., j], ...] = updates[i, ..., j, ...]</code></pre>
+<p>This operation outputs <code>ref</code> after the update is done. This makes it easier to chain operations that need to use the reset value.</p>
+<p>If values in <code>ref</code> is to be updated more than once, because there are duplicate entries in <code>indices</code>, the order at which the updates happen for each value is undefined.</p>
+<p>Requires <code>updates.shape = indices.shape + ref.shape[1:]</code>.</p>
+<div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+<p><img style="width:100%" src="../../images/ScatterUpdate.png" alt></p>
+</div>
+<h5 id="args-60">Args:</h5>
+<ul>
+<li><b><code>ref</code></b>: A mutable <code>Tensor</code>. Should be from a <code>Variable</code> node.</li>
+<li><b><code>indices</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. A tensor of indices into the first dimension of <code>ref</code>.</li>
+<li><b><code>updates</code></b>: A <code>Tensor</code>. Must have the same type as <code>ref</code>. A tensor of updated values to store in <code>ref</code>.</li>
+<li><b><code>use_locking</code></b>: An optional <code>bool</code>. Defaults to <code>True</code>. If True, the assignment will be protected by a lock; otherwise the behavior is undefined, but may exhibit less contention.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-65">Returns:</h5>
+<p>Same as <code>ref</code>. Returned as a convenience for operations that want to use the updated values after the update is done.</p>
+<hr />
+<h3 id="tf.scatter_addref-indices-updates-use_lockingnone-namenone"><a name="//apple_ref/cpp/Function/scatter_add" class="dashAnchor"></a><code id="scatter_add">tf.scatter_add(ref, indices, updates, use_locking=None, name=None)</code></h3>
+<p>Adds sparse updates to a variable reference.</p>
+<p>This operation computes</p>
+<pre><code># Scalar indices
+ref[indices, ...] += updates[...]
+
+# Vector indices (for each i)
+ref[indices[i], ...] += updates[i, ...]
+
+# High rank indices (for each i, ..., j)
+ref[indices[i, ..., j], ...] += updates[i, ..., j, ...]</code></pre>
+<p>This operation outputs <code>ref</code> after the update is done. This makes it easier to chain operations that need to use the reset value.</p>
+<p>Duplicate entries are handled correctly: if multiple <code>indices</code> reference the same location, their contributions add.</p>
+<p>Requires <code>updates.shape = indices.shape + ref.shape[1:]</code>.</p>
+<div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+<p><img style="width:100%" src="../../images/ScatterAdd.png" alt></p>
+</div>
+<h5 id="args-61">Args:</h5>
+<ul>
+<li><b><code>ref</code></b>: A mutable <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int64</code>, <code>int32</code>, <code>uint8</code>, <code>uint16</code>, <code>int16</code>, <code>int8</code>, <code>complex64</code>, <code>complex128</code>, <code>qint8</code>, <code>quint8</code>, <code>qint32</code>, <code>half</code>. Should be from a <code>Variable</code> node.</li>
+<li><b><code>indices</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. A tensor of indices into the first dimension of <code>ref</code>.</li>
+<li><b><code>updates</code></b>: A <code>Tensor</code>. Must have the same type as <code>ref</code>. A tensor of updated values to add to <code>ref</code>.</li>
+<li><b><code>use_locking</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>. If True, the addition will be protected by a lock; otherwise the behavior is undefined, but may exhibit less contention.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-66">Returns:</h5>
+<p>Same as <code>ref</code>. Returned as a convenience for operations that want to use the updated values after the update is done.</p>
+<hr />
+<h3 id="tf.scatter_subref-indices-updates-use_lockingnone-namenone"><a name="//apple_ref/cpp/Function/scatter_sub" class="dashAnchor"></a><code id="scatter_sub">tf.scatter_sub(ref, indices, updates, use_locking=None, name=None)</code></h3>
+<p>Subtracts sparse updates to a variable reference.</p>
+<pre><code># Scalar indices
+ref[indices, ...] -= updates[...]
+
+# Vector indices (for each i)
+ref[indices[i], ...] -= updates[i, ...]
+
+# High rank indices (for each i, ..., j)
+ref[indices[i, ..., j], ...] -= updates[i, ..., j, ...]</code></pre>
+<p>This operation outputs <code>ref</code> after the update is done. This makes it easier to chain operations that need to use the reset value.</p>
+<p>Duplicate entries are handled correctly: if multiple <code>indices</code> reference the same location, their (negated) contributions add.</p>
+<p>Requires <code>updates.shape = indices.shape + ref.shape[1:]</code>.</p>
+<div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+<p><img style="width:100%" src="../../images/ScatterSub.png" alt></p>
+</div>
+<h5 id="args-62">Args:</h5>
+<ul>
+<li><b><code>ref</code></b>: A mutable <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int64</code>, <code>int32</code>, <code>uint8</code>, <code>uint16</code>, <code>int16</code>, <code>int8</code>, <code>complex64</code>, <code>complex128</code>, <code>qint8</code>, <code>quint8</code>, <code>qint32</code>, <code>half</code>. Should be from a <code>Variable</code> node.</li>
+<li><b><code>indices</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. A tensor of indices into the first dimension of <code>ref</code>.</li>
+<li><b><code>updates</code></b>: A <code>Tensor</code>. Must have the same type as <code>ref</code>. A tensor of updated values to subtract from <code>ref</code>.</li>
+<li><b><code>use_locking</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>. If True, the subtraction will be protected by a lock; otherwise the behavior is undefined, but may exhibit less contention.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-67">Returns:</h5>
+<p>Same as <code>ref</code>. Returned as a convenience for operations that want to use the updated values after the update is done.</p>
+<hr />
+<h3 id="tf.scatter_mulref-indices-updates-use_lockingnone-namenone"><a name="//apple_ref/cpp/Function/scatter_mul" class="dashAnchor"></a><code id="scatter_mul">tf.scatter_mul(ref, indices, updates, use_locking=None, name=None)</code></h3>
+<p>Multiplies sparse updates into a variable reference.</p>
+<p>This operation computes</p>
+<pre><code># Scalar indices
+ref[indices, ...] *= updates[...]
+
+# Vector indices (for each i)
+ref[indices[i], ...] *= updates[i, ...]
+
+# High rank indices (for each i, ..., j)
+ref[indices[i, ..., j], ...] *= updates[i, ..., j, ...]</code></pre>
+<p>This operation outputs <code>ref</code> after the update is done. This makes it easier to chain operations that need to use the reset value.</p>
+<p>Duplicate entries are handled correctly: if multiple <code>indices</code> reference the same location, their contributions multiply.</p>
+<p>Requires <code>updates.shape = indices.shape + ref.shape[1:]</code>.</p>
+<h5 id="args-63">Args:</h5>
+<ul>
+<li><b><code>ref</code></b>: A mutable <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int64</code>, <code>int32</code>, <code>uint8</code>, <code>uint16</code>, <code>int16</code>, <code>int8</code>, <code>complex64</code>, <code>complex128</code>, <code>qint8</code>, <code>quint8</code>, <code>qint32</code>, <code>half</code>. Should be from a <code>Variable</code> node.</li>
+<li><b><code>indices</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. A tensor of indices into the first dimension of <code>ref</code>.</li>
+<li><b><code>updates</code></b>: A <code>Tensor</code>. Must have the same type as <code>ref</code>. A tensor of updated values to multiply to <code>ref</code>.</li>
+<li><b><code>use_locking</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>. If True, the operation will be protected by a lock; otherwise the behavior is undefined, but may exhibit less contention.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-68">Returns:</h5>
+<p>Same as <code>ref</code>. Returned as a convenience for operations that want to use the updated values after the update is done.</p>
+<hr />
+<h3 id="tf.scatter_divref-indices-updates-use_lockingnone-namenone"><a name="//apple_ref/cpp/Function/scatter_div" class="dashAnchor"></a><code id="scatter_div">tf.scatter_div(ref, indices, updates, use_locking=None, name=None)</code></h3>
+<p>Divides a variable reference by sparse updates.</p>
+<p>This operation computes</p>
+<pre><code># Scalar indices
+ref[indices, ...] /= updates[...]
+
+# Vector indices (for each i)
+ref[indices[i], ...] /= updates[i, ...]
+
+# High rank indices (for each i, ..., j)
+ref[indices[i, ..., j], ...] /= updates[i, ..., j, ...]</code></pre>
+<p>This operation outputs <code>ref</code> after the update is done. This makes it easier to chain operations that need to use the reset value.</p>
+<p>Duplicate entries are handled correctly: if multiple <code>indices</code> reference the same location, their contributions divide.</p>
+<p>Requires <code>updates.shape = indices.shape + ref.shape[1:]</code>.</p>
+<h5 id="args-64">Args:</h5>
+<ul>
+<li><b><code>ref</code></b>: A mutable <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int64</code>, <code>int32</code>, <code>uint8</code>, <code>uint16</code>, <code>int16</code>, <code>int8</code>, <code>complex64</code>, <code>complex128</code>, <code>qint8</code>, <code>quint8</code>, <code>qint32</code>, <code>half</code>. Should be from a <code>Variable</code> node.</li>
+<li><b><code>indices</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. A tensor of indices into the first dimension of <code>ref</code>.</li>
+<li><b><code>updates</code></b>: A <code>Tensor</code>. Must have the same type as <code>ref</code>. A tensor of values that <code>ref</code> is divided by.</li>
+<li><b><code>use_locking</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>. If True, the operation will be protected by a lock; otherwise the behavior is undefined, but may exhibit less contention.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-69">Returns:</h5>
+<p>Same as <code>ref</code>. Returned as a convenience for operations that want to use the updated values after the update is done.</p>
+<hr />
+<h3 id="tf.scatter_nd_updateref-indices-updates-use_lockingnone-namenone"><a name="//apple_ref/cpp/Function/scatter_nd_update" class="dashAnchor"></a><code id="scatter_nd_update">tf.scatter_nd_update(ref, indices, updates, use_locking=None, name=None)</code></h3>
+<p>Applies sparse <code>updates</code> to individual values or slices within a given</p>
+<p>variable according to <code>indices</code>.</p>
+<p><code>ref</code> is a <code>Tensor</code> with rank <code>P</code> and <code>indices</code> is a <code>Tensor</code> of rank <code>Q</code>.</p>
+<p><code>indices</code> must be integer tensor, containing indices into <code>ref</code>. It must be shape <code>[d_0, ..., d_{Q-2}, K]</code> where <code>0 &lt; K &lt;= P</code>.</p>
+<p>The innermost dimension of <code>indices</code> (with length <code>K</code>) corresponds to indices into elements (if <code>K = P</code>) or slices (if <code>K &lt; P</code>) along the <code>K</code>th dimension of <code>ref</code>.</p>
+<p><code>updates</code> is <code>Tensor</code> of rank <code>Q-1+P-K</code> with shape:</p>
+<pre><code>[d_0, ..., d_{Q-2}, ref.shape[K], ..., ref.shape[P-1]].</code></pre>
+<p>For example, say we want to update 4 scattered elements to a rank-1 tensor to 8 elements. In Python, that update would look like this:</p>
+<pre><code>ref = tf.Variable([1, 2, 3, 4, 5, 6, 7, 8])
+indices = tf.constant([[4], [3], [1] ,[7]])
+updates = tf.constant([9, 10, 11, 12])
+update = tf.scatter_nd_update(ref, indices, updates)
+with tf.Session() as sess:
+  print sess.run(update)</code></pre>
+<p>The resulting update to ref would look like this:</p>
+<pre><code>[1, 11, 3, 10, 9, 6, 7, 12]</code></pre>
+<p>See <a href="#scatter_nd">tf.scatter_nd</a> for more details about how to make updates to slices.</p>
+<h5 id="args-65">Args:</h5>
+<ul>
+<li><b><code>ref</code></b>: A mutable <code>Tensor</code>. A mutable Tensor. Should be from a Variable node.</li>
+<li><b><code>indices</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. A Tensor. Must be one of the following types: int32, int64. A tensor of indices into ref.</li>
+<li><b><code>updates</code></b>: A <code>Tensor</code>. Must have the same type as <code>ref</code>. A Tensor. Must have the same type as ref. A tensor of updated values to add to ref.</li>
+<li><b><code>use_locking</code></b>: An optional <code>bool</code>. Defaults to <code>True</code>. An optional bool. Defaults to True. If True, the assignment will be protected by a lock; otherwise the behavior is undefined, but may exhibit less contention.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-70">Returns:</h5>
+<p>A mutable <code>Tensor</code>. Has the same type as <code>ref</code>. Same as ref. Returned as a convenience for operations that want to use the updated values after the update is done.</p>
+<hr />
+<h3 id="tf.scatter_nd_addref-indices-updates-use_lockingnone-namenone"><a name="//apple_ref/cpp/Function/scatter_nd_add" class="dashAnchor"></a><code id="scatter_nd_add">tf.scatter_nd_add(ref, indices, updates, use_locking=None, name=None)</code></h3>
+<p>Applies sparse addition between <code>updates</code> and individual values or slices</p>
+<p>within a given variable according to <code>indices</code>.</p>
+<p><code>ref</code> is a <code>Tensor</code> with rank <code>P</code> and <code>indices</code> is a <code>Tensor</code> of rank <code>Q</code>.</p>
+<p><code>indices</code> must be integer tensor, containing indices into <code>ref</code>. It must be shape <code>[d_0, ..., d_{Q-2}, K]</code> where <code>0 &lt; K &lt;= P</code>.</p>
+<p>The innermost dimension of <code>indices</code> (with length <code>K</code>) corresponds to indices into elements (if <code>K = P</code>) or slices (if <code>K &lt; P</code>) along the <code>K</code>th dimension of <code>ref</code>.</p>
+<p><code>updates</code> is <code>Tensor</code> of rank <code>Q-1+P-K</code> with shape:</p>
+<pre><code>[d_0, ..., d_{Q-2}, ref.shape[K], ..., ref.shape[P-1]].</code></pre>
+<p>For example, say we want to add 4 scattered elements to a rank-1 tensor to 8 elements. In Python, that addition would look like this:</p>
+<pre><code>ref = tf.Variable([1, 2, 3, 4, 5, 6, 7, 8])
+indices = tf.constant([[4], [3], [1], [7]])
+updates = tf.constant([9, 10, 11, 12])
+add = tf.scatter_nd_add(ref, indices, updates)
+with tf.Session() as sess:
+  print sess.run(add)</code></pre>
+<p>The resulting update to ref would look like this:</p>
+<pre><code>[1, 13, 3, 14, 14, 6, 7, 20]</code></pre>
+<p>See <a href="#scatter_nd">tf.scatter_nd</a> for more details about how to make updates to slices.</p>
+<h5 id="args-66">Args:</h5>
+<ul>
+<li><b><code>ref</code></b>: A mutable <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int64</code>, <code>int32</code>, <code>uint8</code>, <code>uint16</code>, <code>int16</code>, <code>int8</code>, <code>complex64</code>, <code>complex128</code>, <code>qint8</code>, <code>quint8</code>, <code>qint32</code>, <code>half</code>. A mutable Tensor. Should be from a Variable node.</li>
+<li><b><code>indices</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. A Tensor. Must be one of the following types: int32, int64. A tensor of indices into ref.</li>
+<li><b><code>updates</code></b>: A <code>Tensor</code>. Must have the same type as <code>ref</code>. A Tensor. Must have the same type as ref. A tensor of updated values to add to ref.</li>
+<li><b><code>use_locking</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>. An optional bool. Defaults to True. If True, the assignment will be protected by a lock; otherwise the behavior is undefined, but may exhibit less contention.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-71">Returns:</h5>
+<p>A mutable <code>Tensor</code>. Has the same type as <code>ref</code>. Same as ref. Returned as a convenience for operations that want to use the updated values after the update is done.</p>
+<hr />
+<h3 id="tf.scatter_nd_subref-indices-updates-use_lockingnone-namenone"><a name="//apple_ref/cpp/Function/scatter_nd_sub" class="dashAnchor"></a><code id="scatter_nd_sub">tf.scatter_nd_sub(ref, indices, updates, use_locking=None, name=None)</code></h3>
+<p>Applies sparse subtraction between <code>updates</code> and individual values or slices</p>
+<p>within a given variable according to <code>indices</code>.</p>
+<p><code>ref</code> is a <code>Tensor</code> with rank <code>P</code> and <code>indices</code> is a <code>Tensor</code> of rank <code>Q</code>.</p>
+<p><code>indices</code> must be integer tensor, containing indices into <code>ref</code>. It must be shape <code>[d_0, ..., d_{Q-2}, K]</code> where <code>0 &lt; K &lt;= P</code>.</p>
+<p>The innermost dimension of <code>indices</code> (with length <code>K</code>) corresponds to indices into elements (if <code>K = P</code>) or slices (if <code>K &lt; P</code>) along the <code>K</code>th dimension of <code>ref</code>.</p>
+<p><code>updates</code> is <code>Tensor</code> of rank <code>Q-1+P-K</code> with shape:</p>
+<pre><code>[d_0, ..., d_{Q-2}, ref.shape[K], ..., ref.shape[P-1]].</code></pre>
+<p>For example, say we want to subtract 4 scattered elements from a rank-1 tensor with 8 elements. In Python, that subtraction would look like this:</p>
+<pre><code>ref = tf.Variable([1, 2, 3, 4, 5, 6, 7, 8])
+indices = tf.constant([[4], [3], [1], [7]])
+updates = tf.constant([9, 10, 11, 12])
+sub = tf.scatter_nd_sub(ref, indices, updates)
+with tf.Session() as sess:
+  print sess.run(sub)</code></pre>
+<p>The resulting update to ref would look like this:</p>
+<pre><code>[1, -9, 3, -6, -4, 6, 7, -4]</code></pre>
+<p>See <a href="#scatter_nd">tf.scatter_nd</a> for more details about how to make updates to slices.</p>
+<h5 id="args-67">Args:</h5>
+<ul>
+<li><b><code>ref</code></b>: A mutable <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int64</code>, <code>int32</code>, <code>uint8</code>, <code>uint16</code>, <code>int16</code>, <code>int8</code>, <code>complex64</code>, <code>complex128</code>, <code>qint8</code>, <code>quint8</code>, <code>qint32</code>, <code>half</code>. A mutable Tensor. Should be from a Variable node.</li>
+<li><b><code>indices</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. A Tensor. Must be one of the following types: int32, int64. A tensor of indices into ref.</li>
+<li><b><code>updates</code></b>: A <code>Tensor</code>. Must have the same type as <code>ref</code>. A Tensor. Must have the same type as ref. A tensor of updated values to subtract from ref.</li>
+<li><b><code>use_locking</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>. An optional bool. Defaults to True. If True, the assignment will be protected by a lock; otherwise the behavior is undefined, but may exhibit less contention.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-72">Returns:</h5>
+<p>A mutable <code>Tensor</code>. Has the same type as <code>ref</code>. Same as ref. Returned as a convenience for operations that want to use the updated values after the update is done.</p>
+<hr />
+<h3 id="tf.sparse_maska-mask_indices-namenone"><a name="//apple_ref/cpp/Function/sparse_mask" class="dashAnchor"></a><code id="sparse_mask">tf.sparse_mask(a, mask_indices, name=None)</code></h3>
+<p>Masks elements of <code>IndexedSlices</code>.</p>
+<p>Given an <code>IndexedSlices</code> instance <code>a</code>, returns another <code>IndexedSlices</code> that contains a subset of the slices of <code>a</code>. Only the slices at indices not specified in <code>mask_indices</code> are returned.</p>
+<p>This is useful when you need to extract a subset of slices in an <code>IndexedSlices</code> object.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># `a` contains slices at indices [12, 26, 37, 45] from a large tensor</span>
+<span class="co"># with shape [1000, 10]</span>
+a.indices <span class="op">=&gt;</span> [<span class="dv">12</span>, <span class="dv">26</span>, <span class="dv">37</span>, <span class="dv">45</span>]
+tf.shape(a.values) <span class="op">=&gt;</span> [<span class="dv">4</span>, <span class="dv">10</span>]
+
+<span class="co"># `b` will be the subset of `a` slices at its second and third indices, so</span>
+<span class="co"># we want to mask its first and last indices (which are at absolute</span>
+<span class="co"># indices 12, 45)</span>
+b <span class="op">=</span> tf.sparse_mask(a, [<span class="dv">12</span>, <span class="dv">45</span>])
+
+b.indices <span class="op">=&gt;</span> [<span class="dv">26</span>, <span class="dv">37</span>]
+tf.shape(b.values) <span class="op">=&gt;</span> [<span class="dv">2</span>, <span class="dv">10</span>]</code></pre></div>
+<h5 id="args-68">Args:</h5>
+<ul>
+<li><b><code>a</code></b>: An <code>IndexedSlices</code> instance.</li>
+<li><b><code>mask_indices</code></b>: Indices of elements to mask.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-73">Returns:</h5>
+<p>The masked <code>IndexedSlices</code> instance.</p>
+<hr />
+<h3 id="class-tf.indexedslices"><a name="//apple_ref/cpp/Class/IndexedSlices" class="dashAnchor"></a><code id="IndexedSlices">class tf.IndexedSlices</code></h3>
+<p>A sparse representation of a set of tensor slices at given indices.</p>
+<p>This class is a simple wrapper for a pair of <code>Tensor</code> objects:</p>
+<ul>
+<li><code>values</code>: A <code>Tensor</code> of any dtype with shape <code>[D0, D1, ..., Dn]</code>.</li>
+<li><code>indices</code>: A 1-D integer <code>Tensor</code> with shape <code>[D0]</code>.</li>
+</ul>
+<p>An <code>IndexedSlices</code> is typically used to represent a subset of a larger tensor <code>dense</code> of shape <code>[LARGE0, D1, .. , DN]</code> where <code>LARGE0 &gt;&gt; D0</code>. The values in <code>indices</code> are the indices in the first dimension of the slices that have been extracted from the larger tensor.</p>
+<p>The dense tensor <code>dense</code> represented by an <code>IndexedSlices</code> <code>slices</code> has</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">dense[slices.indices[i], :, :, :, ...] <span class="op">=</span> slices.values[i, :, :, :, ...]</code></pre></div>
+<p>The <code>IndexedSlices</code> class is used principally in the definition of gradients for operations that have sparse gradients (e.g. <a href="../../api_docs/python/array_ops.md#gather"><code>tf.gather</code></a>).</p>
+<p>Contrast this representation with <a href="../../api_docs/python/sparse_ops.md#SparseTensor"><code>SparseTensor</code></a>, which uses multi-dimensional indices and scalar values.</p>
+<hr />
+<h4 id="tf.indexedslices.__init__values-indices-dense_shapenone"><code id="IndexedSlices.__init__">tf.IndexedSlices.__init__(values, indices, dense_shape=None)</code></h4>
+<p>Creates an <code>IndexedSlices</code>.</p>
+<hr />
+<h4 id="tf.indexedslices.values"><code id="IndexedSlices.values">tf.IndexedSlices.values</code></h4>
+<p>A <code>Tensor</code> containing the values of the slices.</p>
+<hr />
+<h4 id="tf.indexedslices.indices"><code id="IndexedSlices.indices">tf.IndexedSlices.indices</code></h4>
+<p>A 1-D <code>Tensor</code> containing the indices of the slices.</p>
+<hr />
+<h4 id="tf.indexedslices.dense_shape"><code id="IndexedSlices.dense_shape">tf.IndexedSlices.dense_shape</code></h4>
+<p>A 1-D <code>Tensor</code> containing the shape of the corresponding dense tensor.</p>
+<hr />
+<h4 id="tf.indexedslices.name"><code id="IndexedSlices.name">tf.IndexedSlices.name</code></h4>
+<p>The name of this <code>IndexedSlices</code>.</p>
+<hr />
+<h4 id="tf.indexedslices.dtype"><code id="IndexedSlices.dtype">tf.IndexedSlices.dtype</code></h4>
+<p>The <code>DType</code> of elements in this tensor.</p>
+<hr />
+<h4 id="tf.indexedslices.device"><code id="IndexedSlices.device">tf.IndexedSlices.device</code></h4>
+<p>The name of the device on which <code>values</code> will be produced, or <code>None</code>.</p>
+<hr />
+<h4 id="tf.indexedslices.op"><code id="IndexedSlices.op">tf.IndexedSlices.op</code></h4>
+<p>The <code>Operation</code> that produces <code>values</code> as an output.</p>
+<h4 id="other-methods-2">Other Methods</h4>
+<hr />
+<h4 id="tf.indexedslices.__neg__"><code id="IndexedSlices.__neg__">tf.IndexedSlices.__neg__()</code></h4>
+<hr />
+<h4 id="tf.indexedslices.__str__"><code id="IndexedSlices.__str__">tf.IndexedSlices.__str__()</code></h4>
+<hr />
+<h4 id="tf.indexedslices.graph"><code id="IndexedSlices.graph">tf.IndexedSlices.graph</code></h4>
+<p>The <code>Graph</code> that contains the values, indices, and shape tensors.</p>
+<h3 id="read-only-lookup-tables">Read-only Lookup Tables</h3>
+<hr />
+<h3 id="tf.initialize_all_tablesargs-kwargs"><a name="//apple_ref/cpp/Function/initialize_all_tables" class="dashAnchor"></a><code id="initialize_all_tables">tf.initialize_all_tables(*args, **kwargs)</code></h3>
+<p>Returns an Op that initializes all tables of the default graph. (deprecated)</p>
+<p>THIS FUNCTION IS DEPRECATED. It will be removed after 2017-03-02. Instructions for updating: Use <code>tf.tables_initializer</code> instead.</p>
+<h5 id="args-69">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: Optional name for the initialization op.</li>
+</ul>
+<h5 id="returns-74">Returns:</h5>
+<p>An Op that initializes all tables. Note that if there are not tables the returned Op is a NoOp.</p>
+<hr />
+<h3 id="tf.tables_initializernameinit_all_tables"><a name="//apple_ref/cpp/Function/tables_initializer" class="dashAnchor"></a><code id="tables_initializer">tf.tables_initializer(name='init_all_tables')</code></h3>
+<p>Returns an Op that initializes all tables of the default graph.</p>
+<h5 id="args-70">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: Optional name for the initialization op.</li>
+</ul>
+<h5 id="returns-75">Returns:</h5>
+<p>An Op that initializes all tables. Note that if there are not tables the returned Op is a NoOp.</p>
+<h2 id="exporting-and-importing-meta-graphs">Exporting and Importing Meta Graphs</h2>
+<hr />
+<h3 id="tf.train.export_meta_graphfilenamenone-meta_info_defnone-graph_defnone-saver_defnone-collection_listnone-as_textfalse-graphnone-export_scopenone-clear_devicesfalse-kwargs"><a name="//apple_ref/cpp/Function/export_meta_graph" class="dashAnchor"></a><code id="export_meta_graph">tf.train.export_meta_graph(filename=None, meta_info_def=None, graph_def=None, saver_def=None, collection_list=None, as_text=False, graph=None, export_scope=None, clear_devices=False, **kwargs)</code></h3>
+<p>Returns <code>MetaGraphDef</code> proto. Optionally writes it to filename.</p>
+<p>This function exports the graph, saver, and collection objects into <code>MetaGraphDef</code> protocol buffer with the intention of it being imported at a later time or location to restart training, run inference, or be a subgraph.</p>
+<h5 id="args-71">Args:</h5>
+<ul>
+<li><b><code>filename</code></b>: Optional filename including the path for writing the generated <code>MetaGraphDef</code> protocol buffer.</li>
+<li><b><code>meta_info_def</code></b>: <code>MetaInfoDef</code> protocol buffer.</li>
+<li><b><code>graph_def</code></b>: <code>GraphDef</code> protocol buffer.</li>
+<li><b><code>saver_def</code></b>: <code>SaverDef</code> protocol buffer.</li>
+<li><b><code>collection_list</code></b>: List of string keys to collect.</li>
+<li><b><code>as_text</code></b>: If <code>True</code>, writes the <code>MetaGraphDef</code> as an ASCII proto.</li>
+<li><b><code>graph</code></b>: The <code>Graph</code> to import into. If <code>None</code>, use the default graph.</li>
+<li><b><code>export_scope</code></b>: Optional <code>string</code>. Name scope under which to extract the subgraph. The scope name will be striped from the node definitions for easy import later into new name scopes. If <code>None</code>, the whole graph is exported. graph_def and export_scope cannot both be specified.</li>
+<li><b><code>clear_devices</code></b>: Whether or not to clear the device field for an <code>Operation</code> or <code>Tensor</code> during export.</li>
+<li><b><code>**kwargs</code></b>: Optional keyed arguments.</li>
+</ul>
+<h5 id="returns-76">Returns:</h5>
+<p>A <code>MetaGraphDef</code> proto.</p>
+<h5 id="raises-18">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: When the <code>GraphDef</code> is larger than 2GB.</li>
+</ul>
+<hr />
+<h3 id="tf.train.import_meta_graphmeta_graph_or_file-clear_devicesfalse-import_scopenone-kwargs"><a name="//apple_ref/cpp/Function/import_meta_graph" class="dashAnchor"></a><code id="import_meta_graph">tf.train.import_meta_graph(meta_graph_or_file, clear_devices=False, import_scope=None, **kwargs)</code></h3>
+<p>Recreates a Graph saved in a <code>MetaGraphDef</code> proto.</p>
+<p>This function takes a <code>MetaGraphDef</code> protocol buffer as input. If the argument is a file containing a <code>MetaGraphDef</code> protocol buffer , it constructs a protocol buffer from the file content. The function then adds all the nodes from the <code>graph_def</code> field to the current graph, recreates all the collections, and returns a saver constructed from the <code>saver_def</code> field.</p>
+<p>In combination with <code>export_meta_graph()</code>, this function can be used to</p>
+<ul>
+<li><p>Serialize a graph along with other Python objects such as <code>QueueRunner</code>, <code>Variable</code> into a <code>MetaGraphDef</code>.</p></li>
+<li><p>Restart training from a saved graph and checkpoints.</p></li>
+<li><p>Run inference from a saved graph and checkpoints.</p></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">...
+<span class="co"># Create a saver.</span>
+saver <span class="op">=</span> tf.train.Saver(...variables...)
+<span class="co"># Remember the training_op we want to run by adding it to a collection.</span>
+tf.add_to_collection(<span class="st">&#39;train_op&#39;</span>, train_op)
+sess <span class="op">=</span> tf.Session()
+<span class="cf">for</span> step <span class="op">in</span> <span class="bu">xrange</span>(<span class="dv">1000000</span>):
+    sess.run(train_op)
+    <span class="cf">if</span> step <span class="op">%</span> <span class="dv">1000</span> <span class="op">==</span> <span class="dv">0</span>:
+        <span class="co"># Saves checkpoint, which by default also exports a meta_graph</span>
+        <span class="co"># named &#39;my-model-global_step.meta&#39;.</span>
+        saver.save(sess, <span class="st">&#39;my-model&#39;</span>, global_step<span class="op">=</span>step)</code></pre></div>
+<p>Later we can continue training from this saved <code>meta_graph</code> without building the model from scratch.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> tf.Session() <span class="im">as</span> sess:
+  new_saver <span class="op">=</span> tf.train.import_meta_graph(<span class="st">&#39;my-save-dir/my-model-10000.meta&#39;</span>)
+  new_saver.restore(sess, <span class="st">&#39;my-save-dir/my-model-10000&#39;</span>)
+  <span class="co"># tf.get_collection() returns a list. In this example we only want the</span>
+  <span class="co"># first one.</span>
+  train_op <span class="op">=</span> tf.get_collection(<span class="st">&#39;train_op&#39;</span>)[<span class="dv">0</span>]
+  <span class="cf">for</span> step <span class="op">in</span> <span class="bu">xrange</span>(<span class="dv">1000000</span>):
+    sess.run(train_op)</code></pre></div>
+<p>NOTE: Restarting training from saved <code>meta_graph</code> only works if the device assignments have not changed.</p>
+<h5 id="args-72">Args:</h5>
+<ul>
+<li><b><code>meta_graph_or_file</code></b>: <code>MetaGraphDef</code> protocol buffer or filename (including the path) containing a <code>MetaGraphDef</code>.</li>
+<li><b><code>clear_devices</code></b>: Whether or not to clear the device field for an <code>Operation</code> or <code>Tensor</code> during import.</li>
+<li><b><code>import_scope</code></b>: Optional <code>string</code>. Name scope to add. Only used when initializing from protocol buffer.</li>
+<li><b><code>**kwargs</code></b>: Optional keyed arguments.</li>
+</ul>
+<h5 id="returns-77">Returns:</h5>
+<p>A saver constructed from <code>saver_def</code> in <code>MetaGraphDef</code> or None.</p>
+<p>A None value is returned if no variables exist in the <code>MetaGraphDef</code> (i.e., there are no variables to restore).</p>
+<h1 id="deprecated-functions-removed-after-2017-03-02.-please-dont-use-them.">Deprecated functions (removed after 2017-03-02). Please don't use them.</h1>
+<hr />
+<h3 id="tf.all_variablesargs-kwargs"><a name="//apple_ref/cpp/Function/all_variables" class="dashAnchor"></a><code id="all_variables">tf.all_variables(*args, **kwargs)</code></h3>
+<p>See <code>tf.global_variables</code>. (deprecated)</p>
+<p>THIS FUNCTION IS DEPRECATED. It will be removed after 2017-03-02. Instructions for updating: Please use tf.global_variables instead.</p>
+<hr />
+<h3 id="tf.initialize_all_variablesargs-kwargs"><a name="//apple_ref/cpp/Function/initialize_all_variables" class="dashAnchor"></a><code id="initialize_all_variables">tf.initialize_all_variables(*args, **kwargs)</code></h3>
+<p>See <code>tf.global_variables_initializer</code>. (deprecated)</p>
+<p>THIS FUNCTION IS DEPRECATED. It will be removed after 2017-03-02. Instructions for updating: Use <code>tf.global_variables_initializer</code> instead.</p>
+<hr />
+<h3 id="tf.initialize_local_variablesargs-kwargs"><a name="//apple_ref/cpp/Function/initialize_local_variables" class="dashAnchor"></a><code id="initialize_local_variables">tf.initialize_local_variables(*args, **kwargs)</code></h3>
+<p>See <code>tf.local_variables_initializer</code>. (deprecated)</p>
+<p>THIS FUNCTION IS DEPRECATED. It will be removed after 2017-03-02. Instructions for updating: Use <code>tf.local_variables_initializer</code> instead.</p>
+<hr />
+<h3 id="tf.initialize_variablesargs-kwargs"><a name="//apple_ref/cpp/Function/initialize_variables" class="dashAnchor"></a><code id="initialize_variables">tf.initialize_variables(*args, **kwargs)</code></h3>
+<p>See <code>tf.variables_initializer</code>. (deprecated)</p>
+<p>THIS FUNCTION IS DEPRECATED. It will be removed after 2017-03-02. Instructions for updating: Use <code>tf.variables_initializer</code> instead.</p>

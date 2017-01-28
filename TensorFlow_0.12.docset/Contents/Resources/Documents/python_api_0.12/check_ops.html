@@ -1,0 +1,308 @@
+<!-- This file is machine generated: DO NOT EDIT! -->
+<h1 id="asserts-and-boolean-checks.">Asserts and boolean checks.</h1>
+<p>[TOC]</p>
+<h2 id="asserts-and-boolean-checks">Asserts and Boolean Checks</h2>
+<hr />
+<h3 id="tf.assert_negativex-datanone-summarizenone-messagenone-namenone"><a name="//apple_ref/cpp/Function/assert_negative" class="dashAnchor"></a><code id="assert_negative">tf.assert_negative(x, data=None, summarize=None, message=None, name=None)</code></h3>
+<p>Assert the condition <code>x &lt; 0</code> holds element-wise.</p>
+<p>Example of adding a dependency to an operation:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> tf.control_dependencies([tf.assert_negative(x)]):
+  output <span class="op">=</span> tf.reduce_sum(x)</code></pre></div>
+<p>Example of adding dependency to the tensor being checked:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">x <span class="op">=</span> tf.with_dependencies([tf.assert_negative(x)], x)</code></pre></div>
+<p>Negative means, for every element <code>x[i]</code> of <code>x</code>, we have <code>x[i] &lt; 0</code>. If <code>x</code> is empty this is trivially satisfied.</p>
+<h5 id="args">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: Numeric <code>Tensor</code>.</li>
+<li><b><code>data</code></b>: The tensors to print out if the condition is False. Defaults to error message and first few entries of <code>x</code>.</li>
+<li><b><code>summarize</code></b>: Print this many entries of each tensor.</li>
+<li><b><code>message</code></b>: A string to prefix to the default message.</li>
+<li><b><code>name</code></b>: A name for this operation (optional). Defaults to &quot;assert_negative&quot;.</li>
+</ul>
+<h5 id="returns">Returns:</h5>
+<p>Op raising <code>InvalidArgumentError</code> unless <code>x</code> is all negative.</p>
+<hr />
+<h3 id="tf.assert_positivex-datanone-summarizenone-messagenone-namenone"><a name="//apple_ref/cpp/Function/assert_positive" class="dashAnchor"></a><code id="assert_positive">tf.assert_positive(x, data=None, summarize=None, message=None, name=None)</code></h3>
+<p>Assert the condition <code>x &gt; 0</code> holds element-wise.</p>
+<p>Example of adding a dependency to an operation:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> tf.control_dependencies([tf.assert_positive(x)]):
+  output <span class="op">=</span> tf.reduce_sum(x)</code></pre></div>
+<p>Example of adding dependency to the tensor being checked:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">x <span class="op">=</span> tf.with_dependencies([tf.assert_positive(x)], x)</code></pre></div>
+<p>Positive means, for every element <code>x[i]</code> of <code>x</code>, we have <code>x[i] &gt; 0</code>. If <code>x</code> is empty this is trivially satisfied.</p>
+<h5 id="args-1">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: Numeric <code>Tensor</code>.</li>
+<li><b><code>data</code></b>: The tensors to print out if the condition is False. Defaults to error message and first few entries of <code>x</code>.</li>
+<li><b><code>summarize</code></b>: Print this many entries of each tensor.</li>
+<li><b><code>message</code></b>: A string to prefix to the default message.</li>
+<li><b><code>name</code></b>: A name for this operation (optional). Defaults to &quot;assert_positive&quot;.</li>
+</ul>
+<h5 id="returns-1">Returns:</h5>
+<p>Op raising <code>InvalidArgumentError</code> unless <code>x</code> is all positive.</p>
+<hr />
+<h3 id="tf.assert_proper_iterablevalues"><a name="//apple_ref/cpp/Function/assert_proper_iterable" class="dashAnchor"></a><code id="assert_proper_iterable">tf.assert_proper_iterable(values)</code></h3>
+<p>Static assert that values is a &quot;proper&quot; iterable.</p>
+<p><code>Ops</code> that expect iterables of <code>Tensor</code> can call this to validate input. Useful since <code>Tensor</code>, <code>ndarray</code>, byte/text type are all iterables themselves.</p>
+<h5 id="args-2">Args:</h5>
+<ul>
+<li><b><code>values</code></b>: Object to be checked.</li>
+</ul>
+<h5 id="raises">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>values</code> is not iterable or is one of <code>Tensor</code>, <code>SparseTensor</code>, <code>np.array</code>, <code>tf.compat.bytes_or_text_types</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.assert_non_negativex-datanone-summarizenone-messagenone-namenone"><a name="//apple_ref/cpp/Function/assert_non_negative" class="dashAnchor"></a><code id="assert_non_negative">tf.assert_non_negative(x, data=None, summarize=None, message=None, name=None)</code></h3>
+<p>Assert the condition <code>x &gt;= 0</code> holds element-wise.</p>
+<p>Example of adding a dependency to an operation:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> tf.control_dependencies([tf.assert_non_negative(x)]):
+  output <span class="op">=</span> tf.reduce_sum(x)</code></pre></div>
+<p>Example of adding dependency to the tensor being checked:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">x <span class="op">=</span> tf.with_dependencies([tf.assert_non_negative(x)], x)</code></pre></div>
+<p>Non-negative means, for every element <code>x[i]</code> of <code>x</code>, we have <code>x[i] &gt;= 0</code>. If <code>x</code> is empty this is trivially satisfied.</p>
+<h5 id="args-3">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: Numeric <code>Tensor</code>.</li>
+<li><b><code>data</code></b>: The tensors to print out if the condition is False. Defaults to error message and first few entries of <code>x</code>.</li>
+<li><b><code>summarize</code></b>: Print this many entries of each tensor.</li>
+<li><b><code>message</code></b>: A string to prefix to the default message.</li>
+<li><b><code>name</code></b>: A name for this operation (optional). Defaults to &quot;assert_non_negative&quot;.</li>
+</ul>
+<h5 id="returns-2">Returns:</h5>
+<p>Op raising <code>InvalidArgumentError</code> unless <code>x</code> is all non-negative.</p>
+<hr />
+<h3 id="tf.assert_non_positivex-datanone-summarizenone-messagenone-namenone"><a name="//apple_ref/cpp/Function/assert_non_positive" class="dashAnchor"></a><code id="assert_non_positive">tf.assert_non_positive(x, data=None, summarize=None, message=None, name=None)</code></h3>
+<p>Assert the condition <code>x &lt;= 0</code> holds element-wise.</p>
+<p>Example of adding a dependency to an operation:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> tf.control_dependencies([tf.assert_non_positive(x)]):
+  output <span class="op">=</span> tf.reduce_sum(x)</code></pre></div>
+<p>Example of adding dependency to the tensor being checked:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">x <span class="op">=</span> tf.with_dependencies([tf.assert_non_positive(x)], x)</code></pre></div>
+<p>Non-positive means, for every element <code>x[i]</code> of <code>x</code>, we have <code>x[i] &lt;= 0</code>. If <code>x</code> is empty this is trivially satisfied.</p>
+<h5 id="args-4">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: Numeric <code>Tensor</code>.</li>
+<li><b><code>data</code></b>: The tensors to print out if the condition is False. Defaults to error message and first few entries of <code>x</code>.</li>
+<li><b><code>summarize</code></b>: Print this many entries of each tensor.</li>
+<li><b><code>message</code></b>: A string to prefix to the default message.</li>
+<li><b><code>name</code></b>: A name for this operation (optional). Defaults to &quot;assert_non_positive&quot;.</li>
+</ul>
+<h5 id="returns-3">Returns:</h5>
+<p>Op raising <code>InvalidArgumentError</code> unless <code>x</code> is all non-positive.</p>
+<hr />
+<h3 id="tf.assert_equalx-y-datanone-summarizenone-messagenone-namenone"><a name="//apple_ref/cpp/Function/assert_equal" class="dashAnchor"></a><code id="assert_equal">tf.assert_equal(x, y, data=None, summarize=None, message=None, name=None)</code></h3>
+<p>Assert the condition <code>x == y</code> holds element-wise.</p>
+<p>Example of adding a dependency to an operation:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> tf.control_dependencies([tf.assert_equal(x, y)]):
+  output <span class="op">=</span> tf.reduce_sum(x)</code></pre></div>
+<p>Example of adding dependency to the tensor being checked:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">x <span class="op">=</span> tf.with_dependencies([tf.assert_equal(x, y)], x)</code></pre></div>
+<p>This condition holds if for every pair of (possibly broadcast) elements <code>x[i]</code>, <code>y[i]</code>, we have <code>x[i] == y[i]</code>. If both <code>x</code> and <code>y</code> are empty, this is trivially satisfied.</p>
+<h5 id="args-5">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: Numeric <code>Tensor</code>.</li>
+<li><b><code>y</code></b>: Numeric <code>Tensor</code>, same dtype as and broadcastable to <code>x</code>.</li>
+<li><b><code>data</code></b>: The tensors to print out if the condition is False. Defaults to error message and first few entries of <code>x</code>, <code>y</code>.</li>
+<li><b><code>summarize</code></b>: Print this many entries of each tensor.</li>
+<li><b><code>message</code></b>: A string to prefix to the default message.</li>
+<li><b><code>name</code></b>: A name for this operation (optional). Defaults to &quot;assert_equal&quot;.</li>
+</ul>
+<h5 id="returns-4">Returns:</h5>
+<p>Op that raises <code>InvalidArgumentError</code> if <code>x == y</code> is False.</p>
+<hr />
+<h3 id="tf.assert_integerx-messagenone-namenone"><a name="//apple_ref/cpp/Function/assert_integer" class="dashAnchor"></a><code id="assert_integer">tf.assert_integer(x, message=None, name=None)</code></h3>
+<p>Assert that <code>x</code> is of integer dtype.</p>
+<p>Example of adding a dependency to an operation:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> tf.control_dependencies([tf.assert_integer(x)]):
+  output <span class="op">=</span> tf.reduce_sum(x)</code></pre></div>
+<p>Example of adding dependency to the tensor being checked:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">x <span class="op">=</span> tf.with_dependencies([tf.assert_integer(x)], x)</code></pre></div>
+<h5 id="args-6">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code> whose basetype is integer and is not quantized.</li>
+<li><b><code>message</code></b>: A string to prefix to the default message.</li>
+<li><b><code>name</code></b>: A name for this operation (optional). Defaults to &quot;assert_integer&quot;.</li>
+</ul>
+<h5 id="raises-1">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>x.dtype</code> is anything other than non-quantized integer.</li>
+</ul>
+<h5 id="returns-5">Returns:</h5>
+<p>A <code>no_op</code> that does nothing. Type can be determined statically.</p>
+<hr />
+<h3 id="tf.assert_lessx-y-datanone-summarizenone-messagenone-namenone"><a name="//apple_ref/cpp/Function/assert_less" class="dashAnchor"></a><code id="assert_less">tf.assert_less(x, y, data=None, summarize=None, message=None, name=None)</code></h3>
+<p>Assert the condition <code>x &lt; y</code> holds element-wise.</p>
+<p>Example of adding a dependency to an operation:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> tf.control_dependencies([tf.assert_less(x, y)]):
+  output <span class="op">=</span> tf.reduce_sum(x)</code></pre></div>
+<p>Example of adding dependency to the tensor being checked:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">x <span class="op">=</span> tf.with_dependencies([tf.assert_less(x, y)], x)</code></pre></div>
+<p>This condition holds if for every pair of (possibly broadcast) elements <code>x[i]</code>, <code>y[i]</code>, we have <code>x[i] &lt; y[i]</code>. If both <code>x</code> and <code>y</code> are empty, this is trivially satisfied.</p>
+<h5 id="args-7">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: Numeric <code>Tensor</code>.</li>
+<li><b><code>y</code></b>: Numeric <code>Tensor</code>, same dtype as and broadcastable to <code>x</code>.</li>
+<li><b><code>data</code></b>: The tensors to print out if the condition is False. Defaults to error message and first few entries of <code>x</code>, <code>y</code>.</li>
+<li><b><code>summarize</code></b>: Print this many entries of each tensor.</li>
+<li><b><code>message</code></b>: A string to prefix to the default message.</li>
+<li><b><code>name</code></b>: A name for this operation (optional). Defaults to &quot;assert_less&quot;.</li>
+</ul>
+<h5 id="returns-6">Returns:</h5>
+<p>Op that raises <code>InvalidArgumentError</code> if <code>x &lt; y</code> is False.</p>
+<hr />
+<h3 id="tf.assert_less_equalx-y-datanone-summarizenone-messagenone-namenone"><a name="//apple_ref/cpp/Function/assert_less_equal" class="dashAnchor"></a><code id="assert_less_equal">tf.assert_less_equal(x, y, data=None, summarize=None, message=None, name=None)</code></h3>
+<p>Assert the condition <code>x &lt;= y</code> holds element-wise.</p>
+<p>Example of adding a dependency to an operation:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> tf.control_dependencies([tf.assert_less_equal(x, y)]):
+  output <span class="op">=</span> tf.reduce_sum(x)</code></pre></div>
+<p>Example of adding dependency to the tensor being checked:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">x <span class="op">=</span> tf.with_dependencies([tf.assert_less_equal(x, y)], x)</code></pre></div>
+<p>This condition holds if for every pair of (possibly broadcast) elements <code>x[i]</code>, <code>y[i]</code>, we have <code>x[i] &lt;= y[i]</code>. If both <code>x</code> and <code>y</code> are empty, this is trivially satisfied.</p>
+<h5 id="args-8">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: Numeric <code>Tensor</code>.</li>
+<li><b><code>y</code></b>: Numeric <code>Tensor</code>, same dtype as and broadcastable to <code>x</code>.</li>
+<li><b><code>data</code></b>: The tensors to print out if the condition is False. Defaults to error message and first few entries of <code>x</code>, <code>y</code>.</li>
+<li><b><code>summarize</code></b>: Print this many entries of each tensor.</li>
+<li><b><code>message</code></b>: A string to prefix to the default message.</li>
+<li><b><code>name</code></b>: A name for this operation (optional). Defaults to &quot;assert_less_equal&quot;</li>
+</ul>
+<h5 id="returns-7">Returns:</h5>
+<p>Op that raises <code>InvalidArgumentError</code> if <code>x &lt;= y</code> is False.</p>
+<hr />
+<h3 id="tf.assert_greaterx-y-datanone-summarizenone-messagenone-namenone"><a name="//apple_ref/cpp/Function/assert_greater" class="dashAnchor"></a><code id="assert_greater">tf.assert_greater(x, y, data=None, summarize=None, message=None, name=None)</code></h3>
+<p>Assert the condition <code>x &gt; y</code> holds element-wise.</p>
+<p>Example of adding a dependency to an operation:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> tf.control_dependencies([tf.assert_greater(x, y)]):
+  output <span class="op">=</span> tf.reduce_sum(x)</code></pre></div>
+<p>Example of adding dependency to the tensor being checked:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">x <span class="op">=</span> tf.with_dependencies([tf.assert_greater(x, y)], x)</code></pre></div>
+<p>This condition holds if for every pair of (possibly broadcast) elements <code>x[i]</code>, <code>y[i]</code>, we have <code>x[i] &gt; y[i]</code>. If both <code>x</code> and <code>y</code> are empty, this is trivially satisfied.</p>
+<h5 id="args-9">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: Numeric <code>Tensor</code>.</li>
+<li><b><code>y</code></b>: Numeric <code>Tensor</code>, same dtype as and broadcastable to <code>x</code>.</li>
+<li><b><code>data</code></b>: The tensors to print out if the condition is False. Defaults to error message and first few entries of <code>x</code>, <code>y</code>.</li>
+<li><b><code>summarize</code></b>: Print this many entries of each tensor.</li>
+<li><b><code>message</code></b>: A string to prefix to the default message.</li>
+<li><b><code>name</code></b>: A name for this operation (optional). Defaults to &quot;assert_greater&quot;.</li>
+</ul>
+<h5 id="returns-8">Returns:</h5>
+<p>Op that raises <code>InvalidArgumentError</code> if <code>x &gt; y</code> is False.</p>
+<hr />
+<h3 id="tf.assert_greater_equalx-y-datanone-summarizenone-messagenone-namenone"><a name="//apple_ref/cpp/Function/assert_greater_equal" class="dashAnchor"></a><code id="assert_greater_equal">tf.assert_greater_equal(x, y, data=None, summarize=None, message=None, name=None)</code></h3>
+<p>Assert the condition <code>x &gt;= y</code> holds element-wise.</p>
+<p>Example of adding a dependency to an operation:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> tf.control_dependencies([tf.assert_greater_equal(x, y)]):
+  output <span class="op">=</span> tf.reduce_sum(x)</code></pre></div>
+<p>Example of adding dependency to the tensor being checked:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">x <span class="op">=</span> tf.with_dependencies([tf.assert_greater_equal(x, y)], x)</code></pre></div>
+<p>This condition holds if for every pair of (possibly broadcast) elements <code>x[i]</code>, <code>y[i]</code>, we have <code>x[i] &gt;= y[i]</code>. If both <code>x</code> and <code>y</code> are empty, this is trivially satisfied.</p>
+<h5 id="args-10">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: Numeric <code>Tensor</code>.</li>
+<li><b><code>y</code></b>: Numeric <code>Tensor</code>, same dtype as and broadcastable to <code>x</code>.</li>
+<li><b><code>data</code></b>: The tensors to print out if the condition is False. Defaults to error message and first few entries of <code>x</code>, <code>y</code>.</li>
+<li><b><code>summarize</code></b>: Print this many entries of each tensor.</li>
+<li><b><code>message</code></b>: A string to prefix to the default message.</li>
+<li><b><code>name</code></b>: A name for this operation (optional). Defaults to &quot;assert_greater_equal&quot;</li>
+</ul>
+<h5 id="returns-9">Returns:</h5>
+<p>Op that raises <code>InvalidArgumentError</code> if <code>x &gt;= y</code> is False.</p>
+<hr />
+<h3 id="tf.assert_rankx-rank-datanone-summarizenone-messagenone-namenone"><a name="//apple_ref/cpp/Function/assert_rank" class="dashAnchor"></a><code id="assert_rank">tf.assert_rank(x, rank, data=None, summarize=None, message=None, name=None)</code></h3>
+<p>Assert <code>x</code> has rank equal to <code>rank</code>.</p>
+<p>Example of adding a dependency to an operation:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> tf.control_dependencies([tf.assert_rank(x, <span class="dv">2</span>)]):
+  output <span class="op">=</span> tf.reduce_sum(x)</code></pre></div>
+<p>Example of adding dependency to the tensor being checked:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">x <span class="op">=</span> tf.with_dependencies([tf.assert_rank(x, <span class="dv">2</span>)], x)</code></pre></div>
+<h5 id="args-11">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: Numeric <code>Tensor</code>.</li>
+<li><b><code>rank</code></b>: Scalar integer <code>Tensor</code>.</li>
+<li><b><code>data</code></b>: The tensors to print out if the condition is False. Defaults to error message and first few entries of <code>x</code>.</li>
+<li><b><code>summarize</code></b>: Print this many entries of each tensor.</li>
+<li><b><code>message</code></b>: A string to prefix to the default message.</li>
+<li><b><code>name</code></b>: A name for this operation (optional). Defaults to &quot;assert_rank&quot;.</li>
+</ul>
+<h5 id="returns-10">Returns:</h5>
+<p>Op raising <code>InvalidArgumentError</code> unless <code>x</code> has specified rank. If static checks determine <code>x</code> has correct rank, a <code>no_op</code> is returned.</p>
+<h5 id="raises-2">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If static checks determine <code>x</code> has wrong rank.</li>
+</ul>
+<hr />
+<h3 id="tf.assert_rank_at_leastx-rank-datanone-summarizenone-messagenone-namenone"><a name="//apple_ref/cpp/Function/assert_rank_at_least" class="dashAnchor"></a><code id="assert_rank_at_least">tf.assert_rank_at_least(x, rank, data=None, summarize=None, message=None, name=None)</code></h3>
+<p>Assert <code>x</code> has rank equal to <code>rank</code> or higher.</p>
+<p>Example of adding a dependency to an operation:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> tf.control_dependencies([tf.assert_rank_at_least(x, <span class="dv">2</span>)]):
+  output <span class="op">=</span> tf.reduce_sum(x)</code></pre></div>
+<p>Example of adding dependency to the tensor being checked:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">x <span class="op">=</span> tf.with_dependencies([tf.assert_rank_at_least(x, <span class="dv">2</span>)], x)</code></pre></div>
+<h5 id="args-12">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: Numeric <code>Tensor</code>.</li>
+<li><b><code>rank</code></b>: Scalar <code>Tensor</code>.</li>
+<li><b><code>data</code></b>: The tensors to print out if the condition is False. Defaults to error message and first few entries of <code>x</code>.</li>
+<li><b><code>summarize</code></b>: Print this many entries of each tensor.</li>
+<li><b><code>message</code></b>: A string to prefix to the default message.</li>
+<li><b><code>name</code></b>: A name for this operation (optional). Defaults to &quot;assert_rank_at_least&quot;.</li>
+</ul>
+<h5 id="returns-11">Returns:</h5>
+<p>Op raising <code>InvalidArgumentError</code> unless <code>x</code> has specified rank or higher. If static checks determine <code>x</code> has correct rank, a <code>no_op</code> is returned.</p>
+<h5 id="raises-3">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If static checks determine <code>x</code> has wrong rank.</li>
+</ul>
+<hr />
+<h3 id="tf.assert_typetensor-tf_type-messagenone-namenone"><a name="//apple_ref/cpp/Function/assert_type" class="dashAnchor"></a><code id="assert_type">tf.assert_type(tensor, tf_type, message=None, name=None)</code></h3>
+<p>Statically asserts that the given <code>Tensor</code> is of the specified type.</p>
+<h5 id="args-13">Args:</h5>
+<ul>
+<li><b><code>tensor</code></b>: A tensorflow <code>Tensor</code>.</li>
+<li><b><code>tf_type</code></b>: A tensorflow type (<code>dtypes.float32</code>, <code>tf.int64</code>, <code>dtypes.bool</code>, etc).</li>
+<li><b><code>message</code></b>: A string to prefix to the default message.</li>
+<li><b><code>name</code></b>: A name to give this <code>Op</code>. Defaults to &quot;assert_type&quot;</li>
+</ul>
+<h5 id="raises-4">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If the tensors data type doesn't match <code>tf_type</code>.</li>
+</ul>
+<h5 id="returns-12">Returns:</h5>
+<p>A <code>no_op</code> that does nothing. Type can be determined statically.</p>
+<hr />
+<h3 id="tf.is_non_decreasingx-namenone"><a name="//apple_ref/cpp/Function/is_non_decreasing" class="dashAnchor"></a><code id="is_non_decreasing">tf.is_non_decreasing(x, name=None)</code></h3>
+<p>Returns <code>True</code> if <code>x</code> is non-decreasing.</p>
+<p>Elements of <code>x</code> are compared in row-major order. The tensor <code>[x[0],...]</code> is non-decreasing if for every adjacent pair we have <code>x[i] &lt;= x[i+1]</code>. If <code>x</code> has less than two elements, it is trivially non-decreasing.</p>
+<p>See also: <code>is_strictly_increasing</code></p>
+<h5 id="args-14">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: Numeric <code>Tensor</code>.</li>
+<li><b><code>name</code></b>: A name for this operation (optional). Defaults to &quot;is_non_decreasing&quot;</li>
+</ul>
+<h5 id="returns-13">Returns:</h5>
+<p>Boolean <code>Tensor</code>, equal to <code>True</code> iff <code>x</code> is non-decreasing.</p>
+<h5 id="raises-5">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>x</code> is not a numeric tensor.</li>
+</ul>
+<hr />
+<h3 id="tf.is_numeric_tensortensor"><a name="//apple_ref/cpp/Function/is_numeric_tensor" class="dashAnchor"></a><code id="is_numeric_tensor">tf.is_numeric_tensor(tensor)</code></h3>
+<hr />
+<h3 id="tf.is_strictly_increasingx-namenone"><a name="//apple_ref/cpp/Function/is_strictly_increasing" class="dashAnchor"></a><code id="is_strictly_increasing">tf.is_strictly_increasing(x, name=None)</code></h3>
+<p>Returns <code>True</code> if <code>x</code> is strictly increasing.</p>
+<p>Elements of <code>x</code> are compared in row-major order. The tensor <code>[x[0],...]</code> is strictly increasing if for every adjacent pair we have <code>x[i] &lt; x[i+1]</code>. If <code>x</code> has less than two elements, it is trivially strictly increasing.</p>
+<p>See also: <code>is_non_decreasing</code></p>
+<h5 id="args-15">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: Numeric <code>Tensor</code>.</li>
+<li><b><code>name</code></b>: A name for this operation (optional). Defaults to &quot;is_strictly_increasing&quot;</li>
+</ul>
+<h5 id="returns-14">Returns:</h5>
+<p>Boolean <code>Tensor</code>, equal to <code>True</code> iff <code>x</code> is strictly increasing.</p>
+<h5 id="raises-6">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>x</code> is not a numeric tensor.</li>
+</ul>

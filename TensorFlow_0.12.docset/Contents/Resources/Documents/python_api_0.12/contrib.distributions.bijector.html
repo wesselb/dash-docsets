@@ -1,0 +1,2032 @@
+<!-- This file is machine generated: DO NOT EDIT! -->
+<h1 id="random-variable-transformations-contrib">Random variable transformations (contrib)</h1>
+<p>[TOC]</p>
+<p>Bijector Ops.</p>
+<p>An API for invertible, differentiable transformations of random variables.</p>
+<h2 id="background">Background</h2>
+<p>Differentiable, bijective transformations of continuous random variables alter the calculations made in the cumulative/probability distribution functions and sample function. This module provides a standard interface for making these manipulations.</p>
+<p>For more details and examples, see the <code>Bijector</code> docstring.</p>
+<p>To apply a <code>Bijector</code>, use <code>distributions.TransformedDistribution</code>.</p>
+<h2 id="bijectors">Bijectors</h2>
+<hr />
+<h3 id="class-tf.contrib.distributions.bijector.bijector"><a name="//apple_ref/cpp/Class/Bijector" class="dashAnchor"></a><code id="Bijector">class tf.contrib.distributions.bijector.Bijector</code></h3>
+<p>Interface for transforming a <code>Distribution</code> sample.</p>
+<p>A <code>Bijector</code> implements a <a href="https://en.wikipedia.org/wiki/Diffeomorphism">diffeomorphism</a>, i.e., a bijective, differentiable function. A <code>Bijector</code> is used by <code>TransformedDistribution</code> but can be generally used for transforming a <code>Distribution</code> generated <code>Tensor</code>. A <code>Bijector</code> is characterized by three operations:</p>
+<ol style="list-style-type: decimal">
+<li>Forward Evaluation</li>
+</ol>
+<p>Useful for turning one random outcome into another random outcome from a different distribution.</p>
+<ol start="2" style="list-style-type: decimal">
+<li>Inverse Evaluation</li>
+</ol>
+<p>Useful for &quot;reversing&quot; a transformation to compute one probability in terms of another.</p>
+<ol start="3" style="list-style-type: decimal">
+<li>(log o det o Jacobian o inverse)(x)</li>
+</ol>
+<p>&quot;The log of the determinant of the matrix of all first-order partial derivatives of the inverse function.&quot; Useful for inverting a transformation to compute one probability in terms of another. Geometrically, the det(Jacobian) is the volume of the transformation and is used to scale the probability.</p>
+<p>By convention, transformations of random variables are named in terms of the forward transformation. The forward transformation creates samples, the inverse is useful for computing probabilities.</p>
+<p>Example Use:</p>
+<ul>
+<li>Basic properties:</li>
+</ul>
+<p><code>python   x = ... # A tensor.   # Evaluate forward transformation.   fwd_x = my_bijector.forward(x)   x == my_bijector.inverse(fwd_x)   x != my_bijector.forward(fwd_x)  # Not equal because g(x) != g(g(x)).</code></p>
+<ul>
+<li>Computing a log-likelihood:</li>
+</ul>
+<p><code>python   def transformed_log_pdf(bijector, log_pdf, x):     return (bijector.inverse_log_det_jacobian(x) +             log_pdf(bijector.inverse(x)))</code></p>
+<ul>
+<li>Transforming a random outcome:</li>
+</ul>
+<p><code>python   def transformed_sample(bijector, x):     return bijector.forward(x)</code></p>
+<p>Example transformations:</p>
+<ul>
+<li><p>&quot;Exponential&quot;</p>
+<pre><code>Y = g(X) = exp(X)
+X ~ Normal(0, 1)  # Univariate.</code></pre>
+<p>Implies:</p>
+<pre><code>  g^{-1}(Y) = log(Y)
+  |Jacobian(g^{-1})(y)| = 1 / y
+  Y ~ LogNormal(0, 1), i.e.,
+  prob(Y=y) = |Jacobian(g^{-1})(y)| * prob(X=g^{-1}(y))
+            = (1 / y) Normal(log(y); 0, 1)</code></pre></li>
+<li><p>&quot;ScaleAndShift&quot;</p>
+<pre><code>Y = g(X) = sqrtSigma * X + mu
+X ~ MultivariateNormal(0, I_d)</code></pre>
+<p>Implies:</p>
+<pre><code>  g^{-1}(Y) = inv(sqrtSigma) * (Y - mu)
+  |Jacobian(g^{-1})(y)| = det(inv(sqrtSigma))
+  Y ~ MultivariateNormal(mu, sqrtSigma) , i.e.,
+  prob(Y=y) = |Jacobian(g^{-1})(y)| * prob(X=g^{-1}(y))
+            = det(sqrtSigma)^(-d) *
+              MultivariateNormal(inv(sqrtSigma) * (y - mu); 0, I_d)</code></pre></li>
+</ul>
+<p>Example of why a <code>Bijector</code> needs to understand sample, batch, event partitioning:</p>
+<ul>
+<li>Consider the <code>Exp</code> <code>Bijector</code> applied to a <code>Tensor</code> which has sample, batch, and event (S, B, E) shape semantics. Suppose the <code>Tensor</code>'s partitioned-shape is <code>(S=[4], B=[2], E=[3, 3])</code>.</li>
+</ul>
+<p>For <code>Exp</code>, the shape of the <code>Tensor</code> returned by <code>forward</code> and <code>inverse</code> is unchanged, i.e., <code>[4, 2, 3, 3]</code>. However the shape returned by <code>inverse_log_det_jacobian</code> is <code>[4, 2]</code> because the Jacobian is a reduction over the event dimensions.</p>
+<p>Subclass Requirements:</p>
+<ul>
+<li>Typically subclasses implement <code>_forward</code> and one or both of:
+<ul>
+<li><code>_inverse</code>, <code>_inverse_log_det_jacobian</code>,</li>
+<li><code>_inverse_and_inverse_log_det_jacobian</code>.</li>
+</ul></li>
+<li>If the <code>Bijector</code>'s use is limited to <code>TransformedDistribution</code> (or friends like <code>QuantizedDistribution</code>) then depending on your use, you may not need to implement all of <code>_forward</code> and <code>_inverese</code> functions. Examples:
+<ol style="list-style-type: decimal">
+<li>Sampling (e.g., <code>sample</code>) only requires <code>_forward</code>.</li>
+<li>Probability functions (e.g., <code>prob</code>, <code>cdf</code>, <code>survival</code>) only require <code>_inverse</code> (and related).</li>
+<li>Only calling probability functions on the output of <code>sample</code> means <code>_inverse</code> can be implemented as a cache lookup.</li>
+</ol></li>
+</ul>
+<p>See <code>Example Use</code> [above] which shows how these functions are used to transform a distribution. (Note: <code>_forward</code> could theoretically be implemented as a cache lookup but this would require controlling the underlying sample generation mechanism.)</p>
+<ul>
+<li><p>If computation can be shared among <code>_inverse</code> and <code>_inverse_log_det_jacobian</code> it is preferable to implement <code>_inverse_and_inverse_log_det_jacobian</code>. This usually reduces graph-construction overhead because a <code>Distribution</code>'s implementation of <code>log_prob</code> will need to evaluate both the inverse Jacobian as well as the inverse function.</p></li>
+<li><p>If an additional use case needs just <code>inverse</code> or just <code>inverse_log_det_jacobian</code> then he or she may also wish to implement these functions to avoid computing the <code>inverse_log_det_jacobian</code> or the <code>inverse</code>, respectively.</p></li>
+<li><p>Subclasses should implement <code>_get_forward_event_shape</code>, <code>_forward_event_shape</code> (and <code>inverse</code> counterparts) if the transformation is shape-changing. By default the event-shape is assumed unchanged from input.</p></li>
+</ul>
+<p>Tips for implementing <code>_inverse</code> and <code>_inverse_log_det_jacobian</code>:</p>
+<ul>
+<li><p>As case 3 [above] indicates, under some circumstances the inverse function can be implemented as a cache lookup.</p></li>
+<li><p>The inverse <code>log o det o Jacobian</code> can be implemented as the negative of the forward <code>log o det o Jacobian</code>. This is useful if the <code>inverse</code> is implemented as a cache or the inverse Jacobian is computationally more expensive (e.g., <code>CholeskyOuterProduct</code> <code>Bijector</code>). The following demonstrates the suggested implementation.</p></li>
+</ul>
+<p><code>python   def _inverse_and_log_det_jacobian(self, y):      x = # ... implement inverse, possibly via cache.      return x, -self._forward_log_det_jac(x)  # Note negation.</code></p>
+<p>By overriding the <code>_inverse_and_log_det_jacobian</code> function we have access to the inverse in one call.</p>
+<p>The correctness of this approach can be seen from the following claim.</p>
+<ul>
+<li><p>Claim:</p>
+<p>Assume <code>Y=g(X)</code> is a bijection whose derivative exists and is nonzero for its domain, i.e., <code>d/dX g(X)!=0</code>. Then:</p>
+<p><code>none   (log o det o jacobian o g^{-1})(Y) = -(log o det o jacobian o g)(X)</code></p></li>
+<li><p>Proof:</p>
+<p>From the bijective, nonzero differentiability of <code>g</code>, the <a href="https://en.wikipedia.org/wiki/Inverse_function_theorem">inverse function theorem</a> implies <code>g^{-1}</code> is differentiable in the image of <code>g</code>. Applying the chain rule to <code>y = g(x) = g(g^{-1}(y))</code> yields <code>I = g'(g^{-1}(y))*g^{-1}'(y)</code>. The same theorem also implies <code>g{-1}'</code> is non-singular therefore: <code>inv[ g'(g^{-1}(y)) ] = g^{-1}'(y)</code>. The claim follows from <a href="https://en.wikipedia.org/wiki/Determinant#Multiplicativity_and_matrix_groups">properties of determinant</a>.</p></li>
+<li><p>If possible, prefer a direct implementation of the inverse Jacobian. This should have superior numerical stability and will often share subgraphs with the <code>_inverse</code> implementation. - - -</p></li>
+</ul>
+<h4 id="tf.contrib.distributions.bijector.bijector.__init__batch_ndimsnone-event_ndimsnone-parametersnone-is_constant_jacobianfalse-validate_argsfalse-dtypenone-namenone"><code id="Bijector.__init__">tf.contrib.distributions.bijector.Bijector.__init__(batch_ndims=None, event_ndims=None, parameters=None, is_constant_jacobian=False, validate_args=False, dtype=None, name=None)</code></h4>
+<p>Constructs Bijector.</p>
+<p>A <code>Bijector</code> transforms random variables into new random variables.</p>
+<p>Examples:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Create the Y = g(X) = X transform which operates on 4-Tensors of vectors.</span>
+identity <span class="op">=</span> Identity(batch_ndims<span class="op">=</span><span class="dv">4</span>, event_ndims<span class="op">=</span><span class="dv">1</span>)
+
+<span class="co"># Create the Y = g(X) = exp(X) transform which operates on matrices.</span>
+exp <span class="op">=</span> Exp(batch_ndims<span class="op">=</span><span class="dv">0</span>, event_ndims<span class="op">=</span><span class="dv">2</span>)</code></pre></div>
+<p>See <code>Bijector</code> subclass docstring for more details and specific examples.</p>
+<h5 id="args">Args:</h5>
+<ul>
+<li><b><code>batch_ndims</code></b>: number of dimensions associated with batch coordinates.</li>
+<li><b><code>event_ndims</code></b>: number of dimensions associated with event coordinates.</li>
+<li><b><code>parameters</code></b>: Dictionary of parameters used by this <code>Bijector</code></li>
+<li><b><code>is_constant_jacobian</code></b>: <code>Boolean</code> indicating that the Jacobian is not a function of the input.</li>
+<li><b><code>validate_args</code></b>: <code>Boolean</code>, default <code>False</code>. Whether to validate input with asserts. If <code>validate_args</code> is <code>False</code>, and the inputs are invalid, correct behavior is not guaranteed.</li>
+<li><b><code>dtype</code></b>: <code>tf.dtype</code> supported by this <code>Bijector</code>. <code>None</code> means dtype is not enforced.</li>
+<li><b><code>name</code></b>: The name to give Ops created by the initializer.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.bijector.dtype"><code id="Bijector.dtype">tf.contrib.distributions.bijector.Bijector.dtype</code></h4>
+<p>dtype of <code>Tensor</code>s transformable by this distribution.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.bijector.forwardx-nameforward-condition_kwargs"><code id="Bijector.forward">tf.contrib.distributions.bijector.Bijector.forward(x, name='forward', **condition_kwargs)</code></h4>
+<p>Returns the forward <code>Bijector</code> evaluation, i.e., X = g(Y).</p>
+<h5 id="args-1">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code>. The input to the &quot;forward&quot; evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>x.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if <code>_forward</code> is not implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.bijector.forward_event_shapeinput_shape-nameforward_event_shape"><code id="Bijector.forward_event_shape">tf.contrib.distributions.bijector.Bijector.forward_event_shape(input_shape, name='forward_event_shape')</code></h4>
+<p>Shape of a single sample from a single batch as an <code>int32</code> 1D <code>Tensor</code>.</p>
+<h5 id="args-2">Args:</h5>
+<ul>
+<li><b><code>input_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape passed into <code>forward</code> function.</li>
+<li><b><code>name</code></b>: name to give to the op</li>
+</ul>
+<h5 id="returns-1">Returns:</h5>
+<ul>
+<li><b><code>forward_event_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape after applying <code>forward</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.bijector.forward_log_det_jacobianx-nameforward_log_det_jacobian-condition_kwargs"><code id="Bijector.forward_log_det_jacobian">tf.contrib.distributions.bijector.Bijector.forward_log_det_jacobian(x, name='forward_log_det_jacobian', **condition_kwargs)</code></h4>
+<p>Returns both the forward_log_det_jacobian.</p>
+<h5 id="args-3">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code>. The input to the &quot;forward&quot; Jacobian evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-2">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-1">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_forward_log_det_jacobian</code> nor {<code>_inverse</code>, <code>_inverse_log_det_jacobian</code>} are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.bijector.get_forward_event_shapeinput_shape"><code id="Bijector.get_forward_event_shape">tf.contrib.distributions.bijector.Bijector.get_forward_event_shape(input_shape)</code></h4>
+<p>Shape of a single sample from a single batch as a <code>TensorShape</code>.</p>
+<p>Same meaning as <code>forward_event_shape</code>. May be only partially defined.</p>
+<h5 id="args-4">Args:</h5>
+<ul>
+<li><b><code>input_shape</code></b>: <code>TensorShape</code> indicating event-portion shape passed into <code>forward</code> function.</li>
+</ul>
+<h5 id="returns-3">Returns:</h5>
+<ul>
+<li><b><code>forward_event_shape</code></b>: <code>TensorShape</code> indicating event-portion shape after applying <code>forward</code>. Possibly unknown.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.bijector.get_inverse_event_shapeoutput_shape"><code id="Bijector.get_inverse_event_shape">tf.contrib.distributions.bijector.Bijector.get_inverse_event_shape(output_shape)</code></h4>
+<p>Shape of a single sample from a single batch as a <code>TensorShape</code>.</p>
+<p>Same meaning as <code>inverse_event_shape</code>. May be only partially defined.</p>
+<h5 id="args-5">Args:</h5>
+<ul>
+<li><b><code>output_shape</code></b>: <code>TensorShape</code> indicating event-portion shape passed into <code>inverse</code> function.</li>
+</ul>
+<h5 id="returns-4">Returns:</h5>
+<ul>
+<li><b><code>inverse_event_shape</code></b>: <code>TensorShape</code> indicating event-portion shape after applying <code>inverse</code>. Possibly unknown.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.bijector.inversey-nameinverse-condition_kwargs"><code id="Bijector.inverse">tf.contrib.distributions.bijector.Bijector.inverse(y, name='inverse', **condition_kwargs)</code></h4>
+<p>Returns the inverse <code>Bijector</code> evaluation, i.e., X = g^{-1}(Y).</p>
+<h5 id="args-6">Args:</h5>
+<ul>
+<li><b><code>y</code></b>: <code>Tensor</code>. The input to the &quot;inverse&quot; evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-5">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-2">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_inverse</code> nor <code>_inverse_and_inverse_log_det_jacobian</code> are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.bijector.inverse_and_inverse_log_det_jacobiany-nameinverse_and_inverse_log_det_jacobian-condition_kwargs"><code id="Bijector.inverse_and_inverse_log_det_jacobian">tf.contrib.distributions.bijector.Bijector.inverse_and_inverse_log_det_jacobian(y, name='inverse_and_inverse_log_det_jacobian', **condition_kwargs)</code></h4>
+<p>Returns both the inverse evaluation and inverse_log_det_jacobian.</p>
+<p>Enables possibly more efficient calculation when both inverse and corresponding Jacobian are needed.</p>
+<p>See <code>inverse()</code>, <code>inverse_log_det_jacobian()</code> for more details.</p>
+<h5 id="args-7">Args:</h5>
+<ul>
+<li><b><code>y</code></b>: <code>Tensor</code>. The input to the &quot;inverse&quot; Jacobian evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-6">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-3">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_inverse_and_inverse_log_det_jacobian</code> nor {<code>_inverse</code>, <code>_inverse_log_det_jacobian</code>} are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.bijector.inverse_event_shapeoutput_shape-nameinverse_event_shape"><code id="Bijector.inverse_event_shape">tf.contrib.distributions.bijector.Bijector.inverse_event_shape(output_shape, name='inverse_event_shape')</code></h4>
+<p>Shape of a single sample from a single batch as an <code>int32</code> 1D <code>Tensor</code>.</p>
+<h5 id="args-8">Args:</h5>
+<ul>
+<li><b><code>output_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape passed into <code>inverse</code> function.</li>
+<li><b><code>name</code></b>: name to give to the op</li>
+</ul>
+<h5 id="returns-7">Returns:</h5>
+<ul>
+<li><b><code>inverse_event_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape after applying <code>inverse</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.bijector.inverse_log_det_jacobiany-nameinverse_log_det_jacobian-condition_kwargs"><code id="Bijector.inverse_log_det_jacobian">tf.contrib.distributions.bijector.Bijector.inverse_log_det_jacobian(y, name='inverse_log_det_jacobian', **condition_kwargs)</code></h4>
+<p>Returns the (log o det o Jacobian o inverse)(y).</p>
+<p>Mathematically, returns: <code>log(det(dX/dY))(Y)</code>. (Recall that: <code>X=g^{-1}(Y)</code>.)</p>
+<p>Note that <code>forward_log_det_jacobian</code> is the negative of this function.</p>
+<h5 id="args-9">Args:</h5>
+<ul>
+<li><b><code>y</code></b>: <code>Tensor</code>. The input to the &quot;inverse&quot; Jacobian evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-8">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-4">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_inverse_log_det_jacobian</code> nor <code>_inverse_and_inverse_log_det_jacobian</code> are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.bijector.is_constant_jacobian"><code id="Bijector.is_constant_jacobian">tf.contrib.distributions.bijector.Bijector.is_constant_jacobian</code></h4>
+<p>Returns true iff the Jacobian is not a function of x.</p>
+<p>Note: Jacobian is either constant for both forward and inverse or neither.</p>
+<h5 id="returns-9">Returns:</h5>
+<p><code>Boolean</code>.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.bijector.name"><code id="Bijector.name">tf.contrib.distributions.bijector.Bijector.name</code></h4>
+<p>Returns the string name of this <code>Bijector</code>.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.bijector.parameters"><code id="Bijector.parameters">tf.contrib.distributions.bijector.Bijector.parameters</code></h4>
+<p>Returns this <code>Bijector</code>'s parameters as a name/value dictionary.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.bijector.shaper"><code id="Bijector.shaper">tf.contrib.distributions.bijector.Bijector.shaper</code></h4>
+<p>Returns shape object used to manage shape constraints.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.bijector.validate_args"><code id="Bijector.validate_args">tf.contrib.distributions.bijector.Bijector.validate_args</code></h4>
+<p>Returns True if Tensor arguments will be validated.</p>
+<hr />
+<h3 id="class-tf.contrib.distributions.bijector.chain"><a name="//apple_ref/cpp/Class/Chain" class="dashAnchor"></a><code id="Chain">class tf.contrib.distributions.bijector.Chain</code></h3>
+<p>Bijector which applies a sequence of bijectors.</p>
+<p>Example Use:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">chain <span class="op">=</span> Chain([Exp(), Softplus()], name<span class="op">=</span><span class="st">&quot;one_plus_exp&quot;</span>)</code></pre></div>
+<p>Results in:</p>
+<ul>
+<li>Forward:</li>
+</ul>
+<p><code>python  exp = Exp()  softplus = Softplus()  Chain([exp, softplus]).forward(x)  = exp.forward(softplus.forward(x))  = tf.exp(tf.log(1. + tf.exp(x)))  = 1. + tf.exp(x)</code></p>
+<ul>
+<li>Inverse:</li>
+</ul>
+<p><code>python  exp = Exp()  softplus = Softplus()  Chain([exp, softplus]).inverse(y)  = softplus.inverse(exp.inverse(y))  = tf.log(tf.exp(tf.log(y)) - 1.)  = tf.log(y - 1.)</code> - - -</p>
+<h4 id="tf.contrib.distributions.bijector.chain.__init__bijectors-validate_argsfalse-namenone"><code id="Chain.__init__">tf.contrib.distributions.bijector.Chain.__init__(bijectors=(), validate_args=False, name=None)</code></h4>
+<p>Instantiates <code>Chain</code> bijector.</p>
+<h5 id="args-10">Args:</h5>
+<ul>
+<li><b><code>bijectors</code></b>: Python list of bijector instances. An empty list makes this bijector equivalent to the <code>Identity</code> bijector.</li>
+<li><b><code>validate_args</code></b>: <code>Boolean</code> indicating whether arguments should be checked for correctness.</li>
+<li><b><code>name</code></b>: <code>String</code>, name given to ops managed by this object. Default: E.g., <code>Chain([Exp(), Softplus()]).name == &quot;chain_of_exp_of_softplus&quot;</code>.</li>
+</ul>
+<h5 id="raises-5">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if bijectors have different dtypes.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.chain.bijectors"><code id="Chain.bijectors">tf.contrib.distributions.bijector.Chain.bijectors</code></h4>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.chain.dtype"><code id="Chain.dtype">tf.contrib.distributions.bijector.Chain.dtype</code></h4>
+<p>dtype of <code>Tensor</code>s transformable by this distribution.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.chain.forwardx-nameforward-condition_kwargs"><code id="Chain.forward">tf.contrib.distributions.bijector.Chain.forward(x, name='forward', **condition_kwargs)</code></h4>
+<p>Returns the forward <code>Bijector</code> evaluation, i.e., X = g(Y).</p>
+<h5 id="args-11">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code>. The input to the &quot;forward&quot; evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-10">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-6">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>x.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if <code>_forward</code> is not implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.chain.forward_event_shapeinput_shape-nameforward_event_shape"><code id="Chain.forward_event_shape">tf.contrib.distributions.bijector.Chain.forward_event_shape(input_shape, name='forward_event_shape')</code></h4>
+<p>Shape of a single sample from a single batch as an <code>int32</code> 1D <code>Tensor</code>.</p>
+<h5 id="args-12">Args:</h5>
+<ul>
+<li><b><code>input_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape passed into <code>forward</code> function.</li>
+<li><b><code>name</code></b>: name to give to the op</li>
+</ul>
+<h5 id="returns-11">Returns:</h5>
+<ul>
+<li><b><code>forward_event_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape after applying <code>forward</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.chain.forward_log_det_jacobianx-nameforward_log_det_jacobian-condition_kwargs"><code id="Chain.forward_log_det_jacobian">tf.contrib.distributions.bijector.Chain.forward_log_det_jacobian(x, name='forward_log_det_jacobian', **condition_kwargs)</code></h4>
+<p>Returns both the forward_log_det_jacobian.</p>
+<h5 id="args-13">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code>. The input to the &quot;forward&quot; Jacobian evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-12">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-7">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_forward_log_det_jacobian</code> nor {<code>_inverse</code>, <code>_inverse_log_det_jacobian</code>} are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.chain.get_forward_event_shapeinput_shape"><code id="Chain.get_forward_event_shape">tf.contrib.distributions.bijector.Chain.get_forward_event_shape(input_shape)</code></h4>
+<p>Shape of a single sample from a single batch as a <code>TensorShape</code>.</p>
+<p>Same meaning as <code>forward_event_shape</code>. May be only partially defined.</p>
+<h5 id="args-14">Args:</h5>
+<ul>
+<li><b><code>input_shape</code></b>: <code>TensorShape</code> indicating event-portion shape passed into <code>forward</code> function.</li>
+</ul>
+<h5 id="returns-13">Returns:</h5>
+<ul>
+<li><b><code>forward_event_shape</code></b>: <code>TensorShape</code> indicating event-portion shape after applying <code>forward</code>. Possibly unknown.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.chain.get_inverse_event_shapeoutput_shape"><code id="Chain.get_inverse_event_shape">tf.contrib.distributions.bijector.Chain.get_inverse_event_shape(output_shape)</code></h4>
+<p>Shape of a single sample from a single batch as a <code>TensorShape</code>.</p>
+<p>Same meaning as <code>inverse_event_shape</code>. May be only partially defined.</p>
+<h5 id="args-15">Args:</h5>
+<ul>
+<li><b><code>output_shape</code></b>: <code>TensorShape</code> indicating event-portion shape passed into <code>inverse</code> function.</li>
+</ul>
+<h5 id="returns-14">Returns:</h5>
+<ul>
+<li><b><code>inverse_event_shape</code></b>: <code>TensorShape</code> indicating event-portion shape after applying <code>inverse</code>. Possibly unknown.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.chain.inversey-nameinverse-condition_kwargs"><code id="Chain.inverse">tf.contrib.distributions.bijector.Chain.inverse(y, name='inverse', **condition_kwargs)</code></h4>
+<p>Returns the inverse <code>Bijector</code> evaluation, i.e., X = g^{-1}(Y).</p>
+<h5 id="args-16">Args:</h5>
+<ul>
+<li><b><code>y</code></b>: <code>Tensor</code>. The input to the &quot;inverse&quot; evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-15">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-8">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_inverse</code> nor <code>_inverse_and_inverse_log_det_jacobian</code> are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.chain.inverse_and_inverse_log_det_jacobiany-nameinverse_and_inverse_log_det_jacobian-condition_kwargs"><code id="Chain.inverse_and_inverse_log_det_jacobian">tf.contrib.distributions.bijector.Chain.inverse_and_inverse_log_det_jacobian(y, name='inverse_and_inverse_log_det_jacobian', **condition_kwargs)</code></h4>
+<p>Returns both the inverse evaluation and inverse_log_det_jacobian.</p>
+<p>Enables possibly more efficient calculation when both inverse and corresponding Jacobian are needed.</p>
+<p>See <code>inverse()</code>, <code>inverse_log_det_jacobian()</code> for more details.</p>
+<h5 id="args-17">Args:</h5>
+<ul>
+<li><b><code>y</code></b>: <code>Tensor</code>. The input to the &quot;inverse&quot; Jacobian evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-16">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-9">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_inverse_and_inverse_log_det_jacobian</code> nor {<code>_inverse</code>, <code>_inverse_log_det_jacobian</code>} are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.chain.inverse_event_shapeoutput_shape-nameinverse_event_shape"><code id="Chain.inverse_event_shape">tf.contrib.distributions.bijector.Chain.inverse_event_shape(output_shape, name='inverse_event_shape')</code></h4>
+<p>Shape of a single sample from a single batch as an <code>int32</code> 1D <code>Tensor</code>.</p>
+<h5 id="args-18">Args:</h5>
+<ul>
+<li><b><code>output_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape passed into <code>inverse</code> function.</li>
+<li><b><code>name</code></b>: name to give to the op</li>
+</ul>
+<h5 id="returns-17">Returns:</h5>
+<ul>
+<li><b><code>inverse_event_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape after applying <code>inverse</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.chain.inverse_log_det_jacobiany-nameinverse_log_det_jacobian-condition_kwargs"><code id="Chain.inverse_log_det_jacobian">tf.contrib.distributions.bijector.Chain.inverse_log_det_jacobian(y, name='inverse_log_det_jacobian', **condition_kwargs)</code></h4>
+<p>Returns the (log o det o Jacobian o inverse)(y).</p>
+<p>Mathematically, returns: <code>log(det(dX/dY))(Y)</code>. (Recall that: <code>X=g^{-1}(Y)</code>.)</p>
+<p>Note that <code>forward_log_det_jacobian</code> is the negative of this function.</p>
+<h5 id="args-19">Args:</h5>
+<ul>
+<li><b><code>y</code></b>: <code>Tensor</code>. The input to the &quot;inverse&quot; Jacobian evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-18">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-10">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_inverse_log_det_jacobian</code> nor <code>_inverse_and_inverse_log_det_jacobian</code> are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.chain.is_constant_jacobian"><code id="Chain.is_constant_jacobian">tf.contrib.distributions.bijector.Chain.is_constant_jacobian</code></h4>
+<p>Returns true iff the Jacobian is not a function of x.</p>
+<p>Note: Jacobian is either constant for both forward and inverse or neither.</p>
+<h5 id="returns-19">Returns:</h5>
+<p><code>Boolean</code>.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.chain.name"><code id="Chain.name">tf.contrib.distributions.bijector.Chain.name</code></h4>
+<p>Returns the string name of this <code>Bijector</code>.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.chain.parameters"><code id="Chain.parameters">tf.contrib.distributions.bijector.Chain.parameters</code></h4>
+<p>Returns this <code>Bijector</code>'s parameters as a name/value dictionary.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.chain.shaper"><code id="Chain.shaper">tf.contrib.distributions.bijector.Chain.shaper</code></h4>
+<p>Returns shape object used to manage shape constraints.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.chain.validate_args"><code id="Chain.validate_args">tf.contrib.distributions.bijector.Chain.validate_args</code></h4>
+<p>Returns True if Tensor arguments will be validated.</p>
+<hr />
+<h3 id="class-tf.contrib.distributions.bijector.choleskyouterproduct"><a name="//apple_ref/cpp/Class/CholeskyOuterProduct" class="dashAnchor"></a><code id="CholeskyOuterProduct">class tf.contrib.distributions.bijector.CholeskyOuterProduct</code></h3>
+<p>Bijector which computes Y = g(X) = X X^T where X is a lower-triangular, positive-diagonal matrix.</p>
+<p><code>event_ndims</code> must be 0 or 2, i.e., scalar or matrix.</p>
+<p>Note: the upper-triangular part of X is ignored (whether or not its zero).</p>
+<p>Examples:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">bijector.CholeskyOuterProduct(event_ndims<span class="op">=</span><span class="dv">2</span>).forward(x<span class="op">=</span>[[<span class="dv">1</span>., <span class="dv">0</span>], [<span class="dv">2</span>, <span class="dv">1</span>]])
+<span class="co"># Result: [[1, 1], [1, 5]], i.e., x x^T</span>
+
+bijector.SoftmaxCentered(event_ndims<span class="op">=</span><span class="dv">2</span>).inverse(y<span class="op">=</span>[[<span class="dv">1</span>., <span class="dv">1</span>], [<span class="dv">1</span>, <span class="dv">5</span>]])
+<span class="co"># Result: [[1, 0], [2, 1]], i.e., chol(y).</span></code></pre></div>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.choleskyouterproduct.__init__event_ndims2-validate_argsfalse-namecholesky_outer_product"><code id="CholeskyOuterProduct.__init__">tf.contrib.distributions.bijector.CholeskyOuterProduct.__init__(event_ndims=2, validate_args=False, name='cholesky_outer_product')</code></h4>
+<p>Instantiates the <code>CholeskyOuterProduct</code> bijector.</p>
+<h5 id="args-20">Args:</h5>
+<ul>
+<li><b><code>event_ndims</code></b>: <code>constant</code> <code>int32</code> scalar <code>Tensor</code> indicating the number of dimensions associated with a particular draw from the distribution. Must be 0 or 2.</li>
+<li><b><code>validate_args</code></b>: <code>Boolean</code> indicating whether arguments should be checked for correctness.</li>
+<li><b><code>name</code></b>: <code>String</code> name given to ops managed by this object.</li>
+</ul>
+<h5 id="raises-11">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if event_ndims is neither 0 or 2.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.choleskyouterproduct.dtype"><code id="CholeskyOuterProduct.dtype">tf.contrib.distributions.bijector.CholeskyOuterProduct.dtype</code></h4>
+<p>dtype of <code>Tensor</code>s transformable by this distribution.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.choleskyouterproduct.forwardx-nameforward-condition_kwargs"><code id="CholeskyOuterProduct.forward">tf.contrib.distributions.bijector.CholeskyOuterProduct.forward(x, name='forward', **condition_kwargs)</code></h4>
+<p>Returns the forward <code>Bijector</code> evaluation, i.e., X = g(Y).</p>
+<h5 id="args-21">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code>. The input to the &quot;forward&quot; evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-20">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-12">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>x.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if <code>_forward</code> is not implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.choleskyouterproduct.forward_event_shapeinput_shape-nameforward_event_shape"><code id="CholeskyOuterProduct.forward_event_shape">tf.contrib.distributions.bijector.CholeskyOuterProduct.forward_event_shape(input_shape, name='forward_event_shape')</code></h4>
+<p>Shape of a single sample from a single batch as an <code>int32</code> 1D <code>Tensor</code>.</p>
+<h5 id="args-22">Args:</h5>
+<ul>
+<li><b><code>input_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape passed into <code>forward</code> function.</li>
+<li><b><code>name</code></b>: name to give to the op</li>
+</ul>
+<h5 id="returns-21">Returns:</h5>
+<ul>
+<li><b><code>forward_event_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape after applying <code>forward</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.choleskyouterproduct.forward_log_det_jacobianx-nameforward_log_det_jacobian-condition_kwargs"><code id="CholeskyOuterProduct.forward_log_det_jacobian">tf.contrib.distributions.bijector.CholeskyOuterProduct.forward_log_det_jacobian(x, name='forward_log_det_jacobian', **condition_kwargs)</code></h4>
+<p>Returns both the forward_log_det_jacobian.</p>
+<h5 id="args-23">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code>. The input to the &quot;forward&quot; Jacobian evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-22">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-13">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_forward_log_det_jacobian</code> nor {<code>_inverse</code>, <code>_inverse_log_det_jacobian</code>} are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.choleskyouterproduct.get_forward_event_shapeinput_shape"><code id="CholeskyOuterProduct.get_forward_event_shape">tf.contrib.distributions.bijector.CholeskyOuterProduct.get_forward_event_shape(input_shape)</code></h4>
+<p>Shape of a single sample from a single batch as a <code>TensorShape</code>.</p>
+<p>Same meaning as <code>forward_event_shape</code>. May be only partially defined.</p>
+<h5 id="args-24">Args:</h5>
+<ul>
+<li><b><code>input_shape</code></b>: <code>TensorShape</code> indicating event-portion shape passed into <code>forward</code> function.</li>
+</ul>
+<h5 id="returns-23">Returns:</h5>
+<ul>
+<li><b><code>forward_event_shape</code></b>: <code>TensorShape</code> indicating event-portion shape after applying <code>forward</code>. Possibly unknown.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.choleskyouterproduct.get_inverse_event_shapeoutput_shape"><code id="CholeskyOuterProduct.get_inverse_event_shape">tf.contrib.distributions.bijector.CholeskyOuterProduct.get_inverse_event_shape(output_shape)</code></h4>
+<p>Shape of a single sample from a single batch as a <code>TensorShape</code>.</p>
+<p>Same meaning as <code>inverse_event_shape</code>. May be only partially defined.</p>
+<h5 id="args-25">Args:</h5>
+<ul>
+<li><b><code>output_shape</code></b>: <code>TensorShape</code> indicating event-portion shape passed into <code>inverse</code> function.</li>
+</ul>
+<h5 id="returns-24">Returns:</h5>
+<ul>
+<li><b><code>inverse_event_shape</code></b>: <code>TensorShape</code> indicating event-portion shape after applying <code>inverse</code>. Possibly unknown.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.choleskyouterproduct.inversey-nameinverse-condition_kwargs"><code id="CholeskyOuterProduct.inverse">tf.contrib.distributions.bijector.CholeskyOuterProduct.inverse(y, name='inverse', **condition_kwargs)</code></h4>
+<p>Returns the inverse <code>Bijector</code> evaluation, i.e., X = g^{-1}(Y).</p>
+<h5 id="args-26">Args:</h5>
+<ul>
+<li><b><code>y</code></b>: <code>Tensor</code>. The input to the &quot;inverse&quot; evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-25">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-14">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_inverse</code> nor <code>_inverse_and_inverse_log_det_jacobian</code> are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.choleskyouterproduct.inverse_and_inverse_log_det_jacobiany-nameinverse_and_inverse_log_det_jacobian-condition_kwargs"><code id="CholeskyOuterProduct.inverse_and_inverse_log_det_jacobian">tf.contrib.distributions.bijector.CholeskyOuterProduct.inverse_and_inverse_log_det_jacobian(y, name='inverse_and_inverse_log_det_jacobian', **condition_kwargs)</code></h4>
+<p>Returns both the inverse evaluation and inverse_log_det_jacobian.</p>
+<p>Enables possibly more efficient calculation when both inverse and corresponding Jacobian are needed.</p>
+<p>See <code>inverse()</code>, <code>inverse_log_det_jacobian()</code> for more details.</p>
+<h5 id="args-27">Args:</h5>
+<ul>
+<li><b><code>y</code></b>: <code>Tensor</code>. The input to the &quot;inverse&quot; Jacobian evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-26">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-15">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_inverse_and_inverse_log_det_jacobian</code> nor {<code>_inverse</code>, <code>_inverse_log_det_jacobian</code>} are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.choleskyouterproduct.inverse_event_shapeoutput_shape-nameinverse_event_shape"><code id="CholeskyOuterProduct.inverse_event_shape">tf.contrib.distributions.bijector.CholeskyOuterProduct.inverse_event_shape(output_shape, name='inverse_event_shape')</code></h4>
+<p>Shape of a single sample from a single batch as an <code>int32</code> 1D <code>Tensor</code>.</p>
+<h5 id="args-28">Args:</h5>
+<ul>
+<li><b><code>output_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape passed into <code>inverse</code> function.</li>
+<li><b><code>name</code></b>: name to give to the op</li>
+</ul>
+<h5 id="returns-27">Returns:</h5>
+<ul>
+<li><b><code>inverse_event_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape after applying <code>inverse</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.choleskyouterproduct.inverse_log_det_jacobiany-nameinverse_log_det_jacobian-condition_kwargs"><code id="CholeskyOuterProduct.inverse_log_det_jacobian">tf.contrib.distributions.bijector.CholeskyOuterProduct.inverse_log_det_jacobian(y, name='inverse_log_det_jacobian', **condition_kwargs)</code></h4>
+<p>Returns the (log o det o Jacobian o inverse)(y).</p>
+<p>Mathematically, returns: <code>log(det(dX/dY))(Y)</code>. (Recall that: <code>X=g^{-1}(Y)</code>.)</p>
+<p>Note that <code>forward_log_det_jacobian</code> is the negative of this function.</p>
+<h5 id="args-29">Args:</h5>
+<ul>
+<li><b><code>y</code></b>: <code>Tensor</code>. The input to the &quot;inverse&quot; Jacobian evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-28">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-16">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_inverse_log_det_jacobian</code> nor <code>_inverse_and_inverse_log_det_jacobian</code> are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.choleskyouterproduct.is_constant_jacobian"><code id="CholeskyOuterProduct.is_constant_jacobian">tf.contrib.distributions.bijector.CholeskyOuterProduct.is_constant_jacobian</code></h4>
+<p>Returns true iff the Jacobian is not a function of x.</p>
+<p>Note: Jacobian is either constant for both forward and inverse or neither.</p>
+<h5 id="returns-29">Returns:</h5>
+<p><code>Boolean</code>.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.choleskyouterproduct.name"><code id="CholeskyOuterProduct.name">tf.contrib.distributions.bijector.CholeskyOuterProduct.name</code></h4>
+<p>Returns the string name of this <code>Bijector</code>.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.choleskyouterproduct.parameters"><code id="CholeskyOuterProduct.parameters">tf.contrib.distributions.bijector.CholeskyOuterProduct.parameters</code></h4>
+<p>Returns this <code>Bijector</code>'s parameters as a name/value dictionary.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.choleskyouterproduct.shaper"><code id="CholeskyOuterProduct.shaper">tf.contrib.distributions.bijector.CholeskyOuterProduct.shaper</code></h4>
+<p>Returns shape object used to manage shape constraints.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.choleskyouterproduct.validate_args"><code id="CholeskyOuterProduct.validate_args">tf.contrib.distributions.bijector.CholeskyOuterProduct.validate_args</code></h4>
+<p>Returns True if Tensor arguments will be validated.</p>
+<hr />
+<h3 id="class-tf.contrib.distributions.bijector.exp"><a name="//apple_ref/cpp/Class/Exp" class="dashAnchor"></a><code id="Exp">class tf.contrib.distributions.bijector.Exp</code></h3>
+<p>Bijector which computes Y = g(X) = exp(X).</p>
+<p>Example Use:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Create the Y=g(X)=exp(X) transform which works only on Tensors with 1</span>
+<span class="co"># batch ndim and 2 event ndims (i.e., vector of matrices).</span>
+exp <span class="op">=</span> Exp(batch_ndims<span class="op">=</span><span class="dv">1</span>, event_ndims<span class="op">=</span><span class="dv">2</span>)
+x <span class="op">=</span> [[[<span class="dv">1</span>., <span class="dv">2</span>],
+       [<span class="dv">3</span>, <span class="dv">4</span>]],
+      [[<span class="dv">5</span>, <span class="dv">6</span>],
+       [<span class="dv">7</span>, <span class="dv">8</span>]]]
+exp(x) <span class="op">==</span> exp.forward(x)
+log(x) <span class="op">==</span> exp.inverse(x)</code></pre></div>
+<p>Note: the exp(.) is applied element-wise but the Jacobian is a reduction over the event space. - - -</p>
+<h4 id="tf.contrib.distributions.bijector.exp.__init__event_ndims0-validate_argsfalse-nameexp"><code id="Exp.__init__">tf.contrib.distributions.bijector.Exp.__init__(event_ndims=0, validate_args=False, name='exp')</code></h4>
+<p>Instantiates the <code>Exp</code> bijector.</p>
+<h5 id="args-30">Args:</h5>
+<ul>
+<li><b><code>event_ndims</code></b>: Scalar <code>int32</code> <code>Tensor</code> indicating the number of dimensions associated with a particular draw from the distribution.</li>
+<li><b><code>validate_args</code></b>: <code>Boolean</code> indicating whether arguments should be checked for correctness.</li>
+<li><b><code>name</code></b>: <code>String</code> name given to ops managed by this object.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.exp.dtype"><code id="Exp.dtype">tf.contrib.distributions.bijector.Exp.dtype</code></h4>
+<p>dtype of <code>Tensor</code>s transformable by this distribution.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.exp.forwardx-nameforward-condition_kwargs"><code id="Exp.forward">tf.contrib.distributions.bijector.Exp.forward(x, name='forward', **condition_kwargs)</code></h4>
+<p>Returns the forward <code>Bijector</code> evaluation, i.e., X = g(Y).</p>
+<h5 id="args-31">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code>. The input to the &quot;forward&quot; evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-30">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-17">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>x.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if <code>_forward</code> is not implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.exp.forward_event_shapeinput_shape-nameforward_event_shape"><code id="Exp.forward_event_shape">tf.contrib.distributions.bijector.Exp.forward_event_shape(input_shape, name='forward_event_shape')</code></h4>
+<p>Shape of a single sample from a single batch as an <code>int32</code> 1D <code>Tensor</code>.</p>
+<h5 id="args-32">Args:</h5>
+<ul>
+<li><b><code>input_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape passed into <code>forward</code> function.</li>
+<li><b><code>name</code></b>: name to give to the op</li>
+</ul>
+<h5 id="returns-31">Returns:</h5>
+<ul>
+<li><b><code>forward_event_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape after applying <code>forward</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.exp.forward_log_det_jacobianx-nameforward_log_det_jacobian-condition_kwargs"><code id="Exp.forward_log_det_jacobian">tf.contrib.distributions.bijector.Exp.forward_log_det_jacobian(x, name='forward_log_det_jacobian', **condition_kwargs)</code></h4>
+<p>Returns both the forward_log_det_jacobian.</p>
+<h5 id="args-33">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code>. The input to the &quot;forward&quot; Jacobian evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-32">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-18">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_forward_log_det_jacobian</code> nor {<code>_inverse</code>, <code>_inverse_log_det_jacobian</code>} are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.exp.get_forward_event_shapeinput_shape"><code id="Exp.get_forward_event_shape">tf.contrib.distributions.bijector.Exp.get_forward_event_shape(input_shape)</code></h4>
+<p>Shape of a single sample from a single batch as a <code>TensorShape</code>.</p>
+<p>Same meaning as <code>forward_event_shape</code>. May be only partially defined.</p>
+<h5 id="args-34">Args:</h5>
+<ul>
+<li><b><code>input_shape</code></b>: <code>TensorShape</code> indicating event-portion shape passed into <code>forward</code> function.</li>
+</ul>
+<h5 id="returns-33">Returns:</h5>
+<ul>
+<li><b><code>forward_event_shape</code></b>: <code>TensorShape</code> indicating event-portion shape after applying <code>forward</code>. Possibly unknown.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.exp.get_inverse_event_shapeoutput_shape"><code id="Exp.get_inverse_event_shape">tf.contrib.distributions.bijector.Exp.get_inverse_event_shape(output_shape)</code></h4>
+<p>Shape of a single sample from a single batch as a <code>TensorShape</code>.</p>
+<p>Same meaning as <code>inverse_event_shape</code>. May be only partially defined.</p>
+<h5 id="args-35">Args:</h5>
+<ul>
+<li><b><code>output_shape</code></b>: <code>TensorShape</code> indicating event-portion shape passed into <code>inverse</code> function.</li>
+</ul>
+<h5 id="returns-34">Returns:</h5>
+<ul>
+<li><b><code>inverse_event_shape</code></b>: <code>TensorShape</code> indicating event-portion shape after applying <code>inverse</code>. Possibly unknown.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.exp.inversey-nameinverse-condition_kwargs"><code id="Exp.inverse">tf.contrib.distributions.bijector.Exp.inverse(y, name='inverse', **condition_kwargs)</code></h4>
+<p>Returns the inverse <code>Bijector</code> evaluation, i.e., X = g^{-1}(Y).</p>
+<h5 id="args-36">Args:</h5>
+<ul>
+<li><b><code>y</code></b>: <code>Tensor</code>. The input to the &quot;inverse&quot; evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-35">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-19">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_inverse</code> nor <code>_inverse_and_inverse_log_det_jacobian</code> are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.exp.inverse_and_inverse_log_det_jacobiany-nameinverse_and_inverse_log_det_jacobian-condition_kwargs"><code id="Exp.inverse_and_inverse_log_det_jacobian">tf.contrib.distributions.bijector.Exp.inverse_and_inverse_log_det_jacobian(y, name='inverse_and_inverse_log_det_jacobian', **condition_kwargs)</code></h4>
+<p>Returns both the inverse evaluation and inverse_log_det_jacobian.</p>
+<p>Enables possibly more efficient calculation when both inverse and corresponding Jacobian are needed.</p>
+<p>See <code>inverse()</code>, <code>inverse_log_det_jacobian()</code> for more details.</p>
+<h5 id="args-37">Args:</h5>
+<ul>
+<li><b><code>y</code></b>: <code>Tensor</code>. The input to the &quot;inverse&quot; Jacobian evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-36">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-20">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_inverse_and_inverse_log_det_jacobian</code> nor {<code>_inverse</code>, <code>_inverse_log_det_jacobian</code>} are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.exp.inverse_event_shapeoutput_shape-nameinverse_event_shape"><code id="Exp.inverse_event_shape">tf.contrib.distributions.bijector.Exp.inverse_event_shape(output_shape, name='inverse_event_shape')</code></h4>
+<p>Shape of a single sample from a single batch as an <code>int32</code> 1D <code>Tensor</code>.</p>
+<h5 id="args-38">Args:</h5>
+<ul>
+<li><b><code>output_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape passed into <code>inverse</code> function.</li>
+<li><b><code>name</code></b>: name to give to the op</li>
+</ul>
+<h5 id="returns-37">Returns:</h5>
+<ul>
+<li><b><code>inverse_event_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape after applying <code>inverse</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.exp.inverse_log_det_jacobiany-nameinverse_log_det_jacobian-condition_kwargs"><code id="Exp.inverse_log_det_jacobian">tf.contrib.distributions.bijector.Exp.inverse_log_det_jacobian(y, name='inverse_log_det_jacobian', **condition_kwargs)</code></h4>
+<p>Returns the (log o det o Jacobian o inverse)(y).</p>
+<p>Mathematically, returns: <code>log(det(dX/dY))(Y)</code>. (Recall that: <code>X=g^{-1}(Y)</code>.)</p>
+<p>Note that <code>forward_log_det_jacobian</code> is the negative of this function.</p>
+<h5 id="args-39">Args:</h5>
+<ul>
+<li><b><code>y</code></b>: <code>Tensor</code>. The input to the &quot;inverse&quot; Jacobian evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-38">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-21">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_inverse_log_det_jacobian</code> nor <code>_inverse_and_inverse_log_det_jacobian</code> are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.exp.is_constant_jacobian"><code id="Exp.is_constant_jacobian">tf.contrib.distributions.bijector.Exp.is_constant_jacobian</code></h4>
+<p>Returns true iff the Jacobian is not a function of x.</p>
+<p>Note: Jacobian is either constant for both forward and inverse or neither.</p>
+<h5 id="returns-39">Returns:</h5>
+<p><code>Boolean</code>.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.exp.name"><code id="Exp.name">tf.contrib.distributions.bijector.Exp.name</code></h4>
+<p>Returns the string name of this <code>Bijector</code>.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.exp.parameters"><code id="Exp.parameters">tf.contrib.distributions.bijector.Exp.parameters</code></h4>
+<p>Returns this <code>Bijector</code>'s parameters as a name/value dictionary.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.exp.shaper"><code id="Exp.shaper">tf.contrib.distributions.bijector.Exp.shaper</code></h4>
+<p>Returns shape object used to manage shape constraints.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.exp.validate_args"><code id="Exp.validate_args">tf.contrib.distributions.bijector.Exp.validate_args</code></h4>
+<p>Returns True if Tensor arguments will be validated.</p>
+<hr />
+<h3 id="class-tf.contrib.distributions.bijector.identity"><a name="//apple_ref/cpp/Class/Identity" class="dashAnchor"></a><code id="Identity">class tf.contrib.distributions.bijector.Identity</code></h3>
+<p>Bijector which computes Y = g(X) = X.</p>
+<p>Example Use:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Create the Y=g(X)=X transform which is intended for Tensors with 1 batch</span>
+<span class="co"># ndim and 1 event ndim (i.e., vector of vectors).</span>
+identity <span class="op">=</span> Identity(batch_ndims<span class="op">=</span><span class="dv">1</span>, event_ndims<span class="op">=</span><span class="dv">1</span>)
+x <span class="op">=</span> [[<span class="dv">1</span>., <span class="dv">2</span>],
+     [<span class="dv">3</span>, <span class="dv">4</span>]]
+x <span class="op">==</span> identity.forward(x) <span class="op">==</span> identity.inverse(x)</code></pre></div>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.identity.__init__validate_argsfalse-nameidentity"><code id="Identity.__init__">tf.contrib.distributions.bijector.Identity.__init__(validate_args=False, name='identity')</code></h4>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.identity.dtype"><code id="Identity.dtype">tf.contrib.distributions.bijector.Identity.dtype</code></h4>
+<p>dtype of <code>Tensor</code>s transformable by this distribution.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.identity.forwardx-nameforward-condition_kwargs"><code id="Identity.forward">tf.contrib.distributions.bijector.Identity.forward(x, name='forward', **condition_kwargs)</code></h4>
+<p>Returns the forward <code>Bijector</code> evaluation, i.e., X = g(Y).</p>
+<h5 id="args-40">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code>. The input to the &quot;forward&quot; evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-40">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-22">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>x.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if <code>_forward</code> is not implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.identity.forward_event_shapeinput_shape-nameforward_event_shape"><code id="Identity.forward_event_shape">tf.contrib.distributions.bijector.Identity.forward_event_shape(input_shape, name='forward_event_shape')</code></h4>
+<p>Shape of a single sample from a single batch as an <code>int32</code> 1D <code>Tensor</code>.</p>
+<h5 id="args-41">Args:</h5>
+<ul>
+<li><b><code>input_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape passed into <code>forward</code> function.</li>
+<li><b><code>name</code></b>: name to give to the op</li>
+</ul>
+<h5 id="returns-41">Returns:</h5>
+<ul>
+<li><b><code>forward_event_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape after applying <code>forward</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.identity.forward_log_det_jacobianx-nameforward_log_det_jacobian-condition_kwargs"><code id="Identity.forward_log_det_jacobian">tf.contrib.distributions.bijector.Identity.forward_log_det_jacobian(x, name='forward_log_det_jacobian', **condition_kwargs)</code></h4>
+<p>Returns both the forward_log_det_jacobian.</p>
+<h5 id="args-42">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code>. The input to the &quot;forward&quot; Jacobian evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-42">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-23">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_forward_log_det_jacobian</code> nor {<code>_inverse</code>, <code>_inverse_log_det_jacobian</code>} are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.identity.get_forward_event_shapeinput_shape"><code id="Identity.get_forward_event_shape">tf.contrib.distributions.bijector.Identity.get_forward_event_shape(input_shape)</code></h4>
+<p>Shape of a single sample from a single batch as a <code>TensorShape</code>.</p>
+<p>Same meaning as <code>forward_event_shape</code>. May be only partially defined.</p>
+<h5 id="args-43">Args:</h5>
+<ul>
+<li><b><code>input_shape</code></b>: <code>TensorShape</code> indicating event-portion shape passed into <code>forward</code> function.</li>
+</ul>
+<h5 id="returns-43">Returns:</h5>
+<ul>
+<li><b><code>forward_event_shape</code></b>: <code>TensorShape</code> indicating event-portion shape after applying <code>forward</code>. Possibly unknown.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.identity.get_inverse_event_shapeoutput_shape"><code id="Identity.get_inverse_event_shape">tf.contrib.distributions.bijector.Identity.get_inverse_event_shape(output_shape)</code></h4>
+<p>Shape of a single sample from a single batch as a <code>TensorShape</code>.</p>
+<p>Same meaning as <code>inverse_event_shape</code>. May be only partially defined.</p>
+<h5 id="args-44">Args:</h5>
+<ul>
+<li><b><code>output_shape</code></b>: <code>TensorShape</code> indicating event-portion shape passed into <code>inverse</code> function.</li>
+</ul>
+<h5 id="returns-44">Returns:</h5>
+<ul>
+<li><b><code>inverse_event_shape</code></b>: <code>TensorShape</code> indicating event-portion shape after applying <code>inverse</code>. Possibly unknown.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.identity.inversey-nameinverse-condition_kwargs"><code id="Identity.inverse">tf.contrib.distributions.bijector.Identity.inverse(y, name='inverse', **condition_kwargs)</code></h4>
+<p>Returns the inverse <code>Bijector</code> evaluation, i.e., X = g^{-1}(Y).</p>
+<h5 id="args-45">Args:</h5>
+<ul>
+<li><b><code>y</code></b>: <code>Tensor</code>. The input to the &quot;inverse&quot; evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-45">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-24">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_inverse</code> nor <code>_inverse_and_inverse_log_det_jacobian</code> are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.identity.inverse_and_inverse_log_det_jacobiany-nameinverse_and_inverse_log_det_jacobian-condition_kwargs"><code id="Identity.inverse_and_inverse_log_det_jacobian">tf.contrib.distributions.bijector.Identity.inverse_and_inverse_log_det_jacobian(y, name='inverse_and_inverse_log_det_jacobian', **condition_kwargs)</code></h4>
+<p>Returns both the inverse evaluation and inverse_log_det_jacobian.</p>
+<p>Enables possibly more efficient calculation when both inverse and corresponding Jacobian are needed.</p>
+<p>See <code>inverse()</code>, <code>inverse_log_det_jacobian()</code> for more details.</p>
+<h5 id="args-46">Args:</h5>
+<ul>
+<li><b><code>y</code></b>: <code>Tensor</code>. The input to the &quot;inverse&quot; Jacobian evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-46">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-25">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_inverse_and_inverse_log_det_jacobian</code> nor {<code>_inverse</code>, <code>_inverse_log_det_jacobian</code>} are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.identity.inverse_event_shapeoutput_shape-nameinverse_event_shape"><code id="Identity.inverse_event_shape">tf.contrib.distributions.bijector.Identity.inverse_event_shape(output_shape, name='inverse_event_shape')</code></h4>
+<p>Shape of a single sample from a single batch as an <code>int32</code> 1D <code>Tensor</code>.</p>
+<h5 id="args-47">Args:</h5>
+<ul>
+<li><b><code>output_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape passed into <code>inverse</code> function.</li>
+<li><b><code>name</code></b>: name to give to the op</li>
+</ul>
+<h5 id="returns-47">Returns:</h5>
+<ul>
+<li><b><code>inverse_event_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape after applying <code>inverse</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.identity.inverse_log_det_jacobiany-nameinverse_log_det_jacobian-condition_kwargs"><code id="Identity.inverse_log_det_jacobian">tf.contrib.distributions.bijector.Identity.inverse_log_det_jacobian(y, name='inverse_log_det_jacobian', **condition_kwargs)</code></h4>
+<p>Returns the (log o det o Jacobian o inverse)(y).</p>
+<p>Mathematically, returns: <code>log(det(dX/dY))(Y)</code>. (Recall that: <code>X=g^{-1}(Y)</code>.)</p>
+<p>Note that <code>forward_log_det_jacobian</code> is the negative of this function.</p>
+<h5 id="args-48">Args:</h5>
+<ul>
+<li><b><code>y</code></b>: <code>Tensor</code>. The input to the &quot;inverse&quot; Jacobian evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-48">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-26">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_inverse_log_det_jacobian</code> nor <code>_inverse_and_inverse_log_det_jacobian</code> are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.identity.is_constant_jacobian"><code id="Identity.is_constant_jacobian">tf.contrib.distributions.bijector.Identity.is_constant_jacobian</code></h4>
+<p>Returns true iff the Jacobian is not a function of x.</p>
+<p>Note: Jacobian is either constant for both forward and inverse or neither.</p>
+<h5 id="returns-49">Returns:</h5>
+<p><code>Boolean</code>.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.identity.name"><code id="Identity.name">tf.contrib.distributions.bijector.Identity.name</code></h4>
+<p>Returns the string name of this <code>Bijector</code>.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.identity.parameters"><code id="Identity.parameters">tf.contrib.distributions.bijector.Identity.parameters</code></h4>
+<p>Returns this <code>Bijector</code>'s parameters as a name/value dictionary.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.identity.shaper"><code id="Identity.shaper">tf.contrib.distributions.bijector.Identity.shaper</code></h4>
+<p>Returns shape object used to manage shape constraints.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.identity.validate_args"><code id="Identity.validate_args">tf.contrib.distributions.bijector.Identity.validate_args</code></h4>
+<p>Returns True if Tensor arguments will be validated.</p>
+<hr />
+<h3 id="class-tf.contrib.distributions.bijector.inline"><a name="//apple_ref/cpp/Class/Inline" class="dashAnchor"></a><code id="Inline">class tf.contrib.distributions.bijector.Inline</code></h3>
+<p>Bijector constructed from callables implementing forward, inverse, and inverse_log_det_jacobian.</p>
+<p>Example Use:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">exp <span class="op">=</span> Inline(
+  forward_fn<span class="op">=</span>tf.exp,
+  inverse_fn<span class="op">=</span>tf.log,
+  inverse_log_det_jacobian_fn<span class="op">=</span>(
+    <span class="kw">lambda</span> y: <span class="op">-</span>tf.reduce_sum(tf.log(y), reduction_indices<span class="op">=-</span><span class="dv">1</span>)),
+  name<span class="op">=</span><span class="st">&quot;exp&quot;</span>)</code></pre></div>
+<p>The above example is equivalent to the <code>Bijector</code> <code>Exp(event_ndims=1)</code>. - - -</p>
+<h4 id="tf.contrib.distributions.bijector.inline.__init__forward_fnnone-inverse_fnnone-inverse_log_det_jacobian_fnnone-forward_log_det_jacobian_fnnone-get_forward_event_shape_fnnone-forward_event_shape_fnnone-get_inverse_event_shape_fnnone-inverse_event_shape_fnnone-is_constant_jacobianfalse-validate_argsfalse-nameinline"><code id="Inline.__init__">tf.contrib.distributions.bijector.Inline.__init__(forward_fn=None, inverse_fn=None, inverse_log_det_jacobian_fn=None, forward_log_det_jacobian_fn=None, get_forward_event_shape_fn=None, forward_event_shape_fn=None, get_inverse_event_shape_fn=None, inverse_event_shape_fn=None, is_constant_jacobian=False, validate_args=False, name='inline')</code></h4>
+<p>Creates a <code>Bijector</code> from callables.</p>
+<h5 id="args-49">Args:</h5>
+<ul>
+<li><b><code>forward_fn</code></b>: Python callable implementing the forward transformation.</li>
+<li><b><code>inverse_fn</code></b>: Python callable implementing the inverse transformation.</li>
+<li><b><code>inverse_log_det_jacobian_fn</code></b>: Python callable implementing the log o det o jacobian of the inverse transformation.</li>
+<li><b><code>forward_log_det_jacobian_fn</code></b>: Python callable implementing the log o det o jacobian of the forward transformation.</li>
+<li><b><code>get_forward_event_shape_fn</code></b>: Python callable implementing non-identical static event shape changes. Default: shape is assumed unchanged.</li>
+<li><b><code>forward_event_shape_fn</code></b>: Python callable implementing non-identical event shape changes. Default: shape is assumed unchanged.</li>
+<li><b><code>get_inverse_event_shape_fn</code></b>: Python callable implementing non-identical static event shape changes. Default: shape is assumed unchanged.</li>
+<li><b><code>inverse_event_shape_fn</code></b>: Python callable implementing non-identical event shape changes. Default: shape is assumed unchanged.</li>
+<li><b><code>is_constant_jacobian</code></b>: <code>Boolean</code> indicating that the Jacobian is constant for all input arguments.</li>
+<li><b><code>validate_args</code></b>: <code>Boolean</code> indicating whether arguments should be checked for correctness.</li>
+<li><b><code>name</code></b>: <code>String</code>, name given to ops managed by this object.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.inline.dtype"><code id="Inline.dtype">tf.contrib.distributions.bijector.Inline.dtype</code></h4>
+<p>dtype of <code>Tensor</code>s transformable by this distribution.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.inline.forwardx-nameforward-condition_kwargs"><code id="Inline.forward">tf.contrib.distributions.bijector.Inline.forward(x, name='forward', **condition_kwargs)</code></h4>
+<p>Returns the forward <code>Bijector</code> evaluation, i.e., X = g(Y).</p>
+<h5 id="args-50">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code>. The input to the &quot;forward&quot; evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-50">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-27">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>x.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if <code>_forward</code> is not implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.inline.forward_event_shapeinput_shape-nameforward_event_shape"><code id="Inline.forward_event_shape">tf.contrib.distributions.bijector.Inline.forward_event_shape(input_shape, name='forward_event_shape')</code></h4>
+<p>Shape of a single sample from a single batch as an <code>int32</code> 1D <code>Tensor</code>.</p>
+<h5 id="args-51">Args:</h5>
+<ul>
+<li><b><code>input_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape passed into <code>forward</code> function.</li>
+<li><b><code>name</code></b>: name to give to the op</li>
+</ul>
+<h5 id="returns-51">Returns:</h5>
+<ul>
+<li><b><code>forward_event_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape after applying <code>forward</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.inline.forward_log_det_jacobianx-nameforward_log_det_jacobian-condition_kwargs"><code id="Inline.forward_log_det_jacobian">tf.contrib.distributions.bijector.Inline.forward_log_det_jacobian(x, name='forward_log_det_jacobian', **condition_kwargs)</code></h4>
+<p>Returns both the forward_log_det_jacobian.</p>
+<h5 id="args-52">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code>. The input to the &quot;forward&quot; Jacobian evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-52">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-28">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_forward_log_det_jacobian</code> nor {<code>_inverse</code>, <code>_inverse_log_det_jacobian</code>} are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.inline.get_forward_event_shapeinput_shape"><code id="Inline.get_forward_event_shape">tf.contrib.distributions.bijector.Inline.get_forward_event_shape(input_shape)</code></h4>
+<p>Shape of a single sample from a single batch as a <code>TensorShape</code>.</p>
+<p>Same meaning as <code>forward_event_shape</code>. May be only partially defined.</p>
+<h5 id="args-53">Args:</h5>
+<ul>
+<li><b><code>input_shape</code></b>: <code>TensorShape</code> indicating event-portion shape passed into <code>forward</code> function.</li>
+</ul>
+<h5 id="returns-53">Returns:</h5>
+<ul>
+<li><b><code>forward_event_shape</code></b>: <code>TensorShape</code> indicating event-portion shape after applying <code>forward</code>. Possibly unknown.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.inline.get_inverse_event_shapeoutput_shape"><code id="Inline.get_inverse_event_shape">tf.contrib.distributions.bijector.Inline.get_inverse_event_shape(output_shape)</code></h4>
+<p>Shape of a single sample from a single batch as a <code>TensorShape</code>.</p>
+<p>Same meaning as <code>inverse_event_shape</code>. May be only partially defined.</p>
+<h5 id="args-54">Args:</h5>
+<ul>
+<li><b><code>output_shape</code></b>: <code>TensorShape</code> indicating event-portion shape passed into <code>inverse</code> function.</li>
+</ul>
+<h5 id="returns-54">Returns:</h5>
+<ul>
+<li><b><code>inverse_event_shape</code></b>: <code>TensorShape</code> indicating event-portion shape after applying <code>inverse</code>. Possibly unknown.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.inline.inversey-nameinverse-condition_kwargs"><code id="Inline.inverse">tf.contrib.distributions.bijector.Inline.inverse(y, name='inverse', **condition_kwargs)</code></h4>
+<p>Returns the inverse <code>Bijector</code> evaluation, i.e., X = g^{-1}(Y).</p>
+<h5 id="args-55">Args:</h5>
+<ul>
+<li><b><code>y</code></b>: <code>Tensor</code>. The input to the &quot;inverse&quot; evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-55">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-29">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_inverse</code> nor <code>_inverse_and_inverse_log_det_jacobian</code> are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.inline.inverse_and_inverse_log_det_jacobiany-nameinverse_and_inverse_log_det_jacobian-condition_kwargs"><code id="Inline.inverse_and_inverse_log_det_jacobian">tf.contrib.distributions.bijector.Inline.inverse_and_inverse_log_det_jacobian(y, name='inverse_and_inverse_log_det_jacobian', **condition_kwargs)</code></h4>
+<p>Returns both the inverse evaluation and inverse_log_det_jacobian.</p>
+<p>Enables possibly more efficient calculation when both inverse and corresponding Jacobian are needed.</p>
+<p>See <code>inverse()</code>, <code>inverse_log_det_jacobian()</code> for more details.</p>
+<h5 id="args-56">Args:</h5>
+<ul>
+<li><b><code>y</code></b>: <code>Tensor</code>. The input to the &quot;inverse&quot; Jacobian evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-56">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-30">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_inverse_and_inverse_log_det_jacobian</code> nor {<code>_inverse</code>, <code>_inverse_log_det_jacobian</code>} are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.inline.inverse_event_shapeoutput_shape-nameinverse_event_shape"><code id="Inline.inverse_event_shape">tf.contrib.distributions.bijector.Inline.inverse_event_shape(output_shape, name='inverse_event_shape')</code></h4>
+<p>Shape of a single sample from a single batch as an <code>int32</code> 1D <code>Tensor</code>.</p>
+<h5 id="args-57">Args:</h5>
+<ul>
+<li><b><code>output_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape passed into <code>inverse</code> function.</li>
+<li><b><code>name</code></b>: name to give to the op</li>
+</ul>
+<h5 id="returns-57">Returns:</h5>
+<ul>
+<li><b><code>inverse_event_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape after applying <code>inverse</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.inline.inverse_log_det_jacobiany-nameinverse_log_det_jacobian-condition_kwargs"><code id="Inline.inverse_log_det_jacobian">tf.contrib.distributions.bijector.Inline.inverse_log_det_jacobian(y, name='inverse_log_det_jacobian', **condition_kwargs)</code></h4>
+<p>Returns the (log o det o Jacobian o inverse)(y).</p>
+<p>Mathematically, returns: <code>log(det(dX/dY))(Y)</code>. (Recall that: <code>X=g^{-1}(Y)</code>.)</p>
+<p>Note that <code>forward_log_det_jacobian</code> is the negative of this function.</p>
+<h5 id="args-58">Args:</h5>
+<ul>
+<li><b><code>y</code></b>: <code>Tensor</code>. The input to the &quot;inverse&quot; Jacobian evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-58">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-31">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_inverse_log_det_jacobian</code> nor <code>_inverse_and_inverse_log_det_jacobian</code> are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.inline.is_constant_jacobian"><code id="Inline.is_constant_jacobian">tf.contrib.distributions.bijector.Inline.is_constant_jacobian</code></h4>
+<p>Returns true iff the Jacobian is not a function of x.</p>
+<p>Note: Jacobian is either constant for both forward and inverse or neither.</p>
+<h5 id="returns-59">Returns:</h5>
+<p><code>Boolean</code>.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.inline.name"><code id="Inline.name">tf.contrib.distributions.bijector.Inline.name</code></h4>
+<p>Returns the string name of this <code>Bijector</code>.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.inline.parameters"><code id="Inline.parameters">tf.contrib.distributions.bijector.Inline.parameters</code></h4>
+<p>Returns this <code>Bijector</code>'s parameters as a name/value dictionary.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.inline.shaper"><code id="Inline.shaper">tf.contrib.distributions.bijector.Inline.shaper</code></h4>
+<p>Returns shape object used to manage shape constraints.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.inline.validate_args"><code id="Inline.validate_args">tf.contrib.distributions.bijector.Inline.validate_args</code></h4>
+<p>Returns True if Tensor arguments will be validated.</p>
+<hr />
+<h3 id="class-tf.contrib.distributions.bijector.invert"><a name="//apple_ref/cpp/Class/Invert" class="dashAnchor"></a><code id="Invert">class tf.contrib.distributions.bijector.Invert</code></h3>
+<p>Bijector which inverts another Bijector.</p>
+<p>Example Use: <a href="https://reference.wolfram.com/language/ref/ExpGammaDistribution.html">ExpGammaDistribution (see Background &amp; Context)</a> models <code>Y=log(X)</code> where <code>X ~ Gamma</code>.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">exp_gamma_distribution <span class="op">=</span> TransformedDistribution(
+  Gamma(alpha<span class="op">=</span><span class="dv">1</span>., beta<span class="op">=</span><span class="dv">2</span>.),
+  bijector.Invert(bijector.Exp())</code></pre></div>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.invert.__init__bijector-validate_argsfalse-namenone"><code id="Invert.__init__">tf.contrib.distributions.bijector.Invert.__init__(bijector, validate_args=False, name=None)</code></h4>
+<p>Creates a <code>Bijector</code> which swaps the meaning of <code>inverse</code> and <code>forward</code>.</p>
+<p>Note: An inverted bijector's <code>inverse_log_det_jacobian</code> is often more efficient if the base bijector implements <code>_forward_log_det_jacobian</code>. If <code>_forward_log_det_jacobian</code> is not implemented then the following code is used:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">y <span class="op">=</span> <span class="va">self</span>.inverse(x, <span class="op">**</span>condition_kwargs)
+<span class="cf">return</span> <span class="op">-</span><span class="va">self</span>.inverse_log_det_jacobian(y, <span class="op">**</span>condition_kwargs)</code></pre></div>
+<h5 id="args-59">Args:</h5>
+<ul>
+<li><b><code>bijector</code></b>: Bijector instance.</li>
+<li><b><code>validate_args</code></b>: <code>Boolean</code> indicating whether arguments should be checked for correctness.</li>
+<li><b><code>name</code></b>: <code>String</code>, name given to ops managed by this object.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.invert.bijector"><code id="Invert.bijector">tf.contrib.distributions.bijector.Invert.bijector</code></h4>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.invert.dtype"><code id="Invert.dtype">tf.contrib.distributions.bijector.Invert.dtype</code></h4>
+<p>dtype of <code>Tensor</code>s transformable by this distribution.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.invert.forwardx-nameforward-condition_kwargs"><code id="Invert.forward">tf.contrib.distributions.bijector.Invert.forward(x, name='forward', **condition_kwargs)</code></h4>
+<p>Returns the forward <code>Bijector</code> evaluation, i.e., X = g(Y).</p>
+<h5 id="args-60">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code>. The input to the &quot;forward&quot; evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-60">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-32">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>x.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if <code>_forward</code> is not implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.invert.forward_event_shapeinput_shape-nameforward_event_shape"><code id="Invert.forward_event_shape">tf.contrib.distributions.bijector.Invert.forward_event_shape(input_shape, name='forward_event_shape')</code></h4>
+<p>Shape of a single sample from a single batch as an <code>int32</code> 1D <code>Tensor</code>.</p>
+<h5 id="args-61">Args:</h5>
+<ul>
+<li><b><code>input_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape passed into <code>forward</code> function.</li>
+<li><b><code>name</code></b>: name to give to the op</li>
+</ul>
+<h5 id="returns-61">Returns:</h5>
+<ul>
+<li><b><code>forward_event_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape after applying <code>forward</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.invert.forward_log_det_jacobianx-nameforward_log_det_jacobian-condition_kwargs"><code id="Invert.forward_log_det_jacobian">tf.contrib.distributions.bijector.Invert.forward_log_det_jacobian(x, name='forward_log_det_jacobian', **condition_kwargs)</code></h4>
+<p>Returns both the forward_log_det_jacobian.</p>
+<h5 id="args-62">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code>. The input to the &quot;forward&quot; Jacobian evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-62">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-33">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_forward_log_det_jacobian</code> nor {<code>_inverse</code>, <code>_inverse_log_det_jacobian</code>} are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.invert.get_forward_event_shapeinput_shape"><code id="Invert.get_forward_event_shape">tf.contrib.distributions.bijector.Invert.get_forward_event_shape(input_shape)</code></h4>
+<p>Shape of a single sample from a single batch as a <code>TensorShape</code>.</p>
+<p>Same meaning as <code>forward_event_shape</code>. May be only partially defined.</p>
+<h5 id="args-63">Args:</h5>
+<ul>
+<li><b><code>input_shape</code></b>: <code>TensorShape</code> indicating event-portion shape passed into <code>forward</code> function.</li>
+</ul>
+<h5 id="returns-63">Returns:</h5>
+<ul>
+<li><b><code>forward_event_shape</code></b>: <code>TensorShape</code> indicating event-portion shape after applying <code>forward</code>. Possibly unknown.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.invert.get_inverse_event_shapeoutput_shape"><code id="Invert.get_inverse_event_shape">tf.contrib.distributions.bijector.Invert.get_inverse_event_shape(output_shape)</code></h4>
+<p>Shape of a single sample from a single batch as a <code>TensorShape</code>.</p>
+<p>Same meaning as <code>inverse_event_shape</code>. May be only partially defined.</p>
+<h5 id="args-64">Args:</h5>
+<ul>
+<li><b><code>output_shape</code></b>: <code>TensorShape</code> indicating event-portion shape passed into <code>inverse</code> function.</li>
+</ul>
+<h5 id="returns-64">Returns:</h5>
+<ul>
+<li><b><code>inverse_event_shape</code></b>: <code>TensorShape</code> indicating event-portion shape after applying <code>inverse</code>. Possibly unknown.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.invert.inversey-nameinverse-condition_kwargs"><code id="Invert.inverse">tf.contrib.distributions.bijector.Invert.inverse(y, name='inverse', **condition_kwargs)</code></h4>
+<p>Returns the inverse <code>Bijector</code> evaluation, i.e., X = g^{-1}(Y).</p>
+<h5 id="args-65">Args:</h5>
+<ul>
+<li><b><code>y</code></b>: <code>Tensor</code>. The input to the &quot;inverse&quot; evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-65">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-34">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_inverse</code> nor <code>_inverse_and_inverse_log_det_jacobian</code> are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.invert.inverse_and_inverse_log_det_jacobiany-nameinverse_and_inverse_log_det_jacobian-condition_kwargs"><code id="Invert.inverse_and_inverse_log_det_jacobian">tf.contrib.distributions.bijector.Invert.inverse_and_inverse_log_det_jacobian(y, name='inverse_and_inverse_log_det_jacobian', **condition_kwargs)</code></h4>
+<p>Returns both the inverse evaluation and inverse_log_det_jacobian.</p>
+<p>Enables possibly more efficient calculation when both inverse and corresponding Jacobian are needed.</p>
+<p>See <code>inverse()</code>, <code>inverse_log_det_jacobian()</code> for more details.</p>
+<h5 id="args-66">Args:</h5>
+<ul>
+<li><b><code>y</code></b>: <code>Tensor</code>. The input to the &quot;inverse&quot; Jacobian evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-66">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-35">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_inverse_and_inverse_log_det_jacobian</code> nor {<code>_inverse</code>, <code>_inverse_log_det_jacobian</code>} are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.invert.inverse_event_shapeoutput_shape-nameinverse_event_shape"><code id="Invert.inverse_event_shape">tf.contrib.distributions.bijector.Invert.inverse_event_shape(output_shape, name='inverse_event_shape')</code></h4>
+<p>Shape of a single sample from a single batch as an <code>int32</code> 1D <code>Tensor</code>.</p>
+<h5 id="args-67">Args:</h5>
+<ul>
+<li><b><code>output_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape passed into <code>inverse</code> function.</li>
+<li><b><code>name</code></b>: name to give to the op</li>
+</ul>
+<h5 id="returns-67">Returns:</h5>
+<ul>
+<li><b><code>inverse_event_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape after applying <code>inverse</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.invert.inverse_log_det_jacobiany-nameinverse_log_det_jacobian-condition_kwargs"><code id="Invert.inverse_log_det_jacobian">tf.contrib.distributions.bijector.Invert.inverse_log_det_jacobian(y, name='inverse_log_det_jacobian', **condition_kwargs)</code></h4>
+<p>Returns the (log o det o Jacobian o inverse)(y).</p>
+<p>Mathematically, returns: <code>log(det(dX/dY))(Y)</code>. (Recall that: <code>X=g^{-1}(Y)</code>.)</p>
+<p>Note that <code>forward_log_det_jacobian</code> is the negative of this function.</p>
+<h5 id="args-68">Args:</h5>
+<ul>
+<li><b><code>y</code></b>: <code>Tensor</code>. The input to the &quot;inverse&quot; Jacobian evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-68">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-36">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_inverse_log_det_jacobian</code> nor <code>_inverse_and_inverse_log_det_jacobian</code> are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.invert.is_constant_jacobian"><code id="Invert.is_constant_jacobian">tf.contrib.distributions.bijector.Invert.is_constant_jacobian</code></h4>
+<p>Returns true iff the Jacobian is not a function of x.</p>
+<p>Note: Jacobian is either constant for both forward and inverse or neither.</p>
+<h5 id="returns-69">Returns:</h5>
+<p><code>Boolean</code>.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.invert.name"><code id="Invert.name">tf.contrib.distributions.bijector.Invert.name</code></h4>
+<p>Returns the string name of this <code>Bijector</code>.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.invert.parameters"><code id="Invert.parameters">tf.contrib.distributions.bijector.Invert.parameters</code></h4>
+<p>Returns this <code>Bijector</code>'s parameters as a name/value dictionary.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.invert.shaper"><code id="Invert.shaper">tf.contrib.distributions.bijector.Invert.shaper</code></h4>
+<p>Returns shape object used to manage shape constraints.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.invert.validate_args"><code id="Invert.validate_args">tf.contrib.distributions.bijector.Invert.validate_args</code></h4>
+<p>Returns True if Tensor arguments will be validated.</p>
+<hr />
+<h3 id="class-tf.contrib.distributions.bijector.scaleandshift"><a name="//apple_ref/cpp/Class/ScaleAndShift" class="dashAnchor"></a><code id="ScaleAndShift">class tf.contrib.distributions.bijector.ScaleAndShift</code></h3>
+<p>Bijector which computes Y = g(X; shift, scale) = matmul(scale, X) + shift.</p>
+<p><code>scale</code> is either a non-zero scalar, or a lower triangular matrix with non-zero diagonal. This means the <code>Bijector</code> will be invertible and computation of determinant and inverse will be efficient.</p>
+<p>As a result, the mean and covariance are transformed:</p>
+<pre><code>E[Y] = matmul(scale, E[X])
+Cov[Y] = matmul(scale, matmul(Cov[X], scale, transpose_b=True))</code></pre>
+<p>Example Use:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># No batch, scalar</span>
+mu <span class="op">=</span> <span class="dv">0</span>     <span class="co"># shape=[]</span>
+sigma <span class="op">=</span> <span class="dv">1</span>  <span class="co"># shape=[], treated like a 1x1 matrix.</span>
+b <span class="op">=</span> ScaleAndShift(shift<span class="op">=</span>mu, scale<span class="op">=</span>sigma)
+<span class="co"># b.shaper.batch_ndims == 0</span>
+<span class="co"># b.shaper.event_ndims == 0</span>
+
+<span class="co"># One batch, scalar.</span>
+mu <span class="op">=</span> ...    <span class="co"># shape=[b], b&gt;0</span>
+sigma <span class="op">=</span> ... <span class="co"># shape=[b], b&gt;0, treated like a batch of 1x1 matrices</span>
+b <span class="op">=</span> ScaleAndShift(shift<span class="op">=</span>mu, scale<span class="op">=</span>sigma)
+<span class="co"># b.shaper.batch_ndims == 1</span>
+<span class="co"># b.shaper.event_ndims == 0</span>
+
+<span class="co"># No batch, multivariate.</span>
+mu <span class="op">=</span> ...    <span class="co"># shape=[d],    d&gt;0</span>
+sigma <span class="op">=</span> ... <span class="co"># shape=[d, d], d&gt;0, treated like a single dxd matrix.</span>
+b <span class="op">=</span> ScaleAndShift(shift<span class="op">=</span>mu, scale<span class="op">=</span>sigma, event_ndims<span class="op">=</span><span class="dv">1</span>)
+<span class="co"># b.shaper.batch_ndims == 0</span>
+<span class="co"># b.shaper.event_ndims == 1</span>
+
+<span class="co"># (B1*B2*...*Bb)-batch, multivariate.</span>
+mu <span class="op">=</span> ...    <span class="co"># shape=[B1,...,Bb, d],    b&gt;0, d&gt;0</span>
+sigma <span class="op">=</span> ... <span class="co"># shape=[B1,...,Bb, d, d], b&gt;0, d&gt;0</span>
+b <span class="op">=</span> ScaleAndShift(shift<span class="op">=</span>mu, scale<span class="op">=</span>sigma, event_ndims<span class="op">=</span><span class="dv">1</span>)
+<span class="co"># b.shaper.batch_ndims == b</span>
+<span class="co"># b.shaper.event_ndims == 1</span>
+
+<span class="co"># Mu is broadcast:</span>
+mu <span class="op">=</span> <span class="dv">1</span>
+sigma <span class="op">=</span> [I, I]  <span class="co"># I is a 3x3 identity matrix.</span>
+b <span class="op">=</span> ScaleAndShift(shift<span class="op">=</span>mu, scale<span class="op">=</span>sigma, event_ndims<span class="op">=</span><span class="dv">1</span>)
+x <span class="op">=</span> numpy.ones(S <span class="op">+</span> sigma.shape)
+b.forward(x) <span class="co"># == x + 1</span></code></pre></div>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.scaleandshift.__init__shift-scale-event_ndims0-validate_argsfalse-namescale_and_shift"><code id="ScaleAndShift.__init__">tf.contrib.distributions.bijector.ScaleAndShift.__init__(shift, scale, event_ndims=0, validate_args=False, name='scale_and_shift')</code></h4>
+<p>Instantiates the <code>ScaleAndShift</code> bijector.</p>
+<p>This <code>Bijector</code> is initialized with <code>scale</code> and <code>shift</code> <code>Tensors</code>, giving the forward operation:</p>
+<p><code>Y = g(X) = matmul(scale, X) + shift</code></p>
+<h5 id="args-69">Args:</h5>
+<ul>
+<li><b><code>shift</code></b>: Numeric <code>Tensor</code>.</li>
+<li><b><code>scale</code></b>: Numeric <code>Tensor</code> of same <code>dtype</code> as <code>shift</code>. If <code>event_ndims = 0</code>, <code>scale</code> is treated like a <code>1x1</code> matrix or a batch thereof. Otherwise, the last two dimensions of <code>scale</code> define a matrix. <code>scale</code> must have non-negative diagonal entries. The upper triangular part of <code>scale</code> is ignored, effectively making it lower triangular.</li>
+<li><b><code>event_ndims</code></b>: Scalar <code>int32</code> <code>Tensor</code> indicating the number of dimensions associated with a particular draw from the distribution. Must be 0 or 1</li>
+<li><b><code>validate_args</code></b>: <code>Boolean</code> indicating whether arguments should be checked for correctness.</li>
+<li><b><code>name</code></b>: <code>String</code> name given to ops managed by this object.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.scaleandshift.dtype"><code id="ScaleAndShift.dtype">tf.contrib.distributions.bijector.ScaleAndShift.dtype</code></h4>
+<p>dtype of <code>Tensor</code>s transformable by this distribution.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.scaleandshift.forwardx-nameforward-condition_kwargs"><code id="ScaleAndShift.forward">tf.contrib.distributions.bijector.ScaleAndShift.forward(x, name='forward', **condition_kwargs)</code></h4>
+<p>Returns the forward <code>Bijector</code> evaluation, i.e., X = g(Y).</p>
+<h5 id="args-70">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code>. The input to the &quot;forward&quot; evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-70">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-37">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>x.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if <code>_forward</code> is not implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.scaleandshift.forward_event_shapeinput_shape-nameforward_event_shape"><code id="ScaleAndShift.forward_event_shape">tf.contrib.distributions.bijector.ScaleAndShift.forward_event_shape(input_shape, name='forward_event_shape')</code></h4>
+<p>Shape of a single sample from a single batch as an <code>int32</code> 1D <code>Tensor</code>.</p>
+<h5 id="args-71">Args:</h5>
+<ul>
+<li><b><code>input_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape passed into <code>forward</code> function.</li>
+<li><b><code>name</code></b>: name to give to the op</li>
+</ul>
+<h5 id="returns-71">Returns:</h5>
+<ul>
+<li><b><code>forward_event_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape after applying <code>forward</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.scaleandshift.forward_log_det_jacobianx-nameforward_log_det_jacobian-condition_kwargs"><code id="ScaleAndShift.forward_log_det_jacobian">tf.contrib.distributions.bijector.ScaleAndShift.forward_log_det_jacobian(x, name='forward_log_det_jacobian', **condition_kwargs)</code></h4>
+<p>Returns both the forward_log_det_jacobian.</p>
+<h5 id="args-72">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code>. The input to the &quot;forward&quot; Jacobian evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-72">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-38">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_forward_log_det_jacobian</code> nor {<code>_inverse</code>, <code>_inverse_log_det_jacobian</code>} are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.scaleandshift.get_forward_event_shapeinput_shape"><code id="ScaleAndShift.get_forward_event_shape">tf.contrib.distributions.bijector.ScaleAndShift.get_forward_event_shape(input_shape)</code></h4>
+<p>Shape of a single sample from a single batch as a <code>TensorShape</code>.</p>
+<p>Same meaning as <code>forward_event_shape</code>. May be only partially defined.</p>
+<h5 id="args-73">Args:</h5>
+<ul>
+<li><b><code>input_shape</code></b>: <code>TensorShape</code> indicating event-portion shape passed into <code>forward</code> function.</li>
+</ul>
+<h5 id="returns-73">Returns:</h5>
+<ul>
+<li><b><code>forward_event_shape</code></b>: <code>TensorShape</code> indicating event-portion shape after applying <code>forward</code>. Possibly unknown.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.scaleandshift.get_inverse_event_shapeoutput_shape"><code id="ScaleAndShift.get_inverse_event_shape">tf.contrib.distributions.bijector.ScaleAndShift.get_inverse_event_shape(output_shape)</code></h4>
+<p>Shape of a single sample from a single batch as a <code>TensorShape</code>.</p>
+<p>Same meaning as <code>inverse_event_shape</code>. May be only partially defined.</p>
+<h5 id="args-74">Args:</h5>
+<ul>
+<li><b><code>output_shape</code></b>: <code>TensorShape</code> indicating event-portion shape passed into <code>inverse</code> function.</li>
+</ul>
+<h5 id="returns-74">Returns:</h5>
+<ul>
+<li><b><code>inverse_event_shape</code></b>: <code>TensorShape</code> indicating event-portion shape after applying <code>inverse</code>. Possibly unknown.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.scaleandshift.inversey-nameinverse-condition_kwargs"><code id="ScaleAndShift.inverse">tf.contrib.distributions.bijector.ScaleAndShift.inverse(y, name='inverse', **condition_kwargs)</code></h4>
+<p>Returns the inverse <code>Bijector</code> evaluation, i.e., X = g^{-1}(Y).</p>
+<h5 id="args-75">Args:</h5>
+<ul>
+<li><b><code>y</code></b>: <code>Tensor</code>. The input to the &quot;inverse&quot; evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-75">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-39">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_inverse</code> nor <code>_inverse_and_inverse_log_det_jacobian</code> are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.scaleandshift.inverse_and_inverse_log_det_jacobiany-nameinverse_and_inverse_log_det_jacobian-condition_kwargs"><code id="ScaleAndShift.inverse_and_inverse_log_det_jacobian">tf.contrib.distributions.bijector.ScaleAndShift.inverse_and_inverse_log_det_jacobian(y, name='inverse_and_inverse_log_det_jacobian', **condition_kwargs)</code></h4>
+<p>Returns both the inverse evaluation and inverse_log_det_jacobian.</p>
+<p>Enables possibly more efficient calculation when both inverse and corresponding Jacobian are needed.</p>
+<p>See <code>inverse()</code>, <code>inverse_log_det_jacobian()</code> for more details.</p>
+<h5 id="args-76">Args:</h5>
+<ul>
+<li><b><code>y</code></b>: <code>Tensor</code>. The input to the &quot;inverse&quot; Jacobian evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-76">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-40">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_inverse_and_inverse_log_det_jacobian</code> nor {<code>_inverse</code>, <code>_inverse_log_det_jacobian</code>} are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.scaleandshift.inverse_event_shapeoutput_shape-nameinverse_event_shape"><code id="ScaleAndShift.inverse_event_shape">tf.contrib.distributions.bijector.ScaleAndShift.inverse_event_shape(output_shape, name='inverse_event_shape')</code></h4>
+<p>Shape of a single sample from a single batch as an <code>int32</code> 1D <code>Tensor</code>.</p>
+<h5 id="args-77">Args:</h5>
+<ul>
+<li><b><code>output_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape passed into <code>inverse</code> function.</li>
+<li><b><code>name</code></b>: name to give to the op</li>
+</ul>
+<h5 id="returns-77">Returns:</h5>
+<ul>
+<li><b><code>inverse_event_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape after applying <code>inverse</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.scaleandshift.inverse_log_det_jacobiany-nameinverse_log_det_jacobian-condition_kwargs"><code id="ScaleAndShift.inverse_log_det_jacobian">tf.contrib.distributions.bijector.ScaleAndShift.inverse_log_det_jacobian(y, name='inverse_log_det_jacobian', **condition_kwargs)</code></h4>
+<p>Returns the (log o det o Jacobian o inverse)(y).</p>
+<p>Mathematically, returns: <code>log(det(dX/dY))(Y)</code>. (Recall that: <code>X=g^{-1}(Y)</code>.)</p>
+<p>Note that <code>forward_log_det_jacobian</code> is the negative of this function.</p>
+<h5 id="args-78">Args:</h5>
+<ul>
+<li><b><code>y</code></b>: <code>Tensor</code>. The input to the &quot;inverse&quot; Jacobian evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-78">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-41">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_inverse_log_det_jacobian</code> nor <code>_inverse_and_inverse_log_det_jacobian</code> are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.scaleandshift.is_constant_jacobian"><code id="ScaleAndShift.is_constant_jacobian">tf.contrib.distributions.bijector.ScaleAndShift.is_constant_jacobian</code></h4>
+<p>Returns true iff the Jacobian is not a function of x.</p>
+<p>Note: Jacobian is either constant for both forward and inverse or neither.</p>
+<h5 id="returns-79">Returns:</h5>
+<p><code>Boolean</code>.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.scaleandshift.name"><code id="ScaleAndShift.name">tf.contrib.distributions.bijector.ScaleAndShift.name</code></h4>
+<p>Returns the string name of this <code>Bijector</code>.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.scaleandshift.parameters"><code id="ScaleAndShift.parameters">tf.contrib.distributions.bijector.ScaleAndShift.parameters</code></h4>
+<p>Returns this <code>Bijector</code>'s parameters as a name/value dictionary.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.scaleandshift.scale"><code id="ScaleAndShift.scale">tf.contrib.distributions.bijector.ScaleAndShift.scale</code></h4>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.scaleandshift.shaper"><code id="ScaleAndShift.shaper">tf.contrib.distributions.bijector.ScaleAndShift.shaper</code></h4>
+<p>Returns shape object used to manage shape constraints.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.scaleandshift.shift"><code id="ScaleAndShift.shift">tf.contrib.distributions.bijector.ScaleAndShift.shift</code></h4>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.scaleandshift.validate_args"><code id="ScaleAndShift.validate_args">tf.contrib.distributions.bijector.ScaleAndShift.validate_args</code></h4>
+<p>Returns True if Tensor arguments will be validated.</p>
+<hr />
+<h3 id="class-tf.contrib.distributions.bijector.sigmoidcentered"><a name="//apple_ref/cpp/Class/SigmoidCentered" class="dashAnchor"></a><code id="SigmoidCentered">class tf.contrib.distributions.bijector.SigmoidCentered</code></h3>
+<p>Bijector which computes Y = g(X) = exp([X 0]) / (1 + exp(-X)).</p>
+<p>Equivalent to: <code>bijector.SoftmaxCentered(event_ndims=0)</code>.</p>
+<p>See <code>bijector.SoftmaxCentered</code> for more details. - - -</p>
+<h4 id="tf.contrib.distributions.bijector.sigmoidcentered.__init__validate_argsfalse-namesigmoid_centered"><code id="SigmoidCentered.__init__">tf.contrib.distributions.bijector.SigmoidCentered.__init__(validate_args=False, name='sigmoid_centered')</code></h4>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.sigmoidcentered.dtype"><code id="SigmoidCentered.dtype">tf.contrib.distributions.bijector.SigmoidCentered.dtype</code></h4>
+<p>dtype of <code>Tensor</code>s transformable by this distribution.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.sigmoidcentered.forwardx-nameforward-condition_kwargs"><code id="SigmoidCentered.forward">tf.contrib.distributions.bijector.SigmoidCentered.forward(x, name='forward', **condition_kwargs)</code></h4>
+<p>Returns the forward <code>Bijector</code> evaluation, i.e., X = g(Y).</p>
+<h5 id="args-79">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code>. The input to the &quot;forward&quot; evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-80">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-42">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>x.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if <code>_forward</code> is not implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.sigmoidcentered.forward_event_shapeinput_shape-nameforward_event_shape"><code id="SigmoidCentered.forward_event_shape">tf.contrib.distributions.bijector.SigmoidCentered.forward_event_shape(input_shape, name='forward_event_shape')</code></h4>
+<p>Shape of a single sample from a single batch as an <code>int32</code> 1D <code>Tensor</code>.</p>
+<h5 id="args-80">Args:</h5>
+<ul>
+<li><b><code>input_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape passed into <code>forward</code> function.</li>
+<li><b><code>name</code></b>: name to give to the op</li>
+</ul>
+<h5 id="returns-81">Returns:</h5>
+<ul>
+<li><b><code>forward_event_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape after applying <code>forward</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.sigmoidcentered.forward_log_det_jacobianx-nameforward_log_det_jacobian-condition_kwargs"><code id="SigmoidCentered.forward_log_det_jacobian">tf.contrib.distributions.bijector.SigmoidCentered.forward_log_det_jacobian(x, name='forward_log_det_jacobian', **condition_kwargs)</code></h4>
+<p>Returns both the forward_log_det_jacobian.</p>
+<h5 id="args-81">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code>. The input to the &quot;forward&quot; Jacobian evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-82">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-43">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_forward_log_det_jacobian</code> nor {<code>_inverse</code>, <code>_inverse_log_det_jacobian</code>} are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.sigmoidcentered.get_forward_event_shapeinput_shape"><code id="SigmoidCentered.get_forward_event_shape">tf.contrib.distributions.bijector.SigmoidCentered.get_forward_event_shape(input_shape)</code></h4>
+<p>Shape of a single sample from a single batch as a <code>TensorShape</code>.</p>
+<p>Same meaning as <code>forward_event_shape</code>. May be only partially defined.</p>
+<h5 id="args-82">Args:</h5>
+<ul>
+<li><b><code>input_shape</code></b>: <code>TensorShape</code> indicating event-portion shape passed into <code>forward</code> function.</li>
+</ul>
+<h5 id="returns-83">Returns:</h5>
+<ul>
+<li><b><code>forward_event_shape</code></b>: <code>TensorShape</code> indicating event-portion shape after applying <code>forward</code>. Possibly unknown.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.sigmoidcentered.get_inverse_event_shapeoutput_shape"><code id="SigmoidCentered.get_inverse_event_shape">tf.contrib.distributions.bijector.SigmoidCentered.get_inverse_event_shape(output_shape)</code></h4>
+<p>Shape of a single sample from a single batch as a <code>TensorShape</code>.</p>
+<p>Same meaning as <code>inverse_event_shape</code>. May be only partially defined.</p>
+<h5 id="args-83">Args:</h5>
+<ul>
+<li><b><code>output_shape</code></b>: <code>TensorShape</code> indicating event-portion shape passed into <code>inverse</code> function.</li>
+</ul>
+<h5 id="returns-84">Returns:</h5>
+<ul>
+<li><b><code>inverse_event_shape</code></b>: <code>TensorShape</code> indicating event-portion shape after applying <code>inverse</code>. Possibly unknown.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.sigmoidcentered.inversey-nameinverse-condition_kwargs"><code id="SigmoidCentered.inverse">tf.contrib.distributions.bijector.SigmoidCentered.inverse(y, name='inverse', **condition_kwargs)</code></h4>
+<p>Returns the inverse <code>Bijector</code> evaluation, i.e., X = g^{-1}(Y).</p>
+<h5 id="args-84">Args:</h5>
+<ul>
+<li><b><code>y</code></b>: <code>Tensor</code>. The input to the &quot;inverse&quot; evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-85">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-44">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_inverse</code> nor <code>_inverse_and_inverse_log_det_jacobian</code> are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.sigmoidcentered.inverse_and_inverse_log_det_jacobiany-nameinverse_and_inverse_log_det_jacobian-condition_kwargs"><code id="SigmoidCentered.inverse_and_inverse_log_det_jacobian">tf.contrib.distributions.bijector.SigmoidCentered.inverse_and_inverse_log_det_jacobian(y, name='inverse_and_inverse_log_det_jacobian', **condition_kwargs)</code></h4>
+<p>Returns both the inverse evaluation and inverse_log_det_jacobian.</p>
+<p>Enables possibly more efficient calculation when both inverse and corresponding Jacobian are needed.</p>
+<p>See <code>inverse()</code>, <code>inverse_log_det_jacobian()</code> for more details.</p>
+<h5 id="args-85">Args:</h5>
+<ul>
+<li><b><code>y</code></b>: <code>Tensor</code>. The input to the &quot;inverse&quot; Jacobian evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-86">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-45">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_inverse_and_inverse_log_det_jacobian</code> nor {<code>_inverse</code>, <code>_inverse_log_det_jacobian</code>} are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.sigmoidcentered.inverse_event_shapeoutput_shape-nameinverse_event_shape"><code id="SigmoidCentered.inverse_event_shape">tf.contrib.distributions.bijector.SigmoidCentered.inverse_event_shape(output_shape, name='inverse_event_shape')</code></h4>
+<p>Shape of a single sample from a single batch as an <code>int32</code> 1D <code>Tensor</code>.</p>
+<h5 id="args-86">Args:</h5>
+<ul>
+<li><b><code>output_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape passed into <code>inverse</code> function.</li>
+<li><b><code>name</code></b>: name to give to the op</li>
+</ul>
+<h5 id="returns-87">Returns:</h5>
+<ul>
+<li><b><code>inverse_event_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape after applying <code>inverse</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.sigmoidcentered.inverse_log_det_jacobiany-nameinverse_log_det_jacobian-condition_kwargs"><code id="SigmoidCentered.inverse_log_det_jacobian">tf.contrib.distributions.bijector.SigmoidCentered.inverse_log_det_jacobian(y, name='inverse_log_det_jacobian', **condition_kwargs)</code></h4>
+<p>Returns the (log o det o Jacobian o inverse)(y).</p>
+<p>Mathematically, returns: <code>log(det(dX/dY))(Y)</code>. (Recall that: <code>X=g^{-1}(Y)</code>.)</p>
+<p>Note that <code>forward_log_det_jacobian</code> is the negative of this function.</p>
+<h5 id="args-87">Args:</h5>
+<ul>
+<li><b><code>y</code></b>: <code>Tensor</code>. The input to the &quot;inverse&quot; Jacobian evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-88">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-46">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_inverse_log_det_jacobian</code> nor <code>_inverse_and_inverse_log_det_jacobian</code> are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.sigmoidcentered.is_constant_jacobian"><code id="SigmoidCentered.is_constant_jacobian">tf.contrib.distributions.bijector.SigmoidCentered.is_constant_jacobian</code></h4>
+<p>Returns true iff the Jacobian is not a function of x.</p>
+<p>Note: Jacobian is either constant for both forward and inverse or neither.</p>
+<h5 id="returns-89">Returns:</h5>
+<p><code>Boolean</code>.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.sigmoidcentered.name"><code id="SigmoidCentered.name">tf.contrib.distributions.bijector.SigmoidCentered.name</code></h4>
+<p>Returns the string name of this <code>Bijector</code>.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.sigmoidcentered.parameters"><code id="SigmoidCentered.parameters">tf.contrib.distributions.bijector.SigmoidCentered.parameters</code></h4>
+<p>Returns this <code>Bijector</code>'s parameters as a name/value dictionary.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.sigmoidcentered.shaper"><code id="SigmoidCentered.shaper">tf.contrib.distributions.bijector.SigmoidCentered.shaper</code></h4>
+<p>Returns shape object used to manage shape constraints.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.sigmoidcentered.validate_args"><code id="SigmoidCentered.validate_args">tf.contrib.distributions.bijector.SigmoidCentered.validate_args</code></h4>
+<p>Returns True if Tensor arguments will be validated.</p>
+<hr />
+<h3 id="class-tf.contrib.distributions.bijector.softmaxcentered"><a name="//apple_ref/cpp/Class/SoftmaxCentered" class="dashAnchor"></a><code id="SoftmaxCentered">class tf.contrib.distributions.bijector.SoftmaxCentered</code></h3>
+<p>Bijector which computes <code>Y = g(X) = exp([X 0]) / sum(exp([X 0]))</code>.</p>
+<p>To implement <a href="https://en.wikipedia.org/wiki/Softmax_function">softmax</a> as a bijection, the forward transformation appends a value to the input and the inverse removes this coordinate. The appended coordinate represents a pivot, e.g., <code>softmax(x) = exp(x-c) / sum(exp(x-c))</code> where <code>c</code> is the implicit last coordinate.</p>
+<p>Because we append a coordinate, this bijector only supports <code>event_ndim in [0, 1]</code>, i.e., scalars and vectors.</p>
+<p>Example Use:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">bijector.SoftmaxCentered(event_ndims<span class="op">=</span><span class="dv">1</span>).forward(tf.log([<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>]))
+<span class="co"># Result: [0.2, 0.3, 0.4, 0.1]</span>
+<span class="co"># Extra result: 0.1</span>
+
+bijector.SoftmaxCentered(event_ndims<span class="op">=</span><span class="dv">1</span>).inverse([<span class="fl">0.2</span>, <span class="fl">0.3</span>, <span class="fl">0.4</span>, <span class="fl">0.1</span>])
+<span class="co"># Result: tf.log([2, 3, 4])</span>
+<span class="co"># Extra coordinate removed.</span></code></pre></div>
+<p>At first blush it may seem like the <a href="https://en.wikipedia.org/wiki/Invariance_of_domain">Invariance of domain</a> theorem implies this implementation is not a bijection. However, the appended dimension makes the (forward) image non-open and the theorem does not directly apply. - - -</p>
+<h4 id="tf.contrib.distributions.bijector.softmaxcentered.__init__event_ndims0-validate_argsfalse-namesoftmax_centered"><code id="SoftmaxCentered.__init__">tf.contrib.distributions.bijector.SoftmaxCentered.__init__(event_ndims=0, validate_args=False, name='softmax_centered')</code></h4>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.softmaxcentered.dtype"><code id="SoftmaxCentered.dtype">tf.contrib.distributions.bijector.SoftmaxCentered.dtype</code></h4>
+<p>dtype of <code>Tensor</code>s transformable by this distribution.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.softmaxcentered.forwardx-nameforward-condition_kwargs"><code id="SoftmaxCentered.forward">tf.contrib.distributions.bijector.SoftmaxCentered.forward(x, name='forward', **condition_kwargs)</code></h4>
+<p>Returns the forward <code>Bijector</code> evaluation, i.e., X = g(Y).</p>
+<h5 id="args-88">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code>. The input to the &quot;forward&quot; evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-90">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-47">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>x.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if <code>_forward</code> is not implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.softmaxcentered.forward_event_shapeinput_shape-nameforward_event_shape"><code id="SoftmaxCentered.forward_event_shape">tf.contrib.distributions.bijector.SoftmaxCentered.forward_event_shape(input_shape, name='forward_event_shape')</code></h4>
+<p>Shape of a single sample from a single batch as an <code>int32</code> 1D <code>Tensor</code>.</p>
+<h5 id="args-89">Args:</h5>
+<ul>
+<li><b><code>input_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape passed into <code>forward</code> function.</li>
+<li><b><code>name</code></b>: name to give to the op</li>
+</ul>
+<h5 id="returns-91">Returns:</h5>
+<ul>
+<li><b><code>forward_event_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape after applying <code>forward</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.softmaxcentered.forward_log_det_jacobianx-nameforward_log_det_jacobian-condition_kwargs"><code id="SoftmaxCentered.forward_log_det_jacobian">tf.contrib.distributions.bijector.SoftmaxCentered.forward_log_det_jacobian(x, name='forward_log_det_jacobian', **condition_kwargs)</code></h4>
+<p>Returns both the forward_log_det_jacobian.</p>
+<h5 id="args-90">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code>. The input to the &quot;forward&quot; Jacobian evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-92">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-48">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_forward_log_det_jacobian</code> nor {<code>_inverse</code>, <code>_inverse_log_det_jacobian</code>} are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.softmaxcentered.get_forward_event_shapeinput_shape"><code id="SoftmaxCentered.get_forward_event_shape">tf.contrib.distributions.bijector.SoftmaxCentered.get_forward_event_shape(input_shape)</code></h4>
+<p>Shape of a single sample from a single batch as a <code>TensorShape</code>.</p>
+<p>Same meaning as <code>forward_event_shape</code>. May be only partially defined.</p>
+<h5 id="args-91">Args:</h5>
+<ul>
+<li><b><code>input_shape</code></b>: <code>TensorShape</code> indicating event-portion shape passed into <code>forward</code> function.</li>
+</ul>
+<h5 id="returns-93">Returns:</h5>
+<ul>
+<li><b><code>forward_event_shape</code></b>: <code>TensorShape</code> indicating event-portion shape after applying <code>forward</code>. Possibly unknown.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.softmaxcentered.get_inverse_event_shapeoutput_shape"><code id="SoftmaxCentered.get_inverse_event_shape">tf.contrib.distributions.bijector.SoftmaxCentered.get_inverse_event_shape(output_shape)</code></h4>
+<p>Shape of a single sample from a single batch as a <code>TensorShape</code>.</p>
+<p>Same meaning as <code>inverse_event_shape</code>. May be only partially defined.</p>
+<h5 id="args-92">Args:</h5>
+<ul>
+<li><b><code>output_shape</code></b>: <code>TensorShape</code> indicating event-portion shape passed into <code>inverse</code> function.</li>
+</ul>
+<h5 id="returns-94">Returns:</h5>
+<ul>
+<li><b><code>inverse_event_shape</code></b>: <code>TensorShape</code> indicating event-portion shape after applying <code>inverse</code>. Possibly unknown.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.softmaxcentered.inversey-nameinverse-condition_kwargs"><code id="SoftmaxCentered.inverse">tf.contrib.distributions.bijector.SoftmaxCentered.inverse(y, name='inverse', **condition_kwargs)</code></h4>
+<p>Returns the inverse <code>Bijector</code> evaluation, i.e., X = g^{-1}(Y).</p>
+<h5 id="args-93">Args:</h5>
+<ul>
+<li><b><code>y</code></b>: <code>Tensor</code>. The input to the &quot;inverse&quot; evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-95">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-49">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_inverse</code> nor <code>_inverse_and_inverse_log_det_jacobian</code> are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.softmaxcentered.inverse_and_inverse_log_det_jacobiany-nameinverse_and_inverse_log_det_jacobian-condition_kwargs"><code id="SoftmaxCentered.inverse_and_inverse_log_det_jacobian">tf.contrib.distributions.bijector.SoftmaxCentered.inverse_and_inverse_log_det_jacobian(y, name='inverse_and_inverse_log_det_jacobian', **condition_kwargs)</code></h4>
+<p>Returns both the inverse evaluation and inverse_log_det_jacobian.</p>
+<p>Enables possibly more efficient calculation when both inverse and corresponding Jacobian are needed.</p>
+<p>See <code>inverse()</code>, <code>inverse_log_det_jacobian()</code> for more details.</p>
+<h5 id="args-94">Args:</h5>
+<ul>
+<li><b><code>y</code></b>: <code>Tensor</code>. The input to the &quot;inverse&quot; Jacobian evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-96">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-50">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_inverse_and_inverse_log_det_jacobian</code> nor {<code>_inverse</code>, <code>_inverse_log_det_jacobian</code>} are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.softmaxcentered.inverse_event_shapeoutput_shape-nameinverse_event_shape"><code id="SoftmaxCentered.inverse_event_shape">tf.contrib.distributions.bijector.SoftmaxCentered.inverse_event_shape(output_shape, name='inverse_event_shape')</code></h4>
+<p>Shape of a single sample from a single batch as an <code>int32</code> 1D <code>Tensor</code>.</p>
+<h5 id="args-95">Args:</h5>
+<ul>
+<li><b><code>output_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape passed into <code>inverse</code> function.</li>
+<li><b><code>name</code></b>: name to give to the op</li>
+</ul>
+<h5 id="returns-97">Returns:</h5>
+<ul>
+<li><b><code>inverse_event_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape after applying <code>inverse</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.softmaxcentered.inverse_log_det_jacobiany-nameinverse_log_det_jacobian-condition_kwargs"><code id="SoftmaxCentered.inverse_log_det_jacobian">tf.contrib.distributions.bijector.SoftmaxCentered.inverse_log_det_jacobian(y, name='inverse_log_det_jacobian', **condition_kwargs)</code></h4>
+<p>Returns the (log o det o Jacobian o inverse)(y).</p>
+<p>Mathematically, returns: <code>log(det(dX/dY))(Y)</code>. (Recall that: <code>X=g^{-1}(Y)</code>.)</p>
+<p>Note that <code>forward_log_det_jacobian</code> is the negative of this function.</p>
+<h5 id="args-96">Args:</h5>
+<ul>
+<li><b><code>y</code></b>: <code>Tensor</code>. The input to the &quot;inverse&quot; Jacobian evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-98">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-51">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_inverse_log_det_jacobian</code> nor <code>_inverse_and_inverse_log_det_jacobian</code> are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.softmaxcentered.is_constant_jacobian"><code id="SoftmaxCentered.is_constant_jacobian">tf.contrib.distributions.bijector.SoftmaxCentered.is_constant_jacobian</code></h4>
+<p>Returns true iff the Jacobian is not a function of x.</p>
+<p>Note: Jacobian is either constant for both forward and inverse or neither.</p>
+<h5 id="returns-99">Returns:</h5>
+<p><code>Boolean</code>.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.softmaxcentered.name"><code id="SoftmaxCentered.name">tf.contrib.distributions.bijector.SoftmaxCentered.name</code></h4>
+<p>Returns the string name of this <code>Bijector</code>.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.softmaxcentered.parameters"><code id="SoftmaxCentered.parameters">tf.contrib.distributions.bijector.SoftmaxCentered.parameters</code></h4>
+<p>Returns this <code>Bijector</code>'s parameters as a name/value dictionary.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.softmaxcentered.shaper"><code id="SoftmaxCentered.shaper">tf.contrib.distributions.bijector.SoftmaxCentered.shaper</code></h4>
+<p>Returns shape object used to manage shape constraints.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.softmaxcentered.validate_args"><code id="SoftmaxCentered.validate_args">tf.contrib.distributions.bijector.SoftmaxCentered.validate_args</code></h4>
+<p>Returns True if Tensor arguments will be validated.</p>
+<hr />
+<h3 id="class-tf.contrib.distributions.bijector.softplus"><a name="//apple_ref/cpp/Class/Softplus" class="dashAnchor"></a><code id="Softplus">class tf.contrib.distributions.bijector.Softplus</code></h3>
+<p>Bijector which computes <code>Y = g(X) = Log[1 + exp(X)]</code>.</p>
+<p>The softplus <code>Bijector</code> has the following two useful properties:</p>
+<ul>
+<li>The domain is the positive real numbers</li>
+<li><code>softplus(x) approx x</code>, for large <code>x</code>, so it does not overflow as easily as the <code>Exp</code> <code>Bijector</code>.</li>
+</ul>
+<p>Example Use:</p>
+<p><code>python   # Create the Y=g(X)=softplus(X) transform which works only on Tensors with 1   # batch ndim and 2 event ndims (i.e., vector of matrices).   softplus = Softplus(batch_ndims=1, event_ndims=2)   x = [[[1., 2],          [3, 4]],         [[5, 6],          [7, 8]]]   log(1 + exp(x)) == softplus.forward(x)   log(exp(x) - 1) == softplus.inverse(x)</code></p>
+<p>Note: log(.) and exp(.) are applied element-wise but the Jacobian is a reduction over the event space. - - -</p>
+<h4 id="tf.contrib.distributions.bijector.softplus.__init__event_ndims0-validate_argsfalse-namesoftplus"><code id="Softplus.__init__">tf.contrib.distributions.bijector.Softplus.__init__(event_ndims=0, validate_args=False, name='softplus')</code></h4>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.softplus.dtype"><code id="Softplus.dtype">tf.contrib.distributions.bijector.Softplus.dtype</code></h4>
+<p>dtype of <code>Tensor</code>s transformable by this distribution.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.softplus.forwardx-nameforward-condition_kwargs"><code id="Softplus.forward">tf.contrib.distributions.bijector.Softplus.forward(x, name='forward', **condition_kwargs)</code></h4>
+<p>Returns the forward <code>Bijector</code> evaluation, i.e., X = g(Y).</p>
+<h5 id="args-97">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code>. The input to the &quot;forward&quot; evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-100">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-52">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>x.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if <code>_forward</code> is not implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.softplus.forward_event_shapeinput_shape-nameforward_event_shape"><code id="Softplus.forward_event_shape">tf.contrib.distributions.bijector.Softplus.forward_event_shape(input_shape, name='forward_event_shape')</code></h4>
+<p>Shape of a single sample from a single batch as an <code>int32</code> 1D <code>Tensor</code>.</p>
+<h5 id="args-98">Args:</h5>
+<ul>
+<li><b><code>input_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape passed into <code>forward</code> function.</li>
+<li><b><code>name</code></b>: name to give to the op</li>
+</ul>
+<h5 id="returns-101">Returns:</h5>
+<ul>
+<li><b><code>forward_event_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape after applying <code>forward</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.softplus.forward_log_det_jacobianx-nameforward_log_det_jacobian-condition_kwargs"><code id="Softplus.forward_log_det_jacobian">tf.contrib.distributions.bijector.Softplus.forward_log_det_jacobian(x, name='forward_log_det_jacobian', **condition_kwargs)</code></h4>
+<p>Returns both the forward_log_det_jacobian.</p>
+<h5 id="args-99">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code>. The input to the &quot;forward&quot; Jacobian evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-102">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-53">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_forward_log_det_jacobian</code> nor {<code>_inverse</code>, <code>_inverse_log_det_jacobian</code>} are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.softplus.get_forward_event_shapeinput_shape"><code id="Softplus.get_forward_event_shape">tf.contrib.distributions.bijector.Softplus.get_forward_event_shape(input_shape)</code></h4>
+<p>Shape of a single sample from a single batch as a <code>TensorShape</code>.</p>
+<p>Same meaning as <code>forward_event_shape</code>. May be only partially defined.</p>
+<h5 id="args-100">Args:</h5>
+<ul>
+<li><b><code>input_shape</code></b>: <code>TensorShape</code> indicating event-portion shape passed into <code>forward</code> function.</li>
+</ul>
+<h5 id="returns-103">Returns:</h5>
+<ul>
+<li><b><code>forward_event_shape</code></b>: <code>TensorShape</code> indicating event-portion shape after applying <code>forward</code>. Possibly unknown.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.softplus.get_inverse_event_shapeoutput_shape"><code id="Softplus.get_inverse_event_shape">tf.contrib.distributions.bijector.Softplus.get_inverse_event_shape(output_shape)</code></h4>
+<p>Shape of a single sample from a single batch as a <code>TensorShape</code>.</p>
+<p>Same meaning as <code>inverse_event_shape</code>. May be only partially defined.</p>
+<h5 id="args-101">Args:</h5>
+<ul>
+<li><b><code>output_shape</code></b>: <code>TensorShape</code> indicating event-portion shape passed into <code>inverse</code> function.</li>
+</ul>
+<h5 id="returns-104">Returns:</h5>
+<ul>
+<li><b><code>inverse_event_shape</code></b>: <code>TensorShape</code> indicating event-portion shape after applying <code>inverse</code>. Possibly unknown.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.softplus.inversey-nameinverse-condition_kwargs"><code id="Softplus.inverse">tf.contrib.distributions.bijector.Softplus.inverse(y, name='inverse', **condition_kwargs)</code></h4>
+<p>Returns the inverse <code>Bijector</code> evaluation, i.e., X = g^{-1}(Y).</p>
+<h5 id="args-102">Args:</h5>
+<ul>
+<li><b><code>y</code></b>: <code>Tensor</code>. The input to the &quot;inverse&quot; evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-105">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-54">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_inverse</code> nor <code>_inverse_and_inverse_log_det_jacobian</code> are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.softplus.inverse_and_inverse_log_det_jacobiany-nameinverse_and_inverse_log_det_jacobian-condition_kwargs"><code id="Softplus.inverse_and_inverse_log_det_jacobian">tf.contrib.distributions.bijector.Softplus.inverse_and_inverse_log_det_jacobian(y, name='inverse_and_inverse_log_det_jacobian', **condition_kwargs)</code></h4>
+<p>Returns both the inverse evaluation and inverse_log_det_jacobian.</p>
+<p>Enables possibly more efficient calculation when both inverse and corresponding Jacobian are needed.</p>
+<p>See <code>inverse()</code>, <code>inverse_log_det_jacobian()</code> for more details.</p>
+<h5 id="args-103">Args:</h5>
+<ul>
+<li><b><code>y</code></b>: <code>Tensor</code>. The input to the &quot;inverse&quot; Jacobian evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-106">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-55">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_inverse_and_inverse_log_det_jacobian</code> nor {<code>_inverse</code>, <code>_inverse_log_det_jacobian</code>} are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.softplus.inverse_event_shapeoutput_shape-nameinverse_event_shape"><code id="Softplus.inverse_event_shape">tf.contrib.distributions.bijector.Softplus.inverse_event_shape(output_shape, name='inverse_event_shape')</code></h4>
+<p>Shape of a single sample from a single batch as an <code>int32</code> 1D <code>Tensor</code>.</p>
+<h5 id="args-104">Args:</h5>
+<ul>
+<li><b><code>output_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape passed into <code>inverse</code> function.</li>
+<li><b><code>name</code></b>: name to give to the op</li>
+</ul>
+<h5 id="returns-107">Returns:</h5>
+<ul>
+<li><b><code>inverse_event_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape after applying <code>inverse</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.softplus.inverse_log_det_jacobiany-nameinverse_log_det_jacobian-condition_kwargs"><code id="Softplus.inverse_log_det_jacobian">tf.contrib.distributions.bijector.Softplus.inverse_log_det_jacobian(y, name='inverse_log_det_jacobian', **condition_kwargs)</code></h4>
+<p>Returns the (log o det o Jacobian o inverse)(y).</p>
+<p>Mathematically, returns: <code>log(det(dX/dY))(Y)</code>. (Recall that: <code>X=g^{-1}(Y)</code>.)</p>
+<p>Note that <code>forward_log_det_jacobian</code> is the negative of this function.</p>
+<h5 id="args-105">Args:</h5>
+<ul>
+<li><b><code>y</code></b>: <code>Tensor</code>. The input to the &quot;inverse&quot; Jacobian evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+<li><b><code>**condition_kwargs</code></b>: Named arguments forwarded to subclass implementation.</li>
+</ul>
+<h5 id="returns-108">Returns:</h5>
+<p><code>Tensor</code>.</p>
+<h5 id="raises-56">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_inverse_log_det_jacobian</code> nor <code>_inverse_and_inverse_log_det_jacobian</code> are implemented.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.softplus.is_constant_jacobian"><code id="Softplus.is_constant_jacobian">tf.contrib.distributions.bijector.Softplus.is_constant_jacobian</code></h4>
+<p>Returns true iff the Jacobian is not a function of x.</p>
+<p>Note: Jacobian is either constant for both forward and inverse or neither.</p>
+<h5 id="returns-109">Returns:</h5>
+<p><code>Boolean</code>.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.softplus.name"><code id="Softplus.name">tf.contrib.distributions.bijector.Softplus.name</code></h4>
+<p>Returns the string name of this <code>Bijector</code>.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.softplus.parameters"><code id="Softplus.parameters">tf.contrib.distributions.bijector.Softplus.parameters</code></h4>
+<p>Returns this <code>Bijector</code>'s parameters as a name/value dictionary.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.softplus.shaper"><code id="Softplus.shaper">tf.contrib.distributions.bijector.Softplus.shaper</code></h4>
+<p>Returns shape object used to manage shape constraints.</p>
+<hr />
+<h4 id="tf.contrib.distributions.bijector.softplus.validate_args"><code id="Softplus.validate_args">tf.contrib.distributions.bijector.Softplus.validate_args</code></h4>
+<p>Returns True if Tensor arguments will be validated.</p>

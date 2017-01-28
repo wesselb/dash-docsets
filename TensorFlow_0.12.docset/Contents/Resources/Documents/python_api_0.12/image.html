@@ -1,0 +1,694 @@
+<!-- This file is machine generated: DO NOT EDIT! -->
+<h1 id="images">Images</h1>
+<p>Note: Functions taking <code>Tensor</code> arguments can also take anything accepted by <a href="framework.md#convert_to_tensor"><code>tf.convert_to_tensor</code></a>.</p>
+<p>[TOC]</p>
+<h2 id="encoding-and-decoding">Encoding and Decoding</h2>
+<p>TensorFlow provides Ops to decode and encode JPEG and PNG formats. Encoded images are represented by scalar string Tensors, decoded images by 3-D uint8 tensors of shape <code>[height, width, channels]</code>. (PNG also supports uint16.)</p>
+<p>The encode and decode Ops apply to one image at a time. Their input and output are all of variable size. If you need fixed size images, pass the output of the decode Ops to one of the cropping and resizing Ops.</p>
+<p>Note: The PNG encode and decode Ops support RGBA, but the conversions Ops presently only support RGB, HSV, and GrayScale. Presently, the alpha channel has to be stripped from the image and re-attached using slicing ops.</p>
+<hr />
+<h3 id="tf.image.decode_gifcontents-namenone"><a name="//apple_ref/cpp/Function/decode_gif" class="dashAnchor"></a><code id="decode_gif">tf.image.decode_gif(contents, name=None)</code></h3>
+<p>Decode the first frame of a GIF-encoded image to a uint8 tensor.</p>
+<p>GIF with frame or transparency compression are not supported convert animated GIF from compressed to uncompressed by:</p>
+<p>convert $src.gif -coalesce $dst.gif</p>
+<h5 id="args">Args:</h5>
+<ul>
+<li><b><code>contents</code></b>: A <code>Tensor</code> of type <code>string</code>. 0-D. The GIF-encoded image.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>uint8</code>. 4-D with shape <code>[num_frames, height, width, 3]</code>. RGB order</p>
+<hr />
+<h3 id="tf.image.decode_jpegcontents-channelsnone-rationone-fancy_upscalingnone-try_recover_truncatednone-acceptable_fractionnone-namenone"><a name="//apple_ref/cpp/Function/decode_jpeg" class="dashAnchor"></a><code id="decode_jpeg">tf.image.decode_jpeg(contents, channels=None, ratio=None, fancy_upscaling=None, try_recover_truncated=None, acceptable_fraction=None, name=None)</code></h3>
+<p>Decode a JPEG-encoded image to a uint8 tensor.</p>
+<p>The attr <code>channels</code> indicates the desired number of color channels for the decoded image.</p>
+<p>Accepted values are:</p>
+<ul>
+<li>0: Use the number of channels in the JPEG-encoded image.</li>
+<li>1: output a grayscale image.</li>
+<li>3: output an RGB image.</li>
+</ul>
+<p>If needed, the JPEG-encoded image is transformed to match the requested number of color channels.</p>
+<p>The attr <code>ratio</code> allows downscaling the image by an integer factor during decoding. Allowed values are: 1, 2, 4, and 8. This is much faster than downscaling the image later.</p>
+<h5 id="args-1">Args:</h5>
+<ul>
+<li><b><code>contents</code></b>: A <code>Tensor</code> of type <code>string</code>. 0-D. The JPEG-encoded image.</li>
+<li><b><code>channels</code></b>: An optional <code>int</code>. Defaults to <code>0</code>. Number of color channels for the decoded image.</li>
+<li><b><code>ratio</code></b>: An optional <code>int</code>. Defaults to <code>1</code>. Downscaling ratio.</li>
+<li><b><code>fancy_upscaling</code></b>: An optional <code>bool</code>. Defaults to <code>True</code>. If true use a slower but nicer upscaling of the chroma planes (yuv420/422 only).</li>
+<li><b><code>try_recover_truncated</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>. If true try to recover an image from truncated input.</li>
+<li><b><code>acceptable_fraction</code></b>: An optional <code>float</code>. Defaults to <code>1</code>. The minimum required fraction of lines before a truncated input is accepted.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-1">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>uint8</code>. 3-D with shape <code>[height, width, channels]</code>..</p>
+<hr />
+<h3 id="tf.image.encode_jpegimage-formatnone-qualitynone-progressivenone-optimize_sizenone-chroma_downsamplingnone-density_unitnone-x_densitynone-y_densitynone-xmp_metadatanone-namenone"><a name="//apple_ref/cpp/Function/encode_jpeg" class="dashAnchor"></a><code id="encode_jpeg">tf.image.encode_jpeg(image, format=None, quality=None, progressive=None, optimize_size=None, chroma_downsampling=None, density_unit=None, x_density=None, y_density=None, xmp_metadata=None, name=None)</code></h3>
+<p>JPEG-encode an image.</p>
+<p><code>image</code> is a 3-D uint8 Tensor of shape <code>[height, width, channels]</code>.</p>
+<p>The attr <code>format</code> can be used to override the color format of the encoded output. Values can be:</p>
+<ul>
+<li><code>''</code>: Use a default format based on the number of channels in the image.</li>
+<li><code>grayscale</code>: Output a grayscale JPEG image. The <code>channels</code> dimension of <code>image</code> must be 1.</li>
+<li><code>rgb</code>: Output an RGB JPEG image. The <code>channels</code> dimension of <code>image</code> must be 3.</li>
+</ul>
+<p>If <code>format</code> is not specified or is the empty string, a default format is picked in function of the number of channels in <code>image</code>:</p>
+<ul>
+<li>1: Output a grayscale image.</li>
+<li>3: Output an RGB image.</li>
+</ul>
+<h5 id="args-2">Args:</h5>
+<ul>
+<li><b><code>image</code></b>: A <code>Tensor</code> of type <code>uint8</code>. 3-D with shape <code>[height, width, channels]</code>.</li>
+<li><b><code>format</code></b>: An optional <code>string</code> from: <code>&quot;&quot;, &quot;grayscale&quot;, &quot;rgb&quot;</code>. Defaults to <code>&quot;&quot;</code>. Per pixel image format.</li>
+<li><b><code>quality</code></b>: An optional <code>int</code>. Defaults to <code>95</code>. Quality of the compression from 0 to 100 (higher is better and slower).</li>
+<li><b><code>progressive</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>. If True, create a JPEG that loads progressively (coarse to fine).</li>
+<li><b><code>optimize_size</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>. If True, spend CPU/RAM to reduce size with no quality change.</li>
+<li><b><code>chroma_downsampling</code></b>: An optional <code>bool</code>. Defaults to <code>True</code>. See http://en.wikipedia.org/wiki/Chroma_subsampling.</li>
+<li><b><code>density_unit</code></b>: An optional <code>string</code> from: <code>&quot;in&quot;, &quot;cm&quot;</code>. Defaults to <code>&quot;in&quot;</code>. Unit used to specify <code>x_density</code> and <code>y_density</code>: pixels per inch (<code>'in'</code>) or centimeter (<code>'cm'</code>).</li>
+<li><b><code>x_density</code></b>: An optional <code>int</code>. Defaults to <code>300</code>. Horizontal pixels per density unit.</li>
+<li><b><code>y_density</code></b>: An optional <code>int</code>. Defaults to <code>300</code>. Vertical pixels per density unit.</li>
+<li><b><code>xmp_metadata</code></b>: An optional <code>string</code>. Defaults to <code>&quot;&quot;</code>. If not empty, embed this XMP metadata in the image header.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-2">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>string</code>. 0-D. JPEG-encoded image.</p>
+<hr />
+<h3 id="tf.image.decode_pngcontents-channelsnone-dtypenone-namenone"><a name="//apple_ref/cpp/Function/decode_png" class="dashAnchor"></a><code id="decode_png">tf.image.decode_png(contents, channels=None, dtype=None, name=None)</code></h3>
+<p>Decode a PNG-encoded image to a uint8 or uint16 tensor.</p>
+<p>The attr <code>channels</code> indicates the desired number of color channels for the decoded image.</p>
+<p>Accepted values are:</p>
+<ul>
+<li>0: Use the number of channels in the PNG-encoded image.</li>
+<li>1: output a grayscale image.</li>
+<li>3: output an RGB image.</li>
+<li>4: output an RGBA image.</li>
+</ul>
+<p>If needed, the PNG-encoded image is transformed to match the requested number of color channels.</p>
+<h5 id="args-3">Args:</h5>
+<ul>
+<li><b><code>contents</code></b>: A <code>Tensor</code> of type <code>string</code>. 0-D. The PNG-encoded image.</li>
+<li><b><code>channels</code></b>: An optional <code>int</code>. Defaults to <code>0</code>. Number of color channels for the decoded image.</li>
+<li><b><code>dtype</code></b>: An optional <code>tf.DType</code> from: <code>tf.uint8, tf.uint16</code>. Defaults to <code>tf.uint8</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-3">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>dtype</code>. 3-D with shape <code>[height, width, channels]</code>.</p>
+<hr />
+<h3 id="tf.image.encode_pngimage-compressionnone-namenone"><a name="//apple_ref/cpp/Function/encode_png" class="dashAnchor"></a><code id="encode_png">tf.image.encode_png(image, compression=None, name=None)</code></h3>
+<p>PNG-encode an image.</p>
+<p><code>image</code> is a 3-D uint8 or uint16 Tensor of shape <code>[height, width, channels]</code> where <code>channels</code> is:</p>
+<ul>
+<li>1: for grayscale.</li>
+<li>2: for grayscale + alpha.</li>
+<li>3: for RGB.</li>
+<li>4: for RGBA.</li>
+</ul>
+<p>The ZLIB compression level, <code>compression</code>, can be -1 for the PNG-encoder default or a value from 0 to 9. 9 is the highest compression level, generating the smallest output, but is slower.</p>
+<h5 id="args-4">Args:</h5>
+<ul>
+<li><b><code>image</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>uint8</code>, <code>uint16</code>. 3-D with shape <code>[height, width, channels]</code>.</li>
+<li><b><code>compression</code></b>: An optional <code>int</code>. Defaults to <code>-1</code>. Compression level.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-4">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>string</code>. 0-D. PNG-encoded image.</p>
+<h2 id="resizing">Resizing</h2>
+<p>The resizing Ops accept input images as tensors of several types. They always output resized images as float32 tensors.</p>
+<p>The convenience function <a href="#resize_images"><code>resize_images()</code></a> supports both 4-D and 3-D tensors as input and output. 4-D tensors are for batches of images, 3-D tensors for individual images.</p>
+<p>Other resizing Ops only support 4-D batches of images as input: <a href="#resize_area"><code>resize_area</code></a>, <a href="#resize_bicubic"><code>resize_bicubic</code></a>, <a href="#resize_bilinear"><code>resize_bilinear</code></a>, <a href="#resize_nearest_neighbor"><code>resize_nearest_neighbor</code></a>.</p>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Decode a JPG image and resize it to 299 by 299 using default method.</span>
+image <span class="op">=</span> tf.image.decode_jpeg(...)
+resized_image <span class="op">=</span> tf.image.resize_images(image, [<span class="dv">299</span>, <span class="dv">299</span>])</code></pre></div>
+<hr />
+<h3 id="tf.image.resize_imagesimages-size-method0-align_cornersfalse"><a name="//apple_ref/cpp/Function/resize_images" class="dashAnchor"></a><code id="resize_images">tf.image.resize_images(images, size, method=0, align_corners=False)</code></h3>
+<p>Resize <code>images</code> to <code>size</code> using the specified <code>method</code>.</p>
+<p>Resized images will be distorted if their original aspect ratio is not the same as <code>size</code>. To avoid distortions see <a href="#resize_image_with_crop_or_pad"><code>resize_image_with_crop_or_pad</code></a>.</p>
+<p><code>method</code> can be one of:</p>
+<ul>
+<li><b><code>ResizeMethod.BILINEAR</code></b>: <a href="https://en.wikipedia.org/wiki/Bilinear_interpolation">Bilinear interpolation.</a></li>
+<li><b><code>ResizeMethod.NEAREST_NEIGHBOR</code></b>: <a href="https://en.wikipedia.org/wiki/Nearest-neighbor_interpolation">Nearest neighbor interpolation.</a></li>
+<li><b><code>ResizeMethod.BICUBIC</code></b>: <a href="https://en.wikipedia.org/wiki/Bicubic_interpolation">Bicubic interpolation.</a></li>
+<li><b><code>ResizeMethod.AREA</code></b>: Area interpolation.</li>
+</ul>
+<h5 id="args-5">Args:</h5>
+<ul>
+<li><b><code>images</code></b>: 4-D Tensor of shape <code>[batch, height, width, channels]</code> or 3-D Tensor of shape <code>[height, width, channels]</code>.</li>
+<li><b><code>size</code></b>: A 1-D int32 Tensor of 2 elements: <code>new_height, new_width</code>. The new size for the images.</li>
+<li><b><code>method</code></b>: ResizeMethod. Defaults to <code>ResizeMethod.BILINEAR</code>.</li>
+<li><b><code>align_corners</code></b>: bool. If true, exactly align all 4 corners of the input and output. Defaults to <code>false</code>.</li>
+</ul>
+<h5 id="raises">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if the shape of <code>images</code> is incompatible with the shape arguments to this function</li>
+<li><b><code>ValueError</code></b>: if <code>size</code> has invalid shape or type.</li>
+<li><b><code>ValueError</code></b>: if an unsupported resize method is specified.</li>
+</ul>
+<h5 id="returns-5">Returns:</h5>
+<p>If <code>images</code> was 4-D, a 4-D float Tensor of shape <code>[batch, new_height, new_width, channels]</code>. If <code>images</code> was 3-D, a 3-D float Tensor of shape <code>[new_height, new_width, channels]</code>.</p>
+<hr />
+<h3 id="tf.image.resize_areaimages-size-align_cornersnone-namenone"><a name="//apple_ref/cpp/Function/resize_area" class="dashAnchor"></a><code id="resize_area">tf.image.resize_area(images, size, align_corners=None, name=None)</code></h3>
+<p>Resize <code>images</code> to <code>size</code> using area interpolation.</p>
+<p>Input images can be of different types but output images are always float.</p>
+<h5 id="args-6">Args:</h5>
+<ul>
+<li><b><code>images</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>uint8</code>, <code>int8</code>, <code>int16</code>, <code>int32</code>, <code>int64</code>, <code>half</code>, <code>float32</code>, <code>float64</code>. 4-D with shape <code>[batch, height, width, channels]</code>.</li>
+<li><b><code>size</code></b>: A 1-D int32 Tensor of 2 elements: <code>new_height, new_width</code>. The new size for the images.</li>
+<li><b><code>align_corners</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>. If true, rescale input by (new_height - 1) / (height - 1), which exactly aligns the 4 corners of images and resized images. If false, rescale by new_height / height. Treat similarly the width dimension.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-6">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>float32</code>. 4-D with shape <code>[batch, new_height, new_width, channels]</code>.</p>
+<hr />
+<h3 id="tf.image.resize_bicubicimages-size-align_cornersnone-namenone"><a name="//apple_ref/cpp/Function/resize_bicubic" class="dashAnchor"></a><code id="resize_bicubic">tf.image.resize_bicubic(images, size, align_corners=None, name=None)</code></h3>
+<p>Resize <code>images</code> to <code>size</code> using bicubic interpolation.</p>
+<p>Input images can be of different types but output images are always float.</p>
+<h5 id="args-7">Args:</h5>
+<ul>
+<li><b><code>images</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>uint8</code>, <code>int8</code>, <code>int16</code>, <code>int32</code>, <code>int64</code>, <code>half</code>, <code>float32</code>, <code>float64</code>. 4-D with shape <code>[batch, height, width, channels]</code>.</li>
+<li><b><code>size</code></b>: A 1-D int32 Tensor of 2 elements: <code>new_height, new_width</code>. The new size for the images.</li>
+<li><b><code>align_corners</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>. If true, rescale input by (new_height - 1) / (height - 1), which exactly aligns the 4 corners of images and resized images. If false, rescale by new_height / height. Treat similarly the width dimension.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-7">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>float32</code>. 4-D with shape <code>[batch, new_height, new_width, channels]</code>.</p>
+<hr />
+<h3 id="tf.image.resize_bilinearimages-size-align_cornersnone-namenone"><a name="//apple_ref/cpp/Function/resize_bilinear" class="dashAnchor"></a><code id="resize_bilinear">tf.image.resize_bilinear(images, size, align_corners=None, name=None)</code></h3>
+<p>Resize <code>images</code> to <code>size</code> using bilinear interpolation.</p>
+<p>Input images can be of different types but output images are always float.</p>
+<h5 id="args-8">Args:</h5>
+<ul>
+<li><b><code>images</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>uint8</code>, <code>int8</code>, <code>int16</code>, <code>int32</code>, <code>int64</code>, <code>half</code>, <code>float32</code>, <code>float64</code>. 4-D with shape <code>[batch, height, width, channels]</code>.</li>
+<li><b><code>size</code></b>: A 1-D int32 Tensor of 2 elements: <code>new_height, new_width</code>. The new size for the images.</li>
+<li><b><code>align_corners</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>. If true, rescale input by (new_height - 1) / (height - 1), which exactly aligns the 4 corners of images and resized images. If false, rescale by new_height / height. Treat similarly the width dimension.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-8">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>float32</code>. 4-D with shape <code>[batch, new_height, new_width, channels]</code>.</p>
+<hr />
+<h3 id="tf.image.resize_nearest_neighborimages-size-align_cornersnone-namenone"><a name="//apple_ref/cpp/Function/resize_nearest_neighbor" class="dashAnchor"></a><code id="resize_nearest_neighbor">tf.image.resize_nearest_neighbor(images, size, align_corners=None, name=None)</code></h3>
+<p>Resize <code>images</code> to <code>size</code> using nearest neighbor interpolation.</p>
+<h5 id="args-9">Args:</h5>
+<ul>
+<li><b><code>images</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>uint8</code>, <code>int8</code>, <code>int16</code>, <code>int32</code>, <code>int64</code>, <code>half</code>, <code>float32</code>, <code>float64</code>. 4-D with shape <code>[batch, height, width, channels]</code>.</li>
+<li><b><code>size</code></b>: A 1-D int32 Tensor of 2 elements: <code>new_height, new_width</code>. The new size for the images.</li>
+<li><b><code>align_corners</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>. If true, rescale input by (new_height - 1) / (height - 1), which exactly aligns the 4 corners of images and resized images. If false, rescale by new_height / height. Treat similarly the width dimension.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-9">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>images</code>. 4-D with shape <code>[batch, new_height, new_width, channels]</code>.</p>
+<h2 id="cropping">Cropping</h2>
+<hr />
+<h3 id="tf.image.resize_image_with_crop_or_padimage-target_height-target_width"><a name="//apple_ref/cpp/Function/resize_image_with_crop_or_pad" class="dashAnchor"></a><code id="resize_image_with_crop_or_pad">tf.image.resize_image_with_crop_or_pad(image, target_height, target_width)</code></h3>
+<p>Crops and/or pads an image to a target width and height.</p>
+<p>Resizes an image to a target width and height by either centrally cropping the image or padding it evenly with zeros.</p>
+<p>If <code>width</code> or <code>height</code> is greater than the specified <code>target_width</code> or <code>target_height</code> respectively, this op centrally crops along that dimension. If <code>width</code> or <code>height</code> is smaller than the specified <code>target_width</code> or <code>target_height</code> respectively, this op centrally pads with 0 along that dimension.</p>
+<h5 id="args-10">Args:</h5>
+<ul>
+<li><b><code>image</code></b>: 3-D tensor of shape <code>[height, width, channels]</code></li>
+<li><b><code>target_height</code></b>: Target height.</li>
+<li><b><code>target_width</code></b>: Target width.</li>
+</ul>
+<h5 id="raises-1">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>target_height</code> or <code>target_width</code> are zero or negative.</li>
+</ul>
+<h5 id="returns-10">Returns:</h5>
+<p>Cropped and/or padded image of shape <code>[target_height, target_width, channels]</code></p>
+<hr />
+<h3 id="tf.image.central_cropimage-central_fraction"><a name="//apple_ref/cpp/Function/central_crop" class="dashAnchor"></a><code id="central_crop">tf.image.central_crop(image, central_fraction)</code></h3>
+<p>Crop the central region of the image.</p>
+<p>Remove the outer parts of an image but retain the central region of the image along each dimension. If we specify central_fraction = 0.5, this function returns the region marked with &quot;X&quot; in the below diagram.</p>
+<pre><code> --------
+|        |
+|  XXXX  |
+|  XXXX  |
+|        |   where &quot;X&quot; is the central 50% of the image.
+ --------</code></pre>
+<h5 id="args-11">Args:</h5>
+<ul>
+<li><b><code>image</code></b>: 3-D float Tensor of shape [height, width, depth]</li>
+<li><b><code>central_fraction</code></b>: float (0, 1], fraction of size to crop</li>
+</ul>
+<h5 id="raises-2">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if central_crop_fraction is not within (0, 1].</li>
+</ul>
+<h5 id="returns-11">Returns:</h5>
+<p>3-D float Tensor</p>
+<hr />
+<h3 id="tf.image.pad_to_bounding_boximage-offset_height-offset_width-target_height-target_width"><a name="//apple_ref/cpp/Function/pad_to_bounding_box" class="dashAnchor"></a><code id="pad_to_bounding_box">tf.image.pad_to_bounding_box(image, offset_height, offset_width, target_height, target_width)</code></h3>
+<p>Pad <code>image</code> with zeros to the specified <code>height</code> and <code>width</code>.</p>
+<p>Adds <code>offset_height</code> rows of zeros on top, <code>offset_width</code> columns of zeros on the left, and then pads the image on the bottom and right with zeros until it has dimensions <code>target_height</code>, <code>target_width</code>.</p>
+<p>This op does nothing if <code>offset_*</code> is zero and the image already has size <code>target_height</code> by <code>target_width</code>.</p>
+<h5 id="args-12">Args:</h5>
+<ul>
+<li><b><code>image</code></b>: 3-D tensor with shape <code>[height, width, channels]</code></li>
+<li><b><code>offset_height</code></b>: Number of rows of zeros to add on top.</li>
+<li><b><code>offset_width</code></b>: Number of columns of zeros to add on the left.</li>
+<li><b><code>target_height</code></b>: Height of output image.</li>
+<li><b><code>target_width</code></b>: Width of output image.</li>
+</ul>
+<h5 id="returns-12">Returns:</h5>
+<p>3-D tensor of shape <code>[target_height, target_width, channels]</code></p>
+<h5 id="raises-3">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If the shape of <code>image</code> is incompatible with the <code>offset_*</code> or <code>target_*</code> arguments, or either <code>offset_height</code> or <code>offset_width</code> is negative.</li>
+</ul>
+<hr />
+<h3 id="tf.image.crop_to_bounding_boximage-offset_height-offset_width-target_height-target_width"><a name="//apple_ref/cpp/Function/crop_to_bounding_box" class="dashAnchor"></a><code id="crop_to_bounding_box">tf.image.crop_to_bounding_box(image, offset_height, offset_width, target_height, target_width)</code></h3>
+<p>Crops an image to a specified bounding box.</p>
+<p>This op cuts a rectangular part out of <code>image</code>. The top-left corner of the returned image is at <code>offset_height, offset_width</code> in <code>image</code>, and its lower-right corner is at <code>offset_height + target_height, offset_width + target_width</code>.</p>
+<h5 id="args-13">Args:</h5>
+<ul>
+<li><b><code>image</code></b>: 3-D tensor with shape <code>[height, width, channels]</code></li>
+<li><b><code>offset_height</code></b>: Vertical coordinate of the top-left corner of the result in the input.</li>
+<li><b><code>offset_width</code></b>: Horizontal coordinate of the top-left corner of the result in the input.</li>
+<li><b><code>target_height</code></b>: Height of the result.</li>
+<li><b><code>target_width</code></b>: Width of the result.</li>
+</ul>
+<h5 id="returns-13">Returns:</h5>
+<p>3-D tensor of image with shape <code>[target_height, target_width, channels]</code></p>
+<h5 id="raises-4">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If the shape of <code>image</code> is incompatible with the <code>offset_*</code> or <code>target_*</code> arguments, or either <code>offset_height</code> or <code>offset_width</code> is negative, or either <code>target_height</code> or <code>target_width</code> is not positive.</li>
+</ul>
+<hr />
+<h3 id="tf.image.extract_glimpseinput-size-offsets-centerednone-normalizednone-uniform_noisenone-namenone"><a name="//apple_ref/cpp/Function/extract_glimpse" class="dashAnchor"></a><code id="extract_glimpse">tf.image.extract_glimpse(input, size, offsets, centered=None, normalized=None, uniform_noise=None, name=None)</code></h3>
+<p>Extracts a glimpse from the input tensor.</p>
+<p>Returns a set of windows called glimpses extracted at location <code>offsets</code> from the input tensor. If the windows only partially overlaps the inputs, the non overlapping areas will be filled with random noise.</p>
+<p>The result is a 4-D tensor of shape <code>[batch_size, glimpse_height, glimpse_width, channels]</code>. The channels and batch dimensions are the same as that of the input tensor. The height and width of the output windows are specified in the <code>size</code> parameter.</p>
+<p>The argument <code>normalized</code> and <code>centered</code> controls how the windows are built:</p>
+<ul>
+<li>If the coordinates are normalized but not centered, 0.0 and 1.0 correspond to the minimum and maximum of each height and width dimension.</li>
+<li>If the coordinates are both normalized and centered, they range from -1.0 to 1.0. The coordinates (-1.0, -1.0) correspond to the upper left corner, the lower right corner is located at (1.0, 1.0) and the center is at (0, 0).</li>
+<li>If the coordinates are not normalized they are interpreted as numbers of pixels.</li>
+</ul>
+<h5 id="args-14">Args:</h5>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code> of type <code>float32</code>. A 4-D float tensor of shape <code>[batch_size, height, width, channels]</code>.</li>
+<li><b><code>size</code></b>: A <code>Tensor</code> of type <code>int32</code>. A 1-D tensor of 2 elements containing the size of the glimpses to extract. The glimpse height must be specified first, following by the glimpse width.</li>
+<li><b><code>offsets</code></b>: A <code>Tensor</code> of type <code>float32</code>. A 2-D integer tensor of shape <code>[batch_size, 2]</code> containing the x, y locations of the center of each window.</li>
+<li><b><code>centered</code></b>: An optional <code>bool</code>. Defaults to <code>True</code>. indicates if the offset coordinates are centered relative to the image, in which case the (0, 0) offset is relative to the center of the input images. If false, the (0,0) offset corresponds to the upper left corner of the input images.</li>
+<li><b><code>normalized</code></b>: An optional <code>bool</code>. Defaults to <code>True</code>. indicates if the offset coordinates are normalized.</li>
+<li><b><code>uniform_noise</code></b>: An optional <code>bool</code>. Defaults to <code>True</code>. indicates if the noise should be generated using a uniform distribution or a Gaussian distribution.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-14">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>float32</code>. A tensor representing the glimpses <code>[batch_size,   glimpse_height, glimpse_width, channels]</code>.</p>
+<hr />
+<h3 id="tf.image.crop_and_resizeimage-boxes-box_ind-crop_size-methodnone-extrapolation_valuenone-namenone"><a name="//apple_ref/cpp/Function/crop_and_resize" class="dashAnchor"></a><code id="crop_and_resize">tf.image.crop_and_resize(image, boxes, box_ind, crop_size, method=None, extrapolation_value=None, name=None)</code></h3>
+<p>Extracts crops from the input image tensor and bilinearly resizes them (possibly</p>
+<p>with aspect ratio change) to a common output size specified by <code>crop_size</code>. This is more general than the <code>crop_to_bounding_box</code> op which extracts a fixed size slice from the input image and does not allow resizing or aspect ratio change.</p>
+<p>Returns a tensor with <code>crops</code> from the input <code>image</code> at positions defined at the bounding box locations in <code>boxes</code>. The cropped boxes are all resized (with bilinear interpolation) to a fixed <code>size = [crop_height, crop_width]</code>. The result is a 4-D tensor <code>[num_boxes, crop_height, crop_width, depth]</code>.</p>
+<h5 id="args-15">Args:</h5>
+<ul>
+<li><b><code>image</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>uint8</code>, <code>int8</code>, <code>int16</code>, <code>int32</code>, <code>int64</code>, <code>half</code>, <code>float32</code>, <code>float64</code>. A 4-D tensor of shape <code>[batch, image_height, image_width, depth]</code>. Both <code>image_height</code> and <code>image_width</code> need to be positive.</li>
+<li><b><code>boxes</code></b>: A <code>Tensor</code> of type <code>float32</code>. A 2-D tensor of shape <code>[num_boxes, 4]</code>. The <code>i</code>-th row of the tensor specifies the coordinates of a box in the <code>box_ind[i]</code> image and is specified in normalized coordinates <code>[y1, x1, y2, x2]</code>. A normalized coordinate value of <code>y</code> is mapped to the image coordinate at <code>y * (image_height - 1)</code>, so as the <code>[0, 1]</code> interval of normalized image height is mapped to <code>[0, image_height - 1] in image height coordinates. We do allow y1 &gt; y2, in which case the sampled crop is an up-down flipped version of the original image. The width dimension is treated similarly. Normalized coordinates outside the</code>[0, 1]<code>range are allowed, in which case we use</code>extrapolation_value` to extrapolate the input image values.</li>
+<li><b><code>box_ind</code></b>: A <code>Tensor</code> of type <code>int32</code>. A 1-D tensor of shape <code>[num_boxes]</code> with int32 values in <code>[0, batch)</code>. The value of <code>box_ind[i]</code> specifies the image that the <code>i</code>-th box refers to.</li>
+<li><b><code>crop_size</code></b>: A <code>Tensor</code> of type <code>int32</code>. A 1-D tensor of 2 elements, <code>size = [crop_height, crop_width]</code>. All cropped image patches are resized to this size. The aspect ratio of the image content is not preserved. Both <code>crop_height</code> and <code>crop_width</code> need to be positive.</li>
+<li><b><code>method</code></b>: An optional <code>string</code> from: <code>&quot;bilinear&quot;</code>. Defaults to <code>&quot;bilinear&quot;</code>. A string specifying the interpolation method. Only 'bilinear' is supported for now.</li>
+<li><b><code>extrapolation_value</code></b>: An optional <code>float</code>. Defaults to <code>0</code>. Value used for extrapolation, when applicable.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-15">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>float32</code>. A 4-D tensor of shape <code>[num_boxes, crop_height, crop_width, depth]</code>.</p>
+<h2 id="flipping-rotating-and-transposing">Flipping, Rotating and Transposing</h2>
+<hr />
+<h3 id="tf.image.flip_up_downimage"><a name="//apple_ref/cpp/Function/flip_up_down" class="dashAnchor"></a><code id="flip_up_down">tf.image.flip_up_down(image)</code></h3>
+<p>Flip an image horizontally (upside down).</p>
+<p>Outputs the contents of <code>image</code> flipped along the first dimension, which is <code>height</code>.</p>
+<p>See also <code>reverse()</code>.</p>
+<h5 id="args-16">Args:</h5>
+<ul>
+<li><b><code>image</code></b>: A 3-D tensor of shape <code>[height, width, channels].</code></li>
+</ul>
+<h5 id="returns-16">Returns:</h5>
+<p>A 3-D tensor of the same type and shape as <code>image</code>.</p>
+<h5 id="raises-5">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if the shape of <code>image</code> not supported.</li>
+</ul>
+<hr />
+<h3 id="tf.image.random_flip_up_downimage-seednone"><a name="//apple_ref/cpp/Function/random_flip_up_down" class="dashAnchor"></a><code id="random_flip_up_down">tf.image.random_flip_up_down(image, seed=None)</code></h3>
+<p>Randomly flips an image vertically (upside down).</p>
+<p>With a 1 in 2 chance, outputs the contents of <code>image</code> flipped along the first dimension, which is <code>height</code>. Otherwise output the image as-is.</p>
+<h5 id="args-17">Args:</h5>
+<ul>
+<li><b><code>image</code></b>: A 3-D tensor of shape <code>[height, width, channels].</code></li>
+<li><b><code>seed</code></b>: A Python integer. Used to create a random seed. See <a href="../../api_docs/python/constant_op.md#set_random_seed"><code>set_random_seed</code></a> for behavior.</li>
+</ul>
+<h5 id="returns-17">Returns:</h5>
+<p>A 3-D tensor of the same type and shape as <code>image</code>.</p>
+<h5 id="raises-6">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if the shape of <code>image</code> not supported.</li>
+</ul>
+<hr />
+<h3 id="tf.image.flip_left_rightimage"><a name="//apple_ref/cpp/Function/flip_left_right" class="dashAnchor"></a><code id="flip_left_right">tf.image.flip_left_right(image)</code></h3>
+<p>Flip an image horizontally (left to right).</p>
+<p>Outputs the contents of <code>image</code> flipped along the second dimension, which is <code>width</code>.</p>
+<p>See also <code>reverse()</code>.</p>
+<h5 id="args-18">Args:</h5>
+<ul>
+<li><b><code>image</code></b>: A 3-D tensor of shape <code>[height, width, channels].</code></li>
+</ul>
+<h5 id="returns-18">Returns:</h5>
+<p>A 3-D tensor of the same type and shape as <code>image</code>.</p>
+<h5 id="raises-7">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if the shape of <code>image</code> not supported.</li>
+</ul>
+<hr />
+<h3 id="tf.image.random_flip_left_rightimage-seednone"><a name="//apple_ref/cpp/Function/random_flip_left_right" class="dashAnchor"></a><code id="random_flip_left_right">tf.image.random_flip_left_right(image, seed=None)</code></h3>
+<p>Randomly flip an image horizontally (left to right).</p>
+<p>With a 1 in 2 chance, outputs the contents of <code>image</code> flipped along the second dimension, which is <code>width</code>. Otherwise output the image as-is.</p>
+<h5 id="args-19">Args:</h5>
+<ul>
+<li><b><code>image</code></b>: A 3-D tensor of shape <code>[height, width, channels].</code></li>
+<li><b><code>seed</code></b>: A Python integer. Used to create a random seed. See <a href="../../api_docs/python/constant_op.md#set_random_seed"><code>set_random_seed</code></a> for behavior.</li>
+</ul>
+<h5 id="returns-19">Returns:</h5>
+<p>A 3-D tensor of the same type and shape as <code>image</code>.</p>
+<h5 id="raises-8">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if the shape of <code>image</code> not supported.</li>
+</ul>
+<hr />
+<h3 id="tf.image.transpose_imageimage"><a name="//apple_ref/cpp/Function/transpose_image" class="dashAnchor"></a><code id="transpose_image">tf.image.transpose_image(image)</code></h3>
+<p>Transpose an image by swapping the first and second dimension.</p>
+<p>See also <code>transpose()</code>.</p>
+<h5 id="args-20">Args:</h5>
+<ul>
+<li><b><code>image</code></b>: 3-D tensor of shape <code>[height, width, channels]</code></li>
+</ul>
+<h5 id="returns-20">Returns:</h5>
+<p>A 3-D tensor of shape <code>[width, height, channels]</code></p>
+<h5 id="raises-9">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if the shape of <code>image</code> not supported.</li>
+</ul>
+<hr />
+<h3 id="tf.image.rot90image-k1-namenone"><a name="//apple_ref/cpp/Function/rot90" class="dashAnchor"></a><code id="rot90">tf.image.rot90(image, k=1, name=None)</code></h3>
+<p>Rotate an image counter-clockwise by 90 degrees.</p>
+<h5 id="args-21">Args:</h5>
+<ul>
+<li><b><code>image</code></b>: A 3-D tensor of shape <code>[height, width, channels]</code>.</li>
+<li><b><code>k</code></b>: A scalar integer. The number of times the image is rotated by 90 degrees.</li>
+<li><b><code>name</code></b>: A name for this operation (optional).</li>
+</ul>
+<h5 id="returns-21">Returns:</h5>
+<p>A rotated 3-D tensor of the same type and shape as <code>image</code>.</p>
+<h2 id="converting-between-colorspaces.">Converting Between Colorspaces.</h2>
+<p>Image ops work either on individual images or on batches of images, depending on the shape of their input Tensor.</p>
+<p>If 3-D, the shape is <code>[height, width, channels]</code>, and the Tensor represents one image. If 4-D, the shape is <code>[batch_size, height, width, channels]</code>, and the Tensor represents <code>batch_size</code> images.</p>
+<p>Currently, <code>channels</code> can usefully be 1, 2, 3, or 4. Single-channel images are grayscale, images with 3 channels are encoded as either RGB or HSV. Images with 2 or 4 channels include an alpha channel, which has to be stripped from the image before passing the image to most image processing functions (and can be re-attached later).</p>
+<p>Internally, images are either stored in as one <code>float32</code> per channel per pixel (implicitly, values are assumed to lie in <code>[0,1)</code>) or one <code>uint8</code> per channel per pixel (values are assumed to lie in <code>[0,255]</code>).</p>
+<p>TensorFlow can convert between images in RGB or HSV. The conversion functions work only on float images, so you need to convert images in other formats using <a href="#convert-image-dtype"><code>convert_image_dtype</code></a>.</p>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Decode an image and convert it to HSV.</span>
+rgb_image <span class="op">=</span> tf.image.decode_png(...,  channels<span class="op">=</span><span class="dv">3</span>)
+rgb_image_float <span class="op">=</span> tf.image.convert_image_dtype(rgb_image, tf.float32)
+hsv_image <span class="op">=</span> tf.image.rgb_to_hsv(rgb_image)</code></pre></div>
+<hr />
+<h3 id="tf.image.rgb_to_grayscaleimages-namenone"><a name="//apple_ref/cpp/Function/rgb_to_grayscale" class="dashAnchor"></a><code id="rgb_to_grayscale">tf.image.rgb_to_grayscale(images, name=None)</code></h3>
+<p>Converts one or more images from RGB to Grayscale.</p>
+<p>Outputs a tensor of the same <code>DType</code> and rank as <code>images</code>. The size of the last dimension of the output is 1, containing the Grayscale value of the pixels.</p>
+<h5 id="args-22">Args:</h5>
+<ul>
+<li><b><code>images</code></b>: The RGB tensor to convert. Last dimension must have size 3 and should contain RGB values.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-22">Returns:</h5>
+<p>The converted grayscale image(s).</p>
+<hr />
+<h3 id="tf.image.grayscale_to_rgbimages-namenone"><a name="//apple_ref/cpp/Function/grayscale_to_rgb" class="dashAnchor"></a><code id="grayscale_to_rgb">tf.image.grayscale_to_rgb(images, name=None)</code></h3>
+<p>Converts one or more images from Grayscale to RGB.</p>
+<p>Outputs a tensor of the same <code>DType</code> and rank as <code>images</code>. The size of the last dimension of the output is 3, containing the RGB value of the pixels.</p>
+<h5 id="args-23">Args:</h5>
+<ul>
+<li><b><code>images</code></b>: The Grayscale tensor to convert. Last dimension must be size 1.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-23">Returns:</h5>
+<p>The converted grayscale image(s).</p>
+<hr />
+<h3 id="tf.image.hsv_to_rgbimages-namenone"><a name="//apple_ref/cpp/Function/hsv_to_rgb" class="dashAnchor"></a><code id="hsv_to_rgb">tf.image.hsv_to_rgb(images, name=None)</code></h3>
+<p>Convert one or more images from HSV to RGB.</p>
+<p>Outputs a tensor of the same shape as the <code>images</code> tensor, containing the RGB value of the pixels. The output is only well defined if the value in <code>images</code> are in <code>[0,1]</code>.</p>
+<p>See <code>rgb_to_hsv</code> for a description of the HSV encoding.</p>
+<h5 id="args-24">Args:</h5>
+<ul>
+<li><b><code>images</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>. 1-D or higher rank. HSV data to convert. Last dimension must be size 3.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-24">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>images</code>. <code>images</code> converted to RGB.</p>
+<hr />
+<h3 id="tf.image.rgb_to_hsvimages-namenone"><a name="//apple_ref/cpp/Function/rgb_to_hsv" class="dashAnchor"></a><code id="rgb_to_hsv">tf.image.rgb_to_hsv(images, name=None)</code></h3>
+<p>Converts one or more images from RGB to HSV.</p>
+<p>Outputs a tensor of the same shape as the <code>images</code> tensor, containing the HSV value of the pixels. The output is only well defined if the value in <code>images</code> are in <code>[0,1]</code>.</p>
+<p><code>output[..., 0]</code> contains hue, <code>output[..., 1]</code> contains saturation, and <code>output[..., 2]</code> contains value. All HSV values are in <code>[0,1]</code>. A hue of 0 corresponds to pure red, hue 1/3 is pure green, and 2/3 is pure blue.</p>
+<h5 id="args-25">Args:</h5>
+<ul>
+<li><b><code>images</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>. 1-D or higher rank. RGB data to convert. Last dimension must be size 3.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-25">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>images</code>. <code>images</code> converted to HSV.</p>
+<hr />
+<h3 id="tf.image.convert_image_dtypeimage-dtype-saturatefalse-namenone"><a name="//apple_ref/cpp/Function/convert_image_dtype" class="dashAnchor"></a><code id="convert_image_dtype">tf.image.convert_image_dtype(image, dtype, saturate=False, name=None)</code></h3>
+<p>Convert <code>image</code> to <code>dtype</code>, scaling its values if needed.</p>
+<p>Images that are represented using floating point values are expected to have values in the range [0,1). Image data stored in integer data types are expected to have values in the range <code>[0,MAX]</code>, where <code>MAX</code> is the largest positive representable number for the data type.</p>
+<p>This op converts between data types, scaling the values appropriately before casting.</p>
+<p>Note that converting from floating point inputs to integer types may lead to over/underflow problems. Set saturate to <code>True</code> to avoid such problem in problematic conversions. If enabled, saturation will clip the output into the allowed range before performing a potentially dangerous cast (and only before performing such a cast, i.e., when casting from a floating point to an integer type, and when casting from a signed to an unsigned type; <code>saturate</code> has no effect on casts between floats, or on casts that increase the type's range).</p>
+<h5 id="args-26">Args:</h5>
+<ul>
+<li><b><code>image</code></b>: An image.</li>
+<li><b><code>dtype</code></b>: A <code>DType</code> to convert <code>image</code> to.</li>
+<li><b><code>saturate</code></b>: If <code>True</code>, clip the input before casting (if necessary).</li>
+<li><b><code>name</code></b>: A name for this operation (optional).</li>
+</ul>
+<h5 id="returns-26">Returns:</h5>
+<p><code>image</code>, converted to <code>dtype</code>.</p>
+<h2 id="image-adjustments">Image Adjustments</h2>
+<p>TensorFlow provides functions to adjust images in various ways: brightness, contrast, hue, and saturation. Each adjustment can be done with predefined parameters or with random parameters picked from predefined intervals. Random adjustments are often useful to expand a training set and reduce overfitting.</p>
+<p>If several adjustments are chained it is advisable to minimize the number of redundant conversions by first converting the images to the most natural data type and representation (RGB or HSV).</p>
+<hr />
+<h3 id="tf.image.adjust_brightnessimage-delta"><a name="//apple_ref/cpp/Function/adjust_brightness" class="dashAnchor"></a><code id="adjust_brightness">tf.image.adjust_brightness(image, delta)</code></h3>
+<p>Adjust the brightness of RGB or Grayscale images.</p>
+<p>This is a convenience method that converts an RGB image to float representation, adjusts its brightness, and then converts it back to the original data type. If several adjustments are chained it is advisable to minimize the number of redundant conversions.</p>
+<p>The value <code>delta</code> is added to all components of the tensor <code>image</code>. Both <code>image</code> and <code>delta</code> are converted to <code>float</code> before adding (and <code>image</code> is scaled appropriately if it is in fixed-point representation). For regular images, <code>delta</code> should be in the range <code>[0,1)</code>, as it is added to the image in floating point representation, where pixel values are in the <code>[0,1)</code> range.</p>
+<h5 id="args-27">Args:</h5>
+<ul>
+<li><b><code>image</code></b>: A tensor.</li>
+<li><b><code>delta</code></b>: A scalar. Amount to add to the pixel values.</li>
+</ul>
+<h5 id="returns-27">Returns:</h5>
+<p>A brightness-adjusted tensor of the same shape and type as <code>image</code>.</p>
+<hr />
+<h3 id="tf.image.random_brightnessimage-max_delta-seednone"><a name="//apple_ref/cpp/Function/random_brightness" class="dashAnchor"></a><code id="random_brightness">tf.image.random_brightness(image, max_delta, seed=None)</code></h3>
+<p>Adjust the brightness of images by a random factor.</p>
+<p>Equivalent to <code>adjust_brightness()</code> using a <code>delta</code> randomly picked in the interval <code>[-max_delta, max_delta)</code>.</p>
+<h5 id="args-28">Args:</h5>
+<ul>
+<li><b><code>image</code></b>: An image.</li>
+<li><b><code>max_delta</code></b>: float, must be non-negative.</li>
+<li><b><code>seed</code></b>: A Python integer. Used to create a random seed. See <a href="../../api_docs/python/constant_op.md#set_random_seed"><code>set_random_seed</code></a> for behavior.</li>
+</ul>
+<h5 id="returns-28">Returns:</h5>
+<p>The brightness-adjusted image.</p>
+<h5 id="raises-10">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>max_delta</code> is negative.</li>
+</ul>
+<hr />
+<h3 id="tf.image.adjust_contrastimages-contrast_factor"><a name="//apple_ref/cpp/Function/adjust_contrast" class="dashAnchor"></a><code id="adjust_contrast">tf.image.adjust_contrast(images, contrast_factor)</code></h3>
+<p>Adjust contrast of RGB or grayscale images.</p>
+<p>This is a convenience method that converts an RGB image to float representation, adjusts its contrast, and then converts it back to the original data type. If several adjustments are chained it is advisable to minimize the number of redundant conversions.</p>
+<p><code>images</code> is a tensor of at least 3 dimensions. The last 3 dimensions are interpreted as <code>[height, width, channels]</code>. The other dimensions only represent a collection of images, such as <code>[batch, height, width, channels].</code></p>
+<p>Contrast is adjusted independently for each channel of each image.</p>
+<p>For each channel, this Op computes the mean of the image pixels in the channel and then adjusts each component <code>x</code> of each pixel to <code>(x - mean) * contrast_factor + mean</code>.</p>
+<h5 id="args-29">Args:</h5>
+<ul>
+<li><b><code>images</code></b>: Images to adjust. At least 3-D.</li>
+<li><b><code>contrast_factor</code></b>: A float multiplier for adjusting contrast.</li>
+</ul>
+<h5 id="returns-29">Returns:</h5>
+<p>The contrast-adjusted image or images.</p>
+<hr />
+<h3 id="tf.image.random_contrastimage-lower-upper-seednone"><a name="//apple_ref/cpp/Function/random_contrast" class="dashAnchor"></a><code id="random_contrast">tf.image.random_contrast(image, lower, upper, seed=None)</code></h3>
+<p>Adjust the contrast of an image by a random factor.</p>
+<p>Equivalent to <code>adjust_contrast()</code> but uses a <code>contrast_factor</code> randomly picked in the interval <code>[lower, upper]</code>.</p>
+<h5 id="args-30">Args:</h5>
+<ul>
+<li><b><code>image</code></b>: An image tensor with 3 or more dimensions.</li>
+<li><b><code>lower</code></b>: float. Lower bound for the random contrast factor.</li>
+<li><b><code>upper</code></b>: float. Upper bound for the random contrast factor.</li>
+<li><b><code>seed</code></b>: A Python integer. Used to create a random seed. See <a href="../../api_docs/python/constant_op.md#set_random_seed"><code>set_random_seed</code></a> for behavior.</li>
+</ul>
+<h5 id="returns-30">Returns:</h5>
+<p>The contrast-adjusted tensor.</p>
+<h5 id="raises-11">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>upper &lt;= lower</code> or if <code>lower &lt; 0</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.image.adjust_hueimage-delta-namenone"><a name="//apple_ref/cpp/Function/adjust_hue" class="dashAnchor"></a><code id="adjust_hue">tf.image.adjust_hue(image, delta, name=None)</code></h3>
+<p>Adjust hue of an RGB image.</p>
+<p>This is a convenience method that converts an RGB image to float representation, converts it to HSV, add an offset to the hue channel, converts back to RGB and then back to the original data type. If several adjustments are chained it is advisable to minimize the number of redundant conversions.</p>
+<p><code>image</code> is an RGB image. The image hue is adjusted by converting the image to HSV and rotating the hue channel (H) by <code>delta</code>. The image is then converted back to RGB.</p>
+<p><code>delta</code> must be in the interval <code>[-1, 1]</code>.</p>
+<h5 id="args-31">Args:</h5>
+<ul>
+<li><b><code>image</code></b>: RGB image or images. Size of the last dimension must be 3.</li>
+<li><b><code>delta</code></b>: float. How much to add to the hue channel.</li>
+<li><b><code>name</code></b>: A name for this operation (optional).</li>
+</ul>
+<h5 id="returns-31">Returns:</h5>
+<p>Adjusted image(s), same shape and DType as <code>image</code>.</p>
+<hr />
+<h3 id="tf.image.random_hueimage-max_delta-seednone"><a name="//apple_ref/cpp/Function/random_hue" class="dashAnchor"></a><code id="random_hue">tf.image.random_hue(image, max_delta, seed=None)</code></h3>
+<p>Adjust the hue of an RGB image by a random factor.</p>
+<p>Equivalent to <code>adjust_hue()</code> but uses a <code>delta</code> randomly picked in the interval <code>[-max_delta, max_delta]</code>.</p>
+<p><code>max_delta</code> must be in the interval <code>[0, 0.5]</code>.</p>
+<h5 id="args-32">Args:</h5>
+<ul>
+<li><b><code>image</code></b>: RGB image or images. Size of the last dimension must be 3.</li>
+<li><b><code>max_delta</code></b>: float. Maximum value for the random delta.</li>
+<li><b><code>seed</code></b>: An operation-specific seed. It will be used in conjunction with the graph-level seed to determine the real seeds that will be used in this operation. Please see the documentation of set_random_seed for its interaction with the graph-level random seed.</li>
+</ul>
+<h5 id="returns-32">Returns:</h5>
+<p>3-D float tensor of shape <code>[height, width, channels]</code>.</p>
+<h5 id="raises-12">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>max_delta</code> is invalid.</li>
+</ul>
+<hr />
+<h3 id="tf.image.adjust_gammaimage-gamma1-gain1"><a name="//apple_ref/cpp/Function/adjust_gamma" class="dashAnchor"></a><code id="adjust_gamma">tf.image.adjust_gamma(image, gamma=1, gain=1)</code></h3>
+<p>Performs Gamma Correction on the input image. Also known as Power Law Transform. This function transforms the input image pixelwise according to the equation Out = In**gamma after scaling each pixel to the range 0 to 1.</p>
+<h5 id="args-33">Args:</h5>
+<p>image : A Tensor. gamma : A scalar. Non negative real number. gain : A scalar. The constant multiplier.</p>
+<h5 id="returns-33">Returns:</h5>
+<p>A Tensor. Gamma corrected output image.</p>
+<h5 id="notes">Notes:</h5>
+<p>For gamma greater than 1, the histogram will shift towards left and the output image will be darker than the input image. For gamma less than 1, the histogram will shift towards right and the output image will be brighter than the input image.</p>
+<h5 id="references">References:</h5>
+<p>[1] http://en.wikipedia.org/wiki/Gamma_correction</p>
+<hr />
+<h3 id="tf.image.adjust_saturationimage-saturation_factor-namenone"><a name="//apple_ref/cpp/Function/adjust_saturation" class="dashAnchor"></a><code id="adjust_saturation">tf.image.adjust_saturation(image, saturation_factor, name=None)</code></h3>
+<p>Adjust saturation of an RGB image.</p>
+<p>This is a convenience method that converts an RGB image to float representation, converts it to HSV, add an offset to the saturation channel, converts back to RGB and then back to the original data type. If several adjustments are chained it is advisable to minimize the number of redundant conversions.</p>
+<p><code>image</code> is an RGB image. The image saturation is adjusted by converting the image to HSV and multiplying the saturation (S) channel by <code>saturation_factor</code> and clipping. The image is then converted back to RGB.</p>
+<h5 id="args-34">Args:</h5>
+<ul>
+<li><b><code>image</code></b>: RGB image or images. Size of the last dimension must be 3.</li>
+<li><b><code>saturation_factor</code></b>: float. Factor to multiply the saturation by.</li>
+<li><b><code>name</code></b>: A name for this operation (optional).</li>
+</ul>
+<h5 id="returns-34">Returns:</h5>
+<p>Adjusted image(s), same shape and DType as <code>image</code>.</p>
+<hr />
+<h3 id="tf.image.random_saturationimage-lower-upper-seednone"><a name="//apple_ref/cpp/Function/random_saturation" class="dashAnchor"></a><code id="random_saturation">tf.image.random_saturation(image, lower, upper, seed=None)</code></h3>
+<p>Adjust the saturation of an RGB image by a random factor.</p>
+<p>Equivalent to <code>adjust_saturation()</code> but uses a <code>saturation_factor</code> randomly picked in the interval <code>[lower, upper]</code>.</p>
+<h5 id="args-35">Args:</h5>
+<ul>
+<li><b><code>image</code></b>: RGB image or images. Size of the last dimension must be 3.</li>
+<li><b><code>lower</code></b>: float. Lower bound for the random saturation factor.</li>
+<li><b><code>upper</code></b>: float. Upper bound for the random saturation factor.</li>
+<li><b><code>seed</code></b>: An operation-specific seed. It will be used in conjunction with the graph-level seed to determine the real seeds that will be used in this operation. Please see the documentation of set_random_seed for its interaction with the graph-level random seed.</li>
+</ul>
+<h5 id="returns-35">Returns:</h5>
+<p>Adjusted image(s), same shape and DType as <code>image</code>.</p>
+<h5 id="raises-13">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>upper &lt;= lower</code> or if <code>lower &lt; 0</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.image.per_image_standardizationimage"><a name="//apple_ref/cpp/Function/per_image_standardization" class="dashAnchor"></a><code id="per_image_standardization">tf.image.per_image_standardization(image)</code></h3>
+<p>Linearly scales <code>image</code> to have zero mean and unit norm.</p>
+<p>This op computes <code>(x - mean) / adjusted_stddev</code>, where <code>mean</code> is the average of all values in image, and <code>adjusted_stddev = max(stddev, 1.0/sqrt(image.NumElements()))</code>.</p>
+<p><code>stddev</code> is the standard deviation of all values in <code>image</code>. It is capped away from zero to protect against division by 0 when handling uniform images.</p>
+<h5 id="args-36">Args:</h5>
+<ul>
+<li><b><code>image</code></b>: 3-D tensor of shape <code>[height, width, channels]</code>.</li>
+</ul>
+<h5 id="returns-36">Returns:</h5>
+<p>The standardized image with same shape as <code>image</code>.</p>
+<h5 id="raises-14">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if the shape of 'image' is incompatible with this function.</li>
+</ul>
+<h2 id="working-with-bounding-boxes">Working with Bounding Boxes</h2>
+<hr />
+<h3 id="tf.image.draw_bounding_boxesimages-boxes-namenone"><a name="//apple_ref/cpp/Function/draw_bounding_boxes" class="dashAnchor"></a><code id="draw_bounding_boxes">tf.image.draw_bounding_boxes(images, boxes, name=None)</code></h3>
+<p>Draw bounding boxes on a batch of images.</p>
+<p>Outputs a copy of <code>images</code> but draws on top of the pixels zero or more bounding boxes specified by the locations in <code>boxes</code>. The coordinates of the each bounding box in <code>boxes</code> are encoded as <code>[y_min, x_min, y_max, x_max]</code>. The bounding box coordinates are floats in <code>[0.0, 1.0]</code> relative to the width and height of the underlying image.</p>
+<p>For example, if an image is 100 x 200 pixels and the bounding box is <code>[0.1, 0.2, 0.5, 0.9]</code>, the bottom-left and upper-right coordinates of the bounding box will be <code>(10, 40)</code> to <code>(50, 180)</code>.</p>
+<p>Parts of the bounding box may fall outside the image.</p>
+<h5 id="args-37">Args:</h5>
+<ul>
+<li><b><code>images</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>half</code>. 4-D with shape <code>[batch, height, width, depth]</code>. A batch of images.</li>
+<li><b><code>boxes</code></b>: A <code>Tensor</code> of type <code>float32</code>. 3-D with shape <code>[batch, num_bounding_boxes, 4]</code> containing bounding boxes.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-37">Returns:</h5>
+<p>A <code>Tensor</code>. Has the same type as <code>images</code>. 4-D with the same shape as <code>images</code>. The batch of input images with bounding boxes drawn on the images.</p>
+<hr />
+<h3 id="tf.image.non_max_suppressionboxes-scores-max_output_size-iou_thresholdnone-namenone"><a name="//apple_ref/cpp/Function/non_max_suppression" class="dashAnchor"></a><code id="non_max_suppression">tf.image.non_max_suppression(boxes, scores, max_output_size, iou_threshold=None, name=None)</code></h3>
+<p>Greedily selects a subset of bounding boxes in descending order of score,</p>
+<p>pruning away boxes that have high intersection-over-union (IOU) overlap with previously selected boxes. Bounding boxes are supplied as [y1, x1, y2, x2], where (y1, x1) and (y2, x2) are the coordinates of any diagonal pair of box corners and the coordinates can be provided as normalized (i.e., lying in the interval [0, 1]) or absolute. Note that this algorithm is agnostic to where the origin is in the coordinate system. Note that this algorithm is invariant to orthogonal transformations and translations of the coordinate system; thus translating or reflections of the coordinate system result in the same boxes being selected by the algorithm.</p>
+<p>The output of this operation is a set of integers indexing into the input collection of bounding boxes representing the selected boxes. The bounding box coordinates corresponding to the selected indices can then be obtained using the <code>tf.gather operation</code>. For example:</p>
+<p>selected_indices = tf.image.non_max_suppression( boxes, scores, max_output_size, iou_threshold) selected_boxes = tf.gather(boxes, selected_indices)</p>
+<h5 id="args-38">Args:</h5>
+<ul>
+<li><b><code>boxes</code></b>: A <code>Tensor</code> of type <code>float32</code>. A 2-D float tensor of shape <code>[num_boxes, 4]</code>.</li>
+<li><b><code>scores</code></b>: A <code>Tensor</code> of type <code>float32</code>. A 1-D float tensor of shape <code>[num_boxes]</code> representing a single score corresponding to each box (each row of boxes).</li>
+<li><b><code>max_output_size</code></b>: A <code>Tensor</code> of type <code>int32</code>. A scalar integer tensor representing the maximum number of boxes to be selected by non max suppression.</li>
+<li><b><code>iou_threshold</code></b>: An optional <code>float</code>. Defaults to <code>0.5</code>. A float representing the threshold for deciding whether boxes overlap too much with respect to IOU.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-38">Returns:</h5>
+<p>A <code>Tensor</code> of type <code>int32</code>. A 1-D integer tensor of shape <code>[M]</code> representing the selected indices from the boxes tensor, where <code>M &lt;= max_output_size</code>.</p>
+<hr />
+<h3 id="tf.image.sample_distorted_bounding_boximage_size-bounding_boxes-seednone-seed2none-min_object_coverednone-aspect_ratio_rangenone-area_rangenone-max_attemptsnone-use_image_if_no_bounding_boxesnone-namenone"><a name="//apple_ref/cpp/Function/sample_distorted_bounding_box" class="dashAnchor"></a><code id="sample_distorted_bounding_box">tf.image.sample_distorted_bounding_box(image_size, bounding_boxes, seed=None, seed2=None, min_object_covered=None, aspect_ratio_range=None, area_range=None, max_attempts=None, use_image_if_no_bounding_boxes=None, name=None)</code></h3>
+<p>Generate a single randomly distorted bounding box for an image.</p>
+<p>Bounding box annotations are often supplied in addition to ground-truth labels in image recognition or object localization tasks. A common technique for training such a system is to randomly distort an image while preserving its content, i.e. <em>data augmentation</em>. This Op outputs a randomly distorted localization of an object, i.e. bounding box, given an <code>image_size</code>, <code>bounding_boxes</code> and a series of constraints.</p>
+<p>The output of this Op is a single bounding box that may be used to crop the original image. The output is returned as 3 tensors: <code>begin</code>, <code>size</code> and <code>bboxes</code>. The first 2 tensors can be fed directly into <code>tf.slice</code> to crop the image. The latter may be supplied to <code>tf.image.draw_bounding_boxes</code> to visualize what the bounding box looks like.</p>
+<p>Bounding boxes are supplied and returned as <code>[y_min, x_min, y_max, x_max]</code>. The bounding box coordinates are floats in <code>[0.0, 1.0]</code> relative to the width and height of the underlying image.</p>
+<p>For example,</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    <span class="co"># Generate a single distorted bounding box.</span>
+    begin, size, bbox_for_draw <span class="op">=</span> tf.image.sample_distorted_bounding_box(
+        tf.shape(image),
+        bounding_boxes<span class="op">=</span>bounding_boxes)
+
+    <span class="co"># Draw the bounding box in an image summary.</span>
+    image_with_box <span class="op">=</span> tf.image.draw_bounding_boxes(tf.expand_dims(image, <span class="dv">0</span>),
+                                                  bbox_for_draw)
+    tf.image_summary(<span class="st">&#39;images_with_box&#39;</span>, image_with_box)
+
+    <span class="co"># Employ the bounding box to distort the image.</span>
+    distorted_image <span class="op">=</span> tf.<span class="bu">slice</span>(image, begin, size)</code></pre></div>
+<p>Note that if no bounding box information is available, setting <code>use_image_if_no_bounding_boxes = true</code> will assume there is a single implicit bounding box covering the whole image. If <code>use_image_if_no_bounding_boxes</code> is false and no bounding boxes are supplied, an error is raised.</p>
+<h5 id="args-39">Args:</h5>
+<ul>
+<li><b><code>image_size</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>uint8</code>, <code>int8</code>, <code>int16</code>, <code>int32</code>, <code>int64</code>. 1-D, containing <code>[height, width, channels]</code>.</li>
+<li><b><code>bounding_boxes</code></b>: A <code>Tensor</code> of type <code>float32</code>. 3-D with shape <code>[batch, N, 4]</code> describing the N bounding boxes associated with the image.</li>
+<li><b><code>seed</code></b>: An optional <code>int</code>. Defaults to <code>0</code>. If either <code>seed</code> or <code>seed2</code> are set to non-zero, the random number generator is seeded by the given <code>seed</code>. Otherwise, it is seeded by a random seed.</li>
+<li><b><code>seed2</code></b>: An optional <code>int</code>. Defaults to <code>0</code>. A second seed to avoid seed collision.</li>
+<li><b><code>min_object_covered</code></b>: An optional <code>float</code>. Defaults to <code>0.1</code>. The cropped area of the image must contain at least this fraction of any bounding box supplied.</li>
+<li><b><code>aspect_ratio_range</code></b>: An optional list of <code>floats</code>. Defaults to <code>[0.75, 1.33]</code>. The cropped area of the image must have an aspect ratio = width / height within this range.</li>
+<li><b><code>area_range</code></b>: An optional list of <code>floats</code>. Defaults to <code>[0.05, 1]</code>. The cropped area of the image must contain a fraction of the supplied image within in this range.</li>
+<li><b><code>max_attempts</code></b>: An optional <code>int</code>. Defaults to <code>100</code>. Number of attempts at generating a cropped region of the image of the specified constraints. After <code>max_attempts</code> failures, return the entire image.</li>
+<li><b><code>use_image_if_no_bounding_boxes</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>. Controls behavior if no bounding boxes supplied. If true, assume an implicit bounding box covering the whole input. If false, raise an error.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h5 id="returns-39">Returns:</h5>
+<p>A tuple of <code>Tensor</code> objects (begin, size, bboxes).</p>
+<ul>
+<li><b><code>begin</code></b>: A <code>Tensor</code>. Has the same type as <code>image_size</code>. 1-D, containing <code>[offset_height, offset_width, 0]</code>. Provide as input to <code>tf.slice</code>.</li>
+<li><b><code>size</code></b>: A <code>Tensor</code>. Has the same type as <code>image_size</code>. 1-D, containing <code>[target_height, target_width, -1]</code>. Provide as input to <code>tf.slice</code>.</li>
+<li><b><code>bboxes</code></b>: A <code>Tensor</code> of type <code>float32</code>. 3-D with shape <code>[1, 1, 4]</code> containing the distorted bounding box. Provide as input to <code>tf.image.draw_bounding_boxes</code>.</li>
+</ul>

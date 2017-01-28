@@ -1,0 +1,23 @@
+<!-- This file is machine generated: DO NOT EDIT! -->
+<h1 id="bayesflow-stochastic-graph-contrib">BayesFlow Stochastic Graph (contrib)</h1>
+<p>[TOC]</p>
+<p>Classes and helper functions for Stochastic Computation Graphs.</p>
+<h2 id="stochastic-computation-graph-helper-functions">Stochastic Computation Graph Helper Functions</h2>
+<hr />
+<h3 id="tf.contrib.bayesflow.stochastic_graph.surrogate_losssample_losses-stochastic_tensorsnone-namesurrogateloss"><a name="//apple_ref/cpp/Function/surrogate_loss" class="dashAnchor"></a><code id="surrogate_loss">tf.contrib.bayesflow.stochastic_graph.surrogate_loss(sample_losses, stochastic_tensors=None, name='SurrogateLoss')</code></h3>
+<p>Surrogate loss for stochastic graphs.</p>
+<p>This function will call <code>loss_fn</code> on each <code>StochasticTensor</code> upstream of <code>sample_losses</code>, passing the losses that it influenced.</p>
+<p>Note that currently <code>surrogate_loss</code> does not work with <code>StochasticTensor</code>s instantiated in <code>while_loop</code>s or other control structures.</p>
+<h5 id="args">Args:</h5>
+<ul>
+<li><b><code>sample_losses</code></b>: a list or tuple of final losses. Each loss should be per example in the batch (and possibly per sample); that is, it should have dimensionality of 1 or greater. All losses should have the same shape.</li>
+<li><b><code>stochastic_tensors</code></b>: a list of <code>StochasticTensor</code>s to add loss terms for. If None, defaults to all <code>StochasticTensor</code>s in the graph upstream of the <code>Tensor</code>s in <code>sample_losses</code>.</li>
+<li><b><code>name</code></b>: the name with which to prepend created ops.</li>
+</ul>
+<h5 id="returns">Returns:</h5>
+<p><code>Tensor</code> loss, which is the sum of <code>sample_losses</code> and the <code>loss_fn</code>s returned by the <code>StochasticTensor</code>s.</p>
+<h5 id="raises">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>sample_losses</code> is not a list or tuple, or if its elements are not <code>Tensor</code>s.</li>
+<li><b><code>ValueError</code></b>: if any loss in <code>sample_losses</code> does not have dimensionality 1 or greater.</li>
+</ul>

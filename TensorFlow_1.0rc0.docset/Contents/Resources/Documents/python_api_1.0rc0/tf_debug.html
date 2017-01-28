@@ -1,0 +1,809 @@
+<!-- This file is machine generated: DO NOT EDIT! -->
+<h1 id="tensorflow-debugger">TensorFlow Debugger</h1>
+<p>[TOC]</p>
+<p>Public Python API of TensorFlow Debugger (tfdbg).</p>
+<h2 id="functions-for-adding-debug-watches">Functions for adding debug watches</h2>
+<p>These functions help you modify <code>RunOptions</code> to specify which <code>Tensor</code>s are to be watched when the TensorFlow graph is executed at runtime.</p>
+<hr />
+<h3 id="tf_debug.add_debug_tensor_watchrun_options-node_name-output_slot0-debug_opsdebugidentity-debug_urlsnone"><a name="//apple_ref/cpp/Function/add_debug_tensor_watch" class="dashAnchor"></a><code id="add_debug_tensor_watch">tf_debug.add_debug_tensor_watch(run_options, node_name, output_slot=0, debug_ops='DebugIdentity', debug_urls=None)</code></h3>
+<p>Add watch on a <code>Tensor</code> to <code>RunOptions</code>.</p>
+<p>N.B.: Under certain circumstances, the <code>Tensor</code> may not be actually watched (e.g., if the node of the <code>Tensor</code> is constant-folded during runtime).</p>
+<h5 id="args">Args:</h5>
+<ul>
+<li><b><code>run_options</code></b>: An instance of <code>config_pb2.RunOptions</code> to be modified.</li>
+<li><b><code>node_name</code></b>: (<code>str</code>) name of the node to watch.</li>
+<li><b><code>output_slot</code></b>: (<code>int</code>) output slot index of the tensor from the watched node.</li>
+<li><b><code>debug_ops</code></b>: (<code>str</code> or <code>list</code> of <code>str</code>) name(s) of the debug op(s). Can be a <code>list</code> of <code>str</code> or a single <code>str</code>. The latter case is equivalent to a <code>list</code> of <code>str</code> with only one element.</li>
+<li><b><code>debug_urls</code></b>: (<code>str</code> or <code>list</code> of <code>str</code>) URL(s) to send debug values to, e.g., <code>file:///tmp/tfdbg_dump_1</code>, <code>grpc://localhost:12345</code>.</li>
+</ul>
+<hr />
+<h3 id="tf_debug.watch_graphrun_options-graph-debug_opsdebugidentity-debug_urlsnone-node_name_regex_whitelistnone-op_type_regex_whitelistnone"><a name="//apple_ref/cpp/Function/watch_graph" class="dashAnchor"></a><code id="watch_graph">tf_debug.watch_graph(run_options, graph, debug_ops='DebugIdentity', debug_urls=None, node_name_regex_whitelist=None, op_type_regex_whitelist=None)</code></h3>
+<p>Add debug watches to <code>RunOptions</code> for a TensorFlow graph.</p>
+<p>To watch all <code>Tensor</code>s on the graph, let both <code>node_name_regex_whitelist</code> and <code>op_type_regex_whitelist</code> be the default (<code>None</code>).</p>
+<p>N.B.: Under certain circumstances, not all specified <code>Tensor</code>s will be actually watched (e.g., nodes that are constant-folded during runtime will not be watched).</p>
+<h5 id="args-1">Args:</h5>
+<ul>
+<li><b><code>run_options</code></b>: An instance of <code>config_pb2.RunOptions</code> to be modified.</li>
+<li><b><code>graph</code></b>: An instance of <code>ops.Graph</code>.</li>
+<li><b><code>debug_ops</code></b>: (<code>str</code> or <code>list</code> of <code>str</code>) name(s) of the debug op(s) to use.</li>
+<li><b><code>debug_urls</code></b>: URLs to send debug values to. Can be a list of strings, a single string, or None. The case of a single string is equivalent to a list consisting of a single string, e.g., <code>file:///tmp/tfdbg_dump_1</code>, <code>grpc://localhost:12345</code>.</li>
+<li><b><code>node_name_regex_whitelist</code></b>: Regular-expression whitelist for node_name, e.g., <code>&quot;(weight_[0-9]+|bias_.*)&quot;</code></li>
+<li><b><code>op_type_regex_whitelist</code></b>: Regular-expression whitelist for the op type of nodes, e.g., <code>&quot;(Variable|Add)&quot;</code>. If both <code>node_name_regex_whitelist</code> and <code>op_type_regex_whitelist</code> are set, the two filtering operations will occur in a logical <code>AND</code> relation. In other words, a node will be included if and only if it hits both whitelists.</li>
+</ul>
+<hr />
+<h3 id="tf_debug.watch_graph_with_blacklistsrun_options-graph-debug_opsdebugidentity-debug_urlsnone-node_name_regex_blacklistnone-op_type_regex_blacklistnone"><a name="//apple_ref/cpp/Function/watch_graph_with_blacklists" class="dashAnchor"></a><code id="watch_graph_with_blacklists">tf_debug.watch_graph_with_blacklists(run_options, graph, debug_ops='DebugIdentity', debug_urls=None, node_name_regex_blacklist=None, op_type_regex_blacklist=None)</code></h3>
+<p>Add debug tensor watches, blacklisting nodes and op types.</p>
+<p>This is similar to <code>watch_graph()</code>, but the node names and op types are blacklisted, instead of whitelisted.</p>
+<p>N.B.: Under certain circumstances, not all specified <code>Tensor</code>s will be actually watched (e.g., nodes that are constant-folded during runtime will not be watched).</p>
+<h5 id="args-2">Args:</h5>
+<ul>
+<li><b><code>run_options</code></b>: An instance of <code>config_pb2.RunOptions</code> to be modified.</li>
+<li><b><code>graph</code></b>: An instance of <code>ops.Graph</code>.</li>
+<li><b><code>debug_ops</code></b>: (<code>str</code> or <code>list</code> of <code>str</code>) name(s) of the debug op(s) to use.</li>
+<li><b><code>debug_urls</code></b>: URL(s) to send ebug values to, e.g., <code>file:///tmp/tfdbg_dump_1</code>, <code>grpc://localhost:12345</code>.</li>
+<li><b><code>node_name_regex_blacklist</code></b>: Regular-expression blacklist for node_name. This should be a string, e.g., <code>&quot;(weight_[0-9]+|bias_.*)&quot;</code>.</li>
+<li><b><code>op_type_regex_blacklist</code></b>: Regular-expression blacklist for the op type of nodes, e.g., <code>&quot;(Variable|Add)&quot;</code>. If both node_name_regex_blacklist and op_type_regex_blacklist are set, the two filtering operations will occur in a logical <code>OR</code> relation. In other words, a node will be excluded if it hits either of the two blacklists; a node will be included if and only if it hits neither of the blacklists.</li>
+</ul>
+<h2 id="classes-for-debug-dump-data-and-directories">Classes for debug-dump data and directories</h2>
+<p>These classes allow you to load and inspect tensor values dumped from TensorFlow graphs during runtime.</p>
+<hr />
+<h3 id="class-tf_debug.debugtensordatum"><a name="//apple_ref/cpp/Class/DebugTensorDatum" class="dashAnchor"></a><code id="DebugTensorDatum">class tf_debug.DebugTensorDatum</code></h3>
+<p>A single tensor dumped by TensorFlow Debugger (tfdbg).</p>
+<p>Contains metadata about the dumped tensor, including <code>timestamp</code>, <code>node_name</code>, <code>output_slot</code>, <code>debug_op</code>, and path to the dump file (<code>file_path</code>).</p>
+<p>This type does not hold the generally space-expensive tensor value (numpy array). Instead, it points to the file from which the tensor value can be loaded (with the <code>get_tensor</code> method) if needed. - - -</p>
+<h4 id="tf_debug.debugtensordatum.__init__dump_root-debug_dump_rel_path"><code id="DebugTensorDatum.__init__">tf_debug.DebugTensorDatum.__init__(dump_root, debug_dump_rel_path)</code></h4>
+<p><code>DebugTensorDatum</code> constructor.</p>
+<h5 id="args-3">Args:</h5>
+<ul>
+<li><b><code>dump_root</code></b>: (<code>str</code>) Debug dump root directory.</li>
+<li><b><code>debug_dump_rel_path</code></b>: (<code>str</code>) Path to a debug dump file, relative to the <code>dump_root</code>. For example, suppose the debug dump root directory is <code>/tmp/tfdbg_1</code> and the dump file is at <code>/tmp/tfdbg_1/ns_1/node_a_0_DebugIdentity_123456789</code>, then the value of the debug_dump_rel_path should be <code>ns_1/node_a_0_DebugIdenity_1234456789</code>.</li>
+</ul>
+<h5 id="raises">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If the base file name of the dump file does not conform to the dump file naming pattern: <code>node_name</code><em><code>output_slot</code></em><code>debug_op</code>_<code>timestamp</code></li>
+</ul>
+<hr />
+<h4 id="tf_debug.debugtensordatum.__repr__"><code id="DebugTensorDatum.__repr__">tf_debug.DebugTensorDatum.__repr__()</code></h4>
+<hr />
+<h4 id="tf_debug.debugtensordatum.__str__"><code id="DebugTensorDatum.__str__">tf_debug.DebugTensorDatum.__str__()</code></h4>
+<hr />
+<h4 id="tf_debug.debugtensordatum.debug_op"><code id="DebugTensorDatum.debug_op">tf_debug.DebugTensorDatum.debug_op</code></h4>
+<p>Name of the debug op.</p>
+<h5 id="returns">Returns:</h5>
+<p>(<code>str</code>) debug op name (e.g., <code>DebugIdentity</code>).</p>
+<hr />
+<h4 id="tf_debug.debugtensordatum.dump_size_bytes"><code id="DebugTensorDatum.dump_size_bytes">tf_debug.DebugTensorDatum.dump_size_bytes</code></h4>
+<p>Size of the dump file.</p>
+<p>Unit: byte.</p>
+<h5 id="returns-1">Returns:</h5>
+<p>If the dump file exists, size of the dump file, in bytes. If the dump file does not exist, None.</p>
+<hr />
+<h4 id="tf_debug.debugtensordatum.file_path"><code id="DebugTensorDatum.file_path">tf_debug.DebugTensorDatum.file_path</code></h4>
+<p>Path to the file which stores the value of the dumped tensor.</p>
+<hr />
+<h4 id="tf_debug.debugtensordatum.get_tensor"><code id="DebugTensorDatum.get_tensor">tf_debug.DebugTensorDatum.get_tensor()</code></h4>
+<p>Get tensor from the dump (<code>Event</code>) file.</p>
+<h5 id="returns-2">Returns:</h5>
+<p>The tensor loaded from the dump (<code>Event</code>) file.</p>
+<hr />
+<h4 id="tf_debug.debugtensordatum.node_name"><code id="DebugTensorDatum.node_name">tf_debug.DebugTensorDatum.node_name</code></h4>
+<p>Name of the node from which the tensor value was dumped.</p>
+<h5 id="returns-3">Returns:</h5>
+<p>(<code>str</code>) name of the node watched by the debug op.</p>
+<hr />
+<h4 id="tf_debug.debugtensordatum.output_slot"><code id="DebugTensorDatum.output_slot">tf_debug.DebugTensorDatum.output_slot</code></h4>
+<p>Output slot index from which the tensor value was dumped.</p>
+<h5 id="returns-4">Returns:</h5>
+<p>(<code>int</code>) output slot index watched by the debug op.</p>
+<hr />
+<h4 id="tf_debug.debugtensordatum.tensor_name"><code id="DebugTensorDatum.tensor_name">tf_debug.DebugTensorDatum.tensor_name</code></h4>
+<p>Name of the tensor watched by the debug op.</p>
+<h5 id="returns-5">Returns:</h5>
+<p>(<code>str</code>) <code>Tensor</code> name, in the form of <code>node_name</code>:<code>output_slot</code></p>
+<hr />
+<h4 id="tf_debug.debugtensordatum.timestamp"><code id="DebugTensorDatum.timestamp">tf_debug.DebugTensorDatum.timestamp</code></h4>
+<p>Timestamp of when this tensor value was dumped.</p>
+<h5 id="returns-6">Returns:</h5>
+<p>(<code>int</code>) The timestamp in microseconds.</p>
+<hr />
+<h4 id="tf_debug.debugtensordatum.watch_key"><code id="DebugTensorDatum.watch_key">tf_debug.DebugTensorDatum.watch_key</code></h4>
+<p>Watch key identities a debug watch on a tensor.</p>
+<h5 id="returns-7">Returns:</h5>
+<p>(<code>str</code>) A watch key, in the form of <code>tensor_name</code>:<code>debug_op</code>.</p>
+<hr />
+<h3 id="class-tf_debug.debugdumpdir"><a name="//apple_ref/cpp/Class/DebugDumpDir" class="dashAnchor"></a><code id="DebugDumpDir">class tf_debug.DebugDumpDir</code></h3>
+<p>Data set from a debug-dump directory on filesystem.</p>
+<p>An instance of <code>DebugDumpDir</code> contains all <code>DebugTensorDatum</code> instances in a tfdbg dump root directory. - - -</p>
+<h4 id="tf_debug.debugdumpdir.__init__dump_root-partition_graphsnone-validatetrue"><code id="DebugDumpDir.__init__">tf_debug.DebugDumpDir.__init__(dump_root, partition_graphs=None, validate=True)</code></h4>
+<p><code>DebugDumpDir</code> constructor.</p>
+<h5 id="args-4">Args:</h5>
+<ul>
+<li><b><code>dump_root</code></b>: (<code>str</code>) path to the dump root directory.</li>
+<li><b><code>partition_graphs</code></b>: A repeated field of GraphDefs representing the partition graphs executed by the TensorFlow runtime.</li>
+<li><b><code>validate</code></b>: (<code>bool</code>) whether the dump files are to be validated against the partition graphs.</li>
+</ul>
+<h5 id="raises-1">Raises:</h5>
+<ul>
+<li><b><code>IOError</code></b>: If dump_root does not exist as a directory.</li>
+</ul>
+<hr />
+<h4 id="tf_debug.debugdumpdir.debug_watch_keysnode_name"><code id="DebugDumpDir.debug_watch_keys">tf_debug.DebugDumpDir.debug_watch_keys(node_name)</code></h4>
+<p>Get all tensor watch keys of given node according to partition graphs.</p>
+<h5 id="args-5">Args:</h5>
+<ul>
+<li><b><code>node_name</code></b>: (<code>str</code>) name of the node.</li>
+</ul>
+<h5 id="returns-8">Returns:</h5>
+<p>(<code>list</code> of <code>str</code>) all debug tensor watch keys. Returns an empty list if the node name does not correspond to any debug watch keys.</p>
+<h5 id="raises-2">Raises:</h5>
+<p><code>LookupError</code>: If debug watch information has not been loaded from partition graphs yet.</p>
+<hr />
+<h4 id="tf_debug.debugdumpdir.devices"><code id="DebugDumpDir.devices">tf_debug.DebugDumpDir.devices()</code></h4>
+<p>Get the list of devices.</p>
+<h5 id="returns-9">Returns:</h5>
+<p>(<code>list</code> of <code>str</code>) names of the devices.</p>
+<h5 id="raises-3">Raises:</h5>
+<ul>
+<li><b><code>LookupError</code></b>: If node inputs and control inputs have not been loaded from partition graphs yet.</li>
+</ul>
+<hr />
+<h4 id="tf_debug.debugdumpdir.dumped_tensor_data"><code id="DebugDumpDir.dumped_tensor_data">tf_debug.DebugDumpDir.dumped_tensor_data</code></h4>
+<hr />
+<h4 id="tf_debug.debugdumpdir.findpredicate-first_n0"><code id="DebugDumpDir.find">tf_debug.DebugDumpDir.find(predicate, first_n=0)</code></h4>
+<p>Find dumped tensor data by a certain predicate.</p>
+<h5 id="args-6">Args:</h5>
+<ul>
+<li><p><b><code>predicate</code></b>: A callable that takes two input arguments:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="kw">def</span> predicate(debug_tensor_datum, tensor):
+  <span class="co"># returns a bool</span></code></pre></div>
+<p>where <code>debug_tensor_datum</code> is an instance of <code>DebugTensorDatum</code>, which carries the metadata, such as the <code>Tensor</code>'s node name, output slot timestamp, debug op name, etc.; and <code>tensor</code> is the dumped tensor value as a <code>numpy.ndarray</code>.</p></li>
+<li><p><b><code>first_n</code></b>: (<code>int</code>) return only the first n <code>DebugTensotDatum</code> instances (in time order) for which the predicate returns True. To return all the <code>DebugTensotDatum</code> instances, let first_n be &lt;= 0.</p></li>
+</ul>
+<h5 id="returns-10">Returns:</h5>
+<p>A list of all <code>DebugTensorDatum</code> objects in this <code>DebugDumpDir</code> object for which predicate returns True, sorted in ascending order of the timestamp.</p>
+<hr />
+<h4 id="tf_debug.debugdumpdir.get_dump_sizes_bytesnode_name-output_slot-debug_op"><code id="DebugDumpDir.get_dump_sizes_bytes">tf_debug.DebugDumpDir.get_dump_sizes_bytes(node_name, output_slot, debug_op)</code></h4>
+<p>Get the sizes of the dump files for a debug-dumped tensor.</p>
+<p>Unit of the file size: byte.</p>
+<h5 id="args-7">Args:</h5>
+<ul>
+<li><b><code>node_name</code></b>: (<code>str</code>) name of the node that the tensor is produced by.</li>
+<li><b><code>output_slot</code></b>: (<code>int</code>) output slot index of tensor.</li>
+<li><b><code>debug_op</code></b>: (<code>str</code>) name of the debug op.</li>
+</ul>
+<h5 id="returns-11">Returns:</h5>
+<p>(<code>list</code> of <code>int</code>): list of dump file sizes in bytes.</p>
+<h5 id="raises-4">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If the tensor watch key does not exist in the debug dump data.</li>
+</ul>
+<hr />
+<h4 id="tf_debug.debugdumpdir.get_rel_timestampsnode_name-output_slot-debug_op"><code id="DebugDumpDir.get_rel_timestamps">tf_debug.DebugDumpDir.get_rel_timestamps(node_name, output_slot, debug_op)</code></h4>
+<p>Get the relative timestamp from for a debug-dumped tensor.</p>
+<p>Relative timestamp means (absolute timestamp - <code>t0</code>), where <code>t0</code> is the absolute timestamp of the first dumped tensor in the dump root. The tensor may be dumped multiple times in the dump root directory, so a list of relative timestamps (<code>numpy.ndarray</code>) is returned.</p>
+<h5 id="args-8">Args:</h5>
+<ul>
+<li><b><code>node_name</code></b>: (<code>str</code>) name of the node that the tensor is produced by.</li>
+<li><b><code>output_slot</code></b>: (<code>int</code>) output slot index of tensor.</li>
+<li><b><code>debug_op</code></b>: (<code>str</code>) name of the debug op.</li>
+</ul>
+<h5 id="returns-12">Returns:</h5>
+<p>(<code>list</code> of <code>int</code>) list of relative timestamps.</p>
+<h5 id="raises-5">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If the tensor watch key does not exist in the debug dump data.</li>
+</ul>
+<hr />
+<h4 id="tf_debug.debugdumpdir.get_tensor_file_pathsnode_name-output_slot-debug_op"><code id="DebugDumpDir.get_tensor_file_paths">tf_debug.DebugDumpDir.get_tensor_file_paths(node_name, output_slot, debug_op)</code></h4>
+<p>Get the file paths from a debug-dumped tensor.</p>
+<h5 id="args-9">Args:</h5>
+<ul>
+<li><b><code>node_name</code></b>: (<code>str</code>) name of the node that the tensor is produced by.</li>
+<li><b><code>output_slot</code></b>: (<code>int</code>) output slot index of tensor.</li>
+<li><b><code>debug_op</code></b>: (<code>str</code>) name of the debug op.</li>
+</ul>
+<h5 id="returns-13">Returns:</h5>
+<p>List of file path(s) loaded. This is a list because each debugged tensor may be dumped multiple times.</p>
+<h5 id="raises-6">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If the tensor does not exist in the debug-dump data.</li>
+</ul>
+<hr />
+<h4 id="tf_debug.debugdumpdir.get_tensorsnode_name-output_slot-debug_op"><code id="DebugDumpDir.get_tensors">tf_debug.DebugDumpDir.get_tensors(node_name, output_slot, debug_op)</code></h4>
+<p>Get the tensor value from for a debug-dumped tensor.</p>
+<p>The tensor may be dumped multiple times in the dump root directory, so a list of tensors (<code>numpy.ndarray</code>) is returned.</p>
+<h5 id="args-10">Args:</h5>
+<ul>
+<li><b><code>node_name</code></b>: (<code>str</code>) name of the node that the tensor is produced by.</li>
+<li><b><code>output_slot</code></b>: (<code>int</code>) output slot index of tensor.</li>
+<li><b><code>debug_op</code></b>: (<code>str</code>) name of the debug op.</li>
+</ul>
+<h5 id="returns-14">Returns:</h5>
+<p>List of tensors (<code>numpy.ndarray</code>) loaded from the debug-dump file(s).</p>
+<h5 id="raises-7">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If the tensor does not exist in the debug-dump data.</li>
+</ul>
+<hr />
+<h4 id="tf_debug.debugdumpdir.loaded_partition_graphs"><code id="DebugDumpDir.loaded_partition_graphs">tf_debug.DebugDumpDir.loaded_partition_graphs()</code></h4>
+<p>Test whether partition graphs have been loaded.</p>
+<hr />
+<h4 id="tf_debug.debugdumpdir.node_attributesnode_name"><code id="DebugDumpDir.node_attributes">tf_debug.DebugDumpDir.node_attributes(node_name)</code></h4>
+<p>Get the attributes of a node.</p>
+<h5 id="args-11">Args:</h5>
+<ul>
+<li><b><code>node_name</code></b>: Name of the node in question.</li>
+</ul>
+<h5 id="returns-15">Returns:</h5>
+<p>Attributes of the node.</p>
+<h5 id="raises-8">Raises:</h5>
+<ul>
+<li><b><code>LookupError</code></b>: If no partition graphs have been loaded.</li>
+<li><b><code>ValueError</code></b>: If no node named node_name exists.</li>
+</ul>
+<hr />
+<h4 id="tf_debug.debugdumpdir.node_devicenode_name"><code id="DebugDumpDir.node_device">tf_debug.DebugDumpDir.node_device(node_name)</code></h4>
+<p>Get the device of a node.</p>
+<h5 id="args-12">Args:</h5>
+<ul>
+<li><b><code>node_name</code></b>: (<code>str</code>) name of the node.</li>
+</ul>
+<h5 id="returns-16">Returns:</h5>
+<p>(<code>str</code>) name of the device on which the node is placed.</p>
+<h5 id="raises-9">Raises:</h5>
+<ul>
+<li><b><code>LookupError</code></b>: If node inputs and control inputs have not been loaded from partition graphs yet.</li>
+<li><b><code>ValueError</code></b>: If the node does not exist in partition graphs.</li>
+</ul>
+<hr />
+<h4 id="tf_debug.debugdumpdir.node_existsnode_name"><code id="DebugDumpDir.node_exists">tf_debug.DebugDumpDir.node_exists(node_name)</code></h4>
+<p>Test if a node exists in the partition graphs.</p>
+<h5 id="args-13">Args:</h5>
+<ul>
+<li><b><code>node_name</code></b>: (<code>str</code>) name of the node to be checked.</li>
+</ul>
+<h5 id="returns-17">Returns:</h5>
+<p>A boolean indicating whether the node exists.</p>
+<h5 id="raises-10">Raises:</h5>
+<ul>
+<li><b><code>LookupError</code></b>: If no partition graphs have been loaded yet.</li>
+</ul>
+<hr />
+<h4 id="tf_debug.debugdumpdir.node_inputsnode_name-is_controlfalse"><code id="DebugDumpDir.node_inputs">tf_debug.DebugDumpDir.node_inputs(node_name, is_control=False)</code></h4>
+<p>Get the inputs of given node according to partition graphs.</p>
+<h5 id="args-14">Args:</h5>
+<ul>
+<li><b><code>node_name</code></b>: Name of the node.</li>
+<li><b><code>is_control</code></b>: (<code>bool</code>) Whether control inputs, rather than non-control inputs, are to be returned.</li>
+</ul>
+<h5 id="returns-18">Returns:</h5>
+<p>(<code>list</code> of <code>str</code>) inputs to the node, as a list of node names.</p>
+<h5 id="raises-11">Raises:</h5>
+<ul>
+<li><b><code>LookupError</code></b>: If node inputs and control inputs have not been loaded from partition graphs yet.</li>
+<li><b><code>ValueError</code></b>: If the node does not exist in partition graphs.</li>
+</ul>
+<hr />
+<h4 id="tf_debug.debugdumpdir.node_op_typenode_name"><code id="DebugDumpDir.node_op_type">tf_debug.DebugDumpDir.node_op_type(node_name)</code></h4>
+<p>Get the op type of given node.</p>
+<h5 id="args-15">Args:</h5>
+<ul>
+<li><b><code>node_name</code></b>: (<code>str</code>) name of the node.</li>
+</ul>
+<h5 id="returns-19">Returns:</h5>
+<p>(<code>str</code>) op type of the node.</p>
+<h5 id="raises-12">Raises:</h5>
+<ul>
+<li><b><code>LookupError</code></b>: If node op types have not been loaded from partition graphs yet.</li>
+<li><b><code>ValueError</code></b>: If the node does not exist in partition graphs.</li>
+</ul>
+<hr />
+<h4 id="tf_debug.debugdumpdir.node_recipientsnode_name-is_controlfalse"><code id="DebugDumpDir.node_recipients">tf_debug.DebugDumpDir.node_recipients(node_name, is_control=False)</code></h4>
+<p>Get recipient of the given node's output according to partition graphs.</p>
+<h5 id="args-16">Args:</h5>
+<ul>
+<li><b><code>node_name</code></b>: (<code>str</code>) name of the node.</li>
+<li><b><code>is_control</code></b>: (<code>bool</code>) whether control outputs, rather than non-control outputs, are to be returned.</li>
+</ul>
+<h5 id="returns-20">Returns:</h5>
+<p>(<code>list</code> of <code>str</code>) all inputs to the node, as a list of node names.</p>
+<h5 id="raises-13">Raises:</h5>
+<ul>
+<li><b><code>LookupError</code></b>: If node inputs and control inputs have not been loaded from partition graphs yet.</li>
+<li><b><code>ValueError</code></b>: If the node does not exist in partition graphs.</li>
+</ul>
+<hr />
+<h4 id="tf_debug.debugdumpdir.node_tracebackelement_name"><code id="DebugDumpDir.node_traceback">tf_debug.DebugDumpDir.node_traceback(element_name)</code></h4>
+<p>Try to retrieve the Python traceback of node's construction.</p>
+<h5 id="args-17">Args:</h5>
+<ul>
+<li><b><code>element_name</code></b>: (<code>str</code>) Name of a graph element (node or tensor).</li>
+</ul>
+<h5 id="returns-21">Returns:</h5>
+<p>(list) The traceback list object as returned by the <code>extract_trace</code> method of Python's traceback module.</p>
+<h5 id="raises-14">Raises:</h5>
+<ul>
+<li><b><code>LookupError</code></b>: If Python graph is not available for traceback lookup.</li>
+<li><b><code>KeyError</code></b>: If the node cannot be found in the Python graph loaded.</li>
+</ul>
+<hr />
+<h4 id="tf_debug.debugdumpdir.nodes"><code id="DebugDumpDir.nodes">tf_debug.DebugDumpDir.nodes()</code></h4>
+<p>Get a list of all nodes from the partition graphs.</p>
+<h5 id="returns-22">Returns:</h5>
+<p>All nodes' names, as a list of str.</p>
+<h5 id="raises-15">Raises:</h5>
+<ul>
+<li><b><code>LookupError</code></b>: If no partition graphs have been loaded.</li>
+</ul>
+<hr />
+<h4 id="tf_debug.debugdumpdir.partition_graphs"><code id="DebugDumpDir.partition_graphs">tf_debug.DebugDumpDir.partition_graphs()</code></h4>
+<p>Get the partition graphs.</p>
+<h5 id="returns-23">Returns:</h5>
+<p>Partition graphs as repeated fields of GraphDef.</p>
+<h5 id="raises-16">Raises:</h5>
+<ul>
+<li><b><code>LookupError</code></b>: If no partition graphs have been loaded.</li>
+</ul>
+<hr />
+<h4 id="tf_debug.debugdumpdir.run_feed_keys_info"><code id="DebugDumpDir.run_feed_keys_info">tf_debug.DebugDumpDir.run_feed_keys_info</code></h4>
+<p>Get a str representation of the feed_dict used in the Session.run() call.</p>
+<h5 id="returns-24">Returns:</h5>
+<p>If the information is available, a <code>str</code> obtained from <code>repr(feed_dict)</code>. If the information is not available, <code>None</code>.</p>
+<hr />
+<h4 id="tf_debug.debugdumpdir.run_fetches_info"><code id="DebugDumpDir.run_fetches_info">tf_debug.DebugDumpDir.run_fetches_info</code></h4>
+<p>Get a str representation of the fetches used in the Session.run() call.</p>
+<h5 id="returns-25">Returns:</h5>
+<p>If the information is available, a <code>str</code> obtained from <code>repr(fetches)</code>. If the information is not available, <code>None</code>.</p>
+<hr />
+<h4 id="tf_debug.debugdumpdir.set_python_graphpython_graph"><code id="DebugDumpDir.set_python_graph">tf_debug.DebugDumpDir.set_python_graph(python_graph)</code></h4>
+<p>Provide Python <code>Graph</code> object to the wrapper.</p>
+<p>Unlike the partition graphs, which are protobuf <code>GraphDef</code> objects, <code>Graph</code> is a Python object and carries additional information such as the traceback of the construction of the nodes in the graph.</p>
+<h5 id="args-18">Args:</h5>
+<ul>
+<li><b><code>python_graph</code></b>: (ops.Graph) The Python Graph object.</li>
+</ul>
+<hr />
+<h4 id="tf_debug.debugdumpdir.size"><code id="DebugDumpDir.size">tf_debug.DebugDumpDir.size</code></h4>
+<p>Total number of dumped tensors in the dump root directory.</p>
+<h5 id="returns-26">Returns:</h5>
+<p>(<code>int</code>) total number of dumped tensors in the dump root directory.</p>
+<hr />
+<h4 id="tf_debug.debugdumpdir.t0"><code id="DebugDumpDir.t0">tf_debug.DebugDumpDir.t0</code></h4>
+<p>Absolute timestamp of the first dumped tensor.</p>
+<h5 id="returns-27">Returns:</h5>
+<p>(<code>int</code>) absolute timestamp of the first dumped tensor, in microseconds.</p>
+<hr />
+<h4 id="tf_debug.debugdumpdir.transitive_inputsnode_name-include_controltrue"><code id="DebugDumpDir.transitive_inputs">tf_debug.DebugDumpDir.transitive_inputs(node_name, include_control=True)</code></h4>
+<p>Get the transitive inputs of given node according to partition graphs.</p>
+<h5 id="args-19">Args:</h5>
+<ul>
+<li><b><code>node_name</code></b>: Name of the node</li>
+<li><b><code>include_control</code></b>: Include control inputs (True by default).</li>
+</ul>
+<h5 id="returns-28">Returns:</h5>
+<p>(<code>list</code> of <code>str</code>) all transitive inputs to the node, as a list of node names.</p>
+<h5 id="raises-17">Raises:</h5>
+<ul>
+<li><b><code>LookupError</code></b>: If node inputs and control inputs have not been loaded from partition graphs yet.</li>
+<li><b><code>ValueError</code></b>: If the node does not exist in partition graphs.</li>
+</ul>
+<hr />
+<h4 id="tf_debug.debugdumpdir.watch_key_to_datadebug_watch_key"><code id="DebugDumpDir.watch_key_to_data">tf_debug.DebugDumpDir.watch_key_to_data(debug_watch_key)</code></h4>
+<p>Get all <code>DebugTensorDatum</code> instances corresponding to a debug watch key.</p>
+<h5 id="args-20">Args:</h5>
+<ul>
+<li><b><code>debug_watch_key</code></b>: (<code>str</code>) debug watch key.</li>
+</ul>
+<h5 id="returns-29">Returns:</h5>
+<p>A list of <code>DebugTensorDatum</code> instances that correspond to the debug watch key. If the watch key does not exist, returns an empty list.</p>
+<h5 id="raises-18">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If the debug watch key does not exist.</li>
+</ul>
+<h2 id="functions-for-loading-debug-dump-data">Functions for loading debug-dump data</h2>
+<hr />
+<h3 id="tf_debug.load_tensor_from_event_fileevent_file_path"><a name="//apple_ref/cpp/Function/load_tensor_from_event_file" class="dashAnchor"></a><code id="load_tensor_from_event_file">tf_debug.load_tensor_from_event_file(event_file_path)</code></h3>
+<p>Load a tensor from an event file.</p>
+<p>Assumes that the event file contains a <code>Event</code> protobuf and the <code>Event</code> protobuf contains a <code>Tensor</code> value.</p>
+<h5 id="args-21">Args:</h5>
+<ul>
+<li><b><code>event_file_path</code></b>: (<code>str</code>) path to the event file.</li>
+</ul>
+<h5 id="returns-30">Returns:</h5>
+<p>The tensor value loaded from the event file, as a <code>numpy.ndarray</code>. For uninitialized tensors, returns None.</p>
+<h2 id="tensor-value-predicates">Tensor-value predicates</h2>
+<p>Built-in tensor-filter predicates to support conditional breakpoint between runs. See <code>DebugDumpDir.find()</code> for more details.</p>
+<hr />
+<h3 id="tf_debug.has_inf_or_nandatum-tensor"><a name="//apple_ref/cpp/Function/has_inf_or_nan" class="dashAnchor"></a><code id="has_inf_or_nan">tf_debug.has_inf_or_nan(datum, tensor)</code></h3>
+<p>A predicate for whether a tensor consists of any bad numerical values.</p>
+<p>This predicate is common enough to merit definition in this module. Bad numerical values include <code>nan</code>s and <code>inf</code>s. The signature of this function follows the requirement of the method <code>DebugDumpDir.find()</code>.</p>
+<h5 id="args-22">Args:</h5>
+<ul>
+<li><b><code>datum</code></b>: (<code>DebugTensorDatum</code>) Datum metadata.</li>
+<li><b><code>tensor</code></b>: (<code>numpy.ndarray</code> or None) Value of the tensor. None represents an uninitialized tensor.</li>
+</ul>
+<h5 id="returns-31">Returns:</h5>
+<p>(<code>bool</code>) True if and only if tensor consists of any nan or inf values.</p>
+<h2 id="session-wrapper-class-and-sessionrunhook-implementations">Session wrapper class and <code>SessionRunHook</code> implementations</h2>
+<p>These classes allow you to</p>
+<ul>
+<li>wrap aroundTensorFlow <code>Session</code> objects to debug plain TensorFlow models (see <code>DumpingDebugWrapperSession</code> and <code>LocalCLIDebugWrapperSession</code>), or</li>
+<li>generate <code>SessionRunHook</code> objects to debug <code>tf.contrib.learn</code> models (see <code>DumpingDebugHook</code> and <code>LocalCLIDebugHook</code>).</li>
+</ul>
+<hr />
+<h3 id="class-tf_debug.dumpingdebughook"><a name="//apple_ref/cpp/Class/DumpingDebugHook" class="dashAnchor"></a><code id="DumpingDebugHook">class tf_debug.DumpingDebugHook</code></h3>
+<p>A debugger hook that dumps debug data to filesystem.</p>
+<p>Can be used as a monitor/hook for <code>tf.train.MonitoredSession</code>s and <code>tf.contrib.learn</code>'s <code>Estimator</code>s and <code>Experiment</code>s. - - -</p>
+<h4 id="tf_debug.dumpingdebughook.__enter__"><code id="DumpingDebugHook.__enter__">tf_debug.DumpingDebugHook.__enter__()</code></h4>
+<hr />
+<h4 id="tf_debug.dumpingdebughook.__exit__exec_type-exec_value-exec_tb"><code id="DumpingDebugHook.__exit__">tf_debug.DumpingDebugHook.__exit__(exec_type, exec_value, exec_tb)</code></h4>
+<hr />
+<h4 id="tf_debug.dumpingdebughook.__init__session_root-watch_fnnone-log_usagetrue"><code id="DumpingDebugHook.__init__">tf_debug.DumpingDebugHook.__init__(session_root, watch_fn=None, log_usage=True)</code></h4>
+<p>Create a local debugger command-line interface (CLI) hook.</p>
+<h5 id="args-23">Args:</h5>
+<ul>
+<li><b><code>session_root</code></b>: See doc of <code>dumping_wrapper.DumpingDebugWrapperSession.__init__</code>.</li>
+<li><b><code>watch_fn</code></b>: See doc of <code>dumping_wrapper.DumpingDebugWrapperSession.__init__</code>.</li>
+<li><b><code>log_usage</code></b>: (bool) Whether usage is to be logged.</li>
+</ul>
+<hr />
+<h4 id="tf_debug.dumpingdebughook.after_create_sessionsession-coord"><code id="DumpingDebugHook.after_create_session">tf_debug.DumpingDebugHook.after_create_session(session, coord)</code></h4>
+<p>Called when new TensorFlow session is created.</p>
+<p>This is called to signal the hooks that a new session has been created. This has two essential differences with the situation in which <code>begin</code> is called:</p>
+<ul>
+<li>When this is called, the graph is finalized and ops can no longer be added to the graph.</li>
+<li>This method will also be called as a result of recovering a wrapped session, not only at the beginning of the overall session.</li>
+</ul>
+<h5 id="args-24">Args:</h5>
+<ul>
+<li><b><code>session</code></b>: A TensorFlow Session that has been created.</li>
+<li><b><code>coord</code></b>: A Coordinator object which keeps track of all threads.</li>
+</ul>
+<hr />
+<h4 id="tf_debug.dumpingdebughook.after_runrun_context-run_values"><code id="DumpingDebugHook.after_run">tf_debug.DumpingDebugHook.after_run(run_context, run_values)</code></h4>
+<hr />
+<h4 id="tf_debug.dumpingdebughook.before_runrun_context"><code id="DumpingDebugHook.before_run">tf_debug.DumpingDebugHook.before_run(run_context)</code></h4>
+<hr />
+<h4 id="tf_debug.dumpingdebughook.begin"><code id="DumpingDebugHook.begin">tf_debug.DumpingDebugHook.begin()</code></h4>
+<hr />
+<h4 id="tf_debug.dumpingdebughook.close"><code id="DumpingDebugHook.close">tf_debug.DumpingDebugHook.close()</code></h4>
+<hr />
+<h4 id="tf_debug.dumpingdebughook.endsession"><code id="DumpingDebugHook.end">tf_debug.DumpingDebugHook.end(session)</code></h4>
+<p>Called at the end of session.</p>
+<p>The <code>session</code> argument can be used in case the hook wants to run final ops, such as saving a last checkpoint.</p>
+<h5 id="args-25">Args:</h5>
+<ul>
+<li><b><code>session</code></b>: A TensorFlow Session that will be soon closed.</li>
+</ul>
+<hr />
+<h4 id="tf_debug.dumpingdebughook.graph"><code id="DumpingDebugHook.graph">tf_debug.DumpingDebugHook.graph</code></h4>
+<hr />
+<h4 id="tf_debug.dumpingdebughook.invoke_node_steppernode_stepper-restore_variable_values_on_exittrue"><code id="DumpingDebugHook.invoke_node_stepper">tf_debug.DumpingDebugHook.invoke_node_stepper(node_stepper, restore_variable_values_on_exit=True)</code></h4>
+<p>See doc of BaseDebugWrapperSession.invoke_node_stepper.</p>
+<hr />
+<h4 id="tf_debug.dumpingdebughook.on_run_endrequest"><code id="DumpingDebugHook.on_run_end">tf_debug.DumpingDebugHook.on_run_end(request)</code></h4>
+<p>See doc of BaseDebugWrapperSession.on_run_end.</p>
+<hr />
+<h4 id="tf_debug.dumpingdebughook.on_run_startrequest"><code id="DumpingDebugHook.on_run_start">tf_debug.DumpingDebugHook.on_run_start(request)</code></h4>
+<p>See doc of BaseDebugWrapperSession.on_run_start.</p>
+<hr />
+<h4 id="tf_debug.dumpingdebughook.on_session_initrequest"><code id="DumpingDebugHook.on_session_init">tf_debug.DumpingDebugHook.on_session_init(request)</code></h4>
+<p>See doc of BaseDebugWrapperSession.on_run_start.</p>
+<hr />
+<h4 id="tf_debug.dumpingdebughook.partial_runhandle-fetches-feed_dictnone"><code id="DumpingDebugHook.partial_run">tf_debug.DumpingDebugHook.partial_run(handle, fetches, feed_dict=None)</code></h4>
+<hr />
+<h4 id="tf_debug.dumpingdebughook.partial_run_setupfetches-feedsnone"><code id="DumpingDebugHook.partial_run_setup">tf_debug.DumpingDebugHook.partial_run_setup(fetches, feeds=None)</code></h4>
+<p>Sets up the feeds and fetches for partial runs in the session.</p>
+<hr />
+<h4 id="tf_debug.dumpingdebughook.runfetches-feed_dictnone-optionsnone-run_metadatanone"><code id="DumpingDebugHook.run">tf_debug.DumpingDebugHook.run(fetches, feed_dict=None, options=None, run_metadata=None)</code></h4>
+<p>Wrapper around Session.run() that inserts tensor watch options.</p>
+<h5 id="args-26">Args:</h5>
+<ul>
+<li><b><code>fetches</code></b>: Same as the <code>fetches</code> arg to regular <code>Session.run()</code>.</li>
+<li><b><code>feed_dict</code></b>: Same as the <code>feed_dict</code> arg to regular <code>Session.run()</code>.</li>
+<li><b><code>options</code></b>: Same as the <code>options</code> arg to regular <code>Session.run()</code>.</li>
+<li><b><code>run_metadata</code></b>: Same as the <code>run_metadata</code> arg to regular <code>Session.run()</code>.</li>
+</ul>
+<h5 id="returns-32">Returns:</h5>
+<p>Simply forwards the output of the wrapped <code>Session.run()</code> call.</p>
+<h5 id="raises-19">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: On invalid <code>OnRunStartAction</code> value.</li>
+</ul>
+<hr />
+<h4 id="tf_debug.dumpingdebughook.sess_str"><code id="DumpingDebugHook.sess_str">tf_debug.DumpingDebugHook.sess_str</code></h4>
+<hr />
+<h4 id="tf_debug.dumpingdebughook.session"><code id="DumpingDebugHook.session">tf_debug.DumpingDebugHook.session</code></h4>
+<hr />
+<h3 id="class-tf_debug.dumpingdebugwrappersession"><a name="//apple_ref/cpp/Class/DumpingDebugWrapperSession" class="dashAnchor"></a><code id="DumpingDebugWrapperSession">class tf_debug.DumpingDebugWrapperSession</code></h3>
+<p>Debug Session wrapper that dumps debug data to filesystem. - - -</p>
+<h4 id="tf_debug.dumpingdebugwrappersession.__enter__"><code id="DumpingDebugWrapperSession.__enter__">tf_debug.DumpingDebugWrapperSession.__enter__()</code></h4>
+<hr />
+<h4 id="tf_debug.dumpingdebugwrappersession.__exit__exec_type-exec_value-exec_tb"><code id="DumpingDebugWrapperSession.__exit__">tf_debug.DumpingDebugWrapperSession.__exit__(exec_type, exec_value, exec_tb)</code></h4>
+<hr />
+<h4 id="tf_debug.dumpingdebugwrappersession.__init__sess-session_root-watch_fnnone-log_usagetrue"><code id="DumpingDebugWrapperSession.__init__">tf_debug.DumpingDebugWrapperSession.__init__(sess, session_root, watch_fn=None, log_usage=True)</code></h4>
+<p>Constructor of DumpingDebugWrapperSession.</p>
+<h5 id="args-27">Args:</h5>
+<ul>
+<li><b><code>sess</code></b>: The TensorFlow <code>Session</code> object being wrapped.</li>
+<li><b><code>session_root</code></b>: (<code>str</code>) Path to the session root directory. Must be a directory that does not exist or an empty directory. If the directory does not exist, it will be created by the debugger core during debug <a href="../../../g3doc/api_docs/python/client.md#session.run"><code>Session.run()</code></a> calls. As the <code>run()</code> calls occur, subdirectories will be added to <code>session_root</code>. The subdirectories' names has the following pattern: run_<epoch_time_stamp>_<uuid> E.g., run_1480734393835964_ad4c953a85444900ae79fc1b652fb324</li>
+<li><b><code>watch_fn</code></b>: (<code>Callable</code>) A Callable that can be used to define per-run debug ops and watched tensors. See the doc of <code>NonInteractiveDebugWrapperSession.__init__()</code> for details.</li>
+<li><b><code>log_usage</code></b>: (<code>bool</code>) whether the usage of this class is to be logged.</li>
+</ul>
+<h5 id="raises-20">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>session_root</code> is an existing and non-empty directory or if <code>session_root</code> is a file.</li>
+</ul>
+<hr />
+<h4 id="tf_debug.dumpingdebugwrappersession.close"><code id="DumpingDebugWrapperSession.close">tf_debug.DumpingDebugWrapperSession.close()</code></h4>
+<hr />
+<h4 id="tf_debug.dumpingdebugwrappersession.graph"><code id="DumpingDebugWrapperSession.graph">tf_debug.DumpingDebugWrapperSession.graph</code></h4>
+<hr />
+<h4 id="tf_debug.dumpingdebugwrappersession.invoke_node_steppernode_stepper-restore_variable_values_on_exittrue"><code id="DumpingDebugWrapperSession.invoke_node_stepper">tf_debug.DumpingDebugWrapperSession.invoke_node_stepper(node_stepper, restore_variable_values_on_exit=True)</code></h4>
+<p>See doc of BaseDebugWrapperSession.invoke_node_stepper.</p>
+<hr />
+<h4 id="tf_debug.dumpingdebugwrappersession.on_run_endrequest"><code id="DumpingDebugWrapperSession.on_run_end">tf_debug.DumpingDebugWrapperSession.on_run_end(request)</code></h4>
+<p>See doc of BaseDebugWrapperSession.on_run_end.</p>
+<hr />
+<h4 id="tf_debug.dumpingdebugwrappersession.on_run_startrequest"><code id="DumpingDebugWrapperSession.on_run_start">tf_debug.DumpingDebugWrapperSession.on_run_start(request)</code></h4>
+<p>See doc of BaseDebugWrapperSession.on_run_start.</p>
+<hr />
+<h4 id="tf_debug.dumpingdebugwrappersession.on_session_initrequest"><code id="DumpingDebugWrapperSession.on_session_init">tf_debug.DumpingDebugWrapperSession.on_session_init(request)</code></h4>
+<p>See doc of BaseDebugWrapperSession.on_run_start.</p>
+<hr />
+<h4 id="tf_debug.dumpingdebugwrappersession.partial_runhandle-fetches-feed_dictnone"><code id="DumpingDebugWrapperSession.partial_run">tf_debug.DumpingDebugWrapperSession.partial_run(handle, fetches, feed_dict=None)</code></h4>
+<hr />
+<h4 id="tf_debug.dumpingdebugwrappersession.partial_run_setupfetches-feedsnone"><code id="DumpingDebugWrapperSession.partial_run_setup">tf_debug.DumpingDebugWrapperSession.partial_run_setup(fetches, feeds=None)</code></h4>
+<p>Sets up the feeds and fetches for partial runs in the session.</p>
+<hr />
+<h4 id="tf_debug.dumpingdebugwrappersession.runfetches-feed_dictnone-optionsnone-run_metadatanone"><code id="DumpingDebugWrapperSession.run">tf_debug.DumpingDebugWrapperSession.run(fetches, feed_dict=None, options=None, run_metadata=None)</code></h4>
+<p>Wrapper around Session.run() that inserts tensor watch options.</p>
+<h5 id="args-28">Args:</h5>
+<ul>
+<li><b><code>fetches</code></b>: Same as the <code>fetches</code> arg to regular <code>Session.run()</code>.</li>
+<li><b><code>feed_dict</code></b>: Same as the <code>feed_dict</code> arg to regular <code>Session.run()</code>.</li>
+<li><b><code>options</code></b>: Same as the <code>options</code> arg to regular <code>Session.run()</code>.</li>
+<li><b><code>run_metadata</code></b>: Same as the <code>run_metadata</code> arg to regular <code>Session.run()</code>.</li>
+</ul>
+<h5 id="returns-33">Returns:</h5>
+<p>Simply forwards the output of the wrapped <code>Session.run()</code> call.</p>
+<h5 id="raises-21">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: On invalid <code>OnRunStartAction</code> value.</li>
+</ul>
+<hr />
+<h4 id="tf_debug.dumpingdebugwrappersession.sess_str"><code id="DumpingDebugWrapperSession.sess_str">tf_debug.DumpingDebugWrapperSession.sess_str</code></h4>
+<hr />
+<h4 id="tf_debug.dumpingdebugwrappersession.session"><code id="DumpingDebugWrapperSession.session">tf_debug.DumpingDebugWrapperSession.session</code></h4>
+<hr />
+<h3 id="class-tf_debug.localclidebughook"><a name="//apple_ref/cpp/Class/LocalCLIDebugHook" class="dashAnchor"></a><code id="LocalCLIDebugHook">class tf_debug.LocalCLIDebugHook</code></h3>
+<p>Command-line-interface debugger hook.</p>
+<p>Can be used as a monitor/hook for <code>tf.train.MonitoredSession</code>s and <code>tf.contrib.learn</code>'s <code>Estimator</code>s and <code>Experiment</code>s. - - -</p>
+<h4 id="tf_debug.localclidebughook.__enter__"><code id="LocalCLIDebugHook.__enter__">tf_debug.LocalCLIDebugHook.__enter__()</code></h4>
+<hr />
+<h4 id="tf_debug.localclidebughook.__exit__exec_type-exec_value-exec_tb"><code id="LocalCLIDebugHook.__exit__">tf_debug.LocalCLIDebugHook.__exit__(exec_type, exec_value, exec_tb)</code></h4>
+<hr />
+<h4 id="tf_debug.localclidebughook.__init__ui_typecurses"><code id="LocalCLIDebugHook.__init__">tf_debug.LocalCLIDebugHook.__init__(ui_type='curses')</code></h4>
+<p>Create a local debugger command-line interface (CLI) hook.</p>
+<h5 id="args-29">Args:</h5>
+<ul>
+<li><b><code>ui_type</code></b>: (str) user-interface type.</li>
+</ul>
+<hr />
+<h4 id="tf_debug.localclidebughook.add_tensor_filterfilter_name-tensor_filter"><code id="LocalCLIDebugHook.add_tensor_filter">tf_debug.LocalCLIDebugHook.add_tensor_filter(filter_name, tensor_filter)</code></h4>
+<p>Add a tensor filter.</p>
+<h5 id="args-30">Args:</h5>
+<ul>
+<li><b><code>filter_name</code></b>: (<code>str</code>) name of the filter.</li>
+<li><b><code>tensor_filter</code></b>: (<code>callable</code>) the filter callable. See the doc string of <code>DebugDumpDir.find()</code> for more details about its signature.</li>
+</ul>
+<hr />
+<h4 id="tf_debug.localclidebughook.after_create_sessionsession-coord"><code id="LocalCLIDebugHook.after_create_session">tf_debug.LocalCLIDebugHook.after_create_session(session, coord)</code></h4>
+<p>Called when new TensorFlow session is created.</p>
+<p>This is called to signal the hooks that a new session has been created. This has two essential differences with the situation in which <code>begin</code> is called:</p>
+<ul>
+<li>When this is called, the graph is finalized and ops can no longer be added to the graph.</li>
+<li>This method will also be called as a result of recovering a wrapped session, not only at the beginning of the overall session.</li>
+</ul>
+<h5 id="args-31">Args:</h5>
+<ul>
+<li><b><code>session</code></b>: A TensorFlow Session that has been created.</li>
+<li><b><code>coord</code></b>: A Coordinator object which keeps track of all threads.</li>
+</ul>
+<hr />
+<h4 id="tf_debug.localclidebughook.after_runrun_context-run_values"><code id="LocalCLIDebugHook.after_run">tf_debug.LocalCLIDebugHook.after_run(run_context, run_values)</code></h4>
+<hr />
+<h4 id="tf_debug.localclidebughook.before_runrun_context"><code id="LocalCLIDebugHook.before_run">tf_debug.LocalCLIDebugHook.before_run(run_context)</code></h4>
+<hr />
+<h4 id="tf_debug.localclidebughook.begin"><code id="LocalCLIDebugHook.begin">tf_debug.LocalCLIDebugHook.begin()</code></h4>
+<hr />
+<h4 id="tf_debug.localclidebughook.close"><code id="LocalCLIDebugHook.close">tf_debug.LocalCLIDebugHook.close()</code></h4>
+<hr />
+<h4 id="tf_debug.localclidebughook.endsession"><code id="LocalCLIDebugHook.end">tf_debug.LocalCLIDebugHook.end(session)</code></h4>
+<p>Called at the end of session.</p>
+<p>The <code>session</code> argument can be used in case the hook wants to run final ops, such as saving a last checkpoint.</p>
+<h5 id="args-32">Args:</h5>
+<ul>
+<li><b><code>session</code></b>: A TensorFlow Session that will be soon closed.</li>
+</ul>
+<hr />
+<h4 id="tf_debug.localclidebughook.graph"><code id="LocalCLIDebugHook.graph">tf_debug.LocalCLIDebugHook.graph</code></h4>
+<hr />
+<h4 id="tf_debug.localclidebughook.invoke_node_steppernode_stepper-restore_variable_values_on_exittrue"><code id="LocalCLIDebugHook.invoke_node_stepper">tf_debug.LocalCLIDebugHook.invoke_node_stepper(node_stepper, restore_variable_values_on_exit=True)</code></h4>
+<p>Overrides method in base class to implement interactive node stepper.</p>
+<h5 id="args-33">Args:</h5>
+<ul>
+<li><b><code>node_stepper</code></b>: (<code>stepper.NodeStepper</code>) The underlying NodeStepper API object.</li>
+<li><b><code>restore_variable_values_on_exit</code></b>: (<code>bool</code>) Whether any variables whose values have been altered during this node-stepper invocation should be restored to their old values when this invocation ends.</li>
+</ul>
+<h5 id="returns-34">Returns:</h5>
+<p>The same return values as the <code>Session.run()</code> call on the same fetches as the NodeStepper.</p>
+<hr />
+<h4 id="tf_debug.localclidebughook.on_run_endrequest"><code id="LocalCLIDebugHook.on_run_end">tf_debug.LocalCLIDebugHook.on_run_end(request)</code></h4>
+<p>Overrides on-run-end callback.</p>
+<h5 id="actions-taken">Actions taken:</h5>
+<ol style="list-style-type: decimal">
+<li>Load the debug dump.</li>
+<li>Bring up the Analyzer CLI.</li>
+</ol>
+<h5 id="args-34">Args:</h5>
+<ul>
+<li><b><code>request</code></b>: An instance of OnSessionInitRequest.</li>
+</ul>
+<h5 id="returns-35">Returns:</h5>
+<p>An instance of OnSessionInitResponse.</p>
+<hr />
+<h4 id="tf_debug.localclidebughook.on_run_startrequest"><code id="LocalCLIDebugHook.on_run_start">tf_debug.LocalCLIDebugHook.on_run_start(request)</code></h4>
+<p>Overrides on-run-start callback.</p>
+<h5 id="invoke-the-cli-to-let-user-choose-what-action-to-take">Invoke the CLI to let user choose what action to take:</h5>
+<p><code>run</code> / <code>invoke_stepper</code>.</p>
+<h5 id="args-35">Args:</h5>
+<ul>
+<li><b><code>request</code></b>: An instance of <code>OnSessionInitRequest</code>.</li>
+</ul>
+<h5 id="returns-36">Returns:</h5>
+<p>An instance of <code>OnSessionInitResponse</code>.</p>
+<h5 id="raises-22">Raises:</h5>
+<ul>
+<li><b><code>RuntimeError</code></b>: If user chooses to prematurely exit the debugger.</li>
+</ul>
+<hr />
+<h4 id="tf_debug.localclidebughook.on_session_initrequest"><code id="LocalCLIDebugHook.on_session_init">tf_debug.LocalCLIDebugHook.on_session_init(request)</code></h4>
+<p>Overrides on-session-init callback.</p>
+<h5 id="args-36">Args:</h5>
+<ul>
+<li><b><code>request</code></b>: An instance of <code>OnSessionInitRequest</code>.</li>
+</ul>
+<h5 id="returns-37">Returns:</h5>
+<p>An instance of <code>OnSessionInitResponse</code>.</p>
+<hr />
+<h4 id="tf_debug.localclidebughook.partial_runhandle-fetches-feed_dictnone"><code id="LocalCLIDebugHook.partial_run">tf_debug.LocalCLIDebugHook.partial_run(handle, fetches, feed_dict=None)</code></h4>
+<hr />
+<h4 id="tf_debug.localclidebughook.partial_run_setupfetches-feedsnone"><code id="LocalCLIDebugHook.partial_run_setup">tf_debug.LocalCLIDebugHook.partial_run_setup(fetches, feeds=None)</code></h4>
+<p>Sets up the feeds and fetches for partial runs in the session.</p>
+<hr />
+<h4 id="tf_debug.localclidebughook.runfetches-feed_dictnone-optionsnone-run_metadatanone"><code id="LocalCLIDebugHook.run">tf_debug.LocalCLIDebugHook.run(fetches, feed_dict=None, options=None, run_metadata=None)</code></h4>
+<p>Wrapper around Session.run() that inserts tensor watch options.</p>
+<h5 id="args-37">Args:</h5>
+<ul>
+<li><b><code>fetches</code></b>: Same as the <code>fetches</code> arg to regular <code>Session.run()</code>.</li>
+<li><b><code>feed_dict</code></b>: Same as the <code>feed_dict</code> arg to regular <code>Session.run()</code>.</li>
+<li><b><code>options</code></b>: Same as the <code>options</code> arg to regular <code>Session.run()</code>.</li>
+<li><b><code>run_metadata</code></b>: Same as the <code>run_metadata</code> arg to regular <code>Session.run()</code>.</li>
+</ul>
+<h5 id="returns-38">Returns:</h5>
+<p>Simply forwards the output of the wrapped <code>Session.run()</code> call.</p>
+<h5 id="raises-23">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: On invalid <code>OnRunStartAction</code> value.</li>
+</ul>
+<hr />
+<h4 id="tf_debug.localclidebughook.sess_str"><code id="LocalCLIDebugHook.sess_str">tf_debug.LocalCLIDebugHook.sess_str</code></h4>
+<hr />
+<h4 id="tf_debug.localclidebughook.session"><code id="LocalCLIDebugHook.session">tf_debug.LocalCLIDebugHook.session</code></h4>
+<hr />
+<h3 id="class-tf_debug.localclidebugwrappersession"><a name="//apple_ref/cpp/Class/LocalCLIDebugWrapperSession" class="dashAnchor"></a><code id="LocalCLIDebugWrapperSession">class tf_debug.LocalCLIDebugWrapperSession</code></h3>
+<p>Concrete subclass of BaseDebugWrapperSession implementing a local CLI.</p>
+<p>This class has all the methods that a <code>session.Session</code> object has, in order to support debugging with minimal code changes. Invoking its <code>run()</code> method will launch the command-line interface (CLI) of tfdbg. - - -</p>
+<h4 id="tf_debug.localclidebugwrappersession.__enter__"><code id="LocalCLIDebugWrapperSession.__enter__">tf_debug.LocalCLIDebugWrapperSession.__enter__()</code></h4>
+<hr />
+<h4 id="tf_debug.localclidebugwrappersession.__exit__exec_type-exec_value-exec_tb"><code id="LocalCLIDebugWrapperSession.__exit__">tf_debug.LocalCLIDebugWrapperSession.__exit__(exec_type, exec_value, exec_tb)</code></h4>
+<hr />
+<h4 id="tf_debug.localclidebugwrappersession.__init__sess-dump_rootnone-log_usagetrue-ui_typecurses"><code id="LocalCLIDebugWrapperSession.__init__">tf_debug.LocalCLIDebugWrapperSession.__init__(sess, dump_root=None, log_usage=True, ui_type='curses')</code></h4>
+<p>Constructor of LocalCLIDebugWrapperSession.</p>
+<h5 id="args-38">Args:</h5>
+<ul>
+<li><b><code>sess</code></b>: The TensorFlow <code>Session</code> object being wrapped.</li>
+<li><b><code>dump_root</code></b>: (<code>str</code>) optional path to the dump root directory. Must be a directory that does not exist or an empty directory. If the directory does not exist, it will be created by the debugger core during debug <code>run()</code> calls and removed afterwards.</li>
+<li><b><code>log_usage</code></b>: (<code>bool</code>) whether the usage of this class is to be logged.</li>
+<li><b><code>ui_type</code></b>: (<code>str</code>) requested UI type. Currently supported: (curses | readline)</li>
+</ul>
+<h5 id="raises-24">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If dump_root is an existing and non-empty directory or if dump_root is a file.</li>
+</ul>
+<hr />
+<h4 id="tf_debug.localclidebugwrappersession.add_tensor_filterfilter_name-tensor_filter"><code id="LocalCLIDebugWrapperSession.add_tensor_filter">tf_debug.LocalCLIDebugWrapperSession.add_tensor_filter(filter_name, tensor_filter)</code></h4>
+<p>Add a tensor filter.</p>
+<h5 id="args-39">Args:</h5>
+<ul>
+<li><b><code>filter_name</code></b>: (<code>str</code>) name of the filter.</li>
+<li><b><code>tensor_filter</code></b>: (<code>callable</code>) the filter callable. See the doc string of <code>DebugDumpDir.find()</code> for more details about its signature.</li>
+</ul>
+<hr />
+<h4 id="tf_debug.localclidebugwrappersession.close"><code id="LocalCLIDebugWrapperSession.close">tf_debug.LocalCLIDebugWrapperSession.close()</code></h4>
+<hr />
+<h4 id="tf_debug.localclidebugwrappersession.graph"><code id="LocalCLIDebugWrapperSession.graph">tf_debug.LocalCLIDebugWrapperSession.graph</code></h4>
+<hr />
+<h4 id="tf_debug.localclidebugwrappersession.invoke_node_steppernode_stepper-restore_variable_values_on_exittrue"><code id="LocalCLIDebugWrapperSession.invoke_node_stepper">tf_debug.LocalCLIDebugWrapperSession.invoke_node_stepper(node_stepper, restore_variable_values_on_exit=True)</code></h4>
+<p>Overrides method in base class to implement interactive node stepper.</p>
+<h5 id="args-40">Args:</h5>
+<ul>
+<li><b><code>node_stepper</code></b>: (<code>stepper.NodeStepper</code>) The underlying NodeStepper API object.</li>
+<li><b><code>restore_variable_values_on_exit</code></b>: (<code>bool</code>) Whether any variables whose values have been altered during this node-stepper invocation should be restored to their old values when this invocation ends.</li>
+</ul>
+<h5 id="returns-39">Returns:</h5>
+<p>The same return values as the <code>Session.run()</code> call on the same fetches as the NodeStepper.</p>
+<hr />
+<h4 id="tf_debug.localclidebugwrappersession.on_run_endrequest"><code id="LocalCLIDebugWrapperSession.on_run_end">tf_debug.LocalCLIDebugWrapperSession.on_run_end(request)</code></h4>
+<p>Overrides on-run-end callback.</p>
+<h5 id="actions-taken-1">Actions taken:</h5>
+<ol style="list-style-type: decimal">
+<li>Load the debug dump.</li>
+<li>Bring up the Analyzer CLI.</li>
+</ol>
+<h5 id="args-41">Args:</h5>
+<ul>
+<li><b><code>request</code></b>: An instance of OnSessionInitRequest.</li>
+</ul>
+<h5 id="returns-40">Returns:</h5>
+<p>An instance of OnSessionInitResponse.</p>
+<hr />
+<h4 id="tf_debug.localclidebugwrappersession.on_run_startrequest"><code id="LocalCLIDebugWrapperSession.on_run_start">tf_debug.LocalCLIDebugWrapperSession.on_run_start(request)</code></h4>
+<p>Overrides on-run-start callback.</p>
+<h5 id="invoke-the-cli-to-let-user-choose-what-action-to-take-1">Invoke the CLI to let user choose what action to take:</h5>
+<p><code>run</code> / <code>invoke_stepper</code>.</p>
+<h5 id="args-42">Args:</h5>
+<ul>
+<li><b><code>request</code></b>: An instance of <code>OnSessionInitRequest</code>.</li>
+</ul>
+<h5 id="returns-41">Returns:</h5>
+<p>An instance of <code>OnSessionInitResponse</code>.</p>
+<h5 id="raises-25">Raises:</h5>
+<ul>
+<li><b><code>RuntimeError</code></b>: If user chooses to prematurely exit the debugger.</li>
+</ul>
+<hr />
+<h4 id="tf_debug.localclidebugwrappersession.on_session_initrequest"><code id="LocalCLIDebugWrapperSession.on_session_init">tf_debug.LocalCLIDebugWrapperSession.on_session_init(request)</code></h4>
+<p>Overrides on-session-init callback.</p>
+<h5 id="args-43">Args:</h5>
+<ul>
+<li><b><code>request</code></b>: An instance of <code>OnSessionInitRequest</code>.</li>
+</ul>
+<h5 id="returns-42">Returns:</h5>
+<p>An instance of <code>OnSessionInitResponse</code>.</p>
+<hr />
+<h4 id="tf_debug.localclidebugwrappersession.partial_runhandle-fetches-feed_dictnone"><code id="LocalCLIDebugWrapperSession.partial_run">tf_debug.LocalCLIDebugWrapperSession.partial_run(handle, fetches, feed_dict=None)</code></h4>
+<hr />
+<h4 id="tf_debug.localclidebugwrappersession.partial_run_setupfetches-feedsnone"><code id="LocalCLIDebugWrapperSession.partial_run_setup">tf_debug.LocalCLIDebugWrapperSession.partial_run_setup(fetches, feeds=None)</code></h4>
+<p>Sets up the feeds and fetches for partial runs in the session.</p>
+<hr />
+<h4 id="tf_debug.localclidebugwrappersession.runfetches-feed_dictnone-optionsnone-run_metadatanone"><code id="LocalCLIDebugWrapperSession.run">tf_debug.LocalCLIDebugWrapperSession.run(fetches, feed_dict=None, options=None, run_metadata=None)</code></h4>
+<p>Wrapper around Session.run() that inserts tensor watch options.</p>
+<h5 id="args-44">Args:</h5>
+<ul>
+<li><b><code>fetches</code></b>: Same as the <code>fetches</code> arg to regular <code>Session.run()</code>.</li>
+<li><b><code>feed_dict</code></b>: Same as the <code>feed_dict</code> arg to regular <code>Session.run()</code>.</li>
+<li><b><code>options</code></b>: Same as the <code>options</code> arg to regular <code>Session.run()</code>.</li>
+<li><b><code>run_metadata</code></b>: Same as the <code>run_metadata</code> arg to regular <code>Session.run()</code>.</li>
+</ul>
+<h5 id="returns-43">Returns:</h5>
+<p>Simply forwards the output of the wrapped <code>Session.run()</code> call.</p>
+<h5 id="raises-26">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: On invalid <code>OnRunStartAction</code> value.</li>
+</ul>
+<hr />
+<h4 id="tf_debug.localclidebugwrappersession.sess_str"><code id="LocalCLIDebugWrapperSession.sess_str">tf_debug.LocalCLIDebugWrapperSession.sess_str</code></h4>
+<hr />
+<h4 id="tf_debug.localclidebugwrappersession.session"><code id="LocalCLIDebugWrapperSession.session">tf_debug.LocalCLIDebugWrapperSession.session</code></h4>

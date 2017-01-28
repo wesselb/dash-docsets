@@ -1,0 +1,736 @@
+<!-- This file is machine generated: DO NOT EDIT! -->
+<h1 id="metrics-contrib">Metrics (contrib)</h1>
+<p>[TOC]</p>
+<h2 id="ops-for-evaluation-metrics-and-summary-statistics.">Ops for evaluation metrics and summary statistics.</h2>
+<h3 id="api">API</h3>
+<p>This module provides functions for computing streaming metrics: metrics computed on dynamically valued <code>Tensors</code>. Each metric declaration returns a &quot;value_tensor&quot;, an idempotent operation that returns the current value of the metric, and an &quot;update_op&quot;, an operation that accumulates the information from the current value of the <code>Tensors</code> being measured as well as returns the value of the &quot;value_tensor&quot;.</p>
+<p>To use any of these metrics, one need only declare the metric, call <code>update_op</code> repeatedly to accumulate data over the desired number of <code>Tensor</code> values (often each one is a single batch) and finally evaluate the value_tensor. For example, to use the <code>streaming_mean</code>:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">value <span class="op">=</span> ...
+mean_value, update_op <span class="op">=</span> tf.contrib.metrics.streaming_mean(values)
+sess.run(tf.local_variables_initializer())
+
+<span class="cf">for</span> i <span class="op">in</span> <span class="bu">range</span>(number_of_batches):
+  <span class="bu">print</span>(<span class="st">&#39;Mean after batch </span><span class="sc">%d</span><span class="st">: </span><span class="sc">%f</span><span class="st">&#39;</span> <span class="op">%</span> (i, update_op.<span class="bu">eval</span>())
+<span class="bu">print</span>(<span class="st">&#39;Final Mean: </span><span class="sc">%f</span><span class="st">&#39;</span> <span class="op">%</span> mean_value.<span class="bu">eval</span>())</code></pre></div>
+<p>Each metric function adds nodes to the graph that hold the state necessary to compute the value of the metric as well as a set of operations that actually perform the computation. Every metric evaluation is composed of three steps</p>
+<ul>
+<li>Initialization: initializing the metric state.</li>
+<li>Aggregation: updating the values of the metric state.</li>
+<li>Finalization: computing the final metric value.</li>
+</ul>
+<p>In the above example, calling streaming_mean creates a pair of state variables that will contain (1) the running sum and (2) the count of the number of samples in the sum. Because the streaming metrics use local variables, the Initialization stage is performed by running the op returned by <code>tf.local_variables_initializer()</code>. It sets the sum and count variables to zero.</p>
+<p>Next, Aggregation is performed by examining the current state of <code>values</code> and incrementing the state variables appropriately. This step is executed by running the <code>update_op</code> returned by the metric.</p>
+<p>Finally, finalization is performed by evaluating the &quot;value_tensor&quot;</p>
+<p>In practice, we commonly want to evaluate across many batches and multiple metrics. To do so, we need only run the metric computation operations multiple times:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">labels <span class="op">=</span> ...
+predictions <span class="op">=</span> ...
+accuracy, update_op_acc <span class="op">=</span> tf.contrib.metrics.streaming_accuracy(
+    labels, predictions)
+error, update_op_error <span class="op">=</span> tf.contrib.metrics.streaming_mean_absolute_error(
+    labels, predictions)
+
+sess.run(tf.local_variables_initializer())
+<span class="cf">for</span> batch <span class="op">in</span> <span class="bu">range</span>(num_batches):
+  sess.run([update_op_acc, update_op_error])
+
+accuracy, mean_absolute_error <span class="op">=</span> sess.run([accuracy, mean_absolute_error])</code></pre></div>
+<p>Note that when evaluating the same metric multiple times on different inputs, one must specify the scope of each metric to avoid accumulating the results together:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">labels <span class="op">=</span> ...
+predictions0 <span class="op">=</span> ...
+predictions1 <span class="op">=</span> ...
+
+accuracy0 <span class="op">=</span> tf.contrib.metrics.accuracy(labels, predictions0, name<span class="op">=</span><span class="st">&#39;preds0&#39;</span>)
+accuracy1 <span class="op">=</span> tf.contrib.metrics.accuracy(labels, predictions1, name<span class="op">=</span><span class="st">&#39;preds1&#39;</span>)</code></pre></div>
+<p>Certain metrics, such as streaming_mean or streaming_accuracy, can be weighted via a <code>weights</code> argument. The <code>weights</code> tensor must be the same size as the labels and predictions tensors and results in a weighted average of the metric.</p>
+<h2 id="metric-ops">Metric <code>Ops</code></h2>
+<hr />
+<h3 id="tf.contrib.metrics.streaming_accuracypredictions-labels-weightsnone-metrics_collectionsnone-updates_collectionsnone-namenone"><a name="//apple_ref/cpp/Function/streaming_accuracy" class="dashAnchor"></a><code id="streaming_accuracy">tf.contrib.metrics.streaming_accuracy(predictions, labels, weights=None, metrics_collections=None, updates_collections=None, name=None)</code></h3>
+<p>Calculates how often <code>predictions</code> matches <code>labels</code>.</p>
+<p>The <code>streaming_accuracy</code> function creates two local variables, <code>total</code> and <code>count</code> that are used to compute the frequency with which <code>predictions</code> matches <code>labels</code>. This frequency is ultimately returned as <code>accuracy</code>: an idempotent operation that simply divides <code>total</code> by <code>count</code>.</p>
+<p>For estimation of the metric over a stream of data, the function creates an <code>update_op</code> operation that updates these variables and returns the <code>accuracy</code>. Internally, an <code>is_correct</code> operation computes a <code>Tensor</code> with elements 1.0 where the corresponding elements of <code>predictions</code> and <code>labels</code> match and 0.0 otherwise. Then <code>update_op</code> increments <code>total</code> with the reduced sum of the product of <code>weights</code> and <code>is_correct</code>, and it increments <code>count</code> with the reduced sum of <code>weights</code>.</p>
+<p>If <code>weights</code> is <code>None</code>, weights default to 1. Use weights of 0 to mask values.</p>
+<h5 id="args">Args:</h5>
+<ul>
+<li><b><code>predictions</code></b>: The predicted values, a <code>Tensor</code> of any shape.</li>
+<li><b><code>labels</code></b>: The ground truth values, a <code>Tensor</code> whose shape matches <code>predictions</code>.</li>
+<li><b><code>weights</code></b>: An optional <code>Tensor</code> whose shape is broadcastable to <code>predictions</code>.</li>
+<li><b><code>metrics_collections</code></b>: An optional list of collections that <code>accuracy</code> should be added to.</li>
+<li><b><code>updates_collections</code></b>: An optional list of collections that <code>update_op</code> should be added to.</li>
+<li><b><code>name</code></b>: An optional variable_scope name.</li>
+</ul>
+<h5 id="returns">Returns:</h5>
+<ul>
+<li><b><code>accuracy</code></b>: A tensor representing the accuracy, the value of <code>total</code> divided by <code>count</code>.</li>
+<li><b><code>update_op</code></b>: An operation that increments the <code>total</code> and <code>count</code> variables appropriately and whose value matches <code>accuracy</code>.</li>
+</ul>
+<h5 id="raises">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>predictions</code> and <code>labels</code> have mismatched shapes, or if <code>weights</code> is not <code>None</code> and its shape doesn't match <code>predictions</code>, or if either <code>metrics_collections</code> or <code>updates_collections</code> are not a list or tuple.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.metrics.streaming_meanvalues-weightsnone-metrics_collectionsnone-updates_collectionsnone-namenone"><a name="//apple_ref/cpp/Function/streaming_mean" class="dashAnchor"></a><code id="streaming_mean">tf.contrib.metrics.streaming_mean(values, weights=None, metrics_collections=None, updates_collections=None, name=None)</code></h3>
+<p>Computes the (weighted) mean of the given values.</p>
+<p>The <code>streaming_mean</code> function creates two local variables, <code>total</code> and <code>count</code> that are used to compute the average of <code>values</code>. This average is ultimately returned as <code>mean</code> which is an idempotent operation that simply divides <code>total</code> by <code>count</code>.</p>
+<p>For estimation of the metric over a stream of data, the function creates an <code>update_op</code> operation that updates these variables and returns the <code>mean</code>. <code>update_op</code> increments <code>total</code> with the reduced sum of the product of <code>values</code> and <code>weights</code>, and it increments <code>count</code> with the reduced sum of <code>weights</code>.</p>
+<p>If <code>weights</code> is <code>None</code>, weights default to 1. Use weights of 0 to mask values.</p>
+<h5 id="args-1">Args:</h5>
+<ul>
+<li><b><code>values</code></b>: A <code>Tensor</code> of arbitrary dimensions.</li>
+<li><b><code>weights</code></b>: An optional <code>Tensor</code> whose shape is broadcastable to <code>values</code>.</li>
+<li><b><code>metrics_collections</code></b>: An optional list of collections that <code>mean</code> should be added to.</li>
+<li><b><code>updates_collections</code></b>: An optional list of collections that <code>update_op</code> should be added to.</li>
+<li><b><code>name</code></b>: An optional variable_scope name.</li>
+</ul>
+<h5 id="returns-1">Returns:</h5>
+<ul>
+<li><b><code>mean</code></b>: A tensor representing the current mean, the value of <code>total</code> divided by <code>count</code>.</li>
+<li><b><code>update_op</code></b>: An operation that increments the <code>total</code> and <code>count</code> variables appropriately and whose value matches <code>mean_value</code>.</li>
+</ul>
+<h5 id="raises-1">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>weights</code> is not <code>None</code> and its shape doesn't match <code>values</code>, or if either <code>metrics_collections</code> or <code>updates_collections</code> are not a list or tuple.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.metrics.streaming_recallpredictions-labels-weightsnone-metrics_collectionsnone-updates_collectionsnone-namenone"><a name="//apple_ref/cpp/Function/streaming_recall" class="dashAnchor"></a><code id="streaming_recall">tf.contrib.metrics.streaming_recall(predictions, labels, weights=None, metrics_collections=None, updates_collections=None, name=None)</code></h3>
+<p>Computes the recall of the predictions with respect to the labels.</p>
+<p>The <code>streaming_recall</code> function creates two local variables, <code>true_positives</code> and <code>false_negatives</code>, that are used to compute the recall. This value is ultimately returned as <code>recall</code>, an idempotent operation that simply divides <code>true_positives</code> by the sum of <code>true_positives</code> and <code>false_negatives</code>.</p>
+<p>For estimation of the metric over a stream of data, the function creates an <code>update_op</code> that updates these variables and returns the <code>recall</code>. <code>update_op</code> weights each prediction by the corresponding value in <code>weights</code>.</p>
+<p>If <code>weights</code> is <code>None</code>, weights default to 1. Use weights of 0 to mask values.</p>
+<h5 id="args-2">Args:</h5>
+<ul>
+<li><b><code>predictions</code></b>: The predicted values, a <code>bool</code> <code>Tensor</code> of arbitrary shape.</li>
+<li><b><code>labels</code></b>: The ground truth values, a <code>bool</code> <code>Tensor</code> whose dimensions must match <code>predictions</code>.</li>
+<li><b><code>weights</code></b>: An optional <code>Tensor</code> whose shape is broadcastable to <code>predictions</code>.</li>
+<li><b><code>metrics_collections</code></b>: An optional list of collections that <code>recall</code> should be added to.</li>
+<li><b><code>updates_collections</code></b>: An optional list of collections that <code>update_op</code> should be added to.</li>
+<li><b><code>name</code></b>: An optional variable_scope name.</li>
+</ul>
+<h5 id="returns-2">Returns:</h5>
+<ul>
+<li><b><code>recall</code></b>: Scalar float <code>Tensor</code> with the value of <code>true_positives</code> divided by the sum of <code>true_positives</code> and <code>false_negatives</code>.</li>
+<li><b><code>update_op</code></b>: <code>Operation</code> that increments <code>true_positives</code> and <code>false_negatives</code> variables appropriately and whose value matches <code>recall</code>.</li>
+</ul>
+<h5 id="raises-2">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>predictions</code> and <code>labels</code> have mismatched shapes, or if <code>weights</code> is not <code>None</code> and its shape doesn't match <code>predictions</code>, or if either <code>metrics_collections</code> or <code>updates_collections</code> are not a list or tuple.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.metrics.streaming_precisionpredictions-labels-weightsnone-metrics_collectionsnone-updates_collectionsnone-namenone"><a name="//apple_ref/cpp/Function/streaming_precision" class="dashAnchor"></a><code id="streaming_precision">tf.contrib.metrics.streaming_precision(predictions, labels, weights=None, metrics_collections=None, updates_collections=None, name=None)</code></h3>
+<p>Computes the precision of the predictions with respect to the labels.</p>
+<p>The <code>streaming_precision</code> function creates two local variables, <code>true_positives</code> and <code>false_positives</code>, that are used to compute the precision. This value is ultimately returned as <code>precision</code>, an idempotent operation that simply divides <code>true_positives</code> by the sum of <code>true_positives</code> and <code>false_positives</code>.</p>
+<p>For estimation of the metric over a stream of data, the function creates an <code>update_op</code> operation that updates these variables and returns the <code>precision</code>. <code>update_op</code> weights each prediction by the corresponding value in <code>weights</code>.</p>
+<p>If <code>weights</code> is <code>None</code>, weights default to 1. Use weights of 0 to mask values.</p>
+<h5 id="args-3">Args:</h5>
+<ul>
+<li><b><code>predictions</code></b>: The predicted values, a <code>bool</code> <code>Tensor</code> of arbitrary shape.</li>
+<li><b><code>labels</code></b>: The ground truth values, a <code>bool</code> <code>Tensor</code> whose dimensions must match <code>predictions</code>.</li>
+<li><b><code>weights</code></b>: An optional <code>Tensor</code> whose shape is broadcastable to <code>predictions</code>.</li>
+<li><b><code>metrics_collections</code></b>: An optional list of collections that <code>precision</code> should be added to.</li>
+<li><b><code>updates_collections</code></b>: An optional list of collections that <code>update_op</code> should be added to.</li>
+<li><b><code>name</code></b>: An optional variable_scope name.</li>
+</ul>
+<h5 id="returns-3">Returns:</h5>
+<ul>
+<li><b><code>precision</code></b>: Scalar float <code>Tensor</code> with the value of <code>true_positives</code> divided by the sum of <code>true_positives</code> and <code>false_positives</code>.</li>
+<li><b><code>update_op</code></b>: <code>Operation</code> that increments <code>true_positives</code> and <code>false_positives</code> variables appropriately and whose value matches <code>precision</code>.</li>
+</ul>
+<h5 id="raises-3">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>predictions</code> and <code>labels</code> have mismatched shapes, or if <code>weights</code> is not <code>None</code> and its shape doesn't match <code>predictions</code>, or if either <code>metrics_collections</code> or <code>updates_collections</code> are not a list or tuple.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.metrics.streaming_aucpredictions-labels-weightsnone-num_thresholds200-metrics_collectionsnone-updates_collectionsnone-curveroc-namenone"><a name="//apple_ref/cpp/Function/streaming_auc" class="dashAnchor"></a><code id="streaming_auc">tf.contrib.metrics.streaming_auc(predictions, labels, weights=None, num_thresholds=200, metrics_collections=None, updates_collections=None, curve='ROC', name=None)</code></h3>
+<p>Computes the approximate AUC via a Riemann sum.</p>
+<p>The <code>streaming_auc</code> function creates four local variables, <code>true_positives</code>, <code>true_negatives</code>, <code>false_positives</code> and <code>false_negatives</code> that are used to compute the AUC. To discretize the AUC curve, a linearly spaced set of thresholds is used to compute pairs of recall and precision values. The area under the ROC-curve is therefore computed using the height of the recall values by the false positive rate, while the area under the PR-curve is the computed using the height of the precision values by the recall.</p>
+<p>This value is ultimately returned as <code>auc</code>, an idempotent operation that computes the area under a discretized curve of precision versus recall values (computed using the aforementioned variables). The <code>num_thresholds</code> variable controls the degree of discretization with larger numbers of thresholds more closely approximating the true AUC. The quality of the approximation may vary dramatically depending on <code>num_thresholds</code>.</p>
+<p>For best results, <code>predictions</code> should be distributed approximately uniformly in the range [0, 1] and not peaked around 0 or 1. The quality of the AUC approximation may be poor if this is not the case.</p>
+<p>For estimation of the metric over a stream of data, the function creates an <code>update_op</code> operation that updates these variables and returns the <code>auc</code>.</p>
+<p>If <code>weights</code> is <code>None</code>, weights default to 1. Use weights of 0 to mask values.</p>
+<h5 id="args-4">Args:</h5>
+<ul>
+<li><b><code>predictions</code></b>: A floating point <code>Tensor</code> of arbitrary shape and whose values are in the range <code>[0, 1]</code>.</li>
+<li><b><code>labels</code></b>: A <code>bool</code> <code>Tensor</code> whose shape matches <code>predictions</code>.</li>
+<li><b><code>weights</code></b>: An optional <code>Tensor</code> whose shape is broadcastable to <code>predictions</code>.</li>
+<li><b><code>num_thresholds</code></b>: The number of thresholds to use when discretizing the roc curve.</li>
+<li><b><code>metrics_collections</code></b>: An optional list of collections that <code>auc</code> should be added to.</li>
+<li><b><code>updates_collections</code></b>: An optional list of collections that <code>update_op</code> should be added to.</li>
+<li><p><b><code>curve</code></b>: Specifies the name of the curve to be computed, 'ROC' [default] or 'PR' for the Precision-Recall-curve.</p></li>
+<li><p><b><code>name</code></b>: An optional variable_scope name.</p></li>
+</ul>
+<h5 id="returns-4">Returns:</h5>
+<ul>
+<li><b><code>auc</code></b>: A scalar tensor representing the current area-under-curve.</li>
+<li><b><code>update_op</code></b>: An operation that increments the <code>true_positives</code>, <code>true_negatives</code>, <code>false_positives</code> and <code>false_negatives</code> variables appropriately and whose value matches <code>auc</code>.</li>
+</ul>
+<h5 id="raises-4">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>predictions</code> and <code>labels</code> have mismatched shapes, or if <code>weights</code> is not <code>None</code> and its shape doesn't match <code>predictions</code>, or if either <code>metrics_collections</code> or <code>updates_collections</code> are not a list or tuple.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.metrics.streaming_recall_at_kargs-kwargs"><a name="//apple_ref/cpp/Function/streaming_recall_at_k" class="dashAnchor"></a><code id="streaming_recall_at_k">tf.contrib.metrics.streaming_recall_at_k(*args, **kwargs)</code></h3>
+<p>Computes the recall@k of the predictions with respect to dense labels. (deprecated)</p>
+<p>THIS FUNCTION IS DEPRECATED. It will be removed after 2016-11-08. Instructions for updating: Please use <code>streaming_sparse_recall_at_k</code>, and reshape labels from [batch_size] to [batch_size, 1].</p>
+<p>The <code>streaming_recall_at_k</code> function creates two local variables, <code>total</code> and <code>count</code>, that are used to compute the recall@k frequency. This frequency is ultimately returned as <code>recall_at_&lt;k&gt;</code>: an idempotent operation that simply divides <code>total</code> by <code>count</code>.</p>
+<p>For estimation of the metric over a stream of data, the function creates an <code>update_op</code> operation that updates these variables and returns the <code>recall_at_&lt;k&gt;</code>. Internally, an <code>in_top_k</code> operation computes a <code>Tensor</code> with shape [batch_size] whose elements indicate whether or not the corresponding label is in the top <code>k</code> <code>predictions</code>. Then <code>update_op</code> increments <code>total</code> with the reduced sum of <code>weights</code> where <code>in_top_k</code> is <code>True</code>, and it increments <code>count</code> with the reduced sum of <code>weights</code>.</p>
+<p>If <code>weights</code> is <code>None</code>, weights default to 1. Use weights of 0 to mask values.</p>
+<p>Args: predictions: A floating point tensor of dimension [batch_size, num_classes] labels: A tensor of dimension [batch_size] whose type is in <code>int32</code>, <code>int64</code>. k: The number of top elements to look at for computing recall. weights: An optional <code>Tensor</code> whose shape is broadcastable to <code>predictions</code>. metrics_collections: An optional list of collections that <code>recall_at_k</code> should be added to. updates_collections: An optional list of collections <code>update_op</code> should be added to. name: An optional variable_scope name.</p>
+<p>Returns: recall_at_k: A tensor representing the recall@k, the fraction of labels which fall into the top <code>k</code> predictions. update_op: An operation that increments the <code>total</code> and <code>count</code> variables appropriately and whose value matches <code>recall_at_k</code>.</p>
+<p>Raises: ValueError: If <code>predictions</code> and <code>labels</code> have mismatched shapes, or if <code>weights</code> is not <code>None</code> and its shape doesn't match <code>predictions</code>, or if either <code>metrics_collections</code> or <code>updates_collections</code> are not a list or tuple.</p>
+<hr />
+<h3 id="tf.contrib.metrics.streaming_mean_absolute_errorpredictions-labels-weightsnone-metrics_collectionsnone-updates_collectionsnone-namenone"><a name="//apple_ref/cpp/Function/streaming_mean_absolute_error" class="dashAnchor"></a><code id="streaming_mean_absolute_error">tf.contrib.metrics.streaming_mean_absolute_error(predictions, labels, weights=None, metrics_collections=None, updates_collections=None, name=None)</code></h3>
+<p>Computes the mean absolute error between the labels and predictions.</p>
+<p>The <code>streaming_mean_absolute_error</code> function creates two local variables, <code>total</code> and <code>count</code> that are used to compute the mean absolute error. This average is weighted by <code>weights</code>, and it is ultimately returned as <code>mean_absolute_error</code>: an idempotent operation that simply divides <code>total</code> by <code>count</code>.</p>
+<p>For estimation of the metric over a stream of data, the function creates an <code>update_op</code> operation that updates these variables and returns the <code>mean_absolute_error</code>. Internally, an <code>absolute_errors</code> operation computes the absolute value of the differences between <code>predictions</code> and <code>labels</code>. Then <code>update_op</code> increments <code>total</code> with the reduced sum of the product of <code>weights</code> and <code>absolute_errors</code>, and it increments <code>count</code> with the reduced sum of <code>weights</code></p>
+<p>If <code>weights</code> is <code>None</code>, weights default to 1. Use weights of 0 to mask values.</p>
+<h5 id="args-5">Args:</h5>
+<ul>
+<li><b><code>predictions</code></b>: A <code>Tensor</code> of arbitrary shape.</li>
+<li><b><code>labels</code></b>: A <code>Tensor</code> of the same shape as <code>predictions</code>.</li>
+<li><b><code>weights</code></b>: An optional <code>Tensor</code> whose shape is broadcastable to <code>predictions</code>.</li>
+<li><b><code>metrics_collections</code></b>: An optional list of collections that <code>mean_absolute_error</code> should be added to.</li>
+<li><b><code>updates_collections</code></b>: An optional list of collections that <code>update_op</code> should be added to.</li>
+<li><b><code>name</code></b>: An optional variable_scope name.</li>
+</ul>
+<h5 id="returns-5">Returns:</h5>
+<ul>
+<li><b><code>mean_absolute_error</code></b>: A tensor representing the current mean, the value of <code>total</code> divided by <code>count</code>.</li>
+<li><b><code>update_op</code></b>: An operation that increments the <code>total</code> and <code>count</code> variables appropriately and whose value matches <code>mean_absolute_error</code>.</li>
+</ul>
+<h5 id="raises-5">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>predictions</code> and <code>labels</code> have mismatched shapes, or if <code>weights</code> is not <code>None</code> and its shape doesn't match <code>predictions</code>, or if either <code>metrics_collections</code> or <code>updates_collections</code> are not a list or tuple.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.metrics.streaming_mean_ioupredictions-labels-num_classes-weightsnone-metrics_collectionsnone-updates_collectionsnone-namenone"><a name="//apple_ref/cpp/Function/streaming_mean_iou" class="dashAnchor"></a><code id="streaming_mean_iou">tf.contrib.metrics.streaming_mean_iou(predictions, labels, num_classes, weights=None, metrics_collections=None, updates_collections=None, name=None)</code></h3>
+<p>Calculate per-step mean Intersection-Over-Union (mIOU).</p>
+<p>Mean Intersection-Over-Union is a common evaluation metric for semantic image segmentation, which first computes the IOU for each semantic class and then computes the average over classes.</p>
+<h5 id="iou-is-defined-as-follows">IOU is defined as follows:</h5>
+<p>IOU = true_positive / (true_positive + false_positive + false_negative). The predictions are accumulated in a confusion matrix, weighted by <code>weights</code>, and mIOU is then calculated from it.</p>
+<p>For estimation of the metric over a stream of data, the function creates an <code>update_op</code> operation that updates these variables and returns the <code>mean_iou</code>.</p>
+<p>If <code>weights</code> is <code>None</code>, weights default to 1. Use weights of 0 to mask values.</p>
+<h5 id="args-6">Args:</h5>
+<ul>
+<li><b><code>predictions</code></b>: A tensor of prediction results for semantic labels, whose shape is [batch size] and type <code>int32</code> or <code>int64</code>. The tensor will be flattened, if its rank &gt; 1.</li>
+<li><b><code>labels</code></b>: A tensor of ground truth labels with shape [batch size] and of type <code>int32</code> or <code>int64</code>. The tensor will be flattened, if its rank &gt; 1.</li>
+<li><b><code>num_classes</code></b>: The possible number of labels the prediction task can have. This value must be provided, since a confusion matrix of dimension = [num_classes, num_classes] will be allocated.</li>
+<li><b><code>weights</code></b>: An optional <code>Tensor</code> whose shape is broadcastable to <code>predictions</code>.</li>
+<li><b><code>metrics_collections</code></b>: An optional list of collections that <code>mean_iou</code> should be added to.</li>
+<li><b><code>updates_collections</code></b>: An optional list of collections <code>update_op</code> should be added to.</li>
+<li><b><code>name</code></b>: An optional variable_scope name.</li>
+</ul>
+<h5 id="returns-6">Returns:</h5>
+<ul>
+<li><b><code>mean_iou</code></b>: A tensor representing the mean intersection-over-union.</li>
+<li><b><code>update_op</code></b>: An operation that increments the confusion matrix.</li>
+</ul>
+<h5 id="raises-6">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>predictions</code> and <code>labels</code> have mismatched shapes, or if <code>weights</code> is not <code>None</code> and its shape doesn't match <code>predictions</code>, or if either <code>metrics_collections</code> or <code>updates_collections</code> are not a list or tuple.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.metrics.streaming_mean_relative_errorpredictions-labels-normalizer-weightsnone-metrics_collectionsnone-updates_collectionsnone-namenone"><a name="//apple_ref/cpp/Function/streaming_mean_relative_error" class="dashAnchor"></a><code id="streaming_mean_relative_error">tf.contrib.metrics.streaming_mean_relative_error(predictions, labels, normalizer, weights=None, metrics_collections=None, updates_collections=None, name=None)</code></h3>
+<p>Computes the mean relative error by normalizing with the given values.</p>
+<p>The <code>streaming_mean_relative_error</code> function creates two local variables, <code>total</code> and <code>count</code> that are used to compute the mean relative absolute error. This average is weighted by <code>weights</code>, and it is ultimately returned as <code>mean_relative_error</code>: an idempotent operation that simply divides <code>total</code> by <code>count</code>.</p>
+<p>For estimation of the metric over a stream of data, the function creates an <code>update_op</code> operation that updates these variables and returns the <code>mean_reative_error</code>. Internally, a <code>relative_errors</code> operation divides the absolute value of the differences between <code>predictions</code> and <code>labels</code> by the <code>normalizer</code>. Then <code>update_op</code> increments <code>total</code> with the reduced sum of the product of <code>weights</code> and <code>relative_errors</code>, and it increments <code>count</code> with the reduced sum of <code>weights</code>.</p>
+<p>If <code>weights</code> is <code>None</code>, weights default to 1. Use weights of 0 to mask values.</p>
+<h5 id="args-7">Args:</h5>
+<ul>
+<li><b><code>predictions</code></b>: A <code>Tensor</code> of arbitrary shape.</li>
+<li><b><code>labels</code></b>: A <code>Tensor</code> of the same shape as <code>predictions</code>.</li>
+<li><b><code>normalizer</code></b>: A <code>Tensor</code> of the same shape as <code>predictions</code>.</li>
+<li><b><code>weights</code></b>: An optional <code>Tensor</code> whose shape is broadcastable to <code>predictions</code>.</li>
+<li><b><code>metrics_collections</code></b>: An optional list of collections that <code>mean_relative_error</code> should be added to.</li>
+<li><b><code>updates_collections</code></b>: An optional list of collections that <code>update_op</code> should be added to.</li>
+<li><b><code>name</code></b>: An optional variable_scope name.</li>
+</ul>
+<h5 id="returns-7">Returns:</h5>
+<ul>
+<li><b><code>mean_relative_error</code></b>: A tensor representing the current mean, the value of <code>total</code> divided by <code>count</code>.</li>
+<li><b><code>update_op</code></b>: An operation that increments the <code>total</code> and <code>count</code> variables appropriately and whose value matches <code>mean_relative_error</code>.</li>
+</ul>
+<h5 id="raises-7">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>predictions</code> and <code>labels</code> have mismatched shapes, or if <code>weights</code> is not <code>None</code> and its shape doesn't match <code>predictions</code>, or if either <code>metrics_collections</code> or <code>updates_collections</code> are not a list or tuple.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.metrics.streaming_mean_squared_errorpredictions-labels-weightsnone-metrics_collectionsnone-updates_collectionsnone-namenone"><a name="//apple_ref/cpp/Function/streaming_mean_squared_error" class="dashAnchor"></a><code id="streaming_mean_squared_error">tf.contrib.metrics.streaming_mean_squared_error(predictions, labels, weights=None, metrics_collections=None, updates_collections=None, name=None)</code></h3>
+<p>Computes the mean squared error between the labels and predictions.</p>
+<p>The <code>streaming_mean_squared_error</code> function creates two local variables, <code>total</code> and <code>count</code> that are used to compute the mean squared error. This average is weighted by <code>weights</code>, and it is ultimately returned as <code>mean_squared_error</code>: an idempotent operation that simply divides <code>total</code> by <code>count</code>.</p>
+<p>For estimation of the metric over a stream of data, the function creates an <code>update_op</code> operation that updates these variables and returns the <code>mean_squared_error</code>. Internally, a <code>squared_error</code> operation computes the element-wise square of the difference between <code>predictions</code> and <code>labels</code>. Then <code>update_op</code> increments <code>total</code> with the reduced sum of the product of <code>weights</code> and <code>squared_error</code>, and it increments <code>count</code> with the reduced sum of <code>weights</code>.</p>
+<p>If <code>weights</code> is <code>None</code>, weights default to 1. Use weights of 0 to mask values.</p>
+<h5 id="args-8">Args:</h5>
+<ul>
+<li><b><code>predictions</code></b>: A <code>Tensor</code> of arbitrary shape.</li>
+<li><b><code>labels</code></b>: A <code>Tensor</code> of the same shape as <code>predictions</code>.</li>
+<li><b><code>weights</code></b>: An optional <code>Tensor</code> whose shape is broadcastable to <code>predictions</code>.</li>
+<li><b><code>metrics_collections</code></b>: An optional list of collections that <code>mean_squared_error</code> should be added to.</li>
+<li><b><code>updates_collections</code></b>: An optional list of collections that <code>update_op</code> should be added to.</li>
+<li><b><code>name</code></b>: An optional variable_scope name.</li>
+</ul>
+<h5 id="returns-8">Returns:</h5>
+<ul>
+<li><b><code>mean_squared_error</code></b>: A tensor representing the current mean, the value of <code>total</code> divided by <code>count</code>.</li>
+<li><b><code>update_op</code></b>: An operation that increments the <code>total</code> and <code>count</code> variables appropriately and whose value matches <code>mean_squared_error</code>.</li>
+</ul>
+<h5 id="raises-8">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>predictions</code> and <code>labels</code> have mismatched shapes, or if <code>weights</code> is not <code>None</code> and its shape doesn't match <code>predictions</code>, or if either <code>metrics_collections</code> or <code>updates_collections</code> are not a list or tuple.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.metrics.streaming_root_mean_squared_errorpredictions-labels-weightsnone-metrics_collectionsnone-updates_collectionsnone-namenone"><a name="//apple_ref/cpp/Function/streaming_root_mean_squared_error" class="dashAnchor"></a><code id="streaming_root_mean_squared_error">tf.contrib.metrics.streaming_root_mean_squared_error(predictions, labels, weights=None, metrics_collections=None, updates_collections=None, name=None)</code></h3>
+<p>Computes the root mean squared error between the labels and predictions.</p>
+<p>The <code>streaming_root_mean_squared_error</code> function creates two local variables, <code>total</code> and <code>count</code> that are used to compute the root mean squared error. This average is weighted by <code>weights</code>, and it is ultimately returned as <code>root_mean_squared_error</code>: an idempotent operation that takes the square root of the division of <code>total</code> by <code>count</code>.</p>
+<p>For estimation of the metric over a stream of data, the function creates an <code>update_op</code> operation that updates these variables and returns the <code>root_mean_squared_error</code>. Internally, a <code>squared_error</code> operation computes the element-wise square of the difference between <code>predictions</code> and <code>labels</code>. Then <code>update_op</code> increments <code>total</code> with the reduced sum of the product of <code>weights</code> and <code>squared_error</code>, and it increments <code>count</code> with the reduced sum of <code>weights</code>.</p>
+<p>If <code>weights</code> is <code>None</code>, weights default to 1. Use weights of 0 to mask values.</p>
+<h5 id="args-9">Args:</h5>
+<ul>
+<li><b><code>predictions</code></b>: A <code>Tensor</code> of arbitrary shape.</li>
+<li><b><code>labels</code></b>: A <code>Tensor</code> of the same shape as <code>predictions</code>.</li>
+<li><b><code>weights</code></b>: An optional <code>Tensor</code> whose shape is broadcastable to <code>predictions</code>.</li>
+<li><b><code>metrics_collections</code></b>: An optional list of collections that <code>root_mean_squared_error</code> should be added to.</li>
+<li><b><code>updates_collections</code></b>: An optional list of collections that <code>update_op</code> should be added to.</li>
+<li><b><code>name</code></b>: An optional variable_scope name.</li>
+</ul>
+<h5 id="returns-9">Returns:</h5>
+<ul>
+<li><b><code>root_mean_squared_error</code></b>: A tensor representing the current mean, the value of <code>total</code> divided by <code>count</code>.</li>
+<li><b><code>update_op</code></b>: An operation that increments the <code>total</code> and <code>count</code> variables appropriately and whose value matches <code>root_mean_squared_error</code>.</li>
+</ul>
+<h5 id="raises-9">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>predictions</code> and <code>labels</code> have mismatched shapes, or if <code>weights</code> is not <code>None</code> and its shape doesn't match <code>predictions</code>, or if either <code>metrics_collections</code> or <code>updates_collections</code> are not a list or tuple.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.metrics.streaming_covariancepredictions-labels-weightsnone-metrics_collectionsnone-updates_collectionsnone-namenone"><a name="//apple_ref/cpp/Function/streaming_covariance" class="dashAnchor"></a><code id="streaming_covariance">tf.contrib.metrics.streaming_covariance(predictions, labels, weights=None, metrics_collections=None, updates_collections=None, name=None)</code></h3>
+<p>Computes the unbiased sample covariance between <code>predictions</code> and <code>labels</code>.</p>
+<p>The <code>streaming_covariance</code> function creates four local variables, <code>comoment</code>, <code>mean_prediction</code>, <code>mean_label</code>, and <code>count</code>, which are used to compute the sample covariance between predictions and labels across multiple batches of data. The covariance is ultimately returned as an idempotent operation that simply divides <code>comoment</code> by <code>count</code> - 1. We use <code>count</code> - 1 in order to get an unbiased estimate.</p>
+<p>The algorithm used for this online computation is described in https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance. Specifically, the formula used to combine two sample comoments is <code>C_AB = C_A + C_B + (E[x_A] - E[x_B]) * (E[y_A] - E[y_B]) * n_A * n_B / n_AB</code> The comoment for a single batch of data is simply <code>sum((x - E[x]) * (y - E[y]))</code>, optionally weighted.</p>
+<p>If <code>weights</code> is not None, then it is used to compute weighted comoments, means, and count. NOTE: these weights are treated as &quot;frequency weights&quot;, as opposed to &quot;reliability weights&quot;. See discussion of the difference on https://wikipedia.org/wiki/Weighted_arithmetic_mean#Weighted_sample_variance</p>
+<p>To facilitate the computation of covariance across multiple batches of data, the function creates an <code>update_op</code> operation, which updates underlying variables and returns the updated covariance.</p>
+<h5 id="args-10">Args:</h5>
+<ul>
+<li><b><code>predictions</code></b>: A <code>Tensor</code> of arbitrary size.</li>
+<li><b><code>labels</code></b>: A <code>Tensor</code> of the same size as <code>predictions</code>.</li>
+<li><b><code>weights</code></b>: An optional set of weights which indicates the frequency with which an example is sampled. Must be broadcastable with <code>labels</code>.</li>
+<li><b><code>metrics_collections</code></b>: An optional list of collections that the metric value variable should be added to.</li>
+<li><b><code>updates_collections</code></b>: An optional list of collections that the metric update ops should be added to.</li>
+<li><b><code>name</code></b>: An optional variable_scope name.</li>
+</ul>
+<h5 id="returns-10">Returns:</h5>
+<ul>
+<li><b><code>covariance</code></b>: A <code>Tensor</code> representing the current unbiased sample covariance, <code>comoment</code> / (<code>count</code> - 1).</li>
+<li><b><code>update_op</code></b>: An operation that updates the local variables appropriately.</li>
+</ul>
+<h5 id="raises-10">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If labels and predictions are of different sizes or if either <code>metrics_collections</code> or <code>updates_collections</code> are not a list or tuple.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.metrics.streaming_pearson_correlationpredictions-labels-weightsnone-metrics_collectionsnone-updates_collectionsnone-namenone"><a name="//apple_ref/cpp/Function/streaming_pearson_correlation" class="dashAnchor"></a><code id="streaming_pearson_correlation">tf.contrib.metrics.streaming_pearson_correlation(predictions, labels, weights=None, metrics_collections=None, updates_collections=None, name=None)</code></h3>
+<p>Computes Pearson correlation coefficient between <code>predictions</code>, <code>labels</code>.</p>
+<p>The <code>streaming_pearson_correlation</code> function delegates to <code>streaming_covariance</code> the tracking of three [co]variances:</p>
+<ul>
+<li><code>streaming_covariance(predictions, labels)</code>, i.e. covariance</li>
+<li><code>streaming_covariance(predictions, predictions)</code>, i.e. variance</li>
+<li><code>streaming_covariance(labels, labels)</code>, i.e. variance</li>
+</ul>
+<p>The product-moment correlation ultimately returned is an idempotent operation <code>cov(predictions, labels) / sqrt(var(predictions) * var(labels))</code>. To facilitate correlation computation across multiple batches, the function groups the <code>update_op</code>s of the underlying streaming_covariance and returns an <code>update_op</code>.</p>
+<p>If <code>weights</code> is not None, then it is used to compute a weighted correlation. NOTE: these weights are treated as &quot;frequency weights&quot;, as opposed to &quot;reliability weights&quot;. See discussion of the difference on https://wikipedia.org/wiki/Weighted_arithmetic_mean#Weighted_sample_variance</p>
+<h5 id="args-11">Args:</h5>
+<ul>
+<li><b><code>predictions</code></b>: A <code>Tensor</code> of arbitrary size.</li>
+<li><b><code>labels</code></b>: A <code>Tensor</code> of the same size as predictions.</li>
+<li><b><code>weights</code></b>: An optional set of weights which indicates the frequency with which an example is sampled. Must be broadcastable with <code>labels</code>.</li>
+<li><b><code>metrics_collections</code></b>: An optional list of collections that the metric value variable should be added to.</li>
+<li><b><code>updates_collections</code></b>: An optional list of collections that the metric update ops should be added to.</li>
+<li><b><code>name</code></b>: An optional variable_scope name.</li>
+</ul>
+<h5 id="returns-11">Returns:</h5>
+<ul>
+<li><b><code>pearson_r</code></b>: A tensor representing the current Pearson product-moment correlation coefficient, the value of <code>cov(predictions, labels) / sqrt(var(predictions) * var(labels))</code>.</li>
+<li><b><code>update_op</code></b>: An operation that updates the underlying variables appropriately.</li>
+</ul>
+<h5 id="raises-11">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>labels</code> and <code>predictions</code> are of different sizes, or if <code>weights</code> is the wrong size, or if either <code>metrics_collections</code> or <code>updates_collections</code> are not a <code>list</code> or <code>tuple</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.metrics.streaming_mean_cosine_distancepredictions-labels-dim-weightsnone-metrics_collectionsnone-updates_collectionsnone-namenone"><a name="//apple_ref/cpp/Function/streaming_mean_cosine_distance" class="dashAnchor"></a><code id="streaming_mean_cosine_distance">tf.contrib.metrics.streaming_mean_cosine_distance(predictions, labels, dim, weights=None, metrics_collections=None, updates_collections=None, name=None)</code></h3>
+<p>Computes the cosine distance between the labels and predictions.</p>
+<p>The <code>streaming_mean_cosine_distance</code> function creates two local variables, <code>total</code> and <code>count</code> that are used to compute the average cosine distance between <code>predictions</code> and <code>labels</code>. This average is weighted by <code>weights</code>, and it is ultimately returned as <code>mean_distance</code>, which is an idempotent operation that simply divides <code>total</code> by <code>count</code>.</p>
+<p>For estimation of the metric over a stream of data, the function creates an <code>update_op</code> operation that updates these variables and returns the <code>mean_distance</code>.</p>
+<p>If <code>weights</code> is <code>None</code>, weights default to 1. Use weights of 0 to mask values.</p>
+<h5 id="args-12">Args:</h5>
+<ul>
+<li><b><code>predictions</code></b>: A <code>Tensor</code> of the same shape as <code>labels</code>.</li>
+<li><b><code>labels</code></b>: A <code>Tensor</code> of arbitrary shape.</li>
+<li><b><code>dim</code></b>: The dimension along which the cosine distance is computed.</li>
+<li><b><code>weights</code></b>: An optional <code>Tensor</code> whose shape is broadcastable to <code>predictions</code>, and whose dimension <code>dim</code> is 1.</li>
+<li><b><code>metrics_collections</code></b>: An optional list of collections that the metric value variable should be added to.</li>
+<li><b><code>updates_collections</code></b>: An optional list of collections that the metric update ops should be added to.</li>
+<li><b><code>name</code></b>: An optional variable_scope name.</li>
+</ul>
+<h5 id="returns-12">Returns:</h5>
+<ul>
+<li><b><code>mean_distance</code></b>: A tensor representing the current mean, the value of <code>total</code> divided by <code>count</code>.</li>
+<li><b><code>update_op</code></b>: An operation that increments the <code>total</code> and <code>count</code> variables appropriately.</li>
+</ul>
+<h5 id="raises-12">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>predictions</code> and <code>labels</code> have mismatched shapes, or if <code>weights</code> is not <code>None</code> and its shape doesn't match <code>predictions</code>, or if either <code>metrics_collections</code> or <code>updates_collections</code> are not a list or tuple.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.metrics.streaming_percentage_lessvalues-threshold-weightsnone-metrics_collectionsnone-updates_collectionsnone-namenone"><a name="//apple_ref/cpp/Function/streaming_percentage_less" class="dashAnchor"></a><code id="streaming_percentage_less">tf.contrib.metrics.streaming_percentage_less(values, threshold, weights=None, metrics_collections=None, updates_collections=None, name=None)</code></h3>
+<p>Computes the percentage of values less than the given threshold.</p>
+<p>The <code>streaming_percentage_less</code> function creates two local variables, <code>total</code> and <code>count</code> that are used to compute the percentage of <code>values</code> that fall below <code>threshold</code>. This rate is weighted by <code>weights</code>, and it is ultimately returned as <code>percentage</code> which is an idempotent operation that simply divides <code>total</code> by <code>count</code>.</p>
+<p>For estimation of the metric over a stream of data, the function creates an <code>update_op</code> operation that updates these variables and returns the <code>percentage</code>.</p>
+<p>If <code>weights</code> is <code>None</code>, weights default to 1. Use weights of 0 to mask values.</p>
+<h5 id="args-13">Args:</h5>
+<ul>
+<li><b><code>values</code></b>: A numeric <code>Tensor</code> of arbitrary size.</li>
+<li><b><code>threshold</code></b>: A scalar threshold.</li>
+<li><b><code>weights</code></b>: An optional <code>Tensor</code> whose shape is broadcastable to <code>values</code>.</li>
+<li><b><code>metrics_collections</code></b>: An optional list of collections that the metric value variable should be added to.</li>
+<li><b><code>updates_collections</code></b>: An optional list of collections that the metric update ops should be added to.</li>
+<li><b><code>name</code></b>: An optional variable_scope name.</li>
+</ul>
+<h5 id="returns-13">Returns:</h5>
+<ul>
+<li><b><code>percentage</code></b>: A tensor representing the current mean, the value of <code>total</code> divided by <code>count</code>.</li>
+<li><b><code>update_op</code></b>: An operation that increments the <code>total</code> and <code>count</code> variables appropriately.</li>
+</ul>
+<h5 id="raises-13">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>weights</code> is not <code>None</code> and its shape doesn't match <code>values</code>, or if either <code>metrics_collections</code> or <code>updates_collections</code> are not a list or tuple.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.metrics.streaming_sensitivity_at_specificitypredictions-labels-specificity-weightsnone-num_thresholds200-metrics_collectionsnone-updates_collectionsnone-namenone"><a name="//apple_ref/cpp/Function/streaming_sensitivity_at_specificity" class="dashAnchor"></a><code id="streaming_sensitivity_at_specificity">tf.contrib.metrics.streaming_sensitivity_at_specificity(predictions, labels, specificity, weights=None, num_thresholds=200, metrics_collections=None, updates_collections=None, name=None)</code></h3>
+<p>Computes the the specificity at a given sensitivity.</p>
+<p>The <code>streaming_sensitivity_at_specificity</code> function creates four local variables, <code>true_positives</code>, <code>true_negatives</code>, <code>false_positives</code> and <code>false_negatives</code> that are used to compute the sensitivity at the given specificity value. The threshold for the given specificity value is computed and used to evaluate the corresponding sensitivity.</p>
+<p>For estimation of the metric over a stream of data, the function creates an <code>update_op</code> operation that updates these variables and returns the <code>sensitivity</code>. <code>update_op</code> increments the <code>true_positives</code>, <code>true_negatives</code>, <code>false_positives</code> and <code>false_negatives</code> counts with the weight of each case found in the <code>predictions</code> and <code>labels</code>.</p>
+<p>If <code>weights</code> is <code>None</code>, weights default to 1. Use weights of 0 to mask values.</p>
+<p>For additional information about specificity and sensitivity, see the following: https://en.wikipedia.org/wiki/Sensitivity_and_specificity</p>
+<h5 id="args-14">Args:</h5>
+<ul>
+<li><b><code>predictions</code></b>: A floating point <code>Tensor</code> of arbitrary shape and whose values are in the range <code>[0, 1]</code>.</li>
+<li><b><code>labels</code></b>: A <code>bool</code> <code>Tensor</code> whose shape matches <code>predictions</code>.</li>
+<li><b><code>specificity</code></b>: A scalar value in range <code>[0, 1]</code>.</li>
+<li><b><code>weights</code></b>: An optional <code>Tensor</code> whose shape is broadcastable to <code>predictions</code>.</li>
+<li><b><code>num_thresholds</code></b>: The number of thresholds to use for matching the given specificity.</li>
+<li><b><code>metrics_collections</code></b>: An optional list of collections that <code>sensitivity</code> should be added to.</li>
+<li><b><code>updates_collections</code></b>: An optional list of collections that <code>update_op</code> should be added to.</li>
+<li><b><code>name</code></b>: An optional variable_scope name.</li>
+</ul>
+<h5 id="returns-14">Returns:</h5>
+<ul>
+<li><b><code>sensitivity</code></b>: A scalar tensor representing the sensitivity at the given <code>specificity</code> value.</li>
+<li><b><code>update_op</code></b>: An operation that increments the <code>true_positives</code>, <code>true_negatives</code>, <code>false_positives</code> and <code>false_negatives</code> variables appropriately and whose value matches <code>sensitivity</code>.</li>
+</ul>
+<h5 id="raises-14">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>predictions</code> and <code>labels</code> have mismatched shapes, if <code>weights</code> is not <code>None</code> and its shape doesn't match <code>predictions</code>, or if <code>specificity</code> is not between 0 and 1, or if either <code>metrics_collections</code> or <code>updates_collections</code> are not a list or tuple.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.metrics.streaming_sparse_average_precision_at_kpredictions-labels-k-weightsnone-metrics_collectionsnone-updates_collectionsnone-namenone"><a name="//apple_ref/cpp/Function/streaming_sparse_average_precision_at_k" class="dashAnchor"></a><code id="streaming_sparse_average_precision_at_k">tf.contrib.metrics.streaming_sparse_average_precision_at_k(predictions, labels, k, weights=None, metrics_collections=None, updates_collections=None, name=None)</code></h3>
+<p>Computes average precision@k of predictions with respect to sparse labels.</p>
+<p>See <code>sparse_average_precision_at_k</code> for details on formula. <code>weights</code> are applied to the result of <code>sparse_average_precision_at_k</code></p>
+<p><code>streaming_sparse_average_precision_at_k</code> creates two local variables, <code>average_precision_at_&lt;k&gt;/total</code> and <code>average_precision_at_&lt;k&gt;/max</code>, that are used to compute the frequency. This frequency is ultimately returned as <code>average_precision_at_&lt;k&gt;</code>: an idempotent operation that simply divides <code>average_precision_at_&lt;k&gt;/total</code> by <code>average_precision_at_&lt;k&gt;/max</code>.</p>
+<p>For estimation of the metric over a stream of data, the function creates an <code>update_op</code> operation that updates these variables and returns the <code>precision_at_&lt;k&gt;</code>. Internally, a <code>top_k</code> operation computes a <code>Tensor</code> indicating the top <code>k</code> <code>predictions</code>. Set operations applied to <code>top_k</code> and <code>labels</code> calculate the true positives and false positives weighted by <code>weights</code>. Then <code>update_op</code> increments <code>true_positive_at_&lt;k&gt;</code> and <code>false_positive_at_&lt;k&gt;</code> using these values.</p>
+<p>If <code>weights</code> is <code>None</code>, weights default to 1. Use weights of 0 to mask values.</p>
+<h5 id="args-15">Args:</h5>
+<ul>
+<li><b><code>predictions</code></b>: Float <code>Tensor</code> with shape [D1, ... DN, num_classes] where N &gt;= 1. Commonly, N=1 and <code>predictions</code> has shape [batch size, num_classes]. The final dimension contains the logit values for each class. [D1, ... DN] must match <code>labels</code>.</li>
+<li><b><code>labels</code></b>: <code>int64</code> <code>Tensor</code> or <code>SparseTensor</code> with shape [D1, ... DN, num_labels], where N &gt;= 1 and num_labels is the number of target classes for the associated prediction. Commonly, N=1 and <code>labels</code> has shape [batch_size, num_labels]. [D1, ... DN] must match <code>predictions_</code>. Values should be in range [0, num_classes), where num_classes is the last dimension of <code>predictions</code>. Values outside this range are ignored.</li>
+<li><b><code>k</code></b>: Integer, k for <span class="citation">@k</span> metric. This will calculate an average precision for range <code>[1,k]</code>, as documented above.</li>
+<li><b><code>weights</code></b>: An optional <code>Tensor</code> whose shape is broadcastable to the the first [D1, ... DN] dimensions of <code>predictions</code> and <code>labels</code>.</li>
+<li><b><code>metrics_collections</code></b>: An optional list of collections that values should be added to.</li>
+<li><b><code>updates_collections</code></b>: An optional list of collections that updates should be added to.</li>
+<li><b><code>name</code></b>: Name of new update operation, and namespace for other dependent ops.</li>
+</ul>
+<h5 id="returns-15">Returns:</h5>
+<ul>
+<li><b><code>mean_average_precision</code></b>: Scalar <code>float64</code> <code>Tensor</code> with the mean average precision values.</li>
+<li><b><code>update</code></b>: <code>Operation</code> that increments variables appropriately, and whose value matches <code>metric</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.metrics.streaming_sparse_precision_at_kpredictions-labels-k-class_idnone-weightsnone-metrics_collectionsnone-updates_collectionsnone-namenone"><a name="//apple_ref/cpp/Function/streaming_sparse_precision_at_k" class="dashAnchor"></a><code id="streaming_sparse_precision_at_k">tf.contrib.metrics.streaming_sparse_precision_at_k(predictions, labels, k, class_id=None, weights=None, metrics_collections=None, updates_collections=None, name=None)</code></h3>
+<p>Computes precision@k of the predictions with respect to sparse labels.</p>
+<p>If <code>class_id</code> is specified, we calculate precision by considering only the entries in the batch for which <code>class_id</code> is in the top-k highest <code>predictions</code>, and computing the fraction of them for which <code>class_id</code> is indeed a correct label. If <code>class_id</code> is not specified, we'll calculate precision as how often on average a class among the top-k classes with the highest predicted values of a batch entry is correct and can be found in the label for that entry.</p>
+<p><code>streaming_sparse_precision_at_k</code> creates two local variables, <code>true_positive_at_&lt;k&gt;</code> and <code>false_positive_at_&lt;k&gt;</code>, that are used to compute the precision@k frequency. This frequency is ultimately returned as <code>precision_at_&lt;k&gt;</code>: an idempotent operation that simply divides <code>true_positive_at_&lt;k&gt;</code> by total (<code>true_positive_at_&lt;k&gt;</code> + <code>false_positive_at_&lt;k&gt;</code>).</p>
+<p>For estimation of the metric over a stream of data, the function creates an <code>update_op</code> operation that updates these variables and returns the <code>precision_at_&lt;k&gt;</code>. Internally, a <code>top_k</code> operation computes a <code>Tensor</code> indicating the top <code>k</code> <code>predictions</code>. Set operations applied to <code>top_k</code> and <code>labels</code> calculate the true positives and false positives weighted by <code>weights</code>. Then <code>update_op</code> increments <code>true_positive_at_&lt;k&gt;</code> and <code>false_positive_at_&lt;k&gt;</code> using these values.</p>
+<p>If <code>weights</code> is <code>None</code>, weights default to 1. Use weights of 0 to mask values.</p>
+<h5 id="args-16">Args:</h5>
+<ul>
+<li><b><code>predictions</code></b>: Float <code>Tensor</code> with shape [D1, ... DN, num_classes] where N &gt;= 1. Commonly, N=1 and predictions has shape [batch size, num_classes]. The final dimension contains the logit values for each class. [D1, ... DN] must match <code>labels</code>.</li>
+<li><b><code>labels</code></b>: <code>int64</code> <code>Tensor</code> or <code>SparseTensor</code> with shape [D1, ... DN, num_labels], where N &gt;= 1 and num_labels is the number of target classes for the associated prediction. Commonly, N=1 and <code>labels</code> has shape [batch_size, num_labels]. [D1, ... DN] must match <code>predictions</code>. Values should be in range [0, num_classes), where num_classes is the last dimension of <code>predictions</code>. Values outside this range are ignored.</li>
+<li><b><code>k</code></b>: Integer, k for <span class="citation">@k</span> metric.</li>
+<li><b><code>class_id</code></b>: Integer class ID for which we want binary metrics. This should be in range [0, num_classes], where num_classes is the last dimension of <code>predictions</code>. If <code>class_id</code> is outside this range, the method returns NAN.</li>
+<li><b><code>weights</code></b>: An optional <code>Tensor</code> whose shape is broadcastable to the the first [D1, ... DN] dimensions of <code>predictions</code> and <code>labels</code>.</li>
+<li><b><code>metrics_collections</code></b>: An optional list of collections that values should be added to.</li>
+<li><b><code>updates_collections</code></b>: An optional list of collections that updates should be added to.</li>
+<li><b><code>name</code></b>: Name of new update operation, and namespace for other dependent ops.</li>
+</ul>
+<h5 id="returns-16">Returns:</h5>
+<ul>
+<li><b><code>precision</code></b>: Scalar <code>float64</code> <code>Tensor</code> with the value of <code>true_positives</code> divided by the sum of <code>true_positives</code> and <code>false_positives</code>.</li>
+<li><b><code>update_op</code></b>: <code>Operation</code> that increments <code>true_positives</code> and <code>false_positives</code> variables appropriately, and whose value matches <code>precision</code>.</li>
+</ul>
+<h5 id="raises-15">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>weights</code> is not <code>None</code> and its shape doesn't match <code>predictions</code>, or if either <code>metrics_collections</code> or <code>updates_collections</code> are not a list or tuple.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.metrics.streaming_sparse_precision_at_top_ktop_k_predictions-labels-class_idnone-weightsnone-metrics_collectionsnone-updates_collectionsnone-namenone"><a name="//apple_ref/cpp/Function/streaming_sparse_precision_at_top_k" class="dashAnchor"></a><code id="streaming_sparse_precision_at_top_k">tf.contrib.metrics.streaming_sparse_precision_at_top_k(top_k_predictions, labels, class_id=None, weights=None, metrics_collections=None, updates_collections=None, name=None)</code></h3>
+<p>Computes precision@k of top-k predictions with respect to sparse labels.</p>
+<p>If <code>class_id</code> is specified, we calculate precision by considering only the entries in the batch for which <code>class_id</code> is in the top-k highest <code>predictions</code>, and computing the fraction of them for which <code>class_id</code> is indeed a correct label. If <code>class_id</code> is not specified, we'll calculate precision as how often on average a class among the top-k classes with the highest predicted values of a batch entry is correct and can be found in the label for that entry.</p>
+<p><code>streaming_sparse_precision_at_top_k</code> creates two local variables, <code>true_positive_at_k</code> and <code>false_positive_at_k</code>, that are used to compute the precision@k frequency. This frequency is ultimately returned as <code>precision_at_k</code>: an idempotent operation that simply divides <code>true_positive_at_k</code> by total (<code>true_positive_at_k</code> + <code>false_positive_at_k</code>).</p>
+<p>For estimation of the metric over a stream of data, the function creates an <code>update_op</code> operation that updates these variables and returns the <code>precision_at_k</code>. Internally, set operations applied to <code>top_k_predictions</code> and <code>labels</code> calculate the true positives and false positives weighted by <code>weights</code>. Then <code>update_op</code> increments <code>true_positive_at_k</code> and <code>false_positive_at_k</code> using these values.</p>
+<p>If <code>weights</code> is <code>None</code>, weights default to 1. Use weights of 0 to mask values.</p>
+<h5 id="args-17">Args:</h5>
+<ul>
+<li><b><code>top_k_predictions</code></b>: Integer <code>Tensor</code> with shape [D1, ... DN, k] where N &gt;= 1. Commonly, N=1 and top_k_predictions has shape [batch size, k]. The final dimension contains the indices of top-k labels. [D1, ... DN] must match <code>labels</code>.</li>
+<li><b><code>labels</code></b>: <code>int64</code> <code>Tensor</code> or <code>SparseTensor</code> with shape [D1, ... DN, num_labels], where N &gt;= 1 and num_labels is the number of target classes for the associated prediction. Commonly, N=1 and <code>labels</code> has shape [batch_size, num_labels]. [D1, ... DN] must match <code>top_k_predictions</code>. Values should be in range [0, num_classes), where num_classes is the last dimension of <code>predictions</code>. Values outside this range are ignored.</li>
+<li><b><code>class_id</code></b>: Integer class ID for which we want binary metrics. This should be in range [0, num_classes), where num_classes is the last dimension of <code>predictions</code>. If <code>class_id</code> is outside this range, the method returns NAN.</li>
+<li><b><code>weights</code></b>: An optional <code>Tensor</code> whose shape is broadcastable to the the first [D1, ... DN] dimensions of <code>predictions</code> and <code>labels</code>.</li>
+<li><b><code>metrics_collections</code></b>: An optional list of collections that values should be added to.</li>
+<li><b><code>updates_collections</code></b>: An optional list of collections that updates should be added to.</li>
+<li><b><code>name</code></b>: Name of new update operation, and namespace for other dependent ops.</li>
+</ul>
+<h5 id="returns-17">Returns:</h5>
+<ul>
+<li><b><code>precision</code></b>: Scalar <code>float64</code> <code>Tensor</code> with the value of <code>true_positives</code> divided by the sum of <code>true_positives</code> and <code>false_positives</code>.</li>
+<li><b><code>update_op</code></b>: <code>Operation</code> that increments <code>true_positives</code> and <code>false_positives</code> variables appropriately, and whose value matches <code>precision</code>.</li>
+</ul>
+<h5 id="raises-16">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>weights</code> is not <code>None</code> and its shape doesn't match <code>predictions</code>, or if either <code>metrics_collections</code> or <code>updates_collections</code> are not a list or tuple.</li>
+<li><b><code>ValueError</code></b>: If <code>top_k_predictions</code> has rank &lt; 2.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.metrics.streaming_sparse_recall_at_kpredictions-labels-k-class_idnone-weightsnone-metrics_collectionsnone-updates_collectionsnone-namenone"><a name="//apple_ref/cpp/Function/streaming_sparse_recall_at_k" class="dashAnchor"></a><code id="streaming_sparse_recall_at_k">tf.contrib.metrics.streaming_sparse_recall_at_k(predictions, labels, k, class_id=None, weights=None, metrics_collections=None, updates_collections=None, name=None)</code></h3>
+<p>Computes recall@k of the predictions with respect to sparse labels.</p>
+<p>If <code>class_id</code> is specified, we calculate recall by considering only the entries in the batch for which <code>class_id</code> is in the label, and computing the fraction of them for which <code>class_id</code> is in the top-k <code>predictions</code>. If <code>class_id</code> is not specified, we'll calculate recall as how often on average a class among the labels of a batch entry is in the top-k <code>predictions</code>.</p>
+<p><code>streaming_sparse_recall_at_k</code> creates two local variables, <code>true_positive_at_&lt;k&gt;</code> and <code>false_negative_at_&lt;k&gt;</code>, that are used to compute the recall_at_k frequency. This frequency is ultimately returned as <code>recall_at_&lt;k&gt;</code>: an idempotent operation that simply divides <code>true_positive_at_&lt;k&gt;</code> by total (<code>true_positive_at_&lt;k&gt;</code> + <code>false_negative_at_&lt;k&gt;</code>).</p>
+<p>For estimation of the metric over a stream of data, the function creates an <code>update_op</code> operation that updates these variables and returns the <code>recall_at_&lt;k&gt;</code>. Internally, a <code>top_k</code> operation computes a <code>Tensor</code> indicating the top <code>k</code> <code>predictions</code>. Set operations applied to <code>top_k</code> and <code>labels</code> calculate the true positives and false negatives weighted by <code>weights</code>. Then <code>update_op</code> increments <code>true_positive_at_&lt;k&gt;</code> and <code>false_negative_at_&lt;k&gt;</code> using these values.</p>
+<p>If <code>weights</code> is <code>None</code>, weights default to 1. Use weights of 0 to mask values.</p>
+<h5 id="args-18">Args:</h5>
+<ul>
+<li><b><code>predictions</code></b>: Float <code>Tensor</code> with shape [D1, ... DN, num_classes] where N &gt;= 1. Commonly, N=1 and predictions has shape [batch size, num_classes]. The final dimension contains the logit values for each class. [D1, ... DN] must match <code>labels</code>.</li>
+<li><b><code>labels</code></b>: <code>int64</code> <code>Tensor</code> or <code>SparseTensor</code> with shape [D1, ... DN, num_labels], where N &gt;= 1 and num_labels is the number of target classes for the associated prediction. Commonly, N=1 and <code>labels</code> has shape [batch_size, num_labels]. [D1, ... DN] must match <code>predictions</code>. Values should be in range [0, num_classes), where num_classes is the last dimension of <code>predictions</code>. Values outside this range always count towards <code>false_negative_at_&lt;k&gt;</code>.</li>
+<li><b><code>k</code></b>: Integer, k for <span class="citation">@k</span> metric.</li>
+<li><b><code>class_id</code></b>: Integer class ID for which we want binary metrics. This should be in range [0, num_classes), where num_classes is the last dimension of <code>predictions</code>. If class_id is outside this range, the method returns NAN.</li>
+<li><b><code>weights</code></b>: An optional <code>Tensor</code> whose shape is broadcastable to the the first [D1, ... DN] dimensions of <code>predictions</code> and <code>labels</code>.</li>
+<li><b><code>metrics_collections</code></b>: An optional list of collections that values should be added to.</li>
+<li><b><code>updates_collections</code></b>: An optional list of collections that updates should be added to.</li>
+<li><b><code>name</code></b>: Name of new update operation, and namespace for other dependent ops.</li>
+</ul>
+<h5 id="returns-18">Returns:</h5>
+<ul>
+<li><b><code>recall</code></b>: Scalar <code>float64</code> <code>Tensor</code> with the value of <code>true_positives</code> divided by the sum of <code>true_positives</code> and <code>false_negatives</code>.</li>
+<li><b><code>update_op</code></b>: <code>Operation</code> that increments <code>true_positives</code> and <code>false_negatives</code> variables appropriately, and whose value matches <code>recall</code>.</li>
+</ul>
+<h5 id="raises-17">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>weights</code> is not <code>None</code> and its shape doesn't match <code>predictions</code>, or if either <code>metrics_collections</code> or <code>updates_collections</code> are not a list or tuple.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.metrics.streaming_specificity_at_sensitivitypredictions-labels-sensitivity-weightsnone-num_thresholds200-metrics_collectionsnone-updates_collectionsnone-namenone"><a name="//apple_ref/cpp/Function/streaming_specificity_at_sensitivity" class="dashAnchor"></a><code id="streaming_specificity_at_sensitivity">tf.contrib.metrics.streaming_specificity_at_sensitivity(predictions, labels, sensitivity, weights=None, num_thresholds=200, metrics_collections=None, updates_collections=None, name=None)</code></h3>
+<p>Computes the the specificity at a given sensitivity.</p>
+<p>The <code>streaming_specificity_at_sensitivity</code> function creates four local variables, <code>true_positives</code>, <code>true_negatives</code>, <code>false_positives</code> and <code>false_negatives</code> that are used to compute the specificity at the given sensitivity value. The threshold for the given sensitivity value is computed and used to evaluate the corresponding specificity.</p>
+<p>For estimation of the metric over a stream of data, the function creates an <code>update_op</code> operation that updates these variables and returns the <code>specificity</code>. <code>update_op</code> increments the <code>true_positives</code>, <code>true_negatives</code>, <code>false_positives</code> and <code>false_negatives</code> counts with the weight of each case found in the <code>predictions</code> and <code>labels</code>.</p>
+<p>If <code>weights</code> is <code>None</code>, weights default to 1. Use weights of 0 to mask values.</p>
+<p>For additional information about specificity and sensitivity, see the following: https://en.wikipedia.org/wiki/Sensitivity_and_specificity</p>
+<h5 id="args-19">Args:</h5>
+<ul>
+<li><b><code>predictions</code></b>: A floating point <code>Tensor</code> of arbitrary shape and whose values are in the range <code>[0, 1]</code>.</li>
+<li><b><code>labels</code></b>: A <code>bool</code> <code>Tensor</code> whose shape matches <code>predictions</code>.</li>
+<li><b><code>sensitivity</code></b>: A scalar value in range <code>[0, 1]</code>.</li>
+<li><b><code>weights</code></b>: An optional <code>Tensor</code> whose shape is broadcastable to <code>predictions</code>.</li>
+<li><b><code>num_thresholds</code></b>: The number of thresholds to use for matching the given sensitivity.</li>
+<li><b><code>metrics_collections</code></b>: An optional list of collections that <code>specificity</code> should be added to.</li>
+<li><b><code>updates_collections</code></b>: An optional list of collections that <code>update_op</code> should be added to.</li>
+<li><b><code>name</code></b>: An optional variable_scope name.</li>
+</ul>
+<h5 id="returns-19">Returns:</h5>
+<ul>
+<li><b><code>specificity</code></b>: A scalar tensor representing the specificity at the given <code>specificity</code> value.</li>
+<li><b><code>update_op</code></b>: An operation that increments the <code>true_positives</code>, <code>true_negatives</code>, <code>false_positives</code> and <code>false_negatives</code> variables appropriately and whose value matches <code>specificity</code>.</li>
+</ul>
+<h5 id="raises-18">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>predictions</code> and <code>labels</code> have mismatched shapes, if <code>weights</code> is not <code>None</code> and its shape doesn't match <code>predictions</code>, or if <code>sensitivity</code> is not between 0 and 1, or if either <code>metrics_collections</code> or <code>updates_collections</code> are not a list or tuple.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.metrics.streaming_concatvalues-axis0-max_sizenone-metrics_collectionsnone-updates_collectionsnone-namenone"><a name="//apple_ref/cpp/Function/streaming_concat" class="dashAnchor"></a><code id="streaming_concat">tf.contrib.metrics.streaming_concat(values, axis=0, max_size=None, metrics_collections=None, updates_collections=None, name=None)</code></h3>
+<p>Concatenate values along an axis across batches.</p>
+<p>The function <code>streaming_concat</code> creates two local variables, <code>array</code> and <code>size</code>, that are used to store concatenated values. Internally, <code>array</code> is used as storage for a dynamic array (if <code>maxsize</code> is <code>None</code>), which ensures that updates can be run in amortized constant time.</p>
+<p>For estimation of the metric over a stream of data, the function creates an <code>update_op</code> operation that appends the values of a tensor and returns the <code>value</code> of the concatenated tensors.</p>
+<p>This op allows for evaluating metrics that cannot be updated incrementally using the same framework as other streaming metrics.</p>
+<h5 id="args-20">Args:</h5>
+<ul>
+<li><b><code>values</code></b>: tensor to concatenate. Rank and the shape along all axes other than the axis to concatenate along must be statically known.</li>
+<li><b><code>axis</code></b>: optional integer axis to concatenate along.</li>
+<li><b><code>max_size</code></b>: optional integer maximum size of <code>value</code> along the given axis. Once the maximum size is reached, further updates are no-ops. By default, there is no maximum size: the array is resized as necessary.</li>
+<li><b><code>metrics_collections</code></b>: An optional list of collections that <code>value</code> should be added to.</li>
+<li><b><code>updates_collections</code></b>: An optional list of collections <code>update_op</code> should be added to.</li>
+<li><b><code>name</code></b>: An optional variable_scope name.</li>
+</ul>
+<h5 id="returns-20">Returns:</h5>
+<ul>
+<li><b><code>value</code></b>: A tensor representing the concatenated values.</li>
+<li><b><code>update_op</code></b>: An operation that concatenates the next values.</li>
+</ul>
+<h5 id="raises-19">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>values</code> does not have a statically known rank, <code>axis</code> is not in the valid range or the size of <code>values</code> is not statically known along any axis other than <code>axis</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.metrics.auc_using_histogramboolean_labels-scores-score_range-nbins100-collectionsnone-check_shapetrue-namenone"><a name="//apple_ref/cpp/Function/auc_using_histogram" class="dashAnchor"></a><code id="auc_using_histogram">tf.contrib.metrics.auc_using_histogram(boolean_labels, scores, score_range, nbins=100, collections=None, check_shape=True, name=None)</code></h3>
+<p>AUC computed by maintaining histograms.</p>
+<p>Rather than computing AUC directly, this Op maintains Variables containing histograms of the scores associated with <code>True</code> and <code>False</code> labels. By comparing these the AUC is generated, with some discretization error. See: &quot;Efficient AUC Learning Curve Calculation&quot; by Bouckaert.</p>
+<p>This AUC Op updates in <code>O(batch_size + nbins)</code> time and works well even with large class imbalance. The accuracy is limited by discretization error due to finite number of bins. If scores are concentrated in a fewer bins, accuracy is lower. If this is a concern, we recommend trying different numbers of bins and comparing results.</p>
+<h5 id="args-21">Args:</h5>
+<ul>
+<li><b><code>boolean_labels</code></b>: 1-D boolean <code>Tensor</code>. Entry is <code>True</code> if the corresponding record is in class.</li>
+<li><b><code>scores</code></b>: 1-D numeric <code>Tensor</code>, same shape as boolean_labels.</li>
+<li><b><code>score_range</code></b>: <code>Tensor</code> of shape <code>[2]</code>, same dtype as <code>scores</code>. The min/max values of score that we expect. Scores outside range will be clipped.</li>
+<li><b><code>nbins</code></b>: Integer number of bins to use. Accuracy strictly increases as the number of bins increases.</li>
+<li><b><code>collections</code></b>: List of graph collections keys. Internal histogram Variables are added to these collections. Defaults to <code>[GraphKeys.LOCAL_VARIABLES]</code>.</li>
+<li><b><code>check_shape</code></b>: Boolean. If <code>True</code>, do a runtime shape check on the scores and labels.</li>
+<li><b><code>name</code></b>: A name for this Op. Defaults to &quot;auc_using_histogram&quot;.</li>
+</ul>
+<h5 id="returns-21">Returns:</h5>
+<ul>
+<li><b><code>auc</code></b>: <code>float32</code> scalar <code>Tensor</code>. Fetching this converts internal histograms to auc value.</li>
+<li><b><code>update_op</code></b>: <code>Op</code>, when run, updates internal histograms.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.metrics.accuracypredictions-labels-weightsnone"><a name="//apple_ref/cpp/Function/accuracy" class="dashAnchor"></a><code id="accuracy">tf.contrib.metrics.accuracy(predictions, labels, weights=None)</code></h3>
+<p>Computes the percentage of times that predictions matches labels.</p>
+<h5 id="args-22">Args:</h5>
+<ul>
+<li><b><code>predictions</code></b>: the predicted values, a <code>Tensor</code> whose dtype and shape matches 'labels'.</li>
+<li><b><code>labels</code></b>: the ground truth values, a <code>Tensor</code> of any shape and bool, integer, or string dtype.</li>
+<li><b><code>weights</code></b>: None or <code>Tensor</code> of float values to reweight the accuracy.</li>
+</ul>
+<h5 id="returns-22">Returns:</h5>
+<p>Accuracy <code>Tensor</code>.</p>
+<h5 id="raises-20">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if dtypes don't match or if dtype is not bool, integer, or string.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.metrics.confusion_matrixpredictions-labels-num_classesnone-dtypetf.int32-namenone-weightsnone"><a name="//apple_ref/cpp/Function/confusion_matrix" class="dashAnchor"></a><code id="confusion_matrix">tf.contrib.metrics.confusion_matrix(predictions, labels, num_classes=None, dtype=tf.int32, name=None, weights=None)</code></h3>
+<p>Computes the confusion matrix from predictions and labels.</p>
+<p>Calculate the Confusion Matrix for a pair of prediction and label 1-D int arrays.</p>
+<p>The matrix rows represent the prediction labels and the columns represents the real labels. The confusion matrix is always a 2-D array of shape <code>[n, n]</code>, where <code>n</code> is the number of valid labels for a given classification task. Both prediction and labels must be 1-D arrays of the same shape in order for this function to work.</p>
+<p>If <code>num_classes</code> is None, then <code>num_classes</code> will be set to the one plus the maximum value in either predictions or labels. Class labels are expected to start at 0. E.g., if <code>num_classes</code> was three, then the possible labels would be <code>[0, 1, 2]</code>.</p>
+<p>If <code>weights</code> is not <code>None</code>, then each prediction contributes its corresponding weight to the total value of the confusion matrix cell.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">  tf.contrib.metrics.confusion_matrix([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>], [<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">4</span>]) <span class="op">==&gt;</span>
+      [[<span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span>]
+       [<span class="dv">0</span> <span class="dv">0</span> <span class="dv">1</span> <span class="dv">0</span> <span class="dv">0</span>]
+       [<span class="dv">0</span> <span class="dv">0</span> <span class="dv">1</span> <span class="dv">0</span> <span class="dv">0</span>]
+       [<span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span>]
+       [<span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">1</span>]]</code></pre></div>
+<p>Note that the possible labels are assumed to be <code>[0, 1, 2, 3, 4]</code>, resulting in a 5x5 confusion matrix.</p>
+<h5 id="args-23">Args:</h5>
+<ul>
+<li><b><code>predictions</code></b>: A 1-D array representing the predictions for a given classification.</li>
+<li><b><code>labels</code></b>: A 1-D representing the real labels for the classification task.</li>
+<li><b><code>num_classes</code></b>: The possible number of labels the classification task can have. If this value is not provided, it will be calculated using both predictions and labels array.</li>
+<li><b><code>dtype</code></b>: Data type of the confusion matrix.</li>
+<li><b><code>name</code></b>: Scope name.</li>
+<li><b><code>weights</code></b>: An optional <code>Tensor</code> whose shape matches <code>predictions</code>.</li>
+</ul>
+<h5 id="returns-23">Returns:</h5>
+<p>A k X k matrix representing the confusion matrix, where k is the number of possible labels in the classification task.</p>
+<h5 id="raises-21">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If both predictions and labels are not 1-D vectors and have mismatched shapes, or if <code>weights</code> is not <code>None</code> and its shape doesn't match <code>predictions</code>.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.metrics.aggregate_metricsvalue_update_tuples"><a name="//apple_ref/cpp/Function/aggregate_metrics" class="dashAnchor"></a><code id="aggregate_metrics">tf.contrib.metrics.aggregate_metrics(*value_update_tuples)</code></h3>
+<p>Aggregates the metric value tensors and update ops into two lists.</p>
+<h5 id="args-24">Args:</h5>
+<ul>
+<li><b><code>*value_update_tuples</code></b>: a variable number of tuples, each of which contain the pair of (value_tensor, update_op) from a streaming metric.</li>
+</ul>
+<h5 id="returns-24">Returns:</h5>
+<p>a list of value tensors and a list of update ops.</p>
+<h5 id="raises-22">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>value_update_tuples</code> is empty.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.metrics.aggregate_metric_mapnames_to_tuples"><a name="//apple_ref/cpp/Function/aggregate_metric_map" class="dashAnchor"></a><code id="aggregate_metric_map">tf.contrib.metrics.aggregate_metric_map(names_to_tuples)</code></h3>
+<p>Aggregates the metric names to tuple dictionary.</p>
+<p>This function is useful for pairing metric names with their associated value and update ops when the list of metrics is long. For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">  metrics_to_values, metrics_to_updates <span class="op">=</span> slim.metrics.aggregate_metric_map({
+      <span class="st">&#39;Mean Absolute Error&#39;</span>: new_slim.metrics.streaming_mean_absolute_error(
+          predictions, labels, weights),
+      <span class="st">&#39;Mean Relative Error&#39;</span>: new_slim.metrics.streaming_mean_relative_error(
+          predictions, labels, labels, weights),
+      <span class="co">&#39;RMSE Linear&#39;</span>: new_slim.metrics.streaming_root_mean_squared_error(
+          predictions, labels, weights),
+      <span class="co">&#39;RMSE Log&#39;</span>: new_slim.metrics.streaming_root_mean_squared_error(
+          predictions, labels, weights),
+  })</code></pre></div>
+<h5 id="args-25">Args:</h5>
+<ul>
+<li><b><code>names_to_tuples</code></b>: a map of metric names to tuples, each of which contain the pair of (value_tensor, update_op) from a streaming metric.</li>
+</ul>
+<h5 id="returns-25">Returns:</h5>
+<p>A dictionary from metric names to value ops and a dictionary from metric names to update ops.</p>
+<h2 id="set-ops">Set <code>Ops</code></h2>
+<hr />
+<h3 id="tf.contrib.metrics.set_differencea-b-aminusbtrue-validate_indicestrue"><a name="//apple_ref/cpp/Function/set_difference" class="dashAnchor"></a><code id="set_difference">tf.contrib.metrics.set_difference(a, b, aminusb=True, validate_indices=True)</code></h3>
+<p>Compute set difference of elements in last dimension of <code>a</code> and <code>b</code>.</p>
+<p>All but the last dimension of <code>a</code> and <code>b</code> must match.</p>
+<h5 id="args-26">Args:</h5>
+<ul>
+<li><b><code>a</code></b>: <code>Tensor</code> or <code>SparseTensor</code> of the same type as <code>b</code>. If sparse, indices must be sorted in row-major order.</li>
+<li><b><code>b</code></b>: <code>Tensor</code> or <code>SparseTensor</code> of the same type as <code>a</code>. Must be <code>SparseTensor</code> if <code>a</code> is <code>SparseTensor</code>. If sparse, indices must be sorted in row-major order.</li>
+<li><b><code>aminusb</code></b>: Whether to subtract <code>b</code> from <code>a</code>, vs vice versa.</li>
+<li><b><code>validate_indices</code></b>: Whether to validate the order and range of sparse indices in <code>a</code> and <code>b</code>.</li>
+</ul>
+<h5 id="returns-26">Returns:</h5>
+<p>A <code>SparseTensor</code> with the same rank as <code>a</code> and <code>b</code>, and all but the last dimension the same. Elements along the last dimension contain the differences.</p>
+<hr />
+<h3 id="tf.contrib.metrics.set_intersectiona-b-validate_indicestrue"><a name="//apple_ref/cpp/Function/set_intersection" class="dashAnchor"></a><code id="set_intersection">tf.contrib.metrics.set_intersection(a, b, validate_indices=True)</code></h3>
+<p>Compute set intersection of elements in last dimension of <code>a</code> and <code>b</code>.</p>
+<p>All but the last dimension of <code>a</code> and <code>b</code> must match.</p>
+<h5 id="args-27">Args:</h5>
+<ul>
+<li><b><code>a</code></b>: <code>Tensor</code> or <code>SparseTensor</code> of the same type as <code>b</code>. If sparse, indices must be sorted in row-major order.</li>
+<li><b><code>b</code></b>: <code>Tensor</code> or <code>SparseTensor</code> of the same type as <code>a</code>. Must be <code>SparseTensor</code> if <code>a</code> is <code>SparseTensor</code>. If sparse, indices must be sorted in row-major order.</li>
+<li><b><code>validate_indices</code></b>: Whether to validate the order and range of sparse indices in <code>a</code> and <code>b</code>.</li>
+</ul>
+<h5 id="returns-27">Returns:</h5>
+<p>A <code>SparseTensor</code> with the same rank as <code>a</code> and <code>b</code>, and all but the last dimension the same. Elements along the last dimension contain the intersections.</p>
+<hr />
+<h3 id="tf.contrib.metrics.set_sizea-validate_indicestrue"><a name="//apple_ref/cpp/Function/set_size" class="dashAnchor"></a><code id="set_size">tf.contrib.metrics.set_size(a, validate_indices=True)</code></h3>
+<p>Compute number of unique elements along last dimension of <code>a</code>.</p>
+<h5 id="args-28">Args:</h5>
+<ul>
+<li><b><code>a</code></b>: <code>SparseTensor</code>, with indices sorted in row-major order.</li>
+<li><b><code>validate_indices</code></b>: Whether to validate the order and range of sparse indices in <code>a</code>.</li>
+</ul>
+<h5 id="returns-28">Returns:</h5>
+<p><code>int32</code> <code>Tensor</code> of set sizes. For <code>a</code> ranked <code>n</code>, this is a <code>Tensor</code> with rank <code>n-1</code>, and the same 1st <code>n-1</code> dimensions as <code>a</code>. Each value is the number of unique elements in the corresponding <code>[0...n-1]</code> dimension of <code>a</code>.</p>
+<h5 id="raises-23">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>a</code> is an invalid types.</li>
+</ul>
+<hr />
+<h3 id="tf.contrib.metrics.set_uniona-b-validate_indicestrue"><a name="//apple_ref/cpp/Function/set_union" class="dashAnchor"></a><code id="set_union">tf.contrib.metrics.set_union(a, b, validate_indices=True)</code></h3>
+<p>Compute set union of elements in last dimension of <code>a</code> and <code>b</code>.</p>
+<p>All but the last dimension of <code>a</code> and <code>b</code> must match.</p>
+<h5 id="args-29">Args:</h5>
+<ul>
+<li><b><code>a</code></b>: <code>Tensor</code> or <code>SparseTensor</code> of the same type as <code>b</code>. If sparse, indices must be sorted in row-major order.</li>
+<li><b><code>b</code></b>: <code>Tensor</code> or <code>SparseTensor</code> of the same type as <code>a</code>. Must be <code>SparseTensor</code> if <code>a</code> is <code>SparseTensor</code>. If sparse, indices must be sorted in row-major order.</li>
+<li><b><code>validate_indices</code></b>: Whether to validate the order and range of sparse indices in <code>a</code> and <code>b</code>.</li>
+</ul>
+<h5 id="returns-29">Returns:</h5>
+<p>A <code>SparseTensor</code> with the same rank as <code>a</code> and <code>b</code>, and all but the last dimension the same. Elements along the last dimension contain the unions.</p>

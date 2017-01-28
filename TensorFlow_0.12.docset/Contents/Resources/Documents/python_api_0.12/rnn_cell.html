@@ -1,0 +1,382 @@
+<!-- This file is machine generated: DO NOT EDIT! -->
+<h1 id="neural-network-rnn-cells">Neural Network RNN Cells</h1>
+<p>[TOC]</p>
+<p>Module for constructing RNN Cells.</p>
+<h2 id="base-interface-for-all-rnn-cells">Base interface for all RNN Cells</h2>
+<hr />
+<h3 id="class-tf.nn.rnn_cell.rnncell"><a name="//apple_ref/cpp/Class/RNNCell" class="dashAnchor"></a><code id="RNNCell">class tf.nn.rnn_cell.RNNCell</code></h3>
+<p>Abstract object representing an RNN cell.</p>
+<p>The definition of cell in this package differs from the definition used in the literature. In the literature, cell refers to an object with a single scalar output. The definition in this package refers to a horizontal array of such units.</p>
+<p>An RNN cell, in the most abstract setting, is anything that has a state and performs some operation that takes a matrix of inputs. This operation results in an output matrix with <code>self.output_size</code> columns. If <code>self.state_size</code> is an integer, this operation also results in a new state matrix with <code>self.state_size</code> columns. If <code>self.state_size</code> is a tuple of integers, then it results in a tuple of <code>len(state_size)</code> state matrices, each with a column size corresponding to values in <code>state_size</code>.</p>
+<p>This module provides a number of basic commonly used RNN cells, such as LSTM (Long Short Term Memory) or GRU (Gated Recurrent Unit), and a number of operators that allow add dropouts, projections, or embeddings for inputs. Constructing multi-layer cells is supported by the class <code>MultiRNNCell</code>, or by calling the <code>rnn</code> ops several times. Every <code>RNNCell</code> must have the properties below and and implement <code>__call__</code> with the following signature. - - -</p>
+<h4 id="tf.nn.rnn_cell.rnncell.__call__inputs-state-scopenone"><code id="RNNCell.__call__">tf.nn.rnn_cell.RNNCell.__call__(inputs, state, scope=None)</code></h4>
+<p>Run this RNN cell on inputs, starting from the given state.</p>
+<h5 id="args">Args:</h5>
+<ul>
+<li><b><code>inputs</code></b>: <code>2-D</code> tensor with shape <code>[batch_size x input_size]</code>.</li>
+<li><b><code>state</code></b>: if <code>self.state_size</code> is an integer, this should be a <code>2-D Tensor</code> with shape <code>[batch_size x self.state_size]</code>. Otherwise, if <code>self.state_size</code> is a tuple of integers, this should be a tuple with shapes <code>[batch_size x s] for s in self.state_size</code>.</li>
+<li><b><code>scope</code></b>: VariableScope for the created subgraph; defaults to class name.</li>
+</ul>
+<h5 id="returns">Returns:</h5>
+<p>A pair containing:</p>
+<ul>
+<li>Output: A <code>2-D</code> tensor with shape <code>[batch_size x self.output_size]</code>.</li>
+<li>New state: Either a single <code>2-D</code> tensor, or a tuple of tensors matching the arity and shapes of <code>state</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.nn.rnn_cell.rnncell.output_size"><code id="RNNCell.output_size">tf.nn.rnn_cell.RNNCell.output_size</code></h4>
+<p>Integer or TensorShape: size of outputs produced by this cell.</p>
+<hr />
+<h4 id="tf.nn.rnn_cell.rnncell.state_size"><code id="RNNCell.state_size">tf.nn.rnn_cell.RNNCell.state_size</code></h4>
+<p>size(s) of state(s) used by this cell.</p>
+<p>It can be represented by an Integer, a TensorShape or a tuple of Integers or TensorShapes.</p>
+<hr />
+<h4 id="tf.nn.rnn_cell.rnncell.zero_statebatch_size-dtype"><code id="RNNCell.zero_state">tf.nn.rnn_cell.RNNCell.zero_state(batch_size, dtype)</code></h4>
+<p>Return zero-filled state tensor(s).</p>
+<h5 id="args-1">Args:</h5>
+<ul>
+<li><b><code>batch_size</code></b>: int, float, or unit Tensor representing the batch size.</li>
+<li><b><code>dtype</code></b>: the data type to use for the state.</li>
+</ul>
+<h5 id="returns-1">Returns:</h5>
+<p>If <code>state_size</code> is an int or TensorShape, then the return value is a <code>N-D</code> tensor of shape <code>[batch_size x state_size]</code> filled with zeros.</p>
+<p>If <code>state_size</code> is a nested list or tuple, then the return value is a nested list or tuple (of the same structure) of <code>2-D</code> tensors with the shapes <code>[batch_size x s]</code> for each s in <code>state_size</code>.</p>
+<h2 id="rnn-cells-for-use-with-tensorflows-core-rnn-methods">RNN Cells for use with TensorFlow's core RNN methods</h2>
+<hr />
+<h3 id="class-tf.nn.rnn_cell.basicrnncell"><a name="//apple_ref/cpp/Class/BasicRNNCell" class="dashAnchor"></a><code id="BasicRNNCell">class tf.nn.rnn_cell.BasicRNNCell</code></h3>
+<p>The most basic RNN cell. - - -</p>
+<h4 id="tf.nn.rnn_cell.basicrnncell.__call__inputs-state-scopenone"><code id="BasicRNNCell.__call__">tf.nn.rnn_cell.BasicRNNCell.__call__(inputs, state, scope=None)</code></h4>
+<p>Most basic RNN: output = new_state = activation(W * input + U * state + B).</p>
+<hr />
+<h4 id="tf.nn.rnn_cell.basicrnncell.__init__num_units-input_sizenone-activationtanh"><code id="BasicRNNCell.__init__">tf.nn.rnn_cell.BasicRNNCell.__init__(num_units, input_size=None, activation=tanh)</code></h4>
+<hr />
+<h4 id="tf.nn.rnn_cell.basicrnncell.output_size"><code id="BasicRNNCell.output_size">tf.nn.rnn_cell.BasicRNNCell.output_size</code></h4>
+<hr />
+<h4 id="tf.nn.rnn_cell.basicrnncell.state_size"><code id="BasicRNNCell.state_size">tf.nn.rnn_cell.BasicRNNCell.state_size</code></h4>
+<hr />
+<h4 id="tf.nn.rnn_cell.basicrnncell.zero_statebatch_size-dtype"><code id="BasicRNNCell.zero_state">tf.nn.rnn_cell.BasicRNNCell.zero_state(batch_size, dtype)</code></h4>
+<p>Return zero-filled state tensor(s).</p>
+<h5 id="args-2">Args:</h5>
+<ul>
+<li><b><code>batch_size</code></b>: int, float, or unit Tensor representing the batch size.</li>
+<li><b><code>dtype</code></b>: the data type to use for the state.</li>
+</ul>
+<h5 id="returns-2">Returns:</h5>
+<p>If <code>state_size</code> is an int or TensorShape, then the return value is a <code>N-D</code> tensor of shape <code>[batch_size x state_size]</code> filled with zeros.</p>
+<p>If <code>state_size</code> is a nested list or tuple, then the return value is a nested list or tuple (of the same structure) of <code>2-D</code> tensors with the shapes <code>[batch_size x s]</code> for each s in <code>state_size</code>.</p>
+<hr />
+<h3 id="class-tf.nn.rnn_cell.basiclstmcell"><a name="//apple_ref/cpp/Class/BasicLSTMCell" class="dashAnchor"></a><code id="BasicLSTMCell">class tf.nn.rnn_cell.BasicLSTMCell</code></h3>
+<p>Basic LSTM recurrent network cell.</p>
+<p>The implementation is based on: http://arxiv.org/abs/1409.2329.</p>
+<p>We add forget_bias (default: 1) to the biases of the forget gate in order to reduce the scale of forgetting in the beginning of the training.</p>
+<p>It does not allow cell clipping, a projection layer, and does not use peep-hole connections: it is the basic baseline.</p>
+<p>For advanced models, please use the full LSTMCell that follows. - - -</p>
+<h4 id="tf.nn.rnn_cell.basiclstmcell.__call__inputs-state-scopenone"><code id="BasicLSTMCell.__call__">tf.nn.rnn_cell.BasicLSTMCell.__call__(inputs, state, scope=None)</code></h4>
+<p>Long short-term memory cell (LSTM).</p>
+<hr />
+<h4 id="tf.nn.rnn_cell.basiclstmcell.__init__num_units-forget_bias1.0-input_sizenone-state_is_tupletrue-activationtanh"><code id="BasicLSTMCell.__init__">tf.nn.rnn_cell.BasicLSTMCell.__init__(num_units, forget_bias=1.0, input_size=None, state_is_tuple=True, activation=tanh)</code></h4>
+<p>Initialize the basic LSTM cell.</p>
+<h5 id="args-3">Args:</h5>
+<ul>
+<li><b><code>num_units</code></b>: int, The number of units in the LSTM cell.</li>
+<li><b><code>forget_bias</code></b>: float, The bias added to forget gates (see above).</li>
+<li><b><code>input_size</code></b>: Deprecated and unused.</li>
+<li><b><code>state_is_tuple</code></b>: If True, accepted and returned states are 2-tuples of the <code>c_state</code> and <code>m_state</code>. If False, they are concatenated along the column axis. The latter behavior will soon be deprecated.</li>
+<li><b><code>activation</code></b>: Activation function of the inner states.</li>
+</ul>
+<hr />
+<h4 id="tf.nn.rnn_cell.basiclstmcell.output_size"><code id="BasicLSTMCell.output_size">tf.nn.rnn_cell.BasicLSTMCell.output_size</code></h4>
+<hr />
+<h4 id="tf.nn.rnn_cell.basiclstmcell.state_size"><code id="BasicLSTMCell.state_size">tf.nn.rnn_cell.BasicLSTMCell.state_size</code></h4>
+<hr />
+<h4 id="tf.nn.rnn_cell.basiclstmcell.zero_statebatch_size-dtype"><code id="BasicLSTMCell.zero_state">tf.nn.rnn_cell.BasicLSTMCell.zero_state(batch_size, dtype)</code></h4>
+<p>Return zero-filled state tensor(s).</p>
+<h5 id="args-4">Args:</h5>
+<ul>
+<li><b><code>batch_size</code></b>: int, float, or unit Tensor representing the batch size.</li>
+<li><b><code>dtype</code></b>: the data type to use for the state.</li>
+</ul>
+<h5 id="returns-3">Returns:</h5>
+<p>If <code>state_size</code> is an int or TensorShape, then the return value is a <code>N-D</code> tensor of shape <code>[batch_size x state_size]</code> filled with zeros.</p>
+<p>If <code>state_size</code> is a nested list or tuple, then the return value is a nested list or tuple (of the same structure) of <code>2-D</code> tensors with the shapes <code>[batch_size x s]</code> for each s in <code>state_size</code>.</p>
+<hr />
+<h3 id="class-tf.nn.rnn_cell.grucell"><a name="//apple_ref/cpp/Class/GRUCell" class="dashAnchor"></a><code id="GRUCell">class tf.nn.rnn_cell.GRUCell</code></h3>
+<p>Gated Recurrent Unit cell (cf. http://arxiv.org/abs/1406.1078). - - -</p>
+<h4 id="tf.nn.rnn_cell.grucell.__call__inputs-state-scopenone"><code id="GRUCell.__call__">tf.nn.rnn_cell.GRUCell.__call__(inputs, state, scope=None)</code></h4>
+<p>Gated recurrent unit (GRU) with nunits cells.</p>
+<hr />
+<h4 id="tf.nn.rnn_cell.grucell.__init__num_units-input_sizenone-activationtanh"><code id="GRUCell.__init__">tf.nn.rnn_cell.GRUCell.__init__(num_units, input_size=None, activation=tanh)</code></h4>
+<hr />
+<h4 id="tf.nn.rnn_cell.grucell.output_size"><code id="GRUCell.output_size">tf.nn.rnn_cell.GRUCell.output_size</code></h4>
+<hr />
+<h4 id="tf.nn.rnn_cell.grucell.state_size"><code id="GRUCell.state_size">tf.nn.rnn_cell.GRUCell.state_size</code></h4>
+<hr />
+<h4 id="tf.nn.rnn_cell.grucell.zero_statebatch_size-dtype"><code id="GRUCell.zero_state">tf.nn.rnn_cell.GRUCell.zero_state(batch_size, dtype)</code></h4>
+<p>Return zero-filled state tensor(s).</p>
+<h5 id="args-5">Args:</h5>
+<ul>
+<li><b><code>batch_size</code></b>: int, float, or unit Tensor representing the batch size.</li>
+<li><b><code>dtype</code></b>: the data type to use for the state.</li>
+</ul>
+<h5 id="returns-4">Returns:</h5>
+<p>If <code>state_size</code> is an int or TensorShape, then the return value is a <code>N-D</code> tensor of shape <code>[batch_size x state_size]</code> filled with zeros.</p>
+<p>If <code>state_size</code> is a nested list or tuple, then the return value is a nested list or tuple (of the same structure) of <code>2-D</code> tensors with the shapes <code>[batch_size x s]</code> for each s in <code>state_size</code>.</p>
+<hr />
+<h3 id="class-tf.nn.rnn_cell.lstmcell"><a name="//apple_ref/cpp/Class/LSTMCell" class="dashAnchor"></a><code id="LSTMCell">class tf.nn.rnn_cell.LSTMCell</code></h3>
+<p>Long short-term memory unit (LSTM) recurrent network cell.</p>
+<p>The default non-peephole implementation is based on:</p>
+<p>http://deeplearning.cs.cmu.edu/pdfs/Hochreiter97_lstm.pdf</p>
+<p>S. Hochreiter and J. Schmidhuber. &quot;Long Short-Term Memory&quot;. Neural Computation, 9(8):1735-1780, 1997.</p>
+<p>The peephole implementation is based on:</p>
+<p>https://research.google.com/pubs/archive/43905.pdf</p>
+<p>Hasim Sak, Andrew Senior, and Francoise Beaufays. &quot;Long short-term memory recurrent neural network architectures for large scale acoustic modeling.&quot; INTERSPEECH, 2014.</p>
+<p>The class uses optional peep-hole connections, optional cell clipping, and an optional projection layer. - - -</p>
+<h4 id="tf.nn.rnn_cell.lstmcell.__call__inputs-state-scopenone"><code id="LSTMCell.__call__">tf.nn.rnn_cell.LSTMCell.__call__(inputs, state, scope=None)</code></h4>
+<p>Run one step of LSTM.</p>
+<h5 id="args-6">Args:</h5>
+<ul>
+<li><b><code>inputs</code></b>: input Tensor, 2D, batch x num_units.</li>
+<li><b><code>state</code></b>: if <code>state_is_tuple</code> is False, this must be a state Tensor, <code>2-D, batch x state_size</code>. If <code>state_is_tuple</code> is True, this must be a tuple of state Tensors, both <code>2-D</code>, with column sizes <code>c_state</code> and <code>m_state</code>.</li>
+<li><b><code>scope</code></b>: VariableScope for the created subgraph; defaults to &quot;LSTMCell&quot;.</li>
+</ul>
+<h5 id="returns-5">Returns:</h5>
+<p>A tuple containing:</p>
+<ul>
+<li>A <code>2-D, [batch x output_dim]</code>, Tensor representing the output of the LSTM after reading <code>inputs</code> when previous state was <code>state</code>. Here output_dim is: num_proj if num_proj was set, num_units otherwise.</li>
+<li>Tensor(s) representing the new state of LSTM after reading <code>inputs</code> when the previous state was <code>state</code>. Same type and shape(s) as <code>state</code>.</li>
+</ul>
+<h5 id="raises">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If input size cannot be inferred from inputs via static shape inference.</li>
+</ul>
+<hr />
+<h4 id="tf.nn.rnn_cell.lstmcell.__init__num_units-input_sizenone-use_peepholesfalse-cell_clipnone-initializernone-num_projnone-proj_clipnone-num_unit_shards1-num_proj_shards1-forget_bias1.0-state_is_tupletrue-activationtanh"><code id="LSTMCell.__init__">tf.nn.rnn_cell.LSTMCell.__init__(num_units, input_size=None, use_peepholes=False, cell_clip=None, initializer=None, num_proj=None, proj_clip=None, num_unit_shards=1, num_proj_shards=1, forget_bias=1.0, state_is_tuple=True, activation=tanh)</code></h4>
+<p>Initialize the parameters for an LSTM cell.</p>
+<h5 id="args-7">Args:</h5>
+<ul>
+<li><b><code>num_units</code></b>: int, The number of units in the LSTM cell</li>
+<li><b><code>input_size</code></b>: Deprecated and unused.</li>
+<li><b><code>use_peepholes</code></b>: bool, set True to enable diagonal/peephole connections.</li>
+<li><b><code>cell_clip</code></b>: (optional) A float value, if provided the cell state is clipped by this value prior to the cell output activation.</li>
+<li><b><code>initializer</code></b>: (optional) The initializer to use for the weight and projection matrices.</li>
+<li><b><code>num_proj</code></b>: (optional) int, The output dimensionality for the projection matrices. If None, no projection is performed.</li>
+<li><p><b><code>proj_clip</code></b>: (optional) A float value. If <code>num_proj &gt; 0</code> and <code>proj_clip</code> is provided, then the projected values are clipped elementwise to within <code>[-proj_clip, proj_clip]</code>.</p></li>
+<li><b><code>num_unit_shards</code></b>: How to split the weight matrix. If &gt;1, the weight matrix is stored across num_unit_shards.</li>
+<li><b><code>num_proj_shards</code></b>: How to split the projection matrix. If &gt;1, the projection matrix is stored across num_proj_shards.</li>
+<li><b><code>forget_bias</code></b>: Biases of the forget gate are initialized by default to 1 in order to reduce the scale of forgetting at the beginning of the training.</li>
+<li><b><code>state_is_tuple</code></b>: If True, accepted and returned states are 2-tuples of the <code>c_state</code> and <code>m_state</code>. If False, they are concatenated along the column axis. This latter behavior will soon be deprecated.</li>
+<li><p><b><code>activation</code></b>: Activation function of the inner states.</p></li>
+</ul>
+<hr />
+<h4 id="tf.nn.rnn_cell.lstmcell.output_size"><code id="LSTMCell.output_size">tf.nn.rnn_cell.LSTMCell.output_size</code></h4>
+<hr />
+<h4 id="tf.nn.rnn_cell.lstmcell.state_size"><code id="LSTMCell.state_size">tf.nn.rnn_cell.LSTMCell.state_size</code></h4>
+<hr />
+<h4 id="tf.nn.rnn_cell.lstmcell.zero_statebatch_size-dtype"><code id="LSTMCell.zero_state">tf.nn.rnn_cell.LSTMCell.zero_state(batch_size, dtype)</code></h4>
+<p>Return zero-filled state tensor(s).</p>
+<h5 id="args-8">Args:</h5>
+<ul>
+<li><b><code>batch_size</code></b>: int, float, or unit Tensor representing the batch size.</li>
+<li><b><code>dtype</code></b>: the data type to use for the state.</li>
+</ul>
+<h5 id="returns-6">Returns:</h5>
+<p>If <code>state_size</code> is an int or TensorShape, then the return value is a <code>N-D</code> tensor of shape <code>[batch_size x state_size]</code> filled with zeros.</p>
+<p>If <code>state_size</code> is a nested list or tuple, then the return value is a nested list or tuple (of the same structure) of <code>2-D</code> tensors with the shapes <code>[batch_size x s]</code> for each s in <code>state_size</code>.</p>
+<h2 id="classes-storing-split-rnncell-state">Classes storing split <code>RNNCell</code> state</h2>
+<hr />
+<h3 id="class-tf.nn.rnn_cell.lstmstatetuple"><a name="//apple_ref/cpp/Class/LSTMStateTuple" class="dashAnchor"></a><code id="LSTMStateTuple">class tf.nn.rnn_cell.LSTMStateTuple</code></h3>
+<p>Tuple used by LSTM Cells for <code>state_size</code>, <code>zero_state</code>, and output state.</p>
+<p>Stores two elements: <code>(c, h)</code>, in that order.</p>
+<p>Only used when <code>state_is_tuple=True</code>. - - -</p>
+<h4 id="tf.nn.rnn_cell.lstmstatetuple.__getnewargs__"><code id="LSTMStateTuple.__getnewargs__">tf.nn.rnn_cell.LSTMStateTuple.__getnewargs__()</code></h4>
+<p>Return self as a plain tuple. Used by copy and pickle.</p>
+<hr />
+<h4 id="tf.nn.rnn_cell.lstmstatetuple.__getstate__"><code id="LSTMStateTuple.__getstate__">tf.nn.rnn_cell.LSTMStateTuple.__getstate__()</code></h4>
+<p>Exclude the OrderedDict from pickling</p>
+<hr />
+<h4 id="tf.nn.rnn_cell.lstmstatetuple.__new___cls-c-h"><code id="LSTMStateTuple.__new__">tf.nn.rnn_cell.LSTMStateTuple.__new__(_cls, c, h)</code></h4>
+<p>Create new instance of LSTMStateTuple(c, h)</p>
+<hr />
+<h4 id="tf.nn.rnn_cell.lstmstatetuple.__repr__"><code id="LSTMStateTuple.__repr__">tf.nn.rnn_cell.LSTMStateTuple.__repr__()</code></h4>
+<p>Return a nicely formatted representation string</p>
+<hr />
+<h4 id="tf.nn.rnn_cell.lstmstatetuple.c"><code id="LSTMStateTuple.c">tf.nn.rnn_cell.LSTMStateTuple.c</code></h4>
+<p>Alias for field number 0</p>
+<hr />
+<h4 id="tf.nn.rnn_cell.lstmstatetuple.dtype"><code id="LSTMStateTuple.dtype">tf.nn.rnn_cell.LSTMStateTuple.dtype</code></h4>
+<hr />
+<h4 id="tf.nn.rnn_cell.lstmstatetuple.h"><code id="LSTMStateTuple.h">tf.nn.rnn_cell.LSTMStateTuple.h</code></h4>
+<p>Alias for field number 1</p>
+<h2 id="rnn-cell-wrappers-rnncells-that-wrap-other-rnncells">RNN Cell wrappers (RNNCells that wrap other RNNCells)</h2>
+<hr />
+<h3 id="class-tf.nn.rnn_cell.multirnncell"><a name="//apple_ref/cpp/Class/MultiRNNCell" class="dashAnchor"></a><code id="MultiRNNCell">class tf.nn.rnn_cell.MultiRNNCell</code></h3>
+<p>RNN cell composed sequentially of multiple simple cells. - - -</p>
+<h4 id="tf.nn.rnn_cell.multirnncell.__call__inputs-state-scopenone"><code id="MultiRNNCell.__call__">tf.nn.rnn_cell.MultiRNNCell.__call__(inputs, state, scope=None)</code></h4>
+<p>Run this multi-layer cell on inputs, starting from state.</p>
+<hr />
+<h4 id="tf.nn.rnn_cell.multirnncell.__init__cells-state_is_tupletrue"><code id="MultiRNNCell.__init__">tf.nn.rnn_cell.MultiRNNCell.__init__(cells, state_is_tuple=True)</code></h4>
+<p>Create a RNN cell composed sequentially of a number of RNNCells.</p>
+<h5 id="args-9">Args:</h5>
+<ul>
+<li><b><code>cells</code></b>: list of RNNCells that will be composed in this order.</li>
+<li><b><code>state_is_tuple</code></b>: If True, accepted and returned states are n-tuples, where <code>n = len(cells)</code>. If False, the states are all concatenated along the column axis. This latter behavior will soon be deprecated.</li>
+</ul>
+<h5 id="raises-1">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if cells is empty (not allowed), or at least one of the cells returns a state tuple but the flag <code>state_is_tuple</code> is <code>False</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.nn.rnn_cell.multirnncell.output_size"><code id="MultiRNNCell.output_size">tf.nn.rnn_cell.MultiRNNCell.output_size</code></h4>
+<hr />
+<h4 id="tf.nn.rnn_cell.multirnncell.state_size"><code id="MultiRNNCell.state_size">tf.nn.rnn_cell.MultiRNNCell.state_size</code></h4>
+<hr />
+<h4 id="tf.nn.rnn_cell.multirnncell.zero_statebatch_size-dtype"><code id="MultiRNNCell.zero_state">tf.nn.rnn_cell.MultiRNNCell.zero_state(batch_size, dtype)</code></h4>
+<p>Return zero-filled state tensor(s).</p>
+<h5 id="args-10">Args:</h5>
+<ul>
+<li><b><code>batch_size</code></b>: int, float, or unit Tensor representing the batch size.</li>
+<li><b><code>dtype</code></b>: the data type to use for the state.</li>
+</ul>
+<h5 id="returns-7">Returns:</h5>
+<p>If <code>state_size</code> is an int or TensorShape, then the return value is a <code>N-D</code> tensor of shape <code>[batch_size x state_size]</code> filled with zeros.</p>
+<p>If <code>state_size</code> is a nested list or tuple, then the return value is a nested list or tuple (of the same structure) of <code>2-D</code> tensors with the shapes <code>[batch_size x s]</code> for each s in <code>state_size</code>.</p>
+<hr />
+<h3 id="class-tf.nn.rnn_cell.dropoutwrapper"><a name="//apple_ref/cpp/Class/DropoutWrapper" class="dashAnchor"></a><code id="DropoutWrapper">class tf.nn.rnn_cell.DropoutWrapper</code></h3>
+<p>Operator adding dropout to inputs and outputs of the given cell. - - -</p>
+<h4 id="tf.nn.rnn_cell.dropoutwrapper.__call__inputs-state-scopenone"><code id="DropoutWrapper.__call__">tf.nn.rnn_cell.DropoutWrapper.__call__(inputs, state, scope=None)</code></h4>
+<p>Run the cell with the declared dropouts.</p>
+<hr />
+<h4 id="tf.nn.rnn_cell.dropoutwrapper.__init__cell-input_keep_prob1.0-output_keep_prob1.0-seednone"><code id="DropoutWrapper.__init__">tf.nn.rnn_cell.DropoutWrapper.__init__(cell, input_keep_prob=1.0, output_keep_prob=1.0, seed=None)</code></h4>
+<p>Create a cell with added input and/or output dropout.</p>
+<p>Dropout is never used on the state.</p>
+<h5 id="args-11">Args:</h5>
+<ul>
+<li><b><code>cell</code></b>: an RNNCell, a projection to output_size is added to it.</li>
+<li><b><code>input_keep_prob</code></b>: unit Tensor or float between 0 and 1, input keep probability; if it is float and 1, no input dropout will be added.</li>
+<li><b><code>output_keep_prob</code></b>: unit Tensor or float between 0 and 1, output keep probability; if it is float and 1, no output dropout will be added.</li>
+<li><b><code>seed</code></b>: (optional) integer, the randomness seed.</li>
+</ul>
+<h5 id="raises-2">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if cell is not an RNNCell.</li>
+<li><b><code>ValueError</code></b>: if keep_prob is not between 0 and 1.</li>
+</ul>
+<hr />
+<h4 id="tf.nn.rnn_cell.dropoutwrapper.output_size"><code id="DropoutWrapper.output_size">tf.nn.rnn_cell.DropoutWrapper.output_size</code></h4>
+<hr />
+<h4 id="tf.nn.rnn_cell.dropoutwrapper.state_size"><code id="DropoutWrapper.state_size">tf.nn.rnn_cell.DropoutWrapper.state_size</code></h4>
+<hr />
+<h4 id="tf.nn.rnn_cell.dropoutwrapper.zero_statebatch_size-dtype"><code id="DropoutWrapper.zero_state">tf.nn.rnn_cell.DropoutWrapper.zero_state(batch_size, dtype)</code></h4>
+<p>Return zero-filled state tensor(s).</p>
+<h5 id="args-12">Args:</h5>
+<ul>
+<li><b><code>batch_size</code></b>: int, float, or unit Tensor representing the batch size.</li>
+<li><b><code>dtype</code></b>: the data type to use for the state.</li>
+</ul>
+<h5 id="returns-8">Returns:</h5>
+<p>If <code>state_size</code> is an int or TensorShape, then the return value is a <code>N-D</code> tensor of shape <code>[batch_size x state_size]</code> filled with zeros.</p>
+<p>If <code>state_size</code> is a nested list or tuple, then the return value is a nested list or tuple (of the same structure) of <code>2-D</code> tensors with the shapes <code>[batch_size x s]</code> for each s in <code>state_size</code>.</p>
+<hr />
+<h3 id="class-tf.nn.rnn_cell.embeddingwrapper"><a name="//apple_ref/cpp/Class/EmbeddingWrapper" class="dashAnchor"></a><code id="EmbeddingWrapper">class tf.nn.rnn_cell.EmbeddingWrapper</code></h3>
+<p>Operator adding input embedding to the given cell.</p>
+<p>Note: in many cases it may be more efficient to not use this wrapper, but instead concatenate the whole sequence of your inputs in time, do the embedding on this batch-concatenated sequence, then split it and feed into your RNN. - - -</p>
+<h4 id="tf.nn.rnn_cell.embeddingwrapper.__call__inputs-state-scopenone"><code id="EmbeddingWrapper.__call__">tf.nn.rnn_cell.EmbeddingWrapper.__call__(inputs, state, scope=None)</code></h4>
+<p>Run the cell on embedded inputs.</p>
+<hr />
+<h4 id="tf.nn.rnn_cell.embeddingwrapper.__init__cell-embedding_classes-embedding_size-initializernone"><code id="EmbeddingWrapper.__init__">tf.nn.rnn_cell.EmbeddingWrapper.__init__(cell, embedding_classes, embedding_size, initializer=None)</code></h4>
+<p>Create a cell with an added input embedding.</p>
+<h5 id="args-13">Args:</h5>
+<ul>
+<li><b><code>cell</code></b>: an RNNCell, an embedding will be put before its inputs.</li>
+<li><b><code>embedding_classes</code></b>: integer, how many symbols will be embedded.</li>
+<li><b><code>embedding_size</code></b>: integer, the size of the vectors we embed into.</li>
+<li><b><code>initializer</code></b>: an initializer to use when creating the embedding; if None, the initializer from variable scope or a default one is used.</li>
+</ul>
+<h5 id="raises-3">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if cell is not an RNNCell.</li>
+<li><b><code>ValueError</code></b>: if embedding_classes is not positive.</li>
+</ul>
+<hr />
+<h4 id="tf.nn.rnn_cell.embeddingwrapper.output_size"><code id="EmbeddingWrapper.output_size">tf.nn.rnn_cell.EmbeddingWrapper.output_size</code></h4>
+<hr />
+<h4 id="tf.nn.rnn_cell.embeddingwrapper.state_size"><code id="EmbeddingWrapper.state_size">tf.nn.rnn_cell.EmbeddingWrapper.state_size</code></h4>
+<hr />
+<h4 id="tf.nn.rnn_cell.embeddingwrapper.zero_statebatch_size-dtype"><code id="EmbeddingWrapper.zero_state">tf.nn.rnn_cell.EmbeddingWrapper.zero_state(batch_size, dtype)</code></h4>
+<p>Return zero-filled state tensor(s).</p>
+<h5 id="args-14">Args:</h5>
+<ul>
+<li><b><code>batch_size</code></b>: int, float, or unit Tensor representing the batch size.</li>
+<li><b><code>dtype</code></b>: the data type to use for the state.</li>
+</ul>
+<h5 id="returns-9">Returns:</h5>
+<p>If <code>state_size</code> is an int or TensorShape, then the return value is a <code>N-D</code> tensor of shape <code>[batch_size x state_size]</code> filled with zeros.</p>
+<p>If <code>state_size</code> is a nested list or tuple, then the return value is a nested list or tuple (of the same structure) of <code>2-D</code> tensors with the shapes <code>[batch_size x s]</code> for each s in <code>state_size</code>.</p>
+<hr />
+<h3 id="class-tf.nn.rnn_cell.inputprojectionwrapper"><a name="//apple_ref/cpp/Class/InputProjectionWrapper" class="dashAnchor"></a><code id="InputProjectionWrapper">class tf.nn.rnn_cell.InputProjectionWrapper</code></h3>
+<p>Operator adding an input projection to the given cell.</p>
+<p>Note: in many cases it may be more efficient to not use this wrapper, but instead concatenate the whole sequence of your inputs in time, do the projection on this batch-concatenated sequence, then split it. - - -</p>
+<h4 id="tf.nn.rnn_cell.inputprojectionwrapper.__call__inputs-state-scopenone"><code id="InputProjectionWrapper.__call__">tf.nn.rnn_cell.InputProjectionWrapper.__call__(inputs, state, scope=None)</code></h4>
+<p>Run the input projection and then the cell.</p>
+<hr />
+<h4 id="tf.nn.rnn_cell.inputprojectionwrapper.__init__cell-num_proj-input_sizenone"><code id="InputProjectionWrapper.__init__">tf.nn.rnn_cell.InputProjectionWrapper.__init__(cell, num_proj, input_size=None)</code></h4>
+<p>Create a cell with input projection.</p>
+<h5 id="args-15">Args:</h5>
+<ul>
+<li><b><code>cell</code></b>: an RNNCell, a projection of inputs is added before it.</li>
+<li><b><code>num_proj</code></b>: Python integer. The dimension to project to.</li>
+<li><b><code>input_size</code></b>: Deprecated and unused.</li>
+</ul>
+<h5 id="raises-4">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if cell is not an RNNCell.</li>
+</ul>
+<hr />
+<h4 id="tf.nn.rnn_cell.inputprojectionwrapper.output_size"><code id="InputProjectionWrapper.output_size">tf.nn.rnn_cell.InputProjectionWrapper.output_size</code></h4>
+<hr />
+<h4 id="tf.nn.rnn_cell.inputprojectionwrapper.state_size"><code id="InputProjectionWrapper.state_size">tf.nn.rnn_cell.InputProjectionWrapper.state_size</code></h4>
+<hr />
+<h4 id="tf.nn.rnn_cell.inputprojectionwrapper.zero_statebatch_size-dtype"><code id="InputProjectionWrapper.zero_state">tf.nn.rnn_cell.InputProjectionWrapper.zero_state(batch_size, dtype)</code></h4>
+<p>Return zero-filled state tensor(s).</p>
+<h5 id="args-16">Args:</h5>
+<ul>
+<li><b><code>batch_size</code></b>: int, float, or unit Tensor representing the batch size.</li>
+<li><b><code>dtype</code></b>: the data type to use for the state.</li>
+</ul>
+<h5 id="returns-10">Returns:</h5>
+<p>If <code>state_size</code> is an int or TensorShape, then the return value is a <code>N-D</code> tensor of shape <code>[batch_size x state_size]</code> filled with zeros.</p>
+<p>If <code>state_size</code> is a nested list or tuple, then the return value is a nested list or tuple (of the same structure) of <code>2-D</code> tensors with the shapes <code>[batch_size x s]</code> for each s in <code>state_size</code>.</p>
+<hr />
+<h3 id="class-tf.nn.rnn_cell.outputprojectionwrapper"><a name="//apple_ref/cpp/Class/OutputProjectionWrapper" class="dashAnchor"></a><code id="OutputProjectionWrapper">class tf.nn.rnn_cell.OutputProjectionWrapper</code></h3>
+<p>Operator adding an output projection to the given cell.</p>
+<p>Note: in many cases it may be more efficient to not use this wrapper, but instead concatenate the whole sequence of your outputs in time, do the projection on this batch-concatenated sequence, then split it if needed or directly feed into a softmax. - - -</p>
+<h4 id="tf.nn.rnn_cell.outputprojectionwrapper.__call__inputs-state-scopenone"><code id="OutputProjectionWrapper.__call__">tf.nn.rnn_cell.OutputProjectionWrapper.__call__(inputs, state, scope=None)</code></h4>
+<p>Run the cell and output projection on inputs, starting from state.</p>
+<hr />
+<h4 id="tf.nn.rnn_cell.outputprojectionwrapper.__init__cell-output_size"><code id="OutputProjectionWrapper.__init__">tf.nn.rnn_cell.OutputProjectionWrapper.__init__(cell, output_size)</code></h4>
+<p>Create a cell with output projection.</p>
+<h5 id="args-17">Args:</h5>
+<ul>
+<li><b><code>cell</code></b>: an RNNCell, a projection to output_size is added to it.</li>
+<li><b><code>output_size</code></b>: integer, the size of the output after projection.</li>
+</ul>
+<h5 id="raises-5">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: if cell is not an RNNCell.</li>
+<li><b><code>ValueError</code></b>: if output_size is not positive.</li>
+</ul>
+<hr />
+<h4 id="tf.nn.rnn_cell.outputprojectionwrapper.output_size"><code id="OutputProjectionWrapper.output_size">tf.nn.rnn_cell.OutputProjectionWrapper.output_size</code></h4>
+<hr />
+<h4 id="tf.nn.rnn_cell.outputprojectionwrapper.state_size"><code id="OutputProjectionWrapper.state_size">tf.nn.rnn_cell.OutputProjectionWrapper.state_size</code></h4>
+<hr />
+<h4 id="tf.nn.rnn_cell.outputprojectionwrapper.zero_statebatch_size-dtype"><code id="OutputProjectionWrapper.zero_state">tf.nn.rnn_cell.OutputProjectionWrapper.zero_state(batch_size, dtype)</code></h4>
+<p>Return zero-filled state tensor(s).</p>
+<h5 id="args-18">Args:</h5>
+<ul>
+<li><b><code>batch_size</code></b>: int, float, or unit Tensor representing the batch size.</li>
+<li><b><code>dtype</code></b>: the data type to use for the state.</li>
+</ul>
+<h5 id="returns-11">Returns:</h5>
+<p>If <code>state_size</code> is an int or TensorShape, then the return value is a <code>N-D</code> tensor of shape <code>[batch_size x state_size]</code> filled with zeros.</p>
+<p>If <code>state_size</code> is a nested list or tuple, then the return value is a nested list or tuple (of the same structure) of <code>2-D</code> tensors with the shapes <code>[batch_size x s]</code> for each s in <code>state_size</code>.</p>

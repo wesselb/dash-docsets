@@ -1,0 +1,1797 @@
+<!-- This file is machine generated: DO NOT EDIT! -->
+<h1 id="linear-algebra-contrib">Linear Algebra (contrib)</h1>
+<p>[TOC]</p>
+<p>Linear algebra libraries for TensorFlow.</p>
+<h2 id="linearoperator"><code>LinearOperator</code></h2>
+<p>Subclasses of <code>LinearOperator</code> provide a access to common methods on a (batch) matrix, without the need to materialize the matrix. This allows:</p>
+<ul>
+<li>Matrix free computations</li>
+<li>Different operators to take advantage of special strcture, while providing a consistent API to users.</li>
+</ul>
+<h3 id="base-class">Base class</h3>
+<hr />
+<h3 id="class-tf.contrib.linalg.linearoperator"><a name="//apple_ref/cpp/Class/LinearOperator" class="dashAnchor"></a><code id="LinearOperator">class tf.contrib.linalg.LinearOperator</code></h3>
+<p>Base class defining a [batch of] linear operator[s].</p>
+<p>Subclasses of <code>LinearOperator</code> provide a access to common methods on a (batch) matrix, without the need to materialize the matrix. This allows:</p>
+<ul>
+<li>Matrix free computations</li>
+<li>Operators that take advantage of special structure, while providing a consistent API to users.</li>
+</ul>
+<h4 id="subclassing">Subclassing</h4>
+<p>To enable a public method, subclasses should implement the leading-underscore version of the method. The argument signature should be identical except for the omission of <code>name=&quot;...&quot;</code>. For example, to enable <code>apply(x, adjoint=False, name=&quot;apply&quot;)</code> a subclass should implement <code>_apply(x, adjoint=False)</code>.</p>
+<h4 id="performance-contract">Performance contract</h4>
+<p>Subclasses should implement a method only if it can be done with a reasonable performance increase over generic dense operations, either in time, parallel scalability, or memory usage. For example, if the determinant can only be computed using <code>tf.matrix_determinant(self.to_dense())</code>, then determinants should not be implemented.</p>
+<p>Class docstrings should contain an explanation of computational complexity. Since this is a high-performance library, attention should be paid to detail, and explanations can include constants as well as Big-O notation.</p>
+<h4 id="shape-compatibility">Shape compatibility</h4>
+<p><code>LinearOperator</code> sub classes should operate on a [batch] matrix with compatible shape. Class docstrings should define what is meant by compatible shape. Some sub-classes may not support batching.</p>
+<p>An example is:</p>
+<p><code>x</code> is a batch matrix with compatible shape for <code>apply</code> if</p>
+<pre><code>operator.shape = [B1,...,Bb] + [M, N],  b &gt;= 0,
+x.shape =   [B1,...,Bb] + [N, R]</code></pre>
+<p><code>rhs</code> is a batch matrix with compatible shape for <code>solve</code> if</p>
+<pre><code>operator.shape = [B1,...,Bb] + [M, N],  b &gt;= 0,
+rhs.shape =   [B1,...,Bb] + [M, R]</code></pre>
+<h4 id="example-docstring-for-subclasses.">Example docstring for subclasses.</h4>
+<p>This operator acts like a (batch) matrix <code>A</code> with shape <code>[B1,...,Bb, M, N]</code> for some <code>b &gt;= 0</code>. The first <code>b</code> indices index a batch member. For every batch index <code>(i1,...,ib)</code>, <code>A[i1,...,ib, : :]</code> is an <code>m x n</code> matrix. Again, this matrix <code>A</code> may not be materialized, but for purposes of identifying and working with compatible arguments the shape is relevant.</p>
+<p>Examples:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">some_tensor <span class="op">=</span> ... shape <span class="op">=</span> ????
+operator <span class="op">=</span> MyLinOp(some_tensor)
+
+operator.shape()
+<span class="op">==&gt;</span> [<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">4</span>]
+
+operator.log_determinant()
+<span class="op">==&gt;</span> Shape [<span class="dv">2</span>] Tensor
+
+x <span class="op">=</span> ... Shape [<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">5</span>] Tensor
+
+operator.<span class="bu">apply</span>(x)
+<span class="op">==&gt;</span> Shape [<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">5</span>] Tensor</code></pre></div>
+<h4 id="shape-compatibility-1">Shape compatibility</h4>
+<p>This operator acts on batch matrices with compatible shape. FILL IN WHAT IS MEANT BY COMPATIBLE SHAPE</p>
+<h4 id="performance">Performance</h4>
+<p>FILL THIS IN</p>
+<h4 id="matrix-property-hints">Matrix property hints</h4>
+<p>This <code>LinearOperator</code> is initialized with boolean flags of the form <code>is_X</code>, for <code>X = non_singular, self_adjoint, positive_definite</code>. These have the following meaning * If <code>is_X == True</code>, callers should expect the operator to have the property <code>X</code>. This is a promise that should be fulfilled, but is <em>not</em> a runtime assert. For example, finite floating point precision may result in these promises being violated. * If <code>is_X == False</code>, callers should expect the operator to not have <code>X</code>. * If <code>is_X == None</code> (the default), callers should have no expectation either way. - - -</p>
+<h4 id="tf.contrib.linalg.linearoperator.__init__dtype-graph_parentsnone-is_non_singularnone-is_self_adjointnone-is_positive_definitenone-namenone"><code id="LinearOperator.__init__">tf.contrib.linalg.LinearOperator.__init__(dtype, graph_parents=None, is_non_singular=None, is_self_adjoint=None, is_positive_definite=None, name=None)</code></h4>
+<p>Initialize the <code>LinearOperator</code>.</p>
+<p><strong>This is a private method for subclass use.</strong> <strong>Subclasses should copy-paste this <code>__init__</code> documentation.</strong></p>
+<h5 id="args">Args:</h5>
+<ul>
+<li><b><code>dtype</code></b>: The type of the this <code>LinearOperator</code>. Arguments to <code>apply</code> and <code>solve</code> will have to be this type.</li>
+<li><b><code>graph_parents</code></b>: Python list of graph prerequisites of this <code>LinearOperator</code> Typically tensors that are passed during initialization.</li>
+<li><b><code>is_non_singular</code></b>: Expect that this operator is non-singular.</li>
+<li><b><code>is_self_adjoint</code></b>: Expect that this operator is equal to its hermitian transpose. If <code>dtype</code> is real, this is equivalent to being symmetric.</li>
+<li><b><code>is_positive_definite</code></b>: Expect that this operator is positive definite, meaning the real part of all eigenvalues is positive. We do not require the operator to be self-adjoint to be positive-definite. See:</li>
+<li><b><code>https</code></b>: //en.wikipedia.org/wiki/Positive-definite_matrix<br />
+ #Extension_for_non_symmetric_matrices</li>
+<li><b><code>name</code></b>: A name for this <code>LinearOperator</code>.</li>
+</ul>
+<h5 id="raises">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: if any member of graph_parents is <code>None</code> or not a <code>Tensor</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperator.add_to_tensorx-nameadd_to_tensor"><code id="LinearOperator.add_to_tensor">tf.contrib.linalg.LinearOperator.add_to_tensor(x, name='add_to_tensor')</code></h4>
+<p>Add matrix represented by this operator to <code>x</code>. Equivalent to <code>A + x</code>.</p>
+<h5 id="args-1">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code> with same <code>dtype</code> and shape broadcastable to <code>self.shape</code>.</li>
+<li><b><code>name</code></b>: A name to give this <code>Op</code>.</li>
+</ul>
+<h5 id="returns">Returns:</h5>
+<p>A <code>Tensor</code> with broadcast shape and same <code>dtype</code> as <code>self</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperator.applyx-adjointfalse-nameapply"><code id="LinearOperator.apply">tf.contrib.linalg.LinearOperator.apply(x, adjoint=False, name='apply')</code></h4>
+<p>Transform <code>x</code> with left multiplication: <code>x --&gt; Ax</code>.</p>
+<h5 id="args-2">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code> with compatible shape and same <code>dtype</code> as <code>self</code>. See class docstring for definition of compatibility.</li>
+<li><b><code>adjoint</code></b>: Python <code>bool</code>. If <code>True</code>, left multiply by the adjoint.</li>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-1">Returns:</h5>
+<p>A <code>Tensor</code> with shape <code>[..., M, R]</code> and same <code>dtype</code> as <code>self</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperator.assert_non_singularnameassert_non_singular"><code id="LinearOperator.assert_non_singular">tf.contrib.linalg.LinearOperator.assert_non_singular(name='assert_non_singular')</code></h4>
+<p>Returns an <code>Op</code> that asserts this operator is non singular.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperator.assert_positive_definitenameassert_positive_definite"><code id="LinearOperator.assert_positive_definite">tf.contrib.linalg.LinearOperator.assert_positive_definite(name='assert_positive_definite')</code></h4>
+<p>Returns an <code>Op</code> that asserts this operator is positive definite.</p>
+<p>Here, positive definite means the real part of all eigenvalues is positive. We do not require the operator to be self-adjoint.</p>
+<h5 id="args-3">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name to give this <code>Op</code>.</li>
+</ul>
+<h5 id="returns-2">Returns:</h5>
+<p>An <code>Op</code> that asserts this operator is positive definite.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperator.assert_self_adjointnameassert_self_adjoint"><code id="LinearOperator.assert_self_adjoint">tf.contrib.linalg.LinearOperator.assert_self_adjoint(name='assert_self_adjoint')</code></h4>
+<p>Returns an <code>Op</code> that asserts this operator is self-adjoint.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperator.batch_shape"><code id="LinearOperator.batch_shape">tf.contrib.linalg.LinearOperator.batch_shape</code></h4>
+<p><code>TensorShape</code> of batch dimensions of this <code>LinearOperator</code>.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>TensorShape([B1,...,Bb])</code>, equivalent to <code>A.get_shape()[:-2]</code></p>
+<h5 id="returns-3">Returns:</h5>
+<p><code>TensorShape</code>, statically determined, may be undefined.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperator.batch_shape_dynamicnamebatch_shape_dynamic"><code id="LinearOperator.batch_shape_dynamic">tf.contrib.linalg.LinearOperator.batch_shape_dynamic(name='batch_shape_dynamic')</code></h4>
+<p>Shape of batch dimensions of this operator, determined at runtime.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns a <code>Tensor</code> holding <code>[B1,...,Bb]</code>.</p>
+<h5 id="args-4">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-4">Returns:</h5>
+<p><code>int32</code> <code>Tensor</code></p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperator.determinantnamedet"><code id="LinearOperator.determinant">tf.contrib.linalg.LinearOperator.determinant(name='det')</code></h4>
+<p>Determinant for every batch member.</p>
+<h5 id="args-5">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-5">Returns:</h5>
+<p><code>Tensor</code> with shape <code>self.batch_shape</code> and same <code>dtype</code> as <code>self</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperator.domain_dimension"><code id="LinearOperator.domain_dimension">tf.contrib.linalg.LinearOperator.domain_dimension</code></h4>
+<p>Dimension (in the sense of vector spaces) of the domain of this operator.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>N</code>.</p>
+<h5 id="returns-6">Returns:</h5>
+<p><code>Dimension</code> object.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperator.domain_dimension_dynamicnamedomain_dimension_dynamic"><code id="LinearOperator.domain_dimension_dynamic">tf.contrib.linalg.LinearOperator.domain_dimension_dynamic(name='domain_dimension_dynamic')</code></h4>
+<p>Dimension (in the sense of vector spaces) of the domain of this operator.</p>
+<p>Determined at runtime.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>N</code>.</p>
+<h5 id="args-6">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this <code>Op</code>.</li>
+</ul>
+<h5 id="returns-7">Returns:</h5>
+<p><code>int32</code> <code>Tensor</code></p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperator.dtype"><code id="LinearOperator.dtype">tf.contrib.linalg.LinearOperator.dtype</code></h4>
+<p>The <code>DType</code> of <code>Tensor</code>s handled by this <code>LinearOperator</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperator.graph_parents"><code id="LinearOperator.graph_parents">tf.contrib.linalg.LinearOperator.graph_parents</code></h4>
+<p>List of graph dependencies of this <code>LinearOperator</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperator.is_non_singular"><code id="LinearOperator.is_non_singular">tf.contrib.linalg.LinearOperator.is_non_singular</code></h4>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperator.is_positive_definite"><code id="LinearOperator.is_positive_definite">tf.contrib.linalg.LinearOperator.is_positive_definite</code></h4>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperator.is_self_adjoint"><code id="LinearOperator.is_self_adjoint">tf.contrib.linalg.LinearOperator.is_self_adjoint</code></h4>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperator.log_abs_determinantnamelog_abs_det"><code id="LinearOperator.log_abs_determinant">tf.contrib.linalg.LinearOperator.log_abs_determinant(name='log_abs_det')</code></h4>
+<p>Log absolute value of determinant for every batch member.</p>
+<h5 id="args-7">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-8">Returns:</h5>
+<p><code>Tensor</code> with shape <code>self.batch_shape</code> and same <code>dtype</code> as <code>self</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperator.name"><code id="LinearOperator.name">tf.contrib.linalg.LinearOperator.name</code></h4>
+<p>Name prepended to all ops created by this <code>LinearOperator</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperator.range_dimension"><code id="LinearOperator.range_dimension">tf.contrib.linalg.LinearOperator.range_dimension</code></h4>
+<p>Dimension (in the sense of vector spaces) of the range of this operator.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>M</code>.</p>
+<h5 id="returns-9">Returns:</h5>
+<p><code>Dimension</code> object.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperator.range_dimension_dynamicnamerange_dimension_dynamic"><code id="LinearOperator.range_dimension_dynamic">tf.contrib.linalg.LinearOperator.range_dimension_dynamic(name='range_dimension_dynamic')</code></h4>
+<p>Dimension (in the sense of vector spaces) of the range of this operator.</p>
+<p>Determined at runtime.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>M</code>.</p>
+<h5 id="args-8">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this <code>Op</code>.</li>
+</ul>
+<h5 id="returns-10">Returns:</h5>
+<p><code>int32</code> <code>Tensor</code></p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperator.shape"><code id="LinearOperator.shape">tf.contrib.linalg.LinearOperator.shape</code></h4>
+<p><code>TensorShape</code> of this <code>LinearOperator</code>.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>TensorShape([B1,...,Bb, M, N])</code>, equivalent to <code>A.get_shape()</code>.</p>
+<h5 id="returns-11">Returns:</h5>
+<p><code>TensorShape</code>, statically determined, may be undefined.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperator.shape_dynamicnameshape_dynamic"><code id="LinearOperator.shape_dynamic">tf.contrib.linalg.LinearOperator.shape_dynamic(name='shape_dynamic')</code></h4>
+<p>Shape of this <code>LinearOperator</code>, determined at runtime.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns a <code>Tensor</code> holding <code>[B1,...,Bb, M, N]</code>, equivalent to <code>tf.shape(A)</code>.</p>
+<h5 id="args-9">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-12">Returns:</h5>
+<p><code>int32</code> <code>Tensor</code></p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperator.solverhs-adjointfalse-namesolve"><code id="LinearOperator.solve">tf.contrib.linalg.LinearOperator.solve(rhs, adjoint=False, name='solve')</code></h4>
+<p>Solve <code>R</code> (batch) systems of equations exactly: <code>A X = rhs</code>.</p>
+<p>Examples:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Create an operator acting like a 10 x 2 x 2 matrix.</span>
+operator <span class="op">=</span> LinearOperator(...)
+operator.shape <span class="co"># = 10 x 2 x 2</span>
+
+<span class="co"># Solve one linear system (R = 1) for every member of the length 10 batch.</span>
+RHS <span class="op">=</span> ... <span class="co"># shape 10 x 2 x 1</span>
+X <span class="op">=</span> operator.solve(RHS)  <span class="co"># shape 10 x 2 x 1</span>
+
+<span class="co"># Solve five linear systems (R = 5) for every member of the length 10 batch.</span>
+RHS <span class="op">=</span> ... <span class="co"># shape 10 x 2 x 5</span>
+X <span class="op">=</span> operator.solve(RHS)
+X[<span class="dv">3</span>, :, <span class="dv">2</span>]  <span class="co"># Solution to the linear system A[3, :, :] X = RHS[3, :, 2]</span></code></pre></div>
+<h5 id="args-10">Args:</h5>
+<ul>
+<li><b><code>rhs</code></b>: <code>Tensor</code> with same <code>dtype</code> as this operator and compatible shape. See class docstring for definition of compatibility.</li>
+<li><b><code>adjoint</code></b>: Python <code>bool</code>. If <code>True</code>, solve the system involving the adjoint of this <code>LinearOperator</code>.</li>
+<li><b><code>name</code></b>: A name scope to use for ops added by this method.</li>
+</ul>
+<h5 id="returns-13">Returns:</h5>
+<p><code>Tensor</code> with shape <code>[...,N, R]</code> and same <code>dtype</code> as <code>rhs</code>.</p>
+<h5 id="raises-1">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If self.is_non_singular is False.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperator.tensor_rank"><code id="LinearOperator.tensor_rank">tf.contrib.linalg.LinearOperator.tensor_rank</code></h4>
+<p>Rank (in the sense of tensors) of matrix corresponding to this operator.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>b + 2</code>.</p>
+<h5 id="args-11">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-14">Returns:</h5>
+<p>Python integer, or None if the tensor rank is undefined.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperator.tensor_rank_dynamicnametensor_rank_dynamic"><code id="LinearOperator.tensor_rank_dynamic">tf.contrib.linalg.LinearOperator.tensor_rank_dynamic(name='tensor_rank_dynamic')</code></h4>
+<p>Rank (in the sense of tensors) of matrix corresponding to this operator.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>b + 2</code>.</p>
+<h5 id="args-12">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-15">Returns:</h5>
+<p><code>int32</code> <code>Tensor</code>, determined at runtime.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperator.to_densenameto_dense"><code id="LinearOperator.to_dense">tf.contrib.linalg.LinearOperator.to_dense(name='to_dense')</code></h4>
+<p>Return a dense (batch) matrix representing this operator.</p>
+<h3 id="individual-operators">Individual operators</h3>
+<hr />
+<h3 id="class-tf.contrib.linalg.linearoperatordiag"><a name="//apple_ref/cpp/Class/LinearOperatorDiag" class="dashAnchor"></a><code id="LinearOperatorDiag">class tf.contrib.linalg.LinearOperatorDiag</code></h3>
+<p><code>LinearOperator</code> acting like a [batch] square diagonal matrix.</p>
+<p>This operator acts like a [batch] diagonal matrix <code>A</code> with shape <code>[B1,...,Bb, N, N]</code> for some <code>b &gt;= 0</code>. The first <code>b</code> indices index a batch member. For every batch index <code>(i1,...,ib)</code>, <code>A[i1,...,ib, : :]</code> is an <code>N x N</code> matrix. This matrix <code>A</code> is not materialized, but for purposes of broadcasting this shape will be relevant.</p>
+<p><code>LinearOperatorDiag</code> is initialized with a (batch) vector.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Create a 2 x 2 diagonal linear operator.</span>
+diag <span class="op">=</span> [<span class="dv">1</span>., <span class="op">-</span><span class="dv">1</span>.]
+operator <span class="op">=</span> LinearOperatorDiag(diag)
+
+operator.to_dense()
+<span class="op">==&gt;</span> [[<span class="dv">1</span>.,  <span class="dv">0</span>.]
+     [<span class="dv">0</span>., <span class="op">-</span><span class="dv">1</span>.]]
+
+operator.shape
+<span class="op">==&gt;</span> [<span class="dv">2</span>, <span class="dv">2</span>]
+
+operator.log_determinant()
+<span class="op">==&gt;</span> scalar Tensor
+
+x <span class="op">=</span> ... Shape [<span class="dv">2</span>, <span class="dv">4</span>] Tensor
+operator.<span class="bu">apply</span>(x)
+<span class="op">==&gt;</span> Shape [<span class="dv">2</span>, <span class="dv">4</span>] Tensor
+
+<span class="co"># Create a [2, 3] batch of 4 x 4 linear operators.</span>
+diag <span class="op">=</span> tf.random_normal(shape<span class="op">=</span>[<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>])
+operator <span class="op">=</span> LinearOperatorDiag(diag)
+
+<span class="co"># Create a shape [2, 1, 4, 2] vector.  Note that this shape is compatible</span>
+<span class="co"># since the batch dimensions, [2, 1], are brodcast to</span>
+<span class="co"># operator.batch_shape = [2, 3].</span>
+y <span class="op">=</span> tf.random_normal(shape<span class="op">=</span>[<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">2</span>])
+x <span class="op">=</span> operator.solve(y)
+<span class="op">==&gt;</span> operator.<span class="bu">apply</span>(x) <span class="op">=</span> y</code></pre></div>
+<h4 id="shape-compatibility-2">Shape compatibility</h4>
+<p>This operator acts on [batch] matrix with compatible shape. <code>x</code> is a batch matrix with compatible shape for <code>apply</code> and <code>solve</code> if</p>
+<pre><code>operator.shape = [B1,...,Bb] + [N, N],  with b &gt;= 0
+x.shape =   [C1,...,Cc] + [N, R],
+and [C1,...,Cc] broadcasts with [B1,...,Bb] to [D1,...,Dd]</code></pre>
+<h4 id="performance-1">Performance</h4>
+<p>Suppose <code>operator</code> is a <code>LinearOperatorDiag</code> of shape <code>[N, N]</code>, and <code>x.shape = [N, R]</code>. Then</p>
+<ul>
+<li><code>operator.apply(x)</code> involves <code>N * R</code> multiplications.</li>
+<li><code>operator.solve(x)</code> involves <code>N</code> divisions and <code>N * R</code> multiplications.</li>
+<li><code>operator.determinant()</code> involves a size <code>N</code> <code>reduce_prod</code>.</li>
+</ul>
+<p>If instead <code>operator</code> and <code>x</code> have shape <code>[B1,...,Bb, N, N]</code> and <code>[B1,...,Bb, N, R]</code>, every operation increases in complexity by <code>B1*...*Bb</code>.</p>
+<h4 id="matrix-property-hints-1">Matrix property hints</h4>
+<p>This <code>LinearOperator</code> is initialized with boolean flags of the form <code>is_X</code>, for <code>X = non_singular, self_adjoint, positive_definite</code>. These have the following meaning * If <code>is_X == True</code>, callers should expect the operator to have the property <code>X</code>. This is a promise that should be fulfilled, but is <em>not</em> a runtime assert. For example, finite floating point precision may result in these promises being violated. * If <code>is_X == False</code>, callers should expect the operator to not have <code>X</code>. * If <code>is_X == None</code> (the default), callers should have no expectation either way. - - -</p>
+<h4 id="tf.contrib.linalg.linearoperatordiag.__init__diag-is_non_singularnone-is_self_adjointnone-is_positive_definitenone-namelinearoperatordiag"><code id="LinearOperatorDiag.__init__">tf.contrib.linalg.LinearOperatorDiag.__init__(diag, is_non_singular=None, is_self_adjoint=None, is_positive_definite=None, name='LinearOperatorDiag')</code></h4>
+<p>Initialize a <code>LinearOperatorDiag</code>.</p>
+<h5 id="args-13">Args:</h5>
+<ul>
+<li><b><code>diag</code></b>: Shape <code>[B1,...,Bb, N]</code> <code>Tensor</code> with <code>b &gt;= 0</code> <code>N &gt;= 0</code>. The diagonal of the operator. Allowed dtypes: <code>float32</code>, <code>float64</code>, <code>complex64</code>, <code>complex128</code>.</li>
+<li><b><code>is_non_singular</code></b>: Expect that this operator is non-singular.</li>
+<li><b><code>is_self_adjoint</code></b>: Expect that this operator is equal to its hermitian transpose. If <code>diag.dtype</code> is real, this is auto-set to <code>True</code>.</li>
+<li><b><code>is_positive_definite</code></b>: Expect that this operator is positive definite, meaning the real part of all eigenvalues is positive. We do not require the operator to be self-adjoint to be positive-definite. See:</li>
+<li><b><code>https</code></b>: //en.wikipedia.org/wiki/Positive-definite_matrix #Extension_for_non_symmetric_matrices</li>
+<li><b><code>name</code></b>: A name for this <code>LinearOperator</code>.</li>
+</ul>
+<h5 id="raises-2">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>diag.dtype</code> is not an allowed type.</li>
+<li><b><code>ValueError</code></b>: If <code>diag.dtype</code> is real, and <code>is_self_adjoint</code> is not <code>True</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatordiag.add_to_tensorx-nameadd_to_tensor"><code id="LinearOperatorDiag.add_to_tensor">tf.contrib.linalg.LinearOperatorDiag.add_to_tensor(x, name='add_to_tensor')</code></h4>
+<p>Add matrix represented by this operator to <code>x</code>. Equivalent to <code>A + x</code>.</p>
+<h5 id="args-14">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code> with same <code>dtype</code> and shape broadcastable to <code>self.shape</code>.</li>
+<li><b><code>name</code></b>: A name to give this <code>Op</code>.</li>
+</ul>
+<h5 id="returns-16">Returns:</h5>
+<p>A <code>Tensor</code> with broadcast shape and same <code>dtype</code> as <code>self</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatordiag.applyx-adjointfalse-nameapply"><code id="LinearOperatorDiag.apply">tf.contrib.linalg.LinearOperatorDiag.apply(x, adjoint=False, name='apply')</code></h4>
+<p>Transform <code>x</code> with left multiplication: <code>x --&gt; Ax</code>.</p>
+<h5 id="args-15">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code> with compatible shape and same <code>dtype</code> as <code>self</code>. See class docstring for definition of compatibility.</li>
+<li><b><code>adjoint</code></b>: Python <code>bool</code>. If <code>True</code>, left multiply by the adjoint.</li>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-17">Returns:</h5>
+<p>A <code>Tensor</code> with shape <code>[..., M, R]</code> and same <code>dtype</code> as <code>self</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatordiag.assert_non_singularnameassert_non_singular"><code id="LinearOperatorDiag.assert_non_singular">tf.contrib.linalg.LinearOperatorDiag.assert_non_singular(name='assert_non_singular')</code></h4>
+<p>Returns an <code>Op</code> that asserts this operator is non singular.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatordiag.assert_positive_definitenameassert_positive_definite"><code id="LinearOperatorDiag.assert_positive_definite">tf.contrib.linalg.LinearOperatorDiag.assert_positive_definite(name='assert_positive_definite')</code></h4>
+<p>Returns an <code>Op</code> that asserts this operator is positive definite.</p>
+<p>Here, positive definite means the real part of all eigenvalues is positive. We do not require the operator to be self-adjoint.</p>
+<h5 id="args-16">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name to give this <code>Op</code>.</li>
+</ul>
+<h5 id="returns-18">Returns:</h5>
+<p>An <code>Op</code> that asserts this operator is positive definite.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatordiag.assert_self_adjointnameassert_self_adjoint"><code id="LinearOperatorDiag.assert_self_adjoint">tf.contrib.linalg.LinearOperatorDiag.assert_self_adjoint(name='assert_self_adjoint')</code></h4>
+<p>Returns an <code>Op</code> that asserts this operator is self-adjoint.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatordiag.batch_shape"><code id="LinearOperatorDiag.batch_shape">tf.contrib.linalg.LinearOperatorDiag.batch_shape</code></h4>
+<p><code>TensorShape</code> of batch dimensions of this <code>LinearOperator</code>.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>TensorShape([B1,...,Bb])</code>, equivalent to <code>A.get_shape()[:-2]</code></p>
+<h5 id="returns-19">Returns:</h5>
+<p><code>TensorShape</code>, statically determined, may be undefined.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatordiag.batch_shape_dynamicnamebatch_shape_dynamic"><code id="LinearOperatorDiag.batch_shape_dynamic">tf.contrib.linalg.LinearOperatorDiag.batch_shape_dynamic(name='batch_shape_dynamic')</code></h4>
+<p>Shape of batch dimensions of this operator, determined at runtime.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns a <code>Tensor</code> holding <code>[B1,...,Bb]</code>.</p>
+<h5 id="args-17">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-20">Returns:</h5>
+<p><code>int32</code> <code>Tensor</code></p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatordiag.determinantnamedet"><code id="LinearOperatorDiag.determinant">tf.contrib.linalg.LinearOperatorDiag.determinant(name='det')</code></h4>
+<p>Determinant for every batch member.</p>
+<h5 id="args-18">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-21">Returns:</h5>
+<p><code>Tensor</code> with shape <code>self.batch_shape</code> and same <code>dtype</code> as <code>self</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatordiag.domain_dimension"><code id="LinearOperatorDiag.domain_dimension">tf.contrib.linalg.LinearOperatorDiag.domain_dimension</code></h4>
+<p>Dimension (in the sense of vector spaces) of the domain of this operator.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>N</code>.</p>
+<h5 id="returns-22">Returns:</h5>
+<p><code>Dimension</code> object.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatordiag.domain_dimension_dynamicnamedomain_dimension_dynamic"><code id="LinearOperatorDiag.domain_dimension_dynamic">tf.contrib.linalg.LinearOperatorDiag.domain_dimension_dynamic(name='domain_dimension_dynamic')</code></h4>
+<p>Dimension (in the sense of vector spaces) of the domain of this operator.</p>
+<p>Determined at runtime.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>N</code>.</p>
+<h5 id="args-19">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this <code>Op</code>.</li>
+</ul>
+<h5 id="returns-23">Returns:</h5>
+<p><code>int32</code> <code>Tensor</code></p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatordiag.dtype"><code id="LinearOperatorDiag.dtype">tf.contrib.linalg.LinearOperatorDiag.dtype</code></h4>
+<p>The <code>DType</code> of <code>Tensor</code>s handled by this <code>LinearOperator</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatordiag.graph_parents"><code id="LinearOperatorDiag.graph_parents">tf.contrib.linalg.LinearOperatorDiag.graph_parents</code></h4>
+<p>List of graph dependencies of this <code>LinearOperator</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatordiag.is_non_singular"><code id="LinearOperatorDiag.is_non_singular">tf.contrib.linalg.LinearOperatorDiag.is_non_singular</code></h4>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatordiag.is_positive_definite"><code id="LinearOperatorDiag.is_positive_definite">tf.contrib.linalg.LinearOperatorDiag.is_positive_definite</code></h4>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatordiag.is_self_adjoint"><code id="LinearOperatorDiag.is_self_adjoint">tf.contrib.linalg.LinearOperatorDiag.is_self_adjoint</code></h4>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatordiag.log_abs_determinantnamelog_abs_det"><code id="LinearOperatorDiag.log_abs_determinant">tf.contrib.linalg.LinearOperatorDiag.log_abs_determinant(name='log_abs_det')</code></h4>
+<p>Log absolute value of determinant for every batch member.</p>
+<h5 id="args-20">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-24">Returns:</h5>
+<p><code>Tensor</code> with shape <code>self.batch_shape</code> and same <code>dtype</code> as <code>self</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatordiag.name"><code id="LinearOperatorDiag.name">tf.contrib.linalg.LinearOperatorDiag.name</code></h4>
+<p>Name prepended to all ops created by this <code>LinearOperator</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatordiag.range_dimension"><code id="LinearOperatorDiag.range_dimension">tf.contrib.linalg.LinearOperatorDiag.range_dimension</code></h4>
+<p>Dimension (in the sense of vector spaces) of the range of this operator.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>M</code>.</p>
+<h5 id="returns-25">Returns:</h5>
+<p><code>Dimension</code> object.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatordiag.range_dimension_dynamicnamerange_dimension_dynamic"><code id="LinearOperatorDiag.range_dimension_dynamic">tf.contrib.linalg.LinearOperatorDiag.range_dimension_dynamic(name='range_dimension_dynamic')</code></h4>
+<p>Dimension (in the sense of vector spaces) of the range of this operator.</p>
+<p>Determined at runtime.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>M</code>.</p>
+<h5 id="args-21">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this <code>Op</code>.</li>
+</ul>
+<h5 id="returns-26">Returns:</h5>
+<p><code>int32</code> <code>Tensor</code></p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatordiag.shape"><code id="LinearOperatorDiag.shape">tf.contrib.linalg.LinearOperatorDiag.shape</code></h4>
+<p><code>TensorShape</code> of this <code>LinearOperator</code>.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>TensorShape([B1,...,Bb, M, N])</code>, equivalent to <code>A.get_shape()</code>.</p>
+<h5 id="returns-27">Returns:</h5>
+<p><code>TensorShape</code>, statically determined, may be undefined.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatordiag.shape_dynamicnameshape_dynamic"><code id="LinearOperatorDiag.shape_dynamic">tf.contrib.linalg.LinearOperatorDiag.shape_dynamic(name='shape_dynamic')</code></h4>
+<p>Shape of this <code>LinearOperator</code>, determined at runtime.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns a <code>Tensor</code> holding <code>[B1,...,Bb, M, N]</code>, equivalent to <code>tf.shape(A)</code>.</p>
+<h5 id="args-22">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-28">Returns:</h5>
+<p><code>int32</code> <code>Tensor</code></p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatordiag.solverhs-adjointfalse-namesolve"><code id="LinearOperatorDiag.solve">tf.contrib.linalg.LinearOperatorDiag.solve(rhs, adjoint=False, name='solve')</code></h4>
+<p>Solve <code>R</code> (batch) systems of equations exactly: <code>A X = rhs</code>.</p>
+<p>Examples:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Create an operator acting like a 10 x 2 x 2 matrix.</span>
+operator <span class="op">=</span> LinearOperator(...)
+operator.shape <span class="co"># = 10 x 2 x 2</span>
+
+<span class="co"># Solve one linear system (R = 1) for every member of the length 10 batch.</span>
+RHS <span class="op">=</span> ... <span class="co"># shape 10 x 2 x 1</span>
+X <span class="op">=</span> operator.solve(RHS)  <span class="co"># shape 10 x 2 x 1</span>
+
+<span class="co"># Solve five linear systems (R = 5) for every member of the length 10 batch.</span>
+RHS <span class="op">=</span> ... <span class="co"># shape 10 x 2 x 5</span>
+X <span class="op">=</span> operator.solve(RHS)
+X[<span class="dv">3</span>, :, <span class="dv">2</span>]  <span class="co"># Solution to the linear system A[3, :, :] X = RHS[3, :, 2]</span></code></pre></div>
+<h5 id="args-23">Args:</h5>
+<ul>
+<li><b><code>rhs</code></b>: <code>Tensor</code> with same <code>dtype</code> as this operator and compatible shape. See class docstring for definition of compatibility.</li>
+<li><b><code>adjoint</code></b>: Python <code>bool</code>. If <code>True</code>, solve the system involving the adjoint of this <code>LinearOperator</code>.</li>
+<li><b><code>name</code></b>: A name scope to use for ops added by this method.</li>
+</ul>
+<h5 id="returns-29">Returns:</h5>
+<p><code>Tensor</code> with shape <code>[...,N, R]</code> and same <code>dtype</code> as <code>rhs</code>.</p>
+<h5 id="raises-3">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If self.is_non_singular is False.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatordiag.tensor_rank"><code id="LinearOperatorDiag.tensor_rank">tf.contrib.linalg.LinearOperatorDiag.tensor_rank</code></h4>
+<p>Rank (in the sense of tensors) of matrix corresponding to this operator.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>b + 2</code>.</p>
+<h5 id="args-24">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-30">Returns:</h5>
+<p>Python integer, or None if the tensor rank is undefined.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatordiag.tensor_rank_dynamicnametensor_rank_dynamic"><code id="LinearOperatorDiag.tensor_rank_dynamic">tf.contrib.linalg.LinearOperatorDiag.tensor_rank_dynamic(name='tensor_rank_dynamic')</code></h4>
+<p>Rank (in the sense of tensors) of matrix corresponding to this operator.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>b + 2</code>.</p>
+<h5 id="args-25">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-31">Returns:</h5>
+<p><code>int32</code> <code>Tensor</code>, determined at runtime.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatordiag.to_densenameto_dense"><code id="LinearOperatorDiag.to_dense">tf.contrib.linalg.LinearOperatorDiag.to_dense(name='to_dense')</code></h4>
+<p>Return a dense (batch) matrix representing this operator.</p>
+<hr />
+<h3 id="class-tf.contrib.linalg.linearoperatoridentity"><a name="//apple_ref/cpp/Class/LinearOperatorIdentity" class="dashAnchor"></a><code id="LinearOperatorIdentity">class tf.contrib.linalg.LinearOperatorIdentity</code></h3>
+<p><code>LinearOperator</code> acting like a [batch] square identity matrix.</p>
+<p>This operator acts like a [batch] identity matrix <code>A</code> with shape <code>[B1,...,Bb, N, N]</code> for some <code>b &gt;= 0</code>. The first <code>b</code> indices index a batch member. For every batch index <code>(i1,...,ib)</code>, <code>A[i1,...,ib, : :]</code> is an <code>N x N</code> matrix. This matrix <code>A</code> is not materialized, but for purposes of broadcasting this shape will be relevant.</p>
+<p><code>LinearOperatorIdentity</code> is initialized with <code>num_rows</code>, and optionally <code>batch_shape</code>, and <code>dtype</code> arguments. If <code>batch_shape</code> is <code>None</code>, this operator efficiently passes through all arguments. If <code>batch_shape</code> is provided, broadcasting may occur, which will require making copies.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Create a 2 x 2 identity matrix.</span>
+operator <span class="op">=</span> LinearOperatorIdentity(num_rows<span class="op">=</span><span class="dv">2</span>, dtype<span class="op">=</span>tf.float32)
+
+operator.to_dense()
+<span class="op">==&gt;</span> [[<span class="dv">1</span>., <span class="dv">0</span>.]
+     [<span class="dv">0</span>., <span class="dv">1</span>.]]
+
+operator.shape
+<span class="op">==&gt;</span> [<span class="dv">2</span>, <span class="dv">2</span>]
+
+operator.log_determinant()
+<span class="op">==&gt;</span> <span class="dv">0</span>.
+
+x <span class="op">=</span> ... Shape [<span class="dv">2</span>, <span class="dv">4</span>] Tensor
+operator.<span class="bu">apply</span>(x)
+<span class="op">==&gt;</span> Shape [<span class="dv">2</span>, <span class="dv">4</span>] Tensor, same <span class="im">as</span> x.
+
+y <span class="op">=</span> tf.random_normal(shape<span class="op">=</span>[<span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">4</span>])
+<span class="co"># Note that y.shape is compatible with operator.shape because operator.shape</span>
+<span class="co"># is broadcast to [3, 2, 2].</span>
+<span class="co"># This broadcast does NOT require copying data, since we can infer that y</span>
+<span class="co"># will be passed through without changing shape.  We are always able to infer</span>
+<span class="co"># this if the operator has no batch_shape.</span>
+x <span class="op">=</span> operator.solve(y)
+<span class="op">==&gt;</span> Shape [<span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">4</span>] Tensor, same <span class="im">as</span> y.
+
+<span class="co"># Create a 2-batch of 2x2 identity matrices</span>
+operator <span class="op">=</span> LinearOperatorIdentity(num_rows<span class="op">=</span><span class="dv">2</span>, batch_shape<span class="op">=</span>[<span class="dv">2</span>])
+operator.to_dense()
+<span class="op">==&gt;</span> [[[<span class="dv">1</span>., <span class="dv">0</span>.]
+      [<span class="dv">0</span>., <span class="dv">1</span>.]],
+     [[<span class="dv">1</span>., <span class="dv">0</span>.]
+      [<span class="dv">0</span>., <span class="dv">1</span>.]]]
+
+<span class="co"># Here, even though the operator has a batch shape, the input is the same as</span>
+<span class="co"># the output, so x can be passed through without a copy.  The operator is able</span>
+<span class="co"># to detect that no broadcast is necessary because both x and the operator</span>
+<span class="co"># have statically defined shape.</span>
+x <span class="op">=</span> ... Shape [<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>]
+operator.<span class="bu">apply</span>(x)
+<span class="op">==&gt;</span> Shape [<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>] Tensor, same <span class="im">as</span> x
+
+<span class="co"># Here the operator and x have different batch_shape, and are broadcast.</span>
+<span class="co"># This requires a copy, since the output is different size than the input.</span>
+x <span class="op">=</span> ... Shape [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]
+operator.<span class="bu">apply</span>(x)
+<span class="op">==&gt;</span> Shape [<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>] Tensor, equal to [x, x]</code></pre></div>
+<h3 id="shape-compatibility-3">Shape compatibility</h3>
+<p>This operator acts on [batch] matrix with compatible shape. <code>x</code> is a batch matrix with compatible shape for <code>apply</code> and <code>solve</code> if</p>
+<pre><code>operator.shape = [B1,...,Bb] + [N, N],  with b &gt;= 0
+x.shape =   [C1,...,Cc] + [N, R],
+and [C1,...,Cc] broadcasts with [B1,...,Bb] to [D1,...,Dd]</code></pre>
+<h3 id="performance-2">Performance</h3>
+<p>If <code>batch_shape</code> initialization arg is <code>None</code>:</p>
+<ul>
+<li><code>operator.apply(x)</code> is <code>O(1)</code></li>
+<li><code>operator.solve(x)</code> is <code>O(1)</code></li>
+<li><code>operator.determinant()</code> is <code>O(1)</code></li>
+</ul>
+<p>If <code>batch_shape</code> initialization arg is provided, and static checks cannot rule out the need to broadcast:</p>
+<ul>
+<li><code>operator.apply(x)</code> is <code>O(D1*...*Dd*N*R)</code></li>
+<li><code>operator.solve(x)</code> is <code>O(D1*...*Dd*N*R)</code></li>
+<li><code>operator.determinant()</code> is <code>O(B1*...*Bb)</code></li>
+</ul>
+<h4 id="matrix-property-hints-2">Matrix property hints</h4>
+<p>This <code>LinearOperator</code> is initialized with boolean flags of the form <code>is_X</code>, for <code>X = non_singular, self_adjoint, positive_definite</code>. These have the following meaning * If <code>is_X == True</code>, callers should expect the operator to have the property <code>X</code>. This is a promise that should be fulfilled, but is <em>not</em> a runtime assert. For example, finite floating point precision may result in these promises being violated. * If <code>is_X == False</code>, callers should expect the operator to not have <code>X</code>. * If <code>is_X == None</code> (the default), callers should have no expectation either way. - - -</p>
+<h4 id="tf.contrib.linalg.linearoperatoridentity.__init__num_rows-batch_shapenone-dtypenone-is_non_singulartrue-is_self_adjointtrue-is_positive_definitetrue-assert_proper_shapesfalse-namelinearoperatoridentity"><code id="LinearOperatorIdentity.__init__">tf.contrib.linalg.LinearOperatorIdentity.__init__(num_rows, batch_shape=None, dtype=None, is_non_singular=True, is_self_adjoint=True, is_positive_definite=True, assert_proper_shapes=False, name='LinearOperatorIdentity')</code></h4>
+<p>Initialize a <code>LinearOperatorIdentity</code>.</p>
+<p>The <code>LinearOperatorIdentity</code> is initialized with arguments defining <code>dtype</code> and shape.</p>
+<p>This operator is able to broadcast the leading (batch) dimensions, which sometimes requires copying data. If <code>batch_shape</code> is <code>None</code>, the operator can take arguments of any batch shape without copying. See examples.</p>
+<h5 id="args-26">Args:</h5>
+<ul>
+<li><b><code>num_rows</code></b>: Scalar non-negative integer <code>Tensor</code>. Number of rows in the corresponding identity matrix.</li>
+<li><b><code>batch_shape</code></b>: Optional <code>1-D</code> integer <code>Tensor</code>. The shape of the leading dimensions. If <code>None</code>, this operator has no leading dimensions.</li>
+<li><b><code>dtype</code></b>: Data type of the matrix that this operator represents.</li>
+<li><b><code>is_non_singular</code></b>: Expect that this operator is non-singular.</li>
+<li><b><code>is_self_adjoint</code></b>: Expect that this operator is equal to its hermitian transpose.</li>
+<li><b><code>is_positive_definite</code></b>: Expect that this operator is positive definite.</li>
+<li><b><code>assert_proper_shapes</code></b>: Python <code>bool</code>. If <code>False</code>, only perform static checks that initialization and method arguments have proper shape. If <code>True</code>, and static checks are inconclusive, add asserts to the graph.</li>
+<li><b><code>name</code></b>: A name for this <code>LinearOperator</code></li>
+</ul>
+<h5 id="raises-4">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>num_rows</code> is determined statically to be non-scalar, or negative.</li>
+<li><b><code>ValueError</code></b>: If <code>batch_shape</code> is determined statically to not be 1-D, or negative.</li>
+<li><b><code>ValueError</code></b>: If any of the following is not <code>True</code>: <code>{is_self_adjoint, is_non_singular, is_positive_definite}</code>.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatoridentity.add_to_tensormat-nameadd_to_tensor"><code id="LinearOperatorIdentity.add_to_tensor">tf.contrib.linalg.LinearOperatorIdentity.add_to_tensor(mat, name='add_to_tensor')</code></h4>
+<p>Add matrix represented by this operator to <code>mat</code>. Equiv to <code>I + mat</code>.</p>
+<h5 id="args-27">Args:</h5>
+<ul>
+<li><b><code>mat</code></b>: <code>Tensor</code> with same <code>dtype</code> and shape broadcastable to <code>self</code>.</li>
+<li><b><code>name</code></b>: A name to give this <code>Op</code>.</li>
+</ul>
+<h5 id="returns-32">Returns:</h5>
+<p>A <code>Tensor</code> with broadcast shape and same <code>dtype</code> as <code>self</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatoridentity.applyx-adjointfalse-nameapply"><code id="LinearOperatorIdentity.apply">tf.contrib.linalg.LinearOperatorIdentity.apply(x, adjoint=False, name='apply')</code></h4>
+<p>Transform <code>x</code> with left multiplication: <code>x --&gt; Ax</code>.</p>
+<h5 id="args-28">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code> with compatible shape and same <code>dtype</code> as <code>self</code>. See class docstring for definition of compatibility.</li>
+<li><b><code>adjoint</code></b>: Python <code>bool</code>. If <code>True</code>, left multiply by the adjoint.</li>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-33">Returns:</h5>
+<p>A <code>Tensor</code> with shape <code>[..., M, R]</code> and same <code>dtype</code> as <code>self</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatoridentity.assert_non_singularnameassert_non_singular"><code id="LinearOperatorIdentity.assert_non_singular">tf.contrib.linalg.LinearOperatorIdentity.assert_non_singular(name='assert_non_singular')</code></h4>
+<p>Returns an <code>Op</code> that asserts this operator is non singular.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatoridentity.assert_positive_definitenameassert_positive_definite"><code id="LinearOperatorIdentity.assert_positive_definite">tf.contrib.linalg.LinearOperatorIdentity.assert_positive_definite(name='assert_positive_definite')</code></h4>
+<p>Returns an <code>Op</code> that asserts this operator is positive definite.</p>
+<p>Here, positive definite means the real part of all eigenvalues is positive. We do not require the operator to be self-adjoint.</p>
+<h5 id="args-29">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name to give this <code>Op</code>.</li>
+</ul>
+<h5 id="returns-34">Returns:</h5>
+<p>An <code>Op</code> that asserts this operator is positive definite.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatoridentity.assert_self_adjointnameassert_self_adjoint"><code id="LinearOperatorIdentity.assert_self_adjoint">tf.contrib.linalg.LinearOperatorIdentity.assert_self_adjoint(name='assert_self_adjoint')</code></h4>
+<p>Returns an <code>Op</code> that asserts this operator is self-adjoint.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatoridentity.batch_shape"><code id="LinearOperatorIdentity.batch_shape">tf.contrib.linalg.LinearOperatorIdentity.batch_shape</code></h4>
+<p><code>TensorShape</code> of batch dimensions of this <code>LinearOperator</code>.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>TensorShape([B1,...,Bb])</code>, equivalent to <code>A.get_shape()[:-2]</code></p>
+<h5 id="returns-35">Returns:</h5>
+<p><code>TensorShape</code>, statically determined, may be undefined.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatoridentity.batch_shape_dynamicnamebatch_shape_dynamic"><code id="LinearOperatorIdentity.batch_shape_dynamic">tf.contrib.linalg.LinearOperatorIdentity.batch_shape_dynamic(name='batch_shape_dynamic')</code></h4>
+<p>Shape of batch dimensions of this operator, determined at runtime.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns a <code>Tensor</code> holding <code>[B1,...,Bb]</code>.</p>
+<h5 id="args-30">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-36">Returns:</h5>
+<p><code>int32</code> <code>Tensor</code></p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatoridentity.determinantnamedet"><code id="LinearOperatorIdentity.determinant">tf.contrib.linalg.LinearOperatorIdentity.determinant(name='det')</code></h4>
+<p>Determinant for every batch member.</p>
+<h5 id="args-31">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-37">Returns:</h5>
+<p><code>Tensor</code> with shape <code>self.batch_shape</code> and same <code>dtype</code> as <code>self</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatoridentity.domain_dimension"><code id="LinearOperatorIdentity.domain_dimension">tf.contrib.linalg.LinearOperatorIdentity.domain_dimension</code></h4>
+<p>Dimension (in the sense of vector spaces) of the domain of this operator.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>N</code>.</p>
+<h5 id="returns-38">Returns:</h5>
+<p><code>Dimension</code> object.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatoridentity.domain_dimension_dynamicnamedomain_dimension_dynamic"><code id="LinearOperatorIdentity.domain_dimension_dynamic">tf.contrib.linalg.LinearOperatorIdentity.domain_dimension_dynamic(name='domain_dimension_dynamic')</code></h4>
+<p>Dimension (in the sense of vector spaces) of the domain of this operator.</p>
+<p>Determined at runtime.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>N</code>.</p>
+<h5 id="args-32">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this <code>Op</code>.</li>
+</ul>
+<h5 id="returns-39">Returns:</h5>
+<p><code>int32</code> <code>Tensor</code></p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatoridentity.dtype"><code id="LinearOperatorIdentity.dtype">tf.contrib.linalg.LinearOperatorIdentity.dtype</code></h4>
+<p>The <code>DType</code> of <code>Tensor</code>s handled by this <code>LinearOperator</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatoridentity.graph_parents"><code id="LinearOperatorIdentity.graph_parents">tf.contrib.linalg.LinearOperatorIdentity.graph_parents</code></h4>
+<p>List of graph dependencies of this <code>LinearOperator</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatoridentity.is_non_singular"><code id="LinearOperatorIdentity.is_non_singular">tf.contrib.linalg.LinearOperatorIdentity.is_non_singular</code></h4>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatoridentity.is_positive_definite"><code id="LinearOperatorIdentity.is_positive_definite">tf.contrib.linalg.LinearOperatorIdentity.is_positive_definite</code></h4>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatoridentity.is_self_adjoint"><code id="LinearOperatorIdentity.is_self_adjoint">tf.contrib.linalg.LinearOperatorIdentity.is_self_adjoint</code></h4>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatoridentity.log_abs_determinantnamelog_abs_det"><code id="LinearOperatorIdentity.log_abs_determinant">tf.contrib.linalg.LinearOperatorIdentity.log_abs_determinant(name='log_abs_det')</code></h4>
+<p>Log absolute value of determinant for every batch member.</p>
+<h5 id="args-33">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-40">Returns:</h5>
+<p><code>Tensor</code> with shape <code>self.batch_shape</code> and same <code>dtype</code> as <code>self</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatoridentity.name"><code id="LinearOperatorIdentity.name">tf.contrib.linalg.LinearOperatorIdentity.name</code></h4>
+<p>Name prepended to all ops created by this <code>LinearOperator</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatoridentity.range_dimension"><code id="LinearOperatorIdentity.range_dimension">tf.contrib.linalg.LinearOperatorIdentity.range_dimension</code></h4>
+<p>Dimension (in the sense of vector spaces) of the range of this operator.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>M</code>.</p>
+<h5 id="returns-41">Returns:</h5>
+<p><code>Dimension</code> object.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatoridentity.range_dimension_dynamicnamerange_dimension_dynamic"><code id="LinearOperatorIdentity.range_dimension_dynamic">tf.contrib.linalg.LinearOperatorIdentity.range_dimension_dynamic(name='range_dimension_dynamic')</code></h4>
+<p>Dimension (in the sense of vector spaces) of the range of this operator.</p>
+<p>Determined at runtime.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>M</code>.</p>
+<h5 id="args-34">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this <code>Op</code>.</li>
+</ul>
+<h5 id="returns-42">Returns:</h5>
+<p><code>int32</code> <code>Tensor</code></p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatoridentity.shape"><code id="LinearOperatorIdentity.shape">tf.contrib.linalg.LinearOperatorIdentity.shape</code></h4>
+<p><code>TensorShape</code> of this <code>LinearOperator</code>.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>TensorShape([B1,...,Bb, M, N])</code>, equivalent to <code>A.get_shape()</code>.</p>
+<h5 id="returns-43">Returns:</h5>
+<p><code>TensorShape</code>, statically determined, may be undefined.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatoridentity.shape_dynamicnameshape_dynamic"><code id="LinearOperatorIdentity.shape_dynamic">tf.contrib.linalg.LinearOperatorIdentity.shape_dynamic(name='shape_dynamic')</code></h4>
+<p>Shape of this <code>LinearOperator</code>, determined at runtime.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns a <code>Tensor</code> holding <code>[B1,...,Bb, M, N]</code>, equivalent to <code>tf.shape(A)</code>.</p>
+<h5 id="args-35">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-44">Returns:</h5>
+<p><code>int32</code> <code>Tensor</code></p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatoridentity.solverhs-adjointfalse-namesolve"><code id="LinearOperatorIdentity.solve">tf.contrib.linalg.LinearOperatorIdentity.solve(rhs, adjoint=False, name='solve')</code></h4>
+<p>Solve <code>R</code> (batch) systems of equations exactly: <code>A X = rhs</code>.</p>
+<p>Examples:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Create an operator acting like a 10 x 2 x 2 matrix.</span>
+operator <span class="op">=</span> LinearOperator(...)
+operator.shape <span class="co"># = 10 x 2 x 2</span>
+
+<span class="co"># Solve one linear system (R = 1) for every member of the length 10 batch.</span>
+RHS <span class="op">=</span> ... <span class="co"># shape 10 x 2 x 1</span>
+X <span class="op">=</span> operator.solve(RHS)  <span class="co"># shape 10 x 2 x 1</span>
+
+<span class="co"># Solve five linear systems (R = 5) for every member of the length 10 batch.</span>
+RHS <span class="op">=</span> ... <span class="co"># shape 10 x 2 x 5</span>
+X <span class="op">=</span> operator.solve(RHS)
+X[<span class="dv">3</span>, :, <span class="dv">2</span>]  <span class="co"># Solution to the linear system A[3, :, :] X = RHS[3, :, 2]</span></code></pre></div>
+<h5 id="args-36">Args:</h5>
+<ul>
+<li><b><code>rhs</code></b>: <code>Tensor</code> with same <code>dtype</code> as this operator and compatible shape. See class docstring for definition of compatibility.</li>
+<li><b><code>adjoint</code></b>: Python <code>bool</code>. If <code>True</code>, solve the system involving the adjoint of this <code>LinearOperator</code>.</li>
+<li><b><code>name</code></b>: A name scope to use for ops added by this method.</li>
+</ul>
+<h5 id="returns-45">Returns:</h5>
+<p><code>Tensor</code> with shape <code>[...,N, R]</code> and same <code>dtype</code> as <code>rhs</code>.</p>
+<h5 id="raises-5">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If self.is_non_singular is False.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatoridentity.tensor_rank"><code id="LinearOperatorIdentity.tensor_rank">tf.contrib.linalg.LinearOperatorIdentity.tensor_rank</code></h4>
+<p>Rank (in the sense of tensors) of matrix corresponding to this operator.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>b + 2</code>.</p>
+<h5 id="args-37">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-46">Returns:</h5>
+<p>Python integer, or None if the tensor rank is undefined.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatoridentity.tensor_rank_dynamicnametensor_rank_dynamic"><code id="LinearOperatorIdentity.tensor_rank_dynamic">tf.contrib.linalg.LinearOperatorIdentity.tensor_rank_dynamic(name='tensor_rank_dynamic')</code></h4>
+<p>Rank (in the sense of tensors) of matrix corresponding to this operator.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>b + 2</code>.</p>
+<h5 id="args-38">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-47">Returns:</h5>
+<p><code>int32</code> <code>Tensor</code>, determined at runtime.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatoridentity.to_densenameto_dense"><code id="LinearOperatorIdentity.to_dense">tf.contrib.linalg.LinearOperatorIdentity.to_dense(name='to_dense')</code></h4>
+<p>Return a dense (batch) matrix representing this operator.</p>
+<hr />
+<h3 id="class-tf.contrib.linalg.linearoperatorscaledidentity"><a name="//apple_ref/cpp/Class/LinearOperatorScaledIdentity" class="dashAnchor"></a><code id="LinearOperatorScaledIdentity">class tf.contrib.linalg.LinearOperatorScaledIdentity</code></h3>
+<p><code>LinearOperator</code> acting like a scaled [batch] identity matrix <code>A = c I</code>.</p>
+<p>This operator acts like a scaled [batch] identity matrix <code>A</code> with shape <code>[B1,...,Bb, N, N]</code> for some <code>b &gt;= 0</code>. The first <code>b</code> indices index a batch member. For every batch index <code>(i1,...,ib)</code>, <code>A[i1,...,ib, : :]</code> is a scaled version of the <code>N x N</code> identity matrix.</p>
+<p><code>LinearOperatorIdentity</code> is initialized with <code>num_rows</code>, and a <code>multiplier</code> (a <code>Tensor</code>) of shape <code>[B1,...,Bb]</code>. <code>N</code> is set to <code>num_rows</code>, and the <code>multiplier</code> determines the scale for each batch member.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Create a 2 x 2 scaled identity matrix.</span>
+operator <span class="op">=</span> LinearOperatorIdentity(num_rows<span class="op">=</span><span class="dv">2</span>, multiplier<span class="op">=</span><span class="dv">3</span>.)
+
+operator.to_dense()
+<span class="op">==&gt;</span> [[<span class="dv">3</span>., <span class="dv">0</span>.]
+     [<span class="dv">0</span>., <span class="dv">3</span>.]]
+
+operator.shape
+<span class="op">==&gt;</span> [<span class="dv">2</span>, <span class="dv">2</span>]
+
+operator.log_determinant()
+<span class="op">==&gt;</span> <span class="dv">2</span> <span class="op">*</span> Log[<span class="dv">3</span>]
+
+x <span class="op">=</span> ... Shape [<span class="dv">2</span>, <span class="dv">4</span>] Tensor
+operator.<span class="bu">apply</span>(x)
+<span class="op">==&gt;</span> <span class="dv">3</span> <span class="op">*</span> x
+
+y <span class="op">=</span> tf.random_normal(shape<span class="op">=</span>[<span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">4</span>])
+<span class="co"># Note that y.shape is compatible with operator.shape because operator.shape</span>
+<span class="co"># is broadcast to [3, 2, 2].</span>
+x <span class="op">=</span> operator.solve(y)
+<span class="op">==&gt;</span> <span class="dv">3</span> <span class="op">*</span> x
+
+<span class="co"># Create a 2-batch of 2x2 identity matrices</span>
+operator <span class="op">=</span> LinearOperatorIdentity(num_rows<span class="op">=</span><span class="dv">2</span>, multiplier<span class="op">=</span><span class="dv">5</span>.)
+operator.to_dense()
+<span class="op">==&gt;</span> [[[<span class="dv">5</span>., <span class="dv">0</span>.]
+      [<span class="dv">0</span>., <span class="dv">5</span>.]],
+     [[<span class="dv">5</span>., <span class="dv">0</span>.]
+      [<span class="dv">0</span>., <span class="dv">5</span>.]]]
+
+x <span class="op">=</span> ... Shape [<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>]
+operator.<span class="bu">apply</span>(x)
+<span class="op">==&gt;</span> <span class="dv">5</span> <span class="op">*</span> x
+
+<span class="co"># Here the operator and x have different batch_shape, and are broadcast.</span>
+x <span class="op">=</span> ... Shape [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]
+operator.<span class="bu">apply</span>(x)
+<span class="op">==&gt;</span> <span class="dv">5</span> <span class="op">*</span> x</code></pre></div>
+<h3 id="shape-compatibility-4">Shape compatibility</h3>
+<p>This operator acts on [batch] matrix with compatible shape. <code>x</code> is a batch matrix with compatible shape for <code>apply</code> and <code>solve</code> if</p>
+<pre><code>operator.shape = [B1,...,Bb] + [N, N],  with b &gt;= 0
+x.shape =   [C1,...,Cc] + [N, R],
+and [C1,...,Cc] broadcasts with [B1,...,Bb] to [D1,...,Dd]</code></pre>
+<h3 id="performance-3">Performance</h3>
+<ul>
+<li><code>operator.apply(x)</code> is <code>O(D1*...*Dd*N*R)</code></li>
+<li><code>operator.solve(x)</code> is <code>O(D1*...*Dd*N*R)</code></li>
+<li><code>operator.determinant()</code> is <code>O(D1*...*Dd)</code></li>
+</ul>
+<h4 id="matrix-property-hints-3">Matrix property hints</h4>
+<p>This <code>LinearOperator</code> is initialized with boolean flags of the form <code>is_X</code>, for <code>X = non_singular, self_adjoint, positive_definite</code>. These have the following meaning * If <code>is_X == True</code>, callers should expect the operator to have the property <code>X</code>. This is a promise that should be fulfilled, but is <em>not</em> a runtime assert. For example, finite floating point precision may result in these promises being violated. * If <code>is_X == False</code>, callers should expect the operator to not have <code>X</code>. * If <code>is_X == None</code> (the default), callers should have no expectation either way. - - -</p>
+<h4 id="tf.contrib.linalg.linearoperatorscaledidentity.__init__num_rows-multiplier-is_non_singularnone-is_self_adjointnone-is_positive_definitenone-assert_proper_shapesfalse-namelinearoperatorscaledidentity"><code id="LinearOperatorScaledIdentity.__init__">tf.contrib.linalg.LinearOperatorScaledIdentity.__init__(num_rows, multiplier, is_non_singular=None, is_self_adjoint=None, is_positive_definite=None, assert_proper_shapes=False, name='LinearOperatorScaledIdentity')</code></h4>
+<p>Initialize a <code>LinearOperatorScaledIdentity</code>.</p>
+<p>The <code>LinearOperatorScaledIdentity</code> is initialized with <code>num_rows</code>, which determines the size of each identity matrix, and a <code>multiplier</code>, which defines <code>dtype</code>, batch shape, and scale of each matrix.</p>
+<p>This operator is able to broadcast the leading (batch) dimensions.</p>
+<h5 id="args-39">Args:</h5>
+<ul>
+<li><b><code>num_rows</code></b>: Scalar non-negative integer <code>Tensor</code>. Number of rows in the corresponding identity matrix.</li>
+<li><b><code>multiplier</code></b>: <code>Tensor</code> of shape <code>[B1,...,Bb]</code>, or <code>[]</code> (a scalar).</li>
+<li><b><code>is_non_singular</code></b>: Expect that this operator is non-singular.</li>
+<li><b><code>is_self_adjoint</code></b>: Expect that this operator is equal to its hermitian transpose.</li>
+<li><b><code>is_positive_definite</code></b>: Expect that this operator is positive definite.</li>
+<li><b><code>assert_proper_shapes</code></b>: Python <code>bool</code>. If <code>False</code>, only perform static checks that initialization and method arguments have proper shape. If <code>True</code>, and static checks are inconclusive, add asserts to the graph.</li>
+<li><b><code>name</code></b>: A name for this <code>LinearOperator</code></li>
+</ul>
+<h5 id="raises-6">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>num_rows</code> is determined statically to be non-scalar, or negative.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorscaledidentity.add_to_tensormat-nameadd_to_tensor"><code id="LinearOperatorScaledIdentity.add_to_tensor">tf.contrib.linalg.LinearOperatorScaledIdentity.add_to_tensor(mat, name='add_to_tensor')</code></h4>
+<p>Add matrix represented by this operator to <code>mat</code>. Equiv to <code>I + mat</code>.</p>
+<h5 id="args-40">Args:</h5>
+<ul>
+<li><b><code>mat</code></b>: <code>Tensor</code> with same <code>dtype</code> and shape broadcastable to <code>self</code>.</li>
+<li><b><code>name</code></b>: A name to give this <code>Op</code>.</li>
+</ul>
+<h5 id="returns-48">Returns:</h5>
+<p>A <code>Tensor</code> with broadcast shape and same <code>dtype</code> as <code>self</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorscaledidentity.applyx-adjointfalse-nameapply"><code id="LinearOperatorScaledIdentity.apply">tf.contrib.linalg.LinearOperatorScaledIdentity.apply(x, adjoint=False, name='apply')</code></h4>
+<p>Transform <code>x</code> with left multiplication: <code>x --&gt; Ax</code>.</p>
+<h5 id="args-41">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code> with compatible shape and same <code>dtype</code> as <code>self</code>. See class docstring for definition of compatibility.</li>
+<li><b><code>adjoint</code></b>: Python <code>bool</code>. If <code>True</code>, left multiply by the adjoint.</li>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-49">Returns:</h5>
+<p>A <code>Tensor</code> with shape <code>[..., M, R]</code> and same <code>dtype</code> as <code>self</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorscaledidentity.assert_non_singularnameassert_non_singular"><code id="LinearOperatorScaledIdentity.assert_non_singular">tf.contrib.linalg.LinearOperatorScaledIdentity.assert_non_singular(name='assert_non_singular')</code></h4>
+<p>Returns an <code>Op</code> that asserts this operator is non singular.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorscaledidentity.assert_positive_definitenameassert_positive_definite"><code id="LinearOperatorScaledIdentity.assert_positive_definite">tf.contrib.linalg.LinearOperatorScaledIdentity.assert_positive_definite(name='assert_positive_definite')</code></h4>
+<p>Returns an <code>Op</code> that asserts this operator is positive definite.</p>
+<p>Here, positive definite means the real part of all eigenvalues is positive. We do not require the operator to be self-adjoint.</p>
+<h5 id="args-42">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name to give this <code>Op</code>.</li>
+</ul>
+<h5 id="returns-50">Returns:</h5>
+<p>An <code>Op</code> that asserts this operator is positive definite.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorscaledidentity.assert_self_adjointnameassert_self_adjoint"><code id="LinearOperatorScaledIdentity.assert_self_adjoint">tf.contrib.linalg.LinearOperatorScaledIdentity.assert_self_adjoint(name='assert_self_adjoint')</code></h4>
+<p>Returns an <code>Op</code> that asserts this operator is self-adjoint.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorscaledidentity.batch_shape"><code id="LinearOperatorScaledIdentity.batch_shape">tf.contrib.linalg.LinearOperatorScaledIdentity.batch_shape</code></h4>
+<p><code>TensorShape</code> of batch dimensions of this <code>LinearOperator</code>.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>TensorShape([B1,...,Bb])</code>, equivalent to <code>A.get_shape()[:-2]</code></p>
+<h5 id="returns-51">Returns:</h5>
+<p><code>TensorShape</code>, statically determined, may be undefined.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorscaledidentity.batch_shape_dynamicnamebatch_shape_dynamic"><code id="LinearOperatorScaledIdentity.batch_shape_dynamic">tf.contrib.linalg.LinearOperatorScaledIdentity.batch_shape_dynamic(name='batch_shape_dynamic')</code></h4>
+<p>Shape of batch dimensions of this operator, determined at runtime.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns a <code>Tensor</code> holding <code>[B1,...,Bb]</code>.</p>
+<h5 id="args-43">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-52">Returns:</h5>
+<p><code>int32</code> <code>Tensor</code></p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorscaledidentity.determinantnamedet"><code id="LinearOperatorScaledIdentity.determinant">tf.contrib.linalg.LinearOperatorScaledIdentity.determinant(name='det')</code></h4>
+<p>Determinant for every batch member.</p>
+<h5 id="args-44">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-53">Returns:</h5>
+<p><code>Tensor</code> with shape <code>self.batch_shape</code> and same <code>dtype</code> as <code>self</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorscaledidentity.domain_dimension"><code id="LinearOperatorScaledIdentity.domain_dimension">tf.contrib.linalg.LinearOperatorScaledIdentity.domain_dimension</code></h4>
+<p>Dimension (in the sense of vector spaces) of the domain of this operator.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>N</code>.</p>
+<h5 id="returns-54">Returns:</h5>
+<p><code>Dimension</code> object.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorscaledidentity.domain_dimension_dynamicnamedomain_dimension_dynamic"><code id="LinearOperatorScaledIdentity.domain_dimension_dynamic">tf.contrib.linalg.LinearOperatorScaledIdentity.domain_dimension_dynamic(name='domain_dimension_dynamic')</code></h4>
+<p>Dimension (in the sense of vector spaces) of the domain of this operator.</p>
+<p>Determined at runtime.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>N</code>.</p>
+<h5 id="args-45">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this <code>Op</code>.</li>
+</ul>
+<h5 id="returns-55">Returns:</h5>
+<p><code>int32</code> <code>Tensor</code></p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorscaledidentity.dtype"><code id="LinearOperatorScaledIdentity.dtype">tf.contrib.linalg.LinearOperatorScaledIdentity.dtype</code></h4>
+<p>The <code>DType</code> of <code>Tensor</code>s handled by this <code>LinearOperator</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorscaledidentity.graph_parents"><code id="LinearOperatorScaledIdentity.graph_parents">tf.contrib.linalg.LinearOperatorScaledIdentity.graph_parents</code></h4>
+<p>List of graph dependencies of this <code>LinearOperator</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorscaledidentity.is_non_singular"><code id="LinearOperatorScaledIdentity.is_non_singular">tf.contrib.linalg.LinearOperatorScaledIdentity.is_non_singular</code></h4>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorscaledidentity.is_positive_definite"><code id="LinearOperatorScaledIdentity.is_positive_definite">tf.contrib.linalg.LinearOperatorScaledIdentity.is_positive_definite</code></h4>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorscaledidentity.is_self_adjoint"><code id="LinearOperatorScaledIdentity.is_self_adjoint">tf.contrib.linalg.LinearOperatorScaledIdentity.is_self_adjoint</code></h4>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorscaledidentity.log_abs_determinantnamelog_abs_det"><code id="LinearOperatorScaledIdentity.log_abs_determinant">tf.contrib.linalg.LinearOperatorScaledIdentity.log_abs_determinant(name='log_abs_det')</code></h4>
+<p>Log absolute value of determinant for every batch member.</p>
+<h5 id="args-46">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-56">Returns:</h5>
+<p><code>Tensor</code> with shape <code>self.batch_shape</code> and same <code>dtype</code> as <code>self</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorscaledidentity.multiplier"><code id="LinearOperatorScaledIdentity.multiplier">tf.contrib.linalg.LinearOperatorScaledIdentity.multiplier</code></h4>
+<p>The [batch] scalar <code>Tensor</code>, <code>c</code> in <code>cI</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorscaledidentity.name"><code id="LinearOperatorScaledIdentity.name">tf.contrib.linalg.LinearOperatorScaledIdentity.name</code></h4>
+<p>Name prepended to all ops created by this <code>LinearOperator</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorscaledidentity.range_dimension"><code id="LinearOperatorScaledIdentity.range_dimension">tf.contrib.linalg.LinearOperatorScaledIdentity.range_dimension</code></h4>
+<p>Dimension (in the sense of vector spaces) of the range of this operator.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>M</code>.</p>
+<h5 id="returns-57">Returns:</h5>
+<p><code>Dimension</code> object.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorscaledidentity.range_dimension_dynamicnamerange_dimension_dynamic"><code id="LinearOperatorScaledIdentity.range_dimension_dynamic">tf.contrib.linalg.LinearOperatorScaledIdentity.range_dimension_dynamic(name='range_dimension_dynamic')</code></h4>
+<p>Dimension (in the sense of vector spaces) of the range of this operator.</p>
+<p>Determined at runtime.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>M</code>.</p>
+<h5 id="args-47">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this <code>Op</code>.</li>
+</ul>
+<h5 id="returns-58">Returns:</h5>
+<p><code>int32</code> <code>Tensor</code></p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorscaledidentity.shape"><code id="LinearOperatorScaledIdentity.shape">tf.contrib.linalg.LinearOperatorScaledIdentity.shape</code></h4>
+<p><code>TensorShape</code> of this <code>LinearOperator</code>.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>TensorShape([B1,...,Bb, M, N])</code>, equivalent to <code>A.get_shape()</code>.</p>
+<h5 id="returns-59">Returns:</h5>
+<p><code>TensorShape</code>, statically determined, may be undefined.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorscaledidentity.shape_dynamicnameshape_dynamic"><code id="LinearOperatorScaledIdentity.shape_dynamic">tf.contrib.linalg.LinearOperatorScaledIdentity.shape_dynamic(name='shape_dynamic')</code></h4>
+<p>Shape of this <code>LinearOperator</code>, determined at runtime.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns a <code>Tensor</code> holding <code>[B1,...,Bb, M, N]</code>, equivalent to <code>tf.shape(A)</code>.</p>
+<h5 id="args-48">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-60">Returns:</h5>
+<p><code>int32</code> <code>Tensor</code></p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorscaledidentity.solverhs-adjointfalse-namesolve"><code id="LinearOperatorScaledIdentity.solve">tf.contrib.linalg.LinearOperatorScaledIdentity.solve(rhs, adjoint=False, name='solve')</code></h4>
+<p>Solve <code>R</code> (batch) systems of equations exactly: <code>A X = rhs</code>.</p>
+<p>Examples:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Create an operator acting like a 10 x 2 x 2 matrix.</span>
+operator <span class="op">=</span> LinearOperator(...)
+operator.shape <span class="co"># = 10 x 2 x 2</span>
+
+<span class="co"># Solve one linear system (R = 1) for every member of the length 10 batch.</span>
+RHS <span class="op">=</span> ... <span class="co"># shape 10 x 2 x 1</span>
+X <span class="op">=</span> operator.solve(RHS)  <span class="co"># shape 10 x 2 x 1</span>
+
+<span class="co"># Solve five linear systems (R = 5) for every member of the length 10 batch.</span>
+RHS <span class="op">=</span> ... <span class="co"># shape 10 x 2 x 5</span>
+X <span class="op">=</span> operator.solve(RHS)
+X[<span class="dv">3</span>, :, <span class="dv">2</span>]  <span class="co"># Solution to the linear system A[3, :, :] X = RHS[3, :, 2]</span></code></pre></div>
+<h5 id="args-49">Args:</h5>
+<ul>
+<li><b><code>rhs</code></b>: <code>Tensor</code> with same <code>dtype</code> as this operator and compatible shape. See class docstring for definition of compatibility.</li>
+<li><b><code>adjoint</code></b>: Python <code>bool</code>. If <code>True</code>, solve the system involving the adjoint of this <code>LinearOperator</code>.</li>
+<li><b><code>name</code></b>: A name scope to use for ops added by this method.</li>
+</ul>
+<h5 id="returns-61">Returns:</h5>
+<p><code>Tensor</code> with shape <code>[...,N, R]</code> and same <code>dtype</code> as <code>rhs</code>.</p>
+<h5 id="raises-7">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If self.is_non_singular is False.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorscaledidentity.tensor_rank"><code id="LinearOperatorScaledIdentity.tensor_rank">tf.contrib.linalg.LinearOperatorScaledIdentity.tensor_rank</code></h4>
+<p>Rank (in the sense of tensors) of matrix corresponding to this operator.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>b + 2</code>.</p>
+<h5 id="args-50">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-62">Returns:</h5>
+<p>Python integer, or None if the tensor rank is undefined.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorscaledidentity.tensor_rank_dynamicnametensor_rank_dynamic"><code id="LinearOperatorScaledIdentity.tensor_rank_dynamic">tf.contrib.linalg.LinearOperatorScaledIdentity.tensor_rank_dynamic(name='tensor_rank_dynamic')</code></h4>
+<p>Rank (in the sense of tensors) of matrix corresponding to this operator.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>b + 2</code>.</p>
+<h5 id="args-51">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-63">Returns:</h5>
+<p><code>int32</code> <code>Tensor</code>, determined at runtime.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorscaledidentity.to_densenameto_dense"><code id="LinearOperatorScaledIdentity.to_dense">tf.contrib.linalg.LinearOperatorScaledIdentity.to_dense(name='to_dense')</code></h4>
+<p>Return a dense (batch) matrix representing this operator.</p>
+<hr />
+<h3 id="class-tf.contrib.linalg.linearoperatormatrix"><a name="//apple_ref/cpp/Class/LinearOperatorMatrix" class="dashAnchor"></a><code id="LinearOperatorMatrix">class tf.contrib.linalg.LinearOperatorMatrix</code></h3>
+<p><code>LinearOperator</code> that wraps a [batch] matrix.</p>
+<p>This operator wraps a [batch] matrix <code>A</code> (which is a <code>Tensor</code>) with shape <code>[B1,...,Bb, M, N]</code> for some <code>b &gt;= 0</code>. The first <code>b</code> indices index a batch member. For every batch index <code>(i1,...,ib)</code>, <code>A[i1,...,ib, : :]</code> is an <code>M x N</code> matrix.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Create a 2 x 2 linear operator.</span>
+matrix <span class="op">=</span> [[<span class="dv">1</span>., <span class="dv">2</span>.], [<span class="dv">3</span>., <span class="dv">4</span>.]]
+operator <span class="op">=</span> LinearOperatorMatrix(matrix)
+
+operator.to_dense()
+<span class="op">==&gt;</span> [[<span class="dv">1</span>., <span class="dv">2</span>.]
+     [<span class="dv">3</span>., <span class="dv">4</span>.]]
+
+operator.shape
+<span class="op">==&gt;</span> [<span class="dv">2</span>, <span class="dv">2</span>]
+
+operator.log_determinant()
+<span class="op">==&gt;</span> scalar Tensor
+
+x <span class="op">=</span> ... Shape [<span class="dv">2</span>, <span class="dv">4</span>] Tensor
+operator.<span class="bu">apply</span>(x)
+<span class="op">==&gt;</span> Shape [<span class="dv">2</span>, <span class="dv">4</span>] Tensor
+
+<span class="co"># Create a [2, 3] batch of 4 x 4 linear operators.</span>
+matrix <span class="op">=</span> tf.random_normal(shape<span class="op">=</span>[<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">4</span>])
+operator <span class="op">=</span> LinearOperatorMatrix(matrix)</code></pre></div>
+<h4 id="shape-compatibility-5">Shape compatibility</h4>
+<p>This operator acts on [batch] matrix with compatible shape. <code>x</code> is a batch matrix with compatible shape for <code>apply</code> and <code>solve</code> if</p>
+<pre><code>operator.shape = [B1,...,Bb] + [M, N],  with b &gt;= 0
+x.shape =        [B1,...,Bb] + [N, R],  with R &gt;= 0.</code></pre>
+<h4 id="performance-4">Performance</h4>
+<p><code>LinearOperatorMatrix</code> has exactly the same performance as would be achieved by using standard <code>TensorFlow</code> matrix ops. Intelligent choices are made based on the following initialization hints.</p>
+<ul>
+<li>If <code>dtype</code> is real, and <code>is_self_adjoint</code> and <code>is_positive_definite</code>, a Cholesky factorization is used for the determinant and solve.</li>
+</ul>
+<p>In all cases, suppose <code>operator</code> is a <code>LinearOperatorMatrix</code> of shape <code>[M, N]</code>, and <code>x.shape = [N, R]</code>. Then</p>
+<ul>
+<li><code>operator.apply(x)</code> is <code>O(M * N * R)</code>.</li>
+<li>If <code>M=N</code>, <code>operator.solve(x)</code> is <code>O(N^3 * R)</code>.</li>
+<li>If <code>M=N</code>, <code>operator.determinant()</code> is <code>O(N^3)</code>.</li>
+</ul>
+<p>If instead <code>operator</code> and <code>x</code> have shape <code>[B1,...,Bb, M, N]</code> and <code>[B1,...,Bb, N, R]</code>, every operation increases in complexity by <code>B1*...*Bb</code>.</p>
+<h4 id="matrix-property-hints-4">Matrix property hints</h4>
+<p>This <code>LinearOperator</code> is initialized with boolean flags of the form <code>is_X</code>, for <code>X = non_singular, self_adjoint, positive_definite</code>. These have the following meaning * If <code>is_X == True</code>, callers should expect the operator to have the property <code>X</code>. This is a promise that should be fulfilled, but is <em>not</em> a runtime assert. For example, finite floating point precision may result in these promises being violated. * If <code>is_X == False</code>, callers should expect the operator to not have <code>X</code>. * If <code>is_X == None</code> (the default), callers should have no expectation either way. - - -</p>
+<h4 id="tf.contrib.linalg.linearoperatormatrix.__init__matrix-is_non_singularnone-is_self_adjointnone-is_positive_definitenone-namelinearoperatormatrix"><code id="LinearOperatorMatrix.__init__">tf.contrib.linalg.LinearOperatorMatrix.__init__(matrix, is_non_singular=None, is_self_adjoint=None, is_positive_definite=None, name='LinearOperatorMatrix')</code></h4>
+<p>Initialize a <code>LinearOperatorMatrix</code>.</p>
+<h5 id="args-52">Args:</h5>
+<ul>
+<li><b><code>matrix</code></b>: Shape <code>[B1,...,Bb, M, N]</code> with <code>b &gt;= 0</code>, <code>M, N &gt;= 0</code>. Allowed dtypes: <code>float32</code>, <code>float64</code>, <code>complex64</code>, <code>complex128</code>.</li>
+<li><b><code>is_non_singular</code></b>: Expect that this operator is non-singular.</li>
+<li><b><code>is_self_adjoint</code></b>: Expect that this operator is equal to its hermitian transpose.</li>
+<li><b><code>is_positive_definite</code></b>: Expect that this operator is positive definite, meaning the real part of all eigenvalues is positive. We do not require the operator to be self-adjoint to be positive-definite. See:</li>
+<li><b><code>https</code></b>: //en.wikipedia.org/wiki/Positive-definite_matrix #Extension_for_non_symmetric_matrices</li>
+<li><b><code>name</code></b>: A name for this <code>LinearOperator</code>.</li>
+</ul>
+<h5 id="raises-8">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>diag.dtype</code> is not an allowed type.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatormatrix.add_to_tensorx-nameadd_to_tensor"><code id="LinearOperatorMatrix.add_to_tensor">tf.contrib.linalg.LinearOperatorMatrix.add_to_tensor(x, name='add_to_tensor')</code></h4>
+<p>Add matrix represented by this operator to <code>x</code>. Equivalent to <code>A + x</code>.</p>
+<h5 id="args-53">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code> with same <code>dtype</code> and shape broadcastable to <code>self.shape</code>.</li>
+<li><b><code>name</code></b>: A name to give this <code>Op</code>.</li>
+</ul>
+<h5 id="returns-64">Returns:</h5>
+<p>A <code>Tensor</code> with broadcast shape and same <code>dtype</code> as <code>self</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatormatrix.applyx-adjointfalse-nameapply"><code id="LinearOperatorMatrix.apply">tf.contrib.linalg.LinearOperatorMatrix.apply(x, adjoint=False, name='apply')</code></h4>
+<p>Transform <code>x</code> with left multiplication: <code>x --&gt; Ax</code>.</p>
+<h5 id="args-54">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code> with compatible shape and same <code>dtype</code> as <code>self</code>. See class docstring for definition of compatibility.</li>
+<li><b><code>adjoint</code></b>: Python <code>bool</code>. If <code>True</code>, left multiply by the adjoint.</li>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-65">Returns:</h5>
+<p>A <code>Tensor</code> with shape <code>[..., M, R]</code> and same <code>dtype</code> as <code>self</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatormatrix.assert_non_singularnameassert_non_singular"><code id="LinearOperatorMatrix.assert_non_singular">tf.contrib.linalg.LinearOperatorMatrix.assert_non_singular(name='assert_non_singular')</code></h4>
+<p>Returns an <code>Op</code> that asserts this operator is non singular.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatormatrix.assert_positive_definitenameassert_positive_definite"><code id="LinearOperatorMatrix.assert_positive_definite">tf.contrib.linalg.LinearOperatorMatrix.assert_positive_definite(name='assert_positive_definite')</code></h4>
+<p>Returns an <code>Op</code> that asserts this operator is positive definite.</p>
+<p>Here, positive definite means the real part of all eigenvalues is positive. We do not require the operator to be self-adjoint.</p>
+<h5 id="args-55">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name to give this <code>Op</code>.</li>
+</ul>
+<h5 id="returns-66">Returns:</h5>
+<p>An <code>Op</code> that asserts this operator is positive definite.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatormatrix.assert_self_adjointnameassert_self_adjoint"><code id="LinearOperatorMatrix.assert_self_adjoint">tf.contrib.linalg.LinearOperatorMatrix.assert_self_adjoint(name='assert_self_adjoint')</code></h4>
+<p>Returns an <code>Op</code> that asserts this operator is self-adjoint.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatormatrix.batch_shape"><code id="LinearOperatorMatrix.batch_shape">tf.contrib.linalg.LinearOperatorMatrix.batch_shape</code></h4>
+<p><code>TensorShape</code> of batch dimensions of this <code>LinearOperator</code>.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>TensorShape([B1,...,Bb])</code>, equivalent to <code>A.get_shape()[:-2]</code></p>
+<h5 id="returns-67">Returns:</h5>
+<p><code>TensorShape</code>, statically determined, may be undefined.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatormatrix.batch_shape_dynamicnamebatch_shape_dynamic"><code id="LinearOperatorMatrix.batch_shape_dynamic">tf.contrib.linalg.LinearOperatorMatrix.batch_shape_dynamic(name='batch_shape_dynamic')</code></h4>
+<p>Shape of batch dimensions of this operator, determined at runtime.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns a <code>Tensor</code> holding <code>[B1,...,Bb]</code>.</p>
+<h5 id="args-56">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-68">Returns:</h5>
+<p><code>int32</code> <code>Tensor</code></p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatormatrix.determinantnamedet"><code id="LinearOperatorMatrix.determinant">tf.contrib.linalg.LinearOperatorMatrix.determinant(name='det')</code></h4>
+<p>Determinant for every batch member.</p>
+<h5 id="args-57">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-69">Returns:</h5>
+<p><code>Tensor</code> with shape <code>self.batch_shape</code> and same <code>dtype</code> as <code>self</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatormatrix.domain_dimension"><code id="LinearOperatorMatrix.domain_dimension">tf.contrib.linalg.LinearOperatorMatrix.domain_dimension</code></h4>
+<p>Dimension (in the sense of vector spaces) of the domain of this operator.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>N</code>.</p>
+<h5 id="returns-70">Returns:</h5>
+<p><code>Dimension</code> object.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatormatrix.domain_dimension_dynamicnamedomain_dimension_dynamic"><code id="LinearOperatorMatrix.domain_dimension_dynamic">tf.contrib.linalg.LinearOperatorMatrix.domain_dimension_dynamic(name='domain_dimension_dynamic')</code></h4>
+<p>Dimension (in the sense of vector spaces) of the domain of this operator.</p>
+<p>Determined at runtime.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>N</code>.</p>
+<h5 id="args-58">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this <code>Op</code>.</li>
+</ul>
+<h5 id="returns-71">Returns:</h5>
+<p><code>int32</code> <code>Tensor</code></p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatormatrix.dtype"><code id="LinearOperatorMatrix.dtype">tf.contrib.linalg.LinearOperatorMatrix.dtype</code></h4>
+<p>The <code>DType</code> of <code>Tensor</code>s handled by this <code>LinearOperator</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatormatrix.graph_parents"><code id="LinearOperatorMatrix.graph_parents">tf.contrib.linalg.LinearOperatorMatrix.graph_parents</code></h4>
+<p>List of graph dependencies of this <code>LinearOperator</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatormatrix.is_non_singular"><code id="LinearOperatorMatrix.is_non_singular">tf.contrib.linalg.LinearOperatorMatrix.is_non_singular</code></h4>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatormatrix.is_positive_definite"><code id="LinearOperatorMatrix.is_positive_definite">tf.contrib.linalg.LinearOperatorMatrix.is_positive_definite</code></h4>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatormatrix.is_self_adjoint"><code id="LinearOperatorMatrix.is_self_adjoint">tf.contrib.linalg.LinearOperatorMatrix.is_self_adjoint</code></h4>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatormatrix.log_abs_determinantnamelog_abs_det"><code id="LinearOperatorMatrix.log_abs_determinant">tf.contrib.linalg.LinearOperatorMatrix.log_abs_determinant(name='log_abs_det')</code></h4>
+<p>Log absolute value of determinant for every batch member.</p>
+<h5 id="args-59">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-72">Returns:</h5>
+<p><code>Tensor</code> with shape <code>self.batch_shape</code> and same <code>dtype</code> as <code>self</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatormatrix.name"><code id="LinearOperatorMatrix.name">tf.contrib.linalg.LinearOperatorMatrix.name</code></h4>
+<p>Name prepended to all ops created by this <code>LinearOperator</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatormatrix.range_dimension"><code id="LinearOperatorMatrix.range_dimension">tf.contrib.linalg.LinearOperatorMatrix.range_dimension</code></h4>
+<p>Dimension (in the sense of vector spaces) of the range of this operator.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>M</code>.</p>
+<h5 id="returns-73">Returns:</h5>
+<p><code>Dimension</code> object.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatormatrix.range_dimension_dynamicnamerange_dimension_dynamic"><code id="LinearOperatorMatrix.range_dimension_dynamic">tf.contrib.linalg.LinearOperatorMatrix.range_dimension_dynamic(name='range_dimension_dynamic')</code></h4>
+<p>Dimension (in the sense of vector spaces) of the range of this operator.</p>
+<p>Determined at runtime.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>M</code>.</p>
+<h5 id="args-60">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this <code>Op</code>.</li>
+</ul>
+<h5 id="returns-74">Returns:</h5>
+<p><code>int32</code> <code>Tensor</code></p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatormatrix.shape"><code id="LinearOperatorMatrix.shape">tf.contrib.linalg.LinearOperatorMatrix.shape</code></h4>
+<p><code>TensorShape</code> of this <code>LinearOperator</code>.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>TensorShape([B1,...,Bb, M, N])</code>, equivalent to <code>A.get_shape()</code>.</p>
+<h5 id="returns-75">Returns:</h5>
+<p><code>TensorShape</code>, statically determined, may be undefined.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatormatrix.shape_dynamicnameshape_dynamic"><code id="LinearOperatorMatrix.shape_dynamic">tf.contrib.linalg.LinearOperatorMatrix.shape_dynamic(name='shape_dynamic')</code></h4>
+<p>Shape of this <code>LinearOperator</code>, determined at runtime.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns a <code>Tensor</code> holding <code>[B1,...,Bb, M, N]</code>, equivalent to <code>tf.shape(A)</code>.</p>
+<h5 id="args-61">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-76">Returns:</h5>
+<p><code>int32</code> <code>Tensor</code></p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatormatrix.solverhs-adjointfalse-namesolve"><code id="LinearOperatorMatrix.solve">tf.contrib.linalg.LinearOperatorMatrix.solve(rhs, adjoint=False, name='solve')</code></h4>
+<p>Solve <code>R</code> (batch) systems of equations exactly: <code>A X = rhs</code>.</p>
+<p>Examples:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Create an operator acting like a 10 x 2 x 2 matrix.</span>
+operator <span class="op">=</span> LinearOperator(...)
+operator.shape <span class="co"># = 10 x 2 x 2</span>
+
+<span class="co"># Solve one linear system (R = 1) for every member of the length 10 batch.</span>
+RHS <span class="op">=</span> ... <span class="co"># shape 10 x 2 x 1</span>
+X <span class="op">=</span> operator.solve(RHS)  <span class="co"># shape 10 x 2 x 1</span>
+
+<span class="co"># Solve five linear systems (R = 5) for every member of the length 10 batch.</span>
+RHS <span class="op">=</span> ... <span class="co"># shape 10 x 2 x 5</span>
+X <span class="op">=</span> operator.solve(RHS)
+X[<span class="dv">3</span>, :, <span class="dv">2</span>]  <span class="co"># Solution to the linear system A[3, :, :] X = RHS[3, :, 2]</span></code></pre></div>
+<h5 id="args-62">Args:</h5>
+<ul>
+<li><b><code>rhs</code></b>: <code>Tensor</code> with same <code>dtype</code> as this operator and compatible shape. See class docstring for definition of compatibility.</li>
+<li><b><code>adjoint</code></b>: Python <code>bool</code>. If <code>True</code>, solve the system involving the adjoint of this <code>LinearOperator</code>.</li>
+<li><b><code>name</code></b>: A name scope to use for ops added by this method.</li>
+</ul>
+<h5 id="returns-77">Returns:</h5>
+<p><code>Tensor</code> with shape <code>[...,N, R]</code> and same <code>dtype</code> as <code>rhs</code>.</p>
+<h5 id="raises-9">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If self.is_non_singular is False.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatormatrix.tensor_rank"><code id="LinearOperatorMatrix.tensor_rank">tf.contrib.linalg.LinearOperatorMatrix.tensor_rank</code></h4>
+<p>Rank (in the sense of tensors) of matrix corresponding to this operator.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>b + 2</code>.</p>
+<h5 id="args-63">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-78">Returns:</h5>
+<p>Python integer, or None if the tensor rank is undefined.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatormatrix.tensor_rank_dynamicnametensor_rank_dynamic"><code id="LinearOperatorMatrix.tensor_rank_dynamic">tf.contrib.linalg.LinearOperatorMatrix.tensor_rank_dynamic(name='tensor_rank_dynamic')</code></h4>
+<p>Rank (in the sense of tensors) of matrix corresponding to this operator.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>b + 2</code>.</p>
+<h5 id="args-64">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-79">Returns:</h5>
+<p><code>int32</code> <code>Tensor</code>, determined at runtime.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatormatrix.to_densenameto_dense"><code id="LinearOperatorMatrix.to_dense">tf.contrib.linalg.LinearOperatorMatrix.to_dense(name='to_dense')</code></h4>
+<p>Return a dense (batch) matrix representing this operator.</p>
+<hr />
+<h3 id="class-tf.contrib.linalg.linearoperatortril"><a name="//apple_ref/cpp/Class/LinearOperatorTriL" class="dashAnchor"></a><code id="LinearOperatorTriL">class tf.contrib.linalg.LinearOperatorTriL</code></h3>
+<p><code>LinearOperator</code> acting like a [batch] square lower triangular matrix.</p>
+<p>This operator acts like a [batch] lower triangular matrix <code>A</code> with shape <code>[B1,...,Bb, N, N]</code> for some <code>b &gt;= 0</code>. The first <code>b</code> indices index a batch member. For every batch index <code>(i1,...,ib)</code>, <code>A[i1,...,ib, : :]</code> is an <code>N x N</code> matrix.</p>
+<p><code>LinearOperatorTriL</code> is initialized with a <code>Tensor</code> having dimensions <code>[B1,...,Bb, N, N]</code>. The upper triangle of the last two dimensions is ignored.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Create a 2 x 2 lower-triangular linear operator.</span>
+tril <span class="op">=</span> [[<span class="dv">1</span>., <span class="dv">2</span>.], [<span class="dv">3</span>., <span class="dv">4</span>.]]
+operator <span class="op">=</span> LinearOperatorTriL(tril)
+
+<span class="co"># The upper triangle is ignored.</span>
+operator.to_dense()
+<span class="op">==&gt;</span> [[<span class="dv">1</span>., <span class="dv">0</span>.]
+     [<span class="dv">3</span>., <span class="dv">4</span>.]]
+
+operator.shape
+<span class="op">==&gt;</span> [<span class="dv">2</span>, <span class="dv">2</span>]
+
+operator.log_determinant()
+<span class="op">==&gt;</span> scalar Tensor
+
+x <span class="op">=</span> ... Shape [<span class="dv">2</span>, <span class="dv">4</span>] Tensor
+operator.<span class="bu">apply</span>(x)
+<span class="op">==&gt;</span> Shape [<span class="dv">2</span>, <span class="dv">4</span>] Tensor
+
+<span class="co"># Create a [2, 3] batch of 4 x 4 linear operators.</span>
+tril <span class="op">=</span> tf.random_normal(shape<span class="op">=</span>[<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">4</span>])
+operator <span class="op">=</span> LinearOperatorTriL(tril)</code></pre></div>
+<h4 id="shape-compatibility-6">Shape compatibility</h4>
+<p>This operator acts on [batch] matrix with compatible shape. <code>x</code> is a batch matrix with compatible shape for <code>apply</code> and <code>solve</code> if</p>
+<pre><code>operator.shape = [B1,...,Bb] + [N, N],  with b &gt;= 0
+x.shape =        [B1,...,Bb] + [N, R],  with R &gt;= 0.</code></pre>
+<h4 id="performance-5">Performance</h4>
+<p>Suppose <code>operator</code> is a <code>LinearOperatorTriL</code> of shape <code>[N, N]</code>, and <code>x.shape = [N, R]</code>. Then</p>
+<ul>
+<li><code>operator.apply(x)</code> involves <code>N^2 * R</code> multiplications.</li>
+<li><code>operator.solve(x)</code> involves <code>N * R</code> size <code>N</code> back-substitutions.</li>
+<li><code>operator.determinant()</code> involves a size <code>N</code> <code>reduce_prod</code>.</li>
+</ul>
+<p>If instead <code>operator</code> and <code>x</code> have shape <code>[B1,...,Bb, N, N]</code> and <code>[B1,...,Bb, N, R]</code>, every operation increases in complexity by <code>B1*...*Bb</code>.</p>
+<h4 id="matrix-property-hints-5">Matrix property hints</h4>
+<p>This <code>LinearOperator</code> is initialized with boolean flags of the form <code>is_X</code>, for <code>X = non_singular, self_adjoint, positive_definite</code>. These have the following meaning * If <code>is_X == True</code>, callers should expect the operator to have the property <code>X</code>. This is a promise that should be fulfilled, but is <em>not</em> a runtime assert. For example, finite floating point precision may result in these promises being violated. * If <code>is_X == False</code>, callers should expect the operator to not have <code>X</code>. * If <code>is_X == None</code> (the default), callers should have no expectation either way. - - -</p>
+<h4 id="tf.contrib.linalg.linearoperatortril.__init__tril-is_non_singularnone-is_self_adjointnone-is_positive_definitenone-namelinearoperatortril"><code id="LinearOperatorTriL.__init__">tf.contrib.linalg.LinearOperatorTriL.__init__(tril, is_non_singular=None, is_self_adjoint=None, is_positive_definite=None, name='LinearOperatorTriL')</code></h4>
+<p>Initialize a <code>LinearOperatorTriL</code>.</p>
+<h5 id="args-65">Args:</h5>
+<ul>
+<li><b><code>tril</code></b>: Shape <code>[B1,...,Bb, N, N]</code> with <code>b &gt;= 0</code>, <code>N &gt;= 0</code>. The lower triangular part of <code>tril</code> defines this operator. The strictly upper triangle is ignored. Allowed dtypes: <code>float32</code>, <code>float64</code>.</li>
+<li><b><code>is_non_singular</code></b>: Expect that this operator is non-singular. This operator is non-singular if and only if its diagonal elements are all non-zero.</li>
+<li><b><code>is_self_adjoint</code></b>: Expect that this operator is equal to its hermitian transpose. This operator is self-adjoint only if it is diagonal with real-valued diagonal entries. In this case it is advised to use <code>LinearOperatorDiag</code>.</li>
+<li><b><code>is_positive_definite</code></b>: Expect that this operator is positive definite, meaning the real part of all eigenvalues is positive. We do not require the operator to be self-adjoint to be positive-definite. See:</li>
+<li><b><code>https</code></b>: //en.wikipedia.org/wiki/Positive-definite_matrix #Extension_for_non_symmetric_matrices</li>
+<li><b><code>name</code></b>: A name for this <code>LinearOperator</code>.</li>
+</ul>
+<h5 id="raises-10">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>diag.dtype</code> is not an allowed type.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatortril.add_to_tensorx-nameadd_to_tensor"><code id="LinearOperatorTriL.add_to_tensor">tf.contrib.linalg.LinearOperatorTriL.add_to_tensor(x, name='add_to_tensor')</code></h4>
+<p>Add matrix represented by this operator to <code>x</code>. Equivalent to <code>A + x</code>.</p>
+<h5 id="args-66">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code> with same <code>dtype</code> and shape broadcastable to <code>self.shape</code>.</li>
+<li><b><code>name</code></b>: A name to give this <code>Op</code>.</li>
+</ul>
+<h5 id="returns-80">Returns:</h5>
+<p>A <code>Tensor</code> with broadcast shape and same <code>dtype</code> as <code>self</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatortril.applyx-adjointfalse-nameapply"><code id="LinearOperatorTriL.apply">tf.contrib.linalg.LinearOperatorTriL.apply(x, adjoint=False, name='apply')</code></h4>
+<p>Transform <code>x</code> with left multiplication: <code>x --&gt; Ax</code>.</p>
+<h5 id="args-67">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code> with compatible shape and same <code>dtype</code> as <code>self</code>. See class docstring for definition of compatibility.</li>
+<li><b><code>adjoint</code></b>: Python <code>bool</code>. If <code>True</code>, left multiply by the adjoint.</li>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-81">Returns:</h5>
+<p>A <code>Tensor</code> with shape <code>[..., M, R]</code> and same <code>dtype</code> as <code>self</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatortril.assert_non_singularnameassert_non_singular"><code id="LinearOperatorTriL.assert_non_singular">tf.contrib.linalg.LinearOperatorTriL.assert_non_singular(name='assert_non_singular')</code></h4>
+<p>Returns an <code>Op</code> that asserts this operator is non singular.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatortril.assert_positive_definitenameassert_positive_definite"><code id="LinearOperatorTriL.assert_positive_definite">tf.contrib.linalg.LinearOperatorTriL.assert_positive_definite(name='assert_positive_definite')</code></h4>
+<p>Returns an <code>Op</code> that asserts this operator is positive definite.</p>
+<p>Here, positive definite means the real part of all eigenvalues is positive. We do not require the operator to be self-adjoint.</p>
+<h5 id="args-68">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name to give this <code>Op</code>.</li>
+</ul>
+<h5 id="returns-82">Returns:</h5>
+<p>An <code>Op</code> that asserts this operator is positive definite.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatortril.assert_self_adjointnameassert_self_adjoint"><code id="LinearOperatorTriL.assert_self_adjoint">tf.contrib.linalg.LinearOperatorTriL.assert_self_adjoint(name='assert_self_adjoint')</code></h4>
+<p>Returns an <code>Op</code> that asserts this operator is self-adjoint.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatortril.batch_shape"><code id="LinearOperatorTriL.batch_shape">tf.contrib.linalg.LinearOperatorTriL.batch_shape</code></h4>
+<p><code>TensorShape</code> of batch dimensions of this <code>LinearOperator</code>.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>TensorShape([B1,...,Bb])</code>, equivalent to <code>A.get_shape()[:-2]</code></p>
+<h5 id="returns-83">Returns:</h5>
+<p><code>TensorShape</code>, statically determined, may be undefined.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatortril.batch_shape_dynamicnamebatch_shape_dynamic"><code id="LinearOperatorTriL.batch_shape_dynamic">tf.contrib.linalg.LinearOperatorTriL.batch_shape_dynamic(name='batch_shape_dynamic')</code></h4>
+<p>Shape of batch dimensions of this operator, determined at runtime.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns a <code>Tensor</code> holding <code>[B1,...,Bb]</code>.</p>
+<h5 id="args-69">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-84">Returns:</h5>
+<p><code>int32</code> <code>Tensor</code></p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatortril.determinantnamedet"><code id="LinearOperatorTriL.determinant">tf.contrib.linalg.LinearOperatorTriL.determinant(name='det')</code></h4>
+<p>Determinant for every batch member.</p>
+<h5 id="args-70">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-85">Returns:</h5>
+<p><code>Tensor</code> with shape <code>self.batch_shape</code> and same <code>dtype</code> as <code>self</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatortril.domain_dimension"><code id="LinearOperatorTriL.domain_dimension">tf.contrib.linalg.LinearOperatorTriL.domain_dimension</code></h4>
+<p>Dimension (in the sense of vector spaces) of the domain of this operator.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>N</code>.</p>
+<h5 id="returns-86">Returns:</h5>
+<p><code>Dimension</code> object.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatortril.domain_dimension_dynamicnamedomain_dimension_dynamic"><code id="LinearOperatorTriL.domain_dimension_dynamic">tf.contrib.linalg.LinearOperatorTriL.domain_dimension_dynamic(name='domain_dimension_dynamic')</code></h4>
+<p>Dimension (in the sense of vector spaces) of the domain of this operator.</p>
+<p>Determined at runtime.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>N</code>.</p>
+<h5 id="args-71">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this <code>Op</code>.</li>
+</ul>
+<h5 id="returns-87">Returns:</h5>
+<p><code>int32</code> <code>Tensor</code></p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatortril.dtype"><code id="LinearOperatorTriL.dtype">tf.contrib.linalg.LinearOperatorTriL.dtype</code></h4>
+<p>The <code>DType</code> of <code>Tensor</code>s handled by this <code>LinearOperator</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatortril.graph_parents"><code id="LinearOperatorTriL.graph_parents">tf.contrib.linalg.LinearOperatorTriL.graph_parents</code></h4>
+<p>List of graph dependencies of this <code>LinearOperator</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatortril.is_non_singular"><code id="LinearOperatorTriL.is_non_singular">tf.contrib.linalg.LinearOperatorTriL.is_non_singular</code></h4>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatortril.is_positive_definite"><code id="LinearOperatorTriL.is_positive_definite">tf.contrib.linalg.LinearOperatorTriL.is_positive_definite</code></h4>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatortril.is_self_adjoint"><code id="LinearOperatorTriL.is_self_adjoint">tf.contrib.linalg.LinearOperatorTriL.is_self_adjoint</code></h4>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatortril.log_abs_determinantnamelog_abs_det"><code id="LinearOperatorTriL.log_abs_determinant">tf.contrib.linalg.LinearOperatorTriL.log_abs_determinant(name='log_abs_det')</code></h4>
+<p>Log absolute value of determinant for every batch member.</p>
+<h5 id="args-72">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-88">Returns:</h5>
+<p><code>Tensor</code> with shape <code>self.batch_shape</code> and same <code>dtype</code> as <code>self</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatortril.name"><code id="LinearOperatorTriL.name">tf.contrib.linalg.LinearOperatorTriL.name</code></h4>
+<p>Name prepended to all ops created by this <code>LinearOperator</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatortril.range_dimension"><code id="LinearOperatorTriL.range_dimension">tf.contrib.linalg.LinearOperatorTriL.range_dimension</code></h4>
+<p>Dimension (in the sense of vector spaces) of the range of this operator.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>M</code>.</p>
+<h5 id="returns-89">Returns:</h5>
+<p><code>Dimension</code> object.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatortril.range_dimension_dynamicnamerange_dimension_dynamic"><code id="LinearOperatorTriL.range_dimension_dynamic">tf.contrib.linalg.LinearOperatorTriL.range_dimension_dynamic(name='range_dimension_dynamic')</code></h4>
+<p>Dimension (in the sense of vector spaces) of the range of this operator.</p>
+<p>Determined at runtime.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>M</code>.</p>
+<h5 id="args-73">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this <code>Op</code>.</li>
+</ul>
+<h5 id="returns-90">Returns:</h5>
+<p><code>int32</code> <code>Tensor</code></p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatortril.shape"><code id="LinearOperatorTriL.shape">tf.contrib.linalg.LinearOperatorTriL.shape</code></h4>
+<p><code>TensorShape</code> of this <code>LinearOperator</code>.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>TensorShape([B1,...,Bb, M, N])</code>, equivalent to <code>A.get_shape()</code>.</p>
+<h5 id="returns-91">Returns:</h5>
+<p><code>TensorShape</code>, statically determined, may be undefined.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatortril.shape_dynamicnameshape_dynamic"><code id="LinearOperatorTriL.shape_dynamic">tf.contrib.linalg.LinearOperatorTriL.shape_dynamic(name='shape_dynamic')</code></h4>
+<p>Shape of this <code>LinearOperator</code>, determined at runtime.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns a <code>Tensor</code> holding <code>[B1,...,Bb, M, N]</code>, equivalent to <code>tf.shape(A)</code>.</p>
+<h5 id="args-74">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-92">Returns:</h5>
+<p><code>int32</code> <code>Tensor</code></p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatortril.solverhs-adjointfalse-namesolve"><code id="LinearOperatorTriL.solve">tf.contrib.linalg.LinearOperatorTriL.solve(rhs, adjoint=False, name='solve')</code></h4>
+<p>Solve <code>R</code> (batch) systems of equations exactly: <code>A X = rhs</code>.</p>
+<p>Examples:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Create an operator acting like a 10 x 2 x 2 matrix.</span>
+operator <span class="op">=</span> LinearOperator(...)
+operator.shape <span class="co"># = 10 x 2 x 2</span>
+
+<span class="co"># Solve one linear system (R = 1) for every member of the length 10 batch.</span>
+RHS <span class="op">=</span> ... <span class="co"># shape 10 x 2 x 1</span>
+X <span class="op">=</span> operator.solve(RHS)  <span class="co"># shape 10 x 2 x 1</span>
+
+<span class="co"># Solve five linear systems (R = 5) for every member of the length 10 batch.</span>
+RHS <span class="op">=</span> ... <span class="co"># shape 10 x 2 x 5</span>
+X <span class="op">=</span> operator.solve(RHS)
+X[<span class="dv">3</span>, :, <span class="dv">2</span>]  <span class="co"># Solution to the linear system A[3, :, :] X = RHS[3, :, 2]</span></code></pre></div>
+<h5 id="args-75">Args:</h5>
+<ul>
+<li><b><code>rhs</code></b>: <code>Tensor</code> with same <code>dtype</code> as this operator and compatible shape. See class docstring for definition of compatibility.</li>
+<li><b><code>adjoint</code></b>: Python <code>bool</code>. If <code>True</code>, solve the system involving the adjoint of this <code>LinearOperator</code>.</li>
+<li><b><code>name</code></b>: A name scope to use for ops added by this method.</li>
+</ul>
+<h5 id="returns-93">Returns:</h5>
+<p><code>Tensor</code> with shape <code>[...,N, R]</code> and same <code>dtype</code> as <code>rhs</code>.</p>
+<h5 id="raises-11">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If self.is_non_singular is False.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatortril.tensor_rank"><code id="LinearOperatorTriL.tensor_rank">tf.contrib.linalg.LinearOperatorTriL.tensor_rank</code></h4>
+<p>Rank (in the sense of tensors) of matrix corresponding to this operator.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>b + 2</code>.</p>
+<h5 id="args-76">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-94">Returns:</h5>
+<p>Python integer, or None if the tensor rank is undefined.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatortril.tensor_rank_dynamicnametensor_rank_dynamic"><code id="LinearOperatorTriL.tensor_rank_dynamic">tf.contrib.linalg.LinearOperatorTriL.tensor_rank_dynamic(name='tensor_rank_dynamic')</code></h4>
+<p>Rank (in the sense of tensors) of matrix corresponding to this operator.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>b + 2</code>.</p>
+<h5 id="args-77">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-95">Returns:</h5>
+<p><code>int32</code> <code>Tensor</code>, determined at runtime.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatortril.to_densenameto_dense"><code id="LinearOperatorTriL.to_dense">tf.contrib.linalg.LinearOperatorTriL.to_dense(name='to_dense')</code></h4>
+<p>Return a dense (batch) matrix representing this operator.</p>
+<h3 id="transformations-and-combinations-of-operators">Transformations and Combinations of operators</h3>
+<hr />
+<h3 id="class-tf.contrib.linalg.linearoperatorcomposition"><a name="//apple_ref/cpp/Class/LinearOperatorComposition" class="dashAnchor"></a><code id="LinearOperatorComposition">class tf.contrib.linalg.LinearOperatorComposition</code></h3>
+<p>Composes one or more <code>LinearOperators</code>.</p>
+<p>This operator composes one or more linear operators <code>[op1,...,opJ]</code>, building a new <code>LinearOperator</code> with action defined by:</p>
+<pre><code>op_composed(x) := op1(op2(...(opJ(x)...))</code></pre>
+<p>If <code>opj</code> acts like [batch] matrix <code>Aj</code>, then <code>op_composed</code> acts like the [batch] matrix formed with the multiplication <code>A1 A2...AJ</code>.</p>
+<p>If <code>opj</code> has shape <code>batch_shape_j + [M_j, N_j]</code>, then we must have <code>N_j = M_{j+1}</code>, in which case the composed operator has shape equal to <code>broadcast_batch_shape + [M_1, N_J]</code>, where <code>broadcast_batch_shape</code> is the mutual broadcast of <code>batch_shape_j</code>, <code>j = 1,...,J</code>, assuming the intermediate batch shapes broadcast. Even if the composed shape is well defined, the composed operator's methods may fail due to lack of broadcasting ability in the defining operators' methods.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Create a 2 x 2 linear operator composed of two 2 x 2 operators.</span>
+operator_1 <span class="op">=</span> LinearOperatorMatrix([[<span class="dv">1</span>., <span class="dv">2</span>.], [<span class="dv">3</span>., <span class="dv">4</span>.]])
+operator_2 <span class="op">=</span> LinearOperatorMatrix([[<span class="dv">1</span>., <span class="dv">0</span>.], [<span class="dv">0</span>., <span class="dv">1</span>.]])
+operator <span class="op">=</span> LinearOperatorComposition([operator_1, operator_2])
+
+operator.to_dense()
+<span class="op">==&gt;</span> [[<span class="dv">1</span>., <span class="dv">2</span>.]
+     [<span class="dv">3</span>., <span class="dv">4</span>.]]
+
+operator.shape
+<span class="op">==&gt;</span> [<span class="dv">2</span>, <span class="dv">2</span>]
+
+operator.log_determinant()
+<span class="op">==&gt;</span> scalar Tensor
+
+x <span class="op">=</span> ... Shape [<span class="dv">2</span>, <span class="dv">4</span>] Tensor
+operator.<span class="bu">apply</span>(x)
+<span class="op">==&gt;</span> Shape [<span class="dv">2</span>, <span class="dv">4</span>] Tensor
+
+<span class="co"># Create a [2, 3] batch of 4 x 5 linear operators.</span>
+matrix_45 <span class="op">=</span> tf.random_normal(shape<span class="op">=</span>[<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>])
+operator_45 <span class="op">=</span> LinearOperatorMatrix(matrix)
+
+<span class="co"># Create a [2, 3] batch of 5 x 6 linear operators.</span>
+matrix_56 <span class="op">=</span> tf.random_normal(shape<span class="op">=</span>[<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">6</span>])
+operator_56 <span class="op">=</span> LinearOperatorMatrix(matrix_56)
+
+<span class="co"># Compose to create a [2, 3] batch of 4 x 6 operators.</span>
+opeartor_46 <span class="op">=</span> LinearOperatorComposition([operator_45, operator_56])
+
+<span class="co"># Create a shape [2, 3, 6, 2] vector.</span>
+x <span class="op">=</span> tf.random_normal(shape<span class="op">=</span>[<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">6</span>, <span class="dv">2</span>])
+operator.<span class="bu">apply</span>(x)
+<span class="op">==&gt;</span> Shape [<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">2</span>] Tensor</code></pre></div>
+<h4 id="performance-6">Performance</h4>
+<p>The performance of <code>LinearOperatorComposition</code> on any operation is equal to the sum of the individual operators' operations.</p>
+<h4 id="matrix-property-hints-6">Matrix property hints</h4>
+<p>This <code>LinearOperator</code> is initialized with boolean flags of the form <code>is_X</code>, for <code>X = non_singular, self_adjoint, positive_definite</code>. These have the following meaning * If <code>is_X == True</code>, callers should expect the operator to have the property <code>X</code>. This is a promise that should be fulfilled, but is <em>not</em> a runtime assert. For example, finite floating point precision may result in these promises being violated. * If <code>is_X == False</code>, callers should expect the operator to not have <code>X</code>. * If <code>is_X == None</code> (the default), callers should have no expectation either way. - - -</p>
+<h4 id="tf.contrib.linalg.linearoperatorcomposition.__init__operators-is_non_singularnone-is_self_adjointnone-is_positive_definitenone-namenone"><code id="LinearOperatorComposition.__init__">tf.contrib.linalg.LinearOperatorComposition.__init__(operators, is_non_singular=None, is_self_adjoint=None, is_positive_definite=None, name=None)</code></h4>
+<p>Initialize a <code>LinearOperatorComposition</code>.</p>
+<p><code>LinearOperatorComposition</code> is initialized with a list of operators <code>[op_1,...,op_J]</code>. For the <code>apply</code> method to be well defined, the composition <code>op_i.apply(op_{i+1}(x))</code> must be defined. Other methods have similar constraints.</p>
+<h5 id="args-78">Args:</h5>
+<ul>
+<li><b><code>operators</code></b>: Iterable of <code>LinearOperator</code> objects, each with the same <code>dtype</code> and composible shape.</li>
+<li><b><code>is_non_singular</code></b>: Expect that this operator is non-singular.</li>
+<li><b><code>is_self_adjoint</code></b>: Expect that this operator is equal to its hermitian transpose.</li>
+<li><b><code>is_positive_definite</code></b>: Expect that this operator is positive definite, meaning the real part of all eigenvalues is positive. We do not require the operator to be self-adjoint to be positive-definite. See:</li>
+<li><b><code>https</code></b>: //en.wikipedia.org/wiki/Positive-definite_matrix #Extension_for_non_symmetric_matrices</li>
+<li><b><code>name</code></b>: A name for this <code>LinearOperator</code>. Default is the individual operators names joined with <code>_o_</code>.</li>
+</ul>
+<h5 id="raises-12">Raises:</h5>
+<ul>
+<li><b><code>TypeError</code></b>: If all operators do not have the same <code>dtype</code>.</li>
+<li><b><code>ValueError</code></b>: If <code>operators</code> is empty.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorcomposition.add_to_tensorx-nameadd_to_tensor"><code id="LinearOperatorComposition.add_to_tensor">tf.contrib.linalg.LinearOperatorComposition.add_to_tensor(x, name='add_to_tensor')</code></h4>
+<p>Add matrix represented by this operator to <code>x</code>. Equivalent to <code>A + x</code>.</p>
+<h5 id="args-79">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code> with same <code>dtype</code> and shape broadcastable to <code>self.shape</code>.</li>
+<li><b><code>name</code></b>: A name to give this <code>Op</code>.</li>
+</ul>
+<h5 id="returns-96">Returns:</h5>
+<p>A <code>Tensor</code> with broadcast shape and same <code>dtype</code> as <code>self</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorcomposition.applyx-adjointfalse-nameapply"><code id="LinearOperatorComposition.apply">tf.contrib.linalg.LinearOperatorComposition.apply(x, adjoint=False, name='apply')</code></h4>
+<p>Transform <code>x</code> with left multiplication: <code>x --&gt; Ax</code>.</p>
+<h5 id="args-80">Args:</h5>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code> with compatible shape and same <code>dtype</code> as <code>self</code>. See class docstring for definition of compatibility.</li>
+<li><b><code>adjoint</code></b>: Python <code>bool</code>. If <code>True</code>, left multiply by the adjoint.</li>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-97">Returns:</h5>
+<p>A <code>Tensor</code> with shape <code>[..., M, R]</code> and same <code>dtype</code> as <code>self</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorcomposition.assert_non_singularnameassert_non_singular"><code id="LinearOperatorComposition.assert_non_singular">tf.contrib.linalg.LinearOperatorComposition.assert_non_singular(name='assert_non_singular')</code></h4>
+<p>Returns an <code>Op</code> that asserts this operator is non singular.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorcomposition.assert_positive_definitenameassert_positive_definite"><code id="LinearOperatorComposition.assert_positive_definite">tf.contrib.linalg.LinearOperatorComposition.assert_positive_definite(name='assert_positive_definite')</code></h4>
+<p>Returns an <code>Op</code> that asserts this operator is positive definite.</p>
+<p>Here, positive definite means the real part of all eigenvalues is positive. We do not require the operator to be self-adjoint.</p>
+<h5 id="args-81">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name to give this <code>Op</code>.</li>
+</ul>
+<h5 id="returns-98">Returns:</h5>
+<p>An <code>Op</code> that asserts this operator is positive definite.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorcomposition.assert_self_adjointnameassert_self_adjoint"><code id="LinearOperatorComposition.assert_self_adjoint">tf.contrib.linalg.LinearOperatorComposition.assert_self_adjoint(name='assert_self_adjoint')</code></h4>
+<p>Returns an <code>Op</code> that asserts this operator is self-adjoint.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorcomposition.batch_shape"><code id="LinearOperatorComposition.batch_shape">tf.contrib.linalg.LinearOperatorComposition.batch_shape</code></h4>
+<p><code>TensorShape</code> of batch dimensions of this <code>LinearOperator</code>.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>TensorShape([B1,...,Bb])</code>, equivalent to <code>A.get_shape()[:-2]</code></p>
+<h5 id="returns-99">Returns:</h5>
+<p><code>TensorShape</code>, statically determined, may be undefined.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorcomposition.batch_shape_dynamicnamebatch_shape_dynamic"><code id="LinearOperatorComposition.batch_shape_dynamic">tf.contrib.linalg.LinearOperatorComposition.batch_shape_dynamic(name='batch_shape_dynamic')</code></h4>
+<p>Shape of batch dimensions of this operator, determined at runtime.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns a <code>Tensor</code> holding <code>[B1,...,Bb]</code>.</p>
+<h5 id="args-82">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-100">Returns:</h5>
+<p><code>int32</code> <code>Tensor</code></p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorcomposition.determinantnamedet"><code id="LinearOperatorComposition.determinant">tf.contrib.linalg.LinearOperatorComposition.determinant(name='det')</code></h4>
+<p>Determinant for every batch member.</p>
+<h5 id="args-83">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-101">Returns:</h5>
+<p><code>Tensor</code> with shape <code>self.batch_shape</code> and same <code>dtype</code> as <code>self</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorcomposition.domain_dimension"><code id="LinearOperatorComposition.domain_dimension">tf.contrib.linalg.LinearOperatorComposition.domain_dimension</code></h4>
+<p>Dimension (in the sense of vector spaces) of the domain of this operator.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>N</code>.</p>
+<h5 id="returns-102">Returns:</h5>
+<p><code>Dimension</code> object.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorcomposition.domain_dimension_dynamicnamedomain_dimension_dynamic"><code id="LinearOperatorComposition.domain_dimension_dynamic">tf.contrib.linalg.LinearOperatorComposition.domain_dimension_dynamic(name='domain_dimension_dynamic')</code></h4>
+<p>Dimension (in the sense of vector spaces) of the domain of this operator.</p>
+<p>Determined at runtime.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>N</code>.</p>
+<h5 id="args-84">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this <code>Op</code>.</li>
+</ul>
+<h5 id="returns-103">Returns:</h5>
+<p><code>int32</code> <code>Tensor</code></p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorcomposition.dtype"><code id="LinearOperatorComposition.dtype">tf.contrib.linalg.LinearOperatorComposition.dtype</code></h4>
+<p>The <code>DType</code> of <code>Tensor</code>s handled by this <code>LinearOperator</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorcomposition.graph_parents"><code id="LinearOperatorComposition.graph_parents">tf.contrib.linalg.LinearOperatorComposition.graph_parents</code></h4>
+<p>List of graph dependencies of this <code>LinearOperator</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorcomposition.is_non_singular"><code id="LinearOperatorComposition.is_non_singular">tf.contrib.linalg.LinearOperatorComposition.is_non_singular</code></h4>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorcomposition.is_positive_definite"><code id="LinearOperatorComposition.is_positive_definite">tf.contrib.linalg.LinearOperatorComposition.is_positive_definite</code></h4>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorcomposition.is_self_adjoint"><code id="LinearOperatorComposition.is_self_adjoint">tf.contrib.linalg.LinearOperatorComposition.is_self_adjoint</code></h4>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorcomposition.log_abs_determinantnamelog_abs_det"><code id="LinearOperatorComposition.log_abs_determinant">tf.contrib.linalg.LinearOperatorComposition.log_abs_determinant(name='log_abs_det')</code></h4>
+<p>Log absolute value of determinant for every batch member.</p>
+<h5 id="args-85">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-104">Returns:</h5>
+<p><code>Tensor</code> with shape <code>self.batch_shape</code> and same <code>dtype</code> as <code>self</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorcomposition.name"><code id="LinearOperatorComposition.name">tf.contrib.linalg.LinearOperatorComposition.name</code></h4>
+<p>Name prepended to all ops created by this <code>LinearOperator</code>.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorcomposition.operators"><code id="LinearOperatorComposition.operators">tf.contrib.linalg.LinearOperatorComposition.operators</code></h4>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorcomposition.range_dimension"><code id="LinearOperatorComposition.range_dimension">tf.contrib.linalg.LinearOperatorComposition.range_dimension</code></h4>
+<p>Dimension (in the sense of vector spaces) of the range of this operator.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>M</code>.</p>
+<h5 id="returns-105">Returns:</h5>
+<p><code>Dimension</code> object.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorcomposition.range_dimension_dynamicnamerange_dimension_dynamic"><code id="LinearOperatorComposition.range_dimension_dynamic">tf.contrib.linalg.LinearOperatorComposition.range_dimension_dynamic(name='range_dimension_dynamic')</code></h4>
+<p>Dimension (in the sense of vector spaces) of the range of this operator.</p>
+<p>Determined at runtime.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>M</code>.</p>
+<h5 id="args-86">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this <code>Op</code>.</li>
+</ul>
+<h5 id="returns-106">Returns:</h5>
+<p><code>int32</code> <code>Tensor</code></p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorcomposition.shape"><code id="LinearOperatorComposition.shape">tf.contrib.linalg.LinearOperatorComposition.shape</code></h4>
+<p><code>TensorShape</code> of this <code>LinearOperator</code>.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>TensorShape([B1,...,Bb, M, N])</code>, equivalent to <code>A.get_shape()</code>.</p>
+<h5 id="returns-107">Returns:</h5>
+<p><code>TensorShape</code>, statically determined, may be undefined.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorcomposition.shape_dynamicnameshape_dynamic"><code id="LinearOperatorComposition.shape_dynamic">tf.contrib.linalg.LinearOperatorComposition.shape_dynamic(name='shape_dynamic')</code></h4>
+<p>Shape of this <code>LinearOperator</code>, determined at runtime.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns a <code>Tensor</code> holding <code>[B1,...,Bb, M, N]</code>, equivalent to <code>tf.shape(A)</code>.</p>
+<h5 id="args-87">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-108">Returns:</h5>
+<p><code>int32</code> <code>Tensor</code></p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorcomposition.solverhs-adjointfalse-namesolve"><code id="LinearOperatorComposition.solve">tf.contrib.linalg.LinearOperatorComposition.solve(rhs, adjoint=False, name='solve')</code></h4>
+<p>Solve <code>R</code> (batch) systems of equations exactly: <code>A X = rhs</code>.</p>
+<p>Examples:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Create an operator acting like a 10 x 2 x 2 matrix.</span>
+operator <span class="op">=</span> LinearOperator(...)
+operator.shape <span class="co"># = 10 x 2 x 2</span>
+
+<span class="co"># Solve one linear system (R = 1) for every member of the length 10 batch.</span>
+RHS <span class="op">=</span> ... <span class="co"># shape 10 x 2 x 1</span>
+X <span class="op">=</span> operator.solve(RHS)  <span class="co"># shape 10 x 2 x 1</span>
+
+<span class="co"># Solve five linear systems (R = 5) for every member of the length 10 batch.</span>
+RHS <span class="op">=</span> ... <span class="co"># shape 10 x 2 x 5</span>
+X <span class="op">=</span> operator.solve(RHS)
+X[<span class="dv">3</span>, :, <span class="dv">2</span>]  <span class="co"># Solution to the linear system A[3, :, :] X = RHS[3, :, 2]</span></code></pre></div>
+<h5 id="args-88">Args:</h5>
+<ul>
+<li><b><code>rhs</code></b>: <code>Tensor</code> with same <code>dtype</code> as this operator and compatible shape. See class docstring for definition of compatibility.</li>
+<li><b><code>adjoint</code></b>: Python <code>bool</code>. If <code>True</code>, solve the system involving the adjoint of this <code>LinearOperator</code>.</li>
+<li><b><code>name</code></b>: A name scope to use for ops added by this method.</li>
+</ul>
+<h5 id="returns-109">Returns:</h5>
+<p><code>Tensor</code> with shape <code>[...,N, R]</code> and same <code>dtype</code> as <code>rhs</code>.</p>
+<h5 id="raises-13">Raises:</h5>
+<ul>
+<li><b><code>ValueError</code></b>: If self.is_non_singular is False.</li>
+</ul>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorcomposition.tensor_rank"><code id="LinearOperatorComposition.tensor_rank">tf.contrib.linalg.LinearOperatorComposition.tensor_rank</code></h4>
+<p>Rank (in the sense of tensors) of matrix corresponding to this operator.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>b + 2</code>.</p>
+<h5 id="args-89">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-110">Returns:</h5>
+<p>Python integer, or None if the tensor rank is undefined.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorcomposition.tensor_rank_dynamicnametensor_rank_dynamic"><code id="LinearOperatorComposition.tensor_rank_dynamic">tf.contrib.linalg.LinearOperatorComposition.tensor_rank_dynamic(name='tensor_rank_dynamic')</code></h4>
+<p>Rank (in the sense of tensors) of matrix corresponding to this operator.</p>
+<p>If this operator acts like the batch matrix <code>A</code> with <code>A.shape = [B1,...,Bb, M, N]</code>, then this returns <code>b + 2</code>.</p>
+<h5 id="args-90">Args:</h5>
+<ul>
+<li><b><code>name</code></b>: A name for this `Op.</li>
+</ul>
+<h5 id="returns-111">Returns:</h5>
+<p><code>int32</code> <code>Tensor</code>, determined at runtime.</p>
+<hr />
+<h4 id="tf.contrib.linalg.linearoperatorcomposition.to_densenameto_dense"><code id="LinearOperatorComposition.to_dense">tf.contrib.linalg.LinearOperatorComposition.to_dense(name='to_dense')</code></h4>
+<p>Return a dense (batch) matrix representing this operator.</p>
