@@ -1,0 +1,22 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.graph_editor.make_view" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.graph_editor.make_view" class="dashAnchor"></a><h1 id="tf.contrib.graph_editor.make_view">tf.contrib.graph_editor.make_view</h1>
+<h3 id="tf.contrib.graph_editor.make_view-1"><code>tf.contrib.graph_editor.make_view</code></h3>
+<a name="//apple_ref/cpp/Function/tf.contrib.graph_editor.sgv" class="dashAnchor"></a><h3 id="tf.contrib.graph_editor.sgv"><code>tf.contrib.graph_editor.sgv</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">make_view(
+    <span class="op">*</span>args,
+    <span class="op">**</span>kwargs
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/graph_editor/subgraph.py"><code>tensorflow/contrib/graph_editor/subgraph.py</code></a>.</p>
+<p>See the guides: <a href="../../../../../api_guides/python/contrib.graph_editor.md#Module_subgraph">Graph Editor (contrib) &gt; Module: subgraph</a>, <a href="../../../../../api_guides/python/contrib.graph_editor.md#Useful_aliases">Graph Editor (contrib) &gt; Useful aliases</a></p>
+<p>Create a SubGraphView from selected operations and passthrough tensors.</p>
+<h4 id="args">Args:</h4>
+<p>*args: list of 1) regular expressions (compiled or not) or 2) (array of) <code>tf.Operation</code> 3) (array of) <code>tf.Tensor</code>. Those objects will be converted into a list of operations and a list of candidate for passthrough tensors. **kwargs: keyword graph is used 1) to check that the ops and ts are from the correct graph 2) for regular expression query</p>
+<h4 id="returns">Returns:</h4>
+<p>A subgraph view.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: if the optional keyword argument graph is not a <code>tf.Graph</code> or if an argument in args is not an (array of) <code>tf.Tensor</code> or an (array of) <code>tf.Operation</code> or a string or a regular expression.</li>
+<li><b><code>ValueError</code></b>: if one of the keyword arguments is unexpected.</li>
+</ul>

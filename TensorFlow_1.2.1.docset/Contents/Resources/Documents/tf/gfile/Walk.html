@@ -1,0 +1,19 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.gfile.Walk" /></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.gfile.Walk" class="dashAnchor"></a><h1 id="tf.gfile.walk">tf.gfile.Walk</h1>
+<h3 id="tf.gfile.walk-1"><code>tf.gfile.Walk</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">Walk(
+    top,
+    in_order<span class="op">=</span><span class="va">True</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/lib/io/file_io.py"><code>tensorflow/python/lib/io/file_io.py</code></a>.</p>
+<p>Recursive directory tree generator for directories.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>top</code></b>: string, a Directory name</li>
+<li><b><code>in_order</code></b>: bool, Traverse in order if True, post order if False.</li>
+</ul>
+<p>Errors that happen while listing directories are ignored.</p>
+<h4 id="yields">Yields:</h4>
+<p>Each yield is a 3-tuple: the pathname of a directory, followed by lists of all its subdirectories and leaf files. (dirname, [subdirname, subdirname, ...], [filename, filename, ...]) as strings</p>

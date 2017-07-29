@@ -1,0 +1,29 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.assert_non_negative" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.assert_non_negative" class="dashAnchor"></a><h1 id="tf.assert_non_negative">tf.assert_non_negative</h1>
+<h3 id="tf.assert_non_negative-1"><code>tf.assert_non_negative</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">assert_non_negative(
+    x,
+    data<span class="op">=</span><span class="va">None</span>,
+    summarize<span class="op">=</span><span class="va">None</span>,
+    message<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/check_ops.py"><code>tensorflow/python/ops/check_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/check_ops.html">Asserts and boolean checks</a></p>
+<p>Assert the condition <code>x &gt;= 0</code> holds element-wise.</p>
+<p>Example of adding a dependency to an operation:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> tf.control_dependencies([tf.assert_non_negative(x)]):
+  output <span class="op">=</span> tf.reduce_sum(x)</code></pre></div>
+<p>Non-negative means, for every element <code>x[i]</code> of <code>x</code>, we have <code>x[i] &gt;= 0</code>. If <code>x</code> is empty this is trivially satisfied.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: Numeric <code>Tensor</code>.</li>
+<li><b><code>data</code></b>: The tensors to print out if the condition is False. Defaults to error message and first few entries of <code>x</code>.</li>
+<li><b><code>summarize</code></b>: Print this many entries of each tensor.</li>
+<li><b><code>message</code></b>: A string to prefix to the default message.</li>
+<li><b><code>name</code></b>: A name for this operation (optional). Defaults to &quot;assert_non_negative&quot;.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Op raising <code>InvalidArgumentError</code> unless <code>x</code> is all non-negative.</p>

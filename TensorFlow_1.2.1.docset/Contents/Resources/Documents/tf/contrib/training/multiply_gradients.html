@@ -1,0 +1,22 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.training.multiply_gradients" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.training.multiply_gradients" class="dashAnchor"></a><h1 id="tf.contrib.training.multiply_gradients">tf.contrib.training.multiply_gradients</h1>
+<h3 id="tf.contrib.training.multiply_gradients-1"><code>tf.contrib.training.multiply_gradients</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">multiply_gradients(
+    grads_and_vars,
+    gradient_multipliers
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/training/python/training/training.py"><code>tensorflow/contrib/training/python/training/training.py</code></a>.</p>
+<p>Multiply specified gradients.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>grads_and_vars</code></b>: A list of gradient to variable pairs (tuples).</li>
+<li><b><code>gradient_multipliers</code></b>: A map from either <code>Variables</code> or <code>Variable</code> op names to the coefficient by which the associated gradient should be scaled.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The updated list of gradient to variable pairs.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>grads_and_vars</code> is not a list or if <code>gradient_multipliers</code> is empty or None or if <code>gradient_multipliers</code> is not a dictionary.</li>
+</ul>

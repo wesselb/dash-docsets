@@ -1,0 +1,24 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.saved_model.signature_def_utils.classification_signature_def" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.saved_model.signature_def_utils.classification_signature_def" class="dashAnchor"></a><h1 id="tf.saved_model.signature_def_utils.classification_signature_def">tf.saved_model.signature_def_utils.classification_signature_def</h1>
+<h3 id="tf.saved_model.signature_def_utils.classification_signature_def-1"><code>tf.saved_model.signature_def_utils.classification_signature_def</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">classification_signature_def(
+    examples,
+    classes,
+    scores
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/saved_model/signature_def_utils_impl.py"><code>tensorflow/python/saved_model/signature_def_utils_impl.py</code></a>.</p>
+<p>Creates classification signature from given examples and predictions.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>examples</code></b>: <code>Tensor</code>.</li>
+<li><b><code>classes</code></b>: <code>Tensor</code>.</li>
+<li><b><code>scores</code></b>: <code>Tensor</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A classification-flavored signature_def.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If examples is <code>None</code>.</li>
+</ul>

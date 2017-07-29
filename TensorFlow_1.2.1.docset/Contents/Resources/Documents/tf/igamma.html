@@ -1,0 +1,27 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.igamma" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.igamma" class="dashAnchor"></a><h1 id="tf.igamma">tf.igamma</h1>
+<h3 id="tf.igamma-1"><code>tf.igamma</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">igamma(
+    a,
+    x,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_math_ops.py</code>.</p>
+<p>See the guide: <a href="../../../api_guides/python/math_ops.md#Basic_Math_Functions">Math &gt; Basic Math Functions</a></p>
+<p>Compute the lower regularized incomplete Gamma function <code>Q(a, x)</code>.</p>
+<p>The lower regularized incomplete Gamma function is defined as:</p>
+<p>\(P(a, x) = gamma(a, x) / Gamma(a) = 1 - Q(a, x)\)</p>
+<p>where</p>
+<p>\(gamma(a, x) = int_{0}^{x} t^{a-1} exp(-t) dt\)</p>
+<p>is the lower incomplete Gamma function.</p>
+<p>Note, above <code>Q(a, x)</code> (<code>Igammac</code>) is the upper regularized complete Gamma function.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>a</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>.</li>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must have the same type as <code>a</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>a</code>.</p>

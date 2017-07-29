@@ -1,0 +1,24 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.image.draw_bounding_boxes" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.image.draw_bounding_boxes" class="dashAnchor"></a><h1 id="tf.image.draw_bounding_boxes">tf.image.draw_bounding_boxes</h1>
+<h3 id="tf.image.draw_bounding_boxes-1"><code>tf.image.draw_bounding_boxes</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">draw_bounding_boxes(
+    images,
+    boxes,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_image_ops.py</code>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/image.md#Working_with_Bounding_Boxes">Images &gt; Working with Bounding Boxes</a></p>
+<p>Draw bounding boxes on a batch of images.</p>
+<p>Outputs a copy of <code>images</code> but draws on top of the pixels zero or more bounding boxes specified by the locations in <code>boxes</code>. The coordinates of the each bounding box in <code>boxes</code> are encoded as <code>[y_min, x_min, y_max, x_max]</code>. The bounding box coordinates are floats in <code>[0.0, 1.0]</code> relative to the width and height of the underlying image.</p>
+<p>For example, if an image is 100 x 200 pixels and the bounding box is <code>[0.1, 0.2, 0.5, 0.9]</code>, the bottom-left and upper-right coordinates of the bounding box will be <code>(10, 40)</code> to <code>(50, 180)</code>.</p>
+<p>Parts of the bounding box may fall outside the image.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>images</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>half</code>. 4-D with shape <code>[batch, height, width, depth]</code>. A batch of images.</li>
+<li><b><code>boxes</code></b>: A <code>Tensor</code> of type <code>float32</code>. 3-D with shape <code>[batch, num_bounding_boxes, 4]</code> containing bounding boxes.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>images</code>. 4-D with the same shape as <code>images</code>. The batch of input images with bounding boxes drawn on the images.</p>

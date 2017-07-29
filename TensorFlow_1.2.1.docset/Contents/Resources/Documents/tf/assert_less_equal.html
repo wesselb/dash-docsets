@@ -1,0 +1,31 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.assert_less_equal" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.assert_less_equal" class="dashAnchor"></a><h1 id="tf.assert_less_equal">tf.assert_less_equal</h1>
+<h3 id="tf.assert_less_equal-1"><code>tf.assert_less_equal</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">assert_less_equal(
+    x,
+    y,
+    data<span class="op">=</span><span class="va">None</span>,
+    summarize<span class="op">=</span><span class="va">None</span>,
+    message<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/check_ops.py"><code>tensorflow/python/ops/check_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/check_ops.html">Asserts and boolean checks</a></p>
+<p>Assert the condition <code>x &lt;= y</code> holds element-wise.</p>
+<p>Example of adding a dependency to an operation:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> tf.control_dependencies([tf.assert_less_equal(x, y)]):
+  output <span class="op">=</span> tf.reduce_sum(x)</code></pre></div>
+<p>This condition holds if for every pair of (possibly broadcast) elements <code>x[i]</code>, <code>y[i]</code>, we have <code>x[i] &lt;= y[i]</code>. If both <code>x</code> and <code>y</code> are empty, this is trivially satisfied.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: Numeric <code>Tensor</code>.</li>
+<li><b><code>y</code></b>: Numeric <code>Tensor</code>, same dtype as and broadcastable to <code>x</code>.</li>
+<li><b><code>data</code></b>: The tensors to print out if the condition is False. Defaults to error message and first few entries of <code>x</code>, <code>y</code>.</li>
+<li><b><code>summarize</code></b>: Print this many entries of each tensor.</li>
+<li><b><code>message</code></b>: A string to prefix to the default message.</li>
+<li><b><code>name</code></b>: A name for this operation (optional). Defaults to &quot;assert_less_equal&quot;</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Op that raises <code>InvalidArgumentError</code> if <code>x &lt;= y</code> is False.</p>

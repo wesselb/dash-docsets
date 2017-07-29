@@ -1,0 +1,64 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.test.Benchmark" /> <meta itemprop="property" content="is_abstract"/> <meta itemprop="property" content="report_benchmark"/> <meta itemprop="property" content="run_op_benchmark"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.test.Benchmark" class="dashAnchor"></a><h1 id="tf.test.benchmark">tf.test.Benchmark</h1>
+<h3 id="class-tf.test.benchmark"><code>class tf.test.Benchmark</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/platform/benchmark.py"><code>tensorflow/python/platform/benchmark.py</code></a>.</p>
+<p>Abstract class that provides helpers for TensorFlow benchmarks.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="is_abstract">
+<code>is_abstract</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">is_abstract(cls)</code></pre></div>
+<h3 id="report_benchmark">
+<code>report_benchmark</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">report_benchmark(
+    iters<span class="op">=</span><span class="va">None</span>,
+    cpu_time<span class="op">=</span><span class="va">None</span>,
+    wall_time<span class="op">=</span><span class="va">None</span>,
+    throughput<span class="op">=</span><span class="va">None</span>,
+    extras<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Report a benchmark.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>iters</code></b>: (optional) How many iterations were run</li>
+<li><b><code>cpu_time</code></b>: (optional) Total cpu time in seconds</li>
+<li><b><code>wall_time</code></b>: (optional) Total wall time in seconds</li>
+<li><b><code>throughput</code></b>: (optional) Throughput (in MB/s)</li>
+<li><b><code>extras</code></b>: (optional) Dict mapping string keys to additional benchmark info. Values may be either floats or values that are convertible to strings.</li>
+<li><b><code>name</code></b>: (optional) Override the BenchmarkEntry name with <code>name</code>. Otherwise it is inferred from the top-level method name.</li>
+</ul>
+<h3 id="run_op_benchmark">
+<code>run_op_benchmark</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">run_op_benchmark(
+    sess,
+    op_or_tensor,
+    feed_dict<span class="op">=</span><span class="va">None</span>,
+    burn_iters<span class="op">=</span><span class="dv">2</span>,
+    min_iters<span class="op">=</span><span class="dv">10</span>,
+    store_trace<span class="op">=</span><span class="va">False</span>,
+    store_memory_usage<span class="op">=</span><span class="va">True</span>,
+    name<span class="op">=</span><span class="va">None</span>,
+    extras<span class="op">=</span><span class="va">None</span>,
+    mbs<span class="op">=</span><span class="dv">0</span>
+)</code></pre></div>
+<p>Run an op or tensor in the given session. Report the results.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>sess</code></b>: <code>Session</code> object to use for timing.</li>
+<li><b><code>op_or_tensor</code></b>: <code>Operation</code> or <code>Tensor</code> to benchmark.</li>
+<li><b><code>feed_dict</code></b>: A <code>dict</code> of values to feed for each op iteration (see the <code>feed_dict</code> parameter of <code>Session.run</code>).</li>
+<li><b><code>burn_iters</code></b>: Number of burn-in iterations to run.</li>
+<li><b><code>min_iters</code></b>: Minimum number of iterations to use for timing.</li>
+<li><b><code>store_trace</code></b>: Boolean, whether to run an extra untimed iteration and store the trace of iteration in the benchmark report. The trace will be stored as a string in Google Chrome trace format in the extras field &quot;full_trace_chrome_format&quot;.</li>
+<li><b><code>store_memory_usage</code></b>: Boolean, whether to run an extra untimed iteration, calculate memory usage, and store that in extras fields.</li>
+<li><b><code>name</code></b>: (optional) Override the BenchmarkEntry name with <code>name</code>. Otherwise it is inferred from the top-level method name.</li>
+<li><b><code>extras</code></b>: (optional) Dict mapping string keys to additional benchmark info. Values may be either floats or values that are convertible to strings.</li>
+<li><b><code>mbs</code></b>: (optional) The number of megabytes moved by this op, used to calculate the ops throughput.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>dict</code> containing the key-value pairs that were passed to <code>report_benchmark</code>.</p>

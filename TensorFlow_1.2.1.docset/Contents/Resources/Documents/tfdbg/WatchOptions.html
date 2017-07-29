@@ -1,0 +1,28 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tfdbg.WatchOptions" /> <meta itemprop="property" content="__init__"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tfdbg.WatchOptions" class="dashAnchor"></a><h1 id="tfdbg.watchoptions">tfdbg.WatchOptions</h1>
+<h3 id="class-tfdbg.watchoptions"><code>class tfdbg.WatchOptions</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/debug/wrappers/framework.py"><code>tensorflow/python/debug/wrappers/framework.py</code></a>.</p>
+<p>Type for return values of watch_fn.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    debug_ops<span class="op">=</span><span class="va">None</span>,
+    node_name_regex_whitelist<span class="op">=</span><span class="va">None</span>,
+    op_type_regex_whitelist<span class="op">=</span><span class="va">None</span>,
+    tensor_dtype_regex_whitelist<span class="op">=</span><span class="va">None</span>,
+    tolerate_debug_op_creation_failures<span class="op">=</span><span class="va">False</span>
+)</code></pre></div>
+<p>Constructor of WatchOptions: Debug watch options.</p>
+<p>Used as return values of <code>watch_fn</code>s.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>debug_ops</code></b>: (<code>str</code> or <code>list of str</code>) Debug ops to be used.</li>
+<li><b><code>node_name_regex_whitelist</code></b>: Regular-expression whitelist for node_name, e.g., <code>&quot;(weight_[0-9]+|bias_.*)&quot;</code></li>
+<li><b><code>op_type_regex_whitelist</code></b>: Regular-expression whitelist for the op type of nodes, e.g., <code>&quot;(Variable|Add)&quot;</code>. If both <code>node_name_regex_whitelist</code> and <code>op_type_regex_whitelist</code> are set, the two filtering operations will occur in a logical <code>AND</code> relation. In other words, a node will be included if and only if it hits both whitelists.</li>
+<li><b><code>tensor_dtype_regex_whitelist</code></b>: Regular-experssion whitelist for Tensor data type, e.g., <code>&quot;^int.*&quot;</code>. This whitelist operates in logical <code>AND</code> relations to the two whitelists above.</li>
+<li><b><code>tolerate_debug_op_creation_failures</code></b>: (<code>bool</code>) whether debug op creation failures (e.g., due to dtype incompatibility) are to be tolerated by not throwing exceptions.</li>
+</ul>

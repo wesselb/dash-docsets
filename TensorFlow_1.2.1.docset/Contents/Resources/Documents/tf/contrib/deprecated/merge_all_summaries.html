@@ -1,0 +1,16 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.deprecated.merge_all_summaries" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.deprecated.merge_all_summaries" class="dashAnchor"></a><h1 id="tf.contrib.deprecated.merge_all_summaries">tf.contrib.deprecated.merge_all_summaries</h1>
+<h3 id="tf.contrib.deprecated.merge_all_summaries-1"><code>tf.contrib.deprecated.merge_all_summaries</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">merge_all_summaries(key<span class="op">=</span>tf.GraphKeys.SUMMARIES)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/logging_ops.py"><code>tensorflow/python/ops/logging_ops.py</code></a>.</p>
+<p>Merges all summaries collected in the default graph. (deprecated)</p>
+<p>THIS FUNCTION IS DEPRECATED. It will be removed after 2016-11-30. Instructions for updating: Please switch to tf.summary.merge_all.</p>
+<p>This op is deprecated. Please switch to tf.summary.merge_all, which has identical behavior.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>key</code></b>: <code>GraphKey</code> used to collect the summaries. Defaults to <code>GraphKeys.SUMMARIES</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>If no summaries were collected, returns None. Otherwise returns a scalar <code>Tensor</code> of type <code>string</code> containing the serialized <code>Summary</code> protocol buffer resulting from the merging.</p>

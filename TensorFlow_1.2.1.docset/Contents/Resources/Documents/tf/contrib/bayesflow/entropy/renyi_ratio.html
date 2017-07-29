@@ -1,0 +1,62 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.bayesflow.entropy.renyi_ratio" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.bayesflow.entropy.renyi_ratio" class="dashAnchor"></a><h1 id="tf.contrib.bayesflow.entropy.renyi_ratio">tf.contrib.bayesflow.entropy.renyi_ratio</h1>
+<h3 id="tf.contrib.bayesflow.entropy.renyi_ratio-1"><code>tf.contrib.bayesflow.entropy.renyi_ratio</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">renyi_ratio(
+    log_p,
+    q,
+    alpha,
+    z<span class="op">=</span><span class="va">None</span>,
+    n<span class="op">=</span><span class="va">None</span>,
+    seed<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="st">&#39;renyi_ratio&#39;</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/bayesflow/python/ops/entropy_impl.py"><code>tensorflow/contrib/bayesflow/python/ops/entropy_impl.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../../api_guides/python/contrib.bayesflow.entropy.md#Ops">BayesFlow Entropy (contrib) &gt; Ops</a></p>
+<p>Monte Carlo estimate of the ratio appearing in Renyi divergence.</p>
+<p>This can be used to compute the Renyi (alpha) divergence, or a log evidence approximation based on Renyi divergence.</p>
+<h4 id="definition">Definition</h4>
+<p>With <code>z_i</code> iid samples from <code>q</code>, and <code>exp{log_p(z)} = p(z)</code>, this <code>Op</code> returns the (biased for finite <code>n</code>) estimate:</p>
+<pre><code>(1 - alpha)^{-1} Log[ n^{-1} sum_{i=1}^n ( p(z_i) / q(z_i) )^{1 - alpha},
+\approx (1 - alpha)^{-1} Log[ E_q[ (p(Z) / q(Z))^{1 - alpha} ]  ]</code></pre>
+<p>This ratio appears in different contexts:</p>
+<h4 id="renyi-divergence">Renyi divergence</h4>
+<p>If <code>log_p(z) = Log[p(z)]</code> is the log prob of a distribution, and <code>alpha &gt; 0</code>, <code>alpha != 1</code>, this <code>Op</code> approximates <code>-1</code> times Renyi divergence:</p>
+<pre><code># Choose reasonably high n to limit bias, see below.
+renyi_ratio(log_p, q, alpha, n=100)
+                \approx -1 * D_alpha[q || p],  where
+D_alpha[q || p] := (1 - alpha)^{-1} Log E_q[(p(Z) / q(Z))^{1 - alpha}]</code></pre>
+<p>The Renyi (or &quot;alpha&quot;) divergence is non-negative and equal to zero iff <code>q = p</code>. Various limits of <code>alpha</code> lead to different special case results:</p>
+<pre><code>alpha       D_alpha[q || p]
+-----       ---------------
+--&gt; 0       Log[ int_{q &gt; 0} p(z) dz ]
+= 0.5,      -2 Log[1 - Hel^2[q || p]],  (\propto squared Hellinger distance)
+--&gt; 1       KL[q || p]
+= 2         Log[ 1 + chi^2[q || p] ],   (\propto squared Chi-2 divergence)
+--&gt; infty   Log[ max_z{q(z) / p(z)} ],  (min description length principle).</code></pre>
+<p>See &quot;Renyi Divergence Variational Inference&quot;, by Li and Turner.</p>
+<h4 id="log-evidence-approximation">Log evidence approximation</h4>
+<p>If <code>log_p(z) = Log[p(z, x)]</code> is the log of the joint distribution <code>p</code>, this is an alternative to the ELBO common in variational inference.</p>
+<pre><code>L_alpha(q, p) = Log[p(x)] - D_alpha[q || p]</code></pre>
+<p>If <code>q</code> and <code>p</code> have the same support, and <code>0 &lt; a &lt;= b &lt; 1</code>, one can show <code>ELBO &lt;= D_b &lt;= D_a &lt;= Log[p(x)]</code>. Thus, this <code>Op</code> allows a smooth interpolation between the ELBO and the true evidence.</p>
+<h4 id="stability-notes">Stability notes</h4>
+<p>Note that when <code>1 - alpha</code> is not small, the ratio <code>(p(z) / q(z))^{1 - alpha}</code> is subject to underflow/overflow issues. For that reason, it is evaluated in log-space after centering. Nonetheless, infinite/NaN results may occur. For that reason, one may wish to shrink <code>alpha</code> gradually. See the <code>Op</code> <code>renyi_alpha</code>. Using <code>float64</code> will also help.</p>
+<h4 id="bias-for-finite-sample-size">Bias for finite sample size</h4>
+<p>Due to nonlinearity of the logarithm, for random variables <code>{X_1,...,X_n}</code>, <code>E[ Log[sum_{i=1}^n X_i] ] != Log[ E[sum_{i=1}^n X_i] ]</code>. As a result, this estimate is biased for finite <code>n</code>. For <code>alpha &lt; 1</code>, it is non-decreasing with <code>n</code> (in expectation). For example, if <code>n = 1</code>, this estimator yields the same result as <code>elbo_ratio</code>, and as <code>n</code> increases the expected value of the estimator increases.</p>
+<h4 id="call-signature">Call signature</h4>
+<p>User supplies either <code>Tensor</code> of samples <code>z</code>, or number of samples to draw <code>n</code></p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>log_p</code></b>: Callable mapping samples from <code>q</code> to <code>Tensors</code> with shape broadcastable to <code>q.batch_shape</code>. For example, <code>log_p</code> works &quot;just like&quot; <code>q.log_prob</code>.</li>
+<li><b><code>q</code></b>: <code>tf.contrib.distributions.Distribution</code>. <code>float64</code> <code>dtype</code> recommended. <code>log_p</code> and <code>q</code> should be supported on the same set.</li>
+<li><b><code>alpha</code></b>: <code>Tensor</code> with shape <code>q.batch_shape</code> and values not equal to 1.</li>
+<li><b><code>z</code></b>: <code>Tensor</code> of samples from <code>q</code>, produced by <code>q.sample</code> for some <code>n</code>.</li>
+<li><b><code>n</code></b>: Integer <code>Tensor</code>. The number of samples to use if <code>z</code> is not provided. Note that this can be highly biased for small <code>n</code>, see docstring.</li>
+<li><b><code>seed</code></b>: Python integer to seed the random number generator.</li>
+<li><b><code>name</code></b>: A name to give this <code>Op</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<ul>
+<li><b><code>renyi_result</code></b>: The scaled log of sample mean. <code>Tensor</code> with <code>shape</code> equal to batch shape of <code>q</code>, and <code>dtype</code> = <code>q.dtype</code>.</li>
+</ul>

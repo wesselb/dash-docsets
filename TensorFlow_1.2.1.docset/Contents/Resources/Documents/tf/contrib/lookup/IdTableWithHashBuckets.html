@@ -1,0 +1,105 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.lookup.IdTableWithHashBuckets" /> <meta itemprop="property" content="init"/> <meta itemprop="property" content="key_dtype"/> <meta itemprop="property" content="name"/> <meta itemprop="property" content="value_dtype"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="check_table_dtypes"/> <meta itemprop="property" content="lookup"/> <meta itemprop="property" content="size"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.lookup.IdTableWithHashBuckets" class="dashAnchor"></a><h1 id="tf.contrib.lookup.idtablewithhashbuckets">tf.contrib.lookup.IdTableWithHashBuckets</h1>
+<h3 id="class-tf.contrib.lookup.idtablewithhashbuckets"><code>class tf.contrib.lookup.IdTableWithHashBuckets</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/lookup/lookup_ops.py"><code>tensorflow/contrib/lookup/lookup_ops.py</code></a>.</p>
+<p>String to Id table wrapper that assigns out-of-vocabulary keys to buckets.</p>
+<p>For example, if an instance of <code>IdTableWithHashBuckets</code> is initialized with a string-to-id table that maps: - emerson -&gt; 0 - lake -&gt; 1 - palmer -&gt; 2</p>
+<p>The <code>IdTableWithHashBuckets</code> object will performs the following mapping: - emerson -&gt; 0 - lake -&gt; 1 - palmer -&gt; 2 - <other term> -&gt; bucket id between 3 and 3 + num_oov_buckets, calculated by: hash(<term>) % num_oov_buckets + vocab_size</p>
+<p>If input_tensor is [&quot;emerson&quot;, &quot;lake&quot;, &quot;palmer&quot;, &quot;king&quot;, &quot;crimson&quot;], the lookup result is [0, 1, 2, 4, 7]</p>
+<p>If <code>table</code> is None, only out-of-vocabulary buckets are used.</p>
+<p>Example usage:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">num_oov_buckets <span class="op">=</span> <span class="dv">3</span>
+input_tensor <span class="op">=</span> tf.constant([<span class="st">&quot;emerson&quot;</span>, <span class="st">&quot;lake&quot;</span>, <span class="st">&quot;palmer&quot;</span>, <span class="st">&quot;king&quot;</span>, <span class="st">&quot;crimnson&quot;</span>])
+table <span class="op">=</span> tf.IdTableWithHashBuckets(
+    tf.HashTable(tf.TextFileIdTableInitializer(filename), default_value),
+    num_oov_buckets)
+out <span class="op">=</span> table.lookup(input_tensor).
+table.init.run()
+<span class="bu">print</span> out.<span class="bu">eval</span>()</code></pre></div>
+<p>The hash function used for generating out-of-vocabulary buckets ID is handled by <code>hasher_spec</code>.</p>
+<h2 id="properties">Properties</h2>
+<h3 id="init">
+<code>init</code>
+</h3>
+<p>The table initialization op.</p>
+<h3 id="key_dtype">
+<code>key_dtype</code>
+</h3>
+<p>The table key dtype.</p>
+<h3 id="name">
+<code>name</code>
+</h3>
+<p>The name of the table.</p>
+<h3 id="value_dtype">
+<code>value_dtype</code>
+</h3>
+<p>The table value dtype.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    table,
+    num_oov_buckets,
+    hasher_spec<span class="op">=</span>tf.contrib.lookup.FastHashSpec,
+    name<span class="op">=</span><span class="va">None</span>,
+    key_dtype<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Construct a <code>IdTableWithHashBuckets</code> object.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>table</code></b>: Table that maps <code>tf.string</code> or <code>tf.int64</code> keys to <code>tf.int64</code> ids.</li>
+<li><b><code>num_oov_buckets</code></b>: Number of buckets to use for out-of-vocabulary keys.</li>
+<li><b><code>hasher_spec</code></b>: A <code>HasherSpec</code> to specify the hash function to use for assignation of out-of-vocabulary buckets (optional).</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+<li><b><code>key_dtype</code></b>: Data type of keys passed to <code>lookup</code>. Defaults to <code>table.key_dtype</code> if <code>table</code> is specified, otherwise <code>tf.string</code>. Must be string or integer, and must be castable to <code>table.key_dtype</code>.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: when <code>table</code> in None and <code>num_oov_buckets</code> is not positive.</li>
+<li><b><code>TypeError</code></b>: when <code>hasher_spec</code> is invalid.</li>
+</ul>
+<h3 id="check_table_dtypes">
+<code>check_table_dtypes</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">check_table_dtypes(
+    key_dtype,
+    value_dtype
+)</code></pre></div>
+<p>Check that the given key_dtype and value_dtype matches the table dtypes.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>key_dtype</code></b>: The key data type to check.</li>
+<li><b><code>value_dtype</code></b>: The value data type to check.</li>
+</ul>
+<h4 id="raises-1">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: when 'key_dtype' or 'value_dtype' doesn't match the table data types.</li>
+</ul>
+<h3 id="lookup">
+<code>lookup</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">lookup(
+    keys,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Looks up <code>keys</code> in the table, outputs the corresponding values.</p>
+<p>It assigns out-of-vocabulary keys to buckets based in their hashes.</p>
+<h4 id="args-2">Args:</h4>
+<ul>
+<li><b><code>keys</code></b>: Keys to look up. May be either a <code>SparseTensor</code> or dense <code>Tensor</code>.</li>
+<li><b><code>name</code></b>: Optional name for the op.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>SparseTensor</code> if keys are sparse, otherwise a dense <code>Tensor</code>.</p>
+<h4 id="raises-2">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: when <code>keys</code> doesn't match the table key data type.</li>
+</ul>
+<h3 id="size">
+<code>size</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">size(name<span class="op">=</span><span class="va">None</span>)</code></pre></div>
+<p>Compute the number of elements in this table.</p>

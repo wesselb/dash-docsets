@@ -1,0 +1,20 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.framework.assign_from_values_fn" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.framework.assign_from_values_fn" class="dashAnchor"></a><h1 id="tf.contrib.framework.assign_from_values_fn">tf.contrib.framework.assign_from_values_fn</h1>
+<h3 id="tf.contrib.framework.assign_from_values_fn-1"><code>tf.contrib.framework.assign_from_values_fn</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">assign_from_values_fn(var_names_to_values)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/framework/python/ops/variables.py"><code>tensorflow/contrib/framework/python/ops/variables.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.framework.md#Variables">Framework (contrib) &gt; Variables</a></p>
+<p>Returns a function that assigns specific variables from the given values.</p>
+<p>This function provides a mechanism for performing assignment of variables to values in a way that does not fill the graph with large assignment values.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>var_names_to_values</code></b>: A map from variable names to values.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A function that takes a single argument, a <code>tf.Session</code>, that applies the assignment operation.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if any of the given variable names were not found.</li>
+</ul>

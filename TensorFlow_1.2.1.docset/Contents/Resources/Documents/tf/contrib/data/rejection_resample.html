@@ -1,0 +1,25 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.data.rejection_resample" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.data.rejection_resample" class="dashAnchor"></a><h1 id="tf.contrib.data.rejection_resample">tf.contrib.data.rejection_resample</h1>
+<h3 id="tf.contrib.data.rejection_resample-1"><code>tf.contrib.data.rejection_resample</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">rejection_resample(
+    dataset,
+    class_func,
+    target_dist,
+    initial_dist<span class="op">=</span><span class="va">None</span>,
+    seed<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/data/python/ops/dataset_ops.py"><code>tensorflow/contrib/data/python/ops/dataset_ops.py</code></a>.</p>
+<p>Resamples this dataset to achieve a target class distribution.</p>
+<p><strong>NOTE</strong> Resampling is performed via rejection sampling; some fraction of the input values will be dropped.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>dataset</code></b>: A <code>Dataset</code> object.</li>
+<li><b><code>class_func</code></b>: A function mapping a nested structure of tensors (having shapes and types defined by <code>dataset.output_shapes</code> and <code>dataset.output_types</code>) to a scalar <code>tf.int32</code> tensor. Values should be in <code>[0, num_classes)</code>.</li>
+<li><b><code>target_dist</code></b>: A floating point type tensor, shaped `[num_classes].</li>
+<li><b><code>initial_dist</code></b>: (Optional.) A floating point type tensor, shaped <code>[num_classes]</code>. If not provided, the true class distribution is estimated live in a streaming fashion.</li>
+<li><b><code>seed</code></b>: (Optional.) Python integer seed for the resampler.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Dataset</code>.</p>

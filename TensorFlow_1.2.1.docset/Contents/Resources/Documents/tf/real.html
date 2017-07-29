@@ -1,0 +1,24 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.real" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.real" class="dashAnchor"></a><h1 id="tf.real">tf.real</h1>
+<h3 id="tf.real-1"><code>tf.real</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">real(
+    <span class="bu">input</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/math_ops.py"><code>tensorflow/python/ops/math_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/math_ops.md#Complex_Number_Functions">Math &gt; Complex Number Functions</a></p>
+<p>Returns the real part of a complex number.</p>
+<p>Given a tensor <code>input</code> of complex numbers, this operation returns a tensor of type <code>float32</code> or <code>float64</code> that is the real part of each element in <code>input</code>. All elements in <code>input</code> must be complex numbers of the form \(a + bj\), where <em>a</em> is the real part returned by this operation and <em>b</em> is the imaginary part.</p>
+<p>For example:</p>
+<pre><code># tensor &#39;input&#39; is [-2.25 + 4.75j, 3.25 + 5.75j]
+tf.real(input) ==&gt; [-2.25, 3.25]</code></pre>
+<p>If <code>input</code> is already real, it is returned unchanged.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. Must have numeric type.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>float32</code> or <code>float64</code>.</p>

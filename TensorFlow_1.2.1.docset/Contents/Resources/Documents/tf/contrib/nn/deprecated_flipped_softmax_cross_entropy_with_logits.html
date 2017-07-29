@@ -1,0 +1,28 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.nn.deprecated_flipped_softmax_cross_entropy_with_logits" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.nn.deprecated_flipped_softmax_cross_entropy_with_logits" class="dashAnchor"></a><h1 id="tf.contrib.nn.deprecated_flipped_softmax_cross_entropy_with_logits">tf.contrib.nn.deprecated_flipped_softmax_cross_entropy_with_logits</h1>
+<h3 id="tf.contrib.nn.deprecated_flipped_softmax_cross_entropy_with_logits-1"><code>tf.contrib.nn.deprecated_flipped_softmax_cross_entropy_with_logits</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">deprecated_flipped_softmax_cross_entropy_with_logits(
+    logits,
+    labels,
+    dim<span class="op">=-</span><span class="dv">1</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/nn/python/ops/cross_entropy.py"><code>tensorflow/contrib/nn/python/ops/cross_entropy.py</code></a>.</p>
+<p>Computes softmax cross entropy between <code>logits</code> and <code>labels</code>.</p>
+<p>This function diffs from tf.nn.softmax_cross_entropy_with_logits only in the argument order.</p>
+<p>Measures the probability error in discrete classification tasks in which the classes are mutually exclusive (each entry is in exactly one class). For example, each CIFAR-10 image is labeled with one and only one label: an image can be a dog or a truck, but not both.</p>
+<p><strong>NOTE:</strong> While the classes are mutually exclusive, their probabilities need not be. All that is required is that each row of <code>labels</code> is a valid probability distribution. If they are not, the computation of the gradient will be incorrect.</p>
+<p>If using exclusive <code>labels</code> (wherein one and only one class is true at a time), see <code>sparse_softmax_cross_entropy_with_logits</code>.</p>
+<p><strong>WARNING:</strong> This op expects unscaled logits, since it performs a <code>softmax</code> on <code>logits</code> internally for efficiency. Do not call this op with the output of <code>softmax</code>, as it will produce incorrect results.</p>
+<p><code>logits</code> and <code>labels</code> must have the same shape <code>[batch_size, num_classes]</code> and the same dtype (either <code>float16</code>, <code>float32</code>, or <code>float64</code>).</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>logits</code></b>: Unscaled log probabilities.</li>
+<li><b><code>labels</code></b>: Each row <code>labels[i]</code> must be a valid probability distribution.</li>
+<li><b><code>dim</code></b>: The class dimension. Defaulted to -1 which is the last dimension.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A 1-D <code>Tensor</code> of length <code>batch_size</code> of the same type as <code>logits</code> with the softmax cross entropy loss.</p>

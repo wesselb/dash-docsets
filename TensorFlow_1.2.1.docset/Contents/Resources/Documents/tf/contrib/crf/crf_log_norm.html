@@ -1,0 +1,23 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.crf.crf_log_norm" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.crf.crf_log_norm" class="dashAnchor"></a><h1 id="tf.contrib.crf.crf_log_norm">tf.contrib.crf.crf_log_norm</h1>
+<h3 id="tf.contrib.crf.crf_log_norm-1"><code>tf.contrib.crf.crf_log_norm</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">crf_log_norm(
+    inputs,
+    sequence_lengths,
+    transition_params
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/crf/python/ops/crf.py"><code>tensorflow/contrib/crf/python/ops/crf.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.crf.html">CRF (contrib)</a></p>
+<p>Computes the normalization for a CRF.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>inputs</code></b>: A [batch_size, max_seq_len, num_tags] tensor of unary potentials to use as input to the CRF layer.</li>
+<li><b><code>sequence_lengths</code></b>: A [batch_size] vector of true sequence lengths.</li>
+<li><b><code>transition_params</code></b>: A [num_tags, num_tags] transition matrix.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<ul>
+<li><b><code>log_norm</code></b>: A [batch_size] vector of normalizers for a CRF.</li>
+</ul>

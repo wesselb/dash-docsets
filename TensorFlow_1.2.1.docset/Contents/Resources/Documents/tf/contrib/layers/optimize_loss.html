@@ -1,0 +1,63 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.layers.optimize_loss" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.layers.optimize_loss" class="dashAnchor"></a><h1 id="tf.contrib.layers.optimize_loss">tf.contrib.layers.optimize_loss</h1>
+<h3 id="tf.contrib.layers.optimize_loss-1"><code>tf.contrib.layers.optimize_loss</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">optimize_loss(
+    loss,
+    global_step,
+    learning_rate,
+    optimizer,
+    gradient_noise_scale<span class="op">=</span><span class="va">None</span>,
+    gradient_multipliers<span class="op">=</span><span class="va">None</span>,
+    clip_gradients<span class="op">=</span><span class="va">None</span>,
+    learning_rate_decay_fn<span class="op">=</span><span class="va">None</span>,
+    update_ops<span class="op">=</span><span class="va">None</span>,
+    variables<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>,
+    summaries<span class="op">=</span><span class="va">None</span>,
+    colocate_gradients_with_ops<span class="op">=</span><span class="va">False</span>,
+    increment_global_step<span class="op">=</span><span class="va">True</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/layers/python/layers/optimizers.py"><code>tensorflow/contrib/layers/python/layers/optimizers.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.layers.md#Optimization">Layers (contrib) &gt; Optimization</a></p>
+<p>Given loss and parameters for optimizer, returns a training op.</p>
+<p>Various ways of passing optimizers, include:</p>
+<ul>
+<li>string, name of the optimizer like 'SGD', 'Adam', see OPTIMIZER_CLS_NAMES for full list. E.g. <code>optimize_loss(..., optimizer='Adam')</code>.</li>
+<li>function, takes learning rate <code>Tensor</code> as argument and must return <code>Optimizer</code> instance. E.g. <code>optimize_loss(..., optimizer=lambda lr: tf.train.MomentumOptimizer(lr, momentum=0.5))</code>. Alternatively, if <code>learning_rate</code> is <code>None</code>, the function takes no arguments. E.g. <code>optimize_loss(..., learning_rate=None, optimizer=lambda: tf.train.MomentumOptimizer(0.5, momentum=0.5))</code>.</li>
+<li>class, subclass of <code>Optimizer</code> that takes only one required argument - learning rate, such as AdamOptimizer, AdagradOptimizer. E.g. <code>optimize_loss(..., optimizer=tf.train.AdagradOptimizer)</code>.</li>
+<li>object, instance of subclass of <code>Optimizer</code>. E.g., <code>optimizer_loss(..., optimizer=tf.train.AdagradOptimizer(0.5))</code>.</li>
+</ul>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>loss</code></b>: Scalar <code>Tensor</code>.</li>
+<li><b><code>global_step</code></b>: Scalar int <code>Tensor</code>, step counter to update on each step unless <code>increment_global_step</code> is <code>False</code>. If not supplied, it will be fetched from the default graph (see <code>tf.train.get_global_step</code> for details). If it's not been created, no step will be incremented with each weight update. <code>learning_rate_decay_fn</code> requires <code>global_step</code>.</li>
+<li><b><code>learning_rate</code></b>: float or <code>Tensor</code>, magnitude of update per each training step. Can be <code>None</code>.</li>
+<li><b><code>optimizer</code></b>: string, class or optimizer instance, used as trainer. string should be name of optimizer, like 'SGD', 'Adam', 'Adagrad'. Full list in OPTIMIZER_CLS_NAMES constant. class should be sub-class of <code>tf.Optimizer</code> that implements <code>compute_gradients</code> and <code>apply_gradients</code> functions. optimizer instance should be instantiation of <code>tf.Optimizer</code> sub-class and have <code>compute_gradients</code> and <code>apply_gradients</code> functions.</li>
+<li><b><code>gradient_noise_scale</code></b>: float or None, adds 0-mean normal noise scaled by this value.</li>
+<li><b><code>gradient_multipliers</code></b>: dict of variables or variable names to floats. If present, gradients for specified variables will be multiplied by given constant.</li>
+<li><b><code>clip_gradients</code></b>: float, callable or <code>None</code>. If float, is provided, a global clipping is applied to prevent the norm of the gradient to exceed this value. Alternatively, a callable can be provided e.g.: adaptive_clipping. This callable takes a <code>list</code> of <code>(gradients, variables)</code> <code>tuple</code>s and returns the same thing with the gradients modified.</li>
+<li><b><code>learning_rate_decay_fn</code></b>: function, takes <code>learning_rate</code> and <code>global_step</code> <code>Tensor</code>s, returns <code>Tensor</code>. Can be used to implement any learning rate decay functions. For example: <code>tf.train.exponential_decay</code>. Ignored if <code>learning_rate</code> is not supplied.</li>
+<li><b><code>update_ops</code></b>: list of update <code>Operation</code>s to execute at each step. If <code>None</code>, uses elements of UPDATE_OPS collection. The order of execution between <code>update_ops</code> and <code>loss</code> is non-deterministic.</li>
+<li><b><code>variables</code></b>: list of variables to optimize or <code>None</code> to use all trainable variables.</li>
+<li><b><code>name</code></b>: The name for this operation is used to scope operations and summaries.</li>
+<li><b><code>summaries</code></b>: List of internal quantities to visualize on tensorboard. If not set only the loss and the learning rate will be reported. The complete list is in OPTIMIZER_SUMMARIES.</li>
+<li><b><code>colocate_gradients_with_ops</code></b>: If True, try colocating gradients with the corresponding op.</li>
+<li><b><code>increment_global_step</code></b>: Whether to increment <code>global_step</code>. If your model calls <code>optimize_loss</code> multiple times per training step (e.g. to optimize different parts of the model), use this arg to avoid incrementing <code>global_step</code> more times than necessary.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Training op.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if:
+<ul>
+<li><code>loss</code> is an invalid type or shape.</li>
+<li><code>global_step</code> is an invalid type or shape.</li>
+<li><code>learning_rate</code> is an invalid type or value.</li>
+<li><code>optimizer</code> is wrong type.</li>
+<li><code>clip_gradients</code> is not float or callable.</li>
+<li><code>learning_rate</code> and <code>learning_rate_decay_fn</code> are supplied, but no <code>global_step</code> is available.</li>
+<li><code>gradients</code> is empty</li>
+</ul></li>
+</ul>

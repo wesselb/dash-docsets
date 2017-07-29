@@ -1,0 +1,24 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.matrix_solve" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.matrix_solve" class="dashAnchor"></a><h1 id="tf.matrix_solve">tf.matrix_solve</h1>
+<h3 id="tf.matrix_solve-1"><code>tf.matrix_solve</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">matrix_solve(
+    matrix,
+    rhs,
+    adjoint<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_linalg_ops.py</code>.</p>
+<p>See the guide: <a href="../../../api_guides/python/math_ops.md#Matrix_Math_Functions">Math &gt; Matrix Math Functions</a></p>
+<p>Solves systems of linear equations.</p>
+<p><code>Matrix</code> is a tensor of shape <code>[..., M, M]</code> whose inner-most 2 dimensions form square matrices. <code>Rhs</code> is a tensor of shape <code>[..., M, K]</code>. The <code>output</code> is a tensor shape <code>[..., M, K]</code>. If <code>adjoint</code> is <code>False</code> then each output matrix satisfies <code>matrix[..., :, :] * output[..., :, :] = rhs[..., :, :]</code>. If <code>adjoint</code> is <code>True</code> then each output matrix satisfies <code>adjoint(matrix[..., :, :]) * output[..., :, :] = rhs[..., :, :]</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>matrix</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float64</code>, <code>float32</code>, <code>complex64</code>, <code>complex128</code>. Shape is <code>[..., M, M]</code>.</li>
+<li><b><code>rhs</code></b>: A <code>Tensor</code>. Must have the same type as <code>matrix</code>. Shape is <code>[..., M, K]</code>.</li>
+<li><b><code>adjoint</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>. Boolean indicating whether to solve with <code>matrix</code> or its (block-wise) adjoint.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>matrix</code>. Shape is <code>[..., M, K]</code>.</p>

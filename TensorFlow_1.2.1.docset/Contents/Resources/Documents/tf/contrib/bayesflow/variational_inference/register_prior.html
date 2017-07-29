@@ -1,0 +1,24 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.bayesflow.variational_inference.register_prior" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.bayesflow.variational_inference.register_prior" class="dashAnchor"></a><h1 id="tf.contrib.bayesflow.variational_inference.register_prior">tf.contrib.bayesflow.variational_inference.register_prior</h1>
+<h3 id="tf.contrib.bayesflow.variational_inference.register_prior-1"><code>tf.contrib.bayesflow.variational_inference.register_prior</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">register_prior(
+    variational,
+    prior
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/bayesflow/python/ops/variational_inference_impl.py"><code>tensorflow/contrib/bayesflow/python/ops/variational_inference_impl.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../../api_guides/python/contrib.bayesflow.variational_inference.md#Ops">BayesFlow Variational Inference (contrib) &gt; Ops</a></p>
+<p>Associate a variational <code>StochasticTensor</code> with a <code>Distribution</code> prior.</p>
+<p>This is a helper function used in conjunction with <code>elbo</code> that allows users to specify the mapping between variational distributions and their priors without having to pass in <code>variational_with_prior</code> explicitly.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>variational</code></b>: <code>StochasticTensor</code> q(Z). Approximating distribution.</li>
+<li><b><code>prior</code></b>: <code>Distribution</code> p(Z). Prior distribution.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>None</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if variational is not a <code>StochasticTensor</code> or <code>prior</code> is not a <code>Distribution</code>.</li>
+</ul>

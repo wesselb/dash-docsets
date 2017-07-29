@@ -1,0 +1,27 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.layers.one_hot_encoding" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.layers.one_hot_encoding" class="dashAnchor"></a><h1 id="tf.contrib.layers.one_hot_encoding">tf.contrib.layers.one_hot_encoding</h1>
+<h3 id="tf.contrib.layers.one_hot_encoding-1"><code>tf.contrib.layers.one_hot_encoding</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">one_hot_encoding(
+    labels,
+    num_classes,
+    on_value<span class="op">=</span><span class="fl">1.0</span>,
+    off_value<span class="op">=</span><span class="fl">0.0</span>,
+    outputs_collections<span class="op">=</span><span class="va">None</span>,
+    scope<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/layers/python/layers/layers.py"><code>tensorflow/contrib/layers/python/layers/layers.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.layers.md#Higher_level_ops_for_building_neural_network_layers">Layers (contrib) &gt; Higher level ops for building neural network layers</a></p>
+<p>Transform numeric labels into onehot_labels using <code>tf.one_hot</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>labels</code></b>: [batch_size] target labels.</li>
+<li><b><code>num_classes</code></b>: Total number of classes.</li>
+<li><b><code>on_value</code></b>: A scalar defining the on-value.</li>
+<li><b><code>off_value</code></b>: A scalar defining the off-value.</li>
+<li><b><code>outputs_collections</code></b>: Collection to add the outputs.</li>
+<li><b><code>scope</code></b>: Optional scope for name_scope.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>One-hot encoding of the labels.</p>

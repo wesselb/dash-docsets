@@ -1,0 +1,45 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.feature_column.linear_model" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.feature_column.linear_model" class="dashAnchor"></a><h1 id="tf.feature_column.linear_model">tf.feature_column.linear_model</h1>
+<h3 id="tf.feature_column.linear_model-1"><code>tf.feature_column.linear_model</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">linear_model(
+    features,
+    feature_columns,
+    units<span class="op">=</span><span class="dv">1</span>,
+    sparse_combiner<span class="op">=</span><span class="st">&#39;sum&#39;</span>,
+    weight_collections<span class="op">=</span><span class="va">None</span>,
+    trainable<span class="op">=</span><span class="va">True</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/feature_column/feature_column.py"><code>tensorflow/python/feature_column/feature_column.py</code></a>.</p>
+<p>Returns a linear prediction <code>Tensor</code> based on given <code>feature_columns</code>.</p>
+<p>This function generates a weighted sum based on output dimension <code>units</code>. Weighted sum refers to logits in classification problems. It refers to the prediction itself for linear regression problems.</p>
+<p>Note on supported columns: <code>linear_model</code> treats categorical columns as <code>indicator_column</code>s while <code>input_layer</code> explicitly requires wrapping each of them with an <code>embedding_column</code> or an <code>indicator_column</code>.</p>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">price <span class="op">=</span> numeric_column(<span class="st">&#39;price&#39;</span>)
+price_buckets <span class="op">=</span> bucketized_column(price, boundaries<span class="op">=</span>[<span class="dv">0</span>., <span class="dv">10</span>., <span class="dv">100</span>., <span class="dv">1000</span>.])
+keywords <span class="op">=</span> categorical_column_with_hash_bucket(<span class="st">&quot;keywords&quot;</span>, 10K)
+keywords_price <span class="op">=</span> crossed_column(<span class="st">&#39;keywords&#39;</span>, price_buckets, ...)
+columns <span class="op">=</span> [price_buckets, keywords, keywords_price ...]
+features <span class="op">=</span> tf.parse_example(..., features<span class="op">=</span>make_parse_example_spec(columns))
+prediction <span class="op">=</span> linear_model(features, columns)</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>features</code></b>: A mapping from key to tensors. <code>_FeatureColumn</code>s look up via these keys. For example <code>numeric_column('price')</code> will look at 'price' key in this dict. Values are <code>Tensor</code> or <code>SparseTensor</code> depending on corresponding <code>_FeatureColumn</code>.</li>
+<li><b><code>feature_columns</code></b>: An iterable containing the FeatureColumns to use as inputs to your model. All items should be instances of classes derived from <code>_FeatureColumn</code>s.</li>
+<li><b><code>units</code></b>: An integer, dimensionality of the output space. Default value is 1.</li>
+<li><b><code>sparse_combiner</code></b>: A string specifying how to reduce if a sparse column is multivalent. Currently &quot;mean&quot;, &quot;sqrtn&quot; and &quot;sum&quot; are supported, with &quot;sum&quot; the default. &quot;sqrtn&quot; often achieves good accuracy, in particular with bag-of-words columns. It combines each sparse columns independently.
+<ul>
+<li>&quot;sum&quot;: do not normalize features in the column</li>
+<li>&quot;mean&quot;: do l1 normalization on features in the column</li>
+<li>&quot;sqrtn&quot;: do l2 normalization on features in the column</li>
+</ul></li>
+<li><b><code>weight_collections</code></b>: A list of collection names to which the Variable will be added. Note that, variables will also be added to collections <code>tf.GraphKeys.GLOBAL_VARIABLES</code> and <code>ops.GraphKeys.MODEL_VARIABLES</code>.</li>
+<li><b><code>trainable</code></b>: If <code>True</code> also add the variable to the graph collection <code>GraphKeys.TRAINABLE_VARIABLES</code> (see <code>tf.Variable</code>).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> which represents predictions/logits of a linear model. Its shape is (batch_size, units) and its dtype is <code>float32</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if an item in <code>feature_columns</code> is neither a <code>_DenseColumn</code> nor <code>_CategoricalColumn</code>.</li>
+</ul>

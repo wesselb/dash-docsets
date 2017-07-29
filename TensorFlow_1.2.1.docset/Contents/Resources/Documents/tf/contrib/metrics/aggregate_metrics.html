@@ -1,0 +1,17 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.metrics.aggregate_metrics" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.metrics.aggregate_metrics" class="dashAnchor"></a><h1 id="tf.contrib.metrics.aggregate_metrics">tf.contrib.metrics.aggregate_metrics</h1>
+<h3 id="tf.contrib.metrics.aggregate_metrics-1"><code>tf.contrib.metrics.aggregate_metrics</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">aggregate_metrics(<span class="op">*</span>value_update_tuples)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/metrics/python/ops/metric_ops.py"><code>tensorflow/contrib/metrics/python/ops/metric_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.metrics.md#Metric_Ops_">Metrics (contrib) &gt; Metric <code>Ops</code></a></p>
+<p>Aggregates the metric value tensors and update ops into two lists.</p>
+<h4 id="args">Args:</h4>
+<p>*value_update_tuples: a variable number of tuples, each of which contain the pair of (value_tensor, update_op) from a streaming metric.</p>
+<h4 id="returns">Returns:</h4>
+<p>A list of value <code>Tensor</code> objects and a list of update ops.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>value_update_tuples</code> is empty.</li>
+</ul>

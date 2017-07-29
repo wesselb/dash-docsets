@@ -1,0 +1,20 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.image.angles_to_projective_transforms" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.image.angles_to_projective_transforms" class="dashAnchor"></a><h1 id="tf.contrib.image.angles_to_projective_transforms">tf.contrib.image.angles_to_projective_transforms</h1>
+<h3 id="tf.contrib.image.angles_to_projective_transforms-1"><code>tf.contrib.image.angles_to_projective_transforms</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">angles_to_projective_transforms(
+    angles,
+    image_height,
+    image_width
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/image/python/ops/image_ops.py"><code>tensorflow/contrib/image/python/ops/image_ops.py</code></a>.</p>
+<p>Returns projective transform(s) for the given angle(s).</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>angles</code></b>: A scalar angle to rotate all images by, or (for batches of images) a vector with an angle to rotate each image in the batch.</li>
+<li><b><code>image_height</code></b>: Height of the image(s) to be transformed.</li>
+<li><b><code>image_width</code></b>: Width of the image(s) to be transformed.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A tensor of shape (num_images, 8). Projective transforms which can be given to <code>tf.contrib.image.transform</code>.</p>

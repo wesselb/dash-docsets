@@ -1,0 +1,34 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.layers.avg_pool2d" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.layers.avg_pool2d" class="dashAnchor"></a><h1 id="tf.contrib.layers.avg_pool2d">tf.contrib.layers.avg_pool2d</h1>
+<h3 id="tf.contrib.layers.avg_pool2d-1"><code>tf.contrib.layers.avg_pool2d</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">avg_pool2d(
+    inputs,
+    kernel_size,
+    stride<span class="op">=</span><span class="dv">2</span>,
+    padding<span class="op">=</span><span class="st">&#39;VALID&#39;</span>,
+    data_format<span class="op">=</span>DATA_FORMAT_NHWC,
+    outputs_collections<span class="op">=</span><span class="va">None</span>,
+    scope<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/layers/python/layers/layers.py"><code>tensorflow/contrib/layers/python/layers/layers.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.layers.md#Higher_level_ops_for_building_neural_network_layers">Layers (contrib) &gt; Higher level ops for building neural network layers</a></p>
+<p>Adds a 2D average pooling op.</p>
+<p>It is assumed that the pooling is done per image but not in batch or channels.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>inputs</code></b>: A 4-D tensor of shape <code>[batch_size, height, width, channels]</code> if <code>data_format</code> is <code>NHWC</code>, and <code>[batch_size, channels, height, width]</code> if <code>data_format</code> is <code>NCHW</code>.</li>
+<li><b><code>kernel_size</code></b>: A list of length 2: [kernel_height, kernel_width] of the pooling kernel over which the op is computed. Can be an int if both values are the same.</li>
+<li><b><code>stride</code></b>: A list of length 2: [stride_height, stride_width]. Can be an int if both strides are the same. Note that presently both strides must have the same value.</li>
+<li><b><code>padding</code></b>: The padding method, either 'VALID' or 'SAME'.</li>
+<li><b><code>data_format</code></b>: A string. <code>NHWC</code> (default) and <code>NCHW</code> are supported.</li>
+<li><b><code>outputs_collections</code></b>: The collections to which the outputs are added.</li>
+<li><b><code>scope</code></b>: Optional scope for name_scope.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> representing the results of the pooling operation.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>data_format</code> is neither <code>NHWC</code> nor <code>NCHW</code>.</li>
+</ul>

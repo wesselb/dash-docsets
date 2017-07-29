@@ -1,0 +1,28 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.fill" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.fill" class="dashAnchor"></a><h1 id="tf.fill">tf.fill</h1>
+<h3 id="tf.fill-1"><code>tf.fill</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">fill(
+    dims,
+    value,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_array_ops.py</code>.</p>
+<p>See the guide: <a href="../../../api_guides/python/constant_op.md#Constant_Value_Tensors">Constants, Sequences, and Random Values &gt; Constant Value Tensors</a></p>
+<p>Creates a tensor filled with a scalar value.</p>
+<p>This operation creates a tensor of shape <code>dims</code> and fills it with <code>value</code>.</p>
+<p>For example:</p>
+<pre><code># Output tensor has shape [2, 3].
+fill([2, 3], 9) ==&gt; [[9, 9, 9]
+                     [9, 9, 9]]</code></pre>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>dims</code></b>: A <code>Tensor</code> of type <code>int32</code>. 1-D. Represents the shape of the output tensor.</li>
+<li><p><b><code>value</code></b>: A <code>Tensor</code>. 0-D (scalar). Value to fill the returned tensor.</p></li>
+<li><p><b><code>name</code></b>: A name for the operation (optional).</p></li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>value</code>.</p>
+<h4 id="numpy-compatibility">numpy compatibility</h4>
+<pre><code>Equivalent to np.full</code></pre>

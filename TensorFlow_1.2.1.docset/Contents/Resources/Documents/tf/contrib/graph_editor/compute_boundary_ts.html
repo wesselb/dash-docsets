@@ -1,0 +1,21 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.graph_editor.compute_boundary_ts" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.graph_editor.compute_boundary_ts" class="dashAnchor"></a><h1 id="tf.contrib.graph_editor.compute_boundary_ts">tf.contrib.graph_editor.compute_boundary_ts</h1>
+<h3 id="tf.contrib.graph_editor.compute_boundary_ts-1"><code>tf.contrib.graph_editor.compute_boundary_ts</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">compute_boundary_ts(ops)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/graph_editor/select.py"><code>tensorflow/contrib/graph_editor/select.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.graph_editor.md#Module_select">Graph Editor (contrib) &gt; Module: select</a></p>
+<p>Compute the tensors at the boundary of a set of ops.</p>
+<p>This function looks at all the tensors connected to the given ops (in/out) and classify them into three categories: 1) input tensors: tensors whose generating operation is not in ops. 2) output tensors: tensors whose consumer operations are not in ops 3) inside tensors: tensors which are neither input nor output tensors.</p>
+<p>Note that a tensor can be both an inside tensor and an output tensor if it is consumed by operations both outside and inside of <code>ops</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>ops</code></b>: an object convertible to a list of tf.Operation.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A tuple <code>(outside_input_ts, outside_output_ts, inside_ts)</code> where: <code>outside_input_ts</code> is a Python list of input tensors; <code>outside_output_ts</code> is a python list of output tensors; <code>inside_ts</code> is a python list of inside tensors. Since a tensor can be both an inside tensor and an output tensor, <code>outside_output_ts</code> and <code>inside_ts</code> might intersect.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: if ops cannot be converted to a list of tf.Operation.</li>
+</ul>

@@ -1,0 +1,34 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.bayesflow.variational_inference.elbo_with_log_joint" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.bayesflow.variational_inference.elbo_with_log_joint" class="dashAnchor"></a><h1 id="tf.contrib.bayesflow.variational_inference.elbo_with_log_joint">tf.contrib.bayesflow.variational_inference.elbo_with_log_joint</h1>
+<h3 id="tf.contrib.bayesflow.variational_inference.elbo_with_log_joint-1"><code>tf.contrib.bayesflow.variational_inference.elbo_with_log_joint</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">elbo_with_log_joint(
+    log_joint,
+    variational<span class="op">=</span><span class="va">None</span>,
+    keep_batch_dim<span class="op">=</span><span class="va">True</span>,
+    form<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="st">&#39;ELBO&#39;</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/bayesflow/python/ops/variational_inference_impl.py"><code>tensorflow/contrib/bayesflow/python/ops/variational_inference_impl.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../../api_guides/python/contrib.bayesflow.variational_inference.md#Ops">BayesFlow Variational Inference (contrib) &gt; Ops</a></p>
+<p>Evidence Lower BOund. <code>log p(x) &gt;= ELBO</code>.</p>
+<p>This method is for models that have computed <code>p(x,Z)</code> instead of <code>p(x|Z)</code>. See <code>elbo</code> for further details.</p>
+<p>Because only the joint is specified, analytic KL is not available.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>log_joint</code></b>: <code>Tensor</code> log p(x, Z).</li>
+<li><b><code>variational</code></b>: list of <code>StochasticTensor</code> q(Z). If <code>None</code>, defaults to all <code>StochasticTensor</code> objects upstream of <code>log_joint</code>.</li>
+<li><b><code>keep_batch_dim</code></b>: bool. Whether to keep the batch dimension when summing entropy term. When the sample is per data point, this should be True; otherwise (e.g. in a Bayesian NN), this should be False.</li>
+<li><b><code>form</code></b>: ELBOForms constant. Controls how the ELBO is computed. Defaults to ELBOForms.default.</li>
+<li><b><code>name</code></b>: name to prefix ops with.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p><code>Tensor</code> ELBO of the same type and shape as <code>log_joint</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: if variationals in <code>variational</code> are not <code>StochasticTensor</code>s.</li>
+<li><b><code>TypeError</code></b>: if form is not a valid ELBOForms constant.</li>
+<li><b><code>ValueError</code></b>: if <code>variational</code> is None and there are no <code>StochasticTensor</code>s upstream of <code>log_joint</code>.</li>
+<li><b><code>ValueError</code></b>: if form is ELBOForms.analytic_kl.</li>
+</ul>

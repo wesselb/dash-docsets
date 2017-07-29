@@ -1,0 +1,41 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.feature_column.categorical_column_with_vocabulary_list" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.feature_column.categorical_column_with_vocabulary_list" class="dashAnchor"></a><h1 id="tf.feature_column.categorical_column_with_vocabulary_list">tf.feature_column.categorical_column_with_vocabulary_list</h1>
+<h3 id="tf.feature_column.categorical_column_with_vocabulary_list-1"><code>tf.feature_column.categorical_column_with_vocabulary_list</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">categorical_column_with_vocabulary_list(
+    key,
+    vocabulary_list,
+    dtype<span class="op">=</span><span class="va">None</span>,
+    default_value<span class="op">=-</span><span class="dv">1</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/feature_column/feature_column.py"><code>tensorflow/python/feature_column/feature_column.py</code></a>.</p>
+<p>A <code>_CategoricalColumn</code> with in-memory vocabulary.</p>
+<p>Logic for feature f is: id = vocabulary_list.index_of(f) if f in vocabulary_list else default_value</p>
+<p>Use this when your inputs are in string or integer format, and you have an in-memory vocabulary mapping each value to an integer ID. By default, out-of-vocabulary values are ignored. Use <code>default_value</code> to specify how to include out-of-vocabulary values.</p>
+<p>For input dictionary <code>features</code>, <code>features[key]</code> is either <code>Tensor</code> or <code>SparseTensor</code>. If <code>Tensor</code>, missing values can be represented by <code>-1</code> for int and <code>''</code> for string. Note that these values are independent of the <code>default_value</code> argument.</p>
+<p>In the following examples, each input in <code>vocabulary_list</code> is assigned an ID 0-4 corresponding to its index (e.g., input 'B' produces output 2). All other inputs are assigned <code>default_value</code> 0.</p>
+<p>Linear model:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">colors <span class="op">=</span> categorical_column_with_vocabulary_list(
+    key<span class="op">=</span><span class="st">&#39;colors&#39;</span>, vocabulary_list<span class="op">=</span>(<span class="st">&#39;X&#39;</span>, <span class="st">&#39;R&#39;</span>, <span class="st">&#39;G&#39;</span>, <span class="st">&#39;B&#39;</span>, <span class="st">&#39;Y&#39;</span>), default_value<span class="op">=</span><span class="dv">0</span>)
+columns <span class="op">=</span> [colors, ...]
+features <span class="op">=</span> tf.parse_example(..., features<span class="op">=</span>make_parse_example_spec(columns))
+linear_prediction, _, _ <span class="op">=</span> linear_model(features, columns)</code></pre></div>
+<p>Embedding for a DNN model:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">columns <span class="op">=</span> [embedding_column(colors, <span class="dv">3</span>),...]
+features <span class="op">=</span> tf.parse_example(..., features<span class="op">=</span>make_parse_example_spec(columns))
+dense_tensor <span class="op">=</span> input_layer(features, columns)</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>key</code></b>: A unique string identifying the input feature. It is used as the column name and the dictionary key for feature parsing configs, feature <code>Tensor</code> objects, and feature columns.</li>
+<li><b><code>vocabulary_list</code></b>: An ordered iterable defining the vocabulary. Each feature is mapped to the index of its value (if present) in <code>vocabulary_list</code>. Must be castable to <code>dtype</code>.</li>
+<li><b><code>dtype</code></b>: The type of features. Only string and integer types are supported. If <code>None</code>, it will be inferred from <code>vocabulary_list</code>.</li>
+<li><b><code>default_value</code></b>: The value to use for values not in <code>vocabulary_list</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>_CategoricalColumn</code> with in-memory vocabulary.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>vocabulary_list</code> is empty, or contains duplicate keys.</li>
+<li><b><code>ValueError</code></b>: if <code>dtype</code> is not integer or string.</li>
+</ul>

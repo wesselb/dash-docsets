@@ -1,0 +1,27 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.nn.max_pool" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.nn.max_pool" class="dashAnchor"></a><h1 id="tf.nn.max_pool">tf.nn.max_pool</h1>
+<h3 id="tf.nn.max_pool-1"><code>tf.nn.max_pool</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">max_pool(
+    value,
+    ksize,
+    strides,
+    padding,
+    data_format<span class="op">=</span><span class="st">&#39;NHWC&#39;</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/nn_ops.py"><code>tensorflow/python/ops/nn_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/nn.md#Pooling">Neural Network &gt; Pooling</a></p>
+<p>Performs the max pooling on the input.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>value</code></b>: A 4-D <code>Tensor</code> with shape <code>[batch, height, width, channels]</code> and type <code>tf.float32</code>.</li>
+<li><b><code>ksize</code></b>: A list of ints that has length &gt;= 4. The size of the window for each dimension of the input tensor.</li>
+<li><b><code>strides</code></b>: A list of ints that has length &gt;= 4. The stride of the sliding window for each dimension of the input tensor.</li>
+<li><b><code>padding</code></b>: A string, either <code>'VALID'</code> or <code>'SAME'</code>. The padding algorithm. See the <a href="../../tf/nn/convolution.html">comment here</a></li>
+<li><b><code>data_format</code></b>: A string. 'NHWC' and 'NCHW' are supported.</li>
+<li><b><code>name</code></b>: Optional name for the operation.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> with type <code>tf.float32</code>. The max pooled output tensor.</p>

@@ -1,0 +1,33 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.layers.real_valued_column" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.layers.real_valued_column" class="dashAnchor"></a><h1 id="tf.contrib.layers.real_valued_column">tf.contrib.layers.real_valued_column</h1>
+<h3 id="tf.contrib.layers.real_valued_column-1"><code>tf.contrib.layers.real_valued_column</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">real_valued_column(
+    column_name,
+    dimension<span class="op">=</span><span class="dv">1</span>,
+    default_value<span class="op">=</span><span class="va">None</span>,
+    dtype<span class="op">=</span>tf.float32,
+    normalizer<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/layers/python/layers/feature_column.py"><code>tensorflow/contrib/layers/python/layers/feature_column.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.layers.md#Feature_columns">Layers (contrib) &gt; Feature columns</a></p>
+<p>Creates a <code>_RealValuedColumn</code> for dense numeric data.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>column_name</code></b>: A string defining real valued column name.</li>
+<li><b><code>dimension</code></b>: An integer specifying dimension of the real valued column. The default is 1.</li>
+<li><b><code>default_value</code></b>: A single value compatible with dtype or a list of values compatible with dtype which the column takes on during tf.Example parsing if data is missing. When dimension is not None, a default value of None will cause tf.parse_example to fail if an example does not contain this column. If a single value is provided, the same value will be applied as the default value for every dimension. If a list of values is provided, the length of the list should be equal to the value of <code>dimension</code>. Only scalar default value is supported in case dimension is not specified.</li>
+<li><b><code>dtype</code></b>: defines the type of values. Default value is tf.float32. Must be a non-quantized, real integer or floating point type.</li>
+<li><b><code>normalizer</code></b>: If not None, a function that can be used to normalize the value of the real valued column after default_value is applied for parsing. Normalizer function takes the input tensor as its argument, and returns the output tensor. (e.g. lambda x: (x - 3.0) / 4.2). Note that for variable length columns, the normalizer should expect an input_tensor of type <code>SparseTensor</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A _RealValuedColumn.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: if dimension is not an int</li>
+<li><b><code>ValueError</code></b>: if dimension is not a positive integer</li>
+<li><b><code>TypeError</code></b>: if default_value is a list but its length is not equal to the value of <code>dimension</code>.</li>
+<li><b><code>TypeError</code></b>: if default_value is not compatible with dtype.</li>
+<li><b><code>ValueError</code></b>: if dtype is not convertible to tf.float32.</li>
+</ul>

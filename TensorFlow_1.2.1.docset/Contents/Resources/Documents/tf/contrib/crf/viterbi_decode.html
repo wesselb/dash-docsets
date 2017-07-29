@@ -1,0 +1,23 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.crf.viterbi_decode" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.crf.viterbi_decode" class="dashAnchor"></a><h1 id="tf.contrib.crf.viterbi_decode">tf.contrib.crf.viterbi_decode</h1>
+<h3 id="tf.contrib.crf.viterbi_decode-1"><code>tf.contrib.crf.viterbi_decode</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">viterbi_decode(
+    score,
+    transition_params
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/crf/python/ops/crf.py"><code>tensorflow/contrib/crf/python/ops/crf.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.crf.html">CRF (contrib)</a></p>
+<p>Decode the highest scoring sequence of tags outside of TensorFlow.</p>
+<p>This should only be used at test time.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>score</code></b>: A [seq_len, num_tags] matrix of unary potentials.</li>
+<li><b><code>transition_params</code></b>: A [num_tags, num_tags] matrix of binary potentials.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<ul>
+<li><b><code>viterbi</code></b>: A [seq_len] list of integers containing the highest scoring tag indicies.</li>
+<li><b><code>viterbi_score</code></b>: A float containing the score for the Viterbi sequence.</li>
+</ul>

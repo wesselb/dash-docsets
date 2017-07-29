@@ -1,0 +1,58 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.framework.init_from_checkpoint" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.framework.init_from_checkpoint" class="dashAnchor"></a><h1 id="tf.contrib.framework.init_from_checkpoint">tf.contrib.framework.init_from_checkpoint</h1>
+<h3 id="tf.contrib.framework.init_from_checkpoint-1"><code>tf.contrib.framework.init_from_checkpoint</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">init_from_checkpoint(
+    checkpoint_dir,
+    assignment_map
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/framework/python/framework/checkpoint_utils.py"><code>tensorflow/contrib/framework/python/framework/checkpoint_utils.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.framework.md#Checkpoint_utilities">Framework (contrib) &gt; Checkpoint utilities</a></p>
+<p>Using assignment map initializes current variables with loaded tensors.</p>
+<p>Note: This overrides default initialization ops of specified variables and redefines dtype.</p>
+<p>Assignment map supports following syntax:</p>
+<ul>
+<li><code>'checkpoint_scope_name/': 'scope_name/'</code> - will load all variables in current <code>scope_name</code> from <code>checkpoint_scope_name</code> with matching variable names.</li>
+<li><code>'checkpoint_scope_name/some_other_variable': 'scope_name/variable_name'</code> - will initialize <code>scope_name/variable_name</code> variable from <code>checkpoint_scope_name/some_other_variable</code>.</li>
+<li><code>'scope_variable_name': variable</code> - will initialize given <code>tf.Variable</code> object with variable from the checkpoint.</li>
+<li><code>'scope_variable_name': list(variable)</code> - will initialize list of partitioned variables with variable from the checkpoint.</li>
+<li><code>'/': 'scope_name/'</code> - will load all variables in current <code>scope_name</code> from checkpoint's root (e.g. no scope).</li>
+</ul>
+<p>Supports loading into partitioned variables, which are represented as <code>'&lt;variable&gt;/part_&lt;part #&gt;'</code>.</p>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">  <span class="co"># Create variables.</span>
+  <span class="cf">with</span> tf.variable_scope(<span class="st">&#39;test&#39;</span>):
+    m <span class="op">=</span> tf.get_variable(<span class="st">&#39;my_var&#39;</span>)
+  <span class="cf">with</span> tf.variable_scope(<span class="st">&#39;test2&#39;</span>):
+    var2 <span class="op">=</span> tf.get_variable(<span class="st">&#39;my_var&#39;</span>)
+  var3 <span class="op">=</span> tf.get_variable(name<span class="op">=</span><span class="st">&quot;my1&quot;</span>, shape<span class="op">=</span>[<span class="dv">100</span>, <span class="dv">100</span>],
+                         partitioner<span class="op">=</span><span class="kw">lambda</span> shape, dtype: [<span class="dv">5</span>, <span class="dv">1</span>])
+  ...
+  <span class="co"># Specify which variables to intialize from checkpoint.</span>
+  init_from_checkpoint(checkpoint_dir, {
+    <span class="st">&#39;some_var&#39;</span>: <span class="st">&#39;test/my_var&#39;</span>,
+    <span class="st">&#39;some_scope/&#39;</span>: <span class="st">&#39;test2/&#39;</span>})
+  ...
+  <span class="co"># Or use `Variable` objects to identify what to initialize.</span>
+  init_from_checkpoint(checkpoint_dir, {
+    <span class="st">&#39;some_scope/var2&#39;</span>: var2,
+  })
+  <span class="co"># Initialize partitioned variables</span>
+  init_from_checkpoint(checkpoint_dir, {
+    <span class="st">&#39;some_var_from_ckpt&#39;</span>: <span class="st">&#39;part_var&#39;</span>,
+  })
+  <span class="co"># Or specifying the list of `Variable` objects.</span>
+  init_from_checkpoint(checkpoint_dir, {
+    <span class="st">&#39;some_var_from_ckpt&#39;</span>: var3._get_variable_list(),
+  })
+  ...
+  <span class="co"># Initialize variables as usual.</span>
+  session.run(tf.get_all_variables())</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>checkpoint_dir</code></b>: Directory with checkpoints file or path to checkpoint.</li>
+<li><b><code>assignment_map</code></b>: Dict, where keys are names of the variables in the checkpoint and values are current variables or names of current variables (in default graph).</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<p>tf.errors.OpError: If missing checkpoints or tensors in checkpoints. * <b><code>ValueError</code></b>: If missing variables in current graph.</p>

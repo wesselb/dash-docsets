@@ -1,0 +1,30 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.backend.conv2d_transpose" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.keras.backend.conv2d_transpose" class="dashAnchor"></a><h1 id="tf.contrib.keras.backend.conv2d_transpose">tf.contrib.keras.backend.conv2d_transpose</h1>
+<h3 id="tf.contrib.keras.backend.conv2d_transpose-1"><code>tf.contrib.keras.backend.conv2d_transpose</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">conv2d_transpose(
+    x,
+    kernel,
+    output_shape,
+    strides<span class="op">=</span>(<span class="dv">1</span>, <span class="dv">1</span>),
+    padding<span class="op">=</span><span class="st">&#39;valid&#39;</span>,
+    data_format<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/backend.py"><code>tensorflow/contrib/keras/python/keras/backend.py</code></a>.</p>
+<p>2D deconvolution (i.e.</p>
+<p>transposed convolution).</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>x: Tensor or variable.
+kernel: kernel tensor.
+output_shape: 1D int tensor for the output shape.
+strides: strides tuple.
+padding: string, `&quot;same&quot;` or `&quot;valid&quot;`.
+data_format: `&quot;channels_last&quot;` or `&quot;channels_first&quot;`.
+    Whether to use Theano or TensorFlow data format
+    for inputs/kernels/ouputs.</code></pre>
+<h4 id="returns">Returns:</h4>
+<pre><code>A tensor, result of transposed 2D convolution.</code></pre>
+<h4 id="raises">Raises:</h4>
+<pre><code>ValueError: if `data_format` is neither `channels_last` or
+`channels_first`.</code></pre>

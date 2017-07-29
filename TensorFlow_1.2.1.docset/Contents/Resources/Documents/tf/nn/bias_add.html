@@ -1,0 +1,24 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.nn.bias_add" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.nn.bias_add" class="dashAnchor"></a><h1 id="tf.nn.bias_add">tf.nn.bias_add</h1>
+<h3 id="tf.nn.bias_add-1"><code>tf.nn.bias_add</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">bias_add(
+    value,
+    bias,
+    data_format<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/nn_ops.py"><code>tensorflow/python/ops/nn_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/nn.md#Activation_Functions">Neural Network &gt; Activation Functions</a></p>
+<p>Adds <code>bias</code> to <code>value</code>.</p>
+<p>This is (mostly) a special case of <code>tf.add</code> where <code>bias</code> is restricted to 1-D. Broadcasting is supported, so <code>value</code> may have any number of dimensions. Unlike <code>tf.add</code>, the type of <code>bias</code> is allowed to differ from <code>value</code> in the case where both types are quantized.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>value</code></b>: A <code>Tensor</code> with type <code>float</code>, <code>double</code>, <code>int64</code>, <code>int32</code>, <code>uint8</code>, <code>int16</code>, <code>int8</code>, <code>complex64</code>, or <code>complex128</code>.</li>
+<li><b><code>bias</code></b>: A 1-D <code>Tensor</code> with size matching the last dimension of <code>value</code>. Must be the same type as <code>value</code> unless <code>value</code> is a quantized type, in which case a different quantized type may be used.</li>
+<li><b><code>data_format</code></b>: A string. 'NHWC' and 'NCHW' are supported.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> with the same type as <code>value</code>.</p>

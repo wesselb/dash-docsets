@@ -1,0 +1,16 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.learn.infer_real_valued_columns_from_input_fn" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.learn.infer_real_valued_columns_from_input_fn" class="dashAnchor"></a><h1 id="tf.contrib.learn.infer_real_valued_columns_from_input_fn">tf.contrib.learn.infer_real_valued_columns_from_input_fn</h1>
+<h3 id="tf.contrib.learn.infer_real_valued_columns_from_input_fn-1"><code>tf.contrib.learn.infer_real_valued_columns_from_input_fn</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">infer_real_valued_columns_from_input_fn(input_fn)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/learn/python/learn/estimators/estimator.py"><code>tensorflow/contrib/learn/python/learn/estimators/estimator.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.learn.md#Input_processing">Learn (contrib) &gt; Input processing</a></p>
+<p>Creates <code>FeatureColumn</code> objects for inputs defined by <code>input_fn</code>.</p>
+<p>This interprets all inputs as dense, fixed-length float values. This creates a local graph in which it calls <code>input_fn</code> to build the tensors, then discards it.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input_fn</code></b>: Input function returning a tuple of: features - Dictionary of string feature name to <code>Tensor</code> or <code>Tensor</code>. labels - <code>Tensor</code> of label values.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>List of <code>FeatureColumn</code> objects.</p>

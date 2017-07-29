@@ -1,0 +1,24 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.decode_csv" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.decode_csv" class="dashAnchor"></a><h1 id="tf.decode_csv">tf.decode_csv</h1>
+<h3 id="tf.decode_csv-1"><code>tf.decode_csv</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">decode_csv(
+    records,
+    record_defaults,
+    field_delim<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_parsing_ops.py</code>.</p>
+<p>See the guide: <a href="../../../api_guides/python/io_ops.md#Converting">Inputs and Readers &gt; Converting</a></p>
+<p>Convert CSV records to tensors. Each column maps to one tensor.</p>
+<p>RFC 4180 format is expected for the CSV records. (https://tools.ietf.org/html/rfc4180) Note that we allow leading and trailing spaces with int or float field.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>records</code></b>: A <code>Tensor</code> of type <code>string</code>. Each string is a record/row in the csv and all records should have the same format.</li>
+<li><b><code>record_defaults</code></b>: A list of <code>Tensor</code> objects with types from: <code>float32</code>, <code>int32</code>, <code>int64</code>, <code>string</code>. One tensor per column of the input record, with either a scalar default value for that column or empty if the column is required.</li>
+<li><b><code>field_delim</code></b>: An optional <code>string</code>. Defaults to <code>&quot;,&quot;</code>. delimiter to separate fields in a record.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A list of <code>Tensor</code> objects. Has the same type as <code>record_defaults</code>. Each tensor will have the same shape as records.</p>

@@ -1,0 +1,27 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.layers.dropout" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.layers.dropout" class="dashAnchor"></a><h1 id="tf.contrib.layers.dropout">tf.contrib.layers.dropout</h1>
+<h3 id="tf.contrib.layers.dropout-1"><code>tf.contrib.layers.dropout</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">dropout(
+    inputs,
+    keep_prob<span class="op">=</span><span class="fl">0.5</span>,
+    noise_shape<span class="op">=</span><span class="va">None</span>,
+    is_training<span class="op">=</span><span class="va">True</span>,
+    outputs_collections<span class="op">=</span><span class="va">None</span>,
+    scope<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/layers/python/layers/layers.py"><code>tensorflow/contrib/layers/python/layers/layers.py</code></a>.</p>
+<p>Returns a dropout op applied to the input.</p>
+<p>With probability <code>keep_prob</code>, outputs the input element scaled up by <code>1 / keep_prob</code>, otherwise outputs <code>0</code>. The scaling is so that the expected sum is unchanged.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>inputs</code></b>: The tensor to pass to the nn.dropout op.</li>
+<li><b><code>keep_prob</code></b>: A scalar <code>Tensor</code> with the same type as x. The probability that each element is kept.</li>
+<li><b><code>noise_shape</code></b>: A 1-D <code>Tensor</code> of type <code>int32</code>, representing the shape for randomly generated keep/drop flags.</li>
+<li><b><code>is_training</code></b>: A bool <code>Tensor</code> indicating whether or not the model is in training mode. If so, dropout is applied and values scaled. Otherwise, inputs is returned.</li>
+<li><b><code>outputs_collections</code></b>: Collection to add the outputs.</li>
+<li><b><code>scope</code></b>: Optional scope for name_scope.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A tensor representing the output of the operation.</p>

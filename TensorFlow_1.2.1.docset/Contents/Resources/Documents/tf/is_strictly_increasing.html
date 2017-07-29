@@ -1,0 +1,25 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.is_strictly_increasing" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.is_strictly_increasing" class="dashAnchor"></a><h1 id="tf.is_strictly_increasing">tf.is_strictly_increasing</h1>
+<h3 id="tf.is_strictly_increasing-1"><code>tf.is_strictly_increasing</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">is_strictly_increasing(
+    x,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/check_ops.py"><code>tensorflow/python/ops/check_ops.py</code></a>.</p>
+<p>See the guides: <a href="../../../api_guides/python/check_ops.html">Asserts and boolean checks</a>, <a href="../../../api_guides/python/contrib.framework.html">Framework (contrib)</a></p>
+<p>Returns <code>True</code> if <code>x</code> is strictly increasing.</p>
+<p>Elements of <code>x</code> are compared in row-major order. The tensor <code>[x[0],...]</code> is strictly increasing if for every adjacent pair we have <code>x[i] &lt; x[i+1]</code>. If <code>x</code> has less than two elements, it is trivially strictly increasing.</p>
+<p>See also: <code>is_non_decreasing</code></p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: Numeric <code>Tensor</code>.</li>
+<li><b><code>name</code></b>: A name for this operation (optional). Defaults to &quot;is_strictly_increasing&quot;</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Boolean <code>Tensor</code>, equal to <code>True</code> iff <code>x</code> is strictly increasing.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>x</code> is not a numeric tensor.</li>
+</ul>

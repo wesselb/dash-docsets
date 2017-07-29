@@ -1,0 +1,27 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.graph_editor.get_ops_ios" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.graph_editor.get_ops_ios" class="dashAnchor"></a><h1 id="tf.contrib.graph_editor.get_ops_ios">tf.contrib.graph_editor.get_ops_ios</h1>
+<h3 id="tf.contrib.graph_editor.get_ops_ios-1"><code>tf.contrib.graph_editor.get_ops_ios</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_ops_ios(
+    ops,
+    control_inputs<span class="op">=</span><span class="va">False</span>,
+    control_outputs<span class="op">=</span><span class="va">None</span>,
+    control_ios<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/graph_editor/select.py"><code>tensorflow/contrib/graph_editor/select.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.graph_editor.md#Module_select">Graph Editor (contrib) &gt; Module: select</a></p>
+<p>Return all the <code>tf.Operation</code> which are connected to an op in ops.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>ops</code></b>: an object convertible to a list of <code>tf.Operation</code>.</li>
+<li><b><code>control_inputs</code></b>: A boolean indicating whether control inputs are enabled.</li>
+<li><b><code>control_outputs</code></b>: An instance of <code>util.ControlOutputs</code> or <code>None</code>. If not <code>None</code>, control outputs are enabled.</li>
+<li><b><code>control_ios</code></b>: An instance of <code>util.ControlOutputs</code> or <code>None</code>. If not <code>None</code>, both control inputs and control outputs are enabled. This is equivalent to set <code>control_inputs</code> to <code>True</code> and <code>control_outputs</code> to the <code>util.ControlOutputs</code> instance.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>All the <code>tf.Operation</code> surrounding the given ops.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>ops</code> cannot be converted to a list of <code>tf.Operation</code>.</li>
+</ul>

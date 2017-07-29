@@ -1,0 +1,40 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.train.MonitoredTrainingSession" /></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.train.MonitoredTrainingSession" class="dashAnchor"></a><h1 id="tf.train.monitoredtrainingsession">tf.train.MonitoredTrainingSession</h1>
+<h3 id="tf.train.monitoredtrainingsession-1"><code>tf.train.MonitoredTrainingSession</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">MonitoredTrainingSession(
+    master<span class="op">=</span><span class="st">&#39;&#39;</span>,
+    is_chief<span class="op">=</span><span class="va">True</span>,
+    checkpoint_dir<span class="op">=</span><span class="va">None</span>,
+    scaffold<span class="op">=</span><span class="va">None</span>,
+    hooks<span class="op">=</span><span class="va">None</span>,
+    chief_only_hooks<span class="op">=</span><span class="va">None</span>,
+    save_checkpoint_secs<span class="op">=</span><span class="dv">600</span>,
+    save_summaries_steps<span class="op">=</span><span class="dv">100</span>,
+    save_summaries_secs<span class="op">=</span><span class="va">None</span>,
+    config<span class="op">=</span><span class="va">None</span>,
+    stop_grace_period_secs<span class="op">=</span><span class="dv">120</span>,
+    log_step_count_steps<span class="op">=</span><span class="dv">100</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/training/monitored_session.py"><code>tensorflow/python/training/monitored_session.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/train.md#Distributed_execution">Training &gt; Distributed execution</a></p>
+<p>Creates a <code>MonitoredSession</code> for training.</p>
+<p>For a chief, this utility sets proper session initializer/restorer. It also creates hooks related to checkpoint and summary saving. For workers, this utility sets proper session creator which waits for the chief to initialize/restore.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>master</code></b>: <code>String</code> the TensorFlow master to use.</li>
+<li><b><code>is_chief</code></b>: If <code>True</code>, it will take care of initialization and recovery the underlying TensorFlow session. If <code>False</code>, it will wait on a chief to initialize or recover the TensorFlow session.</li>
+<li><b><code>checkpoint_dir</code></b>: A string. Optional path to a directory where to restore variables.</li>
+<li><b><code>scaffold</code></b>: A <code>Scaffold</code> used for gathering or building supportive ops. If not specified, a default one is created. It's used to finalize the graph.</li>
+<li><b><code>hooks</code></b>: Optional list of <code>SessionRunHook</code> objects.</li>
+<li><b><code>chief_only_hooks</code></b>: list of <code>SessionRunHook</code> objects. Activate these hooks if <code>is_chief==True</code>, ignore otherwise.</li>
+<li><b><code>save_checkpoint_secs</code></b>: The frequency, in seconds, that a checkpoint is saved using a default checkpoint saver. If <code>save_checkpoint_secs</code> is set to <code>None</code>, then the default checkpoint saver isn't used.</li>
+<li><b><code>save_summaries_steps</code></b>: The frequency, in number of global steps, that the summaries are written to disk using a default summary saver. If both <code>save_summaries_steps</code> and <code>save_summaries_secs</code> are set to <code>None</code>, then the default summary saver isn't used.</li>
+<li><b><code>save_summaries_secs</code></b>: The frequency, in secs, that the summaries are written to disk using a default summary saver. If both <code>save_summaries_steps</code> and <code>save_summaries_secs</code> are set to <code>None</code>, then the default summary saver isn't used.</li>
+<li><b><code>config</code></b>: an instance of <code>tf.ConfigProto</code> proto used to configure the session. It's the <code>config</code> argument of constructor of <code>tf.Session</code>.</li>
+<li><b><code>stop_grace_period_secs</code></b>: Number of seconds given to threads to stop after <code>close()</code> has been called.</li>
+<li><b><code>log_step_count_steps</code></b>: The frequency, in number of global steps, that the global step/sec is logged.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>MonitoredSession</code> object.</p>

@@ -1,0 +1,33 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.nn.local_response_normalization" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.nn.local_response_normalization" class="dashAnchor"></a><h1 id="tf.nn.local_response_normalization">tf.nn.local_response_normalization</h1>
+<h3 id="tf.nn.local_response_normalization-1"><code>tf.nn.local_response_normalization</code></h3>
+<a name="//apple_ref/cpp/Function/tf.nn.lrn" class="dashAnchor"></a><h3 id="tf.nn.lrn"><code>tf.nn.lrn</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">local_response_normalization(
+    <span class="bu">input</span>,
+    depth_radius<span class="op">=</span><span class="va">None</span>,
+    bias<span class="op">=</span><span class="va">None</span>,
+    alpha<span class="op">=</span><span class="va">None</span>,
+    beta<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_nn_ops.py</code>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/nn.md#Normalization">Neural Network &gt; Normalization</a></p>
+<p>Local Response Normalization.</p>
+<p>The 4-D <code>input</code> tensor is treated as a 3-D array of 1-D vectors (along the last dimension), and each vector is normalized independently. Within a given vector, each component is divided by the weighted, squared sum of inputs within <code>depth_radius</code>. In detail,</p>
+<pre><code>sqr_sum[a, b, c, d] =
+    sum(input[a, b, c, d - depth_radius : d + depth_radius + 1] ** 2)
+output = input / (bias + alpha * sqr_sum) ** beta</code></pre>
+<p>For details, see <a href="http://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks">Krizhevsky et al., ImageNet classification with deep convolutional neural networks (NIPS 2012)</a>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>half</code>. 4-D.</li>
+<li><b><code>depth_radius</code></b>: An optional <code>int</code>. Defaults to <code>5</code>. 0-D. Half-width of the 1-D normalization window.</li>
+<li><b><code>bias</code></b>: An optional <code>float</code>. Defaults to <code>1</code>. An offset (usually positive to avoid dividing by 0).</li>
+<li><b><code>alpha</code></b>: An optional <code>float</code>. Defaults to <code>1</code>. A scale factor, usually positive.</li>
+<li><b><code>beta</code></b>: An optional <code>float</code>. Defaults to <code>0.5</code>. An exponent.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>input</code>.</p>

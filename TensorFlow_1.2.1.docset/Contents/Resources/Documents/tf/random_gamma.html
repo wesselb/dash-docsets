@@ -1,0 +1,35 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.random_gamma" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.random_gamma" class="dashAnchor"></a><h1 id="tf.random_gamma">tf.random_gamma</h1>
+<h3 id="tf.random_gamma-1"><code>tf.random_gamma</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">random_gamma(
+    shape,
+    alpha,
+    beta<span class="op">=</span><span class="va">None</span>,
+    dtype<span class="op">=</span>tf.float32,
+    seed<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/random_ops.py"><code>tensorflow/python/ops/random_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/constant_op.md#Random_Tensors">Constants, Sequences, and Random Values &gt; Random Tensors</a></p>
+<p>Draws <code>shape</code> samples from each of the given Gamma distribution(s).</p>
+<p><code>alpha</code> is the shape parameter describing the distribution(s), and <code>beta</code> is the inverse scale parameter(s).</p>
+<p>Example:</p>
+<p>samples = tf.random_gamma([10], [0.5, 1.5]) # samples has shape [10, 2], where each slice [:, 0] and [:, 1] represents # the samples drawn from each distribution</p>
+<p>samples = tf.random_gamma([7, 5], [0.5, 1.5]) # samples has shape [7, 5, 2], where each slice [:, :, 0] and [:, :, 1] # represents the 7x5 samples drawn from each of the two distributions</p>
+<p>samples = tf.random_gamma([30], [[1.],[3.],[5.]], beta=[[3., 4.]]) # samples has shape [30, 3, 2], with 30 samples each of 3x2 distributions.</p>
+<p>Note: Because internal calculations are done using <code>float64</code> and casting has <code>floor</code> semantics, we must manually map zero outcomes to the smallest possible positive floating-point value, i.e., <code>np.finfo(dtype).tiny</code>. This means that <code>np.finfo(dtype).tiny</code> occurs more frequently than it otherwise should. This bias can only happen for small values of <code>alpha</code>, i.e., <code>alpha &lt;&lt; 1</code> or large values of <code>beta</code>, i.e., <code>beta &gt;&gt; 1</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>shape</code></b>: A 1-D integer Tensor or Python array. The shape of the output samples to be drawn per alpha/beta-parameterized distribution.</li>
+<li><b><code>alpha</code></b>: A Tensor or Python value or N-D array of type <code>dtype</code>. <code>alpha</code> provides the shape parameter(s) describing the gamma distribution(s) to sample. Must be broadcastable with <code>beta</code>.</li>
+<li><b><code>beta</code></b>: A Tensor or Python value or N-D array of type <code>dtype</code>. Defaults to 1. <code>beta</code> provides the inverse scale parameter(s) of the gamma distribution(s) to sample. Must be broadcastable with <code>alpha</code>.</li>
+<li><b><code>dtype</code></b>: The type of alpha, beta, and the output: <code>float16</code>, <code>float32</code>, or <code>float64</code>.</li>
+<li><b><code>seed</code></b>: A Python integer. Used to create a random seed for the distributions. See <a href="../tf/set_random_seed.html"><code>tf.set_random_seed</code></a> for behavior.</li>
+<li><b><code>name</code></b>: Optional name for the operation.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<ul>
+<li><b><code>samples</code></b>: a <code>Tensor</code> of shape <code>tf.concat(shape, tf.shape(alpha + beta))</code> with values of type <code>dtype</code>.</li>
+</ul>

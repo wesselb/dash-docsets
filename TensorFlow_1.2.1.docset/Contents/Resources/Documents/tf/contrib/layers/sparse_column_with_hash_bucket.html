@@ -1,0 +1,34 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.layers.sparse_column_with_hash_bucket" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.layers.sparse_column_with_hash_bucket" class="dashAnchor"></a><h1 id="tf.contrib.layers.sparse_column_with_hash_bucket">tf.contrib.layers.sparse_column_with_hash_bucket</h1>
+<h3 id="tf.contrib.layers.sparse_column_with_hash_bucket-1"><code>tf.contrib.layers.sparse_column_with_hash_bucket</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">sparse_column_with_hash_bucket(
+    column_name,
+    hash_bucket_size,
+    combiner<span class="op">=</span><span class="st">&#39;sum&#39;</span>,
+    dtype<span class="op">=</span>tf.string
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/layers/python/layers/feature_column.py"><code>tensorflow/contrib/layers/python/layers/feature_column.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.layers.md#Feature_columns">Layers (contrib) &gt; Feature columns</a></p>
+<p>Creates a _SparseColumn with hashed bucket configuration.</p>
+<p>Use this when your sparse features are in string or integer format, but you don't have a vocab file that maps each value to an integer ID. output_id = Hash(input_feature_string) % bucket_size</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>column_name</code></b>: A string defining sparse column name.</li>
+<li><b><code>hash_bucket_size</code></b>: An int that is &gt; 1. The number of buckets.</li>
+<li><b><code>combiner</code></b>: A string specifying how to reduce if the sparse column is multivalent. Currently &quot;mean&quot;, &quot;sqrtn&quot; and &quot;sum&quot; are supported, with &quot;sum&quot; the default. &quot;sqrtn&quot; often achieves good accuracy, in particular with bag-of-words columns.
+<ul>
+<li>&quot;sum&quot;: do not normalize features in the column</li>
+<li>&quot;mean&quot;: do l1 normalization on features in the column</li>
+<li>&quot;sqrtn&quot;: do l2 normalization on features in the column For more information: <code>tf.embedding_lookup_sparse</code>.</li>
+</ul></li>
+<li><b><code>dtype</code></b>: The type of features. Only string and integer types are supported.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A _SparseColumn with hashed bucket configuration</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: hash_bucket_size is not greater than 2.</li>
+<li><b><code>ValueError</code></b>: dtype is neither string nor integer.</li>
+</ul>

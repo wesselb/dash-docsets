@@ -1,0 +1,38 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.count_nonzero" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.count_nonzero" class="dashAnchor"></a><h1 id="tf.count_nonzero">tf.count_nonzero</h1>
+<h3 id="tf.count_nonzero-1"><code>tf.count_nonzero</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">count_nonzero(
+    input_tensor,
+    axis<span class="op">=</span><span class="va">None</span>,
+    keep_dims<span class="op">=</span><span class="va">False</span>,
+    dtype<span class="op">=</span>tf.int64,
+    name<span class="op">=</span><span class="va">None</span>,
+    reduction_indices<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/math_ops.py"><code>tensorflow/python/ops/math_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/math_ops.md#Reduction">Math &gt; Reduction</a></p>
+<p>Computes number of nonzero elements across dimensions of a tensor.</p>
+<p>Reduces <code>input_tensor</code> along the dimensions given in <code>axis</code>. Unless <code>keep_dims</code> is true, the rank of the tensor is reduced by 1 for each entry in <code>axis</code>. If <code>keep_dims</code> is true, the reduced dimensions are retained with length 1.</p>
+<p>If <code>axis</code> has no entries, all dimensions are reduced, and a tensor with a single element is returned.</p>
+<p><strong>NOTE</strong> Floating point comparison to zero is done by exact floating point equality check. Small values are <strong>not</strong> rounded to zero for purposes of the nonzero check.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># &#39;x&#39; is [[0, 1, 0]</span>
+<span class="co">#         [1, 1, 0]]</span>
+tf.count_nonzero(x) <span class="op">==&gt;</span> <span class="dv">3</span>
+tf.count_nonzero(x, <span class="dv">0</span>) <span class="op">==&gt;</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">0</span>]
+tf.count_nonzero(x, <span class="dv">1</span>) <span class="op">==&gt;</span> [<span class="dv">1</span>, <span class="dv">2</span>]
+tf.count_nonzero(x, <span class="dv">1</span>, keep_dims<span class="op">=</span><span class="va">True</span>) <span class="op">==&gt;</span> [[<span class="dv">1</span>], [<span class="dv">2</span>]]
+tf.count_nonzero(x, [<span class="dv">0</span>, <span class="dv">1</span>]) <span class="op">==&gt;</span> <span class="dv">3</span></code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input_tensor</code></b>: The tensor to reduce. Should be of numeric type, or <code>bool</code>.</li>
+<li><b><code>axis</code></b>: The dimensions to reduce. If <code>None</code> (the default), reduces all dimensions.</li>
+<li><b><code>keep_dims</code></b>: If true, retains reduced dimensions with length 1.</li>
+<li><b><code>dtype</code></b>: The output dtype; defaults to <code>tf.int64</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+<li><b><code>reduction_indices</code></b>: The old (deprecated) name for axis.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The reduced tensor (number of nonzero values).</p>

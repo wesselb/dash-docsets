@@ -1,0 +1,62 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.learn.train" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.learn.train" class="dashAnchor"></a><h1 id="tf.contrib.learn.train">tf.contrib.learn.train</h1>
+<h3 id="tf.contrib.learn.train-1"><code>tf.contrib.learn.train</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">train(
+    graph,
+    output_dir,
+    train_op,
+    loss_op,
+    global_step_tensor<span class="op">=</span><span class="va">None</span>,
+    init_op<span class="op">=</span><span class="va">None</span>,
+    init_feed_dict<span class="op">=</span><span class="va">None</span>,
+    init_fn<span class="op">=</span><span class="va">None</span>,
+    log_every_steps<span class="op">=</span><span class="dv">10</span>,
+    supervisor_is_chief<span class="op">=</span><span class="va">True</span>,
+    supervisor_master<span class="op">=</span><span class="st">&#39;&#39;</span>,
+    supervisor_save_model_secs<span class="op">=</span><span class="dv">600</span>,
+    keep_checkpoint_max<span class="op">=</span><span class="dv">5</span>,
+    supervisor_save_summaries_steps<span class="op">=</span><span class="dv">100</span>,
+    feed_fn<span class="op">=</span><span class="va">None</span>,
+    steps<span class="op">=</span><span class="va">None</span>,
+    fail_on_nan_loss<span class="op">=</span><span class="va">True</span>,
+    monitors<span class="op">=</span><span class="va">None</span>,
+    max_steps<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/learn/python/learn/graph_actions.py"><code>tensorflow/contrib/learn/python/learn/graph_actions.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.learn.md#Graph_actions">Learn (contrib) &gt; Graph actions</a></p>
+<p>Train a model. (deprecated)</p>
+<p>THIS FUNCTION IS DEPRECATED. It will be removed after 2017-02-15. Instructions for updating: graph_actions.py will be deleted. Use tf.train.* utilities instead. You can use learn/estimators/estimator.py as an example.</p>
+<p>Given <code>graph</code>, a directory to write outputs to (<code>output_dir</code>), and some ops, run a training loop. The given <code>train_op</code> performs one step of training on the model. The <code>loss_op</code> represents the objective function of the training. It is expected to increment the <code>global_step_tensor</code>, a scalar integer tensor counting training steps. This function uses <code>Supervisor</code> to initialize the graph (from a checkpoint if one is available in <code>output_dir</code>), write summaries defined in the graph, and write regular checkpoints as defined by <code>supervisor_save_model_secs</code>.</p>
+<p>Training continues until <code>global_step_tensor</code> evaluates to <code>max_steps</code>, or, if <code>fail_on_nan_loss</code>, until <code>loss_op</code> evaluates to <code>NaN</code>. In that case the program is terminated with exit code 1.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>graph</code></b>: A graph to train. It is expected that this graph is not in use elsewhere.</li>
+<li><b><code>output_dir</code></b>: A directory to write outputs to.</li>
+<li><b><code>train_op</code></b>: An op that performs one training step when run.</li>
+<li><b><code>loss_op</code></b>: A scalar loss tensor.</li>
+<li><b><code>global_step_tensor</code></b>: A tensor representing the global step. If none is given, one is extracted from the graph using the same logic as in <code>Supervisor</code>.</li>
+<li><b><code>init_op</code></b>: An op that initializes the graph. If <code>None</code>, use <code>Supervisor</code>'s default.</li>
+<li><b><code>init_feed_dict</code></b>: A dictionary that maps <code>Tensor</code> objects to feed values. This feed dictionary will be used when <code>init_op</code> is evaluated.</li>
+<li><b><code>init_fn</code></b>: Optional callable passed to Supervisor to initialize the model.</li>
+<li><b><code>log_every_steps</code></b>: Output logs regularly. The logs contain timing data and the current loss.</li>
+<li><b><code>supervisor_is_chief</code></b>: Whether the current process is the chief supervisor in charge of restoring the model and running standard services.</li>
+<li><b><code>supervisor_master</code></b>: The master string to use when preparing the session.</li>
+<li><b><code>supervisor_save_model_secs</code></b>: Save a checkpoint every <code>supervisor_save_model_secs</code> seconds when training.</li>
+<li><b><code>keep_checkpoint_max</code></b>: The maximum number of recent checkpoint files to keep. As new files are created, older files are deleted. If None or 0, all checkpoint files are kept. This is simply passed as the max_to_keep arg to tf.train.Saver constructor.</li>
+<li><b><code>supervisor_save_summaries_steps</code></b>: Save summaries every <code>supervisor_save_summaries_steps</code> seconds when training.</li>
+<li><b><code>feed_fn</code></b>: A function that is called every iteration to produce a <code>feed_dict</code> passed to <code>session.run</code> calls. Optional.</li>
+<li><b><code>steps</code></b>: Trains for this many steps (e.g. current global step + <code>steps</code>).</li>
+<li><b><code>fail_on_nan_loss</code></b>: If true, raise <code>NanLossDuringTrainingError</code> if <code>loss_op</code> evaluates to <code>NaN</code>. If false, continue training as if nothing happened.</li>
+<li><b><code>monitors</code></b>: List of <code>BaseMonitor</code> subclass instances. Used for callbacks inside the training loop.</li>
+<li><b><code>max_steps</code></b>: Number of total steps for which to train model. If <code>None</code>, train forever. Two calls fit(steps=100) means 200 training iterations. On the other hand two calls of fit(max_steps=100) means, second call will not do any iteration since first call did all 100 steps.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The final loss value.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>output_dir</code>, <code>train_op</code>, <code>loss_op</code>, or <code>global_step_tensor</code> is not provided. See <code>tf.contrib.framework.get_global_step</code> for how we look up the latter if not provided explicitly.</li>
+<li><b><code>NanLossDuringTrainingError</code></b>: If <code>fail_on_nan_loss</code> is <code>True</code>, and loss ever evaluates to <code>NaN</code>.</li>
+<li><b><code>ValueError</code></b>: If both <code>steps</code> and <code>max_steps</code> are not <code>None</code>.</li>
+</ul>

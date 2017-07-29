@@ -1,0 +1,32 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.unique" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.unique" class="dashAnchor"></a><h1 id="tf.unique">tf.unique</h1>
+<h3 id="tf.unique-1"><code>tf.unique</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">unique(
+    x,
+    out_idx<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_array_ops.py</code>.</p>
+<p>See the guide: <a href="../../../api_guides/python/math_ops.md#Sequence_Comparison_and_Indexing">Math &gt; Sequence Comparison and Indexing</a></p>
+<p>Finds unique elements in a 1-D tensor.</p>
+<p>This operation returns a tensor <code>y</code> containing all of the unique elements of <code>x</code> sorted in the same order that they occur in <code>x</code>. This operation also returns a tensor <code>idx</code> the same size as <code>x</code> that contains the index of each value of <code>x</code> in the unique output <code>y</code>. In other words:</p>
+<p><code>y[idx[i]] = x[i] for i in [0, 1,...,rank(x) - 1]</code></p>
+<p>For example:</p>
+<pre><code># tensor &#39;x&#39; is [1, 1, 2, 4, 4, 4, 7, 8, 8]
+y, idx = unique(x)
+y ==&gt; [1, 2, 4, 7, 8]
+idx ==&gt; [0, 0, 1, 2, 2, 2, 3, 4, 4]</code></pre>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. 1-D.</li>
+<li><b><code>out_idx</code></b>: An optional <code>tf.DType</code> from: <code>tf.int32, tf.int64</code>. Defaults to <code>tf.int32</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A tuple of <code>Tensor</code> objects (y, idx).</p>
+<ul>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Has the same type as <code>x</code>. 1-D.</li>
+<li><b><code>idx</code></b>: A <code>Tensor</code> of type <code>out_idx</code>. 1-D.</li>
+</ul>

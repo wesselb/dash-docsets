@@ -1,0 +1,25 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.legacy_seq2seq.basic_rnn_seq2seq" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.legacy_seq2seq.basic_rnn_seq2seq" class="dashAnchor"></a><h1 id="tf.contrib.legacy_seq2seq.basic_rnn_seq2seq">tf.contrib.legacy_seq2seq.basic_rnn_seq2seq</h1>
+<h3 id="tf.contrib.legacy_seq2seq.basic_rnn_seq2seq-1"><code>tf.contrib.legacy_seq2seq.basic_rnn_seq2seq</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">basic_rnn_seq2seq(
+    encoder_inputs,
+    decoder_inputs,
+    cell,
+    dtype<span class="op">=</span>tf.float32,
+    scope<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/legacy_seq2seq/python/ops/seq2seq.py"><code>tensorflow/contrib/legacy_seq2seq/python/ops/seq2seq.py</code></a>.</p>
+<p>Basic RNN sequence-to-sequence model.</p>
+<p>This model first runs an RNN to encode encoder_inputs into a state vector, then runs decoder, initialized with the last encoder state, on decoder_inputs. Encoder and decoder use the same RNN cell type, but don't share parameters.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>encoder_inputs</code></b>: A list of 2D Tensors [batch_size x input_size].</li>
+<li><b><code>decoder_inputs</code></b>: A list of 2D Tensors [batch_size x input_size].</li>
+<li><b><code>cell</code></b>: tf.nn.rnn_cell.RNNCell defining the cell function and size.</li>
+<li><b><code>dtype</code></b>: The dtype of the initial state of the RNN cell (default: tf.float32).</li>
+<li><b><code>scope</code></b>: VariableScope for the created subgraph; default: &quot;basic_rnn_seq2seq&quot;.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A tuple of the form (outputs, state), where: outputs: A list of the same length as decoder_inputs of 2D Tensors with shape [batch_size x output_size] containing the generated outputs. state: The state of each decoder cell in the final time-step. It is a 2D Tensor of shape [batch_size x cell.state_size].</p>

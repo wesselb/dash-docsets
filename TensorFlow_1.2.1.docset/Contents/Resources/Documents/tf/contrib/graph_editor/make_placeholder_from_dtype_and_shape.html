@@ -1,0 +1,23 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.graph_editor.make_placeholder_from_dtype_and_shape" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.graph_editor.make_placeholder_from_dtype_and_shape" class="dashAnchor"></a><h1 id="tf.contrib.graph_editor.make_placeholder_from_dtype_and_shape">tf.contrib.graph_editor.make_placeholder_from_dtype_and_shape</h1>
+<h3 id="tf.contrib.graph_editor.make_placeholder_from_dtype_and_shape-1"><code>tf.contrib.graph_editor.make_placeholder_from_dtype_and_shape</code></h3>
+<a name="//apple_ref/cpp/Function/tf.contrib.graph_editor.ph" class="dashAnchor"></a><h3 id="tf.contrib.graph_editor.ph"><code>tf.contrib.graph_editor.ph</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">make_placeholder_from_dtype_and_shape(
+    dtype,
+    shape<span class="op">=</span><span class="va">None</span>,
+    scope<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/graph_editor/util.py"><code>tensorflow/contrib/graph_editor/util.py</code></a>.</p>
+<p>See the guides: <a href="../../../../../api_guides/python/contrib.graph_editor.md#Module_util">Graph Editor (contrib) &gt; Module: util</a>, <a href="../../../../../api_guides/python/contrib.graph_editor.md#Useful_aliases">Graph Editor (contrib) &gt; Useful aliases</a></p>
+<p>Create a tf.placeholder for the Graph Editor.</p>
+<p>Note that the correct graph scope must be set by the calling function. The placeholder is named using the function placeholder_name (with no tensor argument).</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>dtype</code></b>: the tensor type.</li>
+<li><b><code>shape</code></b>: the tensor shape (optional).</li>
+<li><b><code>scope</code></b>: absolute scope within which to create the placeholder. None means that the scope of t is preserved. &quot;&quot; means the root scope.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A newly created tf.placeholder.</p>

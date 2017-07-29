@@ -1,0 +1,835 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.Tensor" /> <meta itemprop="property" content="device"/> <meta itemprop="property" content="dtype"/> <meta itemprop="property" content="graph"/> <meta itemprop="property" content="name"/> <meta itemprop="property" content="op"/> <meta itemprop="property" content="shape"/> <meta itemprop="property" content="value_index"/> <meta itemprop="property" content="__abs__"/> <meta itemprop="property" content="__add__"/> <meta itemprop="property" content="__and__"/> <meta itemprop="property" content="__bool__"/> <meta itemprop="property" content="__div__"/> <meta itemprop="property" content="__eq__"/> <meta itemprop="property" content="__floordiv__"/> <meta itemprop="property" content="__ge__"/> <meta itemprop="property" content="__getitem__"/> <meta itemprop="property" content="__gt__"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="__invert__"/> <meta itemprop="property" content="__iter__"/> <meta itemprop="property" content="__le__"/> <meta itemprop="property" content="__lt__"/> <meta itemprop="property" content="__matmul__"/> <meta itemprop="property" content="__mod__"/> <meta itemprop="property" content="__mul__"/> <meta itemprop="property" content="__neg__"/> <meta itemprop="property" content="__nonzero__"/> <meta itemprop="property" content="__or__"/> <meta itemprop="property" content="__pow__"/> <meta itemprop="property" content="__radd__"/> <meta itemprop="property" content="__rand__"/> <meta itemprop="property" content="__rdiv__"/> <meta itemprop="property" content="__rfloordiv__"/> <meta itemprop="property" content="__rmatmul__"/> <meta itemprop="property" content="__rmod__"/> <meta itemprop="property" content="__rmul__"/> <meta itemprop="property" content="__ror__"/> <meta itemprop="property" content="__rpow__"/> <meta itemprop="property" content="__rsub__"/> <meta itemprop="property" content="__rtruediv__"/> <meta itemprop="property" content="__rxor__"/> <meta itemprop="property" content="__sub__"/> <meta itemprop="property" content="__truediv__"/> <meta itemprop="property" content="__xor__"/> <meta itemprop="property" content="consumers"/> <meta itemprop="property" content="eval"/> <meta itemprop="property" content="get_shape"/> <meta itemprop="property" content="set_shape"/> <meta itemprop="property" content="OVERLOADABLE_OPERATORS"/> <meta itemprop="property" content="__array_priority__"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.Tensor" class="dashAnchor"></a><h1 id="tf.tensor">tf.Tensor</h1>
+<h3 id="class-tf.tensor"><code>class tf.Tensor</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/framework/ops.py"><code>tensorflow/python/framework/ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/framework.md#Core_graph_data_structures">Building Graphs &gt; Core graph data structures</a></p>
+<p>Represents one of the outputs of an <code>Operation</code>.</p>
+<p>A <code>Tensor</code> is a symbolic handle to one of the outputs of an <code>Operation</code>. It does not hold the values of that operation's output, but instead provides a means of computing those values in a TensorFlow <a href="../tf/Session.html"><code>tf.Session</code></a>.</p>
+<p>This class has two primary purposes:</p>
+<ol style="list-style-type: decimal">
+<li><p>A <code>Tensor</code> can be passed as an input to another <code>Operation</code>. This builds a dataflow connection between operations, which enables TensorFlow to execute an entire <code>Graph</code> that represents a large, multi-step computation.</p></li>
+<li><p>After the graph has been launched in a session, the value of the <code>Tensor</code> can be computed by passing it to <a href="../tf/Session.md#run"><code>tf.Session.run</code></a>. <code>t.eval()</code> is a shortcut for calling <code>tf.get_default_session().run(t)</code>.</p></li>
+</ol>
+<p>In the following example, <code>c</code>, <code>d</code>, and <code>e</code> are symbolic <code>Tensor</code> objects, whereas <code>result</code> is a numpy array that stores a concrete value:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Build a dataflow graph.</span>
+c <span class="op">=</span> tf.constant([[<span class="fl">1.0</span>, <span class="fl">2.0</span>], [<span class="fl">3.0</span>, <span class="fl">4.0</span>]])
+d <span class="op">=</span> tf.constant([[<span class="fl">1.0</span>, <span class="fl">1.0</span>], [<span class="fl">0.0</span>, <span class="fl">1.0</span>]])
+e <span class="op">=</span> tf.matmul(c, d)
+
+<span class="co"># Construct a `Session` to execute the graph.</span>
+sess <span class="op">=</span> tf.Session()
+
+<span class="co"># Execute the graph and store the value that `e` represents in `result`.</span>
+result <span class="op">=</span> sess.run(e)</code></pre></div>
+<h2 id="properties">Properties</h2>
+<h3 id="device">
+<code>device</code>
+</h3>
+<p>The name of the device on which this tensor will be produced, or None.</p>
+<h3 id="dtype">
+<code>dtype</code>
+</h3>
+<p>The <code>DType</code> of elements in this tensor.</p>
+<h3 id="graph">
+<code>graph</code>
+</h3>
+<p>The <code>Graph</code> that contains this tensor.</p>
+<h3 id="name">
+<code>name</code>
+</h3>
+<p>The string name of this tensor.</p>
+<h3 id="op">
+<code>op</code>
+</h3>
+<p>The <code>Operation</code> that produces this tensor as an output.</p>
+<h3 id="shape">
+<code>shape</code>
+</h3>
+<p>Returns the <code>TensorShape</code> that represents the shape of this tensor.</p>
+<p>The shape is computed using shape inference functions that are registered in the Op for each <code>Operation</code>. See <a href="../tf/TensorShape.html"><code>tf.TensorShape</code></a> for more details of what a shape represents.</p>
+<p>The inferred shape of a tensor is used to provide shape information without having to launch the graph in a session. This can be used for debugging, and providing early error messages. For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">c <span class="op">=</span> tf.constant([[<span class="fl">1.0</span>, <span class="fl">2.0</span>, <span class="fl">3.0</span>], [<span class="fl">4.0</span>, <span class="fl">5.0</span>, <span class="fl">6.0</span>]])
+
+<span class="bu">print</span>(c.shape)
+<span class="op">==&gt;</span> TensorShape([Dimension(<span class="dv">2</span>), Dimension(<span class="dv">3</span>)])
+
+d <span class="op">=</span> tf.constant([[<span class="fl">1.0</span>, <span class="fl">0.0</span>], [<span class="fl">0.0</span>, <span class="fl">1.0</span>], [<span class="fl">1.0</span>, <span class="fl">0.0</span>], [<span class="fl">0.0</span>, <span class="fl">1.0</span>]])
+
+<span class="bu">print</span>(d.shape)
+<span class="op">==&gt;</span> TensorShape([Dimension(<span class="dv">4</span>), Dimension(<span class="dv">2</span>)])
+
+<span class="co"># Raises a ValueError, because `c` and `d` do not have compatible</span>
+<span class="co"># inner dimensions.</span>
+e <span class="op">=</span> tf.matmul(c, d)
+
+f <span class="op">=</span> tf.matmul(c, d, transpose_a<span class="op">=</span><span class="va">True</span>, transpose_b<span class="op">=</span><span class="va">True</span>)
+
+<span class="bu">print</span>(f.shape)
+<span class="op">==&gt;</span> TensorShape([Dimension(<span class="dv">3</span>), Dimension(<span class="dv">4</span>)])</code></pre></div>
+<p>In some cases, the inferred shape may have unknown dimensions. If the caller has additional information about the values of these dimensions, <code>Tensor.set_shape()</code> can be used to augment the inferred shape.</p>
+<h4 id="returns">Returns:</h4>
+<p>A <code>TensorShape</code> representing the shape of this tensor.</p>
+<h3 id="value_index">
+<code>value_index</code>
+</h3>
+<p>The index of this tensor in the outputs of its <code>Operation</code>.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    op,
+    value_index,
+    dtype
+)</code></pre></div>
+<p>Creates a new <code>Tensor</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>op</code></b>: An <code>Operation</code>. <code>Operation</code> that computes this tensor.</li>
+<li><b><code>value_index</code></b>: An <code>int</code>. Index of the operation's endpoint that produces this tensor.</li>
+<li><b><code>dtype</code></b>: A <code>DType</code>. Type of elements stored in this tensor.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: If the op is not an <code>Operation</code>.</li>
+</ul>
+<h3 id="__abs__">
+<code><strong>abs</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__abs__</span>(
+    x,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Computes the absolute value of a tensor.</p>
+<p>Given a tensor of real numbers <code>x</code>, this operation returns a tensor containing the absolute value of each element in <code>x</code>. For example, if x is an input element and y is an output element, this operation computes \\(y = |x|\\).</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> or <code>SparseTensor</code> of type <code>float32</code>, <code>float64</code>, <code>int32</code>, or <code>int64</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns-1">Returns:</h4>
+<p>A <code>Tensor</code> or <code>SparseTensor</code> the same size and type as <code>x</code> with absolute values.</p>
+<h3 id="__add__">
+<code><strong>add</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__add__</span>(
+    x,
+    y
+)</code></pre></div>
+<p>Returns x + y element-wise.</p>
+<p><em>NOTE</em>: <code>Add</code> supports broadcasting. <code>AddN</code> does not. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h4 id="args-2">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>uint8</code>, <code>int8</code>, <code>int16</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>complex128</code>, <code>string</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns-2">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<h3 id="__and__">
+<code><strong>and</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__and__</span>(
+    x,
+    y
+)</code></pre></div>
+<p>Returns the truth value of x AND y element-wise.</p>
+<p><em>NOTE</em>: <code>LogicalAnd</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h4 id="args-3">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> of type <code>bool</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code> of type <code>bool</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns-3">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>bool</code>.</p>
+<h3 id="__bool__">
+<code><strong>bool</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">__bool__()</code></pre></div>
+<p>Dummy method to prevent a tensor from being used as a Python <code>bool</code>.</p>
+<p>This overload raises a <code>TypeError</code> when the user inadvertently treats a <code>Tensor</code> as a boolean (e.g. in an <code>if</code> statement). For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">if</span> tf.constant(<span class="va">True</span>):  <span class="co"># Will raise.</span>
+  <span class="co"># ...</span>
+
+<span class="cf">if</span> tf.constant(<span class="dv">5</span>) <span class="op">&lt;</span> tf.constant(<span class="dv">7</span>):  <span class="co"># Will raise.</span>
+  <span class="co"># ...</span></code></pre></div>
+<p>This disallows ambiguities between testing the Python value vs testing the dynamic condition of the <code>Tensor</code>.</p>
+<h4 id="raises-1">Raises:</h4>
+<p><code>TypeError</code>.</p>
+<h3 id="__div__">
+<code><strong>div</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__div__</span>(
+    x,
+    y
+)</code></pre></div>
+<p>Divide two values using Python 2 semantics. Used for Tensor.<strong>div</strong>.</p>
+<h4 id="args-4">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code> numerator of real numeric type.</li>
+<li><b><code>y</code></b>: <code>Tensor</code> denominator of real numeric type.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns-4">Returns:</h4>
+<p><code>x / y</code> returns the quotient of x and y.</p>
+<h3 id="__eq__">
+<code><strong>eq</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__eq__</span>(other)</code></pre></div>
+<h3 id="__floordiv__">
+<code><strong>floordiv</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__floordiv__</span>(
+    x,
+    y
+)</code></pre></div>
+<p>Divides <code>x / y</code> elementwise, rounding toward the most negative integer.</p>
+<p>The same as <code>tf.div(x,y)</code> for integers, but uses <code>tf.floor(tf.div(x,y))</code> for floating point arguments so that the result is always an integer (though possibly an integer represented as floating point). This op is generated by <code>x // y</code> floor division in Python 3 and in Python 2.7 with <code>from __future__ import division</code>.</p>
+<p>Note that for efficiency, <code>floordiv</code> uses C semantics for negative numbers (unlike Python and Numpy).</p>
+<p><code>x</code> and <code>y</code> must have the same type, and the result will have the same type as well.</p>
+<h4 id="args-5">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code> numerator of real numeric type.</li>
+<li><b><code>y</code></b>: <code>Tensor</code> denominator of real numeric type.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns-5">Returns:</h4>
+<p><code>x / y</code> rounded down (except possibly towards zero for negative integers).</p>
+<h4 id="raises-2">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: If the inputs are complex.</li>
+</ul>
+<h3 id="__ge__">
+<code><strong>ge</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__ge__</span>(
+    x,
+    y,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Returns the truth value of (x &gt;= y) element-wise.</p>
+<p><em>NOTE</em>: <code>GreaterEqual</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h4 id="args-6">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>uint8</code>, <code>int16</code>, <code>int8</code>, <code>uint16</code>, <code>half</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns-6">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>bool</code>.</p>
+<h3 id="__getitem__">
+<code><strong>getitem</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__getitem__</span>(
+    tensor,
+    slice_spec,
+    var<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Overload for Tensor.<strong>getitem</strong>.</p>
+<p>This operation extracts the specified region from the tensor. The notation is similar to NumPy with the restriction that currently only support basic indexing. That means that using a tensor as input is not currently allowed</p>
+<p>Some useful examples:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># strip leading and trailing 2 elements</span>
+foo <span class="op">=</span> tf.constant([<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>])
+<span class="bu">print</span>(foo[<span class="dv">2</span>:<span class="op">-</span><span class="dv">2</span>].<span class="bu">eval</span>()) <span class="co"># =&gt; [3,4]</span>
+
+<span class="co"># skip every row and reverse every column</span>
+foo <span class="op">=</span> tf.constant([[<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>], [<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>], [<span class="dv">7</span>,<span class="dv">8</span>,<span class="dv">9</span>]])
+<span class="bu">print</span>(foo[::<span class="dv">2</span>,::<span class="op">-</span><span class="dv">1</span>].<span class="bu">eval</span>()) <span class="co"># =&gt; [[3,2,1], [9,8,7]]</span>
+
+<span class="co"># Insert another dimension</span>
+foo <span class="op">=</span> tf.constant([[<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>], [<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>], [<span class="dv">7</span>,<span class="dv">8</span>,<span class="dv">9</span>]])
+<span class="bu">print</span>(foo[tf.newaxis, :, :].<span class="bu">eval</span>()) <span class="co"># =&gt; [[[3,2,1], [9,8,7]]]</span>
+<span class="bu">print</span>(foo[:, tf.newaxis, :].<span class="bu">eval</span>()) <span class="co"># =&gt; [[[3,2,1]], [[9,8,7]]]</span>
+<span class="bu">print</span>(foo[:, :, tf.newaxis].<span class="bu">eval</span>()) <span class="co"># =&gt; [[[3],[2],[1]], [[9],[8],[7]]]</span>
+
+<span class="co"># Ellipses (3 equivalent operations)</span>
+<span class="bu">print</span>(foo[tf.newaxis, :, :].<span class="bu">eval</span>()) <span class="co"># =&gt; [[[3,2,1], [9,8,7]]]</span>
+<span class="bu">print</span>(foo[tf.newaxis, ...].<span class="bu">eval</span>()) <span class="co"># =&gt; [[[3,2,1], [9,8,7]]]</span>
+<span class="bu">print</span>(foo[tf.newaxis].<span class="bu">eval</span>()) <span class="co"># =&gt; [[[3,2,1], [9,8,7]]]</span></code></pre></div>
+<p>Notes: - <code>tf.newaxis</code> is <code>None</code> as in NumPy. - An implicit ellipsis is placed at the end of the <code>slice_spec</code> - NumPy advanced indexing is currently not supported.</p>
+<h4 id="args-7">Args:</h4>
+<ul>
+<li><b><code>tensor</code></b>: An ops.Tensor object.</li>
+<li><b><code>slice_spec</code></b>: The arguments to Tensor.<strong>getitem</strong>.</li>
+<li><b><code>var</code></b>: In the case of variable slice assignment, the Variable object to slice (i.e. tensor is the read-only view of this variable).</li>
+</ul>
+<h4 id="returns-7">Returns:</h4>
+<p>The appropriate slice of &quot;tensor&quot;, based on &quot;slice_spec&quot;.</p>
+<h4 id="raises-3">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If a slice range is negative size.</li>
+<li><b><code>TypeError</code></b>: If the slice indices aren't int, slice, or Ellipsis.</li>
+</ul>
+<h3 id="__gt__">
+<code><strong>gt</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__gt__</span>(
+    x,
+    y,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Returns the truth value of (x &gt; y) element-wise.</p>
+<p><em>NOTE</em>: <code>Greater</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h4 id="args-8">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>uint8</code>, <code>int16</code>, <code>int8</code>, <code>uint16</code>, <code>half</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns-8">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>bool</code>.</p>
+<h3 id="__invert__">
+<code><strong>invert</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__invert__</span>(
+    x,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Returns the truth value of NOT x element-wise.</p>
+<h4 id="args-9">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> of type <code>bool</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns-9">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>bool</code>.</p>
+<h3 id="__iter__">
+<code><strong>iter</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__iter__</span>()</code></pre></div>
+<p>Dummy method to prevent iteration. Do not call.</p>
+<p>NOTE(mrry): If we register <strong>getitem</strong> as an overloaded operator, Python will valiantly attempt to iterate over the Tensor from 0 to infinity. Declaring this method prevents this unintended behavior.</p>
+<h4 id="raises-4">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: when invoked.</li>
+</ul>
+<h3 id="__le__">
+<code><strong>le</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__le__</span>(
+    x,
+    y,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Returns the truth value of (x &lt;= y) element-wise.</p>
+<p><em>NOTE</em>: <code>LessEqual</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h4 id="args-10">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>uint8</code>, <code>int16</code>, <code>int8</code>, <code>uint16</code>, <code>half</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns-10">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>bool</code>.</p>
+<h3 id="__lt__">
+<code><strong>lt</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__lt__</span>(
+    x,
+    y,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Returns the truth value of (x &lt; y) element-wise.</p>
+<p><em>NOTE</em>: <code>Less</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h4 id="args-11">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>uint8</code>, <code>int16</code>, <code>int8</code>, <code>uint16</code>, <code>half</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns-11">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>bool</code>.</p>
+<h3 id="__matmul__">
+<code><strong>matmul</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">__matmul__(
+    x,
+    y
+)</code></pre></div>
+<p>Multiplies matrix <code>a</code> by matrix <code>b</code>, producing <code>a</code> * <code>b</code>.</p>
+<p>The inputs must be matrices (or tensors of rank &gt; 2, representing batches of matrices), with matching inner dimensions, possibly after transposition.</p>
+<p>Both matrices must be of the same type. The supported types are: <code>float16</code>, <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>complex64</code>, <code>complex128</code>.</p>
+<p>Either matrix can be transposed or adjointed (conjugated and transposed) on the fly by setting one of the corresponding flag to <code>True</code>. These are <code>False</code> by default.</p>
+<p>If one or both of the matrices contain a lot of zeros, a more efficient multiplication algorithm can be used by setting the corresponding <code>a_is_sparse</code> or <code>b_is_sparse</code> flag to <code>True</code>. These are <code>False</code> by default. This optimization is only available for plain matrices (rank-2 tensors) with datatypes <code>bfloat16</code> or <code>float32</code>.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># 2-D tensor `a`</span>
+a <span class="op">=</span> tf.constant([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>], shape<span class="op">=</span>[<span class="dv">2</span>, <span class="dv">3</span>]) <span class="op">=&gt;</span> [[<span class="dv">1</span>. <span class="dv">2</span>. <span class="dv">3</span>.]
+                                                      [<span class="dv">4</span>. <span class="dv">5</span>. <span class="dv">6</span>.]]
+<span class="co"># 2-D tensor `b`</span>
+b <span class="op">=</span> tf.constant([<span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">10</span>, <span class="dv">11</span>, <span class="dv">12</span>], shape<span class="op">=</span>[<span class="dv">3</span>, <span class="dv">2</span>]) <span class="op">=&gt;</span> [[<span class="dv">7</span>. <span class="dv">8</span>.]
+                                                         [<span class="dv">9</span>. <span class="dv">10</span>.]
+                                                         [<span class="dv">11</span>. <span class="dv">12</span>.]]
+c <span class="op">=</span> tf.matmul(a, b) <span class="op">=&gt;</span> [[<span class="dv">58</span> <span class="dv">64</span>]
+                        [<span class="dv">139</span> <span class="dv">154</span>]]
+
+
+<span class="co"># 3-D tensor `a`</span>
+a <span class="op">=</span> tf.constant(np.arange(<span class="dv">1</span>, <span class="dv">13</span>, dtype<span class="op">=</span>np.int32),
+                shape<span class="op">=</span>[<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>])                  <span class="op">=&gt;</span> [[[ <span class="dv">1</span>.  <span class="dv">2</span>.  <span class="dv">3</span>.]
+                                                       [ <span class="dv">4</span>.  <span class="dv">5</span>.  <span class="dv">6</span>.]],
+                                                      [[ <span class="dv">7</span>.  <span class="dv">8</span>.  <span class="dv">9</span>.]
+                                                       [<span class="dv">10</span>. <span class="dv">11</span>. <span class="dv">12</span>.]]]
+
+<span class="co"># 3-D tensor `b`</span>
+b <span class="op">=</span> tf.constant(np.arange(<span class="dv">13</span>, <span class="dv">25</span>, dtype<span class="op">=</span>np.int32),
+                shape<span class="op">=</span>[<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">2</span>])                   <span class="op">=&gt;</span> [[[<span class="dv">13</span>. <span class="dv">14</span>.]
+                                                        [<span class="dv">15</span>. <span class="dv">16</span>.]
+                                                        [<span class="dv">17</span>. <span class="dv">18</span>.]],
+                                                       [[<span class="dv">19</span>. <span class="dv">20</span>.]
+                                                        [<span class="dv">21</span>. <span class="dv">22</span>.]
+                                                        [<span class="dv">23</span>. <span class="dv">24</span>.]]]
+c <span class="op">=</span> tf.matmul(a, b) <span class="op">=&gt;</span> [[[ <span class="dv">94</span> <span class="dv">100</span>]
+                         [<span class="dv">229</span> <span class="dv">244</span>]],
+                        [[<span class="dv">508</span> <span class="dv">532</span>]
+                         [<span class="dv">697</span> <span class="dv">730</span>]]]
+
+<span class="co"># Since python &gt;= 3.5 the @ operator is supported (see PEP 465).</span>
+<span class="co"># In TensorFlow, it simply calls the `tf.matmul()` function, so the</span>
+<span class="co"># following lines are equivalent:</span>
+d <span class="op">=</span> a <span class="op">@</span> b <span class="op">@</span> [[<span class="dv">10</span>.], [<span class="dv">11</span>.]]
+d <span class="op">=</span> tf.matmul(tf.matmul(a, b), [[<span class="dv">10</span>.], [<span class="dv">11</span>.]])</code></pre></div>
+<h4 id="args-12">Args:</h4>
+<ul>
+<li><b><code>a</code></b>: <code>Tensor</code> of type <code>float16</code>, <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>complex64</code>, <code>complex128</code> and rank &gt; 1.</li>
+<li><b><code>b</code></b>: <code>Tensor</code> with same type and rank as <code>a</code>.</li>
+<li><b><code>transpose_a</code></b>: If <code>True</code>, <code>a</code> is transposed before multiplication.</li>
+<li><b><code>transpose_b</code></b>: If <code>True</code>, <code>b</code> is transposed before multiplication.</li>
+<li><b><code>adjoint_a</code></b>: If <code>True</code>, <code>a</code> is conjugated and transposed before multiplication.</li>
+<li><b><code>adjoint_b</code></b>: If <code>True</code>, <code>b</code> is conjugated and transposed before multiplication.</li>
+<li><b><code>a_is_sparse</code></b>: If <code>True</code>, <code>a</code> is treated as a sparse matrix.</li>
+<li><b><code>b_is_sparse</code></b>: If <code>True</code>, <code>b</code> is treated as a sparse matrix.</li>
+<li><b><code>name</code></b>: Name for the operation (optional).</li>
+</ul>
+<h4 id="returns-12">Returns:</h4>
+<p>A <code>Tensor</code> of the same type as <code>a</code> and <code>b</code> where each inner-most matrix is the product of the corresponding matrices in <code>a</code> and <code>b</code>, e.g. if all transpose or adjoint attributes are <code>False</code>:</p>
+<p><code>output</code>[..., i, j] = sum_k (<code>a</code>[..., i, k] * <code>b</code>[..., k, j]), for all indices i, j.</p>
+<ul>
+<li><b><code>Note</code></b>: This is matrix product, not element-wise product.</li>
+</ul>
+<h4 id="raises-5">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If transpose_a and adjoint_a, or transpose_b and adjoint_b are both set to True.</li>
+</ul>
+<h3 id="__mod__">
+<code><strong>mod</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__mod__</span>(
+    x,
+    y
+)</code></pre></div>
+<p>Returns element-wise remainder of division. When <code>x &lt; 0</code> xor <code>y &lt; 0</code> is</p>
+<p>true, this follows Python semantics in that the result here is consistent with a flooring divide. E.g. <code>floor(x / y) * y + mod(x, y) = x</code>.</p>
+<p><em>NOTE</em>: <code>FloorMod</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h4 id="args-13">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>, <code>float32</code>, <code>float64</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns-13">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<h3 id="__mul__">
+<code><strong>mul</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__mul__</span>(
+    x,
+    y
+)</code></pre></div>
+<p>Dispatches cwise mul for &quot;Dense<em>Dense&quot; and &quot;Dense</em>Sparse&quot;.</p>
+<h3 id="__neg__">
+<code><strong>neg</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__neg__</span>(
+    x,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Computes numerical negative value element-wise.</p>
+<p>I.e., \(y = -x\).</p>
+<h4 id="args-14">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>complex128</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns-14">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<h3 id="__nonzero__">
+<code><strong>nonzero</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__nonzero__</span>()</code></pre></div>
+<p>Dummy method to prevent a tensor from being used as a Python <code>bool</code>.</p>
+<p>This is the Python 2.x counterpart to <code>__bool__()</code> above.</p>
+<h4 id="raises-6">Raises:</h4>
+<p><code>TypeError</code>.</p>
+<h3 id="__or__">
+<code><strong>or</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__or__</span>(
+    x,
+    y
+)</code></pre></div>
+<p>Returns the truth value of x OR y element-wise.</p>
+<p><em>NOTE</em>: <code>LogicalOr</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h4 id="args-15">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> of type <code>bool</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code> of type <code>bool</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns-15">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>bool</code>.</p>
+<h3 id="__pow__">
+<code><strong>pow</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__pow__</span>(
+    x,
+    y
+)</code></pre></div>
+<p>Computes the power of one value to another.</p>
+<p>Given a tensor <code>x</code> and a tensor <code>y</code>, this operation computes \\(x^y\\) for corresponding elements in <code>x</code> and <code>y</code>. For example:</p>
+<pre><code># tensor &#39;x&#39; is [[2, 2], [3, 3]]
+# tensor &#39;y&#39; is [[8, 16], [2, 3]]
+tf.pow(x, y) ==&gt; [[256, 65536], [9, 27]]</code></pre>
+<h4 id="args-16">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> of type <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, or <code>complex128</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code> of type <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, or <code>complex128</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns-16">Returns:</h4>
+<p>A <code>Tensor</code>.</p>
+<h3 id="__radd__">
+<code><strong>radd</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__radd__</span>(
+    y,
+    x
+)</code></pre></div>
+<p>Returns x + y element-wise.</p>
+<p><em>NOTE</em>: <code>Add</code> supports broadcasting. <code>AddN</code> does not. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h4 id="args-17">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>uint8</code>, <code>int8</code>, <code>int16</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>complex128</code>, <code>string</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns-17">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<h3 id="__rand__">
+<code><strong>rand</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__rand__</span>(
+    y,
+    x
+)</code></pre></div>
+<p>Returns the truth value of x AND y element-wise.</p>
+<p><em>NOTE</em>: <code>LogicalAnd</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h4 id="args-18">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> of type <code>bool</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code> of type <code>bool</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns-18">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>bool</code>.</p>
+<h3 id="__rdiv__">
+<code><strong>rdiv</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__rdiv__</span>(
+    y,
+    x
+)</code></pre></div>
+<p>Divide two values using Python 2 semantics. Used for Tensor.<strong>div</strong>.</p>
+<h4 id="args-19">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code> numerator of real numeric type.</li>
+<li><b><code>y</code></b>: <code>Tensor</code> denominator of real numeric type.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns-19">Returns:</h4>
+<p><code>x / y</code> returns the quotient of x and y.</p>
+<h3 id="__rfloordiv__">
+<code><strong>rfloordiv</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__rfloordiv__</span>(
+    y,
+    x
+)</code></pre></div>
+<p>Divides <code>x / y</code> elementwise, rounding toward the most negative integer.</p>
+<p>The same as <code>tf.div(x,y)</code> for integers, but uses <code>tf.floor(tf.div(x,y))</code> for floating point arguments so that the result is always an integer (though possibly an integer represented as floating point). This op is generated by <code>x // y</code> floor division in Python 3 and in Python 2.7 with <code>from __future__ import division</code>.</p>
+<p>Note that for efficiency, <code>floordiv</code> uses C semantics for negative numbers (unlike Python and Numpy).</p>
+<p><code>x</code> and <code>y</code> must have the same type, and the result will have the same type as well.</p>
+<h4 id="args-20">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code> numerator of real numeric type.</li>
+<li><b><code>y</code></b>: <code>Tensor</code> denominator of real numeric type.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns-20">Returns:</h4>
+<p><code>x / y</code> rounded down (except possibly towards zero for negative integers).</p>
+<h4 id="raises-7">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: If the inputs are complex.</li>
+</ul>
+<h3 id="__rmatmul__">
+<code><strong>rmatmul</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">__rmatmul__(
+    y,
+    x
+)</code></pre></div>
+<p>Multiplies matrix <code>a</code> by matrix <code>b</code>, producing <code>a</code> * <code>b</code>.</p>
+<p>The inputs must be matrices (or tensors of rank &gt; 2, representing batches of matrices), with matching inner dimensions, possibly after transposition.</p>
+<p>Both matrices must be of the same type. The supported types are: <code>float16</code>, <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>complex64</code>, <code>complex128</code>.</p>
+<p>Either matrix can be transposed or adjointed (conjugated and transposed) on the fly by setting one of the corresponding flag to <code>True</code>. These are <code>False</code> by default.</p>
+<p>If one or both of the matrices contain a lot of zeros, a more efficient multiplication algorithm can be used by setting the corresponding <code>a_is_sparse</code> or <code>b_is_sparse</code> flag to <code>True</code>. These are <code>False</code> by default. This optimization is only available for plain matrices (rank-2 tensors) with datatypes <code>bfloat16</code> or <code>float32</code>.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># 2-D tensor `a`</span>
+a <span class="op">=</span> tf.constant([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>], shape<span class="op">=</span>[<span class="dv">2</span>, <span class="dv">3</span>]) <span class="op">=&gt;</span> [[<span class="dv">1</span>. <span class="dv">2</span>. <span class="dv">3</span>.]
+                                                      [<span class="dv">4</span>. <span class="dv">5</span>. <span class="dv">6</span>.]]
+<span class="co"># 2-D tensor `b`</span>
+b <span class="op">=</span> tf.constant([<span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">10</span>, <span class="dv">11</span>, <span class="dv">12</span>], shape<span class="op">=</span>[<span class="dv">3</span>, <span class="dv">2</span>]) <span class="op">=&gt;</span> [[<span class="dv">7</span>. <span class="dv">8</span>.]
+                                                         [<span class="dv">9</span>. <span class="dv">10</span>.]
+                                                         [<span class="dv">11</span>. <span class="dv">12</span>.]]
+c <span class="op">=</span> tf.matmul(a, b) <span class="op">=&gt;</span> [[<span class="dv">58</span> <span class="dv">64</span>]
+                        [<span class="dv">139</span> <span class="dv">154</span>]]
+
+
+<span class="co"># 3-D tensor `a`</span>
+a <span class="op">=</span> tf.constant(np.arange(<span class="dv">1</span>, <span class="dv">13</span>, dtype<span class="op">=</span>np.int32),
+                shape<span class="op">=</span>[<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>])                  <span class="op">=&gt;</span> [[[ <span class="dv">1</span>.  <span class="dv">2</span>.  <span class="dv">3</span>.]
+                                                       [ <span class="dv">4</span>.  <span class="dv">5</span>.  <span class="dv">6</span>.]],
+                                                      [[ <span class="dv">7</span>.  <span class="dv">8</span>.  <span class="dv">9</span>.]
+                                                       [<span class="dv">10</span>. <span class="dv">11</span>. <span class="dv">12</span>.]]]
+
+<span class="co"># 3-D tensor `b`</span>
+b <span class="op">=</span> tf.constant(np.arange(<span class="dv">13</span>, <span class="dv">25</span>, dtype<span class="op">=</span>np.int32),
+                shape<span class="op">=</span>[<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">2</span>])                   <span class="op">=&gt;</span> [[[<span class="dv">13</span>. <span class="dv">14</span>.]
+                                                        [<span class="dv">15</span>. <span class="dv">16</span>.]
+                                                        [<span class="dv">17</span>. <span class="dv">18</span>.]],
+                                                       [[<span class="dv">19</span>. <span class="dv">20</span>.]
+                                                        [<span class="dv">21</span>. <span class="dv">22</span>.]
+                                                        [<span class="dv">23</span>. <span class="dv">24</span>.]]]
+c <span class="op">=</span> tf.matmul(a, b) <span class="op">=&gt;</span> [[[ <span class="dv">94</span> <span class="dv">100</span>]
+                         [<span class="dv">229</span> <span class="dv">244</span>]],
+                        [[<span class="dv">508</span> <span class="dv">532</span>]
+                         [<span class="dv">697</span> <span class="dv">730</span>]]]
+
+<span class="co"># Since python &gt;= 3.5 the @ operator is supported (see PEP 465).</span>
+<span class="co"># In TensorFlow, it simply calls the `tf.matmul()` function, so the</span>
+<span class="co"># following lines are equivalent:</span>
+d <span class="op">=</span> a <span class="op">@</span> b <span class="op">@</span> [[<span class="dv">10</span>.], [<span class="dv">11</span>.]]
+d <span class="op">=</span> tf.matmul(tf.matmul(a, b), [[<span class="dv">10</span>.], [<span class="dv">11</span>.]])</code></pre></div>
+<h4 id="args-21">Args:</h4>
+<ul>
+<li><b><code>a</code></b>: <code>Tensor</code> of type <code>float16</code>, <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>complex64</code>, <code>complex128</code> and rank &gt; 1.</li>
+<li><b><code>b</code></b>: <code>Tensor</code> with same type and rank as <code>a</code>.</li>
+<li><b><code>transpose_a</code></b>: If <code>True</code>, <code>a</code> is transposed before multiplication.</li>
+<li><b><code>transpose_b</code></b>: If <code>True</code>, <code>b</code> is transposed before multiplication.</li>
+<li><b><code>adjoint_a</code></b>: If <code>True</code>, <code>a</code> is conjugated and transposed before multiplication.</li>
+<li><b><code>adjoint_b</code></b>: If <code>True</code>, <code>b</code> is conjugated and transposed before multiplication.</li>
+<li><b><code>a_is_sparse</code></b>: If <code>True</code>, <code>a</code> is treated as a sparse matrix.</li>
+<li><b><code>b_is_sparse</code></b>: If <code>True</code>, <code>b</code> is treated as a sparse matrix.</li>
+<li><b><code>name</code></b>: Name for the operation (optional).</li>
+</ul>
+<h4 id="returns-21">Returns:</h4>
+<p>A <code>Tensor</code> of the same type as <code>a</code> and <code>b</code> where each inner-most matrix is the product of the corresponding matrices in <code>a</code> and <code>b</code>, e.g. if all transpose or adjoint attributes are <code>False</code>:</p>
+<p><code>output</code>[..., i, j] = sum_k (<code>a</code>[..., i, k] * <code>b</code>[..., k, j]), for all indices i, j.</p>
+<ul>
+<li><b><code>Note</code></b>: This is matrix product, not element-wise product.</li>
+</ul>
+<h4 id="raises-8">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If transpose_a and adjoint_a, or transpose_b and adjoint_b are both set to True.</li>
+</ul>
+<h3 id="__rmod__">
+<code><strong>rmod</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__rmod__</span>(
+    y,
+    x
+)</code></pre></div>
+<p>Returns element-wise remainder of division. When <code>x &lt; 0</code> xor <code>y &lt; 0</code> is</p>
+<p>true, this follows Python semantics in that the result here is consistent with a flooring divide. E.g. <code>floor(x / y) * y + mod(x, y) = x</code>.</p>
+<p><em>NOTE</em>: <code>FloorMod</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h4 id="args-22">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>, <code>float32</code>, <code>float64</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns-22">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<h3 id="__rmul__">
+<code><strong>rmul</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__rmul__</span>(
+    y,
+    x
+)</code></pre></div>
+<p>Dispatches cwise mul for &quot;Dense<em>Dense&quot; and &quot;Dense</em>Sparse&quot;.</p>
+<h3 id="__ror__">
+<code><strong>ror</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__ror__</span>(
+    y,
+    x
+)</code></pre></div>
+<p>Returns the truth value of x OR y element-wise.</p>
+<p><em>NOTE</em>: <code>LogicalOr</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h4 id="args-23">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> of type <code>bool</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code> of type <code>bool</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns-23">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>bool</code>.</p>
+<h3 id="__rpow__">
+<code><strong>rpow</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__rpow__</span>(
+    y,
+    x
+)</code></pre></div>
+<p>Computes the power of one value to another.</p>
+<p>Given a tensor <code>x</code> and a tensor <code>y</code>, this operation computes \\(x^y\\) for corresponding elements in <code>x</code> and <code>y</code>. For example:</p>
+<pre><code># tensor &#39;x&#39; is [[2, 2], [3, 3]]
+# tensor &#39;y&#39; is [[8, 16], [2, 3]]
+tf.pow(x, y) ==&gt; [[256, 65536], [9, 27]]</code></pre>
+<h4 id="args-24">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> of type <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, or <code>complex128</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code> of type <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, or <code>complex128</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns-24">Returns:</h4>
+<p>A <code>Tensor</code>.</p>
+<h3 id="__rsub__">
+<code><strong>rsub</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__rsub__</span>(
+    y,
+    x
+)</code></pre></div>
+<p>Returns x - y element-wise.</p>
+<p><em>NOTE</em>: <code>Sub</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h4 id="args-25">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>complex128</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns-25">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<h3 id="__rtruediv__">
+<code><strong>rtruediv</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__rtruediv__</span>(
+    y,
+    x
+)</code></pre></div>
+<h3 id="__rxor__">
+<code><strong>rxor</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__rxor__</span>(
+    y,
+    x
+)</code></pre></div>
+<p>x ^ y = (x | y) &amp; ~(x &amp; y).</p>
+<h3 id="__sub__">
+<code><strong>sub</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__sub__</span>(
+    x,
+    y
+)</code></pre></div>
+<p>Returns x - y element-wise.</p>
+<p><em>NOTE</em>: <code>Sub</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h4 id="args-26">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>complex128</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns-26">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>
+<h3 id="__truediv__">
+<code><strong>truediv</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__truediv__</span>(
+    x,
+    y
+)</code></pre></div>
+<h3 id="__xor__">
+<code><strong>xor</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__xor__</span>(
+    x,
+    y
+)</code></pre></div>
+<p>x ^ y = (x | y) &amp; ~(x &amp; y).</p>
+<h3 id="consumers">
+<code>consumers</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">consumers()</code></pre></div>
+<p>Returns a list of <code>Operation</code>s that consume this tensor.</p>
+<h4 id="returns-27">Returns:</h4>
+<p>A list of <code>Operation</code>s.</p>
+<h3 id="eval">
+<code>eval</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="bu">eval</span>(
+    feed_dict<span class="op">=</span><span class="va">None</span>,
+    session<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Evaluates this tensor in a <code>Session</code>.</p>
+<p>Calling this method will execute all preceding operations that produce the inputs needed for the operation that produces this tensor.</p>
+<p><em>N.B.</em> Before invoking <code>Tensor.eval()</code>, its graph must have been launched in a session, and either a default session must be available, or <code>session</code> must be specified explicitly.</p>
+<h4 id="args-27">Args:</h4>
+<ul>
+<li><b><code>feed_dict</code></b>: A dictionary that maps <code>Tensor</code> objects to feed values. See <a href="../tf/Session.md#run"><code>tf.Session.run</code></a> for a description of the valid feed values.</li>
+<li><b><code>session</code></b>: (Optional.) The <code>Session</code> to be used to evaluate this tensor. If none, the default session will be used.</li>
+</ul>
+<h4 id="returns-28">Returns:</h4>
+<p>A numpy array corresponding to the value of this tensor.</p>
+<h3 id="get_shape">
+<code>get_shape</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_shape()</code></pre></div>
+<p>Alias of Tensor.shape.</p>
+<h3 id="set_shape">
+<code>set_shape</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">set_shape(shape)</code></pre></div>
+<p>Updates the shape of this tensor.</p>
+<p>This method can be called multiple times, and will merge the given <code>shape</code> with the current shape of this tensor. It can be used to provide additional information about the shape of this tensor that cannot be inferred from the graph alone. For example, this can be used to provide additional information about the shapes of images:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">_, image_data <span class="op">=</span> tf.TFRecordReader(...).read(...)
+image <span class="op">=</span> tf.image.decode_png(image_data, channels<span class="op">=</span><span class="dv">3</span>)
+
+<span class="co"># The height and width dimensions of `image` are data dependent, and</span>
+<span class="co"># cannot be computed without executing the op.</span>
+<span class="bu">print</span>(image.shape)
+<span class="op">==&gt;</span> TensorShape([Dimension(<span class="va">None</span>), Dimension(<span class="va">None</span>), Dimension(<span class="dv">3</span>)])
+
+<span class="co"># We know that each image in this dataset is 28 x 28 pixels.</span>
+image.set_shape([<span class="dv">28</span>, <span class="dv">28</span>, <span class="dv">3</span>])
+<span class="bu">print</span>(image.shape)
+<span class="op">==&gt;</span> TensorShape([Dimension(<span class="dv">28</span>), Dimension(<span class="dv">28</span>), Dimension(<span class="dv">3</span>)])</code></pre></div>
+<h4 id="args-28">Args:</h4>
+<ul>
+<li><b><code>shape</code></b>: A <code>TensorShape</code> representing the shape of this tensor.</li>
+</ul>
+<h4 id="raises-9">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>shape</code> is not compatible with the current shape of this tensor.</li>
+</ul>
+<h2 id="class-members">Class Members</h2>
+<h3 id="OVERLOADABLE_OPERATORS">
+<code>OVERLOADABLE_OPERATORS</code>
+</h3>
+<h3 id="__array_priority__">
+<code><strong>array_priority</strong></code>
+</h3>

@@ -1,0 +1,24 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.copy_graph.copy_variable_to_graph" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.copy_graph.copy_variable_to_graph" class="dashAnchor"></a><h1 id="tf.contrib.copy_graph.copy_variable_to_graph">tf.contrib.copy_graph.copy_variable_to_graph</h1>
+<h3 id="tf.contrib.copy_graph.copy_variable_to_graph-1"><code>tf.contrib.copy_graph.copy_variable_to_graph</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">copy_variable_to_graph(
+    org_instance,
+    to_graph,
+    scope<span class="op">=</span><span class="st">&#39;&#39;</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/copy_graph/python/util/copy_elements.py"><code>tensorflow/contrib/copy_graph/python/util/copy_elements.py</code></a>.</p>
+<p>Given a <code>Variable</code> instance from one <code>Graph</code>, initializes and returns a copy of it from another <code>Graph</code>, under the specified scope (default <code>&quot;&quot;</code>).</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>org_instance</code></b>: A <code>Variable</code> from some <code>Graph</code>.</li>
+<li><b><code>to_graph</code></b>: The <code>Graph</code> to copy the <code>Variable</code> to.</li>
+<li><b><code>scope</code></b>: A scope for the new <code>Variable</code> (default <code>&quot;&quot;</code>).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The copied <code>Variable</code> from <code>to_graph</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>org_instance</code> is not a <code>Variable</code>.</li>
+</ul>

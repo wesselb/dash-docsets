@@ -1,0 +1,20 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.decode_base64" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.decode_base64" class="dashAnchor"></a><h1 id="tf.decode_base64">tf.decode_base64</h1>
+<h3 id="tf.decode_base64-1"><code>tf.decode_base64</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">decode_base64(
+    <span class="bu">input</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_string_ops.py</code>.</p>
+<p>See the guide: <a href="../../../api_guides/python/string_ops.md#Conversion">Strings &gt; Conversion</a></p>
+<p>Decode web-safe base64-encoded strings.</p>
+<p>Input may or may not have padding at the end. See EncodeBase64 for padding. Web-safe means that input must use - and _ instead of + and /.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code> of type <code>string</code>. Base64 strings to decode.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>string</code>. Decoded strings.</p>

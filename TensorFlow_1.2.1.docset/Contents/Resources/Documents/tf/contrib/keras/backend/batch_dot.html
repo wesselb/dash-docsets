@@ -1,0 +1,43 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.backend.batch_dot" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.keras.backend.batch_dot" class="dashAnchor"></a><h1 id="tf.contrib.keras.backend.batch_dot">tf.contrib.keras.backend.batch_dot</h1>
+<h3 id="tf.contrib.keras.backend.batch_dot-1"><code>tf.contrib.keras.backend.batch_dot</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">batch_dot(
+    x,
+    y,
+    axes<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/backend.py"><code>tensorflow/contrib/keras/python/keras/backend.py</code></a>.</p>
+<p>Batchwise dot product.</p>
+<p><code>batch_dot</code> is used to compute dot product of <code>x</code> and <code>y</code> when <code>x</code> and <code>y</code> are data in batch, i.e. in a shape of <code>(batch_size, :)</code>. <code>batch_dot</code> results in a tensor or variable with less dimensions than the input. If the number of dimensions is reduced to 1, we use <code>expand_dims</code> to make sure that ndim is at least 2.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>x: Keras tensor or variable with `ndim &gt;= 2`.
+y: Keras tensor or variable with `ndim &gt;= 2`.
+axes: list of (or single) int with target dimensions.
+    The lengths of `axes[0]` and `axes[1]` should be the same.</code></pre>
+<h4 id="returns">Returns:</h4>
+<pre><code>A tensor with shape equal to the concatenation of `x`&#39;s shape
+(less the dimension that was summed over) and `y`&#39;s shape
+(less the batch dimension and the dimension that was summed over).
+If the final rank is 1, we reshape it to `(batch_size, 1)`.</code></pre>
+<p>Examples: Assume <code>x = [[1, 2], [3, 4]]</code> and <code>y = [[5, 6], [7, 8]]</code> <code>batch_dot(x, y, axes=1) = [[17, 53]]</code> which is the main diagonal of <code>x.dot(y.T)</code>, although we never have to calculate the off-diagonal elements.</p>
+<pre><code>Shape inference:
+Let `x`&#39;s shape be `(100, 20)` and `y`&#39;s shape be `(100, 30, 20)`.
+If `axes` is (1, 2), to find the output shape of resultant tensor,
+    loop through each dimension in `x`&#39;s shape and `y`&#39;s shape:
+
+* `x.shape[0]` : 100 : append to output shape
+* `x.shape[1]` : 20 : do not append to output shape,
+    dimension 1 of `x` has been summed over. (`dot_axes[0]` = 1)
+* `y.shape[0]` : 100 : do not append to output shape,
+    always ignore first dimension of `y`
+* `y.shape[1]` : 30 : append to output shape
+* `y.shape[2]` : 20 : do not append to output shape,
+    dimension 2 of `y` has been summed over. (`dot_axes[1]` = 2)
+`output_shape` = `(100, 30)`</code></pre>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    <span class="op">&gt;&gt;&gt;</span> x_batch <span class="op">=</span> K.ones(shape<span class="op">=</span>(<span class="dv">32</span>, <span class="dv">20</span>, <span class="dv">1</span>))
+    <span class="op">&gt;&gt;&gt;</span> y_batch <span class="op">=</span> K.ones(shape<span class="op">=</span>(<span class="dv">32</span>, <span class="dv">30</span>, <span class="dv">20</span>))
+    <span class="op">&gt;&gt;&gt;</span> xy_batch_dot <span class="op">=</span> K.batch_dot(x_batch, y_batch, axes<span class="op">=</span>[<span class="dv">1</span>, <span class="dv">2</span>])
+    <span class="op">&gt;&gt;&gt;</span> K.int_shape(xy_batch_dot)
+    (<span class="dv">32</span>, <span class="dv">1</span>, <span class="dv">30</span>)</code></pre></div>

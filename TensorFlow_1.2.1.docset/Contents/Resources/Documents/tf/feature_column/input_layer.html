@@ -1,0 +1,37 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.feature_column.input_layer" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.feature_column.input_layer" class="dashAnchor"></a><h1 id="tf.feature_column.input_layer">tf.feature_column.input_layer</h1>
+<h3 id="tf.feature_column.input_layer-1"><code>tf.feature_column.input_layer</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">input_layer(
+    features,
+    feature_columns,
+    weight_collections<span class="op">=</span><span class="va">None</span>,
+    trainable<span class="op">=</span><span class="va">True</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/feature_column/feature_column.py"><code>tensorflow/python/feature_column/feature_column.py</code></a>.</p>
+<p>Returns a dense <code>Tensor</code> as input layer based on given <code>feature_columns</code>.</p>
+<p>Generally a single example in training data is described with FeatureColumns. At the first layer of the model, this column oriented data should be converted to a single <code>Tensor</code>.</p>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">price <span class="op">=</span> numeric_column(<span class="st">&#39;price&#39;</span>)
+keywords_embedded <span class="op">=</span> embedding_column(
+    categorical_column_with_hash_bucket(<span class="st">&quot;keywords&quot;</span>, 10K), dimensions<span class="op">=</span><span class="dv">16</span>)
+columns <span class="op">=</span> [price, keywords_embedded, ...]
+features <span class="op">=</span> tf.parse_example(..., features<span class="op">=</span>make_parse_example_spec(columns))
+dense_tensor <span class="op">=</span> input_layer(features, columns)
+<span class="cf">for</span> units <span class="kw">in</span> [<span class="dv">128</span>, <span class="dv">64</span>, <span class="dv">32</span>]:
+  dense_tensor <span class="op">=</span> tf.layers.dense(dense_tensor, units, tf.nn.relu)
+prediction <span class="op">=</span> tf.layers.dense(dense_tensor, <span class="dv">1</span>)</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>features</code></b>: A mapping from key to tensors. <code>_FeatureColumn</code>s look up via these keys. For example <code>numeric_column('price')</code> will look at 'price' key in this dict. Values can be a <code>SparseTensor</code> or a <code>Tensor</code> depends on corresponding <code>_FeatureColumn</code>.</li>
+<li><b><code>feature_columns</code></b>: An iterable containing the FeatureColumns to use as inputs to your model. All items should be instances of classes derived from <code>_DenseColumn</code> such as <code>numeric_column</code>, <code>embedding_column</code>, <code>bucketized_column</code>, <code>indicator_column</code>. If you have categorical features, you can wrap them with an <code>embedding_column</code> or <code>indicator_column</code>.</li>
+<li><b><code>weight_collections</code></b>: A list of collection names to which the Variable will be added. Note that, variables will also be added to collections <code>tf.GraphKeys.GLOBAL_VARIABLES</code> and <code>ops.GraphKeys.MODEL_VARIABLES</code>.</li>
+<li><b><code>trainable</code></b>: If <code>True</code> also add the variable to the graph collection <code>GraphKeys.TRAINABLE_VARIABLES</code> (see <code>tf.Variable</code>).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> which represents input layer of a model. Its shape is (batch_size, first_layer_dimension) and its dtype is <code>float32</code>. first_layer_dimension is determined based on given <code>feature_columns</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if an item in <code>feature_columns</code> is not a <code>_DenseColumn</code>.</li>
+</ul>

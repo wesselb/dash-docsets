@@ -1,0 +1,29 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.framework.get_graph_from_inputs" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.framework.get_graph_from_inputs" class="dashAnchor"></a><h1 id="tf.contrib.framework.get_graph_from_inputs">tf.contrib.framework.get_graph_from_inputs</h1>
+<h3 id="tf.contrib.framework.get_graph_from_inputs-1"><code>tf.contrib.framework.get_graph_from_inputs</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_graph_from_inputs(
+    op_input_list,
+    graph<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/framework/python/ops/ops.py"><code>tensorflow/contrib/framework/python/ops/ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.framework.html">Framework (contrib)</a></p>
+<p>Returns the appropriate graph to use for the given inputs.</p>
+<ol style="list-style-type: decimal">
+<li>If <code>graph</code> is provided, we validate that all inputs in <code>op_input_list</code> are from the same graph.</li>
+<li>Otherwise, we attempt to select a graph from the first Operation- or Tensor-valued input in <code>op_input_list</code>, and validate that all other such inputs are in the same graph.</li>
+<li>If the graph was not specified and it could not be inferred from <code>op_input_list</code>, we attempt to use the default graph.</li>
+</ol>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>op_input_list</code></b>: A list of inputs to an operation, which may include <code>Tensor</code>, <code>Operation</code>, and other objects that may be converted to a graph element.</li>
+<li><b><code>graph</code></b>: (Optional) The explicit graph to use.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>op_input_list</code> is not a list or tuple, or if graph is not a Graph.</li>
+<li><b><code>ValueError</code></b>: If a graph is explicitly passed and not all inputs are from it, or if the inputs are from multiple graphs, or we could not find a graph and there was no default graph.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The appropriate graph to use for the given inputs.</p>

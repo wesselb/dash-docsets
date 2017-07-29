@@ -1,0 +1,19 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.backend.count_params" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.keras.backend.count_params" class="dashAnchor"></a><h1 id="tf.contrib.keras.backend.count_params">tf.contrib.keras.backend.count_params</h1>
+<h3 id="tf.contrib.keras.backend.count_params-1"><code>tf.contrib.keras.backend.count_params</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">count_params(x)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/backend.py"><code>tensorflow/contrib/keras/python/keras/backend.py</code></a>.</p>
+<p>Returns the number of scalars in a Keras variable.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>x: Keras variable.</code></pre>
+<h4 id="returns">Returns:</h4>
+<pre><code>Integer, the number of scalars in `x`.</code></pre>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    <span class="op">&gt;&gt;&gt;</span> kvar <span class="op">=</span> K.zeros((<span class="dv">2</span>,<span class="dv">3</span>))
+    <span class="op">&gt;&gt;&gt;</span> K.count_params(kvar)
+    <span class="dv">6</span>
+    <span class="op">&gt;&gt;&gt;</span> K.<span class="bu">eval</span>(kvar)
+    array([[ <span class="dv">0</span>.,  <span class="dv">0</span>.,  <span class="dv">0</span>.],
+           [ <span class="dv">0</span>.,  <span class="dv">0</span>.,  <span class="dv">0</span>.]], dtype<span class="op">=</span>float32)</code></pre></div>

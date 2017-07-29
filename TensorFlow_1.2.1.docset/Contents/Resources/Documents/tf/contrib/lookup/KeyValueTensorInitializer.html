@@ -1,0 +1,51 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.lookup.KeyValueTensorInitializer" /> <meta itemprop="property" content="key_dtype"/> <meta itemprop="property" content="value_dtype"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="initialize"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.lookup.KeyValueTensorInitializer" class="dashAnchor"></a><h1 id="tf.contrib.lookup.keyvaluetensorinitializer">tf.contrib.lookup.KeyValueTensorInitializer</h1>
+<h3 id="class-tf.contrib.lookup.keyvaluetensorinitializer"><code>class tf.contrib.lookup.KeyValueTensorInitializer</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/lookup/lookup_ops.py"><code>tensorflow/contrib/lookup/lookup_ops.py</code></a>.</p>
+<p>Table initializers given <code>keys</code> and <code>values</code> tensors.</p>
+<h2 id="properties">Properties</h2>
+<h3 id="key_dtype">
+<code>key_dtype</code>
+</h3>
+<p>The expected table key dtype.</p>
+<h3 id="value_dtype">
+<code>value_dtype</code>
+</h3>
+<p>The expected table value dtype.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    keys,
+    values,
+    key_dtype<span class="op">=</span><span class="va">None</span>,
+    value_dtype<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Constructs a table initializer object based on keys and values tensors.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>keys</code></b>: The tensor for the keys.</li>
+<li><b><code>values</code></b>: The tensor for the values.</li>
+<li><b><code>key_dtype</code></b>: The <code>keys</code> data type. Used when <code>keys</code> is a python array.</li>
+<li><b><code>value_dtype</code></b>: The <code>values</code> data type. Used when <code>values</code> is a python array.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h3 id="initialize">
+<code>initialize</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">initialize(table)</code></pre></div>
+<p>Initializes the given <code>table</code> with <code>keys</code> and <code>values</code> tensors.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>table</code></b>: The table to initialize.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The operation that initializes the table.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: when the keys and values data types do not match the table key and value data types.</li>
+</ul>

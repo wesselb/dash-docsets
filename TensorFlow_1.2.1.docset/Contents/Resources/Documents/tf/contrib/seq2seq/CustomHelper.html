@@ -1,0 +1,51 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.seq2seq.CustomHelper" /> <meta itemprop="property" content="batch_size"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="initialize"/> <meta itemprop="property" content="next_inputs"/> <meta itemprop="property" content="sample"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.seq2seq.CustomHelper" class="dashAnchor"></a><h1 id="tf.contrib.seq2seq.customhelper">tf.contrib.seq2seq.CustomHelper</h1>
+<h3 id="class-tf.contrib.seq2seq.customhelper"><code>class tf.contrib.seq2seq.CustomHelper</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/seq2seq/python/ops/helper.py"><code>tensorflow/contrib/seq2seq/python/ops/helper.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.seq2seq.md#Dynamic_Decoding">Seq2seq Library (contrib) &gt; Dynamic Decoding</a></p>
+<p>Base abstract class that allows the user to customize sampling.</p>
+<h2 id="properties">Properties</h2>
+<h3 id="batch_size">
+<code>batch_size</code>
+</h3>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    initialize_fn,
+    sample_fn,
+    next_inputs_fn
+)</code></pre></div>
+<p>Initializer.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>initialize_fn</code></b>: callable that returns <code>(finished, next_inputs)</code> for the first iteration.</li>
+<li><b><code>sample_fn</code></b>: callable that takes <code>(time, outputs, state)</code> and emits tensor <code>sample_ids</code>.</li>
+<li><b><code>next_inputs_fn</code></b>: callable that takes <code>(time, outputs, state, sample_ids)</code> and emits <code>(finished, next_inputs, next_state)</code>.</li>
+</ul>
+<h3 id="initialize">
+<code>initialize</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">initialize(name<span class="op">=</span><span class="va">None</span>)</code></pre></div>
+<h3 id="next_inputs">
+<code>next_inputs</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">next_inputs(
+    time,
+    outputs,
+    state,
+    sample_ids,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<h3 id="sample">
+<code>sample</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">sample(
+    time,
+    outputs,
+    state,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>

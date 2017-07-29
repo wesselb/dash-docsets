@@ -1,0 +1,18 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.train.sdca_fprint" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.train.sdca_fprint" class="dashAnchor"></a><h1 id="tf.train.sdca_fprint">tf.train.sdca_fprint</h1>
+<h3 id="tf.train.sdca_fprint-1"><code>tf.train.sdca_fprint</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">sdca_fprint(
+    <span class="bu">input</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_sdca_ops.py</code>.</p>
+<p>Computes fingerprints of the input strings.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code> of type <code>string</code>. vector of strings to compute fingerprints on.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>int64</code>. a (N,2) shaped matrix where N is the number of elements in the input vector. Each row contains the low and high parts of the fingerprint.</p>

@@ -1,0 +1,21 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.image.hsv_to_rgb" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.image.hsv_to_rgb" class="dashAnchor"></a><h1 id="tf.image.hsv_to_rgb">tf.image.hsv_to_rgb</h1>
+<h3 id="tf.image.hsv_to_rgb-1"><code>tf.image.hsv_to_rgb</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">hsv_to_rgb(
+    images,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_image_ops.py</code>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/image.md#Converting_Between_Colorspaces">Images &gt; Converting Between Colorspaces</a></p>
+<p>Convert one or more images from HSV to RGB.</p>
+<p>Outputs a tensor of the same shape as the <code>images</code> tensor, containing the RGB value of the pixels. The output is only well defined if the value in <code>images</code> are in <code>[0,1]</code>.</p>
+<p>See <code>rgb_to_hsv</code> for a description of the HSV encoding.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>images</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>. 1-D or higher rank. HSV data to convert. Last dimension must be size 3.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>images</code>. <code>images</code> converted to RGB.</p>

@@ -1,0 +1,25 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.seq2seq.tile_batch" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.seq2seq.tile_batch" class="dashAnchor"></a><h1 id="tf.contrib.seq2seq.tile_batch">tf.contrib.seq2seq.tile_batch</h1>
+<h3 id="tf.contrib.seq2seq.tile_batch-1"><code>tf.contrib.seq2seq.tile_batch</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tile_batch(
+    t,
+    multiplier,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/seq2seq/python/ops/beam_search_decoder.py"><code>tensorflow/contrib/seq2seq/python/ops/beam_search_decoder.py</code></a>.</p>
+<p>Tile the batch dimension of a (possibly nested structure of) tensor(s) t.</p>
+<p>For each tensor t in a (possibly nested structure) of tensors, this function takes a tensor t shaped <code>[batch_size, s0, s1, ...]</code> composed of minibatch entries <code>t[0], ..., t[batch_size - 1]</code> and tiles it to have a shape <code>[batch_size * multiplier, s0, s1, ...]</code> composed of minibatch entries <code>t[0], t[0], ..., t[1], t[1], ...</code> where each minibatch entry is repeated <code>multiplier</code> times.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>t</code></b>: <code>Tensor</code> shaped <code>[batch_size, ...]</code>.</li>
+<li><b><code>multiplier</code></b>: Python int.</li>
+<li><b><code>name</code></b>: Name scope for any created operations.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A (possibly nested structure of) <code>Tensor</code> shaped <code>[batch_size * multiplier, ...]</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if tensor(s) <code>t</code> do not have a statically known rank or the rank is &lt; 1.</li>
+</ul>

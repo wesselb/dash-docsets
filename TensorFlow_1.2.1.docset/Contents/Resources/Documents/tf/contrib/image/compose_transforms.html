@@ -1,0 +1,12 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.image.compose_transforms" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.image.compose_transforms" class="dashAnchor"></a><h1 id="tf.contrib.image.compose_transforms">tf.contrib.image.compose_transforms</h1>
+<h3 id="tf.contrib.image.compose_transforms-1"><code>tf.contrib.image.compose_transforms</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">compose_transforms(<span class="op">*</span>transforms)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/image/python/ops/image_ops.py"><code>tensorflow/contrib/image/python/ops/image_ops.py</code></a>.</p>
+<p>Composes the transforms tensors.</p>
+<h4 id="args">Args:</h4>
+<p>*transforms: List of image projective transforms to be composed. Each transform is length 8 (single transform) or shape (N, 8) (batched transforms). The shapes of all inputs must be equal, and at least one input must be given.</p>
+<h4 id="returns">Returns:</h4>
+<p>A composed transform tensor. When passed to <code>tf.contrib.image.transform</code>, equivalent to applying each of the given transforms to the image in order.</p>

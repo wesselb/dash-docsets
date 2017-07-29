@@ -1,0 +1,28 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.layers.unit_norm" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.layers.unit_norm" class="dashAnchor"></a><h1 id="tf.contrib.layers.unit_norm">tf.contrib.layers.unit_norm</h1>
+<h3 id="tf.contrib.layers.unit_norm-1"><code>tf.contrib.layers.unit_norm</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">unit_norm(
+    inputs,
+    dim,
+    epsilon<span class="op">=</span><span class="fl">1e-07</span>,
+    scope<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/layers/python/layers/layers.py"><code>tensorflow/contrib/layers/python/layers/layers.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.layers.md#Higher_level_ops_for_building_neural_network_layers">Layers (contrib) &gt; Higher level ops for building neural network layers</a></p>
+<p>Normalizes the given input across the specified dimension to unit length.</p>
+<p>Note that the rank of <code>input</code> must be known.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>inputs</code></b>: A <code>Tensor</code> of arbitrary size.</li>
+<li><b><code>dim</code></b>: The dimension along which the input is normalized.</li>
+<li><b><code>epsilon</code></b>: A small value to add to the inputs to avoid dividing by zero.</li>
+<li><b><code>scope</code></b>: Optional scope for variable_scope.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The normalized <code>Tensor</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If dim is smaller than the number of dimensions in 'inputs'.</li>
+</ul>

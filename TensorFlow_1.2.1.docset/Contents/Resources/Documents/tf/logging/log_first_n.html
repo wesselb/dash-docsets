@@ -1,0 +1,20 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.logging.log_first_n" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.logging.log_first_n" class="dashAnchor"></a><h1 id="tf.logging.log_first_n">tf.logging.log_first_n</h1>
+<h3 id="tf.logging.log_first_n-1"><code>tf.logging.log_first_n</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">log_first_n(
+    level,
+    msg,
+    n,
+    <span class="op">*</span>args
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/platform/tf_logging.py"><code>tensorflow/python/platform/tf_logging.py</code></a>.</p>
+<p>Log 'msg % args' at level 'level' only first 'n' times.</p>
+<p>Not threadsafe.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>level</code></b>: The level at which to log.</li>
+<li><b><code>msg</code></b>: The message to be logged.</li>
+<li><b><code>n</code></b>: The number of times this should be called before it is logged. *args: The args to be substituted into the msg.</li>
+</ul>

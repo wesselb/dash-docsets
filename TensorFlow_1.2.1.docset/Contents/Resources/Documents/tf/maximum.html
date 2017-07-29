@@ -1,0 +1,22 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.maximum" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.maximum" class="dashAnchor"></a><h1 id="tf.maximum">tf.maximum</h1>
+<h3 id="tf.maximum-1"><code>tf.maximum</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">maximum(
+    x,
+    y,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_math_ops.py</code>.</p>
+<p>See the guide: <a href="../../../api_guides/python/math_ops.md#Basic_Math_Functions">Math &gt; Basic Math Functions</a></p>
+<p>Returns the max of x and y (i.e. x &gt; y ? x : y) element-wise.</p>
+<p><em>NOTE</em>: <code>Maximum</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>

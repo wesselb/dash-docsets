@@ -1,0 +1,14 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.utils.get_custom_objects" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.keras.utils.get_custom_objects" class="dashAnchor"></a><h1 id="tf.contrib.keras.utils.get_custom_objects">tf.contrib.keras.utils.get_custom_objects</h1>
+<h3 id="tf.contrib.keras.utils.get_custom_objects-1"><code>tf.contrib.keras.utils.get_custom_objects</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_custom_objects()</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/utils/generic_utils.py"><code>tensorflow/contrib/keras/python/keras/utils/generic_utils.py</code></a>.</p>
+<p>Retrieves a live reference to the global dictionary of custom objects.</p>
+<p>Updating and clearing custom objects using <code>custom_object_scope</code> is preferred, but <code>get_custom_objects</code> can be used to directly access <code>_GLOBAL_CUSTOM_OBJECTS</code>.</p>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    get_custom_objects().clear()
+    get_custom_objects()[<span class="st">&quot;MyObject&quot;</span>] <span class="op">=</span> MyObject</code></pre></div>
+<h4 id="returns">Returns:</h4>
+<pre><code>Global dictionary of names to classes (`_GLOBAL_CUSTOM_OBJECTS`).</code></pre>

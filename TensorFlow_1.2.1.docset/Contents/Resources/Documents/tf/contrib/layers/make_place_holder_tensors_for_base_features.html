@@ -1,0 +1,15 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.layers.make_place_holder_tensors_for_base_features" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.layers.make_place_holder_tensors_for_base_features" class="dashAnchor"></a><h1 id="tf.contrib.layers.make_place_holder_tensors_for_base_features">tf.contrib.layers.make_place_holder_tensors_for_base_features</h1>
+<h3 id="tf.contrib.layers.make_place_holder_tensors_for_base_features-1"><code>tf.contrib.layers.make_place_holder_tensors_for_base_features</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">make_place_holder_tensors_for_base_features(feature_columns)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/layers/python/layers/feature_column.py"><code>tensorflow/contrib/layers/python/layers/feature_column.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.layers.md#Feature_columns">Layers (contrib) &gt; Feature columns</a></p>
+<p>Returns placeholder tensors for inference.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>feature_columns</code></b>: An iterable containing all the feature columns. All items should be instances of classes derived from _FeatureColumn.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A dict mapping feature keys to SparseTensors (sparse columns) or placeholder Tensors (dense columns).</p>

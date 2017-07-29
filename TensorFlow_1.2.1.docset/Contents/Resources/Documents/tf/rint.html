@@ -1,0 +1,23 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.rint" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.rint" class="dashAnchor"></a><h1 id="tf.rint">tf.rint</h1>
+<h3 id="tf.rint-1"><code>tf.rint</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">rint(
+    x,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_math_ops.py</code>.</p>
+<p>See the guide: <a href="../../../api_guides/python/math_ops.md#Basic_Math_Functions">Math &gt; Basic Math Functions</a></p>
+<p>Returns element-wise integer closest to x.</p>
+<p>If the result is midway between two representable values, the even representable is chosen. For example:</p>
+<pre><code>rint(-1.5) ==&gt; -2.0
+rint(0.5000001) ==&gt; 1.0
+rint([-1.7, -1.5, -0.2, 0.2, 1.5, 1.7, 2.0]) ==&gt; [-2., -2., -0., 0., 2., 2., 2.]</code></pre>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>

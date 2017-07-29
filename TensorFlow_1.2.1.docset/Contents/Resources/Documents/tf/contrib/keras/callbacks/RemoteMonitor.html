@@ -1,0 +1,70 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.callbacks.RemoteMonitor" /> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="on_batch_begin"/> <meta itemprop="property" content="on_batch_end"/> <meta itemprop="property" content="on_epoch_begin"/> <meta itemprop="property" content="on_epoch_end"/> <meta itemprop="property" content="on_train_begin"/> <meta itemprop="property" content="on_train_end"/> <meta itemprop="property" content="set_model"/> <meta itemprop="property" content="set_params"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.keras.callbacks.RemoteMonitor" class="dashAnchor"></a><h1 id="tf.contrib.keras.callbacks.remotemonitor">tf.contrib.keras.callbacks.RemoteMonitor</h1>
+<h3 id="class-tf.contrib.keras.callbacks.remotemonitor"><code>class tf.contrib.keras.callbacks.RemoteMonitor</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/callbacks.py"><code>tensorflow/contrib/keras/python/keras/callbacks.py</code></a>.</p>
+<p>Callback used to stream events to a server.</p>
+<p>Requires the <code>requests</code> library. Events are sent to <code>root + '/publish/epoch/end/'</code> by default. Calls are HTTP POST, with a <code>data</code> argument which is a JSON-encoded dictionary of event data.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>root: String; root url of the target server.
+path: String; path relative to `root` to which the events will be sent.
+field: String; JSON field under which the data will be stored.
+headers: Dictionary; optional custom HTTP headers.
+    Defaults to:
+    `{&#39;Accept&#39;: &#39;application/json&#39;,
+      &#39;Content-Type&#39;: &#39;application/json&#39;}`</code></pre>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    root<span class="op">=</span><span class="st">&#39;http://localhost:9000&#39;</span>,
+    path<span class="op">=</span><span class="st">&#39;/publish/epoch/end/&#39;</span>,
+    field<span class="op">=</span><span class="st">&#39;data&#39;</span>,
+    headers<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<h3 id="on_batch_begin">
+<code>on_batch_begin</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_batch_begin(
+    batch,
+    logs<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<h3 id="on_batch_end">
+<code>on_batch_end</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_batch_end(
+    batch,
+    logs<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<h3 id="on_epoch_begin">
+<code>on_epoch_begin</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_epoch_begin(
+    epoch,
+    logs<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<h3 id="on_epoch_end">
+<code>on_epoch_end</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_epoch_end(
+    epoch,
+    logs<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<h3 id="on_train_begin">
+<code>on_train_begin</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_train_begin(logs<span class="op">=</span><span class="va">None</span>)</code></pre></div>
+<h3 id="on_train_end">
+<code>on_train_end</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_train_end(logs<span class="op">=</span><span class="va">None</span>)</code></pre></div>
+<h3 id="set_model">
+<code>set_model</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">set_model(model)</code></pre></div>
+<h3 id="set_params">
+<code>set_params</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">set_params(params)</code></pre></div>

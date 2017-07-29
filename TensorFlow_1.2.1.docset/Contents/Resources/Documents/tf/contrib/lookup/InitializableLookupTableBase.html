@@ -1,0 +1,98 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.lookup.InitializableLookupTableBase" /> <meta itemprop="property" content="default_value"/> <meta itemprop="property" content="init"/> <meta itemprop="property" content="key_dtype"/> <meta itemprop="property" content="name"/> <meta itemprop="property" content="table_ref"/> <meta itemprop="property" content="value_dtype"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="check_table_dtypes"/> <meta itemprop="property" content="lookup"/> <meta itemprop="property" content="size"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.lookup.InitializableLookupTableBase" class="dashAnchor"></a><h1 id="tf.contrib.lookup.initializablelookuptablebase">tf.contrib.lookup.InitializableLookupTableBase</h1>
+<h3 id="class-tf.contrib.lookup.initializablelookuptablebase"><code>class tf.contrib.lookup.InitializableLookupTableBase</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/lookup/lookup_ops.py"><code>tensorflow/contrib/lookup/lookup_ops.py</code></a>.</p>
+<p>Initializable lookup table interface.</p>
+<p>An initializable lookup tables persist across different steps.</p>
+<h2 id="properties">Properties</h2>
+<h3 id="default_value">
+<code>default_value</code>
+</h3>
+<p>The default value of the table.</p>
+<h3 id="init">
+<code>init</code>
+</h3>
+<p>The table initialization op.</p>
+<h3 id="key_dtype">
+<code>key_dtype</code>
+</h3>
+<p>The table key dtype.</p>
+<h3 id="name">
+<code>name</code>
+</h3>
+<p>The name of the table.</p>
+<h3 id="table_ref">
+<code>table_ref</code>
+</h3>
+<p>Get the underlying table reference.</p>
+<h3 id="value_dtype">
+<code>value_dtype</code>
+</h3>
+<p>The table value dtype.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    table_ref,
+    default_value,
+    initializer
+)</code></pre></div>
+<p>Construct a table object from a table reference.</p>
+<p>If requires a table initializer object (subclass of <code>TableInitializerBase</code>). It provides the table key and value types, as well as the op to initialize the table. The caller is responsible to execute the initialization op.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>table_ref</code></b>: The table reference, i.e. the output of the lookup table ops.</li>
+<li><b><code>default_value</code></b>: The value to use if a key is missing in the table.</li>
+<li><b><code>initializer</code></b>: The table initializer to use.</li>
+</ul>
+<h3 id="check_table_dtypes">
+<code>check_table_dtypes</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">check_table_dtypes(
+    key_dtype,
+    value_dtype
+)</code></pre></div>
+<p>Check that the given key_dtype and value_dtype matches the table dtypes.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>key_dtype</code></b>: The key data type to check.</li>
+<li><b><code>value_dtype</code></b>: The value data type to check.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: when 'key_dtype' or 'value_dtype' doesn't match the table data types.</li>
+</ul>
+<h3 id="lookup">
+<code>lookup</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">lookup(
+    keys,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Looks up <code>keys</code> in a table, outputs the corresponding values.</p>
+<p>The <code>default_value</code> is used for keys not present in the table.</p>
+<h4 id="args-2">Args:</h4>
+<ul>
+<li><b><code>keys</code></b>: Keys to look up. May be either a <code>SparseTensor</code> or dense <code>Tensor</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>SparseTensor</code> if keys are sparse, otherwise a dense <code>Tensor</code>.</p>
+<h4 id="raises-1">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: when <code>keys</code> or <code>default_value</code> doesn't match the table data types.</li>
+</ul>
+<h3 id="size">
+<code>size</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">size(name<span class="op">=</span><span class="va">None</span>)</code></pre></div>
+<p>Compute the number of elements in this table.</p>
+<h4 id="args-3">Args:</h4>
+<ul>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns-1">Returns:</h4>
+<p>A scalar tensor containing the number of elements in this table.</p>

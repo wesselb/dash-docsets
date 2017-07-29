@@ -1,0 +1,61 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.bayesflow.stochastic_tensor.SampleValue" /> <meta itemprop="property" content="shape"/> <meta itemprop="property" content="stop_gradient"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="declare_inputs"/> <meta itemprop="property" content="popped_above"/> <meta itemprop="property" content="pushed_above"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.bayesflow.stochastic_tensor.SampleValue" class="dashAnchor"></a><h1 id="tf.contrib.bayesflow.stochastic_tensor.samplevalue">tf.contrib.bayesflow.stochastic_tensor.SampleValue</h1>
+<h3 id="class-tf.contrib.bayesflow.stochastic_tensor.samplevalue"><code>class tf.contrib.bayesflow.stochastic_tensor.SampleValue</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/bayesflow/python/ops/stochastic_tensor_impl.py"><code>tensorflow/contrib/bayesflow/python/ops/stochastic_tensor_impl.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../../api_guides/python/contrib.bayesflow.stochastic_tensor.md#Stochastic_Tensor_Value_Types">BayesFlow Stochastic Tensors (contrib) &gt; Stochastic Tensor Value Types</a></p>
+<p>Draw samples, possibly adding new outer dimensions along the way.</p>
+<p>This ValueType draws samples from StochasticTensors run within its context, increasing the rank according to the requested shape.</p>
+<p>Examples:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">mu <span class="op">=</span> tf.zeros((<span class="dv">2</span>,<span class="dv">3</span>))
+sigma <span class="op">=</span> tf.ones((<span class="dv">2</span>, <span class="dv">3</span>))
+<span class="cf">with</span> sg.value_type(sg.SampleValue()):
+  st <span class="op">=</span> sg.StochasticTensor(
+    tf.contrib.distributions.Normal, mu<span class="op">=</span>mu, sigma<span class="op">=</span>sigma)
+<span class="co"># draws 1 sample and does not reshape</span>
+assertEqual(st.value().get_shape(), (<span class="dv">2</span>, <span class="dv">3</span>))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">mu <span class="op">=</span> tf.zeros((<span class="dv">2</span>,<span class="dv">3</span>))
+sigma <span class="op">=</span> tf.ones((<span class="dv">2</span>, <span class="dv">3</span>))
+<span class="cf">with</span> sg.value_type(sg.SampleValue(<span class="dv">4</span>)):
+  st <span class="op">=</span> sg.StochasticTensor(
+    tf.contrib.distributions.Normal, mu<span class="op">=</span>mu, sigma<span class="op">=</span>sigma)
+<span class="co"># draws 4 samples each with shape (2, 3) and concatenates</span>
+assertEqual(st.value().get_shape(), (<span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">3</span>))</code></pre></div>
+<h2 id="properties">Properties</h2>
+<h3 id="shape">
+<code>shape</code>
+</h3>
+<h3 id="stop_gradient">
+<code>stop_gradient</code>
+</h3>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    shape<span class="op">=</span>(),
+    stop_gradient<span class="op">=</span><span class="va">False</span>
+)</code></pre></div>
+<p>Sample according to shape.</p>
+<p>For the given StochasticTensor <code>st</code> using this value type, the shape of <code>st.value()</code> will match that of <code>st.distribution.sample(shape)</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>shape</code></b>: A shape tuple or int32 tensor. The sample shape. Default is a scalar: take one sample and do not change the size.</li>
+<li><b><code>stop_gradient</code></b>: If <code>True</code>, StochasticTensors' values are wrapped in <code>stop_gradient</code>, to avoid backpropagation through.</li>
+</ul>
+<h3 id="declare_inputs">
+<code>declare_inputs</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">declare_inputs(
+    unused_stochastic_tensor,
+    unused_inputs_dict
+)</code></pre></div>
+<h3 id="popped_above">
+<code>popped_above</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">popped_above(unused_value_type)</code></pre></div>
+<h3 id="pushed_above">
+<code>pushed_above</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">pushed_above(unused_value_type)</code></pre></div>

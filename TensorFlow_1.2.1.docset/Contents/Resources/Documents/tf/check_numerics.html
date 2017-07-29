@@ -1,0 +1,22 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.check_numerics" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.check_numerics" class="dashAnchor"></a><h1 id="tf.check_numerics">tf.check_numerics</h1>
+<h3 id="tf.check_numerics-1"><code>tf.check_numerics</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">check_numerics(
+    tensor,
+    message,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_array_ops.py</code>.</p>
+<p>See the guide: <a href="../../../api_guides/python/control_flow_ops.md#Debugging_Operations">Control Flow &gt; Debugging Operations</a></p>
+<p>Checks a tensor for NaN and Inf values.</p>
+<p>When run, reports an <code>InvalidArgument</code> error if <code>tensor</code> has any values that are not a number (NaN) or infinity (Inf). Otherwise, passes <code>tensor</code> as-is.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>tensor</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>.</li>
+<li><b><code>message</code></b>: A <code>string</code>. Prefix of the error message.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>tensor</code>.</p>

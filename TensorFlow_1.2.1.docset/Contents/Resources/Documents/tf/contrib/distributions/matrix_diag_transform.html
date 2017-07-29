@@ -1,0 +1,47 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.distributions.matrix_diag_transform" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.distributions.matrix_diag_transform" class="dashAnchor"></a><h1 id="tf.contrib.distributions.matrix_diag_transform">tf.contrib.distributions.matrix_diag_transform</h1>
+<h3 id="tf.contrib.distributions.matrix_diag_transform-1"><code>tf.contrib.distributions.matrix_diag_transform</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">matrix_diag_transform(
+    matrix,
+    transform<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/distributions/util.py"><code>tensorflow/python/ops/distributions/util.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.distributions.md#Multivariate_distributions">Statistical Distributions (contrib) &gt; Multivariate distributions</a></p>
+<p>Transform diagonal of [batch-]matrix, leave rest of matrix unchanged.</p>
+<p>Create a trainable covariance defined by a Cholesky factor:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Transform network layer into 2 x 2 array.</span>
+matrix_values <span class="op">=</span> tf.contrib.layers.fully_connected(activations, <span class="dv">4</span>)
+matrix <span class="op">=</span> tf.reshape(matrix_values, (batch_size, <span class="dv">2</span>, <span class="dv">2</span>))
+
+<span class="co"># Make the diagonal positive. If the upper triangle was zero, this would be a</span>
+<span class="co"># valid Cholesky factor.</span>
+chol <span class="op">=</span> matrix_diag_transform(matrix, transform<span class="op">=</span>tf.nn.softplus)
+
+<span class="co"># OperatorPDCholesky ignores the upper triangle.</span>
+operator <span class="op">=</span> OperatorPDCholesky(chol)</code></pre></div>
+<p>Example of heteroskedastic 2-D linear regression.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Get a trainable Cholesky factor.</span>
+matrix_values <span class="op">=</span> tf.contrib.layers.fully_connected(activations, <span class="dv">4</span>)
+matrix <span class="op">=</span> tf.reshape(matrix_values, (batch_size, <span class="dv">2</span>, <span class="dv">2</span>))
+chol <span class="op">=</span> matrix_diag_transform(matrix, transform<span class="op">=</span>tf.nn.softplus)
+
+<span class="co"># Get a trainable mean.</span>
+mu <span class="op">=</span> tf.contrib.layers.fully_connected(activations, <span class="dv">2</span>)
+
+<span class="co"># This is a fully trainable multivariate normal!</span>
+dist <span class="op">=</span> tf.contrib.distributions.MVNCholesky(mu, chol)
+
+<span class="co"># Standard log loss. Minimizing this will &quot;train&quot; mu and chol, and then dist</span>
+<span class="co"># will be a distribution predicting labels as multivariate Gaussians.</span>
+loss <span class="op">=</span> <span class="op">-</span><span class="dv">1</span> <span class="op">*</span> tf.reduce_mean(dist.log_prob(labels))</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>matrix</code></b>: Rank <code>R</code> <code>Tensor</code>, <code>R &gt;= 2</code>, where the last two dimensions are equal.</li>
+<li><b><code>transform</code></b>: Element-wise function mapping <code>Tensors</code> to <code>Tensors</code>. To be applied to the diagonal of <code>matrix</code>. If <code>None</code>, <code>matrix</code> is returned unchanged. Defaults to <code>None</code>.</li>
+<li><b><code>name</code></b>: A name to give created ops. Defaults to &quot;matrix_diag_transform&quot;.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> with same shape and <code>dtype</code> as <code>matrix</code>.</p>

@@ -1,0 +1,36 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.cudnn_rnn.RNNParamsSaveable" /> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="restore"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.cudnn_rnn.RNNParamsSaveable" class="dashAnchor"></a><h1 id="tf.contrib.cudnn_rnn.rnnparamssaveable">tf.contrib.cudnn_rnn.RNNParamsSaveable</h1>
+<h3 id="class-tf.contrib.cudnn_rnn.rnnparamssaveable"><code>class tf.contrib.cudnn_rnn.RNNParamsSaveable</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/cudnn_rnn/python/ops/cudnn_rnn_ops.py"><code>tensorflow/contrib/cudnn_rnn/python/ops/cudnn_rnn_ops.py</code></a>.</p>
+<p>SaveableObject implementation that handles the RNN params variable.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    params_to_canonical,
+    canonical_to_params,
+    param_variables,
+    name<span class="op">=</span><span class="st">&#39;params_canonical&#39;</span>
+)</code></pre></div>
+<p>Creates a RNNParamsSaveable object.</p>
+<p>RNNParamsSaveable is saveable/restorable in a checkpoint file and is used to save/restore the weights and biases parameters in a canonical format, where parameters are saved as tensors layer by layer. For each layer, the bias tensors are saved following the weight tensors. When restoring, a user could name param_variables as desired, and restore weight and bias tensors to these variables.</p>
+<p>For CudnnRNNRelu or CudnnRNNTanh, there are 2 tensors per weight and per bias for each layer: tensor 0 is applied to the input from the previous layer and tensor 1 to the recurrent input.</p>
+<p>For CudnnLSTM, there are 8 tensors per weight and per bias for each layer: tensor 0-3 are applied to the input from the previous layer and tensor 4-7 to the recurrent input. Tensor 0 and 4 are for the input gate; tensor 1 and 5 the forget gate; tensor 2 and 6 the new memory gate; tensor 3 and 7 the output gate.</p>
+<p>For CudnnGRU, there are 6 tensors per weight and per bias for each layer: tensor 0-2 are applied to the input from the previous layer and tensor 3-5 to the recurrent input. Tensor 0 and 3 are for the reset gate; tensor 1 and 4 the update gate; tensor 2 and 5 the new memory gate.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>params_to_canonical</code></b>: a function to convert params from a specific format for cuDNN or other RNN ops to the canonical format. _CudnnRNN.params_to_canonical() should be provided here.</li>
+<li><b><code>canonical_to_params</code></b>: a function to convert params from the canonical format to a specific format for cuDNN or other RNN ops. The function must return a scalar (e.g. in the case of cuDNN) or a tuple. This function could be _CudnnRNN.canonical_to_params() or a user-defined function.</li>
+<li><b><code>param_variables</code></b>: a list of Variables for parameters in a specific form. For cuDNN RNN ops, this is a single merged variable for both weights and biases; for other RNN ops, this might be multiple unmerged or partially merged variables respectively for weights and biases.</li>
+<li><b><code>name</code></b>: the name of the RNNParamsSaveable object.</li>
+</ul>
+<h3 id="restore">
+<code>restore</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">restore(
+    restored_tensors,
+    restored_shapes
+)</code></pre></div>

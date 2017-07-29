@@ -1,0 +1,31 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.layers.sparse_column_with_keys" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.layers.sparse_column_with_keys" class="dashAnchor"></a><h1 id="tf.contrib.layers.sparse_column_with_keys">tf.contrib.layers.sparse_column_with_keys</h1>
+<h3 id="tf.contrib.layers.sparse_column_with_keys-1"><code>tf.contrib.layers.sparse_column_with_keys</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">sparse_column_with_keys(
+    column_name,
+    keys,
+    default_value<span class="op">=-</span><span class="dv">1</span>,
+    combiner<span class="op">=</span><span class="st">&#39;sum&#39;</span>,
+    dtype<span class="op">=</span>tf.string
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/layers/python/layers/feature_column.py"><code>tensorflow/contrib/layers/python/layers/feature_column.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.layers.md#Feature_columns">Layers (contrib) &gt; Feature columns</a></p>
+<p>Creates a _SparseColumn with keys.</p>
+<p>Look up logic is as follows: lookup_id = index_of_feature_in_keys if feature in keys else default_value</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>column_name</code></b>: A string defining sparse column name.</li>
+<li><b><code>keys</code></b>: A list or tuple defining vocabulary. Must be castable to <code>dtype</code>.</li>
+<li><b><code>default_value</code></b>: The value to use for out-of-vocabulary feature values. Default is -1.</li>
+<li><b><code>combiner</code></b>: A string specifying how to reduce if the sparse column is multivalent. Currently &quot;mean&quot;, &quot;sqrtn&quot; and &quot;sum&quot; are supported, with &quot;sum&quot; the default. &quot;sqrtn&quot; often achieves good accuracy, in particular with bag-of-words columns.
+<ul>
+<li>&quot;sum&quot;: do not normalize features in the column</li>
+<li>&quot;mean&quot;: do l1 normalization on features in the column</li>
+<li>&quot;sqrtn&quot;: do l2 normalization on features in the column For more information: <code>tf.embedding_lookup_sparse</code>.</li>
+</ul></li>
+<li><b><code>dtype</code></b>: Type of features. Only integer and string are supported.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A _SparseColumnKeys with keys configuration.</p>

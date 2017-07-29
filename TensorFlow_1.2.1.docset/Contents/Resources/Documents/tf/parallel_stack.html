@@ -1,0 +1,31 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.parallel_stack" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.parallel_stack" class="dashAnchor"></a><h1 id="tf.parallel_stack">tf.parallel_stack</h1>
+<h3 id="tf.parallel_stack-1"><code>tf.parallel_stack</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">parallel_stack(
+    values,
+    name<span class="op">=</span><span class="st">&#39;parallel_stack&#39;</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/array_ops.py"><code>tensorflow/python/ops/array_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/array_ops.md#Slicing_and_Joining">Tensor Transformations &gt; Slicing and Joining</a></p>
+<p>Stacks a list of rank-<code>R</code> tensors into one rank-<code>(R+1)</code> tensor in parallel.</p>
+<p>Requires that the shape of inputs be known at graph construction time.</p>
+<p>Packs the list of tensors in <code>values</code> into a tensor with rank one higher than each tensor in <code>values</code>, by packing them along the first dimension. Given a list of length <code>N</code> of tensors of shape <code>(A, B, C)</code>; the <code>output</code> tensor will have the shape <code>(N, A, B, C)</code>.</p>
+<p>For example:</p>
+<pre class="prettyprint"><code># &#39;x&#39; is [1, 4]
+# &#39;y&#39; is [2, 5]
+# &#39;z&#39; is [3, 6]
+parallel_stack([x, y, z]) =&gt; [[1, 4], [2, 5], [3, 6]]</code></pre>
+<p>The difference between stack and parallel_stack is that stack requires all of the inputs be computed before the operation will begin but doesn't require that the input shapes be known during graph construction. Parallel stack will copy pieces of the input into the output as they become available, in some situations this can provide a performance benefit.</p>
+<p>This is the opposite of unstack. The numpy equivalent is</p>
+<pre><code>tf.parallel_stack([x, y, z]) = np.asarray([x, y, z])</code></pre>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>values</code></b>: A list of <code>Tensor</code> objects with the same shape and type.</li>
+<li><b><code>name</code></b>: A name for this operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<ul>
+<li><b><code>output</code></b>: A stacked <code>Tensor</code> with the same type as <code>values</code>.</li>
+</ul>

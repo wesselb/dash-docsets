@@ -1,0 +1,28 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.backend.pool2d" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.keras.backend.pool2d" class="dashAnchor"></a><h1 id="tf.contrib.keras.backend.pool2d">tf.contrib.keras.backend.pool2d</h1>
+<h3 id="tf.contrib.keras.backend.pool2d-1"><code>tf.contrib.keras.backend.pool2d</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">pool2d(
+    x,
+    pool_size,
+    strides<span class="op">=</span>(<span class="dv">1</span>, <span class="dv">1</span>),
+    padding<span class="op">=</span><span class="st">&#39;valid&#39;</span>,
+    data_format<span class="op">=</span><span class="va">None</span>,
+    pool_mode<span class="op">=</span><span class="st">&#39;max&#39;</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/backend.py"><code>tensorflow/contrib/keras/python/keras/backend.py</code></a>.</p>
+<p>2D Pooling.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>x: Tensor or variable.
+pool_size: tuple of 2 integers.
+strides: tuple of 2 integers.
+padding: one of `&quot;valid&quot;`, `&quot;same&quot;`.
+data_format: one of `&quot;channels_first&quot;`, `&quot;channels_last&quot;`.
+pool_mode: one of `&quot;max&quot;`, `&quot;avg&quot;`.</code></pre>
+<h4 id="returns">Returns:</h4>
+<pre><code>A tensor, result of 2D pooling.</code></pre>
+<h4 id="raises">Raises:</h4>
+<pre><code>ValueError: if `data_format` is neither `channels_last` or
+`channels_first`.
+ValueError: if `pool_mode` is neither `max` or `avg`.</code></pre>

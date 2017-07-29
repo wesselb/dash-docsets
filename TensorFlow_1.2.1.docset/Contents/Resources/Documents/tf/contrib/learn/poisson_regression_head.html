@@ -1,0 +1,24 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.learn.poisson_regression_head" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.learn.poisson_regression_head" class="dashAnchor"></a><h1 id="tf.contrib.learn.poisson_regression_head">tf.contrib.learn.poisson_regression_head</h1>
+<h3 id="tf.contrib.learn.poisson_regression_head-1"><code>tf.contrib.learn.poisson_regression_head</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">poisson_regression_head(
+    label_name<span class="op">=</span><span class="va">None</span>,
+    weight_column_name<span class="op">=</span><span class="va">None</span>,
+    label_dimension<span class="op">=</span><span class="dv">1</span>,
+    enable_centered_bias<span class="op">=</span><span class="va">False</span>,
+    head_name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/learn/python/learn/estimators/head.py"><code>tensorflow/contrib/learn/python/learn/estimators/head.py</code></a>.</p>
+<p>Creates a <code>Head</code> for poisson regression.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>label_name</code></b>: String, name of the key in label dict. Can be null if label is a tensor (single headed models).</li>
+<li><b><code>weight_column_name</code></b>: A string defining feature column name representing weights. It is used to down weight or boost examples during training. It will be multiplied by the loss of the example.</li>
+<li><b><code>label_dimension</code></b>: Number of regression labels per example. This is the size of the last dimension of the labels <code>Tensor</code> (typically, this has shape <code>[batch_size, label_dimension]</code>).</li>
+<li><b><code>enable_centered_bias</code></b>: A bool. If True, estimator will learn a centered bias variable for each class. Rest of the model structure learns the residual after centered bias.</li>
+<li><b><code>head_name</code></b>: name of the head. If provided, predictions, summary and metrics keys will be suffixed by <code>&quot;/&quot; + head_name</code> and the default variable scope will be <code>head_name</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>An instance of <code>Head</code> for poisson regression.</p>

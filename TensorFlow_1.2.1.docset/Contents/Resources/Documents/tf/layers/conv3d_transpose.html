@@ -1,0 +1,46 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.layers.conv3d_transpose" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.layers.conv3d_transpose" class="dashAnchor"></a><h1 id="tf.layers.conv3d_transpose">tf.layers.conv3d_transpose</h1>
+<h3 id="tf.layers.conv3d_transpose-1"><code>tf.layers.conv3d_transpose</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">conv3d_transpose(
+    inputs,
+    filters,
+    kernel_size,
+    strides<span class="op">=</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>),
+    padding<span class="op">=</span><span class="st">&#39;valid&#39;</span>,
+    data_format<span class="op">=</span><span class="st">&#39;channels_last&#39;</span>,
+    activation<span class="op">=</span><span class="va">None</span>,
+    use_bias<span class="op">=</span><span class="va">True</span>,
+    kernel_initializer<span class="op">=</span><span class="va">None</span>,
+    bias_initializer<span class="op">=</span>tf.zeros_initializer(),
+    kernel_regularizer<span class="op">=</span><span class="va">None</span>,
+    bias_regularizer<span class="op">=</span><span class="va">None</span>,
+    activity_regularizer<span class="op">=</span><span class="va">None</span>,
+    trainable<span class="op">=</span><span class="va">True</span>,
+    name<span class="op">=</span><span class="va">None</span>,
+    reuse<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/layers/convolutional.py"><code>tensorflow/python/layers/convolutional.py</code></a>.</p>
+<p>Functional interface for transposed 3D convolution layer.</p>
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>inputs</code></b>: Input tensor.</li>
+<li><b><code>filters</code></b>: Integer, the dimensionality of the output space (i.e. the number of filters in the convolution).</li>
+<li><b><code>kernel_size</code></b>: A tuple or list of 3 positive integers specifying the spatial dimensions of of the filters. Can be a single integer to specify the same value for all spatial dimensions.</li>
+<li><b><code>strides</code></b>: A tuple or list of 3 positive integers specifying the strides of the convolution. Can be a single integer to specify the same value for all spatial dimensions.</li>
+<li><b><code>padding</code></b>: one of <code>&quot;valid&quot;</code> or <code>&quot;same&quot;</code> (case-insensitive).</li>
+<li><b><code>data_format</code></b>: A string, one of <code>channels_last</code> (default) or <code>channels_first</code>. The ordering of the dimensions in the inputs. <code>channels_last</code> corresponds to inputs with shape <code>(batch, height, width, channels)</code> while <code>channels_first</code> corresponds to inputs with shape <code>(batch, channels, height, width)</code>.</li>
+<li><b><code>activation</code></b>: Activation function. Set it to None to maintain a linear activation.</li>
+<li><b><code>use_bias</code></b>: Boolean, whether the layer uses a bias.</li>
+<li><b><code>kernel_initializer</code></b>: An initializer for the convolution kernel.</li>
+<li><b><code>bias_initializer</code></b>: An initializer for the bias vector. If None, no bias will be applied.</li>
+<li><b><code>kernel_regularizer</code></b>: Optional regularizer for the convolution kernel.</li>
+<li><b><code>bias_regularizer</code></b>: Optional regularizer for the bias vector.</li>
+<li><b><code>activity_regularizer</code></b>: Regularizer function for the output.</li>
+<li><b><code>trainable</code></b>: Boolean, if <code>True</code> also add variables to the graph collection <code>GraphKeys.TRAINABLE_VARIABLES</code> (see <code>tf.Variable</code>).</li>
+<li><b><code>name</code></b>: A string, the name of the layer.</li>
+<li><b><code>reuse</code></b>: Boolean, whether to reuse the weights of a previous layer by the same name.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Output tensor.</p>

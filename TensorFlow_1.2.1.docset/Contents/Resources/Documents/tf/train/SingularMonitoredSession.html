@@ -1,0 +1,119 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.train.SingularMonitoredSession" /> <meta itemprop="property" content="graph"/> <meta itemprop="property" content="__enter__"/> <meta itemprop="property" content="__exit__"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="close"/> <meta itemprop="property" content="raw_session"/> <meta itemprop="property" content="run"/> <meta itemprop="property" content="should_stop"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.train.SingularMonitoredSession" class="dashAnchor"></a><h1 id="tf.train.singularmonitoredsession">tf.train.SingularMonitoredSession</h1>
+<h3 id="class-tf.train.singularmonitoredsession"><code>class tf.train.SingularMonitoredSession</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/training/monitored_session.py"><code>tensorflow/python/training/monitored_session.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/train.md#Distributed_execution">Training &gt; Distributed execution</a></p>
+<p>Session-like object that handles initialization, restoring, and hooks.</p>
+<p>Please note that this utility is not recommended for distributed settings. For distributed settings, please use <code>tf.train.MonitoredSession</code>. The differences between <code>MonitoredSession</code> and <code>SingularMonitoredSession</code> are:</p>
+<ul>
+<li><code>MonitoredSession</code> handles <code>AbortedError</code> and <code>UnavailableError</code> for distributed settings, but <code>SingularMonitoredSession</code> does not.</li>
+<li><code>MonitoredSession</code> can be created in <code>chief</code> or <code>worker</code> modes. <code>SingularMonitoredSession</code> is always created as <code>chief</code>.</li>
+<li>You can access the raw <code>tf.Session</code> object used by <code>SingularMonitoredSession</code>, whereas in MonitoredSession the raw session is private. This can be used:
+<ul>
+<li>To <code>run</code> without hooks.</li>
+<li>To save and restore.</li>
+</ul></li>
+<li>All other functionality is identical.</li>
+</ul>
+<p>Example usage:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">saver_hook <span class="op">=</span> CheckpointSaverHook(...)
+summary_hook <span class="op">=</span> SummarySaverHook(...)
+<span class="cf">with</span> SingularMonitoredSession(hooks<span class="op">=</span>[saver_hook, summary_hook]) <span class="im">as</span> sess:
+  <span class="cf">while</span> <span class="kw">not</span> sess.should_stop():
+    sess.run(train_op)</code></pre></div>
+<p>Initialization: At creation time the hooked session does following things in given order:</p>
+<ul>
+<li>calls <code>hook.begin()</code> for each given hook</li>
+<li>finalizes the graph via <code>scaffold.finalize()</code></li>
+<li>create session</li>
+<li>initializes the model via initialization ops provided by <code>Scaffold</code></li>
+<li>restores variables if a checkpoint exists</li>
+<li>launches queue runners</li>
+</ul>
+<p>Run: When <code>run()</code> is called, the hooked session does following things:</p>
+<ul>
+<li>calls <code>hook.before_run()</code></li>
+<li>calls TensorFlow <code>session.run()</code> with merged fetches and feed_dict</li>
+<li>calls <code>hook.after_run()</code></li>
+<li>returns result of <code>session.run()</code> asked by user</li>
+</ul>
+<p>Exit: At the <code>close()</code>, the hooked session does following things in order:</p>
+<ul>
+<li>calls <code>hook.end()</code></li>
+<li>closes the queue runners and the session</li>
+<li>suppresses <code>OutOfRange</code> error which indicates that all inputs have been processed if the <code>SingularMonitoredSession</code> is used as a context.</li>
+</ul>
+<h2 id="properties">Properties</h2>
+<h3 id="graph">
+<code>graph</code>
+</h3>
+<p>The graph that was launched in this session.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    hooks<span class="op">=</span><span class="va">None</span>,
+    scaffold<span class="op">=</span><span class="va">None</span>,
+    master<span class="op">=</span><span class="st">&#39;&#39;</span>,
+    config<span class="op">=</span><span class="va">None</span>,
+    checkpoint_dir<span class="op">=</span><span class="va">None</span>,
+    stop_grace_period_secs<span class="op">=</span><span class="dv">120</span>
+)</code></pre></div>
+<p>Creates a SingularMonitoredSession.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>hooks</code></b>: An iterable of `SessionRunHook' objects.</li>
+<li><b><code>scaffold</code></b>: A <code>Scaffold</code> used for gathering or building supportive ops. If not specified a default one is created. It's used to finalize the graph.</li>
+<li><b><code>master</code></b>: <code>String</code> representation of the TensorFlow master to use.</li>
+<li><b><code>config</code></b>: <code>ConfigProto</code> proto used to configure the session.</li>
+<li><b><code>checkpoint_dir</code></b>: A string. Optional path to a directory where to restore variables.</li>
+<li><b><code>stop_grace_period_secs</code></b>: Number of seconds given to threads to stop after <code>close()</code> has been called.</li>
+</ul>
+<h3 id="__enter__">
+<code><strong>enter</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__enter__</span>()</code></pre></div>
+<h3 id="__exit__">
+<code><strong>exit</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__exit__</span>(
+    exception_type,
+    exception_value,
+    traceback
+)</code></pre></div>
+<h3 id="close">
+<code>close</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">close()</code></pre></div>
+<h3 id="raw_session">
+<code>raw_session</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">raw_session()</code></pre></div>
+<p>Returns underlying <code>TensorFlow.Session</code> object.</p>
+<h3 id="run">
+<code>run</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">run(
+    fetches,
+    feed_dict<span class="op">=</span><span class="va">None</span>,
+    options<span class="op">=</span><span class="va">None</span>,
+    run_metadata<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Run ops in the monitored session.</p>
+<p>This method is completely compatible with the <code>tf.Session.run()</code> method.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>fetches</code></b>: Same as <code>tf.Session.run()</code>.</li>
+<li><b><code>feed_dict</code></b>: Same as <code>tf.Session.run()</code>.</li>
+<li><b><code>options</code></b>: Same as <code>tf.Session.run()</code>.</li>
+<li><b><code>run_metadata</code></b>: Same as <code>tf.Session.run()</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Same as <code>tf.Session.run()</code>.</p>
+<h3 id="should_stop">
+<code>should_stop</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">should_stop()</code></pre></div>

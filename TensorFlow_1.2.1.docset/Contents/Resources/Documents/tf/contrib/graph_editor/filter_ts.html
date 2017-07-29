@@ -1,0 +1,23 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.graph_editor.filter_ts" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.graph_editor.filter_ts" class="dashAnchor"></a><h1 id="tf.contrib.graph_editor.filter_ts">tf.contrib.graph_editor.filter_ts</h1>
+<h3 id="tf.contrib.graph_editor.filter_ts-1"><code>tf.contrib.graph_editor.filter_ts</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">filter_ts(
+    ops,
+    positive_filter
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/graph_editor/select.py"><code>tensorflow/contrib/graph_editor/select.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.graph_editor.md#Module_select">Graph Editor (contrib) &gt; Module: select</a></p>
+<p>Get all the tensors which are input or output of an op in ops.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>ops</code></b>: an object convertible to a list of <code>tf.Operation</code>.</li>
+<li><b><code>positive_filter</code></b>: a function deciding whether to keep a tensor or not. If <code>True</code>, all the tensors are returned.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A list of <code>tf.Tensor</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: if ops cannot be converted to a list of <code>tf.Operation</code>.</li>
+</ul>

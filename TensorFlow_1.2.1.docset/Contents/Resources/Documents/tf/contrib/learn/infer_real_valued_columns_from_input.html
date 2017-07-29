@@ -1,0 +1,16 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.learn.infer_real_valued_columns_from_input" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.learn.infer_real_valued_columns_from_input" class="dashAnchor"></a><h1 id="tf.contrib.learn.infer_real_valued_columns_from_input">tf.contrib.learn.infer_real_valued_columns_from_input</h1>
+<h3 id="tf.contrib.learn.infer_real_valued_columns_from_input-1"><code>tf.contrib.learn.infer_real_valued_columns_from_input</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">infer_real_valued_columns_from_input(x)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/learn/python/learn/estimators/estimator.py"><code>tensorflow/contrib/learn/python/learn/estimators/estimator.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.learn.md#Input_processing">Learn (contrib) &gt; Input processing</a></p>
+<p>Creates <code>FeatureColumn</code> objects for inputs defined by input <code>x</code>.</p>
+<p>This interprets all inputs as dense, fixed-length float values.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: Real-valued matrix of shape [n_samples, n_features...]. Can be iterator that returns arrays of features.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>List of <code>FeatureColumn</code> objects.</p>

@@ -1,0 +1,35 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.nn.depthwise_conv2d" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.nn.depthwise_conv2d" class="dashAnchor"></a><h1 id="tf.nn.depthwise_conv2d">tf.nn.depthwise_conv2d</h1>
+<h3 id="tf.nn.depthwise_conv2d-1"><code>tf.nn.depthwise_conv2d</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">depthwise_conv2d(
+    <span class="bu">input</span>,
+    <span class="bu">filter</span>,
+    strides,
+    padding,
+    rate<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>,
+    data_format<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/nn_impl.py"><code>tensorflow/python/ops/nn_impl.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/nn.md#Convolution">Neural Network &gt; Convolution</a></p>
+<p>Depthwise 2-D convolution.</p>
+<p>Given a 4D input tensor ('NHWC' or 'NCHW' data formats) and a filter tensor of shape <code>[filter_height, filter_width, in_channels, channel_multiplier]</code> containing <code>in_channels</code> convolutional filters of depth 1, <code>depthwise_conv2d</code> applies a different filter to each input channel (expanding from 1 channel to <code>channel_multiplier</code> channels for each), then concatenates the results together. The output has <code>in_channels * channel_multiplier</code> channels.</p>
+<p>In detail,</p>
+<pre><code>output[b, i, j, k * channel_multiplier + q] = sum_{di, dj}
+     filter[di, dj, k, q] * input[b, strides[1] * i + rate[0] * di,
+                                     strides[2] * j + rate[1] * dj, k]</code></pre>
+<p>Must have <code>strides[0] = strides[3] = 1</code>. For the most common case of the same horizontal and vertical strides, <code>strides = [1, stride, stride, 1]</code>. If any value in <code>rate</code> is greater than 1, we perform atrous depthwise convolution, in which case all values in the <code>strides</code> tensor must be equal to 1.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: 4-D with shape according to <code>data_format</code>.</li>
+<li><b><code>filter</code></b>: 4-D with shape <code>[filter_height, filter_width, in_channels, channel_multiplier]</code>.</li>
+<li><b><code>strides</code></b>: 1-D of size 4. The stride of the sliding window for each dimension of <code>input</code>.</li>
+<li><b><code>padding</code></b>: A string, either <code>'VALID'</code> or <code>'SAME'</code>. The padding algorithm. See the <a href="../../tf/nn/convolution.html">comment here</a></li>
+<li><b><code>rate</code></b>: 1-D of size 2. The dilation rate in which we sample input values across the <code>height</code> and <code>width</code> dimensions in atrous convolution. If it is greater than 1, then all values of strides must be 1.</li>
+<li><b><code>name</code></b>: A name for this operation (optional).</li>
+<li><b><code>data_format</code></b>: The data format for input. Either &quot;NHWC&quot; (default) or &quot;NCHW&quot;.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A 4-D <code>Tensor</code> with shape according to <code>data_format</code>. E.g., for &quot;NHWC&quot; format, shape is <code>[batch, out_height, out_width, in_channels * channel_multiplier].</code></p>

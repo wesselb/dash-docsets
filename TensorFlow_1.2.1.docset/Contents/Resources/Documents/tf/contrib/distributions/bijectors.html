@@ -1,0 +1,23 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.distributions.bijectors" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.distributions.bijectors" class="dashAnchor"></a><h1 id="module-tf.contrib.distributions.bijectors">Module: tf.contrib.distributions.bijectors</h1>
+<h3 id="module-tf.contrib.distributions.bijectors-1">Module <code>tf.contrib.distributions.bijectors</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/distributions/python/ops/bijectors/__init__.py"><code>tensorflow/contrib/distributions/python/ops/bijectors/__init__.py</code></a>.</p>
+<p>Bijector Ops.</p>
+<h2 id="classes">Classes</h2>
+<p><a href="../../../tf/contrib/distributions/bijectors/Affine.html"><code>class Affine</code></a>: Compute <code>Y = g(X; shift, scale) = scale @ X + shift</code>.</p>
+<p><a href="../../../tf/contrib/distributions/bijectors/AffineLinearOperator.html"><code>class AffineLinearOperator</code></a>: Compute <code>Y = g(X; shift, scale) = scale @ X + shift</code>.</p>
+<p><a href="../../../tf/contrib/distributions/bijectors/Bijector.html"><code>class Bijector</code></a>: Interface for invertible transformations of a <code>Distribution</code> sample.</p>
+<p><a href="../../../tf/contrib/distributions/bijectors/Chain.html"><code>class Chain</code></a>: Bijector which applies a sequence of bijectors.</p>
+<p><a href="../../../tf/contrib/distributions/bijectors/CholeskyOuterProduct.html"><code>class CholeskyOuterProduct</code></a>: Compute <code>g(X) = X @ X.T</code>; X is lower-triangular, positive-diagonal matrix.</p>
+<p><a href="../../../tf/contrib/distributions/bijectors/ConditionalBijector.html"><code>class ConditionalBijector</code></a>: Conditional Bijector is a Bijector that allows intrinsic conditioning.</p>
+<p><a href="../../../tf/contrib/distributions/bijectors/Exp.html"><code>class Exp</code></a>: Compute <code>Y = g(X) = exp(X)</code>.</p>
+<p><a href="../../../tf/contrib/distributions/bijectors/Identity.html"><code>class Identity</code></a>: Compute Y = g(X) = X.</p>
+<p><a href="../../../tf/contrib/distributions/bijectors/Inline.html"><code>class Inline</code></a>: Bijector constructed from custom callables.</p>
+<p><a href="../../../tf/contrib/distributions/bijectors/Invert.html"><code>class Invert</code></a>: Bijector which inverts another Bijector.</p>
+<p><a href="../../../tf/contrib/distributions/bijectors/PowerTransform.html"><code>class PowerTransform</code></a>: Compute <code>Y = g(X) = (1 + X * c)**(1 / c), X &gt;= -1 / c</code>.</p>
+<p><a href="../../../tf/contrib/distributions/bijectors/Sigmoid.html"><code>class Sigmoid</code></a>: Bijector which computes <code>Y = g(X) = 1 / (1 + exp(-X))</code>.</p>
+<p><a href="../../../tf/contrib/distributions/bijectors/SigmoidCentered.html"><code>class SigmoidCentered</code></a>: Bijector which computes Y = g(X) = exp([X 0]) / (1 + exp(-X)).</p>
+<p><a href="../../../tf/contrib/distributions/bijectors/SoftmaxCentered.html"><code>class SoftmaxCentered</code></a>: Bijector which computes <code>Y = g(X) = exp([X 0]) / sum(exp([X 0]))</code>.</p>
+<p><a href="../../../tf/contrib/distributions/bijectors/Softplus.html"><code>class Softplus</code></a>: Bijector which computes <code>Y = g(X) = Log[1 + exp(X)]</code>.</p>

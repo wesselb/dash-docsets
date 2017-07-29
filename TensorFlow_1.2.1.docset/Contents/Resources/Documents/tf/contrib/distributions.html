@@ -1,0 +1,71 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.distributions" /> <meta itemprop="property" content="FULLY_REPARAMETERIZED"/> <meta itemprop="property" content="NOT_REPARAMETERIZED"/></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.distributions" class="dashAnchor"></a><h1 id="module-tf.contrib.distributions">Module: tf.contrib.distributions</h1>
+<h3 id="module-tf.contrib.distributions-1">Module <code>tf.contrib.distributions</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/distributions/__init__.py"><code>tensorflow/contrib/distributions/__init__.py</code></a>.</p>
+<p>Classes representing statistical distributions and ops for working with them.</p>
+<p>See the <a href="../../../../api_guides/python/contrib.distributions.html">Statistical Distributions (contrib)</a> guide.</p>
+<h2 id="modules">Modules</h2>
+<p><a href="../../tf/contrib/distributions/bijectors.html"><code>bijectors</code></a> module: Bijector Ops.</p>
+<h2 id="classes">Classes</h2>
+<p><a href="../../tf/contrib/distributions/Bernoulli.html"><code>class Bernoulli</code></a>: Bernoulli distribution.</p>
+<p><a href="../../tf/contrib/distributions/BernoulliWithSigmoidProbs.html"><code>class BernoulliWithSigmoidProbs</code></a>: Bernoulli with <code>probs = nn.sigmoid(logits)</code>.</p>
+<p><a href="../../tf/contrib/distributions/Beta.html"><code>class Beta</code></a>: Beta distribution.</p>
+<p><a href="../../tf/contrib/distributions/BetaWithSoftplusConcentration.html"><code>class BetaWithSoftplusConcentration</code></a>: Beta with softplus transform of <code>concentration1</code> and <code>concentration0</code>.</p>
+<p><a href="../../tf/contrib/distributions/Binomial.html"><code>class Binomial</code></a>: Binomial distribution.</p>
+<p><a href="../../tf/contrib/distributions/Categorical.html"><code>class Categorical</code></a>: Categorical distribution.</p>
+<p><a href="../../tf/contrib/distributions/Chi2.html"><code>class Chi2</code></a>: Chi2 distribution.</p>
+<p><a href="../../tf/contrib/distributions/Chi2WithAbsDf.html"><code>class Chi2WithAbsDf</code></a>: Chi2 with parameter transform <code>df = floor(abs(df))</code>.</p>
+<p><a href="../../tf/contrib/distributions/ConditionalDistribution.html"><code>class ConditionalDistribution</code></a>: Distribution that supports intrinsic parameters (local latents).</p>
+<p><a href="../../tf/contrib/distributions/ConditionalTransformedDistribution.html"><code>class ConditionalTransformedDistribution</code></a>: A TransformedDistribution that allows intrinsic conditioning.</p>
+<p><a href="../../tf/contrib/distributions/Deterministic.html"><code>class Deterministic</code></a>: Scalar <code>Deterministic</code> distribution on the real line.</p>
+<p><a href="../../tf/contrib/distributions/Dirichlet.html"><code>class Dirichlet</code></a>: Dirichlet distribution.</p>
+<p><a href="../../tf/contrib/distributions/DirichletMultinomial.html"><code>class DirichletMultinomial</code></a>: Dirichlet-Multinomial compound distribution.</p>
+<p><a href="../../tf/contrib/distributions/Distribution.html"><code>class Distribution</code></a>: A generic probability distribution base class.</p>
+<p><a href="../../tf/contrib/distributions/ExpRelaxedOneHotCategorical.html"><code>class ExpRelaxedOneHotCategorical</code></a>: ExpRelaxedOneHotCategorical distribution with temperature and logits.</p>
+<p><a href="../../tf/contrib/distributions/Exponential.html"><code>class Exponential</code></a>: Exponential distribution.</p>
+<p><a href="../../tf/contrib/distributions/ExponentialWithSoftplusRate.html"><code>class ExponentialWithSoftplusRate</code></a>: Exponential with softplus transform on <code>rate</code>.</p>
+<p><a href="../../tf/contrib/distributions/Gamma.html"><code>class Gamma</code></a>: Gamma distribution.</p>
+<p><a href="../../tf/contrib/distributions/GammaWithSoftplusConcentrationRate.html"><code>class GammaWithSoftplusConcentrationRate</code></a>: <code>Gamma</code> with softplus of <code>concentration</code> and <code>rate</code>.</p>
+<p><a href="../../tf/contrib/distributions/Geometric.html"><code>class Geometric</code></a>: Geometric distribution.</p>
+<p><a href="../../tf/contrib/distributions/InverseGamma.html"><code>class InverseGamma</code></a>: InverseGamma distribution.</p>
+<p><a href="../../tf/contrib/distributions/InverseGammaWithSoftplusConcentrationRate.html"><code>class InverseGammaWithSoftplusConcentrationRate</code></a>: <code>InverseGamma</code> with softplus of <code>concentration</code> and <code>rate</code>.</p>
+<p><a href="../../tf/contrib/distributions/Laplace.html"><code>class Laplace</code></a>: The Laplace distribution with location <code>loc</code> and <code>scale</code> parameters.</p>
+<p><a href="../../tf/contrib/distributions/LaplaceWithSoftplusScale.html"><code>class LaplaceWithSoftplusScale</code></a>: Laplace with softplus applied to <code>scale</code>.</p>
+<p><a href="../../tf/contrib/distributions/Logistic.html"><code>class Logistic</code></a>: The Logistic distribution with location <code>loc</code> and <code>scale</code> parameters.</p>
+<p><a href="../../tf/contrib/distributions/Mixture.html"><code>class Mixture</code></a>: Mixture distribution.</p>
+<p><a href="../../tf/contrib/distributions/Multinomial.html"><code>class Multinomial</code></a>: Multinomial distribution.</p>
+<p><a href="../../tf/contrib/distributions/MultivariateNormalDiag.html"><code>class MultivariateNormalDiag</code></a>: The multivariate normal distribution on <code>R^k</code>.</p>
+<p><a href="../../tf/contrib/distributions/MultivariateNormalDiagPlusLowRank.html"><code>class MultivariateNormalDiagPlusLowRank</code></a>: The multivariate normal distribution on <code>R^k</code>.</p>
+<p><a href="../../tf/contrib/distributions/MultivariateNormalDiagWithSoftplusScale.html"><code>class MultivariateNormalDiagWithSoftplusScale</code></a>: MultivariateNormalDiag with <code>diag_stddev = softplus(diag_stddev)</code>.</p>
+<p><a href="../../tf/contrib/distributions/MultivariateNormalFullCovariance.html"><code>class MultivariateNormalFullCovariance</code></a>: The multivariate normal distribution on <code>R^k</code>.</p>
+<p><a href="../../tf/contrib/distributions/MultivariateNormalTriL.html"><code>class MultivariateNormalTriL</code></a>: The multivariate normal distribution on <code>R^k</code>.</p>
+<p><a href="../../tf/contrib/distributions/NegativeBinomial.html"><code>class NegativeBinomial</code></a>: NegativeBinomial distribution.</p>
+<p><a href="../../tf/contrib/distributions/Normal.html"><code>class Normal</code></a>: The Normal distribution with location <code>loc</code> and <code>scale</code> parameters.</p>
+<p><a href="../../tf/contrib/distributions/NormalWithSoftplusScale.html"><code>class NormalWithSoftplusScale</code></a>: Normal with softplus applied to <code>scale</code>.</p>
+<p><a href="../../tf/contrib/distributions/OneHotCategorical.html"><code>class OneHotCategorical</code></a>: OneHotCategorical distribution.</p>
+<p><a href="../../tf/contrib/distributions/Poisson.html"><code>class Poisson</code></a>: Poisson distribution.</p>
+<p><a href="../../tf/contrib/distributions/QuantizedDistribution.html"><code>class QuantizedDistribution</code></a>: Distribution representing the quantization <code>Y = ceiling(X)</code>.</p>
+<p><a href="../../tf/contrib/distributions/RegisterKL.html"><code>class RegisterKL</code></a>: Decorator to register a KL divergence implementation function.</p>
+<p><a href="../../tf/contrib/distributions/RelaxedBernoulli.html"><code>class RelaxedBernoulli</code></a>: RelaxedBernoulli distribution with temperature and logits parameters.</p>
+<p><a href="../../tf/contrib/distributions/RelaxedOneHotCategorical.html"><code>class RelaxedOneHotCategorical</code></a>: RelaxedOneHotCategorical distribution with temperature and logits.</p>
+<p><a href="../../tf/contrib/distributions/ReparameterizationType.html"><code>class ReparameterizationType</code></a>: Instances of this class represent how sampling is reparameterized.</p>
+<p><a href="../../tf/contrib/distributions/StudentT.html"><code>class StudentT</code></a>: Student's t-distribution.</p>
+<p><a href="../../tf/contrib/distributions/StudentTWithAbsDfSoftplusScale.html"><code>class StudentTWithAbsDfSoftplusScale</code></a>: StudentT with <code>df = floor(abs(df))</code> and <code>scale = softplus(scale)</code>.</p>
+<p><a href="../../tf/contrib/distributions/TransformedDistribution.html"><code>class TransformedDistribution</code></a>: A Transformed Distribution.</p>
+<p><a href="../../tf/contrib/distributions/Uniform.html"><code>class Uniform</code></a>: Uniform distribution with <code>low</code> and <code>high</code> parameters.</p>
+<p><a href="../../tf/contrib/distributions/VectorDeterministic.html"><code>class VectorDeterministic</code></a>: Vector <code>Deterministic</code> distribution on <code>R^k</code>.</p>
+<p><a href="../../tf/contrib/distributions/VectorLaplaceDiag.html"><code>class VectorLaplaceDiag</code></a>: The vectorization of the Laplace distribution on <code>R^k</code>.</p>
+<p><a href="../../tf/contrib/distributions/WishartCholesky.html"><code>class WishartCholesky</code></a>: The matrix Wishart distribution on positive definite matrices.</p>
+<p><a href="../../tf/contrib/distributions/WishartFull.html"><code>class WishartFull</code></a>: The matrix Wishart distribution on positive definite matrices.</p>
+<h2 id="functions">Functions</h2>
+<p><a href="../../tf/contrib/distributions/kl_divergence.html"><code>kl_divergence(...)</code></a>: Get the KL-divergence KL(distribution_a || distribution_b).</p>
+<p><a href="../../tf/contrib/distributions/matrix_diag_transform.html"><code>matrix_diag_transform(...)</code></a>: Transform diagonal of [batch-]matrix, leave rest of matrix unchanged.</p>
+<p><a href="../../tf/contrib/distributions/normal_conjugates_known_scale_posterior.html"><code>normal_conjugates_known_scale_posterior(...)</code></a>: Posterior Normal distribution with conjugate prior on the mean.</p>
+<p><a href="../../tf/contrib/distributions/normal_conjugates_known_scale_predictive.html"><code>normal_conjugates_known_scale_predictive(...)</code></a>: Posterior predictive Normal distribution w. conjugate prior on the mean.</p>
+<p><a href="../../tf/contrib/distributions/percentile.html"><code>percentile(...)</code></a>: Compute the <code>q</code>-th percentile of <code>x</code>.</p>
+<p><a href="../../tf/contrib/distributions/softplus_inverse.html"><code>softplus_inverse(...)</code></a>: Computes the inverse softplus, i.e., x = softplus_inverse(softplus(x)).</p>
+<h2 id="other-members">Other Members</h2>
+<p><code>FULLY_REPARAMETERIZED</code></p>
+<p><code>NOT_REPARAMETERIZED</code></p>

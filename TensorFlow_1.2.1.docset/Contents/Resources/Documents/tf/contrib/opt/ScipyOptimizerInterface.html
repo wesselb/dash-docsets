@@ -1,0 +1,79 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.opt.ScipyOptimizerInterface" /> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="minimize"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.opt.ScipyOptimizerInterface" class="dashAnchor"></a><h1 id="tf.contrib.opt.scipyoptimizerinterface">tf.contrib.opt.ScipyOptimizerInterface</h1>
+<h3 id="class-tf.contrib.opt.scipyoptimizerinterface"><code>class tf.contrib.opt.ScipyOptimizerInterface</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/opt/python/training/external_optimizer.py"><code>tensorflow/contrib/opt/python/training/external_optimizer.py</code></a>.</p>
+<p>Wrapper allowing <code>scipy.optimize.minimize</code> to operate a <code>tf.Session</code>.</p>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">vector <span class="op">=</span> tf.Variable([<span class="dv">7</span>., <span class="dv">7</span>.], <span class="st">&#39;vector&#39;</span>)
+
+<span class="co"># Make vector norm as small as possible.</span>
+loss <span class="op">=</span> tf.reduce_sum(tf.square(vector))
+
+optimizer <span class="op">=</span> ScipyOptimizerInterface(loss, options<span class="op">=</span>{<span class="st">&#39;maxiter&#39;</span>: <span class="dv">100</span>})
+
+<span class="cf">with</span> tf.Session() <span class="im">as</span> session:
+  optimizer.minimize(session)
+
+<span class="co"># The value of vector should now be [0., 0.].</span></code></pre></div>
+<p>Example with constraints:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">vector <span class="op">=</span> tf.Variable([<span class="dv">7</span>., <span class="dv">7</span>.], <span class="st">&#39;vector&#39;</span>)
+
+<span class="co"># Make vector norm as small as possible.</span>
+loss <span class="op">=</span> tf.reduce_sum(tf.square(vector))
+<span class="co"># Ensure the vector&#39;s y component is = 1.</span>
+equalities <span class="op">=</span> [vector[<span class="dv">1</span>] <span class="op">-</span> <span class="dv">1</span>.]
+<span class="co"># Ensure the vector&#39;s x component is &gt;= 1.</span>
+inequalities <span class="op">=</span> [vector[<span class="dv">0</span>] <span class="op">-</span> <span class="dv">1</span>.]
+
+<span class="co"># Our default SciPy optimization algorithm, L-BFGS-B, does not support</span>
+<span class="co"># general constraints. Thus we use SLSQP instead.</span>
+optimizer <span class="op">=</span> ScipyOptimizerInterface(
+    loss, equalities<span class="op">=</span>equalities, inequalities<span class="op">=</span>inequalities, method<span class="op">=</span><span class="st">&#39;SLSQP&#39;</span>)
+
+<span class="cf">with</span> tf.Session() <span class="im">as</span> session:
+  optimizer.minimize(session)
+
+<span class="co"># The value of vector should now be [1., 1.].</span></code></pre></div>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    loss,
+    var_list<span class="op">=</span><span class="va">None</span>,
+    equalities<span class="op">=</span><span class="va">None</span>,
+    inequalities<span class="op">=</span><span class="va">None</span>,
+    <span class="op">**</span>optimizer_kwargs
+)</code></pre></div>
+<p>Initialize a new interface instance.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>loss</code></b>: A scalar <code>Tensor</code> to be minimized.</li>
+<li><b><code>var_list</code></b>: Optional list of <code>Variable</code> objects to update to minimize <code>loss</code>. Defaults to the list of variables collected in the graph under the key <code>GraphKeys.TRAINABLE_VARIABLES</code>.</li>
+<li><b><code>equalities</code></b>: Optional list of equality constraint scalar <code>Tensor</code>s to be held equal to zero.</li>
+<li><b><code>inequalities</code></b>: Optional list of inequality constraint scalar <code>Tensor</code>s to be kept nonnegative. **optimizer_kwargs: Other subclass-specific keyword arguments.</li>
+</ul>
+<h3 id="minimize">
+<code>minimize</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">minimize(
+    session<span class="op">=</span><span class="va">None</span>,
+    feed_dict<span class="op">=</span><span class="va">None</span>,
+    fetches<span class="op">=</span><span class="va">None</span>,
+    step_callback<span class="op">=</span><span class="va">None</span>,
+    loss_callback<span class="op">=</span><span class="va">None</span>,
+    <span class="op">**</span>run_kwargs
+)</code></pre></div>
+<p>Minimize a scalar <code>Tensor</code>.</p>
+<p>Variables subject to optimization are updated in-place at the end of optimization.</p>
+<p>Note that this method does <em>not</em> just return a minimization <code>Op</code>, unlike <code>Optimizer.minimize()</code>; instead it actually performs minimization by executing commands to control a <code>Session</code>.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>session</code></b>: A <code>Session</code> instance.</li>
+<li><b><code>feed_dict</code></b>: A feed dict to be passed to calls to <code>session.run</code>.</li>
+<li><b><code>fetches</code></b>: A list of <code>Tensor</code>s to fetch and supply to <code>loss_callback</code> as positional arguments.</li>
+<li><b><code>step_callback</code></b>: A function to be called at each optimization step; arguments are the current values of all optimization variables flattened into a single vector.</li>
+<li><b><code>loss_callback</code></b>: A function to be called every time the loss and gradients are computed, with evaluated fetches supplied as positional arguments. **run_kwargs: kwargs to pass to <code>session.run</code>.</li>
+</ul>

@@ -1,0 +1,37 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.metrics.streaming_percentage_less" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.metrics.streaming_percentage_less" class="dashAnchor"></a><h1 id="tf.contrib.metrics.streaming_percentage_less">tf.contrib.metrics.streaming_percentage_less</h1>
+<h3 id="tf.contrib.metrics.streaming_percentage_less-1"><code>tf.contrib.metrics.streaming_percentage_less</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">streaming_percentage_less(
+    values,
+    threshold,
+    weights<span class="op">=</span><span class="va">None</span>,
+    metrics_collections<span class="op">=</span><span class="va">None</span>,
+    updates_collections<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/metrics/python/ops/metric_ops.py"><code>tensorflow/contrib/metrics/python/ops/metric_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.metrics.md#Metric_Ops_">Metrics (contrib) &gt; Metric <code>Ops</code></a></p>
+<p>Computes the percentage of values less than the given threshold.</p>
+<p>The <code>streaming_percentage_less</code> function creates two local variables, <code>total</code> and <code>count</code> that are used to compute the percentage of <code>values</code> that fall below <code>threshold</code>. This rate is weighted by <code>weights</code>, and it is ultimately returned as <code>percentage</code> which is an idempotent operation that simply divides <code>total</code> by <code>count</code>.</p>
+<p>For estimation of the metric over a stream of data, the function creates an <code>update_op</code> operation that updates these variables and returns the <code>percentage</code>.</p>
+<p>If <code>weights</code> is <code>None</code>, weights default to 1. Use weights of 0 to mask values.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>values</code></b>: A numeric <code>Tensor</code> of arbitrary size.</li>
+<li><b><code>threshold</code></b>: A scalar threshold.</li>
+<li><b><code>weights</code></b>: An optional <code>Tensor</code> whose shape is broadcastable to <code>values</code>.</li>
+<li><b><code>metrics_collections</code></b>: An optional list of collections that the metric value variable should be added to.</li>
+<li><b><code>updates_collections</code></b>: An optional list of collections that the metric update ops should be added to.</li>
+<li><b><code>name</code></b>: An optional variable_scope name.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<ul>
+<li><b><code>percentage</code></b>: A <code>Tensor</code> representing the current mean, the value of <code>total</code> divided by <code>count</code>.</li>
+<li><b><code>update_op</code></b>: An operation that increments the <code>total</code> and <code>count</code> variables appropriately.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>weights</code> is not <code>None</code> and its shape doesn't match <code>values</code>, or if either <code>metrics_collections</code> or <code>updates_collections</code> are not a list or tuple.</li>
+</ul>

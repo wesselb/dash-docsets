@@ -1,0 +1,28 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.clip_by_value" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.clip_by_value" class="dashAnchor"></a><h1 id="tf.clip_by_value">tf.clip_by_value</h1>
+<h3 id="tf.clip_by_value-1"><code>tf.clip_by_value</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">clip_by_value(
+    t,
+    clip_value_min,
+    clip_value_max,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/clip_ops.py"><code>tensorflow/python/ops/clip_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/train.md#Gradient_Clipping">Training &gt; Gradient Clipping</a></p>
+<p>Clips tensor values to a specified min and max.</p>
+<p>Given a tensor <code>t</code>, this operation returns a tensor of the same type and shape as <code>t</code> with its values clipped to <code>clip_value_min</code> and <code>clip_value_max</code>. Any values less than <code>clip_value_min</code> are set to <code>clip_value_min</code>. Any values greater than <code>clip_value_max</code> are set to <code>clip_value_max</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>t</code></b>: A <code>Tensor</code>.</li>
+<li><b><code>clip_value_min</code></b>: A 0-D (scalar) <code>Tensor</code>, or a <code>Tensor</code> with the same shape as <code>t</code>. The minimum value to clip by.</li>
+<li><b><code>clip_value_max</code></b>: A 0-D (scalar) <code>Tensor</code>, or a <code>Tensor</code> with the same shape as <code>t</code>. The maximum value to clip by.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A clipped <code>Tensor</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if the clip tensors would trigger array broadcasting that would make the returned tensor larger than the input.</li>
+</ul>

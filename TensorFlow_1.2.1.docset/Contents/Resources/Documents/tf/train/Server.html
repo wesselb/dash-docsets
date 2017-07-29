@@ -1,0 +1,82 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.train.Server" /> <meta itemprop="property" content="server_def"/> <meta itemprop="property" content="target"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="create_local_server"/> <meta itemprop="property" content="join"/> <meta itemprop="property" content="start"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.train.Server" class="dashAnchor"></a><h1 id="tf.train.server">tf.train.Server</h1>
+<h3 id="class-tf.train.server"><code>class tf.train.Server</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/training/server_lib.py"><code>tensorflow/python/training/server_lib.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/train.md#Distributed_execution">Training &gt; Distributed execution</a></p>
+<p>An in-process TensorFlow server, for use in distributed training.</p>
+<p>A <code>tf.train.Server</code> instance encapsulates a set of devices and a <a href="../../tf/Session.html"><code>tf.Session</code></a> target that can participate in distributed training. A server belongs to a cluster (specified by a <a href="../../tf/train/ClusterSpec.html"><code>tf.train.ClusterSpec</code></a>), and corresponds to a particular task in a named job. The server can communicate with any other server in the same cluster.</p>
+<h2 id="properties">Properties</h2>
+<h3 id="server_def">
+<code>server_def</code>
+</h3>
+<p>Returns the <code>tf.train.ServerDef</code> for this server.</p>
+<h4 id="returns">Returns:</h4>
+<p>A <code>tf.train.ServerDef</code> protocol buffer that describes the configuration of this server.</p>
+<h3 id="target">
+<code>target</code>
+</h3>
+<p>Returns the target for a <code>tf.Session</code> to connect to this server.</p>
+<p>To create a <a href="../../tf/Session.html"><code>tf.Session</code></a> that connects to this server, use the following snippet:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">server <span class="op">=</span> tf.train.Server(...)
+<span class="cf">with</span> tf.Session(server.target):
+  <span class="co"># ...</span></code></pre></div>
+<h4 id="returns-1">Returns:</h4>
+<p>A string containing a session target for this server.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    server_or_cluster_def,
+    job_name<span class="op">=</span><span class="va">None</span>,
+    task_index<span class="op">=</span><span class="va">None</span>,
+    protocol<span class="op">=</span><span class="va">None</span>,
+    config<span class="op">=</span><span class="va">None</span>,
+    start<span class="op">=</span><span class="va">True</span>
+)</code></pre></div>
+<p>Creates a new server with the given definition.</p>
+<p>The <code>job_name</code>, <code>task_index</code>, and <code>protocol</code> arguments are optional, and override any information provided in <code>server_or_cluster_def</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>server_or_cluster_def</code></b>: A <code>tf.train.ServerDef</code> or <code>tf.train.ClusterDef</code> protocol buffer, or a <code>tf.train.ClusterSpec</code> object, describing the server to be created and/or the cluster of which it is a member.</li>
+<li><b><code>job_name</code></b>: (Optional.) Specifies the name of the job of which the server is a member. Defaults to the value in <code>server_or_cluster_def</code>, if specified.</li>
+<li><b><code>task_index</code></b>: (Optional.) Specifies the task index of the server in its job. Defaults to the value in <code>server_or_cluster_def</code>, if specified. Otherwise defaults to 0 if the server's job has only one task.</li>
+<li><b><code>protocol</code></b>: (Optional.) Specifies the protocol to be used by the server. Acceptable values include <code>&quot;grpc&quot;</code>. Defaults to the value in <code>server_or_cluster_def</code>, if specified. Otherwise defaults to <code>&quot;grpc&quot;</code>.</li>
+<li><b><code>config</code></b>: (Options.) A <code>tf.ConfigProto</code> that specifies default configuration options for all sessions that run on this server.</li>
+<li><b><code>start</code></b>: (Optional.) Boolean, indicating whether to start the server after creating it. Defaults to <code>True</code>.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<p>tf.errors.OpError: Or one of its subclasses if an error occurs while creating the TensorFlow server.</p>
+<h3 id="create_local_server">
+<code>create_local_server</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">create_local_server(
+    config<span class="op">=</span><span class="va">None</span>,
+    start<span class="op">=</span><span class="va">True</span>
+)</code></pre></div>
+<p>Creates a new single-process cluster running on the local host.</p>
+<p>This method is a convenience wrapper for creating a <code>tf.train.Server</code> with a <code>tf.train.ServerDef</code> that specifies a single-process cluster containing a single task in a job called <code>&quot;local&quot;</code>.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>config</code></b>: (Options.) A <code>tf.ConfigProto</code> that specifies default configuration options for all sessions that run on this server.</li>
+<li><b><code>start</code></b>: (Optional.) Boolean, indicating whether to start the server after creating it. Defaults to <code>True</code>.</li>
+</ul>
+<h4 id="returns-2">Returns:</h4>
+<p>A local <code>tf.train.Server</code>.</p>
+<h3 id="join">
+<code>join</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">join()</code></pre></div>
+<p>Blocks until the server has shut down.</p>
+<p>This method currently blocks forever.</p>
+<h4 id="raises-1">Raises:</h4>
+<p>tf.errors.OpError: Or one of its subclasses if an error occurs while joining the TensorFlow server.</p>
+<h3 id="start">
+<code>start</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">start()</code></pre></div>
+<p>Starts this server.</p>
+<h4 id="raises-2">Raises:</h4>
+<p>tf.errors.OpError: Or one of its subclasses if an error occurs while starting the TensorFlow server.</p>

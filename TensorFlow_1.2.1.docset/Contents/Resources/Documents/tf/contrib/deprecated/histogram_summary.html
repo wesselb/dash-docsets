@@ -1,0 +1,27 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.deprecated.histogram_summary" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.deprecated.histogram_summary" class="dashAnchor"></a><h1 id="tf.contrib.deprecated.histogram_summary">tf.contrib.deprecated.histogram_summary</h1>
+<h3 id="tf.contrib.deprecated.histogram_summary-1"><code>tf.contrib.deprecated.histogram_summary</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">histogram_summary(
+    tag,
+    values,
+    collections<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/logging_ops.py"><code>tensorflow/python/ops/logging_ops.py</code></a>.</p>
+<p>Outputs a <code>Summary</code> protocol buffer with a histogram. (deprecated)</p>
+<p>THIS FUNCTION IS DEPRECATED. It will be removed after 2016-11-30. Instructions for updating: Please switch to tf.summary.histogram. Note that tf.summary.histogram uses the node name instead of the tag. This means that TensorFlow will automatically de-duplicate summary names based on the scope they are created in.</p>
+<p>This ops is deprecated. Please switch to tf.summary.histogram.</p>
+<p>For an explanation of why this op was deprecated, and information on how to migrate, look <a href="https://github.com/tensorflow/tensorflow/blob/master/tensorflow/contrib/deprecated/__init__.py">'here'</a></p>
+<p>The generated <a href="https://www.tensorflow.org/code/tensorflow/core/framework/summary.proto"><code>Summary</code></a> has one summary value containing a histogram for <code>values</code>.</p>
+<p>This op reports an <code>InvalidArgument</code> error if any value is not finite.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>tag</code></b>: A <code>string</code> <code>Tensor</code>. 0-D. Tag to use for the summary value.</li>
+<li><b><code>values</code></b>: A real numeric <code>Tensor</code>. Any shape. Values to use to build the histogram.</li>
+<li><b><code>collections</code></b>: Optional list of graph collections keys. The new summary op is added to these collections. Defaults to <code>[GraphKeys.SUMMARIES]</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A scalar <code>Tensor</code> of type <code>string</code>. The serialized <code>Summary</code> protocol buffer.</p>

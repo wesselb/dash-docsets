@@ -1,0 +1,28 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.image.random_saturation" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.image.random_saturation" class="dashAnchor"></a><h1 id="tf.image.random_saturation">tf.image.random_saturation</h1>
+<h3 id="tf.image.random_saturation-1"><code>tf.image.random_saturation</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">random_saturation(
+    image,
+    lower,
+    upper,
+    seed<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/image_ops_impl.py"><code>tensorflow/python/ops/image_ops_impl.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/image.md#Image_Adjustments">Images &gt; Image Adjustments</a></p>
+<p>Adjust the saturation of an RGB image by a random factor.</p>
+<p>Equivalent to <code>adjust_saturation()</code> but uses a <code>saturation_factor</code> randomly picked in the interval <code>[lower, upper]</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>image</code></b>: RGB image or images. Size of the last dimension must be 3.</li>
+<li><b><code>lower</code></b>: float. Lower bound for the random saturation factor.</li>
+<li><b><code>upper</code></b>: float. Upper bound for the random saturation factor.</li>
+<li><b><code>seed</code></b>: An operation-specific seed. It will be used in conjunction with the graph-level seed to determine the real seeds that will be used in this operation. Please see the documentation of set_random_seed for its interaction with the graph-level random seed.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Adjusted image(s), same shape and DType as <code>image</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>upper &lt;= lower</code> or if <code>lower &lt; 0</code>.</li>
+</ul>

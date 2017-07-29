@@ -1,0 +1,79 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.preprocessing.image.DirectoryIterator" /> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="__iter__"/> <meta itemprop="property" content="__next__"/> <meta itemprop="property" content="next"/> <meta itemprop="property" content="reset"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.keras.preprocessing.image.DirectoryIterator" class="dashAnchor"></a><h1 id="tf.contrib.keras.preprocessing.image.directoryiterator">tf.contrib.keras.preprocessing.image.DirectoryIterator</h1>
+<h3 id="class-tf.contrib.keras.preprocessing.image.directoryiterator"><code>class tf.contrib.keras.preprocessing.image.DirectoryIterator</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/preprocessing/image.py"><code>tensorflow/contrib/keras/python/keras/preprocessing/image.py</code></a>.</p>
+<p>Iterator capable of reading images from a directory on disk.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>directory: Path to the directory to read images from.
+    Each subdirectory in this directory will be
+    considered to contain images from one class,
+    or alternatively you could specify class subdirectories
+    via the `classes` argument.
+image_data_generator: Instance of `ImageDataGenerator`
+    to use for random transformations and normalization.
+target_size: tuple of integers, dimensions to resize input images to.
+color_mode: One of `&quot;rgb&quot;`, `&quot;grayscale&quot;`. Color mode to read images.
+classes: Optional list of strings, names of sudirectories
+    containing images from each class (e.g. `[&quot;dogs&quot;, &quot;cats&quot;]`).
+    It will be computed automatically if not set.
+class_mode: Mode for yielding the targets:
+    `&quot;binary&quot;`: binary targets (if there are only two classes),
+    `&quot;categorical&quot;`: categorical targets,
+    `&quot;sparse&quot;`: integer targets,
+    `None`: no targets get yielded (only input images are yielded).
+batch_size: Integer, size of a batch.
+shuffle: Boolean, whether to shuffle the data between epochs.
+seed: Random seed for data shuffling.
+data_format: String, one of `channels_first`, `channels_last`.
+save_to_dir: Optional directory where to save the pictures
+    being yielded, in a viewable format. This is useful
+    for visualizing the random transformations being
+    applied, for debugging purposes.
+save_prefix: String prefix to use for saving sample
+    images (if `save_to_dir` is set).
+save_format: Format to use for saving sample images
+    (if `save_to_dir` is set).</code></pre>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    directory,
+    image_data_generator,
+    target_size<span class="op">=</span>(<span class="dv">256</span>, <span class="dv">256</span>),
+    color_mode<span class="op">=</span><span class="st">&#39;rgb&#39;</span>,
+    classes<span class="op">=</span><span class="va">None</span>,
+    class_mode<span class="op">=</span><span class="st">&#39;categorical&#39;</span>,
+    batch_size<span class="op">=</span><span class="dv">32</span>,
+    shuffle<span class="op">=</span><span class="va">True</span>,
+    seed<span class="op">=</span><span class="va">None</span>,
+    data_format<span class="op">=</span><span class="va">None</span>,
+    save_to_dir<span class="op">=</span><span class="va">None</span>,
+    save_prefix<span class="op">=</span><span class="st">&#39;&#39;</span>,
+    save_format<span class="op">=</span><span class="st">&#39;jpeg&#39;</span>,
+    follow_links<span class="op">=</span><span class="va">False</span>
+)</code></pre></div>
+<h3 id="__iter__">
+<code><strong>iter</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__iter__</span>()</code></pre></div>
+<h3 id="__next__">
+<code><strong>next</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__next__</span>(
+    <span class="op">*</span>args,
+    <span class="op">**</span>kwargs
+)</code></pre></div>
+<h3 id="next">
+<code>next</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="bu">next</span>()</code></pre></div>
+<p>For python 2.x.</p>
+<h4 id="returns">Returns:</h4>
+<pre><code>The next batch.</code></pre>
+<h3 id="reset">
+<code>reset</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">reset()</code></pre></div>

@@ -1,0 +1,16 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.layers.one_hot_column" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.layers.one_hot_column" class="dashAnchor"></a><h1 id="tf.contrib.layers.one_hot_column">tf.contrib.layers.one_hot_column</h1>
+<h3 id="tf.contrib.layers.one_hot_column-1"><code>tf.contrib.layers.one_hot_column</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">one_hot_column(sparse_id_column)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/layers/python/layers/feature_column.py"><code>tensorflow/contrib/layers/python/layers/feature_column.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.layers.md#Feature_columns">Layers (contrib) &gt; Feature columns</a></p>
+<p>Creates an <code>_OneHotColumn</code> for a one-hot or multi-hot repr in a DNN.</p>
+<h4 id="args">Args:</h4>
+<pre><code>sparse_id_column: A _SparseColumn which is created by
+  `sparse_column_with_*`
+  or crossed_column functions. Note that `combiner` defined in
+  `sparse_id_column` is ignored.</code></pre>
+<h4 id="returns">Returns:</h4>
+<p>An _OneHotColumn.</p>

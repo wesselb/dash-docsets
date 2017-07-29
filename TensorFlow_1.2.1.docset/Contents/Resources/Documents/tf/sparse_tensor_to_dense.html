@@ -1,0 +1,37 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.sparse_tensor_to_dense" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.sparse_tensor_to_dense" class="dashAnchor"></a><h1 id="tf.sparse_tensor_to_dense">tf.sparse_tensor_to_dense</h1>
+<h3 id="tf.sparse_tensor_to_dense-1"><code>tf.sparse_tensor_to_dense</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">sparse_tensor_to_dense(
+    sp_input,
+    default_value<span class="op">=</span><span class="dv">0</span>,
+    validate_indices<span class="op">=</span><span class="va">True</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/sparse_ops.py"><code>tensorflow/python/ops/sparse_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/sparse_ops.md#Conversion">Sparse Tensors &gt; Conversion</a></p>
+<p>Converts a <code>SparseTensor</code> into a dense tensor.</p>
+<p>This op is a convenience wrapper around <code>sparse_to_dense</code> for <code>SparseTensor</code>s.</p>
+<p>For example, if <code>sp_input</code> has shape <code>[3, 5]</code> and non-empty string values:</p>
+<pre><code>[0, 1]: a
+[0, 3]: b
+[2, 0]: c</code></pre>
+<p>and <code>default_value</code> is <code>x</code>, then the output will be a dense <code>[3, 5]</code> string tensor with values:</p>
+<pre><code>[[x a x b x]
+ [x x x x x]
+ [c x x x x]]</code></pre>
+<p>Indices must be without repeats. This is only tested if validate_indices is True.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>sp_input</code></b>: The input <code>SparseTensor</code>.</li>
+<li><b><code>default_value</code></b>: Scalar value to set for indices not specified in <code>sp_input</code>. Defaults to zero.</li>
+<li><b><code>validate_indices</code></b>: A boolean value. If <code>True</code>, indices are checked to make sure they are sorted in lexicographic order and that there are no repeats.</li>
+<li><b><code>name</code></b>: A name prefix for the returned tensors (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A dense tensor with shape <code>sp_input.dense_shape</code> and values specified by the non-empty values in <code>sp_input</code>. Indices not in <code>sp_input</code> are assigned <code>default_value</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>sp_input</code> is not a <code>SparseTensor</code>.</li>
+</ul>

@@ -1,0 +1,40 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.distributions.RegisterKL" /> <meta itemprop="property" content="__call__"/> <meta itemprop="property" content="__init__"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.distributions.RegisterKL" class="dashAnchor"></a><h1 id="tf.contrib.distributions.registerkl">tf.contrib.distributions.RegisterKL</h1>
+<h3 id="class-tf.contrib.distributions.registerkl"><code>class tf.contrib.distributions.RegisterKL</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/distributions/kullback_leibler.py"><code>tensorflow/python/ops/distributions/kullback_leibler.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.distributions.md#Kullback_Leibler_Divergence">Statistical Distributions (contrib) &gt; Kullback-Leibler Divergence</a></p>
+<p>Decorator to register a KL divergence implementation function.</p>
+<p>Usage:</p>
+<p><span class="citation">@distributions.RegisterKL</span>(distributions.Normal, distributions.Normal) def _kl_normal_mvn(norm_a, norm_b): # Return KL(norm_a || norm_b)</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    dist_cls_a,
+    dist_cls_b
+)</code></pre></div>
+<p>Initialize the KL registrar.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>dist_cls_a</code></b>: the class of the first argument of the KL divergence.</li>
+<li><b><code>dist_cls_b</code></b>: the class of the second argument of the KL divergence.</li>
+</ul>
+<h3 id="__call__">
+<code><strong>call</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__call__</span>(kl_fn)</code></pre></div>
+<p>Perform the KL registration.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>kl_fn</code></b>: The function to use for the KL divergence.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>kl_fn</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: if kl_fn is not a callable.</li>
+<li><b><code>ValueError</code></b>: if a KL divergence function has already been registered for the given argument classes.</li>
+</ul>

@@ -1,0 +1,48 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.utils.get_file" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.keras.utils.get_file" class="dashAnchor"></a><h1 id="tf.contrib.keras.utils.get_file">tf.contrib.keras.utils.get_file</h1>
+<h3 id="tf.contrib.keras.utils.get_file-1"><code>tf.contrib.keras.utils.get_file</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_file(
+    fname,
+    origin,
+    untar<span class="op">=</span><span class="va">False</span>,
+    md5_hash<span class="op">=</span><span class="va">None</span>,
+    file_hash<span class="op">=</span><span class="va">None</span>,
+    cache_subdir<span class="op">=</span><span class="st">&#39;datasets&#39;</span>,
+    hash_algorithm<span class="op">=</span><span class="st">&#39;auto&#39;</span>,
+    extract<span class="op">=</span><span class="va">False</span>,
+    archive_format<span class="op">=</span><span class="st">&#39;auto&#39;</span>,
+    cache_dir<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/utils/data_utils.py"><code>tensorflow/contrib/keras/python/keras/utils/data_utils.py</code></a>.</p>
+<p>Downloads a file from a URL if it not already in the cache.</p>
+<p>By default the file at the url <code>origin</code> is downloaded to the cache_dir <code>~/.keras</code>, placed in the cache_subdir <code>datasets</code>, and given the filename <code>fname</code>. The final location of a file <code>example.txt</code> would therefore be <code>~/.keras/datasets/example.txt</code>.</p>
+<p>Files in tar, tar.gz, tar.bz, and zip formats can also be extracted. Passing a hash will verify the file after download. The command line programs <code>shasum</code> and <code>sha256sum</code> can compute the hash.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>fname: Name of the file. If an absolute path `/path/to/file.txt` is
+    specified the file will be saved at that location.
+origin: Original URL of the file.
+untar: Deprecated in favor of &#39;extract&#39;.
+    boolean, whether the file should be decompressed
+md5_hash: Deprecated in favor of &#39;file_hash&#39;.
+    md5 hash of the file for verification
+file_hash: The expected hash string of the file after download.
+    The sha256 and md5 hash algorithms are both supported.
+cache_subdir: Subdirectory under the Keras cache dir where the file is
+    saved. If an absolute path `/path/to/folder` is
+    specified the file will be saved at that location.
+hash_algorithm: Select the hash algorithm to verify the file.
+    options are &#39;md5&#39;, &#39;sha256&#39;, and &#39;auto&#39;.
+    The default &#39;auto&#39; detects the hash algorithm in use.
+extract: True tries extracting the file as an Archive, like tar or zip.
+archive_format: Archive format to try for extracting the file.
+    Options are &#39;auto&#39;, &#39;tar&#39;, &#39;zip&#39;, and None.
+    &#39;tar&#39; includes tar, tar.gz, and tar.bz files.
+    The default &#39;auto&#39; is [&#39;tar&#39;, &#39;zip&#39;].
+    None or an empty list will return no matches found.
+cache_dir: Location to store cached files, when None it
+    defaults to the [Keras
+      Directory](/faq/#where-is-the-keras-configuration-filed-stored).</code></pre>
+<h4 id="returns">Returns:</h4>
+<pre><code>Path to the downloaded file</code></pre>

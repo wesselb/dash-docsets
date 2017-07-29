@@ -1,0 +1,71 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.train.SummarySaverHook" /> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="after_create_session"/> <meta itemprop="property" content="after_run"/> <meta itemprop="property" content="before_run"/> <meta itemprop="property" content="begin"/> <meta itemprop="property" content="end"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.train.SummarySaverHook" class="dashAnchor"></a><h1 id="tf.train.summarysaverhook">tf.train.SummarySaverHook</h1>
+<h3 id="class-tf.train.summarysaverhook"><code>class tf.train.SummarySaverHook</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/training/basic_session_run_hooks.py"><code>tensorflow/python/training/basic_session_run_hooks.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/train.md#Training_Hooks">Training &gt; Training Hooks</a></p>
+<p>Saves summaries every N steps.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    save_steps<span class="op">=</span><span class="va">None</span>,
+    save_secs<span class="op">=</span><span class="va">None</span>,
+    output_dir<span class="op">=</span><span class="va">None</span>,
+    summary_writer<span class="op">=</span><span class="va">None</span>,
+    scaffold<span class="op">=</span><span class="va">None</span>,
+    summary_op<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Initializes a <code>SummarySaverHook</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>save_steps</code></b>: <code>int</code>, save summaries every N steps. Exactly one of <code>save_secs</code> and <code>save_steps</code> should be set.</li>
+<li><b><code>save_secs</code></b>: <code>int</code>, save summaries every N seconds.</li>
+<li><b><code>output_dir</code></b>: <code>string</code>, the directory to save the summaries to. Only used if no <code>summary_writer</code> is supplied.</li>
+<li><b><code>summary_writer</code></b>: <code>SummaryWriter</code>. If <code>None</code> and an <code>output_dir</code> was passed, one will be created accordingly.</li>
+<li><b><code>scaffold</code></b>: <code>Scaffold</code> to get summary_op if it's not provided.</li>
+<li><b><code>summary_op</code></b>: <code>Tensor</code> of type <code>string</code> containing the serialized <code>Summary</code> protocol buffer or a list of <code>Tensor</code>. They are most likely an output by TF summary methods like <code>tf.summary.scalar</code> or <code>tf.summary.merge_all</code>. It can be passed in as one tensor; if more than one, they must be passed in as a list.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: Exactly one of scaffold or summary_op should be set.</li>
+</ul>
+<h3 id="after_create_session">
+<code>after_create_session</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">after_create_session(
+    session,
+    coord
+)</code></pre></div>
+<p>Called when new TensorFlow session is created.</p>
+<p>This is called to signal the hooks that a new session has been created. This has two essential differences with the situation in which <code>begin</code> is called:</p>
+<ul>
+<li>When this is called, the graph is finalized and ops can no longer be added to the graph.</li>
+<li>This method will also be called as a result of recovering a wrapped session, not only at the beginning of the overall session.</li>
+</ul>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>session</code></b>: A TensorFlow Session that has been created.</li>
+<li><b><code>coord</code></b>: A Coordinator object which keeps track of all threads.</li>
+</ul>
+<h3 id="after_run">
+<code>after_run</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">after_run(
+    run_context,
+    run_values
+)</code></pre></div>
+<h3 id="before_run">
+<code>before_run</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">before_run(run_context)</code></pre></div>
+<h3 id="begin">
+<code>begin</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">begin()</code></pre></div>
+<h3 id="end">
+<code>end</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">end(session<span class="op">=</span><span class="va">None</span>)</code></pre></div>

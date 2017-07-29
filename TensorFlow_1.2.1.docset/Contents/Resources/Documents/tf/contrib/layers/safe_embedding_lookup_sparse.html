@@ -1,0 +1,38 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.layers.safe_embedding_lookup_sparse" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.layers.safe_embedding_lookup_sparse" class="dashAnchor"></a><h1 id="tf.contrib.layers.safe_embedding_lookup_sparse">tf.contrib.layers.safe_embedding_lookup_sparse</h1>
+<h3 id="tf.contrib.layers.safe_embedding_lookup_sparse-1"><code>tf.contrib.layers.safe_embedding_lookup_sparse</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">safe_embedding_lookup_sparse(
+    embedding_weights,
+    sparse_ids,
+    sparse_weights<span class="op">=</span><span class="va">None</span>,
+    combiner<span class="op">=</span><span class="va">None</span>,
+    default_id<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>,
+    partition_strategy<span class="op">=</span><span class="st">&#39;div&#39;</span>,
+    max_norm<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/layers/python/layers/embedding_ops.py"><code>tensorflow/contrib/layers/python/layers/embedding_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.layers.md#Higher_level_ops_for_building_neural_network_layers">Layers (contrib) &gt; Higher level ops for building neural network layers</a></p>
+<p>Lookup embedding results, accounting for invalid IDs and empty features.</p>
+<p>The partitioned embedding in <code>embedding_weights</code> must all be the same shape except for the first dimension. The first dimension is allowed to vary as the vocabulary size is not necessarily a multiple of <code>P</code>. <code>embedding_weights</code> may be a <code>PartitionedVariable</code> as returned by using <code>tf.get_variable()</code> with a partitioner.</p>
+<p>Invalid IDs (&lt; 0) are pruned from input IDs and weights, as well as any IDs with non-positive weight. For an entry with no features, the embedding vector for <code>default_id</code> is returned, or the 0-vector if <code>default_id</code> is not supplied.</p>
+<p>The ids and weights may be multi-dimensional. Embeddings are always aggregated along the last dimension.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>embedding_weights</code></b>: A list of <code>P</code> float tensors or values representing partitioned embedding tensors. Alternatively, a <code>PartitionedVariable</code>, created by partitioning along dimension 0. The total unpartitioned shape should be <code>[e_0, e_1, ..., e_m]</code>, where <code>e_0</code> represents the vocab size and <code>e_1, ..., e_m</code> are the embedding dimensions.</li>
+<li><b><code>sparse_ids</code></b>: <code>SparseTensor</code> of shape <code>[d_0, d_1, ..., d_n]</code> containing the ids. <code>d_0</code> is typically batch size.</li>
+<li><b><code>sparse_weights</code></b>: <code>SparseTensor</code> of same shape as <code>sparse_ids</code>, containing float weights corresponding to <code>sparse_ids</code>, or <code>None</code> if all weights are be assumed to be 1.0.</li>
+<li><b><code>combiner</code></b>: A string specifying how to combine embedding results for each entry. Currently &quot;mean&quot;, &quot;sqrtn&quot; and &quot;sum&quot; are supported, with &quot;mean&quot; the default.</li>
+<li><b><code>default_id</code></b>: The id to use for an entry with no features.</li>
+<li><b><code>name</code></b>: A name for this operation (optional).</li>
+<li><b><code>partition_strategy</code></b>: A string specifying the partitioning strategy. Currently <code>&quot;div&quot;</code> and <code>&quot;mod&quot;</code> are supported. Default is <code>&quot;div&quot;</code>.</li>
+<li><b><code>max_norm</code></b>: If not None, all embeddings are l2-normalized to max_norm before combining.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Dense tensor of shape <code>[d_0, d_1, ..., d_{n-1}, e_1, ..., e_m]</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>embedding_weights</code> is empty.</li>
+</ul>

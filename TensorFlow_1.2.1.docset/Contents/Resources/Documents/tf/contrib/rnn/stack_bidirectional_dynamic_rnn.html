@@ -1,0 +1,39 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.rnn.stack_bidirectional_dynamic_rnn" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.rnn.stack_bidirectional_dynamic_rnn" class="dashAnchor"></a><h1 id="tf.contrib.rnn.stack_bidirectional_dynamic_rnn">tf.contrib.rnn.stack_bidirectional_dynamic_rnn</h1>
+<h3 id="tf.contrib.rnn.stack_bidirectional_dynamic_rnn-1"><code>tf.contrib.rnn.stack_bidirectional_dynamic_rnn</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">stack_bidirectional_dynamic_rnn(
+    cells_fw,
+    cells_bw,
+    inputs,
+    initial_states_fw<span class="op">=</span><span class="va">None</span>,
+    initial_states_bw<span class="op">=</span><span class="va">None</span>,
+    dtype<span class="op">=</span><span class="va">None</span>,
+    sequence_length<span class="op">=</span><span class="va">None</span>,
+    parallel_iterations<span class="op">=</span><span class="va">None</span>,
+    scope<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/rnn/python/ops/rnn.py"><code>tensorflow/contrib/rnn/python/ops/rnn.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.rnn.md#Recurrent_Neural_Networks">RNN and Cells (contrib) &gt; Recurrent Neural Networks</a></p>
+<p>Creates a dynamic bidirectional recurrent neural network.</p>
+<p>Stacks several bidirectional rnn layers. The combined forward and backward layer outputs are used as input of the next layer. tf.bidirectional_rnn does not allow to share forward and backward information between layers. The input_size of the first forward and backward cells must match. The initial state for both directions is zero and no intermediate states are returned.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>cells_fw</code></b>: List of instances of RNNCell, one per layer, to be used for forward direction.</li>
+<li><b><code>cells_bw</code></b>: List of instances of RNNCell, one per layer, to be used for backward direction.</li>
+<li><b><code>inputs</code></b>: The RNN inputs. this must be a tensor of shape: <code>[batch_size, max_time, ...]</code>, or a nested tuple of such elements.</li>
+<li><b><code>initial_states_fw</code></b>: (optional) A list of the initial states (one per layer) for the forward RNN. Each tensor must has an appropriate type and shape <code>[batch_size, cell_fw.state_size]</code>.</li>
+<li><b><code>initial_states_bw</code></b>: (optional) Same as for <code>initial_states_fw</code>, but using the corresponding properties of <code>cells_bw</code>.</li>
+<li><b><code>dtype</code></b>: (optional) The data type for the initial state. Required if either of the initial states are not provided.</li>
+<li><b><code>sequence_length</code></b>: (optional) An int32/int64 vector, size <code>[batch_size]</code>, containing the actual lengths for each of the sequences.</li>
+<li><b><code>parallel_iterations</code></b>: (Default: 32). The number of iterations to run in parallel. Those operations which do not have any temporal dependency and can be run in parallel, will be. This parameter trades off time for space. Values &gt;&gt; 1 use more memory but take less time, while smaller values use less memory but computations take longer.</li>
+<li><b><code>scope</code></b>: VariableScope for the created subgraph; defaults to None.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A tuple (outputs, output_state_fw, output_state_bw) where: outputs: Output <code>Tensor</code> shaped: <code>batch_size, max_time, layers_output]</code>. Where layers_output are depth-concatenated forward and backward outputs. output_states_fw is the final states, one tensor per layer, of the forward rnn. output_states_bw is the final states, one tensor per layer, of the backward rnn.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>cell_fw</code> or <code>cell_bw</code> is not an instance of <code>RNNCell</code>.</li>
+<li><b><code>ValueError</code></b>: If inputs is <code>None</code>.</li>
+</ul>

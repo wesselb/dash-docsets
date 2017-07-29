@@ -1,0 +1,23 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.framework.assign_from_checkpoint" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.framework.assign_from_checkpoint" class="dashAnchor"></a><h1 id="tf.contrib.framework.assign_from_checkpoint">tf.contrib.framework.assign_from_checkpoint</h1>
+<h3 id="tf.contrib.framework.assign_from_checkpoint-1"><code>tf.contrib.framework.assign_from_checkpoint</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">assign_from_checkpoint(
+    model_path,
+    var_list
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/framework/python/ops/variables.py"><code>tensorflow/contrib/framework/python/ops/variables.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.framework.md#Variables">Framework (contrib) &gt; Variables</a></p>
+<p>Creates an operation to assign specific variables from a checkpoint.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>model_path</code></b>: The full path to the model checkpoint. To get latest checkpoint use <code>model_path = tf.train.latest_checkpoint(checkpoint_dir)</code></li>
+<li><b><code>var_list</code></b>: A list of (possibly partitioned) <code>Variable</code> objects or a dictionary mapping names in the checkpoint to the corresponding variables or list of variables to initialize from that checkpoint value. For partitioned Variables, the name in the checkpoint must be the full variable, not the name of the partitioned variable, eg. &quot;my_var&quot; rather than &quot;my_var/part_4&quot;. If empty, returns no_op(), {}.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>the restore_op and the feed_dict that need to be run to restore var_list.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If the checkpoint specified at <code>model_path</code> is missing one of the variables in <code>var_list</code>.</li>
+</ul>

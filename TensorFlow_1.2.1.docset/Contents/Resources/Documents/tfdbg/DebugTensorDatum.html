@@ -1,0 +1,90 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tfdbg.DebugTensorDatum" /> <meta itemprop="property" content="debug_op"/> <meta itemprop="property" content="dump_size_bytes"/> <meta itemprop="property" content="extended_timestamp"/> <meta itemprop="property" content="file_path"/> <meta itemprop="property" content="node_name"/> <meta itemprop="property" content="output_slot"/> <meta itemprop="property" content="tensor_name"/> <meta itemprop="property" content="timestamp"/> <meta itemprop="property" content="watch_key"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="get_tensor"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tfdbg.DebugTensorDatum" class="dashAnchor"></a><h1 id="tfdbg.debugtensordatum">tfdbg.DebugTensorDatum</h1>
+<h3 id="class-tfdbg.debugtensordatum"><code>class tfdbg.DebugTensorDatum</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/debug/lib/debug_data.py"><code>tensorflow/python/debug/lib/debug_data.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/tfdbg.md#Classes_for_debug_dump_data_and_directories">TensorFlow Debugger &gt; Classes for debug-dump data and directories</a></p>
+<p>A single tensor dumped by TensorFlow Debugger (tfdbg).</p>
+<p>Contains metadata about the dumped tensor, including <code>timestamp</code>, <code>node_name</code>, <code>output_slot</code>, <code>debug_op</code>, and path to the dump file (<code>file_path</code>).</p>
+<p>This type does not hold the generally space-expensive tensor value (numpy array). Instead, it points to the file from which the tensor value can be loaded (with the <code>get_tensor</code> method) if needed.</p>
+<h2 id="properties">Properties</h2>
+<h3 id="debug_op">
+<code>debug_op</code>
+</h3>
+<p>Name of the debug op.</p>
+<h4 id="returns">Returns:</h4>
+<p>(<code>str</code>) debug op name (e.g., <code>DebugIdentity</code>).</p>
+<h3 id="dump_size_bytes">
+<code>dump_size_bytes</code>
+</h3>
+<p>Size of the dump file.</p>
+<p>Unit: byte.</p>
+<h4 id="returns-1">Returns:</h4>
+<p>If the dump file exists, size of the dump file, in bytes. If the dump file does not exist, None.</p>
+<h3 id="extended_timestamp">
+<code>extended_timestamp</code>
+</h3>
+<p>Extended timestamp, possibly with an index suffix.</p>
+<p>The index suffix, e.g., &quot;-1&quot;, is for disambiguating multiple dumps of the same tensor with the same timestamp, which can occur if the dumping events are spaced by shorter than the temporal resolution of the timestamps.</p>
+<h4 id="returns-2">Returns:</h4>
+<p>(<code>str</code>) The extended timestamp.</p>
+<h3 id="file_path">
+<code>file_path</code>
+</h3>
+<p>Path to the file which stores the value of the dumped tensor.</p>
+<h3 id="node_name">
+<code>node_name</code>
+</h3>
+<p>Name of the node from which the tensor value was dumped.</p>
+<h4 id="returns-3">Returns:</h4>
+<p>(<code>str</code>) name of the node watched by the debug op.</p>
+<h3 id="output_slot">
+<code>output_slot</code>
+</h3>
+<p>Output slot index from which the tensor value was dumped.</p>
+<h4 id="returns-4">Returns:</h4>
+<p>(<code>int</code>) output slot index watched by the debug op.</p>
+<h3 id="tensor_name">
+<code>tensor_name</code>
+</h3>
+<p>Name of the tensor watched by the debug op.</p>
+<h4 id="returns-5">Returns:</h4>
+<p>(<code>str</code>) <code>Tensor</code> name, in the form of <code>node_name</code>:<code>output_slot</code></p>
+<h3 id="timestamp">
+<code>timestamp</code>
+</h3>
+<p>Timestamp of when this tensor value was dumped.</p>
+<h4 id="returns-6">Returns:</h4>
+<p>(<code>int</code>) The timestamp in microseconds.</p>
+<h3 id="watch_key">
+<code>watch_key</code>
+</h3>
+<p>Watch key identities a debug watch on a tensor.</p>
+<h4 id="returns-7">Returns:</h4>
+<p>(<code>str</code>) A watch key, in the form of <code>tensor_name</code>:<code>debug_op</code>.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    dump_root,
+    debug_dump_rel_path
+)</code></pre></div>
+<p><code>DebugTensorDatum</code> constructor.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>dump_root</code></b>: (<code>str</code>) Debug dump root directory.</li>
+<li><b><code>debug_dump_rel_path</code></b>: (<code>str</code>) Path to a debug dump file, relative to the <code>dump_root</code>. For example, suppose the debug dump root directory is <code>/tmp/tfdbg_1</code> and the dump file is at <code>/tmp/tfdbg_1/ns_1/node_a_0_DebugIdentity_123456789</code>, then the value of the debug_dump_rel_path should be <code>ns_1/node_a_0_DebugIdenity_1234456789</code>.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If the base file name of the dump file does not conform to the dump file naming pattern: <code>node_name</code><em><code>output_slot</code></em><code>debug_op</code>_<code>timestamp</code></li>
+</ul>
+<h3 id="get_tensor">
+<code>get_tensor</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_tensor()</code></pre></div>
+<p>Get tensor from the dump (<code>Event</code>) file.</p>
+<h4 id="returns-8">Returns:</h4>
+<p>The tensor loaded from the dump (<code>Event</code>) file.</p>

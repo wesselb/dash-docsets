@@ -1,0 +1,33 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.constraints.UnitNorm" /> <meta itemprop="property" content="__call__"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="get_config"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.keras.constraints.UnitNorm" class="dashAnchor"></a><h1 id="tf.contrib.keras.constraints.unitnorm">tf.contrib.keras.constraints.UnitNorm</h1>
+<h3 id="class-tf.contrib.keras.constraints.unitnorm"><code>class tf.contrib.keras.constraints.UnitNorm</code></h3>
+<a name="//apple_ref/cpp/Function/tf.contrib.keras.constraints.unit_norm" class="dashAnchor"></a><h3 id="class-tf.contrib.keras.constraints.unit_norm"><code>class tf.contrib.keras.constraints.unit_norm</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/constraints.py"><code>tensorflow/contrib/keras/python/keras/constraints.py</code></a>.</p>
+<p>Constrains the weights incident to each hidden unit to have unit norm.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>axis: integer, axis along which to calculate weight norms.
+    For instance, in a `Dense` layer the weight matrix
+    has shape `(input_dim, output_dim)`,
+    set `axis` to `0` to constrain each weight vector
+    of length `(input_dim,)`.
+    In a `Convolution2D` layer with `data_format=&quot;channels_last&quot;`,
+    the weight tensor has shape
+    `(rows, cols, input_depth, output_depth)`,
+    set `axis` to `[0, 1, 2]`
+    to constrain the weights of each filter tensor of size
+    `(rows, cols, input_depth)`.</code></pre>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(axis<span class="op">=</span><span class="dv">0</span>)</code></pre></div>
+<h3 id="__call__">
+<code><strong>call</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__call__</span>(w)</code></pre></div>
+<h3 id="get_config">
+<code>get_config</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_config()</code></pre></div>

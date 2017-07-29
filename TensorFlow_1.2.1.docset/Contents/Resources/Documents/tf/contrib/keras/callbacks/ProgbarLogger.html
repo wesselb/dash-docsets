@@ -1,0 +1,62 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.callbacks.ProgbarLogger" /> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="on_batch_begin"/> <meta itemprop="property" content="on_batch_end"/> <meta itemprop="property" content="on_epoch_begin"/> <meta itemprop="property" content="on_epoch_end"/> <meta itemprop="property" content="on_train_begin"/> <meta itemprop="property" content="on_train_end"/> <meta itemprop="property" content="set_model"/> <meta itemprop="property" content="set_params"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.keras.callbacks.ProgbarLogger" class="dashAnchor"></a><h1 id="tf.contrib.keras.callbacks.progbarlogger">tf.contrib.keras.callbacks.ProgbarLogger</h1>
+<h3 id="class-tf.contrib.keras.callbacks.progbarlogger"><code>class tf.contrib.keras.callbacks.ProgbarLogger</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/callbacks.py"><code>tensorflow/contrib/keras/python/keras/callbacks.py</code></a>.</p>
+<p>Callback that prints metrics to stdout.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>count_mode: One of &quot;steps&quot; or &quot;samples&quot;.
+    Whether the progress bar should
+    count samples seens or steps (batches) seen.</code></pre>
+<h4 id="raises">Raises:</h4>
+<pre><code>ValueError: In case of invalid `count_mode`.</code></pre>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(count_mode<span class="op">=</span><span class="st">&#39;samples&#39;</span>)</code></pre></div>
+<h3 id="on_batch_begin">
+<code>on_batch_begin</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_batch_begin(
+    batch,
+    logs<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<h3 id="on_batch_end">
+<code>on_batch_end</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_batch_end(
+    batch,
+    logs<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<h3 id="on_epoch_begin">
+<code>on_epoch_begin</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_epoch_begin(
+    epoch,
+    logs<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<h3 id="on_epoch_end">
+<code>on_epoch_end</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_epoch_end(
+    epoch,
+    logs<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<h3 id="on_train_begin">
+<code>on_train_begin</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_train_begin(logs<span class="op">=</span><span class="va">None</span>)</code></pre></div>
+<h3 id="on_train_end">
+<code>on_train_end</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_train_end(logs<span class="op">=</span><span class="va">None</span>)</code></pre></div>
+<h3 id="set_model">
+<code>set_model</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">set_model(model)</code></pre></div>
+<h3 id="set_params">
+<code>set_params</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">set_params(params)</code></pre></div>

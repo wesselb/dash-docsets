@@ -1,0 +1,25 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.lbeta" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.lbeta" class="dashAnchor"></a><h1 id="tf.lbeta">tf.lbeta</h1>
+<h3 id="tf.lbeta-1"><code>tf.lbeta</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">lbeta(
+    x,
+    name<span class="op">=</span><span class="st">&#39;lbeta&#39;</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/special_math_ops.py"><code>tensorflow/python/ops/special_math_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/math_ops.md#Basic_Math_Functions">Math &gt; Basic Math Functions</a></p>
+<p>Computes \(ln(|Beta(x)|)\), reducing along the last dimension.</p>
+<p>Given one-dimensional <code>z = [z_0,...,z_{K-1}]</code>, we define</p>
+<p><br /><span class="math display"><em>B</em><em>e</em><em>t</em><em>a</em>(<em>z</em>)=∏<sub><em>j</em></sub><em>G</em><em>a</em><em>m</em><em>m</em><em>a</em>(<em>z</em><sub><em>j</em></sub>)/<em>G</em><em>a</em><em>m</em><em>m</em><em>a</em>(∑<sub><em>j</em></sub><em>z</em><sub><em>j</em></sub>)</span><br /></p>
+<p>And for <code>n + 1</code> dimensional <code>x</code> with shape <code>[N1, ..., Nn, K]</code>, we define <br /><span class="math display"><em>l</em><em>b</em><em>e</em><em>t</em><em>a</em>(<em>x</em>)[<em>i</em>1, ..., <em>i</em><em>n</em>]=<em>L</em><em>o</em><em>g</em>(|<em>B</em><em>e</em><em>t</em><em>a</em>(<em>x</em>[<em>i</em>1, ..., <em>i</em><em>n</em>, :])|)</span><br />.</p>
+<p>In other words, the last dimension is treated as the <code>z</code> vector.</p>
+<p>Note that if <code>z = [u, v]</code>, then \(Beta(z) = int_0^1 t^{u-1} (1 - t)^{v-1} dt\), which defines the traditional bivariate beta function.</p>
+<p>If the last dimension is empty, we follow the convention that the sum over the empty set is zero, and the product is one.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A rank <code>n + 1</code> <code>Tensor</code>, <code>n &gt;= 0</code> with type <code>float</code>, or <code>double</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The logarithm of \(|Beta(x)|\) reducing along the last dimension.</p>

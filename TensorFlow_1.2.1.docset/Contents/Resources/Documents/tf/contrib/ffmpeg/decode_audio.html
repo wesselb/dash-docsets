@@ -1,0 +1,24 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.ffmpeg.decode_audio" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.ffmpeg.decode_audio" class="dashAnchor"></a><h1 id="tf.contrib.ffmpeg.decode_audio">tf.contrib.ffmpeg.decode_audio</h1>
+<h3 id="tf.contrib.ffmpeg.decode_audio-1"><code>tf.contrib.ffmpeg.decode_audio</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">decode_audio(
+    contents,
+    file_format<span class="op">=</span><span class="va">None</span>,
+    samples_per_second<span class="op">=</span><span class="va">None</span>,
+    channel_count<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/ffmpeg/ffmpeg_ops.py"><code>tensorflow/contrib/ffmpeg/ffmpeg_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.ffmpeg.md#Encoding_and_decoding_audio_using_FFmpeg">FFmpeg (contrib) &gt; Encoding and decoding audio using FFmpeg</a></p>
+<p>Create an op that decodes the contents of an audio file.</p>
+<p>Note that ffmpeg is free to select the &quot;best&quot; audio track from an mp4. https://trac.ffmpeg.org/wiki/Map</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>contents</code></b>: The binary contents of the audio file to decode. This is a scalar.</li>
+<li><b><code>file_format</code></b>: A string specifying which format the contents will conform to. This can be mp3, mp4, ogg, or wav.</li>
+<li><b><code>samples_per_second</code></b>: The number of samples per second that is assumed. In some cases, resampling will occur to generate the correct sample rate.</li>
+<li><b><code>channel_count</code></b>: The number of channels that should be created from the audio contents. If the contents have more than this number, then some channels will be merged or dropped. If contents has fewer than this, then additional channels will be created from the existing ones.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A rank 2 tensor that has time along dimension 0 and channels along dimension 1. Dimension 0 will be <code>samples_per_second * length</code> wide, and dimension 1 will be <code>channel_count</code> wide. If ffmpeg fails to decode the audio then an empty tensor will be returned.</p>

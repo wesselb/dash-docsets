@@ -1,0 +1,24 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.stateless.stateless_random_normal" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.stateless.stateless_random_normal" class="dashAnchor"></a><h1 id="tf.contrib.stateless.stateless_random_normal">tf.contrib.stateless.stateless_random_normal</h1>
+<h3 id="tf.contrib.stateless.stateless_random_normal-1"><code>tf.contrib.stateless.stateless_random_normal</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">stateless_random_normal(
+    shape,
+    seed,
+    dtype<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/contrib/stateless/gen_stateless_random_ops.py</code>.</p>
+<p>Outputs deterministic pseudorandom values from a normal distribution.</p>
+<p>The generated values will have mean 0 and standard deviation 1.</p>
+<p>The outputs are a deterministic function of <code>shape</code> and <code>seed</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>shape</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. The shape of the output tensor.</li>
+<li><b><code>seed</code></b>: A <code>Tensor</code> of type <code>int64</code>. 2 seeds (shape [2]).</li>
+<li><b><code>dtype</code></b>: An optional <code>tf.DType</code> from: <code>tf.half, tf.float32, tf.float64</code>. Defaults to <code>tf.float32</code>. The type of the output.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>dtype</code>. Random values with specified shape.</p>

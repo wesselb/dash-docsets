@@ -1,0 +1,39 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.train.export_meta_graph" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.train.export_meta_graph" class="dashAnchor"></a><h1 id="tf.train.export_meta_graph">tf.train.export_meta_graph</h1>
+<h3 id="tf.train.export_meta_graph-1"><code>tf.train.export_meta_graph</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">export_meta_graph(
+    filename<span class="op">=</span><span class="va">None</span>,
+    meta_info_def<span class="op">=</span><span class="va">None</span>,
+    graph_def<span class="op">=</span><span class="va">None</span>,
+    saver_def<span class="op">=</span><span class="va">None</span>,
+    collection_list<span class="op">=</span><span class="va">None</span>,
+    as_text<span class="op">=</span><span class="va">False</span>,
+    graph<span class="op">=</span><span class="va">None</span>,
+    export_scope<span class="op">=</span><span class="va">None</span>,
+    clear_devices<span class="op">=</span><span class="va">False</span>,
+    <span class="op">**</span>kwargs
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/training/saver.py"><code>tensorflow/python/training/saver.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/state_ops.md#Exporting_and_Importing_Meta_Graphs">Variables &gt; Exporting and Importing Meta Graphs</a></p>
+<p>Returns <code>MetaGraphDef</code> proto. Optionally writes it to filename.</p>
+<p>This function exports the graph, saver, and collection objects into <code>MetaGraphDef</code> protocol buffer with the intention of it being imported at a later time or location to restart training, run inference, or be a subgraph.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>filename</code></b>: Optional filename including the path for writing the generated <code>MetaGraphDef</code> protocol buffer.</li>
+<li><b><code>meta_info_def</code></b>: <code>MetaInfoDef</code> protocol buffer.</li>
+<li><b><code>graph_def</code></b>: <code>GraphDef</code> protocol buffer.</li>
+<li><b><code>saver_def</code></b>: <code>SaverDef</code> protocol buffer.</li>
+<li><b><code>collection_list</code></b>: List of string keys to collect.</li>
+<li><b><code>as_text</code></b>: If <code>True</code>, writes the <code>MetaGraphDef</code> as an ASCII proto.</li>
+<li><b><code>graph</code></b>: The <code>Graph</code> to import into. If <code>None</code>, use the default graph.</li>
+<li><b><code>export_scope</code></b>: Optional <code>string</code>. Name scope under which to extract the subgraph. The scope name will be striped from the node definitions for easy import later into new name scopes. If <code>None</code>, the whole graph is exported. graph_def and export_scope cannot both be specified.</li>
+<li><b><code>clear_devices</code></b>: Whether or not to clear the device field for an <code>Operation</code> or <code>Tensor</code> during export. **kwargs: Optional keyed arguments.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>MetaGraphDef</code> proto.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: When the <code>GraphDef</code> is larger than 2GB.</li>
+</ul>

@@ -1,0 +1,19 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.backend.set_image_data_format" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.keras.backend.set_image_data_format" class="dashAnchor"></a><h1 id="tf.contrib.keras.backend.set_image_data_format">tf.contrib.keras.backend.set_image_data_format</h1>
+<h3 id="tf.contrib.keras.backend.set_image_data_format-1"><code>tf.contrib.keras.backend.set_image_data_format</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">set_image_data_format(data_format)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/backend.py"><code>tensorflow/contrib/keras/python/keras/backend.py</code></a>.</p>
+<p>Sets the value of the image data format convention.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>data_format: string. `&#39;channels_first&#39;` or `&#39;channels_last&#39;`.</code></pre>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    <span class="op">&gt;&gt;&gt;</span> <span class="im">from</span> keras <span class="im">import</span> backend <span class="im">as</span> K
+    <span class="op">&gt;&gt;&gt;</span> K.image_data_format()
+    <span class="co">&#39;channels_first&#39;</span>
+    <span class="op">&gt;&gt;&gt;</span> K.set_image_data_format(<span class="st">&#39;channels_last&#39;</span>)
+    <span class="op">&gt;&gt;&gt;</span> K.image_data_format()
+    <span class="co">&#39;channels_last&#39;</span></code></pre></div>
+<h4 id="raises">Raises:</h4>
+<pre><code>ValueError: In case of invalid `data_format` value.</code></pre>

@@ -1,0 +1,29 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.graph_editor.get_backward_walk_ops" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.graph_editor.get_backward_walk_ops" class="dashAnchor"></a><h1 id="tf.contrib.graph_editor.get_backward_walk_ops">tf.contrib.graph_editor.get_backward_walk_ops</h1>
+<h3 id="tf.contrib.graph_editor.get_backward_walk_ops-1"><code>tf.contrib.graph_editor.get_backward_walk_ops</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_backward_walk_ops(
+    seed_ops,
+    inclusive<span class="op">=</span><span class="va">True</span>,
+    within_ops<span class="op">=</span><span class="va">None</span>,
+    stop_at_ts<span class="op">=</span>(),
+    control_inputs<span class="op">=</span><span class="va">False</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/graph_editor/select.py"><code>tensorflow/contrib/graph_editor/select.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.graph_editor.md#Module_select">Graph Editor (contrib) &gt; Module: select</a></p>
+<p>Do a backward graph walk and return all the visited ops.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>seed_ops</code></b>: an iterable of operations from which the backward graph walk starts. If a list of tensors is given instead, the seed_ops are set to be the generators of those tensors.</li>
+<li><b><code>inclusive</code></b>: if True the given seed_ops are also part of the resulting set.</li>
+<li><b><code>within_ops</code></b>: an iterable of <code>tf.Operation</code> within which the search is restricted. If <code>within_ops</code> is <code>None</code>, the search is performed within the whole graph.</li>
+<li><b><code>stop_at_ts</code></b>: an iterable of tensors at which the graph walk stops.</li>
+<li><b><code>control_inputs</code></b>: if True, control inputs will be used while moving backward.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A Python set of all the <code>tf.Operation</code> behind <code>seed_ops</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>seed_ops</code> or <code>within_ops</code> cannot be converted to a list of <code>tf.Operation</code>.</li>
+</ul>

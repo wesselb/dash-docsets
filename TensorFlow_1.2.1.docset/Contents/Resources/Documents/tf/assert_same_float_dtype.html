@@ -1,0 +1,25 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.assert_same_float_dtype" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.assert_same_float_dtype" class="dashAnchor"></a><h1 id="tf.assert_same_float_dtype">tf.assert_same_float_dtype</h1>
+<h3 id="tf.assert_same_float_dtype-1"><code>tf.assert_same_float_dtype</code></h3>
+<a name="//apple_ref/cpp/Function/tf.contrib.framework.assert_same_float_dtype" class="dashAnchor"></a><h3 id="tf.contrib.framework.assert_same_float_dtype"><code>tf.contrib.framework.assert_same_float_dtype</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">assert_same_float_dtype(
+    tensors<span class="op">=</span><span class="va">None</span>,
+    dtype<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/check_ops.py"><code>tensorflow/python/ops/check_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/contrib.framework.html">Framework (contrib)</a></p>
+<p>Validate and return float type based on <code>tensors</code> and <code>dtype</code>.</p>
+<p>For ops such as matrix multiplication, inputs and weights must be of the same float type. This function validates that all <code>tensors</code> are the same type, validates that type is <code>dtype</code> (if supplied), and returns the type. Type must be a floating point type. If neither <code>tensors</code> nor <code>dtype</code> is supplied, the function will return <code>dtypes.float32</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>tensors</code></b>: Tensors of input values. Can include <code>None</code> elements, which will be ignored.</li>
+<li><b><code>dtype</code></b>: Expected type.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Validated type.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if neither <code>tensors</code> nor <code>dtype</code> is supplied, or result is not float, or the common type of the inputs is not a floating point type.</li>
+</ul>

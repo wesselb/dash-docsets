@@ -1,0 +1,27 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.graph_editor.detach" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.graph_editor.detach" class="dashAnchor"></a><h1 id="tf.contrib.graph_editor.detach">tf.contrib.graph_editor.detach</h1>
+<h3 id="tf.contrib.graph_editor.detach-1"><code>tf.contrib.graph_editor.detach</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">detach(
+    sgv,
+    control_inputs<span class="op">=</span><span class="va">False</span>,
+    control_outputs<span class="op">=</span><span class="va">None</span>,
+    control_ios<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/graph_editor/edit.py"><code>tensorflow/contrib/graph_editor/edit.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.graph_editor.md#Module_edit">Graph Editor (contrib) &gt; Module: edit</a></p>
+<p>Detach both the inputs and the outputs of a subgraph view.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>sgv</code></b>: the subgraph view to be detached. This argument is converted to a subgraph using the same rules as the function subgraph.make_view. Note that sgv is modified in place.</li>
+<li><b><code>control_inputs</code></b>: A boolean indicating whether control inputs are enabled.</li>
+<li><b><code>control_outputs</code></b>: An instance of util.ControlOutputs or None. If not None, control outputs are enabled.</li>
+<li><b><code>control_ios</code></b>: An instance of util.ControlOutputs or None. If not None, both control inputs and control outputs are enabled. This is equivalent to set control_inputs to True and control_outputs to the util.ControlOutputs instance.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A tuple <code>(sgv, detached_inputs, detached_outputs)</code> where: <code>sgv</code> is a new subgraph view of the detached subgraph; <code>detach_inputs</code> is a list of the created input placeholders; <code>detach_outputs</code> is a list of the created output placeholders.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>StandardError</code></b>: if sgv cannot be converted to a SubGraphView using the same rules than the function subgraph.make_view.</li>
+</ul>

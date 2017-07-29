@@ -1,0 +1,19 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.fixed_size_partitioner" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.fixed_size_partitioner" class="dashAnchor"></a><h1 id="tf.fixed_size_partitioner">tf.fixed_size_partitioner</h1>
+<h3 id="tf.fixed_size_partitioner-1"><code>tf.fixed_size_partitioner</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">fixed_size_partitioner(
+    num_shards,
+    axis<span class="op">=</span><span class="dv">0</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/partitioned_variables.py"><code>tensorflow/python/ops/partitioned_variables.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/state_ops.md#Variable_Partitioners_for_Sharding">Variables &gt; Variable Partitioners for Sharding</a></p>
+<p>Partitioner to specify a fixed number of shards along given axis.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>num_shards</code></b>: <code>int</code>, number of shards to partition variable.</li>
+<li><b><code>axis</code></b>: <code>int</code>, axis to partition on.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A partition function usable as the <code>partitioner</code> argument to <code>variable_scope</code>, <code>get_variable</code>, and <code>get_partitioned_variable_list</code>.</p>

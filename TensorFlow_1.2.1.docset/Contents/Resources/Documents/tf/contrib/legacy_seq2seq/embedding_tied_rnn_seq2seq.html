@@ -1,0 +1,39 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.legacy_seq2seq.embedding_tied_rnn_seq2seq" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.legacy_seq2seq.embedding_tied_rnn_seq2seq" class="dashAnchor"></a><h1 id="tf.contrib.legacy_seq2seq.embedding_tied_rnn_seq2seq">tf.contrib.legacy_seq2seq.embedding_tied_rnn_seq2seq</h1>
+<h3 id="tf.contrib.legacy_seq2seq.embedding_tied_rnn_seq2seq-1"><code>tf.contrib.legacy_seq2seq.embedding_tied_rnn_seq2seq</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">embedding_tied_rnn_seq2seq(
+    encoder_inputs,
+    decoder_inputs,
+    cell,
+    num_symbols,
+    embedding_size,
+    num_decoder_symbols<span class="op">=</span><span class="va">None</span>,
+    output_projection<span class="op">=</span><span class="va">None</span>,
+    feed_previous<span class="op">=</span><span class="va">False</span>,
+    dtype<span class="op">=</span><span class="va">None</span>,
+    scope<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/legacy_seq2seq/python/ops/seq2seq.py"><code>tensorflow/contrib/legacy_seq2seq/python/ops/seq2seq.py</code></a>.</p>
+<p>Embedding RNN sequence-to-sequence model with tied (shared) parameters.</p>
+<p>This model first embeds encoder_inputs by a newly created embedding (of shape [num_symbols x input_size]). Then it runs an RNN to encode embedded encoder_inputs into a state vector. Next, it embeds decoder_inputs using the same embedding. Then it runs RNN decoder, initialized with the last encoder state, on embedded decoder_inputs. The decoder output is over symbols from 0 to num_decoder_symbols - 1 if num_decoder_symbols is none; otherwise it is over 0 to num_symbols - 1.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>encoder_inputs</code></b>: A list of 1D int32 Tensors of shape [batch_size].</li>
+<li><b><code>decoder_inputs</code></b>: A list of 1D int32 Tensors of shape [batch_size].</li>
+<li><b><code>cell</code></b>: tf.nn.rnn_cell.RNNCell defining the cell function and size.</li>
+<li><b><code>num_symbols</code></b>: Integer; number of symbols for both encoder and decoder.</li>
+<li><b><code>embedding_size</code></b>: Integer, the length of the embedding vector for each symbol.</li>
+<li><b><code>num_decoder_symbols</code></b>: Integer; number of output symbols for decoder. If provided, the decoder output is over symbols 0 to num_decoder_symbols - 1. Otherwise, decoder output is over symbols 0 to num_symbols - 1. Note that this assumes that the vocabulary is set up such that the first num_decoder_symbols of num_symbols are part of decoding.</li>
+<li><b><code>output_projection</code></b>: None or a pair (W, B) of output projection weights and biases; W has shape [output_size x num_symbols] and B has shape [num_symbols]; if provided and feed_previous=True, each fed previous output will first be multiplied by W and added B.</li>
+<li><b><code>feed_previous</code></b>: Boolean or scalar Boolean Tensor; if True, only the first of decoder_inputs will be used (the &quot;GO&quot; symbol), and all other decoder inputs will be taken from previous outputs (as in embedding_rnn_decoder). If False, decoder_inputs are used as given (the standard decoder case).</li>
+<li><b><code>dtype</code></b>: The dtype to use for the initial RNN states (default: tf.float32).</li>
+<li><b><code>scope</code></b>: VariableScope for the created subgraph; defaults to &quot;embedding_tied_rnn_seq2seq&quot;.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A tuple of the form (outputs, state), where: outputs: A list of the same length as decoder_inputs of 2D Tensors with shape [batch_size x output_symbols] containing the generated outputs where output_symbols = num_decoder_symbols if num_decoder_symbols is not None otherwise output_symbols = num_symbols. state: The state of each decoder cell at the final time-step. It is a 2D Tensor of shape [batch_size x cell.state_size].</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: When output_projection has the wrong shape.</li>
+</ul>

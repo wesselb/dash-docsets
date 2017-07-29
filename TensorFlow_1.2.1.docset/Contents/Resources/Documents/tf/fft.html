@@ -1,0 +1,23 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.fft" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.fft" class="dashAnchor"></a><h1 id="tf.fft">tf.fft</h1>
+<h3 id="tf.fft-1"><code>tf.fft</code></h3>
+<a name="//apple_ref/cpp/Function/tf.spectral.fft" class="dashAnchor"></a><h3 id="tf.spectral.fft"><code>tf.spectral.fft</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">fft(
+    <span class="bu">input</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_spectral_ops.py</code>.</p>
+<p>See the guide: <a href="../../../api_guides/python/spectral_ops.md#Fourier_Transform_Functions">Spectral Functions &gt; Fourier Transform Functions</a></p>
+<p>Fast Fourier transform.</p>
+<p>Computes the 1-dimensional discrete Fourier transform over the inner-most dimension of <code>input</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code> of type <code>complex64</code>. A complex64 tensor.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>complex64</code>. A complex64 tensor of the same shape as <code>input</code>. The inner-most dimension of <code>input</code> is replaced with its 1D Fourier transform.</p>
+<h4 id="numpy-compatibility">numpy compatibility</h4>
+<p>Equivalent to np.fft.fft</p>

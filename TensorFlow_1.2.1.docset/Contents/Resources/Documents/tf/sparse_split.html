@@ -1,0 +1,44 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.sparse_split" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.sparse_split" class="dashAnchor"></a><h1 id="tf.sparse_split">tf.sparse_split</h1>
+<h3 id="tf.sparse_split-1"><code>tf.sparse_split</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">sparse_split(
+    keyword_required<span class="op">=</span>KeywordRequired(),
+    sp_input<span class="op">=</span><span class="va">None</span>,
+    num_split<span class="op">=</span><span class="va">None</span>,
+    axis<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>,
+    split_dim<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/sparse_ops.py"><code>tensorflow/python/ops/sparse_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/sparse_ops.md#Manipulation">Sparse Tensors &gt; Manipulation</a></p>
+<p>Split a <code>SparseTensor</code> into <code>num_split</code> tensors along <code>axis</code>.</p>
+<p>If the <code>sp_input.dense_shape[axis]</code> is not an integer multiple of <code>num_split</code> each slice starting from 0:<code>shape[axis] % num_split</code> gets extra one dimension. For example, if <code>axis = 1</code> and <code>num_split = 2</code> and the input is:</p>
+<pre><code>input_tensor = shape = [2, 7]
+[    a   d e  ]
+[b c          ]</code></pre>
+<p>Graphically the output tensors are:</p>
+<pre><code>output_tensor[0] =
+[    a ]
+[b c   ]
+
+output_tensor[1] =
+[ d e  ]
+[      ]</code></pre>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>keyword_required</code></b>: Python 2 standin for * (temporary for argument reorder)</li>
+<li><b><code>sp_input</code></b>: The <code>SparseTensor</code> to split.</li>
+<li><b><code>num_split</code></b>: A Python integer. The number of ways to split.</li>
+<li><b><code>axis</code></b>: A 0-D <code>int32</code> <code>Tensor</code>. The dimension along which to split.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+<li><b><code>split_dim</code></b>: Deprecated old name for axis.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p><code>num_split</code> <code>SparseTensor</code> objects resulting from splitting <code>value</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>sp_input</code> is not a <code>SparseTensor</code>.</li>
+<li><b><code>ValueError</code></b>: If the deprecated <code>split_dim</code> and <code>axis</code> are both non None.</li>
+</ul>

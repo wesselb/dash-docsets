@@ -1,0 +1,54 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.bayesflow.monte_carlo.expectation" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.bayesflow.monte_carlo.expectation" class="dashAnchor"></a><h1 id="tf.contrib.bayesflow.monte_carlo.expectation">tf.contrib.bayesflow.monte_carlo.expectation</h1>
+<h3 id="tf.contrib.bayesflow.monte_carlo.expectation-1"><code>tf.contrib.bayesflow.monte_carlo.expectation</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">expectation(
+    f,
+    p,
+    z<span class="op">=</span><span class="va">None</span>,
+    n<span class="op">=</span><span class="va">None</span>,
+    seed<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="st">&#39;expectation&#39;</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/bayesflow/python/ops/monte_carlo_impl.py"><code>tensorflow/contrib/bayesflow/python/ops/monte_carlo_impl.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../../api_guides/python/contrib.bayesflow.monte_carlo.md#Ops">BayesFlow Monte Carlo (contrib) &gt; Ops</a></p>
+<p>Monte Carlo estimate of an expectation: <code>E_p[f(Z)]</code> with sample mean.</p>
+<p>This <code>Op</code> returns</p>
+<pre><code>n^{-1} sum_{i=1}^n f(z_i),  where z_i ~ p
+\approx E_p[f(Z)]</code></pre>
+<p>User supplies either <code>Tensor</code> of samples <code>z</code>, or number of samples to draw <code>n</code></p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>f</code></b>: Callable mapping samples from <code>p</code> to <code>Tensors</code>.</li>
+<li><b><code>p</code></b>: <code>tf.contrib.distributions.Distribution</code>.</li>
+<li><b><code>z</code></b>: <code>Tensor</code> of samples from <code>p</code>, produced by <code>p.sample</code> for some <code>n</code>.</li>
+<li><b><code>n</code></b>: Integer <code>Tensor</code>. Number of samples to generate if <code>z</code> is not provided.</li>
+<li><b><code>seed</code></b>: Python integer to seed the random number generator.</li>
+<li><b><code>name</code></b>: A name to give this <code>Op</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> with the same <code>dtype</code> as <code>p</code>.</p>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">N_samples <span class="op">=</span> <span class="dv">10000</span>
+
+distributions <span class="op">=</span> tf.contrib.distributions
+
+dist <span class="op">=</span> distributions.Uniform([<span class="fl">0.0</span>, <span class="fl">0.0</span>], [<span class="fl">1.0</span>, <span class="fl">2.0</span>])
+elementwise_mean <span class="op">=</span> <span class="kw">lambda</span> x: x
+mean_sum <span class="op">=</span> <span class="kw">lambda</span> x: tf.reduce_sum(x, <span class="dv">1</span>)
+
+estimate_elementwise_mean_tf <span class="op">=</span> monte_carlo.expectation(elementwise_mean,
+                                                       dist,
+                                                       n<span class="op">=</span>N_samples)
+estimate_mean_sum_tf <span class="op">=</span> monte_carlo.expectation(mean_sum,
+                                               dist,
+                                               n<span class="op">=</span>N_samples)
+
+<span class="cf">with</span> tf.Session() <span class="im">as</span> sess:
+  estimate_elementwise_mean, estimate_mean_sum <span class="op">=</span> (
+      sess.run([estimate_elementwise_mean_tf, estimate_mean_sum_tf]))
+<span class="bu">print</span> estimate_elementwise_mean
+<span class="op">&gt;&gt;&gt;</span> np.array([ <span class="fl">0.50018013</span>  <span class="fl">1.00097895</span>], dtype<span class="op">=</span>np.float32)
+<span class="bu">print</span> estimate_mean_sum
+<span class="op">&gt;&gt;&gt;</span> <span class="fl">1.49571</span></code></pre></div>

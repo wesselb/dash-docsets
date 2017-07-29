@@ -1,0 +1,37 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.learn.multi_label_head" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.learn.multi_label_head" class="dashAnchor"></a><h1 id="tf.contrib.learn.multi_label_head">tf.contrib.learn.multi_label_head</h1>
+<h3 id="tf.contrib.learn.multi_label_head-1"><code>tf.contrib.learn.multi_label_head</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">multi_label_head(
+    n_classes,
+    label_name<span class="op">=</span><span class="va">None</span>,
+    weight_column_name<span class="op">=</span><span class="va">None</span>,
+    enable_centered_bias<span class="op">=</span><span class="va">False</span>,
+    head_name<span class="op">=</span><span class="va">None</span>,
+    thresholds<span class="op">=</span><span class="va">None</span>,
+    metric_class_ids<span class="op">=</span><span class="va">None</span>,
+    loss_fn<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/learn/python/learn/estimators/head.py"><code>tensorflow/contrib/learn/python/learn/estimators/head.py</code></a>.</p>
+<p>Creates a Head for multi label classification.</p>
+<p>Multi-label classification handles the case where each example may have zero or more associated labels, from a discrete set. This is distinct from <code>multi_class_head</code> which has exactly one label from a discrete set.</p>
+<p>This head by default uses sigmoid cross entropy loss, which expects as input a multi-hot tensor of shape <code>(batch_size, num_classes)</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>n_classes</code></b>: Integer, number of classes, must be &gt;= 2</li>
+<li><b><code>label_name</code></b>: String, name of the key in label dict. Can be null if label is a tensor (single headed models).</li>
+<li><b><code>weight_column_name</code></b>: A string defining feature column name representing weights. It is used to down weight or boost examples during training. It will be multiplied by the loss of the example.</li>
+<li><b><code>enable_centered_bias</code></b>: A bool. If True, estimator will learn a centered bias variable for each class. Rest of the model structure learns the residual after centered bias.</li>
+<li><b><code>head_name</code></b>: name of the head. If provided, predictions, summary and metrics keys will be suffixed by <code>&quot;/&quot; + head_name</code> and the default variable scope will be <code>head_name</code>.</li>
+<li><b><code>thresholds</code></b>: thresholds for eval metrics, defaults to [.5]</li>
+<li><b><code>metric_class_ids</code></b>: List of class IDs for which we should report per-class metrics. Must all be in the range <code>[0, n_classes)</code>.</li>
+<li><b><code>loss_fn</code></b>: Optional function that takes (<code>labels</code>, <code>logits</code>, <code>weights</code>) as parameter and returns a weighted scalar loss. <code>weights</code> should be optional. See <code>tf.losses</code></li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>An instance of <code>Head</code> for multi label classification.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If n_classes is &lt; 2</li>
+<li><b><code>ValueError</code></b>: If loss_fn does not have expected signature.</li>
+</ul>

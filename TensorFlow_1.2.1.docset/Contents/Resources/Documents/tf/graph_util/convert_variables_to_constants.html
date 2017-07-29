@@ -1,0 +1,25 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.graph_util.convert_variables_to_constants" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.graph_util.convert_variables_to_constants" class="dashAnchor"></a><h1 id="tf.graph_util.convert_variables_to_constants">tf.graph_util.convert_variables_to_constants</h1>
+<h3 id="tf.graph_util.convert_variables_to_constants-1"><code>tf.graph_util.convert_variables_to_constants</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">convert_variables_to_constants(
+    sess,
+    input_graph_def,
+    output_node_names,
+    variable_names_whitelist<span class="op">=</span><span class="va">None</span>,
+    variable_names_blacklist<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/framework/graph_util_impl.py"><code>tensorflow/python/framework/graph_util_impl.py</code></a>.</p>
+<p>Replaces all the variables in a graph with constants of the same values.</p>
+<p>If you have a trained graph containing Variable ops, it can be convenient to convert them all to Const ops holding the same values. This makes it possible to describe the network fully with a single GraphDef file, and allows the removal of a lot of ops related to loading and saving the variables.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>sess</code></b>: Active TensorFlow session containing the variables.</li>
+<li><b><code>input_graph_def</code></b>: GraphDef object holding the network.</li>
+<li><b><code>output_node_names</code></b>: List of name strings for the result nodes of the graph.</li>
+<li><b><code>variable_names_whitelist</code></b>: The set of variable names to convert (by default, all variables are converted).</li>
+<li><b><code>variable_names_blacklist</code></b>: The set of variable names to omit converting to constants.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>GraphDef containing a simplified version of the original.</p>

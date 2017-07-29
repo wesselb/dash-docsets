@@ -1,0 +1,24 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.ones" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.ones" class="dashAnchor"></a><h1 id="tf.ones">tf.ones</h1>
+<h3 id="tf.ones-1"><code>tf.ones</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">ones(
+    shape,
+    dtype<span class="op">=</span>tf.float32,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/array_ops.py"><code>tensorflow/python/ops/array_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/constant_op.md#Constant_Value_Tensors">Constants, Sequences, and Random Values &gt; Constant Value Tensors</a></p>
+<p>Creates a tensor with all elements set to 1.</p>
+<p>This operation returns a tensor of type <code>dtype</code> with shape <code>shape</code> and all elements set to 1.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.ones([<span class="dv">2</span>, <span class="dv">3</span>], tf.int32) <span class="op">==&gt;</span> [[<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>], [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>]]</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>shape</code></b>: Either a list of integers, or a 1-D <code>Tensor</code> of type <code>int32</code>.</li>
+<li><b><code>dtype</code></b>: The type of an element in the resulting <code>Tensor</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> with all elements set to 1.</p>

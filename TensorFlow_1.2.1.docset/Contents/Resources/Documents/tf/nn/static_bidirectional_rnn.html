@@ -1,0 +1,38 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.nn.static_bidirectional_rnn" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.nn.static_bidirectional_rnn" class="dashAnchor"></a><h1 id="tf.nn.static_bidirectional_rnn">tf.nn.static_bidirectional_rnn</h1>
+<a name="//apple_ref/cpp/Function/tf.contrib.rnn.static_bidirectional_rnn" class="dashAnchor"></a><h3 id="tf.contrib.rnn.static_bidirectional_rnn"><code>tf.contrib.rnn.static_bidirectional_rnn</code></h3>
+<h3 id="tf.nn.static_bidirectional_rnn-1"><code>tf.nn.static_bidirectional_rnn</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">static_bidirectional_rnn(
+    cell_fw,
+    cell_bw,
+    inputs,
+    initial_state_fw<span class="op">=</span><span class="va">None</span>,
+    initial_state_bw<span class="op">=</span><span class="va">None</span>,
+    dtype<span class="op">=</span><span class="va">None</span>,
+    sequence_length<span class="op">=</span><span class="va">None</span>,
+    scope<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/rnn.py"><code>tensorflow/python/ops/rnn.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/contrib.rnn.md#Recurrent_Neural_Networks">RNN and Cells (contrib) &gt; Recurrent Neural Networks</a></p>
+<p>Creates a bidirectional recurrent neural network.</p>
+<p>Similar to the unidirectional case above (rnn) but takes input and builds independent forward and backward RNNs with the final forward and backward outputs depth-concatenated, such that the output will have the format [time][batch][cell_fw.output_size + cell_bw.output_size]. The input_size of forward and backward cell must match. The initial state for both directions is zero by default (but can be set optionally) and no intermediate states are ever returned -- the network is fully unrolled for the given (passed in) length(s) of the sequence(s) or completely unrolled if length(s) is not given.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>cell_fw</code></b>: An instance of RNNCell, to be used for forward direction.</li>
+<li><b><code>cell_bw</code></b>: An instance of RNNCell, to be used for backward direction.</li>
+<li><b><code>inputs</code></b>: A length T list of inputs, each a tensor of shape [batch_size, input_size], or a nested tuple of such elements.</li>
+<li><b><code>initial_state_fw</code></b>: (optional) An initial state for the forward RNN. This must be a tensor of appropriate type and shape <code>[batch_size, cell_fw.state_size]</code>. If <code>cell_fw.state_size</code> is a tuple, this should be a tuple of tensors having shapes <code>[batch_size, s] for s in cell_fw.state_size</code>.</li>
+<li><b><code>initial_state_bw</code></b>: (optional) Same as for <code>initial_state_fw</code>, but using the corresponding properties of <code>cell_bw</code>.</li>
+<li><b><code>dtype</code></b>: (optional) The data type for the initial state. Required if either of the initial states are not provided.</li>
+<li><b><code>sequence_length</code></b>: (optional) An int32/int64 vector, size <code>[batch_size]</code>, containing the actual lengths for each of the sequences.</li>
+<li><b><code>scope</code></b>: VariableScope for the created subgraph; defaults to &quot;bidirectional_rnn&quot;</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A tuple (outputs, output_state_fw, output_state_bw) where: outputs is a length <code>T</code> list of outputs (one for each input), which are depth-concatenated forward and backward outputs. output_state_fw is the final state of the forward rnn. output_state_bw is the final state of the backward rnn.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>cell_fw</code> or <code>cell_bw</code> is not an instance of <code>RNNCell</code>.</li>
+<li><b><code>ValueError</code></b>: If inputs is None or an empty list.</li>
+</ul>

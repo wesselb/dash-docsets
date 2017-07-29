@@ -1,0 +1,19 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.layers.softmax" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.layers.softmax" class="dashAnchor"></a><h1 id="tf.contrib.layers.softmax">tf.contrib.layers.softmax</h1>
+<h3 id="tf.contrib.layers.softmax-1"><code>tf.contrib.layers.softmax</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">softmax(
+    logits,
+    scope<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/layers/python/layers/layers.py"><code>tensorflow/contrib/layers/python/layers/layers.py</code></a>.</p>
+<p>Performs softmax on Nth dimension of N-dimensional logit tensor.</p>
+<p>For two-dimensional logits this reduces to tf.nn.softmax. The N-th dimension needs to have a specified number of elements (number of classes).</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>logits</code></b>: N-dimensional <code>Tensor</code> with logits, where N &gt; 1.</li>
+<li><b><code>scope</code></b>: Optional scope for variable_scope.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> with same shape and type as logits.</p>

@@ -1,0 +1,62 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.sets.set_difference" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.sets.set_difference" class="dashAnchor"></a><h1 id="tf.sets.set_difference">tf.sets.set_difference</h1>
+<a name="//apple_ref/cpp/Function/tf.contrib.metrics.set_difference" class="dashAnchor"></a><h3 id="tf.contrib.metrics.set_difference"><code>tf.contrib.metrics.set_difference</code></h3>
+<h3 id="tf.sets.set_difference-1"><code>tf.sets.set_difference</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">set_difference(
+    a,
+    b,
+    aminusb<span class="op">=</span><span class="va">True</span>,
+    validate_indices<span class="op">=</span><span class="va">True</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/sets_impl.py"><code>tensorflow/python/ops/sets_impl.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/contrib.metrics.md#Set_Ops_">Metrics (contrib) &gt; Set <code>Ops</code></a></p>
+<p>Compute set difference of elements in last dimension of <code>a</code> and <code>b</code>.</p>
+<p>All but the last dimension of <code>a</code> and <code>b</code> must match.</p>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">  a <span class="op">=</span> [
+    [
+      [
+        [<span class="dv">1</span>, <span class="dv">2</span>],
+        [<span class="dv">3</span>],
+      ],
+      [
+        [<span class="dv">4</span>],
+        [<span class="dv">5</span>, <span class="dv">6</span>],
+      ],
+    ],
+  ]
+  b <span class="op">=</span> [
+    [
+      [
+        [<span class="dv">1</span>, <span class="dv">3</span>],
+        [<span class="dv">2</span>],
+      ],
+      [
+        [<span class="dv">4</span>, <span class="dv">5</span>],
+        [<span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>],
+      ],
+    ],
+  ]
+  set_difference(a, b, aminusb<span class="op">=</span><span class="va">True</span>) <span class="op">=</span> [
+    [
+      [
+        [<span class="dv">2</span>],
+        [<span class="dv">3</span>],
+      ],
+      [
+        [],
+        [],
+      ],
+    ],
+  ]</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>a</code></b>: <code>Tensor</code> or <code>SparseTensor</code> of the same type as <code>b</code>. If sparse, indices must be sorted in row-major order.</li>
+<li><b><code>b</code></b>: <code>Tensor</code> or <code>SparseTensor</code> of the same type as <code>a</code>. If sparse, indices must be sorted in row-major order.</li>
+<li><b><code>aminusb</code></b>: Whether to subtract <code>b</code> from <code>a</code>, vs vice versa.</li>
+<li><b><code>validate_indices</code></b>: Whether to validate the order and range of sparse indices in <code>a</code> and <code>b</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>SparseTensor</code> whose shape is the same rank as <code>a</code> and <code>b</code>, and all but the last dimension the same. Elements along the last dimension contain the differences.</p>

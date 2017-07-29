@@ -1,0 +1,25 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.pow" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.pow" class="dashAnchor"></a><h1 id="tf.pow">tf.pow</h1>
+<h3 id="tf.pow-1"><code>tf.pow</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="bu">pow</span>(
+    x,
+    y,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/math_ops.py"><code>tensorflow/python/ops/math_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/math_ops.md#Basic_Math_Functions">Math &gt; Basic Math Functions</a></p>
+<p>Computes the power of one value to another.</p>
+<p>Given a tensor <code>x</code> and a tensor <code>y</code>, this operation computes \\(x^y\\) for corresponding elements in <code>x</code> and <code>y</code>. For example:</p>
+<pre><code># tensor &#39;x&#39; is [[2, 2], [3, 3]]
+# tensor &#39;y&#39; is [[8, 16], [2, 3]]
+tf.pow(x, y) ==&gt; [[256, 65536], [9, 27]]</code></pre>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> of type <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, or <code>complex128</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code> of type <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, or <code>complex128</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>.</p>

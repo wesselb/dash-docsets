@@ -1,0 +1,20 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.gfile.Copy" /></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.gfile.Copy" class="dashAnchor"></a><h1 id="tf.gfile.copy">tf.gfile.Copy</h1>
+<h3 id="tf.gfile.copy-1"><code>tf.gfile.Copy</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">Copy(
+    oldpath,
+    newpath,
+    overwrite<span class="op">=</span><span class="va">False</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/lib/io/file_io.py"><code>tensorflow/python/lib/io/file_io.py</code></a>.</p>
+<p>Copies data from oldpath to newpath.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>oldpath</code></b>: string, name of the file who's contents need to be copied</li>
+<li><b><code>newpath</code></b>: string, name of the file to which to copy to</li>
+<li><b><code>overwrite</code></b>: boolean, if false its an error for newpath to be occupied by an existing file.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<p>errors.OpError: If the operation fails.</p>

@@ -1,0 +1,41 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.split" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.split" class="dashAnchor"></a><h1 id="tf.split">tf.split</h1>
+<h3 id="tf.split-1"><code>tf.split</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">split(
+    value,
+    num_or_size_splits,
+    axis<span class="op">=</span><span class="dv">0</span>,
+    num<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="st">&#39;split&#39;</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/array_ops.py"><code>tensorflow/python/ops/array_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/array_ops.md#Slicing_and_Joining">Tensor Transformations &gt; Slicing and Joining</a></p>
+<p>Splits a tensor into sub tensors.</p>
+<p>If <code>num_or_size_splits</code> is an integer type, <code>num_split</code>, then splits <code>value</code> along dimension <code>axis</code> into <code>num_split</code> smaller tensors. Requires that <code>num_split</code> evenly divides <code>value.shape[axis]</code>.</p>
+<p>If <code>num_or_size_splits</code> is not an integer type, it is presumed to be a Tensor <code>size_splits</code>, then splits <code>value</code> into <code>len(size_splits)</code> pieces. The shape of the <code>i</code>-th piece has the same size as the <code>value</code> except along dimension <code>axis</code> where the size is <code>size_splits[i]</code>.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># &#39;value&#39; is a tensor with shape [5, 30]</span>
+<span class="co"># Split &#39;value&#39; into 3 tensors with sizes [4, 15, 11] along dimension 1</span>
+split0, split1, split2 <span class="op">=</span> tf.split(value, [<span class="dv">4</span>, <span class="dv">15</span>, <span class="dv">11</span>], <span class="dv">1</span>)
+tf.shape(split0) <span class="op">==&gt;</span> [<span class="dv">5</span>, <span class="dv">4</span>]
+tf.shape(split1) <span class="op">==&gt;</span> [<span class="dv">5</span>, <span class="dv">15</span>]
+tf.shape(split2) <span class="op">==&gt;</span> [<span class="dv">5</span>, <span class="dv">11</span>]
+<span class="co"># Split &#39;value&#39; into 3 tensors along dimension 1</span>
+split0, split1, split2 <span class="op">=</span> tf.split(value, num_or_size_splits<span class="op">=</span><span class="dv">3</span>, axis<span class="op">=</span><span class="dv">1</span>)
+tf.shape(split0) <span class="op">==&gt;</span> [<span class="dv">5</span>, <span class="dv">10</span>]</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>value</code></b>: The <code>Tensor</code> to split.</li>
+<li><b><code>num_or_size_splits</code></b>: Either a 0-D integer <code>Tensor</code> indicating the number of splits along split_dim or a 1-D integer <code>Tensor</code> integer tensor containing the sizes of each output tensor along split_dim. If a scalar then it must evenly divide <code>value.shape[axis]</code>; otherwise the sum of sizes along the split dimension must match that of the <code>value</code>.</li>
+<li><b><code>axis</code></b>: A 0-D <code>int32</code> <code>Tensor</code>. The dimension along which to split. Must be in the range <code>[0, rank(value))</code>. Defaults to 0.</li>
+<li><b><code>num</code></b>: Optional, used to specify the number of outputs when it cannot be inferred from the shape of <code>size_splits</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>if <code>num_or_size_splits</code> is a scalar returns <code>num_or_size_splits</code> <code>Tensor</code> objects; if <code>num_or_size_splits</code> is a 1-D Tensor returns <code>num_or_size_splits.get_shape[0]</code> <code>Tensor</code> objects resulting from splitting <code>value</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>num</code> is unspecified and cannot be inferred.</li>
+</ul>

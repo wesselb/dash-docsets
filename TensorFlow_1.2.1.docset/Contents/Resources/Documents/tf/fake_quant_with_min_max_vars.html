@@ -1,0 +1,28 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.fake_quant_with_min_max_vars" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.fake_quant_with_min_max_vars" class="dashAnchor"></a><h1 id="tf.fake_quant_with_min_max_vars">tf.fake_quant_with_min_max_vars</h1>
+<h3 id="tf.fake_quant_with_min_max_vars-1"><code>tf.fake_quant_with_min_max_vars</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">fake_quant_with_min_max_vars(
+    inputs,
+    <span class="bu">min</span>,
+    <span class="bu">max</span>,
+    num_bits<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_array_ops.py</code>.</p>
+<p>See the guide: <a href="../../../api_guides/python/array_ops.md#Fake_quantization">Tensor Transformations &gt; Fake quantization</a></p>
+<p>Fake-quantize the 'inputs' tensor of type float via global float scalars <code>min</code></p>
+<p>and <code>max</code> to 'outputs' tensor of same shape as <code>inputs</code>.</p>
+<p>[min; max] is the clamping range for the 'inputs' data. Op divides this range into 255 steps (total of 256 values), then replaces each 'inputs' value with the closest of the quantized step values. 'num_bits' is the bitwidth of the quantization; between 2 and 8, inclusive.</p>
+<p>This operation has a gradient and thus allows for training <code>min</code> and <code>max</code> values.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>inputs</code></b>: A <code>Tensor</code> of type <code>float32</code>.</li>
+<li><b><code>min</code></b>: A <code>Tensor</code> of type <code>float32</code>.</li>
+<li><b><code>max</code></b>: A <code>Tensor</code> of type <code>float32</code>.</li>
+<li><b><code>num_bits</code></b>: An optional <code>int</code>. Defaults to <code>8</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>float32</code>.</p>

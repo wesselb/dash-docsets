@@ -1,0 +1,40 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.matrix_transpose" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.matrix_transpose" class="dashAnchor"></a><h1 id="tf.matrix_transpose">tf.matrix_transpose</h1>
+<h3 id="tf.matrix_transpose-1"><code>tf.matrix_transpose</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">matrix_transpose(
+    a,
+    name<span class="op">=</span><span class="st">&#39;matrix_transpose&#39;</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/array_ops.py"><code>tensorflow/python/ops/array_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/math_ops.md#Matrix_Math_Functions">Math &gt; Matrix Math Functions</a></p>
+<p>Transposes last two dimensions of tensor <code>a</code>.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Matrix with no batch dimension.</span>
+<span class="co"># &#39;x&#39; is [[1 2 3]</span>
+<span class="co">#         [4 5 6]]</span>
+tf.matrix_transpose(x) <span class="op">==&gt;</span> [[<span class="dv">1</span> <span class="dv">4</span>]
+                                 [<span class="dv">2</span> <span class="dv">5</span>]
+                                 [<span class="dv">3</span> <span class="dv">6</span>]]
+
+<span class="co"># Matrix with two batch dimensions.</span>
+<span class="co"># x.shape is [1, 2, 3, 4]</span>
+<span class="co"># tf.matrix_transpose(x) is shape [1, 2, 4, 3]</span></code></pre></div>
+<p>Note that <code>tf.matmul</code> provides kwargs allowing for transpose of arguments. This is done with minimal cost, and is preferable to using this function. E.g.</p>
+<pre><code># Good!  Transpose is taken at minimal additional cost.
+tf.matmul(matrix, b, transpose_b=True)
+
+# Inefficient!
+tf.matmul(matrix, tf.matrix_transpose(b))</code></pre>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>a</code></b>: A <code>Tensor</code> with <code>rank &gt;= 2</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A transposed batch matrix <code>Tensor</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>a</code> is determined statically to have <code>rank &lt; 2</code>.</li>
+</ul>

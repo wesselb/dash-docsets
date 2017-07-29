@@ -1,0 +1,19 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.seq2seq.hardmax" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.seq2seq.hardmax" class="dashAnchor"></a><h1 id="tf.contrib.seq2seq.hardmax">tf.contrib.seq2seq.hardmax</h1>
+<h3 id="tf.contrib.seq2seq.hardmax-1"><code>tf.contrib.seq2seq.hardmax</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">hardmax(
+    logits,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/seq2seq/python/ops/attention_wrapper.py"><code>tensorflow/contrib/seq2seq/python/ops/attention_wrapper.py</code></a>.</p>
+<p>Returns batched one-hot vectors.</p>
+<p>The depth index containing the <code>1</code> is that of the maximum logit value.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>logits</code></b>: A batch tensor of logit values.</li>
+<li><b><code>name</code></b>: Name to use when creating ops.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A batched one-hot tensor.</p>

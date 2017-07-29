@@ -1,0 +1,23 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.framework.get_variables_to_restore" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.framework.get_variables_to_restore" class="dashAnchor"></a><h1 id="tf.contrib.framework.get_variables_to_restore">tf.contrib.framework.get_variables_to_restore</h1>
+<h3 id="tf.contrib.framework.get_variables_to_restore-1"><code>tf.contrib.framework.get_variables_to_restore</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_variables_to_restore(
+    include<span class="op">=</span><span class="va">None</span>,
+    exclude<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/framework/python/ops/variables.py"><code>tensorflow/contrib/framework/python/ops/variables.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.framework.md#Variables">Framework (contrib) &gt; Variables</a></p>
+<p>Gets the list of the variables to restore.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>include</code></b>: an optional list/tuple of scope strings for filtering which variables from the VARIABLES collection to include. None would include all the variables.</li>
+<li><b><code>exclude</code></b>: an optional list/tuple of scope strings for filtering which variables from the VARIABLES collection to exclude. None it would not exclude any.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>a list of variables to restore.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: include or exclude is provided but is not a list or a tuple.</li>
+</ul>

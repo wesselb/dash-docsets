@@ -1,0 +1,36 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.training.create_train_op" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.training.create_train_op" class="dashAnchor"></a><h1 id="tf.contrib.training.create_train_op">tf.contrib.training.create_train_op</h1>
+<h3 id="tf.contrib.training.create_train_op-1"><code>tf.contrib.training.create_train_op</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">create_train_op(
+    total_loss,
+    optimizer,
+    global_step<span class="op">=</span>_USE_GLOBAL_STEP,
+    update_ops<span class="op">=</span><span class="va">None</span>,
+    variables_to_train<span class="op">=</span><span class="va">None</span>,
+    transform_grads_fn<span class="op">=</span><span class="va">None</span>,
+    summarize_gradients<span class="op">=</span><span class="va">False</span>,
+    gate_gradients<span class="op">=</span>tf_optimizer.Optimizer.GATE_OP,
+    aggregation_method<span class="op">=</span><span class="va">None</span>,
+    colocate_gradients_with_ops<span class="op">=</span><span class="va">False</span>,
+    check_numerics<span class="op">=</span><span class="va">True</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/training/python/training/training.py"><code>tensorflow/contrib/training/python/training/training.py</code></a>.</p>
+<p>Creates an <code>Operation</code> that evaluates the gradients and returns the loss.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>total_loss</code></b>: A <code>Tensor</code> representing the total loss.</li>
+<li><b><code>optimizer</code></b>: A tf.Optimizer to use for computing the gradients.</li>
+<li><b><code>global_step</code></b>: A <code>Tensor</code> representing the global step variable. If left as <code>_USE_GLOBAL_STEP</code>, then tf.contrib.framework.global_step() is used.</li>
+<li><b><code>update_ops</code></b>: An optional list of updates to execute. If <code>update_ops</code> is <code>None</code>, then the update ops are set to the contents of the <code>tf.GraphKeys.UPDATE_OPS</code> collection. If <code>update_ops</code> is not <code>None</code>, but it doesn't contain all of the update ops in <code>tf.GraphKeys.UPDATE_OPS</code>, a warning will be displayed.</li>
+<li><b><code>variables_to_train</code></b>: an optional list of variables to train. If None, it will default to all tf.trainable_variables().</li>
+<li><b><code>transform_grads_fn</code></b>: A function which takes a single argument, a list of gradient to variable pairs (tuples), performs any requested gradient updates, such as gradient clipping or multipliers, and returns the updated list.</li>
+<li><b><code>summarize_gradients</code></b>: Whether or not add summaries for each gradient.</li>
+<li><b><code>gate_gradients</code></b>: How to gate the computation of gradients. See tf.Optimizer.</li>
+<li><b><code>aggregation_method</code></b>: Specifies the method used to combine gradient terms. Valid values are defined in the class <code>AggregationMethod</code>.</li>
+<li><b><code>colocate_gradients_with_ops</code></b>: Whether or not to try colocating the gradients with the ops that generated them.</li>
+<li><b><code>check_numerics</code></b>: Whether or not we apply check_numerics.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> that when evaluated, computes the gradients and returns the total loss value.</p>

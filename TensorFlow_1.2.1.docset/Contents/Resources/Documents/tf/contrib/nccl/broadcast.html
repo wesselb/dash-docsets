@@ -1,0 +1,19 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.nccl.broadcast" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.nccl.broadcast" class="dashAnchor"></a><h1 id="tf.contrib.nccl.broadcast">tf.contrib.nccl.broadcast</h1>
+<h3 id="tf.contrib.nccl.broadcast-1"><code>tf.contrib.nccl.broadcast</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">broadcast(
+    src_tensor,
+    dst_devices
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/nccl/python/ops/nccl_ops.py"><code>tensorflow/contrib/nccl/python/ops/nccl_ops.py</code></a>.</p>
+<p>Returns a list of tensors on <code>dst_devices</code>, each with value <code>tensor</code>.</p>
+<p>The computation is done with a broadcast nccl operation, so if only some of the returned tensors and src_tensor are evaluated then the computation will hang.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>src_tensor</code></b>: The tensor to send; must be assigned to a GPU device.</li>
+<li><b><code>dst_devices</code></b>: The GPU devices to receive the sent tensor.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>List of tensors, each with the value of <code>src_tensor</code>, which the device of tensor i is <code>dst_devices[i]</code>.</p>

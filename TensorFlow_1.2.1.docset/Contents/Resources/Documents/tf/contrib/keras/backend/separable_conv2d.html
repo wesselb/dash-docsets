@@ -1,0 +1,30 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.backend.separable_conv2d" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.keras.backend.separable_conv2d" class="dashAnchor"></a><h1 id="tf.contrib.keras.backend.separable_conv2d">tf.contrib.keras.backend.separable_conv2d</h1>
+<h3 id="tf.contrib.keras.backend.separable_conv2d-1"><code>tf.contrib.keras.backend.separable_conv2d</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">separable_conv2d(
+    x,
+    depthwise_kernel,
+    pointwise_kernel,
+    strides<span class="op">=</span>(<span class="dv">1</span>, <span class="dv">1</span>),
+    padding<span class="op">=</span><span class="st">&#39;valid&#39;</span>,
+    data_format<span class="op">=</span><span class="va">None</span>,
+    dilation_rate<span class="op">=</span>(<span class="dv">1</span>, <span class="dv">1</span>)
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/backend.py"><code>tensorflow/contrib/keras/python/keras/backend.py</code></a>.</p>
+<p>2D convolution with separable filters.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>x: input tensor
+depthwise_kernel: convolution kernel for the depthwise convolution.
+pointwise_kernel: kernel for the 1x1 convolution.
+strides: strides tuple (length 2).
+padding: padding mode, &quot;valid&quot; or &quot;same&quot;.
+data_format: data format, &quot;channels_first&quot; or &quot;channels_last&quot;.
+dilation_rate: tuple of integers,
+    dilation rates for the separable convolution.</code></pre>
+<h4 id="returns">Returns:</h4>
+<pre><code>Output tensor.</code></pre>
+<h4 id="raises">Raises:</h4>
+<pre><code>ValueError: if `data_format` is neither `channels_last` or
+`channels_first`.</code></pre>

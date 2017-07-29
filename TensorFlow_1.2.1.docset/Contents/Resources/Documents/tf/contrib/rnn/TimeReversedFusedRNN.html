@@ -1,0 +1,29 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.rnn.TimeReversedFusedRNN" /> <meta itemprop="property" content="__call__"/> <meta itemprop="property" content="__init__"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.rnn.TimeReversedFusedRNN" class="dashAnchor"></a><h1 id="tf.contrib.rnn.timereversedfusedrnn">tf.contrib.rnn.TimeReversedFusedRNN</h1>
+<h3 id="class-tf.contrib.rnn.timereversedfusedrnn"><code>class tf.contrib.rnn.TimeReversedFusedRNN</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/rnn/python/ops/fused_rnn_cell.py"><code>tensorflow/contrib/rnn/python/ops/fused_rnn_cell.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.rnn.md#Core_RNN_Cell_wrappers_RNNCells_that_wrap_other_RNNCells_">RNN and Cells (contrib) &gt; Core RNN Cell wrappers (RNNCells that wrap other RNNCells)</a></p>
+<p>This is an adaptor to time-reverse a FusedRNNCell.</p>
+<p>For example,</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">cell <span class="op">=</span> tf.contrib.rnn.BasicRNNCell(<span class="dv">10</span>)
+fw_lstm <span class="op">=</span> tf.contrib.rnn.FusedRNNCellAdaptor(cell, use_dynamic_rnn<span class="op">=</span><span class="va">True</span>)
+bw_lstm <span class="op">=</span> tf.contrib.rnn.TimeReversedFusedRNN(fw_lstm)
+fw_out, fw_state <span class="op">=</span> fw_lstm(inputs)
+bw_out, bw_state <span class="op">=</span> bw_lstm(inputs)</code></pre></div>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(cell)</code></pre></div>
+<h3 id="__call__">
+<code><strong>call</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__call__</span>(
+    inputs,
+    initial_state<span class="op">=</span><span class="va">None</span>,
+    dtype<span class="op">=</span><span class="va">None</span>,
+    sequence_length<span class="op">=</span><span class="va">None</span>,
+    scope<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>

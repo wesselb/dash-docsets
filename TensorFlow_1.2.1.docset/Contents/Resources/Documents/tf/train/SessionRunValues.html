@@ -1,0 +1,39 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.train.SessionRunValues" /> <meta itemprop="property" content="options"/> <meta itemprop="property" content="results"/> <meta itemprop="property" content="run_metadata"/> <meta itemprop="property" content="__new__"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.train.SessionRunValues" class="dashAnchor"></a><h1 id="tf.train.sessionrunvalues">tf.train.SessionRunValues</h1>
+<h3 id="class-tf.train.sessionrunvalues"><code>class tf.train.SessionRunValues</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/training/session_run_hook.py"><code>tensorflow/python/training/session_run_hook.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/train.md#Training_Hooks">Training &gt; Training Hooks</a></p>
+<p>Contains the results of <code>Session.run()</code>.</p>
+<p>In the future we may use this object to add more information about result of run without changing the Hook API.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>results</code></b>: The return values from <code>Session.run()</code> corresponding to the fetches attribute returned in the RunArgs. Note that this has the same shape as the RunArgs fetches. For example: fetches = global_step_tensor =&gt; results = nparray(int) fetches = [train_op, summary_op, global_step_tensor] =&gt; results = [None, nparray(string), nparray(int)] fetches = {'step': global_step_tensor, 'summ': summary_op} =&gt; results = {'step': nparray(int), 'summ': nparray(string)}</li>
+<li><b><code>options</code></b>: <code>RunOptions</code> from the <code>Session.run()</code> call.</li>
+<li><b><code>run_metadata</code></b>: <code>RunMetadata</code> from the <code>Session.run()</code> call.</li>
+</ul>
+<h2 id="properties">Properties</h2>
+<h3 id="options">
+<code>options</code>
+</h3>
+<p>Alias for field number 1</p>
+<h3 id="results">
+<code>results</code>
+</h3>
+<p>Alias for field number 0</p>
+<h3 id="run_metadata">
+<code>run_metadata</code>
+</h3>
+<p>Alias for field number 2</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__new__">
+<code><strong>new</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__new__</span>(
+    _cls,
+    results,
+    options,
+    run_metadata
+)</code></pre></div>
+<p>Create new instance of SessionRunValues(results, options, run_metadata)</p>

@@ -1,0 +1,38 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.eye" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.eye" class="dashAnchor"></a><h1 id="tf.eye">tf.eye</h1>
+<h3 id="tf.eye-1"><code>tf.eye</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">eye(
+    num_rows,
+    num_columns<span class="op">=</span><span class="va">None</span>,
+    batch_shape<span class="op">=</span><span class="va">None</span>,
+    dtype<span class="op">=</span>tf.float32,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/linalg_ops.py"><code>tensorflow/python/ops/linalg_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/math_ops.md#Matrix_Math_Functions">Math &gt; Matrix Math Functions</a></p>
+<p>Construct an identity matrix, or a batch of matrices.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Construct one identity matrix.</span>
+tf.eye(<span class="dv">2</span>)
+<span class="op">==&gt;</span> [[<span class="dv">1</span>., <span class="dv">0</span>.],
+     [<span class="dv">0</span>., <span class="dv">1</span>.]]
+
+<span class="co"># Construct a batch of 3 identity matricies, each 2 x 2.</span>
+<span class="co"># batch_identity[i, :, :] is a 2 x 2 identity matrix, i = 0, 1, 2.</span>
+batch_identity <span class="op">=</span> tf.eye(<span class="dv">2</span>, batch_shape<span class="op">=</span>[<span class="dv">3</span>])
+
+<span class="co"># Construct one 2 x 3 &quot;identity&quot; matrix</span>
+tf.eye(<span class="dv">2</span>, num_columns<span class="op">=</span><span class="dv">3</span>)
+<span class="op">==&gt;</span> [[ <span class="dv">1</span>.,  <span class="dv">0</span>.,  <span class="dv">0</span>.],
+     [ <span class="dv">0</span>.,  <span class="dv">1</span>.,  <span class="dv">0</span>.]]</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>num_rows</code></b>: Non-negative <code>int32</code> scalar <code>Tensor</code> giving the number of rows in each batch matrix.</li>
+<li><b><code>num_columns</code></b>: Optional non-negative <code>int32</code> scalar <code>Tensor</code> giving the number of columns in each batch matrix. Defaults to <code>num_rows</code>.</li>
+<li><b><code>batch_shape</code></b>: <code>int32</code> <code>Tensor</code>. If provided, returned <code>Tensor</code> will have leading batch dimensions of this shape.</li>
+<li><b><code>dtype</code></b>: The type of an element in the resulting <code>Tensor</code></li>
+<li><b><code>name</code></b>: A name for this <code>Op</code>. Defaults to &quot;eye&quot;.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of shape <code>batch_shape + [num_rows, num_columns]</code></p>

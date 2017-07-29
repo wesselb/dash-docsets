@@ -1,0 +1,23 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.backend.in_test_phase" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.keras.backend.in_test_phase" class="dashAnchor"></a><h1 id="tf.contrib.keras.backend.in_test_phase">tf.contrib.keras.backend.in_test_phase</h1>
+<h3 id="tf.contrib.keras.backend.in_test_phase-1"><code>tf.contrib.keras.backend.in_test_phase</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">in_test_phase(
+    x,
+    alt,
+    training<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/backend.py"><code>tensorflow/contrib/keras/python/keras/backend.py</code></a>.</p>
+<p>Selects <code>x</code> in test phase, and <code>alt</code> otherwise.</p>
+<p>Note that <code>alt</code> should have the <em>same shape</em> as <code>x</code>.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>x: What to return in test phase
+    (tensor or callable that returns a tensor).
+alt: What to return otherwise
+    (tensor or callable that returns a tensor).
+training: Optional scalar tensor
+    (or Python boolean, or Python integer)
+    specifing the learning phase.</code></pre>
+<h4 id="returns">Returns:</h4>
+<pre><code>Either `x` or `alt` based on `K.learning_phase`.</code></pre>

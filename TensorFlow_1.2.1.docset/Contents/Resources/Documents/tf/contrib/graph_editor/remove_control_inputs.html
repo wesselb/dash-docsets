@@ -1,0 +1,23 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.graph_editor.remove_control_inputs" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.graph_editor.remove_control_inputs" class="dashAnchor"></a><h1 id="tf.contrib.graph_editor.remove_control_inputs">tf.contrib.graph_editor.remove_control_inputs</h1>
+<h3 id="tf.contrib.graph_editor.remove_control_inputs-1"><code>tf.contrib.graph_editor.remove_control_inputs</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">remove_control_inputs(
+    op,
+    cops
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/graph_editor/reroute.py"><code>tensorflow/contrib/graph_editor/reroute.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.graph_editor.md#Module_reroute">Graph Editor (contrib) &gt; Module: reroute</a></p>
+<p>Remove the control inputs cops from co.</p>
+<p>Warning: this function is directly manipulating the internals of the <code>tf.Graph</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>op</code></b>: a <code>tf.Operation</code> from which to remove the control inputs.</li>
+<li><b><code>cops</code></b>: an object convertible to a list of <code>tf.Operation</code>.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: if op is not a <code>tf.Operation</code>.</li>
+<li><b><code>ValueError</code></b>: if any cop in cops is not a control input of op.</li>
+</ul>

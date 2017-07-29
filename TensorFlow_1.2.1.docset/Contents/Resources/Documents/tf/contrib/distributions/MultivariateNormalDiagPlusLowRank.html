@@ -1,0 +1,531 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.distributions.MultivariateNormalDiagPlusLowRank" /> <meta itemprop="property" content="allow_nan_stats"/> <meta itemprop="property" content="batch_shape"/> <meta itemprop="property" content="bijector"/> <meta itemprop="property" content="distribution"/> <meta itemprop="property" content="dtype"/> <meta itemprop="property" content="event_shape"/> <meta itemprop="property" content="loc"/> <meta itemprop="property" content="name"/> <meta itemprop="property" content="parameters"/> <meta itemprop="property" content="reparameterization_type"/> <meta itemprop="property" content="scale"/> <meta itemprop="property" content="validate_args"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="batch_shape_tensor"/> <meta itemprop="property" content="cdf"/> <meta itemprop="property" content="copy"/> <meta itemprop="property" content="covariance"/> <meta itemprop="property" content="entropy"/> <meta itemprop="property" content="event_shape_tensor"/> <meta itemprop="property" content="is_scalar_batch"/> <meta itemprop="property" content="is_scalar_event"/> <meta itemprop="property" content="log_cdf"/> <meta itemprop="property" content="log_prob"/> <meta itemprop="property" content="log_survival_function"/> <meta itemprop="property" content="mean"/> <meta itemprop="property" content="mode"/> <meta itemprop="property" content="param_shapes"/> <meta itemprop="property" content="param_static_shapes"/> <meta itemprop="property" content="prob"/> <meta itemprop="property" content="quantile"/> <meta itemprop="property" content="sample"/> <meta itemprop="property" content="stddev"/> <meta itemprop="property" content="survival_function"/> <meta itemprop="property" content="variance"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.distributions.MultivariateNormalDiagPlusLowRank" class="dashAnchor"></a><h1 id="tf.contrib.distributions.multivariatenormaldiagpluslowrank">tf.contrib.distributions.MultivariateNormalDiagPlusLowRank</h1>
+<h3 id="class-tf.contrib.distributions.multivariatenormaldiagpluslowrank"><code>class tf.contrib.distributions.MultivariateNormalDiagPlusLowRank</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/distributions/python/ops/mvn_diag_plus_low_rank.py"><code>tensorflow/contrib/distributions/python/ops/mvn_diag_plus_low_rank.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.distributions.md#Multivariate_distributions">Statistical Distributions (contrib) &gt; Multivariate distributions</a></p>
+<p>The multivariate normal distribution on <code>R^k</code>.</p>
+<p>The Multivariate Normal distribution is defined over <code>R^k</code> and parameterized by a (batch of) length-<code>k</code> <code>loc</code> vector (aka &quot;mu&quot;) and a (batch of) <code>k x k</code> <code>scale</code> matrix; <code>covariance = scale @ scale.T</code> where <code>@</code> denotes matrix-multiplication.</p>
+<h4 id="mathematical-details">Mathematical Details</h4>
+<p>The probability density function (pdf) is,</p>
+<pre class="none"><code>pdf(x; loc, scale) = exp(-0.5 ||y||**2) / Z,
+y = inv(scale) @ (x - loc),
+Z = (2 pi)**(0.5 k) |det(scale)|,</code></pre>
+<p>where:</p>
+<ul>
+<li><code>loc</code> is a vector in <code>R^k</code>,</li>
+<li><code>scale</code> is a linear operator in <code>R^{k x k}</code>, <code>cov = scale @ scale.T</code>,</li>
+<li><code>Z</code> denotes the normalization constant, and,</li>
+<li><code>||y||**2</code> denotes the squared Euclidean norm of <code>y</code>.</li>
+</ul>
+<p>A (non-batch) <code>scale</code> matrix is:</p>
+<pre class="none"><code>scale = diag(scale_diag + scale_identity_multiplier ones(k)) +
+      scale_perturb_factor @ diag(scale_perturb_diag) @ scale_perturb_factor.T</code></pre>
+<p>where:</p>
+<ul>
+<li><code>scale_diag.shape = [k]</code>,</li>
+<li><code>scale_identity_multiplier.shape = []</code>,</li>
+<li><code>scale_perturb_factor.shape = [k, r]</code>, typically <code>k &gt;&gt; r</code>, and,</li>
+<li><code>scale_perturb_diag.shape = [r]</code>.</li>
+</ul>
+<p>Additional leading dimensions (if any) will index batches.</p>
+<p>If both <code>scale_diag</code> and <code>scale_identity_multiplier</code> are <code>None</code>, then <code>scale</code> is the Identity matrix.</p>
+<p>The MultivariateNormal distribution is a member of the <a href="https://en.wikipedia.org/wiki/Location-scale_family">location-scale family</a>, i.e., it can be constructed as,</p>
+<pre class="none"><code>X ~ MultivariateNormal(loc=0, scale=1)   # Identity scale, zero shift.
+Y = scale @ X + loc</code></pre>
+<h4 id="examples">Examples</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">ds <span class="op">=</span> tf.contrib.distributions
+
+<span class="co"># Initialize a single 3-variate Gaussian with covariance `cov = S @ S.T`,</span>
+<span class="co"># `S = diag(d) + U @ diag(m) @ U.T`. The perturbation, `U @ diag(m) @ U.T`, is</span>
+<span class="co"># a rank-2 update.</span>
+mu <span class="op">=</span> [<span class="op">-</span><span class="fl">0.5</span>., <span class="dv">0</span>, <span class="fl">0.5</span>]   <span class="co"># shape: [3]</span>
+d <span class="op">=</span> [<span class="fl">1.5</span>, <span class="fl">0.5</span>, <span class="dv">2</span>]      <span class="co"># shape: [3]</span>
+U <span class="op">=</span> [[<span class="dv">1</span>., <span class="dv">2</span>],
+     [<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>],
+     [<span class="dv">2</span>, <span class="op">-</span><span class="fl">0.5</span>]]        <span class="co"># shape: [3, 2]</span>
+m <span class="op">=</span> [<span class="dv">4</span>., <span class="dv">5</span>]            <span class="co"># shape: [2]</span>
+mvn <span class="op">=</span> ds.MultivariateNormalDiagPlusLowRank(
+    loc<span class="op">=</span>mu
+    scale_diag<span class="op">=</span>d
+    scale_perturb_factor<span class="op">=</span>U,
+    scale_perturb_diag<span class="op">=</span>m)
+
+<span class="co"># Evaluate this on an observation in `R^3`, returning a scalar.</span>
+mvn.prob([<span class="op">-</span><span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>]).<span class="bu">eval</span>()  <span class="co"># shape: []</span>
+
+<span class="co"># Initialize a 2-batch of 3-variate Gaussians; `S = diag(d) + U @ U.T`.</span>
+mu <span class="op">=</span> [[<span class="dv">1</span>.,  <span class="dv">2</span>,  <span class="dv">3</span>],
+      [<span class="dv">11</span>, <span class="dv">22</span>, <span class="dv">33</span>]]      <span class="co"># shape: [b, k] = [2, 3]</span>
+U <span class="op">=</span> [[[<span class="dv">1</span>., <span class="dv">2</span>],
+      [<span class="dv">3</span>,  <span class="dv">4</span>],
+      [<span class="dv">5</span>,  <span class="dv">6</span>]],
+     [[<span class="fl">0.5</span>, <span class="fl">0.75</span>],
+      [<span class="dv">1</span>,<span class="dv">0</span>, <span class="fl">0.25</span>],
+      [<span class="fl">1.5</span>, <span class="fl">1.25</span>]]]      <span class="co"># shape: [b, k, r] = [2, 3, 2]</span>
+m <span class="op">=</span> [[<span class="fl">0.1</span>, <span class="fl">0.2</span>],
+     [<span class="fl">0.4</span>, <span class="fl">0.5</span>]]         <span class="co"># shape: [b, r] = [2, 2]</span>
+
+mvn <span class="op">=</span> ds.MultivariateNormalDiagPlusLowRank(
+    loc<span class="op">=</span>mu,
+    scale_perturb_factor<span class="op">=</span>U,
+    scale_perturb_diag<span class="op">=</span>m)
+
+mvn.covariance().<span class="bu">eval</span>()   <span class="co"># shape: [2, 3, 3]</span>
+<span class="co"># ==&gt; [[[  15.63   31.57    48.51]</span>
+<span class="co">#       [  31.57   69.31   105.05]</span>
+<span class="co">#       [  48.51  105.05   162.59]]</span>
+<span class="co">#</span>
+<span class="co">#      [[   2.59    1.41    3.35]</span>
+<span class="co">#       [   1.41    2.71    3.34]</span>
+<span class="co">#       [   3.35    3.34    8.35]]]</span>
+
+<span class="co"># Compute the pdf of two `R^3` observations (one from each batch);</span>
+<span class="co"># return a length-2 vector.</span>
+x <span class="op">=</span> [[<span class="op">-</span><span class="fl">0.9</span>, <span class="dv">0</span>, <span class="fl">0.1</span>],
+     [<span class="op">-</span><span class="dv">10</span>, <span class="dv">0</span>, <span class="dv">9</span>]]     <span class="co"># shape: [2, 3]</span>
+mvn.prob(x).<span class="bu">eval</span>()    <span class="co"># shape: [2]</span></code></pre></div>
+<h2 id="properties">Properties</h2>
+<h3 id="allow_nan_stats">
+<code>allow_nan_stats</code>
+</h3>
+<p>Python <code>bool</code> describing behavior when a stat is undefined.</p>
+<p>Stats return +/- infinity when it makes sense. E.g., the variance of a Cauchy distribution is infinity. However, sometimes the statistic is undefined, e.g., if a distribution's pdf does not achieve a maximum within the support of the distribution, the mode is undefined. If the mean is undefined, then by definition the variance is undefined. E.g. the mean for Student's T for df = 1 is undefined (no clear way to say it is either + or - infinity), so the variance = E[(X - mean)**2] is also undefined.</p>
+<h4 id="returns">Returns:</h4>
+<ul>
+<li><b><code>allow_nan_stats</code></b>: Python <code>bool</code>.</li>
+</ul>
+<h3 id="batch_shape">
+<code>batch_shape</code>
+</h3>
+<p>Shape of a single sample from a single event index as a <code>TensorShape</code>.</p>
+<p>May be partially defined or unknown.</p>
+<p>The batch dimensions are indexes into independent, non-identical parameterizations of this distribution.</p>
+<h4 id="returns-1">Returns:</h4>
+<ul>
+<li><b><code>batch_shape</code></b>: <code>TensorShape</code>, possibly unknown.</li>
+</ul>
+<h3 id="bijector">
+<code>bijector</code>
+</h3>
+<p>Function transforming x =&gt; y.</p>
+<h3 id="distribution">
+<code>distribution</code>
+</h3>
+<p>Base distribution, p(x).</p>
+<h3 id="dtype">
+<code>dtype</code>
+</h3>
+<p>The <code>DType</code> of <code>Tensor</code>s handled by this <code>Distribution</code>.</p>
+<h3 id="event_shape">
+<code>event_shape</code>
+</h3>
+<p>Shape of a single sample from a single batch as a <code>TensorShape</code>.</p>
+<p>May be partially defined or unknown.</p>
+<h4 id="returns-2">Returns:</h4>
+<ul>
+<li><b><code>event_shape</code></b>: <code>TensorShape</code>, possibly unknown.</li>
+</ul>
+<h3 id="loc">
+<code>loc</code>
+</h3>
+<p>The <code>loc</code> <code>Tensor</code> in <code>Y = scale @ X + loc</code>.</p>
+<h3 id="name">
+<code>name</code>
+</h3>
+<p>Name prepended to all ops created by this <code>Distribution</code>.</p>
+<h3 id="parameters">
+<code>parameters</code>
+</h3>
+<p>Dictionary of parameters used to instantiate this <code>Distribution</code>.</p>
+<h3 id="reparameterization_type">
+<code>reparameterization_type</code>
+</h3>
+<p>Describes how samples from the distribution are reparameterized.</p>
+<p>Currently this is one of the static instances <code>distributions.FULLY_REPARAMETERIZED</code> or <code>distributions.NOT_REPARAMETERIZED</code>.</p>
+<h4 id="returns-3">Returns:</h4>
+<p>An instance of <code>ReparameterizationType</code>.</p>
+<h3 id="scale">
+<code>scale</code>
+</h3>
+<p>The <code>scale</code> <code>LinearOperator</code> in <code>Y = scale @ X + loc</code>.</p>
+<h3 id="validate_args">
+<code>validate_args</code>
+</h3>
+<p>Python <code>bool</code> indicating possibly expensive checks are enabled.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    loc<span class="op">=</span><span class="va">None</span>,
+    scale_diag<span class="op">=</span><span class="va">None</span>,
+    scale_identity_multiplier<span class="op">=</span><span class="va">None</span>,
+    scale_perturb_factor<span class="op">=</span><span class="va">None</span>,
+    scale_perturb_diag<span class="op">=</span><span class="va">None</span>,
+    validate_args<span class="op">=</span><span class="va">False</span>,
+    allow_nan_stats<span class="op">=</span><span class="va">True</span>,
+    name<span class="op">=</span><span class="st">&#39;MultivariateNormalDiagPlusLowRank&#39;</span>
+)</code></pre></div>
+<p>Construct Multivariate Normal distribution on <code>R^k</code>.</p>
+<p>The <code>batch_shape</code> is the broadcast shape between <code>loc</code> and <code>scale</code> arguments.</p>
+<p>The <code>event_shape</code> is given by last dimension of the matrix implied by <code>scale</code>. The last dimension of <code>loc</code> (if provided) must broadcast with this.</p>
+<p>Recall that <code>covariance = scale @ scale.T</code>. A (non-batch) <code>scale</code> matrix is:</p>
+<pre class="none"><code>scale = diag(scale_diag + scale_identity_multiplier ones(k)) +
+    scale_perturb_factor @ diag(scale_perturb_diag) @ scale_perturb_factor.T</code></pre>
+<p>where:</p>
+<ul>
+<li><code>scale_diag.shape = [k]</code>,</li>
+<li><code>scale_identity_multiplier.shape = []</code>,</li>
+<li><code>scale_perturb_factor.shape = [k, r]</code>, typically <code>k &gt;&gt; r</code>, and,</li>
+<li><code>scale_perturb_diag.shape = [r]</code>.</li>
+</ul>
+<p>Additional leading dimensions (if any) will index batches.</p>
+<p>If both <code>scale_diag</code> and <code>scale_identity_multiplier</code> are <code>None</code>, then <code>scale</code> is the Identity matrix.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>loc</code></b>: Floating-point <code>Tensor</code>. If this is set to <code>None</code>, <code>loc</code> is implicitly <code>0</code>. When specified, may have shape <code>[B1, ..., Bb, k]</code> where <code>b &gt;= 0</code> and <code>k</code> is the event size.</li>
+<li><b><code>scale_diag</code></b>: Non-zero, floating-point <code>Tensor</code> representing a diagonal matrix added to <code>scale</code>. May have shape <code>[B1, ..., Bb, k]</code>, <code>b &gt;= 0</code>, and characterizes <code>b</code>-batches of <code>k x k</code> diagonal matrices added to <code>scale</code>. When both <code>scale_identity_multiplier</code> and <code>scale_diag</code> are <code>None</code> then <code>scale</code> is the <code>Identity</code>.</li>
+<li><b><code>scale_identity_multiplier</code></b>: Non-zero, floating-point <code>Tensor</code> representing a scaled-identity-matrix added to <code>scale</code>. May have shape <code>[B1, ..., Bb]</code>, <code>b &gt;= 0</code>, and characterizes <code>b</code>-batches of scaled <code>k x k</code> identity matrices added to <code>scale</code>. When both <code>scale_identity_multiplier</code> and <code>scale_diag</code> are <code>None</code> then <code>scale</code> is the <code>Identity</code>.</li>
+<li><b><code>scale_perturb_factor</code></b>: Floating-point <code>Tensor</code> representing a rank-<code>r</code> perturbation added to <code>scale</code>. May have shape <code>[B1, ..., Bb, k, r]</code>, <code>b &gt;= 0</code>, and characterizes <code>b</code>-batches of rank-<code>r</code> updates to <code>scale</code>. When <code>None</code>, no rank-<code>r</code> update is added to <code>scale</code>.</li>
+<li><b><code>scale_perturb_diag</code></b>: Floating-point <code>Tensor</code> representing a diagonal matrix inside the rank-<code>r</code> perturbation added to <code>scale</code>. May have shape <code>[B1, ..., Bb, r]</code>, <code>b &gt;= 0</code>, and characterizes <code>b</code>-batches of <code>r x r</code> diagonal matrices inside the perturbation added to <code>scale</code>. When <code>None</code>, an identity matrix is used inside the perturbation. Can only be specified if <code>scale_perturb_factor</code> is also specified.</li>
+<li><b><code>validate_args</code></b>: Python <code>bool</code>, default <code>False</code>. When <code>True</code> distribution parameters are checked for validity despite possibly degrading runtime performance. When <code>False</code> invalid inputs may silently render incorrect outputs.</li>
+<li><b><code>allow_nan_stats</code></b>: Python <code>bool</code>, default <code>True</code>. When <code>True</code>, statistics (e.g., mean, mode, variance) use the value &quot;<code>NaN</code>&quot; to indicate the result is undefined. When <code>False</code>, an exception is raised if one or more of the statistic's batch members are undefined.</li>
+<li><b><code>name</code></b>: Python <code>str</code> name prefixed to Ops created by this class.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if at most <code>scale_identity_multiplier</code> is specified.</li>
+</ul>
+<h3 id="batch_shape_tensor">
+<code>batch_shape_tensor</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">batch_shape_tensor(name<span class="op">=</span><span class="st">&#39;batch_shape_tensor&#39;</span>)</code></pre></div>
+<p>Shape of a single sample from a single event index as a 1-D <code>Tensor</code>.</p>
+<p>The batch dimensions are indexes into independent, non-identical parameterizations of this distribution.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>name</code></b>: name to give to the op</li>
+</ul>
+<h4 id="returns-4">Returns:</h4>
+<ul>
+<li><b><code>batch_shape</code></b>: <code>Tensor</code>.</li>
+</ul>
+<h3 id="cdf">
+<code>cdf</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">cdf(
+    value,
+    name<span class="op">=</span><span class="st">&#39;cdf&#39;</span>
+)</code></pre></div>
+<p>Cumulative distribution function.</p>
+<p>Given random variable <code>X</code>, the cumulative distribution function <code>cdf</code> is:</p>
+<pre class="none"><code>cdf(x) := P[X &lt;= x]</code></pre>
+<h4 id="args-2">Args:</h4>
+<ul>
+<li><b><code>value</code></b>: <code>float</code> or <code>double</code> <code>Tensor</code>.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+</ul>
+<h4 id="returns-5">Returns:</h4>
+<ul>
+<li><b><code>cdf</code></b>: a <code>Tensor</code> of shape <code>sample_shape(x) + self.batch_shape</code> with values of type <code>self.dtype</code>.</li>
+</ul>
+<h3 id="copy">
+<code>copy</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">copy(<span class="op">**</span>override_parameters_kwargs)</code></pre></div>
+<p>Creates a deep copy of the distribution.</p>
+<p>Note: the copy distribution may continue to depend on the original initialization arguments.</p>
+<h4 id="args-3">Args:</h4>
+<p>**override_parameters_kwargs: String/value dictionary of initialization arguments to override with new values.</p>
+<h4 id="returns-6">Returns:</h4>
+<ul>
+<li><b><code>distribution</code></b>: A new instance of <code>type(self)</code> initialized from the union of self.parameters and override_parameters_kwargs, i.e., <code>dict(self.parameters, **override_parameters_kwargs)</code>.</li>
+</ul>
+<h3 id="covariance">
+<code>covariance</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">covariance(name<span class="op">=</span><span class="st">&#39;covariance&#39;</span>)</code></pre></div>
+<p>Covariance.</p>
+<p>Covariance is (possibly) defined only for non-scalar-event distributions.</p>
+<p>For example, for a length-<code>k</code>, vector-valued distribution, it is calculated as,</p>
+<pre class="none"><code>Cov[i, j] = Covariance(X_i, X_j) = E[(X_i - E[X_i]) (X_j - E[X_j])]</code></pre>
+<p>where <code>Cov</code> is a (batch of) <code>k x k</code> matrix, <code>0 &lt;= (i, j) &lt; k</code>, and <code>E</code> denotes expectation.</p>
+<p>Alternatively, for non-vector, multivariate distributions (e.g., matrix-valued, Wishart), <code>Covariance</code> shall return a (batch of) matrices under some vectorization of the events, i.e.,</p>
+<pre class="none"><code>Cov[i, j] = Covariance(Vec(X)_i, Vec(X)_j) = [as above]</code></pre>
+<p>where <code>Cov</code> is a (batch of) <code>k' x k'</code> matrices, <code>0 &lt;= (i, j) &lt; k' = reduce_prod(event_shape)</code>, and <code>Vec</code> is some function mapping indices of this distribution's event dimensions to indices of a length-<code>k'</code> vector.</p>
+<h4 id="args-4">Args:</h4>
+<ul>
+<li><b><code>name</code></b>: The name to give this op.</li>
+</ul>
+<h4 id="returns-7">Returns:</h4>
+<ul>
+<li><b><code>covariance</code></b>: Floating-point <code>Tensor</code> with shape <code>[B1, ..., Bn, k', k']</code> where the first <code>n</code> dimensions are batch coordinates and <code>k' = reduce_prod(self.event_shape)</code>.</li>
+</ul>
+<h3 id="entropy">
+<code>entropy</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">entropy(name<span class="op">=</span><span class="st">&#39;entropy&#39;</span>)</code></pre></div>
+<p>Shannon entropy in nats.</p>
+<h3 id="event_shape_tensor">
+<code>event_shape_tensor</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">event_shape_tensor(name<span class="op">=</span><span class="st">&#39;event_shape_tensor&#39;</span>)</code></pre></div>
+<p>Shape of a single sample from a single batch as a 1-D int32 <code>Tensor</code>.</p>
+<h4 id="args-5">Args:</h4>
+<ul>
+<li><b><code>name</code></b>: name to give to the op</li>
+</ul>
+<h4 id="returns-8">Returns:</h4>
+<ul>
+<li><b><code>event_shape</code></b>: <code>Tensor</code>.</li>
+</ul>
+<h3 id="is_scalar_batch">
+<code>is_scalar_batch</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">is_scalar_batch(name<span class="op">=</span><span class="st">&#39;is_scalar_batch&#39;</span>)</code></pre></div>
+<p>Indicates that <code>batch_shape == []</code>.</p>
+<h4 id="args-6">Args:</h4>
+<ul>
+<li><b><code>name</code></b>: The name to give this op.</li>
+</ul>
+<h4 id="returns-9">Returns:</h4>
+<ul>
+<li><b><code>is_scalar_batch</code></b>: <code>bool</code> scalar <code>Tensor</code>.</li>
+</ul>
+<h3 id="is_scalar_event">
+<code>is_scalar_event</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">is_scalar_event(name<span class="op">=</span><span class="st">&#39;is_scalar_event&#39;</span>)</code></pre></div>
+<p>Indicates that <code>event_shape == []</code>.</p>
+<h4 id="args-7">Args:</h4>
+<ul>
+<li><b><code>name</code></b>: The name to give this op.</li>
+</ul>
+<h4 id="returns-10">Returns:</h4>
+<ul>
+<li><b><code>is_scalar_event</code></b>: <code>bool</code> scalar <code>Tensor</code>.</li>
+</ul>
+<h3 id="log_cdf">
+<code>log_cdf</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">log_cdf(
+    value,
+    name<span class="op">=</span><span class="st">&#39;log_cdf&#39;</span>
+)</code></pre></div>
+<p>Log cumulative distribution function.</p>
+<p>Given random variable <code>X</code>, the cumulative distribution function <code>cdf</code> is:</p>
+<pre class="none"><code>log_cdf(x) := Log[ P[X &lt;= x] ]</code></pre>
+<p>Often, a numerical approximation can be used for <code>log_cdf(x)</code> that yields a more accurate answer than simply taking the logarithm of the <code>cdf</code> when <code>x &lt;&lt; -1</code>.</p>
+<h4 id="args-8">Args:</h4>
+<ul>
+<li><b><code>value</code></b>: <code>float</code> or <code>double</code> <code>Tensor</code>.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+</ul>
+<h4 id="returns-11">Returns:</h4>
+<ul>
+<li><b><code>logcdf</code></b>: a <code>Tensor</code> of shape <code>sample_shape(x) + self.batch_shape</code> with values of type <code>self.dtype</code>.</li>
+</ul>
+<h3 id="log_prob">
+<code>log_prob</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">log_prob(
+    value,
+    name<span class="op">=</span><span class="st">&#39;log_prob&#39;</span>
+)</code></pre></div>
+<p>Log probability density/mass function.</p>
+<p>Additional documentation from <code>MultivariateNormalLinearOperator</code>:</p>
+<p><code>value</code> is a batch vector with compatible shape if <code>value</code> is a <code>Tensor</code> whose shape can be broadcast up to either:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="va">self</span>.batch_shape <span class="op">+</span> <span class="va">self</span>.event_shape</code></pre></div>
+<p>or</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">[M1, ..., Mm] <span class="op">+</span> <span class="va">self</span>.batch_shape <span class="op">+</span> <span class="va">self</span>.event_shape</code></pre></div>
+<h4 id="args-9">Args:</h4>
+<ul>
+<li><b><code>value</code></b>: <code>float</code> or <code>double</code> <code>Tensor</code>.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+</ul>
+<h4 id="returns-12">Returns:</h4>
+<ul>
+<li><b><code>log_prob</code></b>: a <code>Tensor</code> of shape <code>sample_shape(x) + self.batch_shape</code> with values of type <code>self.dtype</code>.</li>
+</ul>
+<h3 id="log_survival_function">
+<code>log_survival_function</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">log_survival_function(
+    value,
+    name<span class="op">=</span><span class="st">&#39;log_survival_function&#39;</span>
+)</code></pre></div>
+<p>Log survival function.</p>
+<p>Given random variable <code>X</code>, the survival function is defined:</p>
+<pre class="none"><code>log_survival_function(x) = Log[ P[X &gt; x] ]
+                         = Log[ 1 - P[X &lt;= x] ]
+                         = Log[ 1 - cdf(x) ]</code></pre>
+<p>Typically, different numerical approximations can be used for the log survival function, which are more accurate than <code>1 - cdf(x)</code> when <code>x &gt;&gt; 1</code>.</p>
+<h4 id="args-10">Args:</h4>
+<ul>
+<li><b><code>value</code></b>: <code>float</code> or <code>double</code> <code>Tensor</code>.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+</ul>
+<h4 id="returns-13">Returns:</h4>
+<p><code>Tensor</code> of shape <code>sample_shape(x) + self.batch_shape</code> with values of type <code>self.dtype</code>.</p>
+<h3 id="mean">
+<code>mean</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">mean(name<span class="op">=</span><span class="st">&#39;mean&#39;</span>)</code></pre></div>
+<p>Mean.</p>
+<h3 id="mode">
+<code>mode</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">mode(name<span class="op">=</span><span class="st">&#39;mode&#39;</span>)</code></pre></div>
+<p>Mode.</p>
+<h3 id="param_shapes">
+<code>param_shapes</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">param_shapes(
+    cls,
+    sample_shape,
+    name<span class="op">=</span><span class="st">&#39;DistributionParamShapes&#39;</span>
+)</code></pre></div>
+<p>Shapes of parameters given the desired shape of a call to <code>sample()</code>.</p>
+<p>This is a class method that describes what key/value arguments are required to instantiate the given <code>Distribution</code> so that a particular shape is returned for that instance's call to <code>sample()</code>.</p>
+<p>Subclasses should override class method <code>_param_shapes</code>.</p>
+<h4 id="args-11">Args:</h4>
+<ul>
+<li><b><code>sample_shape</code></b>: <code>Tensor</code> or python list/tuple. Desired shape of a call to <code>sample()</code>.</li>
+<li><b><code>name</code></b>: name to prepend ops with.</li>
+</ul>
+<h4 id="returns-14">Returns:</h4>
+<p><code>dict</code> of parameter name to <code>Tensor</code> shapes.</p>
+<h3 id="param_static_shapes">
+<code>param_static_shapes</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">param_static_shapes(
+    cls,
+    sample_shape
+)</code></pre></div>
+<p>param_shapes with static (i.e. <code>TensorShape</code>) shapes.</p>
+<p>This is a class method that describes what key/value arguments are required to instantiate the given <code>Distribution</code> so that a particular shape is returned for that instance's call to <code>sample()</code>. Assumes that the sample's shape is known statically.</p>
+<p>Subclasses should override class method <code>_param_shapes</code> to return constant-valued tensors when constant values are fed.</p>
+<h4 id="args-12">Args:</h4>
+<ul>
+<li><b><code>sample_shape</code></b>: <code>TensorShape</code> or python list/tuple. Desired shape of a call to <code>sample()</code>.</li>
+</ul>
+<h4 id="returns-15">Returns:</h4>
+<p><code>dict</code> of parameter name to <code>TensorShape</code>.</p>
+<h4 id="raises-1">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>sample_shape</code> is a <code>TensorShape</code> and is not fully defined.</li>
+</ul>
+<h3 id="prob">
+<code>prob</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">prob(
+    value,
+    name<span class="op">=</span><span class="st">&#39;prob&#39;</span>
+)</code></pre></div>
+<p>Probability density/mass function.</p>
+<p>Additional documentation from <code>MultivariateNormalLinearOperator</code>:</p>
+<p><code>value</code> is a batch vector with compatible shape if <code>value</code> is a <code>Tensor</code> whose shape can be broadcast up to either:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="va">self</span>.batch_shape <span class="op">+</span> <span class="va">self</span>.event_shape</code></pre></div>
+<p>or</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">[M1, ..., Mm] <span class="op">+</span> <span class="va">self</span>.batch_shape <span class="op">+</span> <span class="va">self</span>.event_shape</code></pre></div>
+<h4 id="args-13">Args:</h4>
+<ul>
+<li><b><code>value</code></b>: <code>float</code> or <code>double</code> <code>Tensor</code>.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+</ul>
+<h4 id="returns-16">Returns:</h4>
+<ul>
+<li><b><code>prob</code></b>: a <code>Tensor</code> of shape <code>sample_shape(x) + self.batch_shape</code> with values of type <code>self.dtype</code>.</li>
+</ul>
+<h3 id="quantile">
+<code>quantile</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">quantile(
+    value,
+    name<span class="op">=</span><span class="st">&#39;quantile&#39;</span>
+)</code></pre></div>
+<p>Quantile function. Aka &quot;inverse cdf&quot; or &quot;percent point function&quot;.</p>
+<p>Given random variable <code>X</code> and <code>p in [0, 1]</code>, the <code>quantile</code> is:</p>
+<pre class="none"><code>quantile(p) := x such that P[X &lt;= x] == p</code></pre>
+<h4 id="args-14">Args:</h4>
+<ul>
+<li><b><code>value</code></b>: <code>float</code> or <code>double</code> <code>Tensor</code>.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+</ul>
+<h4 id="returns-17">Returns:</h4>
+<ul>
+<li><b><code>quantile</code></b>: a <code>Tensor</code> of shape <code>sample_shape(x) + self.batch_shape</code> with values of type <code>self.dtype</code>.</li>
+</ul>
+<h3 id="sample">
+<code>sample</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">sample(
+    sample_shape<span class="op">=</span>(),
+    seed<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="st">&#39;sample&#39;</span>
+)</code></pre></div>
+<p>Generate samples of the specified shape.</p>
+<p>Note that a call to <code>sample()</code> without arguments will generate a single sample.</p>
+<h4 id="args-15">Args:</h4>
+<ul>
+<li><b><code>sample_shape</code></b>: 0D or 1D <code>int32</code> <code>Tensor</code>. Shape of the generated samples.</li>
+<li><b><code>seed</code></b>: Python integer seed for RNG</li>
+<li><b><code>name</code></b>: name to give to the op.</li>
+</ul>
+<h4 id="returns-18">Returns:</h4>
+<ul>
+<li><b><code>samples</code></b>: a <code>Tensor</code> with prepended dimensions <code>sample_shape</code>.</li>
+</ul>
+<h3 id="stddev">
+<code>stddev</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">stddev(name<span class="op">=</span><span class="st">&#39;stddev&#39;</span>)</code></pre></div>
+<p>Standard deviation.</p>
+<p>Standard deviation is defined as,</p>
+<pre class="none"><code>stddev = E[(X - E[X])**2]**0.5</code></pre>
+<p>where <code>X</code> is the random variable associated with this distribution, <code>E</code> denotes expectation, and <code>stddev.shape = batch_shape + event_shape</code>.</p>
+<h4 id="args-16">Args:</h4>
+<ul>
+<li><b><code>name</code></b>: The name to give this op.</li>
+</ul>
+<h4 id="returns-19">Returns:</h4>
+<ul>
+<li><b><code>stddev</code></b>: Floating-point <code>Tensor</code> with shape identical to <code>batch_shape + event_shape</code>, i.e., the same shape as <code>self.mean()</code>.</li>
+</ul>
+<h3 id="survival_function">
+<code>survival_function</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">survival_function(
+    value,
+    name<span class="op">=</span><span class="st">&#39;survival_function&#39;</span>
+)</code></pre></div>
+<p>Survival function.</p>
+<p>Given random variable <code>X</code>, the survival function is defined:</p>
+<pre class="none"><code>survival_function(x) = P[X &gt; x]
+                     = 1 - P[X &lt;= x]
+                     = 1 - cdf(x).</code></pre>
+<h4 id="args-17">Args:</h4>
+<ul>
+<li><b><code>value</code></b>: <code>float</code> or <code>double</code> <code>Tensor</code>.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+</ul>
+<h4 id="returns-20">Returns:</h4>
+<p><code>Tensor</code> of shape <code>sample_shape(x) + self.batch_shape</code> with values of type <code>self.dtype</code>.</p>
+<h3 id="variance">
+<code>variance</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">variance(name<span class="op">=</span><span class="st">&#39;variance&#39;</span>)</code></pre></div>
+<p>Variance.</p>
+<p>Variance is defined as,</p>
+<pre class="none"><code>Var = E[(X - E[X])**2]</code></pre>
+<p>where <code>X</code> is the random variable associated with this distribution, <code>E</code> denotes expectation, and <code>Var.shape = batch_shape + event_shape</code>.</p>
+<h4 id="args-18">Args:</h4>
+<ul>
+<li><b><code>name</code></b>: The name to give this op.</li>
+</ul>
+<h4 id="returns-21">Returns:</h4>
+<ul>
+<li><b><code>variance</code></b>: Floating-point <code>Tensor</code> with shape identical to <code>batch_shape + event_shape</code>, i.e., the same shape as <code>self.mean()</code>.</li>
+</ul>

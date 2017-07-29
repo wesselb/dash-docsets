@@ -1,0 +1,25 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.string_to_hash_bucket_strong" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.string_to_hash_bucket_strong" class="dashAnchor"></a><h1 id="tf.string_to_hash_bucket_strong">tf.string_to_hash_bucket_strong</h1>
+<h3 id="tf.string_to_hash_bucket_strong-1"><code>tf.string_to_hash_bucket_strong</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">string_to_hash_bucket_strong(
+    <span class="bu">input</span>,
+    num_buckets,
+    key,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_string_ops.py</code>.</p>
+<p>See the guide: <a href="../../../api_guides/python/string_ops.md#Hashing">Strings &gt; Hashing</a></p>
+<p>Converts each string in the input Tensor to its hash mod by a number of buckets.</p>
+<p>The hash function is deterministic on the content of the string within the process. The hash function is a keyed hash function, where attribute <code>key</code> defines the key of the hash function. <code>key</code> is an array of 2 elements.</p>
+<p>A strong hash is important when inputs may be malicious, e.g. URLs with additional components. Adversaries could try to make their inputs hash to the same bucket for a denial-of-service attack or to skew the results. A strong hash prevents this by making it difficult, if not infeasible, to compute inputs that hash to the same bucket. This comes at a cost of roughly 4x higher compute time than <code>tf.string_to_hash_bucket_fast</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code> of type <code>string</code>. The strings to assign a hash bucket.</li>
+<li><b><code>num_buckets</code></b>: An <code>int</code> that is <code>&gt;= 1</code>. The number of buckets.</li>
+<li><b><code>key</code></b>: A list of <code>ints</code>. The key for the keyed hash function passed as a list of two uint64 elements.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>int64</code>. A Tensor of the same shape as the input <code>string_tensor</code>.</p>

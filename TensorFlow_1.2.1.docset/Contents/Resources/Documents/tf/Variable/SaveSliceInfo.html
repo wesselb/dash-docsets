@@ -1,0 +1,53 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.Variable.SaveSliceInfo" /> <meta itemprop="property" content="spec"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="to_proto"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.Variable.SaveSliceInfo" class="dashAnchor"></a><h1 id="tf.variable.savesliceinfo">tf.Variable.SaveSliceInfo</h1>
+<h3 id="class-tf.variable.savesliceinfo"><code>class tf.Variable.SaveSliceInfo</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/variables.py"><code>tensorflow/python/ops/variables.py</code></a>.</p>
+<p>Information on how to save this Variable as a slice.</p>
+<p>Provides internal support for saving variables as slices of a larger variable. This API is not public and is subject to change.</p>
+<p>Available properties:</p>
+<ul>
+<li>full_name</li>
+<li>full_shape</li>
+<li>var_offset</li>
+<li>var_shape</li>
+</ul>
+<h2 id="properties">Properties</h2>
+<h3 id="spec">
+<code>spec</code>
+</h3>
+<p>Computes the spec string used for saving.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    full_name<span class="op">=</span><span class="va">None</span>,
+    full_shape<span class="op">=</span><span class="va">None</span>,
+    var_offset<span class="op">=</span><span class="va">None</span>,
+    var_shape<span class="op">=</span><span class="va">None</span>,
+    save_slice_info_def<span class="op">=</span><span class="va">None</span>,
+    import_scope<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Create a <code>SaveSliceInfo</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>full_name</code></b>: Name of the full variable of which this <code>Variable</code> is a slice.</li>
+<li><b><code>full_shape</code></b>: Shape of the full variable, as a list of int.</li>
+<li><b><code>var_offset</code></b>: Offset of this <code>Variable</code> into the full variable, as a list of int.</li>
+<li><b><code>var_shape</code></b>: Shape of this <code>Variable</code>, as a list of int.</li>
+<li><b><code>save_slice_info_def</code></b>: <code>SaveSliceInfoDef</code> protocol buffer. If not <code>None</code>, recreates the SaveSliceInfo object its contents. <code>save_slice_info_def</code> and other arguments are mutually exclusive.</li>
+<li><b><code>import_scope</code></b>: Optional <code>string</code>. Name scope to add. Only used when initializing from protocol buffer.</li>
+</ul>
+<h3 id="to_proto">
+<code>to_proto</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">to_proto(export_scope<span class="op">=</span><span class="va">None</span>)</code></pre></div>
+<p>Returns a SaveSliceInfoDef() proto.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>export_scope</code></b>: Optional <code>string</code>. Name scope to remove.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>SaveSliceInfoDef</code> protocol buffer, or None if the <code>Variable</code> is not in the specified name scope.</p>

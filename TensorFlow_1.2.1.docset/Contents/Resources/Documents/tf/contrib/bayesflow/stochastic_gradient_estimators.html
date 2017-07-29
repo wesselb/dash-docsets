@@ -1,0 +1,15 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.bayesflow.stochastic_gradient_estimators" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.bayesflow.stochastic_gradient_estimators" class="dashAnchor"></a><h1 id="module-tf.contrib.bayesflow.stochastic_gradient_estimators">Module: tf.contrib.bayesflow.stochastic_gradient_estimators</h1>
+<h3 id="module-tf.contrib.bayesflow.stochastic_gradient_estimators-1">Module <code>tf.contrib.bayesflow.stochastic_gradient_estimators</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/bayesflow/python/ops/stochastic_gradient_estimators.py"><code>tensorflow/contrib/bayesflow/python/ops/stochastic_gradient_estimators.py</code></a>.</p>
+<p>Stochastic gradient estimators.</p>
+<p>These functions are meant to be used in conjunction with <code>StochasticTensor</code> (<code>loss_fn</code> parameter) and <code>surrogate_loss</code>.</p>
+<p>See Gradient Estimation Using Stochastic Computation Graphs (http://arxiv.org/abs/1506.05254) by Schulman et al., eq. 1 and section 4, for mathematical details.</p>
+<h2 id="score-function-estimator">Score function estimator</h2>
+<p>The score function is an unbiased estimator of the gradient of <code>E_p(x)[f(x)]</code>, where <code>f(x)</code> can be considered to be a &quot;loss&quot; term. It is computed as <code>E_p(x)[f(x) grad(log p(x))]</code>. A constant <code>b</code>, referred to here as the &quot;baseline&quot;, can be subtracted from <code>f(x)</code> without affecting the expectation. The term <code>(f(x) - b)</code> is referred to here as the &quot;advantage&quot;.</p>
+<p>Note that the methods defined in this module actually compute the integrand of the score function, such that when taking the gradient, the true score function is computed.</p>
+<h2 id="baseline-functions">Baseline functions</h2>
+<p>Baselines reduce the variance of Monte Carlo estimate of an expectation. The baseline for a stochastic node can be a function of all non-influenced nodes (see section 4 of Schulman et al., linked above). Baselines are also known as &quot;control variates.&quot;</p>
+<p>In the context of a MC estimate of <code>E_p(x)[f(x) - b]</code>, baseline functions have the signature <code>(st, fx) =&gt; Tensor</code>, where <code>st</code> is a <code>StochasticTensor</code> backed by the distribution <code>p(x)</code> and <code>fx</code> is the influenced loss.</p>

@@ -1,0 +1,31 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.backend.cast" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.keras.backend.cast" class="dashAnchor"></a><h1 id="tf.contrib.keras.backend.cast">tf.contrib.keras.backend.cast</h1>
+<h3 id="tf.contrib.keras.backend.cast-1"><code>tf.contrib.keras.backend.cast</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">cast(
+    x,
+    dtype
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/backend.py"><code>tensorflow/contrib/keras/python/keras/backend.py</code></a>.</p>
+<p>Casts a tensor to a different dtype and returns it.</p>
+<p>You can cast a Keras variable but it still returns a Keras tensor.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>x: Keras tensor (or variable).
+dtype: String, either (`&#39;float16&#39;`, `&#39;float32&#39;`, or `&#39;float64&#39;`).</code></pre>
+<h4 id="returns">Returns:</h4>
+<pre><code>Keras tensor with dtype `dtype`.</code></pre>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    <span class="op">&gt;&gt;&gt;</span> <span class="im">from</span> keras <span class="im">import</span> backend <span class="im">as</span> K
+    <span class="op">&gt;&gt;&gt;</span> <span class="bu">input</span> <span class="op">=</span> K.placeholder((<span class="dv">2</span>, <span class="dv">3</span>), dtype<span class="op">=</span><span class="st">&#39;float32&#39;</span>)
+    <span class="op">&gt;&gt;&gt;</span> <span class="bu">input</span>
+    <span class="op">&lt;</span>tf.Tensor <span class="st">&#39;Placeholder_2:0&#39;</span> shape<span class="op">=</span>(<span class="dv">2</span>, <span class="dv">3</span>) dtype<span class="op">=</span>float32<span class="op">&gt;</span>
+    <span class="co"># It doesn&#39;t work in-place as below.</span>
+    <span class="op">&gt;&gt;&gt;</span> K.cast(<span class="bu">input</span>, dtype<span class="op">=</span><span class="st">&#39;float16&#39;</span>)
+    <span class="op">&lt;</span>tf.Tensor <span class="st">&#39;Cast_1:0&#39;</span> shape<span class="op">=</span>(<span class="dv">2</span>, <span class="dv">3</span>) dtype<span class="op">=</span>float16<span class="op">&gt;</span>
+    <span class="op">&gt;&gt;&gt;</span> <span class="bu">input</span>
+    <span class="op">&lt;</span>tf.Tensor <span class="st">&#39;Placeholder_2:0&#39;</span> shape<span class="op">=</span>(<span class="dv">2</span>, <span class="dv">3</span>) dtype<span class="op">=</span>float32<span class="op">&gt;</span>
+    <span class="co"># you need to assign it.</span>
+    <span class="op">&gt;&gt;&gt;</span> <span class="bu">input</span> <span class="op">=</span> K.cast(<span class="bu">input</span>, dtype<span class="op">=</span><span class="st">&#39;float16&#39;</span>)
+    <span class="op">&gt;&gt;&gt;</span> <span class="bu">input</span>
+    <span class="op">&lt;</span>tf.Tensor <span class="st">&#39;Cast_2:0&#39;</span> shape<span class="op">=</span>(<span class="dv">2</span>, <span class="dv">3</span>) dtype<span class="op">=</span>float16<span class="op">&gt;</span></code></pre></div>

@@ -1,0 +1,141 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.learn.RunConfig" /> <meta itemprop="property" content="cluster_spec"/> <meta itemprop="property" content="environment"/> <meta itemprop="property" content="evaluation_master"/> <meta itemprop="property" content="is_chief"/> <meta itemprop="property" content="keep_checkpoint_every_n_hours"/> <meta itemprop="property" content="keep_checkpoint_max"/> <meta itemprop="property" content="master"/> <meta itemprop="property" content="model_dir"/> <meta itemprop="property" content="num_ps_replicas"/> <meta itemprop="property" content="num_worker_replicas"/> <meta itemprop="property" content="save_checkpoints_secs"/> <meta itemprop="property" content="save_checkpoints_steps"/> <meta itemprop="property" content="save_summary_steps"/> <meta itemprop="property" content="session_config"/> <meta itemprop="property" content="task_id"/> <meta itemprop="property" content="task_type"/> <meta itemprop="property" content="tf_config"/> <meta itemprop="property" content="tf_random_seed"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="get_task_id"/> <meta itemprop="property" content="replace"/> <meta itemprop="property" content="uid"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.learn.RunConfig" class="dashAnchor"></a><h1 id="tf.contrib.learn.runconfig">tf.contrib.learn.RunConfig</h1>
+<h3 id="class-tf.contrib.learn.runconfig"><code>class tf.contrib.learn.RunConfig</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/learn/python/learn/estimators/run_config.py"><code>tensorflow/contrib/learn/python/learn/estimators/run_config.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.learn.md#Graph_actions">Learn (contrib) &gt; Graph actions</a></p>
+<p>This class specifies the configurations for an <code>Estimator</code> run.</p>
+<p>This class is the implementation of ${tf.estimator.RunConfig} interface.</p>
+<p>If you're a Google-internal user using command line flags with <code>learn_runner.py</code> (for instance, to do distributed training or to use parameter servers), you probably want to use <code>learn_runner.EstimatorConfig</code> instead.</p>
+<h2 id="properties">Properties</h2>
+<h3 id="cluster_spec">
+<code>cluster_spec</code>
+</h3>
+<h3 id="environment">
+<code>environment</code>
+</h3>
+<h3 id="evaluation_master">
+<code>evaluation_master</code>
+</h3>
+<h3 id="is_chief">
+<code>is_chief</code>
+</h3>
+<h3 id="keep_checkpoint_every_n_hours">
+<code>keep_checkpoint_every_n_hours</code>
+</h3>
+<h3 id="keep_checkpoint_max">
+<code>keep_checkpoint_max</code>
+</h3>
+<h3 id="master">
+<code>master</code>
+</h3>
+<h3 id="model_dir">
+<code>model_dir</code>
+</h3>
+<h3 id="num_ps_replicas">
+<code>num_ps_replicas</code>
+</h3>
+<h3 id="num_worker_replicas">
+<code>num_worker_replicas</code>
+</h3>
+<h3 id="save_checkpoints_secs">
+<code>save_checkpoints_secs</code>
+</h3>
+<h3 id="save_checkpoints_steps">
+<code>save_checkpoints_steps</code>
+</h3>
+<h3 id="save_summary_steps">
+<code>save_summary_steps</code>
+</h3>
+<h3 id="session_config">
+<code>session_config</code>
+</h3>
+<h3 id="task_id">
+<code>task_id</code>
+</h3>
+<h3 id="task_type">
+<code>task_type</code>
+</h3>
+<h3 id="tf_config">
+<code>tf_config</code>
+</h3>
+<h3 id="tf_random_seed">
+<code>tf_random_seed</code>
+</h3>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    master<span class="op">=</span><span class="va">None</span>,
+    num_cores<span class="op">=</span><span class="dv">0</span>,
+    log_device_placement<span class="op">=</span><span class="va">False</span>,
+    gpu_memory_fraction<span class="op">=</span><span class="dv">1</span>,
+    tf_random_seed<span class="op">=</span><span class="va">None</span>,
+    save_summary_steps<span class="op">=</span><span class="dv">100</span>,
+    save_checkpoints_secs<span class="op">=</span>_USE_DEFAULT,
+    save_checkpoints_steps<span class="op">=</span><span class="va">None</span>,
+    keep_checkpoint_max<span class="op">=</span><span class="dv">5</span>,
+    keep_checkpoint_every_n_hours<span class="op">=</span><span class="dv">10000</span>,
+    evaluation_master<span class="op">=</span><span class="st">&#39;&#39;</span>,
+    model_dir<span class="op">=</span><span class="va">None</span>,
+    session_config<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Constructor.</p>
+<p>Note that the superclass <code>ClusterConfig</code> may set properties like <code>cluster_spec</code>, <code>is_chief</code>, <code>master</code> (if <code>None</code> in the args), <code>num_ps_replicas</code>, <code>task_id</code>, and <code>task_type</code> based on the <code>TF_CONFIG</code> environment variable. See <code>ClusterConfig</code> for more details.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>master</code></b>: TensorFlow master. Defaults to empty string for local.</li>
+<li><b><code>num_cores</code></b>: Number of cores to be used. If 0, the system picks an appropriate number (default: 0).</li>
+<li><b><code>log_device_placement</code></b>: Log the op placement to devices (default: False).</li>
+<li><b><code>gpu_memory_fraction</code></b>: Fraction of GPU memory used by the process on each GPU uniformly on the same machine.</li>
+<li><b><code>tf_random_seed</code></b>: Random seed for TensorFlow initializers. Setting this value allows consistency between reruns.</li>
+<li><b><code>save_summary_steps</code></b>: Save summaries every this many steps.</li>
+<li><b><code>save_checkpoints_secs</code></b>: Save checkpoints every this many seconds. Can not be specified with <code>save_checkpoints_steps</code>.</li>
+<li><b><code>save_checkpoints_steps</code></b>: Save checkpoints every this many steps. Can not be specified with <code>save_checkpoints_secs</code>.</li>
+<li><b><code>keep_checkpoint_max</code></b>: The maximum number of recent checkpoint files to keep. As new files are created, older files are deleted. If None or 0, all checkpoint files are kept. Defaults to 5 (that is, the 5 most recent checkpoint files are kept.)</li>
+<li><b><code>keep_checkpoint_every_n_hours</code></b>: Number of hours between each checkpoint to be saved. The default value of 10,000 hours effectively disables the feature.</li>
+<li><b><code>evaluation_master</code></b>: the master on which to perform evaluation.</li>
+<li><b><code>model_dir</code></b>: directory where model parameters, graph etc are saved. If <code>None</code>, will use <code>model_dir</code> property in <code>TF_CONFIG</code> environment variable. If both are set, must have same value. If both are <code>None</code>, see <code>Estimator</code> about where the model will be saved.</li>
+<li><b><code>session_config</code></b>: a ConfigProto used to set session parameters, or None. Note - using this argument, it is easy to provide settings which break otherwise perfectly good models. Use with care.</li>
+</ul>
+<h3 id="get_task_id">
+<code>get_task_id</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_task_id()</code></pre></div>
+<p>Returns task index from <code>TF_CONFIG</code> environmental variable.</p>
+<p>If you have a ClusterConfig instance, you can just access its task_id property instead of calling this function and re-parsing the environmental variable.</p>
+<h4 id="returns">Returns:</h4>
+<p><code>TF_CONFIG['task']['index']</code>. Defaults to 0.</p>
+<h3 id="replace">
+<code>replace</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">replace(<span class="op">**</span>kwargs)</code></pre></div>
+<p>Returns a new instance of <code>RunConfig</code> replacing specified properties.</p>
+<p>Only the properties in the following list are allowed to be replaced: - <code>model_dir</code>. - <code>tf_random_seed</code>, - <code>save_summary_steps</code>, - <code>save_checkpoints_steps</code>, - <code>save_checkpoints_secs</code>, - <code>session_config</code>, - <code>keep_checkpoint_max</code>, - <code>keep_checkpoint_every_n_hours</code>,</p>
+<p>In addition, either <code>save_checkpoints_steps</code> or <code>save_checkpoints_secs</code> can be set (should not be both).</p>
+<h4 id="args-1">Args:</h4>
+<p>**kwargs: keyword named properties with new values.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If any property name in <code>kwargs</code> does not exist or is not allowed to be replaced, or both <code>save_checkpoints_steps</code> and <code>save_checkpoints_secs</code> are set.</li>
+</ul>
+<h4 id="returns-1">Returns:</h4>
+<p>a new instance of <code>RunConfig</code>.</p>
+<h3 id="uid">
+<code>uid</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">uid(
+    <span class="op">*</span>args,
+    <span class="op">**</span>kwargs
+)</code></pre></div>
+<p>Generates a 'Unique Identifier' based on all internal fields. (experimental)</p>
+<p>THIS FUNCTION IS EXPERIMENTAL. It may change or be removed at any time, and without warning.</p>
+<p>Caller should use the uid string to check <code>RunConfig</code> instance integrity in one session use, but should not rely on the implementation details, which is subject to change.</p>
+<h4 id="args-2">Args:</h4>
+<ul>
+<li><b><code>whitelist</code></b>: A list of the string names of the properties uid should not include. If <code>None</code>, defaults to <code>_DEFAULT_UID_WHITE_LIST</code>, which includes most properites user allowes to change.</li>
+</ul>
+<h4 id="returns-2">Returns:</h4>
+<p>A uid string.</p>

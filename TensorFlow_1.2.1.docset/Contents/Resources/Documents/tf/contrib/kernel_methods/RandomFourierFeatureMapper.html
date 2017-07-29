@@ -1,0 +1,63 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.kernel_methods.RandomFourierFeatureMapper" /> <meta itemprop="property" content="input_dim"/> <meta itemprop="property" content="name"/> <meta itemprop="property" content="output_dim"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="map"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.kernel_methods.RandomFourierFeatureMapper" class="dashAnchor"></a><h1 id="tf.contrib.kernel_methods.randomfourierfeaturemapper">tf.contrib.kernel_methods.RandomFourierFeatureMapper</h1>
+<h3 id="class-tf.contrib.kernel_methods.randomfourierfeaturemapper"><code>class tf.contrib.kernel_methods.RandomFourierFeatureMapper</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/kernel_methods/python/mappers/random_fourier_features.py"><code>tensorflow/contrib/kernel_methods/python/mappers/random_fourier_features.py</code></a>.</p>
+<p>Class that implements Random Fourier Feature Mapping (RFFM) in TensorFlow.</p>
+<p>The RFFM mapping is used to approximate the Gaussian (RBF) kernel:</p>
+<pre><code>exp(-||x-y||_2^2 / (2 * sigma^2))</code></pre>
+<p>The implementation of RFFM is based on the following paper: &quot;Random Features for Large-Scale Kernel Machines&quot; by Ali Rahimi and Ben Recht. (link: https://people.eecs.berkeley.edu/~brecht/papers/07.rah.rec.nips.pdf)</p>
+<p>The mapping uses a matrix <code>Omega \in R^{d x D}</code> and a bias vector <code>b \in R^D</code> where <code>d</code> is the input dimension (number of dense input features) and <code>D</code> is the output dimension (i.e., dimension of the feature space the input is mapped to). Each entry of <code>Omega</code> is sampled i.i.d. from a (scaled) Gaussian distribution and each entry of <code>b</code> is sampled independently and uniformly from [0, 2 * pi].</p>
+<p>For a single input feature vector x in R^d, its RFFM is defined as:</p>
+<pre><code>    sqrt(2/D) * cos(x * Omega + b)</code></pre>
+<p>where <code>cos</code> is the element-wise cosine function and <code>x, b</code> are represented as row vectors. The aforementioned paper shows that the linear kernel of RFFM-mapped vectors approximates the Gaussian kernel of the initial vectors.</p>
+<h2 id="properties">Properties</h2>
+<h3 id="input_dim">
+<code>input_dim</code>
+</h3>
+<h3 id="name">
+<code>name</code>
+</h3>
+<p>Returns a name for the <code>RandomFourierFeatureMapper</code> instance.</p>
+<p>If the name provided in the constructor is <code>None</code>, then the object's unique id is returned.</p>
+<h4 id="returns">Returns:</h4>
+<p>A name for the <code>RandomFourierFeatureMapper</code> instance.</p>
+<h3 id="output_dim">
+<code>output_dim</code>
+</h3>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    input_dim,
+    output_dim,
+    stddev<span class="op">=</span><span class="fl">1.0</span>,
+    seed<span class="op">=</span><span class="dv">1</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Constructs a RandomFourierFeatureMapper instance.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input_dim</code></b>: The dimension (number of features) of the tensors to be mapped.</li>
+<li><b><code>output_dim</code></b>: The output dimension of the mapping.</li>
+<li><b><code>stddev</code></b>: The standard deviation of the Gaussian kernel to be approximated. The error of the classifier trained using this approximation is very sensitive to this parameter.</li>
+<li><b><code>seed</code></b>: An integer used to initialize the parameters (<code>Omega</code> and <code>b</code>) of the mapper. For repeatable sequences across different invocations of the mapper object (for instance, to ensure consistent mapping both at training and eval/inference if these happen in different invocations), set this to the same integer.</li>
+<li><b><code>name</code></b>: name for the mapper object.</li>
+</ul>
+<h3 id="map">
+<code>map</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="bu">map</span>(input_tensor)</code></pre></div>
+<p>Maps each row of input_tensor using random Fourier features.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>input_tensor</code></b>: a <code>Tensor</code> containing input features. It's shape is [batch_size, self._input_dim].</li>
+</ul>
+<h4 id="returns-1">Returns:</h4>
+<p>A <code>Tensor</code> of shape [batch_size, self._output_dim] containing RFFM-mapped features.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>InvalidShapeError</code></b>: if the shape of the <code>input_tensor</code> is inconsistent with expected input dimension.</li>
+</ul>

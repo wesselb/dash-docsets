@@ -1,0 +1,39 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.FixedLenFeature" /> <meta itemprop="property" content="default_value"/> <meta itemprop="property" content="dtype"/> <meta itemprop="property" content="shape"/> <meta itemprop="property" content="__new__"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.FixedLenFeature" class="dashAnchor"></a><h1 id="tf.fixedlenfeature">tf.FixedLenFeature</h1>
+<h3 id="class-tf.fixedlenfeature"><code>class tf.FixedLenFeature</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/parsing_ops.py"><code>tensorflow/python/ops/parsing_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/io_ops.md#Converting">Inputs and Readers &gt; Converting</a></p>
+<p>Configuration for parsing a fixed-length input feature.</p>
+<p>To treat sparse input as dense, provide a <code>default_value</code>; otherwise, the parse functions will fail on any examples missing this feature.</p>
+<h4 id="fields">Fields:</h4>
+<ul>
+<li><b><code>shape</code></b>: Shape of input data.</li>
+<li><b><code>dtype</code></b>: Data type of input.</li>
+<li><b><code>default_value</code></b>: Value to be used if an example is missing this feature. It must be compatible with <code>dtype</code> and of the specified <code>shape</code>.</li>
+</ul>
+<h2 id="properties">Properties</h2>
+<h3 id="default_value">
+<code>default_value</code>
+</h3>
+<p>Alias for field number 2</p>
+<h3 id="dtype">
+<code>dtype</code>
+</h3>
+<p>Alias for field number 1</p>
+<h3 id="shape">
+<code>shape</code>
+</h3>
+<p>Alias for field number 0</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__new__">
+<code><strong>new</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__new__</span>(
+    _cls,
+    shape,
+    dtype,
+    default_value<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Create new instance of FixedLenFeature(shape, dtype, default_value)</p>

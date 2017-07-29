@@ -1,0 +1,59 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.seq2seq.TrainingHelper" /> <meta itemprop="property" content="batch_size"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="initialize"/> <meta itemprop="property" content="next_inputs"/> <meta itemprop="property" content="sample"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.seq2seq.TrainingHelper" class="dashAnchor"></a><h1 id="tf.contrib.seq2seq.traininghelper">tf.contrib.seq2seq.TrainingHelper</h1>
+<h3 id="class-tf.contrib.seq2seq.traininghelper"><code>class tf.contrib.seq2seq.TrainingHelper</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/seq2seq/python/ops/helper.py"><code>tensorflow/contrib/seq2seq/python/ops/helper.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.seq2seq.md#Dynamic_Decoding">Seq2seq Library (contrib) &gt; Dynamic Decoding</a></p>
+<p>A helper for use during training. Only reads inputs.</p>
+<p>Returned sample_ids are the argmax of the RNN output logits.</p>
+<h2 id="properties">Properties</h2>
+<h3 id="batch_size">
+<code>batch_size</code>
+</h3>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    inputs,
+    sequence_length,
+    time_major<span class="op">=</span><span class="va">False</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Initializer.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>inputs</code></b>: A (structure of) input tensors.</li>
+<li><b><code>sequence_length</code></b>: An int32 vector tensor.</li>
+<li><b><code>time_major</code></b>: Python bool. Whether the tensors in <code>inputs</code> are time major. If <code>False</code> (default), they are assumed to be batch major.</li>
+<li><b><code>name</code></b>: Name scope for any created operations.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>sequence_length</code> is not a 1D tensor.</li>
+</ul>
+<h3 id="initialize">
+<code>initialize</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">initialize(name<span class="op">=</span><span class="va">None</span>)</code></pre></div>
+<h3 id="next_inputs">
+<code>next_inputs</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">next_inputs(
+    time,
+    outputs,
+    state,
+    name<span class="op">=</span><span class="va">None</span>,
+    <span class="op">**</span>unused_kwargs
+)</code></pre></div>
+<p>next_inputs_fn for TrainingHelper.</p>
+<h3 id="sample">
+<code>sample</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">sample(
+    time,
+    outputs,
+    name<span class="op">=</span><span class="va">None</span>,
+    <span class="op">**</span>unused_kwargs
+)</code></pre></div>

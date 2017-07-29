@@ -1,0 +1,24 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tfdbg" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tfdbg" class="dashAnchor"></a><h1 id="module-tfdbg">Module: tfdbg</h1>
+<h3 id="module-tfdbg-1">Module <code>tfdbg</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/debug/__init__.py"><code>tensorflow/python/debug/__init__.py</code></a>.</p>
+<p>Public Python API of TensorFlow Debugger (tfdbg).</p>
+<p>See the <a href="../../api_guides/python/tfdbg.html">TensorFlow Debugger</a> guide.</p>
+<h2 id="classes">Classes</h2>
+<p><a href="./tfdbg/DebugDumpDir.html"><code>class DebugDumpDir</code></a>: Data set from a debug-dump directory on filesystem.</p>
+<p><a href="./tfdbg/DebugTensorDatum.html"><code>class DebugTensorDatum</code></a>: A single tensor dumped by TensorFlow Debugger (tfdbg).</p>
+<p><a href="./tfdbg/DumpingDebugHook.html"><code>class DumpingDebugHook</code></a>: A debugger hook that dumps debug data to filesystem.</p>
+<p><a href="./tfdbg/DumpingDebugWrapperSession.html"><code>class DumpingDebugWrapperSession</code></a>: Debug Session wrapper that dumps debug data to filesystem.</p>
+<p><a href="./tfdbg/GrpcDebugHook.html"><code>class GrpcDebugHook</code></a>: A hook that streams debugger-related events to any grpc_debug_server.</p>
+<p><a href="./tfdbg/GrpcDebugWrapperSession.html"><code>class GrpcDebugWrapperSession</code></a>: Debug Session wrapper that send debug data to gRPC stream(s).</p>
+<p><a href="./tfdbg/LocalCLIDebugHook.html"><code>class LocalCLIDebugHook</code></a>: Command-line-interface debugger hook.</p>
+<p><a href="./tfdbg/LocalCLIDebugWrapperSession.html"><code>class LocalCLIDebugWrapperSession</code></a>: Concrete subclass of BaseDebugWrapperSession implementing a local CLI.</p>
+<p><a href="./tfdbg/WatchOptions.html"><code>class WatchOptions</code></a>: Type for return values of watch_fn.</p>
+<h2 id="functions">Functions</h2>
+<p><a href="./tfdbg/add_debug_tensor_watch.html"><code>add_debug_tensor_watch(...)</code></a>: Add watch on a <code>Tensor</code> to <code>RunOptions</code>.</p>
+<p><a href="./tfdbg/has_inf_or_nan.html"><code>has_inf_or_nan(...)</code></a>: A predicate for whether a tensor consists of any bad numerical values.</p>
+<p><a href="./tfdbg/load_tensor_from_event_file.html"><code>load_tensor_from_event_file(...)</code></a>: Load a tensor from an event file.</p>
+<p><a href="./tfdbg/watch_graph.html"><code>watch_graph(...)</code></a>: Add debug watches to <code>RunOptions</code> for a TensorFlow graph.</p>
+<p><a href="./tfdbg/watch_graph_with_blacklists.html"><code>watch_graph_with_blacklists(...)</code></a>: Add debug tensor watches, blacklisting nodes and op types.</p>

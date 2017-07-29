@@ -1,0 +1,16 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.train.get_checkpoint_mtimes" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.train.get_checkpoint_mtimes" class="dashAnchor"></a><h1 id="tf.train.get_checkpoint_mtimes">tf.train.get_checkpoint_mtimes</h1>
+<h3 id="tf.train.get_checkpoint_mtimes-1"><code>tf.train.get_checkpoint_mtimes</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_checkpoint_mtimes(checkpoint_prefixes)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/training/saver.py"><code>tensorflow/python/training/saver.py</code></a>.</p>
+<p>Returns the mtimes (modification timestamps) of the checkpoints.</p>
+<p>Globs for the checkpoints pointed to by <code>checkpoint_prefixes</code>. If the files exist, collect their mtime. Both V2 and V1 checkpoints are considered, in that priority.</p>
+<p>This is the recommended way to get the mtimes, since it takes into account the naming difference between V1 and V2 formats.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>checkpoint_prefixes</code></b>: a list of checkpoint paths, typically the results of <code>Saver.save()</code> or those of <code>tf.train.latest_checkpoint()</code>, regardless of sharded/non-sharded or V1/V2.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A list of mtimes (in microseconds) of the found checkpoints.</p>

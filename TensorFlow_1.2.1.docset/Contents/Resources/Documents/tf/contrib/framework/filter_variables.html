@@ -1,0 +1,30 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.framework.filter_variables" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.framework.filter_variables" class="dashAnchor"></a><h1 id="tf.contrib.framework.filter_variables">tf.contrib.framework.filter_variables</h1>
+<h3 id="tf.contrib.framework.filter_variables-1"><code>tf.contrib.framework.filter_variables</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">filter_variables(
+    var_list,
+    include_patterns<span class="op">=</span><span class="va">None</span>,
+    exclude_patterns<span class="op">=</span><span class="va">None</span>,
+    reg_search<span class="op">=</span><span class="va">True</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/framework/python/ops/variables.py"><code>tensorflow/contrib/framework/python/ops/variables.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.framework.md#Variables">Framework (contrib) &gt; Variables</a></p>
+<p>Filter a list of variables using regular expressions.</p>
+<p>First includes variables according to the list of include_patterns. Afterwards, eliminates variables according to the list of exclude_patterns.</p>
+<p>For example, one can obtain a list of variables with the weights of all convolutional layers (depending on the network definition) by:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">variables <span class="op">=</span> tf.contrib.framework.get_model_variables()
+conv_weight_variables <span class="op">=</span> tf.contrib.framework.filter_variables(
+    variables,
+    include_patterns<span class="op">=</span>[<span class="st">&#39;Conv&#39;</span>],
+    exclude_patterns<span class="op">=</span>[<span class="st">&#39;biases&#39;</span>, <span class="st">&#39;Logits&#39;</span>])</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>var_list</code></b>: list of variables.</li>
+<li><b><code>include_patterns</code></b>: list of regular expressions to include. Defaults to None, which means all variables are selected according to the include rules. A variable is included if it matches any of the include_patterns.</li>
+<li><b><code>exclude_patterns</code></b>: list of regular expressions to exclude. Defaults to None, which means all variables are selected according to the exclude rules. A variable is excluded if it matches any of the exclude_patterns.</li>
+<li><b><code>reg_search</code></b>: boolean. If True (default), performs re.search to find matches (i.e. pattern can match any substring of the variable name). If False, performs re.match (i.e. regexp should match from the beginning of the variable name).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>filtered list of variables.</p>

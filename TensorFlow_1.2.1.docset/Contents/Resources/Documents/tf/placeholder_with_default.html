@@ -1,0 +1,21 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.placeholder_with_default" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.placeholder_with_default" class="dashAnchor"></a><h1 id="tf.placeholder_with_default">tf.placeholder_with_default</h1>
+<h3 id="tf.placeholder_with_default-1"><code>tf.placeholder_with_default</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">placeholder_with_default(
+    <span class="bu">input</span>,
+    shape,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_array_ops.py</code>.</p>
+<p>See the guide: <a href="../../../api_guides/python/io_ops.md#Placeholders">Inputs and Readers &gt; Placeholders</a></p>
+<p>A placeholder op that passes through <code>input</code> when its output is not fed.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. The default value to produce when <code>output</code> is not fed.</li>
+<li><b><code>shape</code></b>: A <code>tf.TensorShape</code> or list of <code>ints</code>. The (possibly partial) shape of the tensor.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>input</code>. A placeholder tensor that defaults to <code>input</code> if it is not fed.</p>

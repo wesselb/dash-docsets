@@ -1,0 +1,158 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.train.ProximalAdagradOptimizer" /> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="apply_gradients"/> <meta itemprop="property" content="compute_gradients"/> <meta itemprop="property" content="get_name"/> <meta itemprop="property" content="get_slot"/> <meta itemprop="property" content="get_slot_names"/> <meta itemprop="property" content="minimize"/> <meta itemprop="property" content="GATE_GRAPH"/> <meta itemprop="property" content="GATE_NONE"/> <meta itemprop="property" content="GATE_OP"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.train.ProximalAdagradOptimizer" class="dashAnchor"></a><h1 id="tf.train.proximaladagradoptimizer">tf.train.ProximalAdagradOptimizer</h1>
+<h3 id="class-tf.train.proximaladagradoptimizer"><code>class tf.train.ProximalAdagradOptimizer</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/training/proximal_adagrad.py"><code>tensorflow/python/training/proximal_adagrad.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/train.md#Optimizers">Training &gt; Optimizers</a></p>
+<p>Optimizer that implements the Proximal Adagrad algorithm.</p>
+<p>See this <a href="http://papers.nips.cc/paper/3793-efficient-learning-using-forward-backward-splitting.pdf">paper</a>.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    learning_rate,
+    initial_accumulator_value<span class="op">=</span><span class="fl">0.1</span>,
+    l1_regularization_strength<span class="op">=</span><span class="fl">0.0</span>,
+    l2_regularization_strength<span class="op">=</span><span class="fl">0.0</span>,
+    use_locking<span class="op">=</span><span class="va">False</span>,
+    name<span class="op">=</span><span class="st">&#39;ProximalAdagrad&#39;</span>
+)</code></pre></div>
+<p>Construct a new ProximalAdagrad optimizer.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>learning_rate</code></b>: A <code>Tensor</code> or a floating point value. The learning rate.</li>
+<li><b><code>initial_accumulator_value</code></b>: A floating point value. Starting value for the accumulators, must be positive.</li>
+<li><b><code>l1_regularization_strength</code></b>: A float value, must be greater than or equal to zero.</li>
+<li><b><code>l2_regularization_strength</code></b>: A float value, must be greater than or equal to zero.</li>
+<li><b><code>use_locking</code></b>: If <code>True</code> use locks for update operations.</li>
+<li><b><code>name</code></b>: Optional name prefix for the operations created when applying gradients. Defaults to &quot;Adagrad&quot;.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If the <code>initial_accumulator_value</code> is invalid.</li>
+</ul>
+<h3 id="apply_gradients">
+<code>apply_gradients</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">apply_gradients(
+    grads_and_vars,
+    global_step<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Apply gradients to variables.</p>
+<p>This is the second part of <code>minimize()</code>. It returns an <code>Operation</code> that applies gradients.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>grads_and_vars</code></b>: List of (gradient, variable) pairs as returned by <code>compute_gradients()</code>.</li>
+<li><b><code>global_step</code></b>: Optional <code>Variable</code> to increment by one after the variables have been updated.</li>
+<li><b><code>name</code></b>: Optional name for the returned operation. Default to the name passed to the <code>Optimizer</code> constructor.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>An <code>Operation</code> that applies the specified gradients. If <code>global_step</code> was not None, that operation also increments <code>global_step</code>.</p>
+<h4 id="raises-1">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>grads_and_vars</code> is malformed.</li>
+<li><b><code>ValueError</code></b>: If none of the variables have gradients.</li>
+</ul>
+<h3 id="compute_gradients">
+<code>compute_gradients</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">compute_gradients(
+    loss,
+    var_list<span class="op">=</span><span class="va">None</span>,
+    gate_gradients<span class="op">=</span>GATE_OP,
+    aggregation_method<span class="op">=</span><span class="va">None</span>,
+    colocate_gradients_with_ops<span class="op">=</span><span class="va">False</span>,
+    grad_loss<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Compute gradients of <code>loss</code> for the variables in <code>var_list</code>.</p>
+<p>This is the first part of <code>minimize()</code>. It returns a list of (gradient, variable) pairs where &quot;gradient&quot; is the gradient for &quot;variable&quot;. Note that &quot;gradient&quot; can be a <code>Tensor</code>, an <code>IndexedSlices</code>, or <code>None</code> if there is no gradient for the given variable.</p>
+<h4 id="args-2">Args:</h4>
+<ul>
+<li><b><code>loss</code></b>: A Tensor containing the value to minimize.</li>
+<li><b><code>var_list</code></b>: Optional list or tuple of <code>tf.Variable</code> to update to minimize <code>loss</code>. Defaults to the list of variables collected in the graph under the key <code>GraphKey.TRAINABLE_VARIABLES</code>.</li>
+<li><b><code>gate_gradients</code></b>: How to gate the computation of gradients. Can be <code>GATE_NONE</code>, <code>GATE_OP</code>, or <code>GATE_GRAPH</code>.</li>
+<li><b><code>aggregation_method</code></b>: Specifies the method used to combine gradient terms. Valid values are defined in the class <code>AggregationMethod</code>.</li>
+<li><b><code>colocate_gradients_with_ops</code></b>: If True, try colocating gradients with the corresponding op.</li>
+<li><b><code>grad_loss</code></b>: Optional. A <code>Tensor</code> holding the gradient computed for <code>loss</code>.</li>
+</ul>
+<h4 id="returns-1">Returns:</h4>
+<p>A list of (gradient, variable) pairs. Variable is always present, but gradient can be <code>None</code>.</p>
+<h4 id="raises-2">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>var_list</code> contains anything else than <code>Variable</code> objects.</li>
+<li><b><code>ValueError</code></b>: If some arguments are invalid.</li>
+</ul>
+<h3 id="get_name">
+<code>get_name</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_name()</code></pre></div>
+<h3 id="get_slot">
+<code>get_slot</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_slot(
+    var,
+    name
+)</code></pre></div>
+<p>Return a slot named <code>name</code> created for <code>var</code> by the Optimizer.</p>
+<p>Some <code>Optimizer</code> subclasses use additional variables. For example <code>Momentum</code> and <code>Adagrad</code> use variables to accumulate updates. This method gives access to these <code>Variable</code> objects if for some reason you need them.</p>
+<p>Use <code>get_slot_names()</code> to get the list of slot names created by the <code>Optimizer</code>.</p>
+<h4 id="args-3">Args:</h4>
+<ul>
+<li><b><code>var</code></b>: A variable passed to <code>minimize()</code> or <code>apply_gradients()</code>.</li>
+<li><b><code>name</code></b>: A string.</li>
+</ul>
+<h4 id="returns-2">Returns:</h4>
+<p>The <code>Variable</code> for the slot if it was created, <code>None</code> otherwise.</p>
+<h3 id="get_slot_names">
+<code>get_slot_names</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_slot_names()</code></pre></div>
+<p>Return a list of the names of slots created by the <code>Optimizer</code>.</p>
+<p>See <code>get_slot()</code>.</p>
+<h4 id="returns-3">Returns:</h4>
+<p>A list of strings.</p>
+<h3 id="minimize">
+<code>minimize</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">minimize(
+    loss,
+    global_step<span class="op">=</span><span class="va">None</span>,
+    var_list<span class="op">=</span><span class="va">None</span>,
+    gate_gradients<span class="op">=</span>GATE_OP,
+    aggregation_method<span class="op">=</span><span class="va">None</span>,
+    colocate_gradients_with_ops<span class="op">=</span><span class="va">False</span>,
+    name<span class="op">=</span><span class="va">None</span>,
+    grad_loss<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Add operations to minimize <code>loss</code> by updating <code>var_list</code>.</p>
+<p>This method simply combines calls <code>compute_gradients()</code> and <code>apply_gradients()</code>. If you want to process the gradient before applying them call <code>compute_gradients()</code> and <code>apply_gradients()</code> explicitly instead of using this function.</p>
+<h4 id="args-4">Args:</h4>
+<ul>
+<li><b><code>loss</code></b>: A <code>Tensor</code> containing the value to minimize.</li>
+<li><b><code>global_step</code></b>: Optional <code>Variable</code> to increment by one after the variables have been updated.</li>
+<li><b><code>var_list</code></b>: Optional list or tuple of <code>Variable</code> objects to update to minimize <code>loss</code>. Defaults to the list of variables collected in the graph under the key <code>GraphKeys.TRAINABLE_VARIABLES</code>.</li>
+<li><b><code>gate_gradients</code></b>: How to gate the computation of gradients. Can be <code>GATE_NONE</code>, <code>GATE_OP</code>, or <code>GATE_GRAPH</code>.</li>
+<li><b><code>aggregation_method</code></b>: Specifies the method used to combine gradient terms. Valid values are defined in the class <code>AggregationMethod</code>.</li>
+<li><b><code>colocate_gradients_with_ops</code></b>: If True, try colocating gradients with the corresponding op.</li>
+<li><b><code>name</code></b>: Optional name for the returned operation.</li>
+<li><b><code>grad_loss</code></b>: Optional. A <code>Tensor</code> holding the gradient computed for <code>loss</code>.</li>
+</ul>
+<h4 id="returns-4">Returns:</h4>
+<p>An Operation that updates the variables in <code>var_list</code>. If <code>global_step</code> was not <code>None</code>, that operation also increments <code>global_step</code>.</p>
+<h4 id="raises-3">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If some of the variables are not <code>Variable</code> objects.</li>
+</ul>
+<h2 id="class-members">Class Members</h2>
+<h3 id="GATE_GRAPH">
+<code>GATE_GRAPH</code>
+</h3>
+<h3 id="GATE_NONE">
+<code>GATE_NONE</code>
+</h3>
+<h3 id="GATE_OP">
+<code>GATE_OP</code>
+</h3>

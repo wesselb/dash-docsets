@@ -1,0 +1,34 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.seq2seq" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.seq2seq" class="dashAnchor"></a><h1 id="module-tf.contrib.seq2seq">Module: tf.contrib.seq2seq</h1>
+<h3 id="module-tf.contrib.seq2seq-1">Module <code>tf.contrib.seq2seq</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/seq2seq/__init__.py"><code>tensorflow/contrib/seq2seq/__init__.py</code></a>.</p>
+<p>Ops for building neural network seq2seq decoders and losses.</p>
+<p>See the <a href="../../../../api_guides/python/contrib.seq2seq.html">Seq2seq Library (contrib)</a> guide.</p>
+<h2 id="classes">Classes</h2>
+<p><a href="../../tf/contrib/seq2seq/AttentionMechanism.html"><code>class AttentionMechanism</code></a></p>
+<p><a href="../../tf/contrib/seq2seq/AttentionWrapper.html"><code>class AttentionWrapper</code></a>: Wraps another <code>RNNCell</code> with attention.</p>
+<p><a href="../../tf/contrib/seq2seq/AttentionWrapperState.html"><code>class AttentionWrapperState</code></a>: <code>namedtuple</code> storing the state of a <code>AttentionWrapper</code>.</p>
+<p><a href="../../tf/contrib/seq2seq/BahdanauAttention.html"><code>class BahdanauAttention</code></a>: Implements Bhadanau-style (additive) attention.</p>
+<p><a href="../../tf/contrib/seq2seq/BasicDecoder.html"><code>class BasicDecoder</code></a>: Basic sampling decoder.</p>
+<p><a href="../../tf/contrib/seq2seq/BasicDecoderOutput.html"><code>class BasicDecoderOutput</code></a></p>
+<p><a href="../../tf/contrib/seq2seq/BeamSearchDecoder.html"><code>class BeamSearchDecoder</code></a>: BeamSearch sampling decoder.</p>
+<p><a href="../../tf/contrib/seq2seq/BeamSearchDecoderOutput.html"><code>class BeamSearchDecoderOutput</code></a></p>
+<p><a href="../../tf/contrib/seq2seq/BeamSearchDecoderState.html"><code>class BeamSearchDecoderState</code></a></p>
+<p><a href="../../tf/contrib/seq2seq/CustomHelper.html"><code>class CustomHelper</code></a>: Base abstract class that allows the user to customize sampling.</p>
+<p><a href="../../tf/contrib/seq2seq/Decoder.html"><code>class Decoder</code></a>: An RNN Decoder abstract interface object.</p>
+<p><a href="../../tf/contrib/seq2seq/FinalBeamSearchDecoderOutput.html"><code>class FinalBeamSearchDecoderOutput</code></a>: Final outputs returned by the beam search after all decoding is finished.</p>
+<p><a href="../../tf/contrib/seq2seq/GreedyEmbeddingHelper.html"><code>class GreedyEmbeddingHelper</code></a>: A helper for use during inference.</p>
+<p><a href="../../tf/contrib/seq2seq/Helper.html"><code>class Helper</code></a>: Interface for implementing sampling in seq2seq decoders.</p>
+<p><a href="../../tf/contrib/seq2seq/LuongAttention.html"><code>class LuongAttention</code></a>: Implements Luong-style (multiplicative) attention scoring.</p>
+<p><a href="../../tf/contrib/seq2seq/SampleEmbeddingHelper.html"><code>class SampleEmbeddingHelper</code></a>: A helper for use during inference.</p>
+<p><a href="../../tf/contrib/seq2seq/ScheduledEmbeddingTrainingHelper.html"><code>class ScheduledEmbeddingTrainingHelper</code></a>: A training helper that adds scheduled sampling.</p>
+<p><a href="../../tf/contrib/seq2seq/ScheduledOutputTrainingHelper.html"><code>class ScheduledOutputTrainingHelper</code></a>: A training helper that adds scheduled sampling directly to outputs.</p>
+<p><a href="../../tf/contrib/seq2seq/TrainingHelper.html"><code>class TrainingHelper</code></a>: A helper for use during training. Only reads inputs.</p>
+<h2 id="functions">Functions</h2>
+<p><a href="../../tf/contrib/seq2seq/dynamic_decode.html"><code>dynamic_decode(...)</code></a>: Perform dynamic decoding with <code>decoder</code>.</p>
+<p><a href="../../tf/contrib/seq2seq/gather_tree.html"><code>gather_tree(...)</code></a>: Calculates the full beams from the per-step ids and parent beam ids.</p>
+<p><a href="../../tf/contrib/seq2seq/hardmax.html"><code>hardmax(...)</code></a>: Returns batched one-hot vectors.</p>
+<p><a href="../../tf/contrib/seq2seq/sequence_loss.html"><code>sequence_loss(...)</code></a>: Weighted cross-entropy loss for a sequence of logits.</p>
+<p><a href="../../tf/contrib/seq2seq/tile_batch.html"><code>tile_batch(...)</code></a>: Tile the batch dimension of a (possibly nested structure of) tensor(s) t.</p>

@@ -1,0 +1,139 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.preprocessing.image.ImageDataGenerator" /> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="fit"/> <meta itemprop="property" content="flow"/> <meta itemprop="property" content="flow_from_directory"/> <meta itemprop="property" content="random_transform"/> <meta itemprop="property" content="standardize"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.keras.preprocessing.image.ImageDataGenerator" class="dashAnchor"></a><h1 id="tf.contrib.keras.preprocessing.image.imagedatagenerator">tf.contrib.keras.preprocessing.image.ImageDataGenerator</h1>
+<h3 id="class-tf.contrib.keras.preprocessing.image.imagedatagenerator"><code>class tf.contrib.keras.preprocessing.image.ImageDataGenerator</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/preprocessing/image.py"><code>tensorflow/contrib/keras/python/keras/preprocessing/image.py</code></a>.</p>
+<p>Generate minibatches of image data with real-time data augmentation.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>featurewise_center: set input mean to 0 over the dataset.
+samplewise_center: set each sample mean to 0.
+featurewise_std_normalization: divide inputs by std of the dataset.
+samplewise_std_normalization: divide each input by its std.
+zca_whitening: apply ZCA whitening.
+rotation_range: degrees (0 to 180).
+width_shift_range: fraction of total width.
+height_shift_range: fraction of total height.
+shear_range: shear intensity (shear angle in radians).
+zoom_range: amount of zoom. if scalar z, zoom will be randomly picked
+    in the range [1-z, 1+z]. A sequence of two can be passed instead
+    to select this range.
+channel_shift_range: shift range for each channels.
+fill_mode: points outside the boundaries are filled according to the
+    given mode (&#39;constant&#39;, &#39;nearest&#39;, &#39;reflect&#39; or &#39;wrap&#39;). Default
+    is &#39;nearest&#39;.
+cval: value used for points outside the boundaries when fill_mode is
+    &#39;constant&#39;. Default is 0.
+horizontal_flip: whether to randomly flip images horizontally.
+vertical_flip: whether to randomly flip images vertically.
+rescale: rescaling factor. If None or 0, no rescaling is applied,
+    otherwise we multiply the data by the value provided
+    (before applying any other transformation).
+preprocessing_function: function that will be implied on each input.
+    The function will run before any other modification on it.
+    The function should take one argument:
+    one image (Numpy tensor with rank 3),
+    and should output a Numpy tensor with the same shape.
+data_format: &#39;channels_first&#39; or &#39;channels_last&#39;. In &#39;channels_first&#39;
+  mode, the channels dimension
+    (the depth) is at index 1, in &#39;channels_last&#39; mode it is at index 3.
+    It defaults to the `image_data_format` value found in your
+    Keras config file at `~/.keras/keras.json`.
+    If you never set it, then it will be &quot;channels_last&quot;.</code></pre>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    featurewise_center<span class="op">=</span><span class="va">False</span>,
+    samplewise_center<span class="op">=</span><span class="va">False</span>,
+    featurewise_std_normalization<span class="op">=</span><span class="va">False</span>,
+    samplewise_std_normalization<span class="op">=</span><span class="va">False</span>,
+    zca_whitening<span class="op">=</span><span class="va">False</span>,
+    rotation_range<span class="op">=</span><span class="fl">0.0</span>,
+    width_shift_range<span class="op">=</span><span class="fl">0.0</span>,
+    height_shift_range<span class="op">=</span><span class="fl">0.0</span>,
+    shear_range<span class="op">=</span><span class="fl">0.0</span>,
+    zoom_range<span class="op">=</span><span class="fl">0.0</span>,
+    channel_shift_range<span class="op">=</span><span class="fl">0.0</span>,
+    fill_mode<span class="op">=</span><span class="st">&#39;nearest&#39;</span>,
+    cval<span class="op">=</span><span class="fl">0.0</span>,
+    horizontal_flip<span class="op">=</span><span class="va">False</span>,
+    vertical_flip<span class="op">=</span><span class="va">False</span>,
+    rescale<span class="op">=</span><span class="va">None</span>,
+    preprocessing_function<span class="op">=</span><span class="va">None</span>,
+    data_format<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<h3 id="fit">
+<code>fit</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">fit(
+    x,
+    augment<span class="op">=</span><span class="va">False</span>,
+    rounds<span class="op">=</span><span class="dv">1</span>,
+    seed<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Fits internal statistics to some sample data.</p>
+<p>Required for featurewise_center, featurewise_std_normalization and zca_whitening.</p>
+<h4 id="arguments-1">Arguments:</h4>
+<pre><code>x: Numpy array, the data to fit on. Should have rank 4.
+    In case of grayscale data,
+    the channels axis should have value 1, and in case
+    of RGB data, it should have value 3.
+augment: Whether to fit on randomly augmented samples
+rounds: If `augment`,
+    how many augmentation passes to do over the data
+seed: random seed.</code></pre>
+<h4 id="raises">Raises:</h4>
+<pre><code>ValueError: in case of invalid input `x`.
+ImportError: if Scipy is not available.</code></pre>
+<h3 id="flow">
+<code>flow</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">flow(
+    x,
+    y<span class="op">=</span><span class="va">None</span>,
+    batch_size<span class="op">=</span><span class="dv">32</span>,
+    shuffle<span class="op">=</span><span class="va">True</span>,
+    seed<span class="op">=</span><span class="va">None</span>,
+    save_to_dir<span class="op">=</span><span class="va">None</span>,
+    save_prefix<span class="op">=</span><span class="st">&#39;&#39;</span>,
+    save_format<span class="op">=</span><span class="st">&#39;jpeg&#39;</span>
+)</code></pre></div>
+<h3 id="flow_from_directory">
+<code>flow_from_directory</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">flow_from_directory(
+    directory,
+    target_size<span class="op">=</span>(<span class="dv">256</span>, <span class="dv">256</span>),
+    color_mode<span class="op">=</span><span class="st">&#39;rgb&#39;</span>,
+    classes<span class="op">=</span><span class="va">None</span>,
+    class_mode<span class="op">=</span><span class="st">&#39;categorical&#39;</span>,
+    batch_size<span class="op">=</span><span class="dv">32</span>,
+    shuffle<span class="op">=</span><span class="va">True</span>,
+    seed<span class="op">=</span><span class="va">None</span>,
+    save_to_dir<span class="op">=</span><span class="va">None</span>,
+    save_prefix<span class="op">=</span><span class="st">&#39;&#39;</span>,
+    save_format<span class="op">=</span><span class="st">&#39;jpeg&#39;</span>,
+    follow_links<span class="op">=</span><span class="va">False</span>
+)</code></pre></div>
+<h3 id="random_transform">
+<code>random_transform</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">random_transform(x)</code></pre></div>
+<p>Randomly augment a single image tensor.</p>
+<h4 id="arguments-2">Arguments:</h4>
+<pre><code>x: 3D tensor, single image.</code></pre>
+<h4 id="returns">Returns:</h4>
+<pre><code>A randomly transformed version of the input (same shape).</code></pre>
+<h4 id="raises-1">Raises:</h4>
+<pre><code>ImportError: if Scipy is not available.</code></pre>
+<h3 id="standardize">
+<code>standardize</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">standardize(x)</code></pre></div>
+<p>Apply the normalization configuration to a batch of inputs.</p>
+<h4 id="arguments-3">Arguments:</h4>
+<pre><code>x: batch of inputs to be normalized.</code></pre>
+<h4 id="returns-1">Returns:</h4>
+<pre><code>The inputs, normalized.</code></pre>

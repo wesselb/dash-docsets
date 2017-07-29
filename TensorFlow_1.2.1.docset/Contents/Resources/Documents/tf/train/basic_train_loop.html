@@ -1,0 +1,26 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.train.basic_train_loop" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.train.basic_train_loop" class="dashAnchor"></a><h1 id="tf.train.basic_train_loop">tf.train.basic_train_loop</h1>
+<h3 id="tf.train.basic_train_loop-1"><code>tf.train.basic_train_loop</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">basic_train_loop(
+    supervisor,
+    train_step_fn,
+    args<span class="op">=</span><span class="va">None</span>,
+    kwargs<span class="op">=</span><span class="va">None</span>,
+    master<span class="op">=</span><span class="st">&#39;&#39;</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/training/basic_loops.py"><code>tensorflow/python/training/basic_loops.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/train.md#Training_Utilities">Training &gt; Training Utilities</a></p>
+<p>Basic loop to train a model.</p>
+<p>Calls <code>train_step_fn</code> in a loop to train a model. The function is called as:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">train_step_fn(session, <span class="op">*</span>args, <span class="op">**</span>kwargs)</code></pre></div>
+<p>It is passed a <code>tf.Session</code> in addition to <code>args</code> and <code>kwargs</code>. The function typically runs one training step in the session.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>supervisor</code></b>: <code>tf.train.Supervisor</code> to run the training services.</li>
+<li><b><code>train_step_fn</code></b>: Callable to execute one training step. Called repeatedly as <code>train_step_fn(session, *args **kwargs)</code>.</li>
+<li><b><code>args</code></b>: Optional positional arguments passed to <code>train_step_fn</code>.</li>
+<li><b><code>kwargs</code></b>: Optional keyword arguments passed to <code>train_step_fn</code>.</li>
+<li><b><code>master</code></b>: Master to use to create the training session. Defaults to <code>&quot;&quot;</code> which causes the session to be created in the local process.</li>
+</ul>

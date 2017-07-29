@@ -1,0 +1,37 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.legacy_seq2seq.model_with_buckets" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.legacy_seq2seq.model_with_buckets" class="dashAnchor"></a><h1 id="tf.contrib.legacy_seq2seq.model_with_buckets">tf.contrib.legacy_seq2seq.model_with_buckets</h1>
+<h3 id="tf.contrib.legacy_seq2seq.model_with_buckets-1"><code>tf.contrib.legacy_seq2seq.model_with_buckets</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">model_with_buckets(
+    encoder_inputs,
+    decoder_inputs,
+    targets,
+    weights,
+    buckets,
+    seq2seq,
+    softmax_loss_function<span class="op">=</span><span class="va">None</span>,
+    per_example_loss<span class="op">=</span><span class="va">False</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/legacy_seq2seq/python/ops/seq2seq.py"><code>tensorflow/contrib/legacy_seq2seq/python/ops/seq2seq.py</code></a>.</p>
+<p>Create a sequence-to-sequence model with support for bucketing.</p>
+<p>The seq2seq argument is a function that defines a sequence-to-sequence model, e.g., seq2seq = lambda x, y: basic_rnn_seq2seq( x, y, rnn_cell.GRUCell(24))</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>encoder_inputs</code></b>: A list of Tensors to feed the encoder; first seq2seq input.</li>
+<li><b><code>decoder_inputs</code></b>: A list of Tensors to feed the decoder; second seq2seq input.</li>
+<li><b><code>targets</code></b>: A list of 1D batch-sized int32 Tensors (desired output sequence).</li>
+<li><b><code>weights</code></b>: List of 1D batch-sized float-Tensors to weight the targets.</li>
+<li><b><code>buckets</code></b>: A list of pairs of (input size, output size) for each bucket.</li>
+<li><b><code>seq2seq</code></b>: A sequence-to-sequence model function; it takes 2 input that agree with encoder_inputs and decoder_inputs, and returns a pair consisting of outputs and states (as, e.g., basic_rnn_seq2seq).</li>
+<li><b><code>softmax_loss_function</code></b>: Function (labels, logits) -&gt; loss-batch to be used instead of the standard softmax (the default if this is None). <strong>Note that to avoid confusion, it is required for the function to accept named arguments.</strong></li>
+<li><b><code>per_example_loss</code></b>: Boolean. If set, the returned loss will be a batch-sized tensor of losses for each sequence in the batch. If unset, it will be a scalar with the averaged loss from all examples.</li>
+<li><b><code>name</code></b>: Optional name for this operation, defaults to &quot;model_with_buckets&quot;.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A tuple of the form (outputs, losses), where: outputs: The outputs for each bucket. Its j'th element consists of a list of 2D Tensors. The shape of output tensors can be either [batch_size x output_size] or [batch_size x num_decoder_symbols] depending on the seq2seq model used. losses: List of scalar Tensors, representing losses for each bucket, or, if per_example_loss is set, a list of 1D batch-sized float Tensors.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If length of encoder_inputs, targets, or weights is smaller than the largest (last) bucket.</li>
+</ul>

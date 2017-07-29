@@ -1,0 +1,58 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.learn.ExportStrategy" /> <meta itemprop="property" content="export_fn"/> <meta itemprop="property" content="name"/> <meta itemprop="property" content="__new__"/> <meta itemprop="property" content="export"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.learn.ExportStrategy" class="dashAnchor"></a><h1 id="tf.contrib.learn.exportstrategy">tf.contrib.learn.ExportStrategy</h1>
+<h3 id="class-tf.contrib.learn.exportstrategy"><code>class tf.contrib.learn.ExportStrategy</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/learn/python/learn/export_strategy.py"><code>tensorflow/contrib/learn/python/learn/export_strategy.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.learn.md#Distributed_training_utilities">Learn (contrib) &gt; Distributed training utilities</a></p>
+<p>A class representing a type of model export.</p>
+<p>Typically constructed by a utility function specific to the exporter, such as <code>saved_model_export_utils.make_export_strategy()</code>.</p>
+<p>The fields are: name: The directory name under the export base directory where exports of this type will be written. export_fn: A function that writes an export, given an estimator, a destination path, and optionally a checkpoint path and an evaluation result for that checkpoint. This export_fn() may be run repeatedly during continuous training, or just once at the end of fixed-length training. Note the export_fn() may choose whether or not to export based on the eval result or based on an internal timer or any other criterion, if exports are not desired for every checkpoint.</p>
+<p>The signature of this function must be one of:</p>
+<ul>
+<li><code>(estimator, export_path) -&gt; export_path</code></li>
+<li><code>(estimator, export_path, checkpoint_path) -&gt; export_path</code></li>
+<li><code>(estimator, export_path, checkpoint_path, eval_result) -&gt; export_path</code></li>
+</ul>
+<h2 id="properties">Properties</h2>
+<h3 id="export_fn">
+<code>export_fn</code>
+</h3>
+<p>Alias for field number 1</p>
+<h3 id="name">
+<code>name</code>
+</h3>
+<p>Alias for field number 0</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__new__">
+<code><strong>new</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__new__</span>(
+    _cls,
+    name,
+    export_fn
+)</code></pre></div>
+<p>Create new instance of ExportStrategy(name, export_fn)</p>
+<h3 id="export">
+<code>export</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">export(
+    estimator,
+    export_path,
+    checkpoint_path<span class="op">=</span><span class="va">None</span>,
+    eval_result<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Exports the given Estimator to a specific format.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>estimator</code></b>: the Estimator to export.</li>
+<li><b><code>export_path</code></b>: A string containing a directory where to write the export.</li>
+<li><b><code>checkpoint_path</code></b>: The checkpoint path to export. If None (the default), the strategy may locate a checkpoint (e.g. the most recent) by itself.</li>
+<li><b><code>eval_result</code></b>: The output of Estimator.evaluate on this checkpoint. This should be set only if checkpoint_path is provided (otherwise it is unclear which checkpoint this eval refers to).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The string path to the exported directory.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if the export_fn does not have the required signature</li>
+</ul>

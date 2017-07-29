@@ -1,0 +1,34 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.cumsum" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.cumsum" class="dashAnchor"></a><h1 id="tf.cumsum">tf.cumsum</h1>
+<h3 id="tf.cumsum-1"><code>tf.cumsum</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">cumsum(
+    x,
+    axis<span class="op">=</span><span class="dv">0</span>,
+    exclusive<span class="op">=</span><span class="va">False</span>,
+    reverse<span class="op">=</span><span class="va">False</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/math_ops.py"><code>tensorflow/python/ops/math_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/math_ops.md#Scan">Math &gt; Scan</a></p>
+<p>Compute the cumulative sum of the tensor <code>x</code> along <code>axis</code>.</p>
+<p>By default, this op performs an inclusive cumsum, which means that the first element of the input is identical to the first element of the output:</p>
+<pre class="prettyprint"><code>tf.cumsum([a, b, c]) ==&gt; [a, a + b, a + b + c]</code></pre>
+<p>By setting the <code>exclusive</code> kwarg to <code>True</code>, an exclusive cumsum is performed instead:</p>
+<pre class="prettyprint"><code>tf.cumsum([a, b, c], exclusive=True) ==&gt; [0, a, a + b]</code></pre>
+<p>By setting the <code>reverse</code> kwarg to <code>True</code>, the cumsum is performed in the opposite direction:</p>
+<pre class="prettyprint"><code>tf.cumsum([a, b, c], reverse=True) ==&gt; [a + b + c, b + c, c]</code></pre>
+<p>This is more efficient than using separate <code>tf.reverse</code> ops.</p>
+<p>The <code>reverse</code> and <code>exclusive</code> kwargs can also be combined:</p>
+<pre class="prettyprint"><code>tf.cumsum([a, b, c], exclusive=True, reverse=True) ==&gt; [b + c, c, 0]</code></pre>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int64</code>, <code>int32</code>, <code>uint8</code>, <code>uint16</code>, <code>int16</code>, <code>int8</code>, <code>complex64</code>, <code>complex128</code>, <code>qint8</code>, <code>quint8</code>, <code>qint32</code>, <code>half</code>.</li>
+<li><b><code>axis</code></b>: A <code>Tensor</code> of type <code>int32</code> (default: 0).</li>
+<li><b><code>exclusive</code></b>: If <code>True</code>, perform exclusive cumsum.</li>
+<li><b><code>reverse</code></b>: A <code>bool</code> (default: False).</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>

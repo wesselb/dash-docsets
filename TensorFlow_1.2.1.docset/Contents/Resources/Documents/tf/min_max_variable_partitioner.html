@@ -1,0 +1,24 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.min_max_variable_partitioner" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.min_max_variable_partitioner" class="dashAnchor"></a><h1 id="tf.min_max_variable_partitioner">tf.min_max_variable_partitioner</h1>
+<h3 id="tf.min_max_variable_partitioner-1"><code>tf.min_max_variable_partitioner</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">min_max_variable_partitioner(
+    max_partitions<span class="op">=</span><span class="dv">1</span>,
+    axis<span class="op">=</span><span class="dv">0</span>,
+    min_slice_size<span class="op">=</span><span class="dv">256</span> <span class="op">&lt;&lt;</span> <span class="dv">10</span>,
+    bytes_per_string_element<span class="op">=</span><span class="dv">16</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/partitioned_variables.py"><code>tensorflow/python/ops/partitioned_variables.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/state_ops.md#Variable_Partitioners_for_Sharding">Variables &gt; Variable Partitioners for Sharding</a></p>
+<p>Partitioner to allocate minimum size per slice.</p>
+<p>Returns a partitioner that partitions the variable of given shape and dtype such that each partition has a minimum of <code>min_slice_size</code> slice of the variable. The maximum number of such partitions (upper bound) is given by <code>max_partitions</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>max_partitions</code></b>: Upper bound on the number of partitions. Defaults to 1.</li>
+<li><b><code>axis</code></b>: Axis along which to partition the variable. Defaults to 0.</li>
+<li><b><code>min_slice_size</code></b>: Minimum size of the variable slice per partition. Defaults to 256K.</li>
+<li><b><code>bytes_per_string_element</code></b>: If the <code>Variable</code> is of type string, this provides an estimate of how large each scalar in the <code>Variable</code> is.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A partition function usable as the <code>partitioner</code> argument to <code>variable_scope</code>, <code>get_variable</code>, and <code>get_partitioned_variable_list</code>.</p>

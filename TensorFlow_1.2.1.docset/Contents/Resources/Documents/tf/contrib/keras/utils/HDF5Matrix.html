@@ -1,0 +1,48 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.utils.HDF5Matrix" /> <meta itemprop="property" content="shape"/> <meta itemprop="property" content="__getitem__"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="__len__"/> <meta itemprop="property" content="refs"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.keras.utils.HDF5Matrix" class="dashAnchor"></a><h1 id="tf.contrib.keras.utils.hdf5matrix">tf.contrib.keras.utils.HDF5Matrix</h1>
+<h3 id="class-tf.contrib.keras.utils.hdf5matrix"><code>class tf.contrib.keras.utils.HDF5Matrix</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/utils/io_utils.py"><code>tensorflow/contrib/keras/python/keras/utils/io_utils.py</code></a>.</p>
+<p>Representation of HDF5 dataset to be used instead of a Numpy array.</p>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    x_data <span class="op">=</span> HDF5Matrix(<span class="st">&#39;input/file.hdf5&#39;</span>, <span class="st">&#39;data&#39;</span>)
+    model.predict(x_data)</code></pre></div>
+<p>Providing <code>start</code> and <code>end</code> allows use of a slice of the dataset.</p>
+<p>Optionally, a normalizer function (or lambda) can be given. This will be called on every slice of data retrieved.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>datapath: string, path to a HDF5 file
+dataset: string, name of the HDF5 dataset in the file specified
+    in datapath
+start: int, start of desired slice of the specified dataset
+end: int, end of desired slice of the specified dataset
+normalizer: function to be called on data when retrieved</code></pre>
+<h4 id="returns">Returns:</h4>
+<pre><code>An array-like HDF5 dataset.</code></pre>
+<h2 id="properties">Properties</h2>
+<h3 id="shape">
+<code>shape</code>
+</h3>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    datapath,
+    dataset,
+    start<span class="op">=</span><span class="dv">0</span>,
+    end<span class="op">=</span><span class="va">None</span>,
+    normalizer<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<h3 id="__getitem__">
+<code><strong>getitem</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__getitem__</span>(key)</code></pre></div>
+<h3 id="__len__">
+<code><strong>len</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__len__</span>()</code></pre></div>
+<h2 id="class-members">Class Members</h2>
+<h3 id="refs">
+<code>refs</code>
+</h3>

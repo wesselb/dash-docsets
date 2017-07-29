@@ -1,0 +1,131 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.parse_example" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.parse_example" class="dashAnchor"></a><h1 id="tf.parse_example">tf.parse_example</h1>
+<h3 id="tf.parse_example-1"><code>tf.parse_example</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">parse_example(
+    serialized,
+    features,
+    name<span class="op">=</span><span class="va">None</span>,
+    example_names<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/parsing_ops.py"><code>tensorflow/python/ops/parsing_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/io_ops.md#Converting">Inputs and Readers &gt; Converting</a></p>
+<p>Parses <code>Example</code> protos into a <code>dict</code> of tensors.</p>
+<p>Parses a number of serialized <a href="https://www.tensorflow.org/code/tensorflow/core/example/example.proto"><code>Example</code></a> protos given in <code>serialized</code>. We refer to <code>serialized</code> as a batch with <code>batch_size</code> many entries of individual <code>Example</code> protos.</p>
+<p><code>example_names</code> may contain descriptive names for the corresponding serialized protos. These may be useful for debugging purposes, but they have no effect on the output. If not <code>None</code>, <code>example_names</code> must be the same length as <code>serialized</code>.</p>
+<p>This op parses serialized examples into a dictionary mapping keys to <code>Tensor</code> and <code>SparseTensor</code> objects. <code>features</code> is a dict from keys to <code>VarLenFeature</code>, <code>SparseFeature</code>, and <code>FixedLenFeature</code> objects. Each <code>VarLenFeature</code> and <code>SparseFeature</code> is mapped to a <code>SparseTensor</code>, and each <code>FixedLenFeature</code> is mapped to a <code>Tensor</code>.</p>
+<p>Each <code>VarLenFeature</code> maps to a <code>SparseTensor</code> of the specified type representing a ragged matrix. Its indices are <code>[batch, index]</code> where <code>batch</code> identifies the example in <code>serialized</code>, and <code>index</code> is the value's index in the list of values associated with that feature and example.</p>
+<p>Each <code>SparseFeature</code> maps to a <code>SparseTensor</code> of the specified type representing a Tensor of <code>dense_shape</code> <code>[batch_size] + SparseFeature.size</code>. Its <code>values</code> come from the feature in the examples with key <code>value_key</code>. A <code>values[i]</code> comes from a position <code>k</code> in the feature of an example at batch entry <code>batch</code>. This positional information is recorded in <code>indices[i]</code> as <code>[batch, index_0, index_1, ...]</code> where <code>index_j</code> is the <code>k-th</code> value of the feature in the example at with key <code>SparseFeature.index_key[j]. In other words, we split the indices (except the first index indicating the batch entry) of a</code>SparseTensor<code>by dimension into different features of the</code>Example<code>. Due to its complexity a</code>VarLenFeature<code>should be preferred over a</code>SparseFeature` whenever possible.</p>
+<p>Each <code>FixedLenFeature</code> <code>df</code> maps to a <code>Tensor</code> of the specified type (or <code>tf.float32</code> if not specified) and shape <code>(serialized.size(),) + df.shape</code>.</p>
+<p><code>FixedLenFeature</code> entries with a <code>default_value</code> are optional. With no default value, we will fail if that <code>Feature</code> is missing from any example in <code>serialized</code>.</p>
+<p>Each <code>FixedLenSequenceFeature</code> <code>df</code> maps to a <code>Tensor</code> of the specified type (or <code>tf.float32</code> if not specified) and shape <code>(serialized.size(), None) + df.shape</code>. All examples in <code>serialized</code> will be padded with <code>default_value</code> along the second dimension.</p>
+<p>Examples:</p>
+<p>For example, if one expects a <code>tf.float32</code> <code>VarLenFeature</code> <code>ft</code> and three serialized <code>Example</code>s are provided:</p>
+<pre><code>serialized = [
+  features
+    { feature { key: &quot;ft&quot; value { float_list { value: [1.0, 2.0] } } } },
+  features
+    { feature []},
+  features
+    { feature { key: &quot;ft&quot; value { float_list { value: [3.0] } } }
+]</code></pre>
+<p>then the output will look like:</p>
+<pre><code>{&quot;ft&quot;: SparseTensor(indices=[[0, 0], [0, 1], [2, 0]],
+                    values=[1.0, 2.0, 3.0],
+                    dense_shape=(3, 2)) }</code></pre>
+<p>If instead a <code>FixedLenSequenceFeature</code> with <code>default_value = -1.0</code> and <code>shape=[]</code> is used then the output will look like:</p>
+<pre><code>{&quot;ft&quot;: [[1.0, 2.0], [3.0, -1.0]]}</code></pre>
+<p>Given two <code>Example</code> input protos in <code>serialized</code>:</p>
+<pre><code>[
+  features {
+    feature { key: &quot;kw&quot; value { bytes_list { value: [ &quot;knit&quot;, &quot;big&quot; ] } } }
+    feature { key: &quot;gps&quot; value { float_list { value: [] } } }
+  },
+  features {
+    feature { key: &quot;kw&quot; value { bytes_list { value: [ &quot;emmy&quot; ] } } }
+    feature { key: &quot;dank&quot; value { int64_list { value: [ 42 ] } } }
+    feature { key: &quot;gps&quot; value { } }
+  }
+]</code></pre>
+<p>And arguments</p>
+<pre><code>example_names: [&quot;input0&quot;, &quot;input1&quot;],
+features: {
+    &quot;kw&quot;: VarLenFeature(tf.string),
+    &quot;dank&quot;: VarLenFeature(tf.int64),
+    &quot;gps&quot;: VarLenFeature(tf.float32),
+}</code></pre>
+<p>Then the output is a dictionary:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">{
+  <span class="st">&quot;kw&quot;</span>: SparseTensor(
+      indices<span class="op">=</span>[[<span class="dv">0</span>, <span class="dv">0</span>], [<span class="dv">0</span>, <span class="dv">1</span>], [<span class="dv">1</span>, <span class="dv">0</span>]],
+      values<span class="op">=</span>[<span class="st">&quot;knit&quot;</span>, <span class="st">&quot;big&quot;</span>, <span class="st">&quot;emmy&quot;</span>]
+      dense_shape<span class="op">=</span>[<span class="dv">2</span>, <span class="dv">2</span>]),
+  <span class="st">&quot;dank&quot;</span>: SparseTensor(
+      indices<span class="op">=</span>[[<span class="dv">1</span>, <span class="dv">0</span>]],
+      values<span class="op">=</span>[<span class="dv">42</span>],
+      dense_shape<span class="op">=</span>[<span class="dv">2</span>, <span class="dv">1</span>]),
+  <span class="st">&quot;gps&quot;</span>: SparseTensor(
+      indices<span class="op">=</span>[],
+      values<span class="op">=</span>[],
+      dense_shape<span class="op">=</span>[<span class="dv">2</span>, <span class="dv">0</span>]),
+}</code></pre></div>
+<p>For dense results in two serialized <code>Example</code>s:</p>
+<pre><code>[
+  features {
+    feature { key: &quot;age&quot; value { int64_list { value: [ 0 ] } } }
+    feature { key: &quot;gender&quot; value { bytes_list { value: [ &quot;f&quot; ] } } }
+   },
+   features {
+    feature { key: &quot;age&quot; value { int64_list { value: [] } } }
+    feature { key: &quot;gender&quot; value { bytes_list { value: [ &quot;f&quot; ] } } }
+  }
+]</code></pre>
+<p>We can use arguments:</p>
+<pre><code>example_names: [&quot;input0&quot;, &quot;input1&quot;],
+features: {
+    &quot;age&quot;: FixedLenFeature([], dtype=tf.int64, default_value=-1),
+    &quot;gender&quot;: FixedLenFeature([], dtype=tf.string),
+}</code></pre>
+<p>And the expected output is:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">{
+  <span class="st">&quot;age&quot;</span>: [[<span class="dv">0</span>], [<span class="op">-</span><span class="dv">1</span>]],
+  <span class="st">&quot;gender&quot;</span>: [[<span class="st">&quot;f&quot;</span>], [<span class="st">&quot;f&quot;</span>]],
+}</code></pre></div>
+<p>An alternative to <code>VarLenFeature</code> to obtain a <code>SparseTensor</code> is <code>SparseFeature</code>. For example, given two <code>Example</code> input protos in <code>serialized</code>:</p>
+<pre><code>[
+  features {
+    feature { key: &quot;val&quot; value { float_list { value: [ 0.5, -1.0 ] } } }
+    feature { key: &quot;ix&quot; value { int64_list { value: [ 3, 20 ] } } }
+  },
+  features {
+    feature { key: &quot;val&quot; value { float_list { value: [ 0.0 ] } } }
+    feature { key: &quot;ix&quot; value { int64_list { value: [ 42 ] } } }
+  }
+]</code></pre>
+<p>And arguments</p>
+<pre><code>example_names: [&quot;input0&quot;, &quot;input1&quot;],
+features: {
+    &quot;sparse&quot;: SparseFeature(
+        index_key=&quot;ix&quot;, value_key=&quot;val&quot;, dtype=tf.float32, size=100),
+}</code></pre>
+<p>Then the output is a dictionary:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">{
+  <span class="st">&quot;sparse&quot;</span>: SparseTensor(
+      indices<span class="op">=</span>[[<span class="dv">0</span>, <span class="dv">3</span>], [<span class="dv">0</span>, <span class="dv">20</span>], [<span class="dv">1</span>, <span class="dv">42</span>]],
+      values<span class="op">=</span>[<span class="fl">0.5</span>, <span class="op">-</span><span class="fl">1.0</span>, <span class="fl">0.0</span>]
+      dense_shape<span class="op">=</span>[<span class="dv">2</span>, <span class="dv">100</span>]),
+}</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>serialized</code></b>: A vector (1-D Tensor) of strings, a batch of binary serialized <code>Example</code> protos.</li>
+<li><b><code>features</code></b>: A <code>dict</code> mapping feature keys to <code>FixedLenFeature</code>, <code>VarLenFeature</code>, and <code>SparseFeature</code> values.</li>
+<li><b><code>name</code></b>: A name for this operation (optional).</li>
+<li><b><code>example_names</code></b>: A vector (1-D Tensor) of strings (optional), the names of the serialized protos in the batch.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>dict</code> mapping feature keys to <code>Tensor</code> and <code>SparseTensor</code> values.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if any feature is invalid.</li>
+</ul>

@@ -1,0 +1,20 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.graph_editor.assign_renamed_collections_handler" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.graph_editor.assign_renamed_collections_handler" class="dashAnchor"></a><h1 id="tf.contrib.graph_editor.assign_renamed_collections_handler">tf.contrib.graph_editor.assign_renamed_collections_handler</h1>
+<h3 id="tf.contrib.graph_editor.assign_renamed_collections_handler-1"><code>tf.contrib.graph_editor.assign_renamed_collections_handler</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">assign_renamed_collections_handler(
+    info,
+    elem,
+    elem_
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/graph_editor/transform.py"><code>tensorflow/contrib/graph_editor/transform.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.graph_editor.md#Module_transform">Graph Editor (contrib) &gt; Module: transform</a></p>
+<p>Add the transformed elem to the (renamed) collections of elem.</p>
+<p>A collection is renamed only if is not a known key, as described in <code>tf.GraphKeys</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>info</code></b>: Transform._TmpInfo instance.</li>
+<li><b><code>elem</code></b>: the original element (<code>tf.Tensor</code> or <code>tf.Operation</code>)</li>
+<li><b><code>elem_</code></b>: the transformed element</li>
+</ul>

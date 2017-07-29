@@ -1,0 +1,28 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.bayesflow.stochastic_graph.surrogate_loss" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.bayesflow.stochastic_graph.surrogate_loss" class="dashAnchor"></a><h1 id="tf.contrib.bayesflow.stochastic_graph.surrogate_loss">tf.contrib.bayesflow.stochastic_graph.surrogate_loss</h1>
+<h3 id="tf.contrib.bayesflow.stochastic_graph.surrogate_loss-1"><code>tf.contrib.bayesflow.stochastic_graph.surrogate_loss</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">surrogate_loss(
+    sample_losses,
+    stochastic_tensors<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="st">&#39;SurrogateLoss&#39;</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/bayesflow/python/ops/stochastic_graph_impl.py"><code>tensorflow/contrib/bayesflow/python/ops/stochastic_graph_impl.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../../api_guides/python/contrib.bayesflow.stochastic_graph.md#Stochastic_Computation_Graph_Helper_Functions">BayesFlow Stochastic Graph (contrib) &gt; Stochastic Computation Graph Helper Functions</a></p>
+<p>Surrogate loss for stochastic graphs.</p>
+<p>This function will call <code>loss_fn</code> on each <code>StochasticTensor</code> upstream of <code>sample_losses</code>, passing the losses that it influenced.</p>
+<p>Note that currently <code>surrogate_loss</code> does not work with <code>StochasticTensor</code>s instantiated in <code>while_loop</code>s or other control structures.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>sample_losses</code></b>: a list or tuple of final losses. Each loss should be per example in the batch (and possibly per sample); that is, it should have dimensionality of 1 or greater. All losses should have the same shape.</li>
+<li><b><code>stochastic_tensors</code></b>: a list of <code>StochasticTensor</code>s to add loss terms for. If None, defaults to all <code>StochasticTensor</code>s in the graph upstream of the <code>Tensor</code>s in <code>sample_losses</code>.</li>
+<li><b><code>name</code></b>: the name with which to prepend created ops.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p><code>Tensor</code> loss, which is the sum of <code>sample_losses</code> and the <code>loss_fn</code>s returned by the <code>StochasticTensor</code>s.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>sample_losses</code> is not a list or tuple, or if its elements are not <code>Tensor</code>s.</li>
+<li><b><code>ValueError</code></b>: if any loss in <code>sample_losses</code> does not have dimensionality 1 or greater.</li>
+</ul>

@@ -1,0 +1,24 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.layers.l2_regularizer" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.layers.l2_regularizer" class="dashAnchor"></a><h1 id="tf.contrib.layers.l2_regularizer">tf.contrib.layers.l2_regularizer</h1>
+<h3 id="tf.contrib.layers.l2_regularizer-1"><code>tf.contrib.layers.l2_regularizer</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">l2_regularizer(
+    scale,
+    scope<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/layers/python/layers/regularizers.py"><code>tensorflow/contrib/layers/python/layers/regularizers.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.layers.md#Regularizers">Layers (contrib) &gt; Regularizers</a></p>
+<p>Returns a function that can be used to apply L2 regularization to weights.</p>
+<p>Small values of L2 can help prevent overfitting the training data.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>scale</code></b>: A scalar multiplier <code>Tensor</code>. 0.0 disables the regularizer.</li>
+<li><b><code>scope</code></b>: An optional scope name.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A function with signature <code>l2(weights)</code> that applies L2 regularization.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If scale is negative or if scale is not a float.</li>
+</ul>

@@ -1,0 +1,21 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.arg_min" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.arg_min" class="dashAnchor"></a><h1 id="tf.arg_min">tf.arg_min</h1>
+<h3 id="tf.arg_min-1"><code>tf.arg_min</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">arg_min(
+    <span class="bu">input</span>,
+    dimension,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_math_ops.py</code>.</p>
+<p>Returns the index with the smallest value across dimensions of a tensor.</p>
+<p>Note that in case of ties the identity of the return value is not guaranteed.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int64</code>, <code>int32</code>, <code>uint8</code>, <code>uint16</code>, <code>int16</code>, <code>int8</code>, <code>complex64</code>, <code>complex128</code>, <code>qint8</code>, <code>quint8</code>, <code>qint32</code>, <code>half</code>.</li>
+<li><b><code>dimension</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. int32, 0 &lt;= dimension &lt; rank(input). Describes which dimension of the input Tensor to reduce across. For vectors, use dimension = 0.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>int64</code>.</p>

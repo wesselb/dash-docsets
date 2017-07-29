@@ -1,0 +1,47 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.layers.input_from_feature_columns" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.layers.input_from_feature_columns" class="dashAnchor"></a><h1 id="tf.contrib.layers.input_from_feature_columns">tf.contrib.layers.input_from_feature_columns</h1>
+<h3 id="tf.contrib.layers.input_from_feature_columns-1"><code>tf.contrib.layers.input_from_feature_columns</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">input_from_feature_columns(
+    columns_to_tensors,
+    feature_columns,
+    weight_collections<span class="op">=</span><span class="va">None</span>,
+    trainable<span class="op">=</span><span class="va">True</span>,
+    scope<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/layers/python/layers/feature_column_ops.py"><code>tensorflow/contrib/layers/python/layers/feature_column_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.layers.md#Feature_columns">Layers (contrib) &gt; Feature columns</a></p>
+<p>A tf.contrib.layers style input layer builder based on FeatureColumns.</p>
+<p>Generally a single example in training data is described with feature columns. At the first layer of the model, this column oriented data should be converted to a single tensor. Each feature column needs a different kind of operation during this conversion. For example sparse features need a totally different handling than continuous features.</p>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">  <span class="co"># Building model for training</span>
+  columns_to_tensor <span class="op">=</span> tf.parse_example(...)
+  first_layer <span class="op">=</span> input_from_feature_columns(
+      columns_to_tensors<span class="op">=</span>columns_to_tensor,
+      feature_columns<span class="op">=</span>feature_columns)
+  second_layer <span class="op">=</span> fully_connected(inputs<span class="op">=</span>first_layer, ...)
+  ...</code></pre></div>
+<p>where feature_columns can be defined as follows:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">  sparse_feature <span class="op">=</span> sparse_column_with_hash_bucket(
+      column_name<span class="op">=</span><span class="st">&quot;sparse_col&quot;</span>, ...)
+  sparse_feature_emb <span class="op">=</span> embedding_column(sparse_id_column<span class="op">=</span>sparse_feature, ...)
+  real_valued_feature <span class="op">=</span> real_valued_column(...)
+  real_valued_buckets <span class="op">=</span> bucketized_column(
+      source_column<span class="op">=</span>real_valued_feature, ...)
+
+  feature_columns<span class="op">=</span>[sparse_feature_emb, real_valued_buckets]</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>columns_to_tensors</code></b>: A mapping from feature column to tensors. 'string' key means a base feature (not-transformed). It can have FeatureColumn as a key too. That means that FeatureColumn is already transformed by input pipeline.</li>
+<li><b><code>feature_columns</code></b>: A set containing all the feature columns. All items in the set should be instances of classes derived by FeatureColumn.</li>
+<li><b><code>weight_collections</code></b>: List of graph collections to which weights are added.</li>
+<li><b><code>trainable</code></b>: If <code>True</code> also add variables to the graph collection <code>GraphKeys.TRAINABLE_VARIABLES</code> (see tf.Variable).</li>
+<li><b><code>scope</code></b>: Optional scope for variable_scope.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A Tensor which can be consumed by hidden layers in the neural network.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if FeatureColumn cannot be consumed by a neural network.</li>
+</ul>

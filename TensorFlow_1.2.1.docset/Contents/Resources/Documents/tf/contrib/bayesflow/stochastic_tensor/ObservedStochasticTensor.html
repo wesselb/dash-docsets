@@ -1,0 +1,64 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.bayesflow.stochastic_tensor.ObservedStochasticTensor" /> <meta itemprop="property" content="distribution"/> <meta itemprop="property" content="dtype"/> <meta itemprop="property" content="graph"/> <meta itemprop="property" content="name"/> <meta itemprop="property" content="value_type"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="entropy"/> <meta itemprop="property" content="loss"/> <meta itemprop="property" content="mean"/> <meta itemprop="property" content="value"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.bayesflow.stochastic_tensor.ObservedStochasticTensor" class="dashAnchor"></a><h1 id="tf.contrib.bayesflow.stochastic_tensor.observedstochastictensor">tf.contrib.bayesflow.stochastic_tensor.ObservedStochasticTensor</h1>
+<h3 id="class-tf.contrib.bayesflow.stochastic_tensor.observedstochastictensor"><code>class tf.contrib.bayesflow.stochastic_tensor.ObservedStochasticTensor</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/bayesflow/python/ops/stochastic_tensor_impl.py"><code>tensorflow/contrib/bayesflow/python/ops/stochastic_tensor_impl.py</code></a>.</p>
+<p>A StochasticTensor with an observed value.</p>
+<h2 id="properties">Properties</h2>
+<h3 id="distribution">
+<code>distribution</code>
+</h3>
+<h3 id="dtype">
+<code>dtype</code>
+</h3>
+<h3 id="graph">
+<code>graph</code>
+</h3>
+<h3 id="name">
+<code>name</code>
+</h3>
+<h3 id="value_type">
+<code>value_type</code>
+</h3>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    dist,
+    value,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Construct an <code>ObservedStochasticTensor</code>.</p>
+<p><code>ObservedStochasticTensor</code> is backed by distribution <code>dist</code> and uses the provided value instead of using the current value type to draw a value from the distribution. The provided value argument must be appropriately shaped to have come from the distribution.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>dist</code></b>: an instance of <code>Distribution</code>.</li>
+<li><b><code>value</code></b>: a Tensor containing the observed value</li>
+<li><b><code>name</code></b>: a name for this <code>ObservedStochasticTensor</code> and its ops.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>dist</code> is not an instance of <code>Distribution</code>.</li>
+<li><b><code>ValueError</code></b>: if <code>value</code> is not compatible with the distribution.</li>
+</ul>
+<h3 id="entropy">
+<code>entropy</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">entropy(name<span class="op">=</span><span class="st">&#39;entropy&#39;</span>)</code></pre></div>
+<h3 id="loss">
+<code>loss</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">loss(
+    final_loss,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<h3 id="mean">
+<code>mean</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">mean(name<span class="op">=</span><span class="st">&#39;mean&#39;</span>)</code></pre></div>
+<h3 id="value">
+<code>value</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">value(name<span class="op">=</span><span class="st">&#39;value&#39;</span>)</code></pre></div>

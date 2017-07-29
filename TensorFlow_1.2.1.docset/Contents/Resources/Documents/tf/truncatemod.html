@@ -1,0 +1,23 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.truncatemod" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.truncatemod" class="dashAnchor"></a><h1 id="tf.truncatemod">tf.truncatemod</h1>
+<h3 id="tf.truncatemod-1"><code>tf.truncatemod</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">truncatemod(
+    x,
+    y,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_math_ops.py</code>.</p>
+<p>See the guide: <a href="../../../api_guides/python/math_ops.md#Arithmetic_Operators">Math &gt; Arithmetic Operators</a></p>
+<p>Returns element-wise remainder of division. This emulates C semantics in that</p>
+<p>the result here is consistent with a truncating divide. E.g. <code>truncate(x / y) * y + truncate_mod(x, y) = x</code>.</p>
+<p><em>NOTE</em>: <code>TruncateMod</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>, <code>float32</code>, <code>float64</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>

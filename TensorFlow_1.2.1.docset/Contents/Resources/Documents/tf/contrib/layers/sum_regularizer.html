@@ -1,0 +1,19 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.layers.sum_regularizer" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.layers.sum_regularizer" class="dashAnchor"></a><h1 id="tf.contrib.layers.sum_regularizer">tf.contrib.layers.sum_regularizer</h1>
+<h3 id="tf.contrib.layers.sum_regularizer-1"><code>tf.contrib.layers.sum_regularizer</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">sum_regularizer(
+    regularizer_list,
+    scope<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/layers/python/layers/regularizers.py"><code>tensorflow/contrib/layers/python/layers/regularizers.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.layers.md#Regularizers">Layers (contrib) &gt; Regularizers</a></p>
+<p>Returns a function that applies the sum of multiple regularizers.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>regularizer_list</code></b>: A list of regularizers to apply.</li>
+<li><b><code>scope</code></b>: An optional scope name</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A function with signature <code>sum_reg(weights)</code> that applies the sum of all the input regularizers.</p>

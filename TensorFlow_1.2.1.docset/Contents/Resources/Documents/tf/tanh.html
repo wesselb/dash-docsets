@@ -1,0 +1,20 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.tanh" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.tanh" class="dashAnchor"></a><h1 id="tf.tanh">tf.tanh</h1>
+<a name="//apple_ref/cpp/Function/tf.nn.tanh" class="dashAnchor"></a><h3 id="tf.nn.tanh"><code>tf.nn.tanh</code></h3>
+<h3 id="tf.tanh-1"><code>tf.tanh</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tanh(
+    x,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/math_ops.py"><code>tensorflow/python/ops/math_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/nn.md#Activation_Functions">Neural Network &gt; Activation Functions</a></p>
+<p>Computes hyperbolic tangent of <code>x</code> element-wise.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A Tensor or SparseTensor with type <code>float</code>, <code>double</code>, <code>int32</code>, <code>complex64</code>, <code>int64</code>, or <code>qint32</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A Tensor or SparseTensor respectively with the same type as <code>x</code> if <code>x.dtype != qint32</code> otherwise the return type is <code>quint8</code>.</p>

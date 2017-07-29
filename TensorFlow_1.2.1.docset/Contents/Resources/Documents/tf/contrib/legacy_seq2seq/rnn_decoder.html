@@ -1,0 +1,29 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.legacy_seq2seq.rnn_decoder" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.legacy_seq2seq.rnn_decoder" class="dashAnchor"></a><h1 id="tf.contrib.legacy_seq2seq.rnn_decoder">tf.contrib.legacy_seq2seq.rnn_decoder</h1>
+<h3 id="tf.contrib.legacy_seq2seq.rnn_decoder-1"><code>tf.contrib.legacy_seq2seq.rnn_decoder</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">rnn_decoder(
+    decoder_inputs,
+    initial_state,
+    cell,
+    loop_function<span class="op">=</span><span class="va">None</span>,
+    scope<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/legacy_seq2seq/python/ops/seq2seq.py"><code>tensorflow/contrib/legacy_seq2seq/python/ops/seq2seq.py</code></a>.</p>
+<p>RNN decoder for the sequence-to-sequence model.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>decoder_inputs</code></b>: A list of 2D Tensors [batch_size x input_size].</li>
+<li><b><code>initial_state</code></b>: 2D Tensor with shape [batch_size x cell.state_size].</li>
+<li><b><code>cell</code></b>: rnn_cell.RNNCell defining the cell function and size.</li>
+<li><b><code>loop_function</code></b>: If not None, this function will be applied to the i-th output in order to generate the i+1-st input, and decoder_inputs will be ignored, except for the first element (&quot;GO&quot; symbol). This can be used for decoding, but also for training to emulate http://arxiv.org/abs/1506.03099. Signature -- loop_function(prev, i) = next
+<ul>
+<li>prev is a 2D Tensor of shape [batch_size x output_size],</li>
+<li>i is an integer, the step number (when advanced control is needed),</li>
+<li>next is a 2D Tensor of shape [batch_size x input_size].</li>
+</ul></li>
+<li><b><code>scope</code></b>: VariableScope for the created subgraph; defaults to &quot;rnn_decoder&quot;.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A tuple of the form (outputs, state), where: outputs: A list of the same length as decoder_inputs of 2D Tensors with shape [batch_size x output_size] containing generated outputs. state: The state of each cell at the final time-step. It is a 2D Tensor of shape [batch_size x cell.state_size]. (Note that in some cases, like basic RNN cell or GRU cell, outputs and states can be the same. They are different for LSTM cells though.)</p>

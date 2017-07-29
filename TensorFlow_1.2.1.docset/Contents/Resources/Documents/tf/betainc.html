@@ -1,0 +1,28 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.betainc" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.betainc" class="dashAnchor"></a><h1 id="tf.betainc">tf.betainc</h1>
+<h3 id="tf.betainc-1"><code>tf.betainc</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">betainc(
+    a,
+    b,
+    x,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_math_ops.py</code>.</p>
+<p>See the guide: <a href="../../../api_guides/python/math_ops.md#Basic_Math_Functions">Math &gt; Basic Math Functions</a></p>
+<p>Compute the regularized incomplete beta integral \(I_x(a, b)\).</p>
+<p>The regularized incomplete beta integral is defined as:</p>
+<p>\(I_x(a, b) = \)</p>
+<p>where</p>
+<p>\(B(x; a, b) = _0^x t^{a-1} (1 - t)^{b-1} dt\)</p>
+<p>is the incomplete beta function and \(B(a, b)\) is the <em>complete</em> beta function.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>a</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>.</li>
+<li><b><code>b</code></b>: A <code>Tensor</code>. Must have the same type as <code>a</code>.</li>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must have the same type as <code>a</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>a</code>.</p>

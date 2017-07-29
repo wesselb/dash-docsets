@@ -1,0 +1,17 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.gfile.ListDirectory" /></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.gfile.ListDirectory" class="dashAnchor"></a><h1 id="tf.gfile.listdirectory">tf.gfile.ListDirectory</h1>
+<h3 id="tf.gfile.listdirectory-1"><code>tf.gfile.ListDirectory</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">ListDirectory(dirname)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/lib/io/file_io.py"><code>tensorflow/python/lib/io/file_io.py</code></a>.</p>
+<p>Returns a list of entries contained within a directory.</p>
+<p>The list is in arbitrary order. It does not contain the special entries &quot;.&quot; and &quot;..&quot;.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>dirname</code></b>: string, path to a directory</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>[filename1, filename2, ... filenameN] as strings</p>
+<h4 id="raises">Raises:</h4>
+<p>errors.NotFoundError if directory doesn't exist</p>

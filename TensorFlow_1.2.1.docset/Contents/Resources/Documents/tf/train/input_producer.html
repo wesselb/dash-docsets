@@ -1,0 +1,40 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.train.input_producer" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.train.input_producer" class="dashAnchor"></a><h1 id="tf.train.input_producer">tf.train.input_producer</h1>
+<h3 id="tf.train.input_producer-1"><code>tf.train.input_producer</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">input_producer(
+    input_tensor,
+    element_shape<span class="op">=</span><span class="va">None</span>,
+    num_epochs<span class="op">=</span><span class="va">None</span>,
+    shuffle<span class="op">=</span><span class="va">True</span>,
+    seed<span class="op">=</span><span class="va">None</span>,
+    capacity<span class="op">=</span><span class="dv">32</span>,
+    shared_name<span class="op">=</span><span class="va">None</span>,
+    summary_name<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>,
+    cancel_op<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/training/input.py"><code>tensorflow/python/training/input.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/io_ops.md#Input_pipeline">Inputs and Readers &gt; Input pipeline</a></p>
+<p>Output the rows of <code>input_tensor</code> to a queue for an input pipeline.</p>
+<p>Note: if <code>num_epochs</code> is not <code>None</code>, this function creates local counter <code>epochs</code>. Use <code>local_variables_initializer()</code> to initialize local variables.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input_tensor</code></b>: A tensor with the rows to produce. Must be at least one-dimensional. Must either have a fully-defined shape, or <code>element_shape</code> must be defined.</li>
+<li><b><code>element_shape</code></b>: (Optional.) A <code>TensorShape</code> representing the shape of a row of <code>input_tensor</code>, if it cannot be inferred.</li>
+<li><b><code>num_epochs</code></b>: (Optional.) An integer. If specified <code>input_producer</code> produces each row of <code>input_tensor</code> <code>num_epochs</code> times before generating an <code>OutOfRange</code> error. If not specified, <code>input_producer</code> can cycle through the rows of <code>input_tensor</code> an unlimited number of times.</li>
+<li><b><code>shuffle</code></b>: (Optional.) A boolean. If true, the rows are randomly shuffled within each epoch.</li>
+<li><b><code>seed</code></b>: (Optional.) An integer. The seed to use if <code>shuffle</code> is true.</li>
+<li><b><code>capacity</code></b>: (Optional.) The capacity of the queue to be used for buffering the input.</li>
+<li><b><code>shared_name</code></b>: (Optional.) If set, this queue will be shared under the given name across multiple sessions.</li>
+<li><b><code>summary_name</code></b>: (Optional.) If set, a scalar summary for the current queue size will be generated, using this name as part of the tag.</li>
+<li><b><code>name</code></b>: (Optional.) A name for queue.</li>
+<li><b><code>cancel_op</code></b>: (Optional.) Cancel op for the queue</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A queue with the output rows. A <code>QueueRunner</code> for the queue is added to the current <code>QUEUE_RUNNER</code> collection of the current graph.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If the shape of the input cannot be inferred from the arguments.</li>
+</ul>

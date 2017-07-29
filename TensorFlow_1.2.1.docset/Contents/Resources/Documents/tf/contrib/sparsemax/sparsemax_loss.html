@@ -1,0 +1,22 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.sparsemax.sparsemax_loss" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.sparsemax.sparsemax_loss" class="dashAnchor"></a><h1 id="tf.contrib.sparsemax.sparsemax_loss">tf.contrib.sparsemax.sparsemax_loss</h1>
+<h3 id="tf.contrib.sparsemax.sparsemax_loss-1"><code>tf.contrib.sparsemax.sparsemax_loss</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">sparsemax_loss(
+    logits,
+    sparsemax,
+    labels,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/sparsemax/python/ops/sparsemax_loss.py"><code>tensorflow/contrib/sparsemax/python/ops/sparsemax_loss.py</code></a>.</p>
+<p>Computes sparsemax loss function <a href="https://arxiv.org/abs/1602.02068">1</a>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>logits</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>.</li>
+<li><b><code>sparsemax</code></b>: A <code>Tensor</code>. Must have the same type as <code>logits</code>.</li>
+<li><b><code>labels</code></b>: A <code>Tensor</code>. Must have the same type as <code>logits</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>logits</code>.</p>

@@ -1,0 +1,20 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tfdbg.has_inf_or_nan" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tfdbg.has_inf_or_nan" class="dashAnchor"></a><h1 id="tfdbg.has_inf_or_nan">tfdbg.has_inf_or_nan</h1>
+<h3 id="tfdbg.has_inf_or_nan-1"><code>tfdbg.has_inf_or_nan</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">has_inf_or_nan(
+    datum,
+    tensor
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/debug/lib/debug_data.py"><code>tensorflow/python/debug/lib/debug_data.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/tfdbg.md#Tensor_value_predicates">TensorFlow Debugger &gt; Tensor-value predicates</a></p>
+<p>A predicate for whether a tensor consists of any bad numerical values.</p>
+<p>This predicate is common enough to merit definition in this module. Bad numerical values include <code>nan</code>s and <code>inf</code>s. The signature of this function follows the requirement of the method <code>DebugDumpDir.find()</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>datum</code></b>: (<code>DebugTensorDatum</code>) Datum metadata.</li>
+<li><b><code>tensor</code></b>: (<code>numpy.ndarray</code> or None) Value of the tensor. None represents an uninitialized tensor.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>(<code>bool</code>) True if and only if tensor consists of any nan or inf values.</p>

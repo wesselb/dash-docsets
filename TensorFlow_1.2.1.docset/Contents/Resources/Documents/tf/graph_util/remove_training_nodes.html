@@ -1,0 +1,15 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.graph_util.remove_training_nodes" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.graph_util.remove_training_nodes" class="dashAnchor"></a><h1 id="tf.graph_util.remove_training_nodes">tf.graph_util.remove_training_nodes</h1>
+<h3 id="tf.graph_util.remove_training_nodes-1"><code>tf.graph_util.remove_training_nodes</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">remove_training_nodes(input_graph)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/framework/graph_util_impl.py"><code>tensorflow/python/framework/graph_util_impl.py</code></a>.</p>
+<p>Prunes out nodes that aren't needed for inference.</p>
+<p>There are nodes like Identity and CheckNumerics that are only useful during training, and can be removed in graphs that will be used for nothing but inference. Here we identify and remove them, returning an equivalent graph. To be specific, CheckNumerics nodes are always removed, and Identity nodes that aren't involved in control edges are spliced out so that their input and outputs are directly connected.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input_graph</code></b>: Model to analyze and prune.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A list of nodes with the unnecessary ones removed.</p>

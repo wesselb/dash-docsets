@@ -1,0 +1,37 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.saved_model.loader" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.saved_model.loader" class="dashAnchor"></a><h1 id="module-tf.saved_model.loader">Module: tf.saved_model.loader</h1>
+<h3 id="module-tf.saved_model.loader-1">Module <code>tf.saved_model.loader</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/saved_model/loader.py"><code>tensorflow/python/saved_model/loader.py</code></a>.</p>
+<p>Loader functionality for SavedModel with hermetic, language-neutral exports.</p>
+<p>Load and restore capability for a SavedModel, which may include multiple meta graph defs. Each SavedModel is associated with a single checkpoint. Each meta graph def is saved with one or more tags, which are used to identify the exact meta graph def to load.</p>
+<p>The <code>load</code> operation requires the session in which to restore the graph definition and variables, the tags used to identify the meta graph def to load and the location of the SavedModel.</p>
+<p>Upon a load, the subset of variables and assets supplied as part of the specific meta graph def, will be restored into the supplied session. The values of the variables though will correspond to the saved values from the first meta graph added to the SavedModel using <code>add_meta_graph_and_variables(...)</code> in <code>builder.py</code>.</p>
+<p>Typical usage:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">...
+builder <span class="op">=</span> tf.saved_model.builder.SavedModelBuilder(export_dir)
+
+<span class="cf">with</span> tf.Session(graph<span class="op">=</span>tf.Graph()) <span class="im">as</span> sess:
+  ...
+  builder.add_meta_graph_and_variables(sess,
+                                       [<span class="st">&quot;foo-tag&quot;</span>],
+                                       signature_def_map<span class="op">=</span>foo_signatures,
+                                       assets_collection<span class="op">=</span>foo_assets)
+...
+
+<span class="cf">with</span> tf.Session(graph<span class="op">=</span>tf.Graph()) <span class="im">as</span> sess:
+  ...
+  builder.add_meta_graph([<span class="st">&quot;bar-tag&quot;</span>, <span class="st">&quot;baz-tag&quot;</span>],
+                         assets_collection<span class="op">=</span>bar_baz_assets)
+...
+
+builder.save()
+
+...
+<span class="cf">with</span> tf.Session(graph<span class="op">=</span>tf.Graph()) <span class="im">as</span> sess:
+  tf.saved_model.loader.load(sess, [<span class="st">&quot;foo-tag&quot;</span>], export_dir)
+  ...</code></pre></div>
+<h2 id="functions">Functions</h2>
+<p><a href="../../tf/saved_model/loader/load.html"><code>load(...)</code></a>: Loads the model from a SavedModel as specified by tags.</p>
+<p><a href="../../tf/saved_model/loader/maybe_saved_model_directory.html"><code>maybe_saved_model_directory(...)</code></a>: Checks whether the provided export directory could contain a SavedModel.</p>

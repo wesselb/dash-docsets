@@ -1,0 +1,30 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.quantized_concat" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.quantized_concat" class="dashAnchor"></a><h1 id="tf.quantized_concat">tf.quantized_concat</h1>
+<h3 id="tf.quantized_concat-1"><code>tf.quantized_concat</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">quantized_concat(
+    concat_dim,
+    values,
+    input_mins,
+    input_maxes,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_array_ops.py</code>.</p>
+<p>See the guide: <a href="../../../api_guides/python/array_ops.md#Slicing_and_Joining">Tensor Transformations &gt; Slicing and Joining</a></p>
+<p>Concatenates quantized tensors along one dimension.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>concat_dim</code></b>: A <code>Tensor</code> of type <code>int32</code>. 0-D. The dimension along which to concatenate. Must be in the range [0, rank(values)).</li>
+<li><b><code>values</code></b>: A list of at least 2 <code>Tensor</code> objects with the same type. The <code>N</code> Tensors to concatenate. Their ranks and types must match, and their sizes must match in all dimensions except <code>concat_dim</code>.</li>
+<li><b><code>input_mins</code></b>: A list with the same length as <code>values</code> of <code>Tensor</code> objects with type <code>float32</code>. The minimum scalar values for each of the input tensors.</li>
+<li><b><code>input_maxes</code></b>: A list with the same length as <code>values</code> of <code>Tensor</code> objects with type <code>float32</code>. The maximum scalar values for each of the input tensors.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A tuple of <code>Tensor</code> objects (output, output_min, output_max).</p>
+<ul>
+<li><b><code>output</code></b>: A <code>Tensor</code>. Has the same type as <code>values</code>. A <code>Tensor</code> with the concatenation of values stacked along the <code>concat_dim</code> dimension. This tensor's shape matches that of <code>values</code> except in <code>concat_dim</code> where it has the sum of the sizes.</li>
+<li><b><code>output_min</code></b>: A <code>Tensor</code> of type <code>float32</code>. The float value that the minimum quantized output value represents.</li>
+<li><b><code>output_max</code></b>: A <code>Tensor</code> of type <code>float32</code>. The float value that the maximum quantized output value represents.</li>
+</ul>

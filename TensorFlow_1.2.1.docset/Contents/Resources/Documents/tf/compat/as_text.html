@@ -1,0 +1,22 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.as_text" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.as_text" class="dashAnchor"></a><h1 id="tf.compat.as_text">tf.compat.as_text</h1>
+<h3 id="tf.compat.as_text-1"><code>tf.compat.as_text</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">as_text(
+    bytes_or_text,
+    encoding<span class="op">=</span><span class="st">&#39;utf-8&#39;</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/util/compat.py"><code>tensorflow/python/util/compat.py</code></a>.</p>
+<p>Returns the given argument as a unicode string.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>bytes_or_text</code></b>: A <code>bytes</code>, <code>str, or</code>unicode` object.</li>
+<li><b><code>encoding</code></b>: A string indicating the charset for decoding unicode.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>unicode</code> (Python 2) or <code>str</code> (Python 3) object.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>bytes_or_text</code> is not a binary or unicode string.</li>
+</ul>

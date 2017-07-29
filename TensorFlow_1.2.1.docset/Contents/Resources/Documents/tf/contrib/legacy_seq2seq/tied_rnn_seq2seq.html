@@ -1,0 +1,27 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.legacy_seq2seq.tied_rnn_seq2seq" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.legacy_seq2seq.tied_rnn_seq2seq" class="dashAnchor"></a><h1 id="tf.contrib.legacy_seq2seq.tied_rnn_seq2seq">tf.contrib.legacy_seq2seq.tied_rnn_seq2seq</h1>
+<h3 id="tf.contrib.legacy_seq2seq.tied_rnn_seq2seq-1"><code>tf.contrib.legacy_seq2seq.tied_rnn_seq2seq</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tied_rnn_seq2seq(
+    encoder_inputs,
+    decoder_inputs,
+    cell,
+    loop_function<span class="op">=</span><span class="va">None</span>,
+    dtype<span class="op">=</span>tf.float32,
+    scope<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/legacy_seq2seq/python/ops/seq2seq.py"><code>tensorflow/contrib/legacy_seq2seq/python/ops/seq2seq.py</code></a>.</p>
+<p>RNN sequence-to-sequence model with tied encoder and decoder parameters.</p>
+<p>This model first runs an RNN to encode encoder_inputs into a state vector, and then runs decoder, initialized with the last encoder state, on decoder_inputs. Encoder and decoder use the same RNN cell and share parameters.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>encoder_inputs</code></b>: A list of 2D Tensors [batch_size x input_size].</li>
+<li><b><code>decoder_inputs</code></b>: A list of 2D Tensors [batch_size x input_size].</li>
+<li><b><code>cell</code></b>: tf.nn.rnn_cell.RNNCell defining the cell function and size.</li>
+<li><b><code>loop_function</code></b>: If not None, this function will be applied to i-th output in order to generate i+1-th input, and decoder_inputs will be ignored, except for the first element (&quot;GO&quot; symbol), see rnn_decoder for details.</li>
+<li><b><code>dtype</code></b>: The dtype of the initial state of the rnn cell (default: tf.float32).</li>
+<li><b><code>scope</code></b>: VariableScope for the created subgraph; default: &quot;tied_rnn_seq2seq&quot;.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A tuple of the form (outputs, state), where: outputs: A list of the same length as decoder_inputs of 2D Tensors with shape [batch_size x output_size] containing the generated outputs. state: The state of each decoder cell in each time-step. This is a list with length len(decoder_inputs) -- one item for each time-step. It is a 2D Tensor of shape [batch_size x cell.state_size].</p>

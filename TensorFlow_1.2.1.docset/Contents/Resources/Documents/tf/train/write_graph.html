@@ -1,0 +1,31 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.train.write_graph" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.train.write_graph" class="dashAnchor"></a><h1 id="tf.train.write_graph">tf.train.write_graph</h1>
+<h3 id="tf.train.write_graph-1"><code>tf.train.write_graph</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">write_graph(
+    graph_or_graph_def,
+    logdir,
+    name,
+    as_text<span class="op">=</span><span class="va">True</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/framework/graph_io.py"><code>tensorflow/python/framework/graph_io.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/train.md#Training_Utilities">Training &gt; Training Utilities</a></p>
+<p>Writes a graph proto to a file.</p>
+<p>The graph is written as a binary proto unless <code>as_text</code> is <code>True</code>.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">v <span class="op">=</span> tf.Variable(<span class="dv">0</span>, name<span class="op">=</span><span class="st">&#39;my_variable&#39;</span>)
+sess <span class="op">=</span> tf.Session()
+tf.train.write_graph(sess.graph_def, <span class="st">&#39;/tmp/my-model&#39;</span>, <span class="st">&#39;train.pbtxt&#39;</span>)</code></pre></div>
+<p>or</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">v <span class="op">=</span> tf.Variable(<span class="dv">0</span>, name<span class="op">=</span><span class="st">&#39;my_variable&#39;</span>)
+sess <span class="op">=</span> tf.Session()
+tf.train.write_graph(sess.graph, <span class="st">&#39;/tmp/my-model&#39;</span>, <span class="st">&#39;train.pbtxt&#39;</span>)</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>graph_or_graph_def</code></b>: A <code>Graph</code> or a <code>GraphDef</code> protocol buffer.</li>
+<li><b><code>logdir</code></b>: Directory where to write the graph. This can refer to remote filesystems, such as Google Cloud Storage (GCS).</li>
+<li><b><code>name</code></b>: Filename for the graph.</li>
+<li><b><code>as_text</code></b>: If <code>True</code>, writes the graph as an ASCII proto.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The path of the output proto file.</p>

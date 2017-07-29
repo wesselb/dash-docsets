@@ -1,0 +1,13 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.stateless" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.stateless" class="dashAnchor"></a><h1 id="module-tf.contrib.stateless">Module: tf.contrib.stateless</h1>
+<h3 id="module-tf.contrib.stateless-1">Module <code>tf.contrib.stateless</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/stateless/__init__.py"><code>tensorflow/contrib/stateless/__init__.py</code></a>.</p>
+<p>Stateless random ops which take seed as a tensor input.</p>
+<p>Instead of taking <code>seed</code> as an attr which initializes a mutable state within the op, these random ops take <code>seed</code> as an input, and the random numbers are a deterministic function of <code>shape</code> and <code>seed</code>.</p>
+<p>WARNING: These ops are in contrib, and are not stable. They should be consistent across multiple runs on the same hardware, but only for the same version of the code.</p>
+<h2 id="functions">Functions</h2>
+<p><a href="../../tf/contrib/stateless/stateless_random_normal.html"><code>stateless_random_normal(...)</code></a>: Outputs deterministic pseudorandom values from a normal distribution.</p>
+<p><a href="../../tf/contrib/stateless/stateless_random_uniform.html"><code>stateless_random_uniform(...)</code></a>: Outputs deterministic pseudorandom random values from a uniform distribution.</p>
+<p><a href="../../tf/contrib/stateless/stateless_truncated_normal.html"><code>stateless_truncated_normal(...)</code></a>: Outputs deterministic pseudorandom values from a truncated normal distribution.</p>

@@ -1,0 +1,39 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.dequantize" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.dequantize" class="dashAnchor"></a><h1 id="tf.dequantize">tf.dequantize</h1>
+<h3 id="tf.dequantize-1"><code>tf.dequantize</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">dequantize(
+    <span class="bu">input</span>,
+    min_range,
+    max_range,
+    mode<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_array_ops.py</code>.</p>
+<p>See the guide: <a href="../../../api_guides/python/array_ops.md#Slicing_and_Joining">Tensor Transformations &gt; Slicing and Joining</a></p>
+<p>Dequantize the 'input' tensor into a float Tensor.</p>
+<p>[min_range, max_range] are scalar floats that specify the range for the 'input' data. The 'mode' attribute controls exactly which calculations are used to convert the float values to their quantized equivalents.</p>
+<p>In 'MIN_COMBINED' mode, each value of the tensor will undergo the following:</p>
+<pre><code>if T == qint8, in[i] += (range(T) + 1)/ 2.0
+out[i] = min_range + (in[i]* (max_range - min_range) / range(T))</code></pre>
+<p>here <code>range(T) = numeric_limits&lt;T&gt;::max() - numeric_limits&lt;T&gt;::min()</code></p>
+<p><em>MIN_COMBINED Mode Example</em></p>
+<p>If the input comes from a QuantizedRelu6, the output type is quint8 (range of 0-255) but the possible range of QuantizedRelu6 is 0-6. The min_range and max_range values are therefore 0.0 and 6.0. Dequantize on quint8 will take each value, cast to float, and multiply by 6 / 255. Note that if quantizedtype is qint8, the operation will additionally add each value by 128 prior to casting.</p>
+<p>If the mode is 'MIN_FIRST', then this approach is used:</p>
+<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp">number_of_steps = <span class="dv">1</span> &lt;&lt; (<span class="er">#</span> of bits in T)
+range_adjust = number_of_steps / (number_of_steps - <span class="dv">1</span>)
+range = (range_max - range_min) * range_adjust
+range_scale = range / number_of_steps
+<span class="at">const</span> <span class="dt">double</span> offset_input = <span class="kw">static_cast</span>&lt;<span class="dt">double</span>&gt;(input) - lowest_quantized;
+result = range_min + ((input - numeric_limits&lt;T&gt;::min()) * range_scale)</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>qint8</code>, <code>quint8</code>, <code>qint16</code>, <code>quint16</code>, <code>qint32</code>.</li>
+<li><b><code>min_range</code></b>: A <code>Tensor</code> of type <code>float32</code>. The minimum scalar value possibly produced for the input.</li>
+<li><b><code>max_range</code></b>: A <code>Tensor</code> of type <code>float32</code>. The maximum scalar value possibly produced for the input.</li>
+<li><b><code>mode</code></b>: An optional <code>string</code> from: <code>&quot;MIN_COMBINED&quot;, &quot;MIN_FIRST&quot;</code>. Defaults to <code>&quot;MIN_COMBINED&quot;</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>float32</code>.</p>

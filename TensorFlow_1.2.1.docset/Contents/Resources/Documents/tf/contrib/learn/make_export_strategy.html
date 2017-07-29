@@ -1,0 +1,24 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.learn.make_export_strategy" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.learn.make_export_strategy" class="dashAnchor"></a><h1 id="tf.contrib.learn.make_export_strategy">tf.contrib.learn.make_export_strategy</h1>
+<h3 id="tf.contrib.learn.make_export_strategy-1"><code>tf.contrib.learn.make_export_strategy</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">make_export_strategy(
+    serving_input_fn,
+    default_output_alternative_key<span class="op">=</span><span class="va">None</span>,
+    assets_extra<span class="op">=</span><span class="va">None</span>,
+    as_text<span class="op">=</span><span class="va">False</span>,
+    exports_to_keep<span class="op">=</span><span class="dv">5</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/learn/python/learn/utils/saved_model_export_utils.py"><code>tensorflow/contrib/learn/python/learn/utils/saved_model_export_utils.py</code></a>.</p>
+<p>Create an ExportStrategy for use with Experiment.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>serving_input_fn</code></b>: A function that takes no arguments and returns an <code>InputFnOps</code>.</li>
+<li><b><code>default_output_alternative_key</code></b>: the name of the head to serve when an incoming serving request does not explicitly request a specific head. Must be <code>None</code> if the estimator inherits from ${tf.estimator.Estimator} or for single-headed models.</li>
+<li><b><code>assets_extra</code></b>: A dict specifying how to populate the assets.extra directory within the exported SavedModel. Each key should give the destination path (including the filename) relative to the assets.extra directory. The corresponding value gives the full path of the source file to be copied. For example, the simple case of copying a single file without renaming it is specified as <code>{'my_asset_file.txt': '/path/to/my_asset_file.txt'}</code>.</li>
+<li><b><code>as_text</code></b>: whether to write the SavedModel proto in text format.</li>
+<li><b><code>exports_to_keep</code></b>: Number of exports to keep. Older exports will be garbage-collected. Defaults to 5. Set to None to disable garbage collection.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>An ExportStrategy that can be passed to the Experiment constructor.</p>

@@ -1,0 +1,38 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.layers.embed_sequence" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.layers.embed_sequence" class="dashAnchor"></a><h1 id="tf.contrib.layers.embed_sequence">tf.contrib.layers.embed_sequence</h1>
+<h3 id="tf.contrib.layers.embed_sequence-1"><code>tf.contrib.layers.embed_sequence</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">embed_sequence(
+    ids,
+    vocab_size<span class="op">=</span><span class="va">None</span>,
+    embed_dim<span class="op">=</span><span class="va">None</span>,
+    unique<span class="op">=</span><span class="va">False</span>,
+    initializer<span class="op">=</span><span class="va">None</span>,
+    regularizer<span class="op">=</span><span class="va">None</span>,
+    trainable<span class="op">=</span><span class="va">True</span>,
+    scope<span class="op">=</span><span class="va">None</span>,
+    reuse<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/layers/python/layers/encoders.py"><code>tensorflow/contrib/layers/python/layers/encoders.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.layers.md#Higher_level_ops_for_building_neural_network_layers">Layers (contrib) &gt; Higher level ops for building neural network layers</a></p>
+<p>Maps a sequence of symbols to a sequence of embeddings.</p>
+<p>Typical use case would be reusing embeddings between an encoder and decoder.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>ids</code></b>: <code>[batch_size, doc_length]</code> <code>Tensor</code> of type <code>int32</code> or <code>int64</code> with symbol ids.</li>
+<li><b><code>vocab_size</code></b>: Integer number of symbols in vocabulary.</li>
+<li><b><code>embed_dim</code></b>: Integer number of dimensions for embedding matrix.</li>
+<li><b><code>unique</code></b>: If <code>True</code>, will first compute the unique set of indices, and then lookup each embedding once, repeating them in the output as needed.</li>
+<li><b><code>initializer</code></b>: An initializer for the embeddings, if <code>None</code> default for current scope is used.</li>
+<li><b><code>regularizer</code></b>: Optional regularizer for the embeddings.</li>
+<li><b><code>trainable</code></b>: If <code>True</code> also add variables to the graph collection <code>GraphKeys.TRAINABLE_VARIABLES</code> (see <code>tf.Variable</code>).</li>
+<li><b><code>scope</code></b>: Optional string specifying the variable scope for the op, required if <code>reuse=True</code>.</li>
+<li><b><code>reuse</code></b>: If <code>True</code>, variables inside the op will be reused.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p><code>Tensor</code> of <code>[batch_size, doc_length, embed_dim]</code> with embedded sequences.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>embed_dim</code> or <code>vocab_size</code> are not specified when <code>reuse</code> is <code>None</code> or <code>False</code>.</li>
+</ul>

@@ -1,0 +1,28 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.backend.shape" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.keras.backend.shape" class="dashAnchor"></a><h1 id="tf.contrib.keras.backend.shape">tf.contrib.keras.backend.shape</h1>
+<h3 id="tf.contrib.keras.backend.shape-1"><code>tf.contrib.keras.backend.shape</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">shape(x)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/backend.py"><code>tensorflow/contrib/keras/python/keras/backend.py</code></a>.</p>
+<p>Returns the symbolic shape of a tensor or variable.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>x: A tensor or variable.</code></pre>
+<h4 id="returns">Returns:</h4>
+<pre><code>A symbolic shape (which is itself a tensor).</code></pre>
+<p>Examples:</p>
+<pre><code>    # TensorFlow example
+    &gt;&gt;&gt; from keras import backend as K
+    &gt;&gt;&gt; tf_session = K.get_session()
+    &gt;&gt;&gt; val = np.array([[1, 2], [3, 4]])
+    &gt;&gt;&gt; kvar = K.variable(value=val)
+    &gt;&gt;&gt; input = keras.backend.placeholder(shape=(2, 4, 5))
+    &gt;&gt;&gt; K.shape(kvar)
+    &lt;tf.Tensor &#39;Shape_8:0&#39; shape=(2,) dtype=int32&gt;
+    &gt;&gt;&gt; K.shape(input)
+    &lt;tf.Tensor &#39;Shape_9:0&#39; shape=(3,) dtype=int32&gt;
+    # To get integer shape (Instead, you can use K.int_shape(x))
+    &gt;&gt;&gt; K.shape(kvar).eval(session=tf_session)
+    array([2, 2], dtype=int32)
+    &gt;&gt;&gt; K.shape(input).eval(session=tf_session)
+    array([2, 4, 5], dtype=int32)</code></pre>

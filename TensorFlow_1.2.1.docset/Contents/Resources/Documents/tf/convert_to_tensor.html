@@ -1,0 +1,40 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.convert_to_tensor" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.convert_to_tensor" class="dashAnchor"></a><h1 id="tf.convert_to_tensor">tf.convert_to_tensor</h1>
+<h3 id="tf.convert_to_tensor-1"><code>tf.convert_to_tensor</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">convert_to_tensor(
+    value,
+    dtype<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>,
+    preferred_dtype<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/framework/ops.py"><code>tensorflow/python/framework/ops.py</code></a>.</p>
+<p>See the guides: <a href="../../../api_guides/python/framework.md#Utility_functions">Building Graphs &gt; Utility functions</a>, <a href="../../../api_guides/python/constant_op.html">Constants, Sequences, and Random Values</a>, <a href="../../../api_guides/python/control_flow_ops.html">Control Flow</a>, <a href="../../../api_guides/python/functional_ops.html">Higher Order Functions</a>, <a href="../../../api_guides/python/image.html">Images</a>, <a href="../../../api_guides/python/io_ops.html">Inputs and Readers</a>, <a href="../../../api_guides/python/math_ops.html">Math</a>, <a href="../../../api_guides/python/nn.html">Neural Network</a>, <a href="../../../api_guides/python/sparse_ops.html">Sparse Tensors</a>, <a href="../../../api_guides/python/string_ops.html">Strings</a>, <a href="../../../api_guides/python/session_ops.html">Tensor Handle Operations</a>, <a href="../../../api_guides/python/array_ops.html">Tensor Transformations</a>, <a href="../../../api_guides/python/state_ops.html">Variables</a>, <a href="../../../api_guides/python/script_ops.html">Wraps python functions</a></p>
+<p>Converts the given <code>value</code> to a <code>Tensor</code>.</p>
+<p>This function converts Python objects of various types to <code>Tensor</code> objects. It accepts <code>Tensor</code> objects, numpy arrays, Python lists, and Python scalars. For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">import</span> numpy <span class="im">as</span> np
+
+<span class="kw">def</span> my_func(arg):
+  arg <span class="op">=</span> tf.convert_to_tensor(arg, dtype<span class="op">=</span>tf.float32)
+  <span class="cf">return</span> tf.matmul(arg, arg) <span class="op">+</span> arg
+
+<span class="co"># The following calls are equivalent.</span>
+value_1 <span class="op">=</span> my_func(tf.constant([[<span class="fl">1.0</span>, <span class="fl">2.0</span>], [<span class="fl">3.0</span>, <span class="fl">4.0</span>]]))
+value_2 <span class="op">=</span> my_func([[<span class="fl">1.0</span>, <span class="fl">2.0</span>], [<span class="fl">3.0</span>, <span class="fl">4.0</span>]])
+value_3 <span class="op">=</span> my_func(np.array([[<span class="fl">1.0</span>, <span class="fl">2.0</span>], [<span class="fl">3.0</span>, <span class="fl">4.0</span>]], dtype<span class="op">=</span>np.float32))</code></pre></div>
+<p>This function can be useful when composing a new operation in Python (such as <code>my_func</code> in the example above). All standard Python op constructors apply this function to each of their Tensor-valued inputs, which allows those ops to accept numpy arrays, Python lists, and scalars in addition to <code>Tensor</code> objects.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>value</code></b>: An object whose type has a registered <code>Tensor</code> conversion function.</li>
+<li><b><code>dtype</code></b>: Optional element type for the returned tensor. If missing, the type is inferred from the type of <code>value</code>.</li>
+<li><b><code>name</code></b>: Optional name to use if a new <code>Tensor</code> is created.</li>
+<li><b><code>preferred_dtype</code></b>: Optional element type for the returned tensor, used when dtype is None. In some cases, a caller may not have a dtype in mind when converting to a tensor, so preferred_dtype can be used as a soft preference. If the conversion to <code>preferred_dtype</code> is not possible, this argument has no effect.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>An <code>Output</code> based on <code>value</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: If no conversion function is registered for <code>value</code>.</li>
+<li><b><code>RuntimeError</code></b>: If a registered conversion function returns an invalid value.</li>
+</ul>

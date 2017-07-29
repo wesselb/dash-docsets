@@ -1,0 +1,27 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.nn.softmax" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.nn.softmax" class="dashAnchor"></a><h1 id="tf.nn.softmax">tf.nn.softmax</h1>
+<h3 id="tf.nn.softmax-1"><code>tf.nn.softmax</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">softmax(
+    logits,
+    dim<span class="op">=-</span><span class="dv">1</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/nn_ops.py"><code>tensorflow/python/ops/nn_ops.py</code></a>.</p>
+<p>See the guides: <a href="../../../../api_guides/python/contrib.layers.md#Higher_level_ops_for_building_neural_network_layers">Layers (contrib) &gt; Higher level ops for building neural network layers</a>, <a href="../../../../api_guides/python/nn.md#Classification">Neural Network &gt; Classification</a></p>
+<p>Computes softmax activations.</p>
+<p>For each batch <code>i</code> and class <code>j</code> we have</p>
+<pre><code>softmax = exp(logits) / reduce_sum(exp(logits), dim)</code></pre>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>logits</code></b>: A non-empty <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>.</li>
+<li><b><code>dim</code></b>: The dimension softmax would be performed on. The default is -1 which indicates the last dimension.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>logits</code>. Same shape as <code>logits</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>InvalidArgumentError</code></b>: if <code>logits</code> is empty or <code>dim</code> is beyond the last dimension of <code>logits</code>.</li>
+</ul>

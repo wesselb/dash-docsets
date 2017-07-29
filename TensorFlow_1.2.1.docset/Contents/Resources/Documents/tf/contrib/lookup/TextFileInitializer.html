@@ -1,0 +1,100 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.lookup.TextFileInitializer" /> <meta itemprop="property" content="key_dtype"/> <meta itemprop="property" content="value_dtype"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="initialize"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.lookup.TextFileInitializer" class="dashAnchor"></a><h1 id="tf.contrib.lookup.textfileinitializer">tf.contrib.lookup.TextFileInitializer</h1>
+<h3 id="class-tf.contrib.lookup.textfileinitializer"><code>class tf.contrib.lookup.TextFileInitializer</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/lookup/lookup_ops.py"><code>tensorflow/contrib/lookup/lookup_ops.py</code></a>.</p>
+<p>Table initializers from a text file.</p>
+<p>This initializer assigns one entry in the table for each line in the file.</p>
+<p>The key and value type of the table to initialize is given by <code>key_dtype</code> and <code>value_dtype</code>.</p>
+<p>The key and value content to get from each line is specified by the <code>key_index</code> and <code>value_index</code>.</p>
+<ul>
+<li><code>TextFileIndex.LINE_NUMBER</code> means use the line number starting from zero, expects data type int64.</li>
+<li><code>TextFileIndex.WHOLE_LINE</code> means use the whole line content, expects data type string.</li>
+<li>A value <code>&gt;=0</code> means use the index (starting at zero) of the split line based on <code>delimiter</code>.</li>
+</ul>
+<p>For example if we have a file with the following content:</p>
+<pre><code>emerson 10
+lake 20
+palmer 30</code></pre>
+<p>The following snippet initializes a table with the first column as keys and second column as values:</p>
+<ul>
+<li><code>emerson -&gt; 10</code></li>
+<li><code>lake -&gt; 20</code></li>
+<li><code>palmer -&gt; 30</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">table <span class="op">=</span> tf.contrib.lookup.HashTable(tf.contrib.lookup.TextFileInitializer(
+    <span class="st">&quot;test.txt&quot;</span>, tf.string, <span class="dv">0</span>, tf.int64, <span class="dv">1</span>, delimiter<span class="op">=</span><span class="st">&quot; &quot;</span>), <span class="op">-</span><span class="dv">1</span>)
+...
+table.init.run()</code></pre></div>
+<p>Similarly to initialize the whole line as keys and the line number as values.</p>
+<ul>
+<li><code>emerson 10 -&gt; 0</code></li>
+<li><code>lake 20 -&gt; 1</code></li>
+<li><code>palmer 30 -&gt; 2</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">table <span class="op">=</span> tf.contrib.lookup.HashTable(tf.contrib.lookup.TextFileInitializer(
+    <span class="st">&quot;test.txt&quot;</span>, tf.string, tf.contrib.lookup.TextFileIndex.WHOLE_LINE,
+    tf.int64, tf.contrib.lookup.TextFileIndex.LINE_NUMBER, delimiter<span class="op">=</span><span class="st">&quot; &quot;</span>), <span class="op">-</span><span class="dv">1</span>)
+...
+table.init.run()</code></pre></div>
+<h2 id="properties">Properties</h2>
+<h3 id="key_dtype">
+<code>key_dtype</code>
+</h3>
+<p>The expected table key dtype.</p>
+<h3 id="value_dtype">
+<code>value_dtype</code>
+</h3>
+<p>The expected table value dtype.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    filename,
+    key_dtype,
+    key_index,
+    value_dtype,
+    value_index,
+    vocab_size<span class="op">=</span><span class="va">None</span>,
+    delimiter<span class="op">=</span><span class="st">&#39;</span><span class="ch">\t</span><span class="st">&#39;</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Constructs a table initializer object to populate from a text file.</p>
+<p>It generates one key-value pair per line. The type of table key and value are specified by <code>key_dtype</code> and <code>value_dtype</code>, respectively. Similarly the content of the key and value are specified by the key_index and value_index.</p>
+<ul>
+<li>TextFileIndex.LINE_NUMBER means use the line number starting from zero, expects data type int64.</li>
+<li>TextFileIndex.WHOLE_LINE means use the whole line content, expects data type string.</li>
+<li>A value &gt;=0 means use the index (starting at zero) of the split line based on <code>delimiter</code>.</li>
+</ul>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>filename</code></b>: The filename of the text file to be used for initialization. The path must be accessible from wherever the graph is initialized (eg. trainer or eval workers). The filename may be a scalar <code>Tensor</code>.</li>
+<li><b><code>key_dtype</code></b>: The <code>key</code> data type.</li>
+<li><b><code>key_index</code></b>: the index that represents information of a line to get the table 'key' values from.</li>
+<li><b><code>value_dtype</code></b>: The <code>value</code> data type.</li>
+<li><b><code>value_index</code></b>: the index that represents information of a line to get the table 'value' values from.'</li>
+<li><b><code>vocab_size</code></b>: The number of elements in the file, if known.</li>
+<li><b><code>delimiter</code></b>: The delimiter to separate fields in a line.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: when the filename is empty, or when the table key and value data types do not match the expected data types.</li>
+</ul>
+<h3 id="initialize">
+<code>initialize</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">initialize(table)</code></pre></div>
+<p>Initializes the table from a text file.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>table</code></b>: The table to be initialized.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The operation that initializes the table.</p>
+<h4 id="raises-1">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: when the keys and values data types do not match the table key and value data types.</li>
+</ul>

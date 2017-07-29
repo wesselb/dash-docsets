@@ -1,0 +1,85 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.layers" /> <meta itemprop="property" content="OPTIMIZER_CLS_NAMES"/> <meta itemprop="property" content="SPARSE_FEATURE_CROSS_DEFAULT_HASH_KEY"/> <meta itemprop="property" content="elu"/> <meta itemprop="property" content="legacy_linear"/> <meta itemprop="property" content="legacy_relu"/> <meta itemprop="property" content="linear"/> <meta itemprop="property" content="relu"/> <meta itemprop="property" content="relu6"/> <meta itemprop="property" content="scale_gradient"/></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.layers" class="dashAnchor"></a><h1 id="module-tf.contrib.layers">Module: tf.contrib.layers</h1>
+<h3 id="module-tf.contrib.layers-1">Module <code>tf.contrib.layers</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/layers/__init__.py"><code>tensorflow/contrib/layers/__init__.py</code></a>.</p>
+<p>Ops for building neural network layers, regularizers, summaries, etc.</p>
+<p>See the <a href="../../../../api_guides/python/contrib.layers.html">Layers (contrib)</a> guide.</p>
+<h2 id="modules">Modules</h2>
+<p><a href="../../tf/contrib/layers/feature_column.html"><code>feature_column</code></a> module: This API defines FeatureColumn abstraction.</p>
+<p><a href="../../tf/contrib/layers/summaries.html"><code>summaries</code></a> module: Utility functions for summary creation.</p>
+<h2 id="functions">Functions</h2>
+<p><a href="../../tf/contrib/layers/apply_regularization.html"><code>apply_regularization(...)</code></a>: Returns the summed penalty by applying <code>regularizer</code> to the <code>weights_list</code>.</p>
+<p><a href="../../tf/contrib/layers/avg_pool2d.html"><code>avg_pool2d(...)</code></a>: Adds a 2D average pooling op.</p>
+<p><a href="../../tf/contrib/layers/batch_norm.html"><code>batch_norm(...)</code></a>: Adds a Batch Normalization layer from http://arxiv.org/abs/1502.03167.</p>
+<p><a href="../../tf/contrib/layers/bias_add.html"><code>bias_add(...)</code></a>: Adds a bias to the inputs.</p>
+<p><a href="../../tf/contrib/layers/bow_encoder.html"><code>bow_encoder(...)</code></a>: Maps a sequence of symbols to a vector per example by averaging embeddings.</p>
+<p><a href="../../tf/contrib/layers/bucketized_column.html"><code>bucketized_column(...)</code></a>: Creates a _BucketizedColumn for discretizing dense input.</p>
+<p><a href="../../tf/contrib/layers/check_feature_columns.html"><code>check_feature_columns(...)</code></a>: Checks the validity of the set of FeatureColumns.</p>
+<p><a href="../../tf/contrib/layers/conv2d.html"><code>conv2d(...)</code></a>: Adds an N-D convolution followed by an optional batch_norm layer.</p>
+<p><a href="../../tf/contrib/layers/conv2d_in_plane.html"><code>conv2d_in_plane(...)</code></a>: Performs the same in-plane convolution to each channel independently.</p>
+<p><a href="../../tf/contrib/layers/conv2d_transpose.html"><code>conv2d_transpose(...)</code></a>: Adds a convolution2d_transpose with an optional batch normalization layer.</p>
+<p><a href="../../tf/contrib/layers/conv2d.html"><code>convolution2d(...)</code></a>: Adds an N-D convolution followed by an optional batch_norm layer.</p>
+<p><a href="../../tf/contrib/layers/conv2d_in_plane.html"><code>convolution2d_in_plane(...)</code></a>: Performs the same in-plane convolution to each channel independently.</p>
+<p><a href="../../tf/contrib/layers/conv2d_transpose.html"><code>convolution2d_transpose(...)</code></a>: Adds a convolution2d_transpose with an optional batch normalization layer.</p>
+<p><a href="../../tf/contrib/layers/create_feature_spec_for_parsing.html"><code>create_feature_spec_for_parsing(...)</code></a>: Helper that prepares features config from input feature_columns.</p>
+<p><a href="../../tf/contrib/layers/crossed_column.html"><code>crossed_column(...)</code></a>: Creates a _CrossedColumn for performing feature crosses.</p>
+<p><a href="../../tf/contrib/layers/dropout.html"><code>dropout(...)</code></a>: Returns a dropout op applied to the input.</p>
+<p><a href="../../tf/contrib/layers/embed_sequence.html"><code>embed_sequence(...)</code></a>: Maps a sequence of symbols to a sequence of embeddings.</p>
+<p><a href="../../tf/contrib/layers/embedding_column.html"><code>embedding_column(...)</code></a>: Creates an <code>_EmbeddingColumn</code> for feeding sparse data into a DNN.</p>
+<p><a href="../../tf/contrib/layers/embedding_lookup_unique.html"><code>embedding_lookup_unique(...)</code></a>: Version of embedding_lookup that avoids duplicate lookups.</p>
+<p><a href="../../tf/contrib/layers/flatten.html"><code>flatten(...)</code></a>: Flattens the input while maintaining the batch_size.</p>
+<p><a href="../../tf/contrib/layers/fully_connected.html"><code>fully_connected(...)</code></a>: Adds a fully connected layer.</p>
+<p><a href="../../tf/contrib/layers/infer_real_valued_columns.html"><code>infer_real_valued_columns(...)</code></a></p>
+<p><a href="../../tf/contrib/layers/input_from_feature_columns.html"><code>input_from_feature_columns(...)</code></a>: A tf.contrib.layers style input layer builder based on FeatureColumns.</p>
+<p><a href="../../tf/contrib/layers/joint_weighted_sum_from_feature_columns.html"><code>joint_weighted_sum_from_feature_columns(...)</code></a>: A restricted linear prediction builder based on FeatureColumns.</p>
+<p><a href="../../tf/contrib/layers/l1_regularizer.html"><code>l1_regularizer(...)</code></a>: Returns a function that can be used to apply L1 regularization to weights.</p>
+<p><a href="../../tf/contrib/layers/l2_regularizer.html"><code>l2_regularizer(...)</code></a>: Returns a function that can be used to apply L2 regularization to weights.</p>
+<p><a href="../../tf/contrib/layers/layer_norm.html"><code>layer_norm(...)</code></a>: Adds a Layer Normalization layer from https://arxiv.org/abs/1607.06450.</p>
+<p><a href="../../tf/contrib/layers/legacy_fully_connected.html"><code>legacy_fully_connected(...)</code></a>: Adds the parameters for a fully connected layer and returns the output.</p>
+<p><a href="../../tf/contrib/layers/make_place_holder_tensors_for_base_features.html"><code>make_place_holder_tensors_for_base_features(...)</code></a>: Returns placeholder tensors for inference.</p>
+<p><a href="../../tf/contrib/layers/max_pool2d.html"><code>max_pool2d(...)</code></a>: Adds a 2D Max Pooling op.</p>
+<p><a href="../../tf/contrib/layers/multi_class_target.html"><code>multi_class_target(...)</code></a>: Creates a _TargetColumn for multi class single label classification. (deprecated)</p>
+<p><a href="../../tf/contrib/layers/one_hot_column.html"><code>one_hot_column(...)</code></a>: Creates an <code>_OneHotColumn</code> for a one-hot or multi-hot repr in a DNN.</p>
+<p><a href="../../tf/contrib/layers/one_hot_encoding.html"><code>one_hot_encoding(...)</code></a>: Transform numeric labels into onehot_labels using <code>tf.one_hot</code>.</p>
+<p><a href="../../tf/contrib/layers/optimize_loss.html"><code>optimize_loss(...)</code></a>: Given loss and parameters for optimizer, returns a training op.</p>
+<p><a href="../../tf/contrib/layers/parse_feature_columns_from_examples.html"><code>parse_feature_columns_from_examples(...)</code></a>: Parses tf.Examples to extract tensors for given feature_columns.</p>
+<p><a href="../../tf/contrib/layers/parse_feature_columns_from_sequence_examples.html"><code>parse_feature_columns_from_sequence_examples(...)</code></a>: Parses tf.SequenceExamples to extract tensors for given <code>FeatureColumn</code>s.</p>
+<p><a href="../../tf/contrib/layers/real_valued_column.html"><code>real_valued_column(...)</code></a>: Creates a <code>_RealValuedColumn</code> for dense numeric data.</p>
+<p><a href="../../tf/contrib/layers/regression_target.html"><code>regression_target(...)</code></a>: Creates a _TargetColumn for linear regression. (deprecated)</p>
+<p><a href="../../tf/contrib/layers/repeat.html"><code>repeat(...)</code></a>: Applies the same layer with the same arguments repeatedly.</p>
+<p><a href="../../tf/contrib/layers/safe_embedding_lookup_sparse.html"><code>safe_embedding_lookup_sparse(...)</code></a>: Lookup embedding results, accounting for invalid IDs and empty features.</p>
+<p><a href="../../tf/contrib/layers/scattered_embedding_column.html"><code>scattered_embedding_column(...)</code></a>: Creates an embedding column of a sparse feature using parameter hashing.</p>
+<p><a href="../../tf/contrib/layers/separable_conv2d.html"><code>separable_conv2d(...)</code></a>: Adds a depth-separable 2D convolution with optional batch_norm layer.</p>
+<p><a href="../../tf/contrib/layers/separable_conv2d.html"><code>separable_convolution2d(...)</code></a>: Adds a depth-separable 2D convolution with optional batch_norm layer.</p>
+<p><a href="../../tf/contrib/layers/sequence_input_from_feature_columns.html"><code>sequence_input_from_feature_columns(...)</code></a>: Builds inputs for sequence models from <code>FeatureColumn</code>s. (experimental)</p>
+<p><a href="../../tf/contrib/layers/shared_embedding_columns.html"><code>shared_embedding_columns(...)</code></a>: Creates a list of <code>_EmbeddingColumn</code> sharing the same embedding.</p>
+<p><a href="../../tf/contrib/layers/softmax.html"><code>softmax(...)</code></a>: Performs softmax on Nth dimension of N-dimensional logit tensor.</p>
+<p><a href="../../tf/contrib/layers/sparse_column_with_hash_bucket.html"><code>sparse_column_with_hash_bucket(...)</code></a>: Creates a _SparseColumn with hashed bucket configuration.</p>
+<p><a href="../../tf/contrib/layers/sparse_column_with_integerized_feature.html"><code>sparse_column_with_integerized_feature(...)</code></a>: Creates an integerized _SparseColumn.</p>
+<p><a href="../../tf/contrib/layers/sparse_column_with_keys.html"><code>sparse_column_with_keys(...)</code></a>: Creates a _SparseColumn with keys.</p>
+<p><a href="../../tf/contrib/layers/stack.html"><code>stack(...)</code></a>: Builds a stack of layers by applying layer repeatedly using stack_args.</p>
+<p><a href="../../tf/contrib/layers/sum_regularizer.html"><code>sum_regularizer(...)</code></a>: Returns a function that applies the sum of multiple regularizers.</p>
+<p><a href="../../tf/contrib/layers/summarize_activation.html"><code>summarize_activation(...)</code></a>: Summarize an activation.</p>
+<p><a href="../../tf/contrib/layers/summarize_activations.html"><code>summarize_activations(...)</code></a>: Summarize activations, using <code>summarize_activation</code> to summarize.</p>
+<p><a href="../../tf/contrib/layers/summarize_collection.html"><code>summarize_collection(...)</code></a>: Summarize a graph collection of tensors, possibly filtered by name.</p>
+<p><a href="../../tf/contrib/layers/summarize_tensor.html"><code>summarize_tensor(...)</code></a>: Summarize a tensor using a suitable summary type.</p>
+<p><a href="../../tf/contrib/layers/summarize_tensors.html"><code>summarize_tensors(...)</code></a>: Summarize a set of tensors.</p>
+<p><a href="../../tf/contrib/layers/transform_features.html"><code>transform_features(...)</code></a>: Returns transformed features based on features columns passed in.</p>
+<p><a href="../../tf/contrib/layers/unit_norm.html"><code>unit_norm(...)</code></a>: Normalizes the given input across the specified dimension to unit length.</p>
+<p><a href="../../tf/contrib/layers/variance_scaling_initializer.html"><code>variance_scaling_initializer(...)</code></a>: Returns an initializer that generates tensors without scaling variance.</p>
+<p><a href="../../tf/contrib/layers/weighted_sparse_column.html"><code>weighted_sparse_column(...)</code></a>: Creates a _SparseColumn by combining sparse_id_column with a weight column.</p>
+<p><a href="../../tf/contrib/layers/weighted_sum_from_feature_columns.html"><code>weighted_sum_from_feature_columns(...)</code></a>: A tf.contrib.layers style linear prediction builder based on FeatureColumn.</p>
+<p><a href="../../tf/contrib/layers/xavier_initializer.html"><code>xavier_initializer(...)</code></a>: Returns an initializer performing &quot;Xavier&quot; initialization for weights.</p>
+<p><a href="../../tf/contrib/layers/xavier_initializer.html"><code>xavier_initializer_conv2d(...)</code></a>: Returns an initializer performing &quot;Xavier&quot; initialization for weights.</p>
+<h2 id="other-members">Other Members</h2>
+<p><code>OPTIMIZER_CLS_NAMES</code></p>
+<p><code>SPARSE_FEATURE_CROSS_DEFAULT_HASH_KEY</code></p>
+<p><code>elu</code></p>
+<p><code>legacy_linear</code></p>
+<p><code>legacy_relu</code></p>
+<p><code>linear</code></p>
+<p><code>relu</code></p>
+<p><code>relu6</code></p>
+<p><code>scale_gradient</code></p>

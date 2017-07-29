@@ -1,0 +1,23 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.summary.merge" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.summary.merge" class="dashAnchor"></a><h1 id="tf.summary.merge">tf.summary.merge</h1>
+<h3 id="tf.summary.merge-1"><code>tf.summary.merge</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">merge(
+    inputs,
+    collections<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/summary/summary.py"><code>tensorflow/python/summary/summary.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/summary.md#Generation_of_Summaries">Summary Operations &gt; Generation of Summaries</a></p>
+<p>Merges summaries.</p>
+<p>This op creates a <a href="https://www.tensorflow.org/code/tensorflow/core/framework/summary.proto"><code>Summary</code></a> protocol buffer that contains the union of all the values in the input summaries.</p>
+<p>When the Op is run, it reports an <code>InvalidArgument</code> error if multiple values in the summaries to merge use the same tag.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>inputs</code></b>: A list of <code>string</code> <code>Tensor</code> objects containing serialized <code>Summary</code> protocol buffers.</li>
+<li><b><code>collections</code></b>: Optional list of graph collections keys. The new summary op is added to these collections. Defaults to <code>[]</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A scalar <code>Tensor</code> of type <code>string</code>. The serialized <code>Summary</code> protocol buffer resulting from the merging.</p>

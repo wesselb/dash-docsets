@@ -1,0 +1,24 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.graph_editor.make_placeholder_from_tensor" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.graph_editor.make_placeholder_from_tensor" class="dashAnchor"></a><h1 id="tf.contrib.graph_editor.make_placeholder_from_tensor">tf.contrib.graph_editor.make_placeholder_from_tensor</h1>
+<h3 id="tf.contrib.graph_editor.make_placeholder_from_tensor-1"><code>tf.contrib.graph_editor.make_placeholder_from_tensor</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">make_placeholder_from_tensor(
+    t,
+    scope<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/graph_editor/util.py"><code>tensorflow/contrib/graph_editor/util.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.graph_editor.md#Module_util">Graph Editor (contrib) &gt; Module: util</a></p>
+<p>Create a <code>tf.placeholder</code> for the Graph Editor.</p>
+<p>Note that the correct graph scope must be set by the calling function.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>t</code></b>: a <code>tf.Tensor</code> whose name will be used to create the placeholder (see function placeholder_name).</li>
+<li><b><code>scope</code></b>: absolute scope within which to create the placeholder. None means that the scope of <code>t</code> is preserved. <code>&quot;&quot;</code> means the root scope.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A newly created <code>tf.placeholder</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>t</code> is not <code>None</code> or a <code>tf.Tensor</code>.</li>
+</ul>

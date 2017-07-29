@@ -1,0 +1,30 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.as_string" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.as_string" class="dashAnchor"></a><h1 id="tf.as_string">tf.as_string</h1>
+<h3 id="tf.as_string-1"><code>tf.as_string</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">as_string(
+    <span class="bu">input</span>,
+    precision<span class="op">=</span><span class="va">None</span>,
+    scientific<span class="op">=</span><span class="va">None</span>,
+    shortest<span class="op">=</span><span class="va">None</span>,
+    width<span class="op">=</span><span class="va">None</span>,
+    fill<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_string_ops.py</code>.</p>
+<p>See the guide: <a href="../../../api_guides/python/string_ops.md#Conversion">Strings &gt; Conversion</a></p>
+<p>Converts each entry in the given tensor to strings. Supports many numeric</p>
+<p>types and boolean.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>float32</code>, <code>float64</code>, <code>bool</code>, <code>int8</code>.</li>
+<li><b><code>precision</code></b>: An optional <code>int</code>. Defaults to <code>-1</code>. The post-decimal precision to use for floating point numbers. Only used if precision &gt; -1.</li>
+<li><b><code>scientific</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>. Use scientific notation for floating point numbers.</li>
+<li><b><code>shortest</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>. Use shortest representation (either scientific or standard) for floating point numbers.</li>
+<li><b><code>width</code></b>: An optional <code>int</code>. Defaults to <code>-1</code>. Pad pre-decimal numbers to this width. Applies to both floating point and integer numbers. Only used if width &gt; -1.</li>
+<li><b><code>fill</code></b>: An optional <code>string</code>. Defaults to <code>&quot;&quot;</code>. The value to pad if width &gt; -1. If empty, pads with spaces. Another typical value is '0'. String cannot be longer than 1 character.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>string</code>.</p>

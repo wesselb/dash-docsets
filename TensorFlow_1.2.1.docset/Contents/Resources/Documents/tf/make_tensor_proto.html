@@ -1,0 +1,35 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.make_tensor_proto" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.make_tensor_proto" class="dashAnchor"></a><h1 id="tf.make_tensor_proto">tf.make_tensor_proto</h1>
+<a name="//apple_ref/cpp/Function/tf.contrib.util.make_tensor_proto" class="dashAnchor"></a><h3 id="tf.contrib.util.make_tensor_proto"><code>tf.contrib.util.make_tensor_proto</code></h3>
+<h3 id="tf.make_tensor_proto-1"><code>tf.make_tensor_proto</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">make_tensor_proto(
+    values,
+    dtype<span class="op">=</span><span class="va">None</span>,
+    shape<span class="op">=</span><span class="va">None</span>,
+    verify_shape<span class="op">=</span><span class="va">False</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/framework/tensor_util.py"><code>tensorflow/python/framework/tensor_util.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/contrib.util.md#Miscellaneous_Utility_Functions">Utilities (contrib) &gt; Miscellaneous Utility Functions</a></p>
+<p>Create a TensorProto.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>values</code></b>: Values to put in the TensorProto.</li>
+<li><b><code>dtype</code></b>: Optional tensor_pb2 DataType value.</li>
+<li><b><code>shape</code></b>: List of integers representing the dimensions of tensor.</li>
+<li><b><code>verify_shape</code></b>: Boolean that enables verification of a shape of values.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A TensorProto. Depending on the type, it may contain data in the &quot;tensor_content&quot; attribute, which is not directly useful to Python programs. To access the values you should convert the proto back to a numpy ndarray with tensor_util.MakeNdarray(proto).</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: if unsupported types are provided.</li>
+<li><b><code>ValueError</code></b>: if arguments have inappropriate values or if verify_shape is True and shape of values is not equals to a shape from the argument.</li>
+</ul>
+<p>make_tensor_proto accepts &quot;values&quot; of a python scalar, a python list, a numpy ndarray, or a numpy scalar.</p>
+<p>If &quot;values&quot; is a python scalar or a python list, make_tensor_proto first convert it to numpy ndarray. If dtype is None, the conversion tries its best to infer the right numpy data type. Otherwise, the resulting numpy array has a compatible data type with the given dtype.</p>
+<p>In either case above, the numpy ndarray (either the caller provided or the auto converted) must have the compatible type with dtype.</p>
+<p>make_tensor_proto then converts the numpy array to a tensor proto.</p>
+<p>If &quot;shape&quot; is None, the resulting tensor proto represents the numpy array precisely.</p>
+<p>Otherwise, &quot;shape&quot; specifies the tensor's shape and the numpy array can not have more elements than what &quot;shape&quot; specifies.</p>

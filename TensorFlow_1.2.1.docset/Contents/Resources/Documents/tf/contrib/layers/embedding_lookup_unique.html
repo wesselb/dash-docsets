@@ -1,0 +1,25 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.layers.embedding_lookup_unique" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.layers.embedding_lookup_unique" class="dashAnchor"></a><h1 id="tf.contrib.layers.embedding_lookup_unique">tf.contrib.layers.embedding_lookup_unique</h1>
+<h3 id="tf.contrib.layers.embedding_lookup_unique-1"><code>tf.contrib.layers.embedding_lookup_unique</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">embedding_lookup_unique(
+    params,
+    ids,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/layers/python/layers/embedding_ops.py"><code>tensorflow/contrib/layers/python/layers/embedding_ops.py</code></a>.</p>
+<p>Version of embedding_lookup that avoids duplicate lookups.</p>
+<p>This can save communication in the case of repeated ids. Same interface as embedding_lookup. Except it supports multi-dimensional <code>ids</code> which allows to not reshape input/output to fit gather.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>params</code></b>: A list of tensors with the same shape and type, or a <code>PartitionedVariable</code>. Shape <code>[index, d1, d2, ...]</code>.</li>
+<li><b><code>ids</code></b>: A one-dimensional <code>Tensor</code> with type <code>int32</code> or <code>int64</code> containing the ids to be looked up in <code>params</code>. Shape <code>[ids1, ids2, ...]</code>.</li>
+<li><b><code>name</code></b>: A name for this operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> with the same type as the tensors in <code>params</code> and dimension of <code>[ids1, ids2, d1, d2, ...]</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>params</code> is empty.</li>
+</ul>

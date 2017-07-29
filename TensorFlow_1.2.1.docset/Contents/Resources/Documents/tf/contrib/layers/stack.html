@@ -1,0 +1,33 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.layers.stack" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.layers.stack" class="dashAnchor"></a><h1 id="tf.contrib.layers.stack">tf.contrib.layers.stack</h1>
+<h3 id="tf.contrib.layers.stack-1"><code>tf.contrib.layers.stack</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">stack(
+    inputs,
+    layer,
+    stack_args,
+    <span class="op">**</span>kwargs
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/layers/python/layers/layers.py"><code>tensorflow/contrib/layers/python/layers/layers.py</code></a>.</p>
+<p>Builds a stack of layers by applying layer repeatedly using stack_args.</p>
+<p><code>stack</code> allows you to repeatedly apply the same operation with different arguments <code>stack_args[i]</code>. For each application of the layer, <code>stack</code> creates a new scope appended with an increasing number. For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">  y <span class="op">=</span> stack(x, fully_connected, [<span class="dv">32</span>, <span class="dv">64</span>, <span class="dv">128</span>], scope<span class="op">=</span><span class="st">&#39;fc&#39;</span>)
+  <span class="co"># It is equivalent to:</span>
+
+  x <span class="op">=</span> fully_connected(x, <span class="dv">32</span>, scope<span class="op">=</span><span class="st">&#39;fc/fc_1&#39;</span>)
+  x <span class="op">=</span> fully_connected(x, <span class="dv">64</span>, scope<span class="op">=</span><span class="st">&#39;fc/fc_2&#39;</span>)
+  y <span class="op">=</span> fully_connected(x, <span class="dv">128</span>, scope<span class="op">=</span><span class="st">&#39;fc/fc_3&#39;</span>)</code></pre></div>
+<p>If the <code>scope</code> argument is not given in <code>kwargs</code>, it is set to <code>layer.__name__</code>, or <code>layer.func.__name__</code> (for <code>functools.partial</code> objects). If neither <code>__name__</code> nor <code>func.__name__</code> is available, the layers are called with <code>scope='stack'</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>inputs</code></b>: A <code>Tensor</code> suitable for layer.</li>
+<li><b><code>layer</code></b>: A layer with arguments <code>(inputs, *args, **kwargs)</code></li>
+<li><b><code>stack_args</code></b>: A list/tuple of parameters for each call of layer. **kwargs: Extra kwargs for the layer.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> result of applying the stacked layers.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If the op is unknown or wrong.</li>
+</ul>

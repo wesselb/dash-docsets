@@ -1,0 +1,33 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.learn.InputFnOps" /> <meta itemprop="property" content="default_inputs"/> <meta itemprop="property" content="features"/> <meta itemprop="property" content="labels"/> <meta itemprop="property" content="__new__"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.learn.InputFnOps" class="dashAnchor"></a><h1 id="tf.contrib.learn.inputfnops">tf.contrib.learn.InputFnOps</h1>
+<h3 id="class-tf.contrib.learn.inputfnops"><code>class tf.contrib.learn.InputFnOps</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/learn/python/learn/utils/input_fn_utils.py"><code>tensorflow/contrib/learn/python/learn/utils/input_fn_utils.py</code></a>.</p>
+<p>A return type for an input_fn.</p>
+<p>This return type is currently only supported for serving input_fn. Training and eval input_fn should return a <code>(features, labels)</code> tuple.</p>
+<p>The expected return values are: features: A dict of string to <code>Tensor</code> or <code>SparseTensor</code>, specifying the features to be passed to the model. labels: A <code>Tensor</code>, <code>SparseTensor</code>, or a dict of string to <code>Tensor</code> or <code>SparseTensor</code>, specifying labels for training or eval. For serving, set <code>labels</code> to <code>None</code>. default_inputs: a dict of string to <code>Tensor</code> or <code>SparseTensor</code>, specifying the input placeholders (if any) that this input_fn expects to be fed. Typically, this is used by a serving input_fn, which expects to be fed serialized <code>tf.Example</code> protos.</p>
+<h2 id="properties">Properties</h2>
+<h3 id="default_inputs">
+<code>default_inputs</code>
+</h3>
+<p>Alias for field number 2</p>
+<h3 id="features">
+<code>features</code>
+</h3>
+<p>Alias for field number 0</p>
+<h3 id="labels">
+<code>labels</code>
+</h3>
+<p>Alias for field number 1</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__new__">
+<code><strong>new</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__new__</span>(
+    _cls,
+    features,
+    labels,
+    default_inputs
+)</code></pre></div>
+<p>Create new instance of InputFnOps(features, labels, default_inputs)</p>

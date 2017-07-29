@@ -1,0 +1,32 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.matrix_solve_ls" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.matrix_solve_ls" class="dashAnchor"></a><h1 id="tf.matrix_solve_ls">tf.matrix_solve_ls</h1>
+<h3 id="tf.matrix_solve_ls-1"><code>tf.matrix_solve_ls</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">matrix_solve_ls(
+    matrix,
+    rhs,
+    l2_regularizer<span class="op">=</span><span class="fl">0.0</span>,
+    fast<span class="op">=</span><span class="va">True</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/linalg_ops.py"><code>tensorflow/python/ops/linalg_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/math_ops.md#Matrix_Math_Functions">Math &gt; Matrix Math Functions</a></p>
+<p>Solves one or more linear least-squares problems.</p>
+<p><code>matrix</code> is a tensor of shape <code>[..., M, N]</code> whose inner-most 2 dimensions form <code>M</code>-by-<code>N</code> matrices. Rhs is a tensor of shape <code>[..., M, K]</code> whose inner-most 2 dimensions form <code>M</code>-by-<code>K</code> matrices. The computed output is a <code>Tensor</code> of shape <code>[..., N, K]</code> whose inner-most 2 dimensions form <code>M</code>-by-<code>K</code> matrices that solve the equations <code>matrix[..., :, :] * output[..., :, :] = rhs[..., :, :]</code> in the least squares sense.</p>
+<p>Below we will use the following notation for each pair of matrix and right-hand sides in the batch:</p>
+<p><code>matrix</code>=\(A ^{m n}\), <code>rhs</code>=\(B ^{m k}\), <code>output</code>=\(X ^{n k}\), <code>l2_regularizer</code>=\(\).</p>
+<p>If <code>fast</code> is <code>True</code>, then the solution is computed by solving the normal equations using Cholesky decomposition. Specifically, if \(m n\) then \(X = (A^T A + I)^{-1} A^T B\), which solves the least-squares problem \(X = _{Z ^{n k}} ||A Z - B||_F^2 + ||Z||<em>F^2\). If \(m n\) then <code>output</code> is computed as \(X = A^T (A A^T + I)^{-1} B\), which (for \(= 0\)) is the minimum-norm solution to the under-determined linear system, i.e. \(X = </em>{Z ^{n k}} ||Z||_F^2 \), subject to \(A Z = B\). Notice that the fast path is only numerically stable when \(A\) is numerically full rank and has a condition number \((A) \) or\(\) is sufficiently large.</p>
+<p>If <code>fast</code> is <code>False</code> an algorithm based on the numerically robust complete orthogonal decomposition is used. This computes the minimum-norm least-squares solution, even when \(A\) is rank deficient. This path is typically 6-7 times slower than the fast path. If <code>fast</code> is <code>False</code> then <code>l2_regularizer</code> is ignored.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>matrix</code></b>: <code>Tensor</code> of shape <code>[..., M, N]</code>.</li>
+<li><b><code>rhs</code></b>: <code>Tensor</code> of shape <code>[..., M, K]</code>.</li>
+<li><b><code>l2_regularizer</code></b>: 0-D <code>double</code> <code>Tensor</code>. Ignored if <code>fast=False</code>.</li>
+<li><b><code>fast</code></b>: bool. Defaults to <code>True</code>.</li>
+<li><b><code>name</code></b>: string, optional name of the operation.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<ul>
+<li><b><code>output</code></b>: <code>Tensor</code> of shape <code>[..., N, K]</code> whose inner-most 2 dimensions form <code>M</code>-by-<code>K</code> matrices that solve the equations <code>matrix[..., :, :] * output[..., :, :] = rhs[..., :, :]</code> in the least squares sense.</li>
+</ul>

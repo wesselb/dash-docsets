@@ -1,0 +1,40 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.legacy_seq2seq.one2many_rnn_seq2seq" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.legacy_seq2seq.one2many_rnn_seq2seq" class="dashAnchor"></a><h1 id="tf.contrib.legacy_seq2seq.one2many_rnn_seq2seq">tf.contrib.legacy_seq2seq.one2many_rnn_seq2seq</h1>
+<h3 id="tf.contrib.legacy_seq2seq.one2many_rnn_seq2seq-1"><code>tf.contrib.legacy_seq2seq.one2many_rnn_seq2seq</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">one2many_rnn_seq2seq(
+    encoder_inputs,
+    decoder_inputs_dict,
+    enc_cell,
+    dec_cells_dict,
+    num_encoder_symbols,
+    num_decoder_symbols_dict,
+    embedding_size,
+    feed_previous<span class="op">=</span><span class="va">False</span>,
+    dtype<span class="op">=</span><span class="va">None</span>,
+    scope<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/legacy_seq2seq/python/ops/seq2seq.py"><code>tensorflow/contrib/legacy_seq2seq/python/ops/seq2seq.py</code></a>.</p>
+<p>One-to-many RNN sequence-to-sequence model (multi-task).</p>
+<p>This is a multi-task sequence-to-sequence model with one encoder and multiple decoders. Reference to multi-task sequence-to-sequence learning can be found here: http://arxiv.org/abs/1511.06114</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>encoder_inputs</code></b>: A list of 1D int32 Tensors of shape [batch_size].</li>
+<li><b><code>decoder_inputs_dict</code></b>: A dictionary mapping decoder name (string) to the corresponding decoder_inputs; each decoder_inputs is a list of 1D Tensors of shape [batch_size]; num_decoders is defined as len(decoder_inputs_dict).</li>
+<li><b><code>enc_cell</code></b>: tf.nn.rnn_cell.RNNCell defining the encoder cell function and size.</li>
+<li><b><code>dec_cells_dict</code></b>: A dictionary mapping encoder name (string) to an instance of tf.nn.rnn_cell.RNNCell.</li>
+<li><b><code>num_encoder_symbols</code></b>: Integer; number of symbols on the encoder side.</li>
+<li><b><code>num_decoder_symbols_dict</code></b>: A dictionary mapping decoder name (string) to an integer specifying number of symbols for the corresponding decoder; len(num_decoder_symbols_dict) must be equal to num_decoders.</li>
+<li><b><code>embedding_size</code></b>: Integer, the length of the embedding vector for each symbol.</li>
+<li><b><code>feed_previous</code></b>: Boolean or scalar Boolean Tensor; if True, only the first of decoder_inputs will be used (the &quot;GO&quot; symbol), and all other decoder inputs will be taken from previous outputs (as in embedding_rnn_decoder). If False, decoder_inputs are used as given (the standard decoder case).</li>
+<li><b><code>dtype</code></b>: The dtype of the initial state for both the encoder and encoder rnn cells (default: tf.float32).</li>
+<li><b><code>scope</code></b>: VariableScope for the created subgraph; defaults to &quot;one2many_rnn_seq2seq&quot;</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A tuple of the form (outputs_dict, state_dict), where: outputs_dict: A mapping from decoder name (string) to a list of the same length as decoder_inputs_dict[name]; each element in the list is a 2D Tensors with shape [batch_size x num_decoder_symbol_list[name]] containing the generated outputs. state_dict: A mapping from decoder name (string) to the final state of the corresponding decoder RNN; it is a 2D Tensor of shape [batch_size x cell.state_size].</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: if enc_cell or any of the dec_cells are not instances of RNNCell.</li>
+<li><b><code>ValueError</code></b>: if len(dec_cells) != len(decoder_inputs_dict).</li>
+</ul>

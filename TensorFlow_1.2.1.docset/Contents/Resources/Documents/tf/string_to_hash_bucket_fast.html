@@ -1,0 +1,22 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.string_to_hash_bucket_fast" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.string_to_hash_bucket_fast" class="dashAnchor"></a><h1 id="tf.string_to_hash_bucket_fast">tf.string_to_hash_bucket_fast</h1>
+<h3 id="tf.string_to_hash_bucket_fast-1"><code>tf.string_to_hash_bucket_fast</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">string_to_hash_bucket_fast(
+    <span class="bu">input</span>,
+    num_buckets,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_string_ops.py</code>.</p>
+<p>See the guide: <a href="../../../api_guides/python/string_ops.md#Hashing">Strings &gt; Hashing</a></p>
+<p>Converts each string in the input Tensor to its hash mod by a number of buckets.</p>
+<p>The hash function is deterministic on the content of the string within the process and will never change. However, it is not suitable for cryptography. This function may be used when CPU time is scarce and inputs are trusted or unimportant. There is a risk of adversaries constructing inputs that all hash to the same bucket. To prevent this problem, use a strong hash function with <code>tf.string_to_hash_bucket_strong</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code> of type <code>string</code>. The strings to assign a hash bucket.</li>
+<li><b><code>num_buckets</code></b>: An <code>int</code> that is <code>&gt;= 1</code>. The number of buckets.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>int64</code>. A Tensor of the same shape as the input <code>string_tensor</code>.</p>

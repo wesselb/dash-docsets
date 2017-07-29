@@ -1,0 +1,44 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.train.maybe_shuffle_batch" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.train.maybe_shuffle_batch" class="dashAnchor"></a><h1 id="tf.train.maybe_shuffle_batch">tf.train.maybe_shuffle_batch</h1>
+<h3 id="tf.train.maybe_shuffle_batch-1"><code>tf.train.maybe_shuffle_batch</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">maybe_shuffle_batch(
+    tensors,
+    batch_size,
+    capacity,
+    min_after_dequeue,
+    keep_input,
+    num_threads<span class="op">=</span><span class="dv">1</span>,
+    seed<span class="op">=</span><span class="va">None</span>,
+    enqueue_many<span class="op">=</span><span class="va">False</span>,
+    shapes<span class="op">=</span><span class="va">None</span>,
+    allow_smaller_final_batch<span class="op">=</span><span class="va">False</span>,
+    shared_name<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/training/input.py"><code>tensorflow/python/training/input.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/io_ops.md#Input_pipeline">Inputs and Readers &gt; Input pipeline</a></p>
+<p>Creates batches by randomly shuffling conditionally-enqueued tensors.</p>
+<p>See docstring in <code>shuffle_batch</code> for more details.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>tensors</code></b>: The list or dictionary of tensors to enqueue.</li>
+<li><b><code>batch_size</code></b>: The new batch size pulled from the queue.</li>
+<li><b><code>capacity</code></b>: An integer. The maximum number of elements in the queue.</li>
+<li><b><code>min_after_dequeue</code></b>: Minimum number elements in the queue after a dequeue, used to ensure a level of mixing of elements.</li>
+<li><b><code>keep_input</code></b>: A <code>bool</code> Tensor. This tensor controls whether the input is added to the queue or not. If it is a scalar and evaluates <code>True</code>, then <code>tensors</code> are all added to the queue. If it is a vector and <code>enqueue_many</code> is <code>True</code>, then each example is added to the queue only if the corresonding value in <code>keep_input</code> is <code>True</code>. This tensor essentially acts as a filtering mechanism.</li>
+<li><b><code>num_threads</code></b>: The number of threads enqueuing <code>tensor_list</code>.</li>
+<li><b><code>seed</code></b>: Seed for the random shuffling within the queue.</li>
+<li><b><code>enqueue_many</code></b>: Whether each tensor in <code>tensor_list</code> is a single example.</li>
+<li><b><code>shapes</code></b>: (Optional) The shapes for each example. Defaults to the inferred shapes for <code>tensor_list</code>.</li>
+<li><b><code>allow_smaller_final_batch</code></b>: (Optional) Boolean. If <code>True</code>, allow the final batch to be smaller if there are insufficient items left in the queue.</li>
+<li><b><code>shared_name</code></b>: (Optional) If set, this queue will be shared under the given name across multiple sessions.</li>
+<li><b><code>name</code></b>: (Optional) A name for the operations.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A list or dictionary of tensors with the types as <code>tensors</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If the <code>shapes</code> are not specified, and cannot be inferred from the elements of <code>tensors</code>.</li>
+</ul>

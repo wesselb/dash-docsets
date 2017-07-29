@@ -1,0 +1,902 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.models.Sequential" /> <meta itemprop="property" content="constraints"/> <meta itemprop="property" content="graph"/> <meta itemprop="property" content="input"/> <meta itemprop="property" content="input_mask"/> <meta itemprop="property" content="input_shape"/> <meta itemprop="property" content="input_spec"/> <meta itemprop="property" content="losses"/> <meta itemprop="property" content="non_trainable_variables"/> <meta itemprop="property" content="non_trainable_weights"/> <meta itemprop="property" content="output"/> <meta itemprop="property" content="output_mask"/> <meta itemprop="property" content="output_shape"/> <meta itemprop="property" content="regularizers"/> <meta itemprop="property" content="scope_name"/> <meta itemprop="property" content="state_updates"/> <meta itemprop="property" content="stateful"/> <meta itemprop="property" content="trainable"/> <meta itemprop="property" content="trainable_variables"/> <meta itemprop="property" content="trainable_weights"/> <meta itemprop="property" content="updates"/> <meta itemprop="property" content="uses_learning_phase"/> <meta itemprop="property" content="variables"/> <meta itemprop="property" content="weights"/> <meta itemprop="property" content="__call__"/> <meta itemprop="property" content="__deepcopy__"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="add"/> <meta itemprop="property" content="add_loss"/> <meta itemprop="property" content="add_update"/> <meta itemprop="property" content="add_variable"/> <meta itemprop="property" content="add_weight"/> <meta itemprop="property" content="apply"/> <meta itemprop="property" content="build"/> <meta itemprop="property" content="call"/> <meta itemprop="property" content="compile"/> <meta itemprop="property" content="compute_mask"/> <meta itemprop="property" content="count_params"/> <meta itemprop="property" content="evaluate"/> <meta itemprop="property" content="evaluate_generator"/> <meta itemprop="property" content="fit"/> <meta itemprop="property" content="fit_generator"/> <meta itemprop="property" content="from_config"/> <meta itemprop="property" content="get_config"/> <meta itemprop="property" content="get_input_at"/> <meta itemprop="property" content="get_input_mask_at"/> <meta itemprop="property" content="get_input_shape_at"/> <meta itemprop="property" content="get_layer"/> <meta itemprop="property" content="get_losses_for"/> <meta itemprop="property" content="get_output_at"/> <meta itemprop="property" content="get_output_mask_at"/> <meta itemprop="property" content="get_output_shape_at"/> <meta itemprop="property" content="get_updates_for"/> <meta itemprop="property" content="get_weights"/> <meta itemprop="property" content="load_weights"/> <meta itemprop="property" content="pop"/> <meta itemprop="property" content="predict"/> <meta itemprop="property" content="predict_classes"/> <meta itemprop="property" content="predict_generator"/> <meta itemprop="property" content="predict_on_batch"/> <meta itemprop="property" content="predict_proba"/> <meta itemprop="property" content="reset_states"/> <meta itemprop="property" content="run_internal_graph"/> <meta itemprop="property" content="save"/> <meta itemprop="property" content="save_weights"/> <meta itemprop="property" content="set_weights"/> <meta itemprop="property" content="summary"/> <meta itemprop="property" content="test_on_batch"/> <meta itemprop="property" content="to_json"/> <meta itemprop="property" content="to_yaml"/> <meta itemprop="property" content="train_on_batch"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.keras.models.Sequential" class="dashAnchor"></a><h1 id="tf.contrib.keras.models.sequential">tf.contrib.keras.models.Sequential</h1>
+<h3 id="class-tf.contrib.keras.models.sequential"><code>class tf.contrib.keras.models.Sequential</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/models.py"><code>tensorflow/contrib/keras/python/keras/models.py</code></a>.</p>
+<p>Linear stack of layers.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>layers: list of layers to add to the model.</code></pre>
+<h1 id="note">Note</h1>
+<pre><code>The first layer passed to a Sequential model
+should have a defined input shape. What that
+means is that it should have received an `input_shape`
+or `batch_input_shape` argument,
+or for some type of layers (recurrent, Dense...)
+an `input_dim` argument.</code></pre>
+<p>Example:</p>
+<pre><code>```python
+    model = Sequential()
+    # first layer must have a defined input shape
+    model.add(Dense(32, input_dim=500))
+    # afterwards, Keras does automatic shape inference
+    model.add(Dense(32))
+
+    # also possible (equivalent to the above):
+    model = Sequential()
+    model.add(Dense(32, input_shape=(500,)))
+    model.add(Dense(32))
+
+    # also possible (equivalent to the above):
+    model = Sequential()
+    # here the batch dimension is None,
+    # which means any batch size will be accepted by the model.
+    model.add(Dense(32, batch_input_shape=(None, 500)))
+    model.add(Dense(32))
+```</code></pre>
+<h2 id="properties">Properties</h2>
+<h3 id="constraints">
+<code>constraints</code>
+</h3>
+<h3 id="graph">
+<code>graph</code>
+</h3>
+<h3 id="input">
+<code>input</code>
+</h3>
+<p>Retrieves the input tensor(s) of a layer.</p>
+<p>Only applicable if the layer has exactly one inbound node, i.e. if it is connected to one incoming layer.</p>
+<h4 id="returns">Returns:</h4>
+<pre><code>Input tensor or list of input tensors.</code></pre>
+<h4 id="raises">Raises:</h4>
+<pre><code>AttributeError: if the layer is connected to
+more than one incoming layers.</code></pre>
+<h3 id="input_mask">
+<code>input_mask</code>
+</h3>
+<p>Retrieves the input mask tensor(s) of a layer.</p>
+<p>Only applicable if the layer has exactly one inbound node, i.e. if it is connected to one incoming layer.</p>
+<h4 id="returns-1">Returns:</h4>
+<pre><code>Input mask tensor (potentially None) or list of input
+mask tensors.</code></pre>
+<h4 id="raises-1">Raises:</h4>
+<pre><code>AttributeError: if the layer is connected to
+more than one incoming layers.</code></pre>
+<h3 id="input_shape">
+<code>input_shape</code>
+</h3>
+<p>Retrieves the input shape(s) of a layer.</p>
+<p>Only applicable if the layer has exactly one inbound node, i.e. if it is connected to one incoming layer.</p>
+<h4 id="returns-2">Returns:</h4>
+<pre><code>Input shape, as `TensorShape`
+(or list of `TensorShape`, one tuple per input tensor).</code></pre>
+<h4 id="raises-2">Raises:</h4>
+<pre><code>AttributeError: if the layer is connected to
+more than one incoming layers.</code></pre>
+<h3 id="input_spec">
+<code>input_spec</code>
+</h3>
+<p>Gets the model's input specs.</p>
+<h4 id="returns-3">Returns:</h4>
+<pre><code>A list of `InputSpec` instances (one per input to the model)
+    or a single instance if the model has only one input.</code></pre>
+<h3 id="losses">
+<code>losses</code>
+</h3>
+<h3 id="non_trainable_variables">
+<code>non_trainable_variables</code>
+</h3>
+<h3 id="non_trainable_weights">
+<code>non_trainable_weights</code>
+</h3>
+<h3 id="output">
+<code>output</code>
+</h3>
+<p>Retrieves the output tensor(s) of a layer.</p>
+<p>Only applicable if the layer has exactly one inbound node, i.e. if it is connected to one incoming layer.</p>
+<h4 id="returns-4">Returns:</h4>
+<pre><code>Output tensor or list of output tensors.</code></pre>
+<h4 id="raises-3">Raises:</h4>
+<pre><code>AttributeError: if the layer is connected to
+more than one incoming layers.</code></pre>
+<h3 id="output_mask">
+<code>output_mask</code>
+</h3>
+<p>Retrieves the output mask tensor(s) of a layer.</p>
+<p>Only applicable if the layer has exactly one inbound node, i.e. if it is connected to one incoming layer.</p>
+<h4 id="returns-5">Returns:</h4>
+<pre><code>Output mask tensor (potentially None) or list of output
+mask tensors.</code></pre>
+<h4 id="raises-4">Raises:</h4>
+<pre><code>AttributeError: if the layer is connected to
+more than one incoming layers.</code></pre>
+<h3 id="output_shape">
+<code>output_shape</code>
+</h3>
+<p>Retrieves the output shape(s) of a layer.</p>
+<p>Only applicable if the layer has one inbound node, or if all inbound nodes have the same output shape.</p>
+<h4 id="returns-6">Returns:</h4>
+<pre><code>Output shape, as `TensorShape`
+(or list of `TensorShape`, one tuple per output tensor).</code></pre>
+<h4 id="raises-5">Raises:</h4>
+<pre><code>AttributeError: if the layer is connected to
+more than one incoming layers.</code></pre>
+<h3 id="regularizers">
+<code>regularizers</code>
+</h3>
+<h3 id="scope_name">
+<code>scope_name</code>
+</h3>
+<h3 id="state_updates">
+<code>state_updates</code>
+</h3>
+<h3 id="stateful">
+<code>stateful</code>
+</h3>
+<h3 id="trainable">
+<code>trainable</code>
+</h3>
+<h3 id="trainable_variables">
+<code>trainable_variables</code>
+</h3>
+<h3 id="trainable_weights">
+<code>trainable_weights</code>
+</h3>
+<h3 id="updates">
+<code>updates</code>
+</h3>
+<h3 id="uses_learning_phase">
+<code>uses_learning_phase</code>
+</h3>
+<h3 id="variables">
+<code>variables</code>
+</h3>
+<p>Returns the list of all layer variables/weights.</p>
+<h4 id="returns-7">Returns:</h4>
+<p>A list of variables.</p>
+<h3 id="weights">
+<code>weights</code>
+</h3>
+<p>Returns the list of all layer variables/weights.</p>
+<h4 id="returns-8">Returns:</h4>
+<p>A list of variables.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    layers<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<h3 id="__call__">
+<code><strong>call</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__call__</span>(
+    inputs,
+    <span class="op">**</span>kwargs
+)</code></pre></div>
+<p>Wrapper around self.call(), for handling internal references.</p>
+<p>If a Keras tensor is passed: - We call self._add_inbound_node(). - If necessary, we <code>build</code> the layer to match the shape of the input(s). - We update the _keras_history of the output tensor(s) with the current layer. This is done as part of _add_inbound_node().</p>
+<h4 id="arguments-1">Arguments:</h4>
+<pre><code>inputs: Can be a tensor or list/tuple of tensors.
+**kwargs: Additional keyword arguments to be passed to `call()`.</code></pre>
+<h4 id="returns-9">Returns:</h4>
+<pre><code>Output of the layer&#39;s `call` method.</code></pre>
+<h4 id="raises-6">Raises:</h4>
+<pre><code>ValueError: in case the layer is missing shape information
+    for its `build` call.</code></pre>
+<h3 id="__deepcopy__">
+<code><strong>deepcopy</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">__deepcopy__(memo)</code></pre></div>
+<h3 id="add">
+<code>add</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">add(layer)</code></pre></div>
+<p>Adds a layer instance on top of the layer stack.</p>
+<h4 id="arguments-2">Arguments:</h4>
+<pre><code>layer: layer instance.</code></pre>
+<h4 id="raises-7">Raises:</h4>
+<pre><code>TypeError: If `layer` is not a layer instance.
+ValueError: In case the `layer` argument does not
+    know its input shape.
+ValueError: In case the `layer` argument has
+    multiple output tensors, or is already connected
+    somewhere else (forbidden in `Sequential` models).</code></pre>
+<h3 id="add_loss">
+<code>add_loss</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">add_loss(
+    losses,
+    inputs<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Add loss tensor(s), potentially dependent on layer inputs.</p>
+<p>Some losses (for instance, activity regularization losses) may be dependent on the inputs passed when calling a layer. Hence, when reusing a same layer on different inputs <code>a</code> and <code>b</code>, some entries in <code>layer.losses</code> may be dependent on <code>a</code> and some on <code>b</code>. This method automatically keeps track of dependencies.</p>
+<p>The <code>get_losses_for</code> method allows to retrieve the losses relevant to a specific set of inputs.</p>
+<h4 id="arguments-3">Arguments:</h4>
+<ul>
+<li><b><code>losses</code></b>: Loss tensor, or list/tuple of tensors.</li>
+<li><b><code>inputs</code></b>: Optional input tensor(s) that the loss(es) depend on. Must match the <code>inputs</code> argument passed to the <code>__call__</code> method at the time the losses are created. If <code>None</code> is passed, the losses are assumed to be unconditional, and will apply across all dataflows of the layer (e.g. weight regularization losses).</li>
+</ul>
+<h3 id="add_update">
+<code>add_update</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">add_update(
+    updates,
+    inputs<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Add update op(s), potentially dependent on layer inputs.</p>
+<p>Weight updates (for instance, the updates of the moving mean and variance in a BatchNormalization layer) may be dependent on the inputs passed when calling a layer. Hence, when reusing a same layer on different inputs <code>a</code> and <code>b</code>, some entries in <code>layer.updates</code> may be dependent on <code>a</code> and some on <code>b</code>. This method automatically keeps track of dependencies.</p>
+<p>The <code>get_updates_for</code> method allows to retrieve the updates relevant to a specific set of inputs.</p>
+<h4 id="arguments-4">Arguments:</h4>
+<ul>
+<li><b><code>updates</code></b>: Update op, or list/tuple of update ops.</li>
+<li><b><code>inputs</code></b>: Optional input tensor(s) that the update(s) depend on. Must match the <code>inputs</code> argument passed to the <code>__call__</code> method at the time the updates are created. If <code>None</code> is passed, the updates are assumed to be unconditional, and will apply across all dataflows of the layer.</li>
+</ul>
+<h3 id="add_variable">
+<code>add_variable</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">add_variable(
+    name,
+    shape,
+    dtype<span class="op">=</span><span class="va">None</span>,
+    initializer<span class="op">=</span><span class="va">None</span>,
+    regularizer<span class="op">=</span><span class="va">None</span>,
+    trainable<span class="op">=</span><span class="va">True</span>
+)</code></pre></div>
+<p>Adds a new variable to the layer, or gets an existing one; returns it.</p>
+<h4 id="arguments-5">Arguments:</h4>
+<ul>
+<li><b><code>name</code></b>: variable name.</li>
+<li><b><code>shape</code></b>: variable shape.</li>
+<li><b><code>dtype</code></b>: The type of the variable. Defaults to <code>self.dtype</code>.</li>
+<li><b><code>initializer</code></b>: initializer instance (callable).</li>
+<li><b><code>regularizer</code></b>: regularizer instance (callable).</li>
+<li><b><code>trainable</code></b>: whether the variable should be part of the layer's &quot;trainable_variables&quot; (e.g. variables, biases) or &quot;non_trainable_variables&quot; (e.g. BatchNorm mean, stddev).</li>
+</ul>
+<h4 id="returns-10">Returns:</h4>
+<p>The created variable.</p>
+<h3 id="add_weight">
+<code>add_weight</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">add_weight(
+    name,
+    shape,
+    dtype<span class="op">=</span><span class="va">None</span>,
+    initializer<span class="op">=</span><span class="va">None</span>,
+    regularizer<span class="op">=</span><span class="va">None</span>,
+    trainable<span class="op">=</span><span class="va">True</span>,
+    constraint<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Adds a weight variable to the layer.</p>
+<h4 id="arguments-6">Arguments:</h4>
+<pre><code>name: String, the name for the weight variable.
+shape: The shape tuple of the weight.
+dtype: The dtype of the weight.
+initializer: An Initializer instance (callable).
+regularizer: An optional Regularizer instance.
+trainable: A boolean, whether the weight should
+    be trained via backprop or not (assuming
+    that the layer itself is also trainable).
+constraint: An optional Constraint instance.</code></pre>
+<h4 id="returns-11">Returns:</h4>
+<pre><code>The created weight variable.</code></pre>
+<h3 id="apply">
+<code>apply</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="bu">apply</span>(
+    inputs,
+    <span class="op">*</span>args,
+    <span class="op">**</span>kwargs
+)</code></pre></div>
+<p>Apply the layer on a input.</p>
+<p>This simply wraps <code>self.__call__</code>.</p>
+<h4 id="arguments-7">Arguments:</h4>
+<ul>
+<li><b><code>inputs</code></b>: Input tensor(s). *args: additional positional arguments to be passed to <code>self.call</code>. **kwargs: additional keyword arguments to be passed to <code>self.call</code>.</li>
+</ul>
+<h4 id="returns-12">Returns:</h4>
+<p>Output tensor(s).</p>
+<h3 id="build">
+<code>build</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">build(input_shape<span class="op">=</span><span class="va">None</span>)</code></pre></div>
+<h3 id="call">
+<code>call</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">call(
+    inputs,
+    mask<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<h3 id="compile">
+<code>compile</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="bu">compile</span>(
+    optimizer,
+    loss,
+    metrics<span class="op">=</span><span class="va">None</span>,
+    sample_weight_mode<span class="op">=</span><span class="va">None</span>,
+    <span class="op">**</span>kwargs
+)</code></pre></div>
+<p>Configures the learning process.</p>
+<h4 id="arguments-8">Arguments:</h4>
+<pre><code>optimizer: str (name of optimizer) or optimizer object.
+    See [optimizers](/optimizers).
+loss: str (name of objective function) or objective function.
+    See [objectives](/objectives).
+metrics: list of metrics to be evaluated by the model
+    during training and testing.
+    Typically you will use `metrics=[&#39;accuracy&#39;]`.
+    See [metrics](/metrics).
+sample_weight_mode: if you need to do timestep-wise
+    sample weighting (2D weights), set this to &quot;temporal&quot;.
+    &quot;None&quot; defaults to sample-wise weights (1D).
+**kwargs: for Theano backend, these are passed into K.function.
+    Ignored for Tensorflow backend.</code></pre>
+<p>Example: <code>python         model = Sequential()         model.add(Dense(32, input_shape=(500,)))         model.add(Dense(10, activation='softmax'))         model.compile(optimizer='rmsprop',                       loss='categorical_crossentropy',                       metrics=['accuracy'])</code></p>
+<h3 id="compute_mask">
+<code>compute_mask</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">compute_mask(
+    inputs,
+    mask
+)</code></pre></div>
+<h3 id="count_params">
+<code>count_params</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">count_params()</code></pre></div>
+<p>Count the total number of scalars composing the weights.</p>
+<h4 id="returns-13">Returns:</h4>
+<pre><code>An integer count.</code></pre>
+<h4 id="raises-8">Raises:</h4>
+<pre><code>RuntimeError: if the layer isn&#39;t yet built
+    (in which case its weights aren&#39;t yet defined).</code></pre>
+<h3 id="evaluate">
+<code>evaluate</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">evaluate(
+    x,
+    y,
+    batch_size<span class="op">=</span><span class="dv">32</span>,
+    verbose<span class="op">=</span><span class="dv">1</span>,
+    sample_weight<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Computes the loss on some input data, batch by batch.</p>
+<h4 id="arguments-9">Arguments:</h4>
+<pre><code>x: input data, as a Numpy array or list of Numpy arrays
+    (if the model has multiple inputs).
+y: labels, as a Numpy array.
+batch_size: integer. Number of samples per gradient update.
+verbose: verbosity mode, 0 or 1.
+sample_weight: sample weights, as a Numpy array.</code></pre>
+<h4 id="returns-14">Returns:</h4>
+<pre><code>Scalar test loss (if the model has no metrics)
+or list of scalars (if the model computes other metrics).
+The attribute `model.metrics_names` will give you
+the display labels for the scalar outputs.</code></pre>
+<h4 id="raises-9">Raises:</h4>
+<pre><code>RuntimeError: if the model was never compiled.</code></pre>
+<h3 id="evaluate_generator">
+<code>evaluate_generator</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">evaluate_generator(
+    generator,
+    steps,
+    max_q_size<span class="op">=</span><span class="dv">10</span>,
+    workers<span class="op">=</span><span class="dv">1</span>,
+    pickle_safe<span class="op">=</span><span class="va">False</span>
+)</code></pre></div>
+<p>Evaluates the model on a data generator.</p>
+<p>The generator should return the same kind of data as accepted by <code>test_on_batch</code>.</p>
+<h4 id="arguments-10">Arguments:</h4>
+<pre><code>generator: Generator yielding tuples (inputs, targets)
+    or (inputs, targets, sample_weights)
+steps: Total number of steps (batches of samples)
+    to yield from `generator` before stopping.
+max_q_size: maximum size for the generator queue
+workers: maximum number of processes to spin up
+pickle_safe: if True, use process based threading.
+    Note that because this implementation
+    relies on multiprocessing, you should not pass
+    non picklable arguments to the generator
+    as they can&#39;t be passed easily to children processes.</code></pre>
+<h4 id="returns-15">Returns:</h4>
+<pre><code>Scalar test loss (if the model has no metrics)
+or list of scalars (if the model computes other metrics).
+The attribute `model.metrics_names` will give you
+the display labels for the scalar outputs.</code></pre>
+<h4 id="raises-10">Raises:</h4>
+<pre><code>RuntimeError: if the model was never compiled.</code></pre>
+<h3 id="fit">
+<code>fit</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">fit(
+    x,
+    y,
+    batch_size<span class="op">=</span><span class="dv">32</span>,
+    epochs<span class="op">=</span><span class="dv">10</span>,
+    verbose<span class="op">=</span><span class="dv">1</span>,
+    callbacks<span class="op">=</span><span class="va">None</span>,
+    validation_split<span class="op">=</span><span class="fl">0.0</span>,
+    validation_data<span class="op">=</span><span class="va">None</span>,
+    shuffle<span class="op">=</span><span class="va">True</span>,
+    class_weight<span class="op">=</span><span class="va">None</span>,
+    sample_weight<span class="op">=</span><span class="va">None</span>,
+    initial_epoch<span class="op">=</span><span class="dv">0</span>
+)</code></pre></div>
+<p>Trains the model for a fixed number of epochs.</p>
+<h4 id="arguments-11">Arguments:</h4>
+<pre><code>x: input data, as a Numpy array or list of Numpy arrays
+    (if the model has multiple inputs).
+y: labels, as a Numpy array.
+batch_size: integer. Number of samples per gradient update.
+epochs: integer, the number of epochs to train the model.
+verbose: 0 for no logging to stdout,
+    1 for progress bar logging, 2 for one log line per epoch.
+callbacks: list of `keras.callbacks.Callback` instances.
+    List of callbacks to apply during training.
+    See [callbacks](/callbacks).
+validation_split: float (0. &lt; x &lt; 1).
+    Fraction of the data to use as held-out validation data.
+validation_data: tuple (x_val, y_val) or tuple
+    (x_val, y_val, val_sample_weights) to be used as held-out
+    validation data. Will override validation_split.
+shuffle: boolean or str (for &#39;batch&#39;).
+    Whether to shuffle the samples at each epoch.
+    &#39;batch&#39; is a special option for dealing with the
+    limitations of HDF5 data; it shuffles in batch-sized chunks.
+class_weight: dictionary mapping classes to a weight value,
+    used for scaling the loss function (during training only).
+sample_weight: Numpy array of weights for
+    the training samples, used for scaling the loss function
+    (during training only). You can either pass a flat (1D)
+    Numpy array with the same length as the input samples
+    (1:1 mapping between weights and samples),
+    or in the case of temporal data,
+    you can pass a 2D array with shape (samples, sequence_length),
+    to apply a different weight to every timestep of every sample.
+    In this case you should make sure to specify
+    sample_weight_mode=&quot;temporal&quot; in compile().
+initial_epoch: epoch at which to start training
+    (useful for resuming a previous training run)</code></pre>
+<h4 id="returns-16">Returns:</h4>
+<pre><code>A `History` object. Its `History.history` attribute is
+a record of training loss values and metrics values
+at successive epochs, as well as validation loss values
+and validation metrics values (if applicable).</code></pre>
+<h4 id="raises-11">Raises:</h4>
+<pre><code>RuntimeError: if the model was never compiled.</code></pre>
+<h3 id="fit_generator">
+<code>fit_generator</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">fit_generator(
+    generator,
+    steps_per_epoch,
+    epochs<span class="op">=</span><span class="dv">1</span>,
+    verbose<span class="op">=</span><span class="dv">1</span>,
+    callbacks<span class="op">=</span><span class="va">None</span>,
+    validation_data<span class="op">=</span><span class="va">None</span>,
+    validation_steps<span class="op">=</span><span class="va">None</span>,
+    class_weight<span class="op">=</span><span class="va">None</span>,
+    max_q_size<span class="op">=</span><span class="dv">10</span>,
+    workers<span class="op">=</span><span class="dv">1</span>,
+    pickle_safe<span class="op">=</span><span class="va">False</span>,
+    initial_epoch<span class="op">=</span><span class="dv">0</span>
+)</code></pre></div>
+<p>Fits the model on data generated batch-by-batch by a Python generator.</p>
+<p>The generator is run in parallel to the model, for efficiency. For instance, this allows you to do real-time data augmentation on images on CPU in parallel to training your model on GPU.</p>
+<h4 id="arguments-12">Arguments:</h4>
+<pre><code>generator: A generator.
+    The output of the generator must be either
+    - a tuple (inputs, targets)
+    - a tuple (inputs, targets, sample_weights).
+    All arrays should contain the same number of samples.
+    The generator is expected to loop over its data
+    indefinitely. An epoch finishes when `samples_per_epoch`
+    samples have been seen by the model.
+steps_per_epoch: Total number of steps (batches of samples)
+    to yield from `generator` before declaring one epoch
+    finished and starting the next epoch. It should typically
+    be equal to the number of unique samples of your dataset
+    divided by the batch size.
+epochs: Integer, total number of iterations on the data.
+verbose: Verbosity mode, 0, 1, or 2.
+callbacks: List of callbacks to be called during training.
+validation_data: This can be either
+    - A generator for the validation data
+    - A tuple (inputs, targets)
+    - A tuple (inputs, targets, sample_weights).
+validation_steps: Only relevant if `validation_data`
+    is a generator.
+    Number of steps to yield from validation generator
+    at the end of every epoch. It should typically
+    be equal to the number of unique samples of your
+    validation dataset divided by the batch size.
+class_weight: Dictionary mapping class indices to a weight
+    for the class.
+max_q_size: Maximum size for the generator queue
+workers: Maximum number of processes to spin up
+pickle_safe: Ff True, use process based threading.
+    Note that because
+    this implementation relies on multiprocessing,
+    you should not pass
+    non picklable arguments to the generator
+    as they can&#39;t be passed
+    easily to children processes.
+initial_epoch: Epoch at which to start training
+    (useful for resuming a previous training run)</code></pre>
+<h4 id="returns-17">Returns:</h4>
+<pre><code>A `History` object.</code></pre>
+<h4 id="raises-12">Raises:</h4>
+<pre><code>RuntimeError: if the model was never compiled.</code></pre>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    <span class="kw">def</span> generate_arrays_from_file(path):
+        <span class="cf">while</span> <span class="dv">1</span>:
+            f <span class="op">=</span> <span class="bu">open</span>(path)
+            <span class="cf">for</span> line <span class="kw">in</span> f:
+                <span class="co"># create Numpy arrays of input data</span>
+                <span class="co"># and labels, from each line in the file</span>
+                x, y <span class="op">=</span> process_line(line)
+                <span class="cf">yield</span> (x, y)
+                f.close()
+
+    model.fit_generator(generate_arrays_from_file(<span class="st">&#39;/my_file.txt&#39;</span>),
+                        samples_per_epoch<span class="op">=</span><span class="dv">10000</span>, epochs<span class="op">=</span><span class="dv">10</span>)</code></pre></div>
+<h3 id="from_config">
+<code>from_config</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">from_config(
+    cls,
+    config,
+    custom_objects<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<h3 id="get_config">
+<code>get_config</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_config()</code></pre></div>
+<h3 id="get_input_at">
+<code>get_input_at</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_input_at(node_index)</code></pre></div>
+<p>Retrieves the input tensor(s) of a layer at a given node.</p>
+<h4 id="arguments-13">Arguments:</h4>
+<pre><code>node_index: Integer, index of the node
+    from which to retrieve the attribute.
+    E.g. `node_index=0` will correspond to the
+    first time the layer was called.</code></pre>
+<h4 id="returns-18">Returns:</h4>
+<pre><code>A tensor (or list of tensors if the layer has multiple inputs).</code></pre>
+<h3 id="get_input_mask_at">
+<code>get_input_mask_at</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_input_mask_at(node_index)</code></pre></div>
+<p>Retrieves the input mask tensor(s) of a layer at a given node.</p>
+<h4 id="arguments-14">Arguments:</h4>
+<pre><code>node_index: Integer, index of the node
+    from which to retrieve the attribute.
+    E.g. `node_index=0` will correspond to the
+    first time the layer was called.</code></pre>
+<h4 id="returns-19">Returns:</h4>
+<pre><code>A mask tensor
+(or list of tensors if the layer has multiple inputs).</code></pre>
+<h3 id="get_input_shape_at">
+<code>get_input_shape_at</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_input_shape_at(node_index)</code></pre></div>
+<p>Retrieves the input shape(s) of a layer at a given node.</p>
+<h4 id="arguments-15">Arguments:</h4>
+<pre><code>node_index: Integer, index of the node
+    from which to retrieve the attribute.
+    E.g. `node_index=0` will correspond to the
+    first time the layer was called.</code></pre>
+<h4 id="returns-20">Returns:</h4>
+<pre><code>A shape tuple
+(or list of shape tuples if the layer has multiple inputs).</code></pre>
+<h3 id="get_layer">
+<code>get_layer</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_layer(
+    name<span class="op">=</span><span class="va">None</span>,
+    index<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Retrieve a layer that is part of the model.</p>
+<p>Returns a layer based on either its name (unique) or its index in the graph. Indices are based on order of horizontal graph traversal (bottom-up).</p>
+<h4 id="arguments-16">Arguments:</h4>
+<pre><code>name: string, name of layer.
+index: integer, index of layer.</code></pre>
+<h4 id="returns-21">Returns:</h4>
+<pre><code>A layer instance.</code></pre>
+<h3 id="get_losses_for">
+<code>get_losses_for</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_losses_for(inputs)</code></pre></div>
+<h3 id="get_output_at">
+<code>get_output_at</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_output_at(node_index)</code></pre></div>
+<p>Retrieves the output tensor(s) of a layer at a given node.</p>
+<h4 id="arguments-17">Arguments:</h4>
+<pre><code>node_index: Integer, index of the node
+    from which to retrieve the attribute.
+    E.g. `node_index=0` will correspond to the
+    first time the layer was called.</code></pre>
+<h4 id="returns-22">Returns:</h4>
+<pre><code>A tensor (or list of tensors if the layer has multiple outputs).</code></pre>
+<h3 id="get_output_mask_at">
+<code>get_output_mask_at</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_output_mask_at(node_index)</code></pre></div>
+<p>Retrieves the output mask tensor(s) of a layer at a given node.</p>
+<h4 id="arguments-18">Arguments:</h4>
+<pre><code>node_index: Integer, index of the node
+    from which to retrieve the attribute.
+    E.g. `node_index=0` will correspond to the
+    first time the layer was called.</code></pre>
+<h4 id="returns-23">Returns:</h4>
+<pre><code>A mask tensor
+(or list of tensors if the layer has multiple outputs).</code></pre>
+<h3 id="get_output_shape_at">
+<code>get_output_shape_at</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_output_shape_at(node_index)</code></pre></div>
+<p>Retrieves the output shape(s) of a layer at a given node.</p>
+<h4 id="arguments-19">Arguments:</h4>
+<pre><code>node_index: Integer, index of the node
+    from which to retrieve the attribute.
+    E.g. `node_index=0` will correspond to the
+    first time the layer was called.</code></pre>
+<h4 id="returns-24">Returns:</h4>
+<pre><code>A shape tuple
+(or list of shape tuples if the layer has multiple outputs).</code></pre>
+<h3 id="get_updates_for">
+<code>get_updates_for</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_updates_for(inputs)</code></pre></div>
+<h3 id="get_weights">
+<code>get_weights</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_weights()</code></pre></div>
+<p>Retrieves the weights of the model.</p>
+<h4 id="returns-25">Returns:</h4>
+<pre><code>A flat list of Numpy arrays
+(one array per model weight).</code></pre>
+<h3 id="load_weights">
+<code>load_weights</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">load_weights(
+    filepath,
+    by_name<span class="op">=</span><span class="va">False</span>
+)</code></pre></div>
+<h3 id="pop">
+<code>pop</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">pop()</code></pre></div>
+<p>Removes the last layer in the model.</p>
+<h4 id="raises-13">Raises:</h4>
+<pre><code>TypeError: if there are no layers in the model.</code></pre>
+<h3 id="predict">
+<code>predict</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">predict(
+    x,
+    batch_size<span class="op">=</span><span class="dv">32</span>,
+    verbose<span class="op">=</span><span class="dv">0</span>
+)</code></pre></div>
+<p>Generates output predictions for the input samples.</p>
+<p>The input samples are processed batch by batch.</p>
+<h4 id="arguments-20">Arguments:</h4>
+<pre><code>x: the input data, as a Numpy array.
+batch_size: integer.
+verbose: verbosity mode, 0 or 1.</code></pre>
+<h4 id="returns-26">Returns:</h4>
+<pre><code>A Numpy array of predictions.</code></pre>
+<h3 id="predict_classes">
+<code>predict_classes</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">predict_classes(
+    x,
+    batch_size<span class="op">=</span><span class="dv">32</span>,
+    verbose<span class="op">=</span><span class="dv">1</span>
+)</code></pre></div>
+<p>Generate class predictions for the input samples.</p>
+<p>The input samples are processed batch by batch.</p>
+<h4 id="arguments-21">Arguments:</h4>
+<pre><code>x: input data, as a Numpy array or list of Numpy arrays
+    (if the model has multiple inputs).
+batch_size: integer.
+verbose: verbosity mode, 0 or 1.</code></pre>
+<h4 id="returns-27">Returns:</h4>
+<pre><code>A numpy array of class predictions.</code></pre>
+<h3 id="predict_generator">
+<code>predict_generator</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">predict_generator(
+    generator,
+    steps,
+    max_q_size<span class="op">=</span><span class="dv">10</span>,
+    workers<span class="op">=</span><span class="dv">1</span>,
+    pickle_safe<span class="op">=</span><span class="va">False</span>,
+    verbose<span class="op">=</span><span class="dv">0</span>
+)</code></pre></div>
+<p>Generates predictions for the input samples from a data generator.</p>
+<p>The generator should return the same kind of data as accepted by <code>predict_on_batch</code>.</p>
+<h4 id="arguments-22">Arguments:</h4>
+<pre><code>generator: generator yielding batches of input samples.
+steps: Total number of steps (batches of samples)
+    to yield from `generator` before stopping.
+max_q_size: maximum size for the generator queue
+workers: maximum number of processes to spin up
+pickle_safe: if True, use process based threading.
+    Note that because this implementation
+    relies on multiprocessing, you should not pass
+    non picklable arguments to the generator
+    as they can&#39;t be passed easily to children processes.
+verbose: verbosity mode, 0 or 1.</code></pre>
+<h4 id="returns-28">Returns:</h4>
+<pre><code>A Numpy array of predictions.</code></pre>
+<h3 id="predict_on_batch">
+<code>predict_on_batch</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">predict_on_batch(x)</code></pre></div>
+<p>Returns predictions for a single batch of samples.</p>
+<h4 id="arguments-23">Arguments:</h4>
+<pre><code>x: input data, as a Numpy array or list of Numpy arrays
+    (if the model has multiple inputs).</code></pre>
+<h4 id="returns-29">Returns:</h4>
+<pre><code>A Numpy array of predictions.</code></pre>
+<h3 id="predict_proba">
+<code>predict_proba</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">predict_proba(
+    x,
+    batch_size<span class="op">=</span><span class="dv">32</span>,
+    verbose<span class="op">=</span><span class="dv">1</span>
+)</code></pre></div>
+<p>Generates class probability predictions for the input samples.</p>
+<p>The input samples are processed batch by batch.</p>
+<h4 id="arguments-24">Arguments:</h4>
+<pre><code>x: input data, as a Numpy array or list of Numpy arrays
+    (if the model has multiple inputs).
+batch_size: integer.
+verbose: verbosity mode, 0 or 1.</code></pre>
+<h4 id="returns-30">Returns:</h4>
+<pre><code>A Numpy array of probability predictions.</code></pre>
+<h3 id="reset_states">
+<code>reset_states</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">reset_states()</code></pre></div>
+<h3 id="run_internal_graph">
+<code>run_internal_graph</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">run_internal_graph(
+    inputs,
+    masks<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Computes output tensors for new inputs.</p>
+<h1 id="note-1">Note:</h1>
+<pre><code>- Expects `inputs` to be a list (potentially with 1 element).
+- Can be run on non-Keras tensors.</code></pre>
+<h4 id="arguments-25">Arguments:</h4>
+<pre><code>inputs: List of tensors
+masks: List of masks (tensors or None).</code></pre>
+<h4 id="returns-31">Returns:</h4>
+<pre><code>Three lists: output_tensors, output_masks, output_shapes</code></pre>
+<h3 id="save">
+<code>save</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">save(
+    filepath,
+    overwrite<span class="op">=</span><span class="va">True</span>,
+    include_optimizer<span class="op">=</span><span class="va">True</span>
+)</code></pre></div>
+<p>Save the model to a single HDF5 file.</p>
+<p>The savefile includes: - The model architecture, allowing to re-instantiate the model. - The model weights. - The state of the optimizer, allowing to resume training exactly where you left off.</p>
+<p>This allows you to save the entirety of the state of a model in a single file.</p>
+<p>Saved models can be reinstantiated via <code>keras.models.load_model</code>. The model returned by <code>load_model</code> is a compiled model ready to be used (unless the saved model was never compiled in the first place).</p>
+<h4 id="arguments-26">Arguments:</h4>
+<pre><code>filepath: String, path to the file to save the weights to.
+overwrite: Whether to silently overwrite any existing file at the
+    target location, or provide the user with a manual prompt.
+include_optimizer: If True, save optimizer&#39;s state together.</code></pre>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">from</span> keras.models <span class="im">import</span> load_model
+
+model.save(<span class="st">&#39;my_model.h5&#39;</span>)  <span class="co"># creates a HDF5 file &#39;my_model.h5&#39;</span>
+<span class="kw">del</span> model  <span class="co"># deletes the existing model</span>
+
+<span class="co"># returns a compiled model</span>
+<span class="co"># identical to the previous one</span>
+model <span class="op">=</span> load_model(<span class="st">&#39;my_model.h5&#39;</span>)</code></pre></div>
+<h3 id="save_weights">
+<code>save_weights</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">save_weights(
+    filepath,
+    overwrite<span class="op">=</span><span class="va">True</span>
+)</code></pre></div>
+<h3 id="set_weights">
+<code>set_weights</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">set_weights(weights)</code></pre></div>
+<p>Sets the weights of the model.</p>
+<h4 id="arguments-27">Arguments:</h4>
+<pre><code>weights: Should be a list
+    of Numpy arrays with shapes and types matching
+    the output of `model.get_weights()`.</code></pre>
+<h3 id="summary">
+<code>summary</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">summary(
+    line_length<span class="op">=</span><span class="va">None</span>,
+    positions<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<h3 id="test_on_batch">
+<code>test_on_batch</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">test_on_batch(
+    x,
+    y,
+    sample_weight<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Evaluates the model over a single batch of samples.</p>
+<h4 id="arguments-28">Arguments:</h4>
+<pre><code>x: input data, as a Numpy array or list of Numpy arrays
+    (if the model has multiple inputs).
+y: labels, as a Numpy array.
+sample_weight: sample weights, as a Numpy array.</code></pre>
+<h4 id="returns-32">Returns:</h4>
+<pre><code>Scalar test loss (if the model has no metrics)
+or list of scalars (if the model computes other metrics).
+The attribute `model.metrics_names` will give you
+the display labels for the scalar outputs.</code></pre>
+<h4 id="raises-14">Raises:</h4>
+<pre><code>RuntimeError: if the model was never compiled.</code></pre>
+<h3 id="to_json">
+<code>to_json</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">to_json(<span class="op">**</span>kwargs)</code></pre></div>
+<p>Returns a JSON string containing the network configuration.</p>
+<p>To load a network from a JSON save file, use <code>keras.models.model_from_json(json_string, custom_objects={})</code>.</p>
+<h4 id="arguments-29">Arguments:</h4>
+<pre><code>**kwargs: Additional keyword arguments
+    to be passed to `json.dumps()`.</code></pre>
+<h4 id="returns-33">Returns:</h4>
+<pre><code>A JSON string.</code></pre>
+<h3 id="to_yaml">
+<code>to_yaml</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">to_yaml(<span class="op">**</span>kwargs)</code></pre></div>
+<p>Returns a yaml string containing the network configuration.</p>
+<p>To load a network from a yaml save file, use <code>keras.models.model_from_yaml(yaml_string, custom_objects={})</code>.</p>
+<p><code>custom_objects</code> should be a dictionary mapping the names of custom losses / layers / etc to the corresponding functions / classes.</p>
+<h4 id="arguments-30">Arguments:</h4>
+<pre><code>**kwargs: Additional keyword arguments
+    to be passed to `yaml.dump()`.</code></pre>
+<h4 id="returns-34">Returns:</h4>
+<pre><code>A YAML string.</code></pre>
+<h4 id="raises-15">Raises:</h4>
+<pre><code>ImportError: if yaml module is not found.</code></pre>
+<h3 id="train_on_batch">
+<code>train_on_batch</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">train_on_batch(
+    x,
+    y,
+    class_weight<span class="op">=</span><span class="va">None</span>,
+    sample_weight<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Single gradient update over one batch of samples.</p>
+<h4 id="arguments-31">Arguments:</h4>
+<pre><code>x: input data, as a Numpy array or list of Numpy arrays
+    (if the model has multiple inputs).
+y: labels, as a Numpy array.
+class_weight: dictionary mapping classes to a weight value,
+    used for scaling the loss function (during training only).
+sample_weight: sample weights, as a Numpy array.</code></pre>
+<h4 id="returns-35">Returns:</h4>
+<pre><code>Scalar training loss (if the model has no metrics)
+or list of scalars (if the model computes other metrics).
+The attribute `model.metrics_names` will give you
+the display labels for the scalar outputs.</code></pre>
+<h4 id="raises-16">Raises:</h4>
+<pre><code>RuntimeError: if the model was never compiled.</code></pre>

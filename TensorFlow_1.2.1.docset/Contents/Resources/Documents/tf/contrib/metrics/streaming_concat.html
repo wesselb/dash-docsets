@@ -1,0 +1,37 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.metrics.streaming_concat" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.metrics.streaming_concat" class="dashAnchor"></a><h1 id="tf.contrib.metrics.streaming_concat">tf.contrib.metrics.streaming_concat</h1>
+<h3 id="tf.contrib.metrics.streaming_concat-1"><code>tf.contrib.metrics.streaming_concat</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">streaming_concat(
+    values,
+    axis<span class="op">=</span><span class="dv">0</span>,
+    max_size<span class="op">=</span><span class="va">None</span>,
+    metrics_collections<span class="op">=</span><span class="va">None</span>,
+    updates_collections<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/metrics/python/ops/metric_ops.py"><code>tensorflow/contrib/metrics/python/ops/metric_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.metrics.md#Metric_Ops_">Metrics (contrib) &gt; Metric <code>Ops</code></a></p>
+<p>Concatenate values along an axis across batches.</p>
+<p>The function <code>streaming_concat</code> creates two local variables, <code>array</code> and <code>size</code>, that are used to store concatenated values. Internally, <code>array</code> is used as storage for a dynamic array (if <code>maxsize</code> is <code>None</code>), which ensures that updates can be run in amortized constant time.</p>
+<p>For estimation of the metric over a stream of data, the function creates an <code>update_op</code> operation that appends the values of a tensor and returns the length of the concatenated axis.</p>
+<p>This op allows for evaluating metrics that cannot be updated incrementally using the same framework as other streaming metrics.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>values</code></b>: <code>Tensor</code> to concatenate. Rank and the shape along all axes other than the axis to concatenate along must be statically known.</li>
+<li><b><code>axis</code></b>: optional integer axis to concatenate along.</li>
+<li><b><code>max_size</code></b>: optional integer maximum size of <code>value</code> along the given axis. Once the maximum size is reached, further updates are no-ops. By default, there is no maximum size: the array is resized as necessary.</li>
+<li><b><code>metrics_collections</code></b>: An optional list of collections that <code>value</code> should be added to.</li>
+<li><b><code>updates_collections</code></b>: An optional list of collections <code>update_op</code> should be added to.</li>
+<li><b><code>name</code></b>: An optional variable_scope name.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<ul>
+<li><b><code>value</code></b>: A <code>Tensor</code> representing the concatenated values.</li>
+<li><b><code>update_op</code></b>: An operation that concatenates the next values.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>values</code> does not have a statically known rank, <code>axis</code> is not in the valid range or the size of <code>values</code> is not statically known along any axis other than <code>axis</code>.</li>
+</ul>

@@ -1,0 +1,51 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.applications.ResNet50" /></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.keras.applications.ResNet50" class="dashAnchor"></a><a name="//apple_ref/cpp/Function/tf.contrib.keras.applications.resnet50" class="dashAnchor"></a><h1 id="tf.contrib.keras.applications.resnet50">tf.contrib.keras.applications.ResNet50</h1>
+<h3 id="tf.contrib.keras.applications.resnet50-1"><code>tf.contrib.keras.applications.ResNet50</code></h3>
+<a name="//apple_ref/cpp/Class/tf.contrib.keras.applications.resnet50.ResNet50" class="dashAnchor"></a><h3 id="tf.contrib.keras.applications.resnet50.resnet50"><code>tf.contrib.keras.applications.resnet50.ResNet50</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">ResNet50(
+    include_top<span class="op">=</span><span class="va">True</span>,
+    weights<span class="op">=</span><span class="st">&#39;imagenet&#39;</span>,
+    input_tensor<span class="op">=</span><span class="va">None</span>,
+    input_shape<span class="op">=</span><span class="va">None</span>,
+    pooling<span class="op">=</span><span class="va">None</span>,
+    classes<span class="op">=</span><span class="dv">1000</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/applications/resnet50.py"><code>tensorflow/contrib/keras/python/keras/applications/resnet50.py</code></a>.</p>
+<p>Instantiates the ResNet50 architecture.</p>
+<p>Optionally loads weights pre-trained on ImageNet. Note that when using TensorFlow, for best performance you should set <code>image_data_format=&quot;channels_last&quot;</code> in your Keras config at ~/.keras/keras.json.</p>
+<p>The model and the weights are compatible with both TensorFlow and Theano. The data format convention used by the model is the one specified in your Keras config file.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>include_top: whether to include the fully-connected
+    layer at the top of the network.
+weights: one of `None` (random initialization)
+    or &quot;imagenet&quot; (pre-training on ImageNet).
+input_tensor: optional Keras tensor (i.e. output of `layers.Input()`)
+    to use as image input for the model.
+input_shape: optional shape tuple, only to be specified
+    if `include_top` is False (otherwise the input shape
+    has to be `(224, 224, 3)` (with `channels_last` data format)
+    or `(3, 224, 244)` (with `channels_first` data format).
+    It should have exactly 3 inputs channels,
+    and width and height should be no smaller than 197.
+    E.g. `(200, 200, 3)` would be one valid value.
+pooling: Optional pooling mode for feature extraction
+    when `include_top` is `False`.
+    - `None` means that the output of the model will be
+        the 4D tensor output of the
+        last convolutional layer.
+    - `avg` means that global average pooling
+        will be applied to the output of the
+        last convolutional layer, and thus
+        the output of the model will be a 2D tensor.
+    - `max` means that global max pooling will
+        be applied.
+classes: optional number of classes to classify images
+    into, only to be specified if `include_top` is True, and
+    if no `weights` argument is specified.</code></pre>
+<h4 id="returns">Returns:</h4>
+<pre><code>A Keras model instance.</code></pre>
+<h4 id="raises">Raises:</h4>
+<pre><code>ValueError: in case of invalid argument for `weights`,
+    or invalid input shape.</code></pre>

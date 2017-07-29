@@ -1,0 +1,19 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.backend.switch" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.keras.backend.switch" class="dashAnchor"></a><h1 id="tf.contrib.keras.backend.switch">tf.contrib.keras.backend.switch</h1>
+<h3 id="tf.contrib.keras.backend.switch-1"><code>tf.contrib.keras.backend.switch</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">switch(
+    condition,
+    then_expression,
+    else_expression
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/backend.py"><code>tensorflow/contrib/keras/python/keras/backend.py</code></a>.</p>
+<p>Switches between two operations depending on a scalar value.</p>
+<p>Note that both <code>then_expression</code> and <code>else_expression</code> should be symbolic tensors of the <em>same shape</em>.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>condition: scalar tensor (`int` or `bool`).
+then_expression: either a tensor, or a callable that returns a tensor.
+else_expression: either a tensor, or a callable that returns a tensor.</code></pre>
+<h4 id="returns">Returns:</h4>
+<pre><code>The selected tensor.</code></pre>

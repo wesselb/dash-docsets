@@ -1,0 +1,21 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.backend.ndim" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.keras.backend.ndim" class="dashAnchor"></a><h1 id="tf.contrib.keras.backend.ndim">tf.contrib.keras.backend.ndim</h1>
+<h3 id="tf.contrib.keras.backend.ndim-1"><code>tf.contrib.keras.backend.ndim</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">ndim(x)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/backend.py"><code>tensorflow/contrib/keras/python/keras/backend.py</code></a>.</p>
+<p>Returns the number of axes in a tensor, as an integer.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>x: Tensor or variable.</code></pre>
+<h4 id="returns">Returns:</h4>
+<pre><code>Integer (scalar), number of axes.</code></pre>
+<p>Examples:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    <span class="op">&gt;&gt;&gt;</span> <span class="im">from</span> keras <span class="im">import</span> backend <span class="im">as</span> K
+    <span class="op">&gt;&gt;&gt;</span> <span class="bu">input</span> <span class="op">=</span> K.placeholder(shape<span class="op">=</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">5</span>))
+    <span class="op">&gt;&gt;&gt;</span> val <span class="op">=</span> np.array([[<span class="dv">1</span>, <span class="dv">2</span>], [<span class="dv">3</span>, <span class="dv">4</span>]])
+    <span class="op">&gt;&gt;&gt;</span> kvar <span class="op">=</span> K.variable(value<span class="op">=</span>val)
+    <span class="op">&gt;&gt;&gt;</span> K.ndim(<span class="bu">input</span>)
+    <span class="dv">3</span>
+    <span class="op">&gt;&gt;&gt;</span> K.ndim(kvar)
+    <span class="dv">2</span></code></pre></div>

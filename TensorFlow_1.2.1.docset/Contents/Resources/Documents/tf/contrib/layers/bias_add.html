@@ -1,0 +1,42 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.layers.bias_add" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.layers.bias_add" class="dashAnchor"></a><h1 id="tf.contrib.layers.bias_add">tf.contrib.layers.bias_add</h1>
+<h3 id="tf.contrib.layers.bias_add-1"><code>tf.contrib.layers.bias_add</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">bias_add(
+    inputs,
+    activation_fn<span class="op">=</span><span class="va">None</span>,
+    initializer<span class="op">=</span>tf.zeros_initializer(),
+    regularizer<span class="op">=</span><span class="va">None</span>,
+    reuse<span class="op">=</span><span class="va">None</span>,
+    variables_collections<span class="op">=</span><span class="va">None</span>,
+    outputs_collections<span class="op">=</span><span class="va">None</span>,
+    trainable<span class="op">=</span><span class="va">True</span>,
+    data_format<span class="op">=</span>DATA_FORMAT_NHWC,
+    scope<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/layers/python/layers/layers.py"><code>tensorflow/contrib/layers/python/layers/layers.py</code></a>.</p>
+<p>Adds a bias to the inputs.</p>
+<p>Can be used as a normalizer function for conv2d and fully_connected.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>inputs</code></b>: A tensor of with at least rank 2 and value for the last dimension, e.g. <code>[batch_size, depth]</code>, <code>[None, None, None, depth]</code>.</li>
+<li><b><code>activation_fn</code></b>: Activation function, default set to None to skip it and maintain a linear activation.</li>
+<li><b><code>initializer</code></b>: An initializer for the bias, defaults to 0.</li>
+<li><b><code>regularizer</code></b>: A regularizer like the result of <code>l1_regularizer</code> or <code>l2_regularizer</code>.</li>
+<li><b><code>reuse</code></b>: Whether or not the layer and its variables should be reused. To be able to reuse the layer scope must be given.</li>
+<li><b><code>variables_collections</code></b>: Optional collections for the variables.</li>
+<li><b><code>outputs_collections</code></b>: Collections to add the outputs.</li>
+<li><b><code>trainable</code></b>: If <code>True</code> also add variables to the graph collection <code>GraphKeys.TRAINABLE_VARIABLES</code> (see tf.Variable).</li>
+<li><b><code>data_format</code></b>: A string. 'NHWC' and 'NCHW' are supported.</li>
+<li><b><code>scope</code></b>: Optional scope for variable_scope.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A tensor representing the result of adding biases to the inputs.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>data_format</code> is neither <code>NHWC</code> nor <code>NCHW</code>.</li>
+<li><b><code>ValueError</code></b>: If <code>data_format</code> is <code>NCHW</code> and rank of <code>inputs</code> is not 4.</li>
+<li><b><code>ValueError</code></b>: If the rank of <code>inputs</code> is undefined.</li>
+<li><b><code>ValueError</code></b>: If rank or <code>C</code> dimension of <code>inputs</code> is undefined.</li>
+</ul>

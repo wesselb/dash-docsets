@@ -1,0 +1,29 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.Print" /></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.Print" class="dashAnchor"></a><h1 id="tf.print">tf.Print</h1>
+<h3 id="tf.print-1"><code>tf.Print</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">Print(
+    input_,
+    data,
+    message<span class="op">=</span><span class="va">None</span>,
+    first_n<span class="op">=</span><span class="va">None</span>,
+    summarize<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/logging_ops.py"><code>tensorflow/python/ops/logging_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/control_flow_ops.md#Debugging_Operations">Control Flow &gt; Debugging Operations</a></p>
+<p>Prints a list of tensors.</p>
+<p>This is an identity op with the side effect of printing <code>data</code> when evaluating.</p>
+<p>Note: This op prints to the standard error. It is not currently compatible with jupyter notebook (printing to the notebook <em>server's</em> output, not into the notebook).</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input_</code></b>: A tensor passed through this op.</li>
+<li><b><code>data</code></b>: A list of tensors to print out when op is evaluated.</li>
+<li><b><code>message</code></b>: A string, prefix of the error message.</li>
+<li><b><code>first_n</code></b>: Only log <code>first_n</code> number of times. Negative numbers log always; this is the default.</li>
+<li><b><code>summarize</code></b>: Only print this many entries of each tensor. If None, then a maximum of 3 elements are printed per input tensor.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Same tensor as <code>input_</code>.</p>

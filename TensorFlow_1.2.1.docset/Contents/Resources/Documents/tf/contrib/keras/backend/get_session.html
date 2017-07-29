@@ -1,0 +1,14 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.backend.get_session" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.keras.backend.get_session" class="dashAnchor"></a><h1 id="tf.contrib.keras.backend.get_session">tf.contrib.keras.backend.get_session</h1>
+<h3 id="tf.contrib.keras.backend.get_session-1"><code>tf.contrib.keras.backend.get_session</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_session()</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/backend.py"><code>tensorflow/contrib/keras/python/keras/backend.py</code></a>.</p>
+<p>Returns the TF session to be used by the backend.</p>
+<p>If a default TensorFlow session is available, we will return it.</p>
+<p>Else, we will return the global Keras session.</p>
+<p>If no global Keras session exists at this point: we will create a new global session.</p>
+<p>Note that you can manually set the global session via <code>K.set_session(sess)</code>.</p>
+<h4 id="returns">Returns:</h4>
+<pre><code>A TensorFlow session.</code></pre>

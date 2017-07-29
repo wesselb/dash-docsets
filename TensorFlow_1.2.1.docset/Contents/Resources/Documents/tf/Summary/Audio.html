@@ -1,0 +1,31 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.summary.audio" /></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.Summary.Audio" class="dashAnchor"></a><a name="//apple_ref/cpp/Function/tf.summary.audio" class="dashAnchor"></a><h1 id="tf.summary.audio">tf.summary.audio</h1>
+<h3 id="tf.summary.audio-1"><code>tf.summary.audio</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">audio(
+    name,
+    tensor,
+    sample_rate,
+    max_outputs<span class="op">=</span><span class="dv">3</span>,
+    collections<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/summary/summary.py"><code>tensorflow/python/summary/summary.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/summary.md#Generation_of_Summaries">Summary Operations &gt; Generation of Summaries</a></p>
+<p>Outputs a <code>Summary</code> protocol buffer with audio.</p>
+<p>The summary has up to <code>max_outputs</code> summary values containing audio. The audio is built from <code>tensor</code> which must be 3-D with shape <code>[batch_size, frames, channels]</code> or 2-D with shape <code>[batch_size, frames]</code>. The values are assumed to be in the range of <code>[-1.0, 1.0]</code> with a sample rate of <code>sample_rate</code>.</p>
+<p>The <code>tag</code> in the outputted Summary.Value protobufs is generated based on the name, with a suffix depending on the max_outputs setting:</p>
+<ul>
+<li>If <code>max_outputs</code> is 1, the summary value tag is '<em>name</em>/audio'.</li>
+<li>If <code>max_outputs</code> is greater than 1, the summary value tags are generated sequentially as '<em>name</em>/audio/0', '<em>name</em>/audio/1', etc</li>
+</ul>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>name</code></b>: A name for the generated node. Will also serve as a series name in TensorBoard.</li>
+<li><b><code>tensor</code></b>: A 3-D <code>float32</code> <code>Tensor</code> of shape <code>[batch_size, frames, channels]</code> or a 2-D <code>float32</code> <code>Tensor</code> of shape <code>[batch_size, frames]</code>.</li>
+<li><b><code>sample_rate</code></b>: A Scalar <code>float32</code> <code>Tensor</code> indicating the sample rate of the signal in hertz.</li>
+<li><b><code>max_outputs</code></b>: Max number of batch elements to generate audio for.</li>
+<li><b><code>collections</code></b>: Optional list of ops.GraphKeys. The collections to add the summary to. Defaults to [_ops.GraphKeys.SUMMARIES]</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A scalar <code>Tensor</code> of type <code>string</code>. The serialized <code>Summary</code> protocol buffer.</p>

@@ -1,0 +1,95 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.saved_model.builder.SavedModelBuilder" /> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="add_meta_graph"/> <meta itemprop="property" content="add_meta_graph_and_variables"/> <meta itemprop="property" content="save"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.saved_model.builder.SavedModelBuilder" class="dashAnchor"></a><h1 id="tf.saved_model.builder.savedmodelbuilder">tf.saved_model.builder.SavedModelBuilder</h1>
+<h3 id="class-tf.saved_model.builder.savedmodelbuilder"><code>class tf.saved_model.builder.SavedModelBuilder</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/saved_model/builder_impl.py"><code>tensorflow/python/saved_model/builder_impl.py</code></a>.</p>
+<p>Builds the <code>SavedModel</code> protocol buffer and saves variables and assets.</p>
+<p>The <code>SavedModelBuilder</code> class provides functionality to build a <code>SavedModel</code> protocol buffer. Specifically, this allows multiple meta graphs to be saved as part of a single language-neutral <code>SavedModel</code>, while sharing variables and assets.</p>
+<p>To build a SavedModel, the first meta graph must be saved with variables. Subsequent meta graphs will simply be saved with their graph definitions. If assets need to be saved and written or copied to disk, they can be provided when the meta graph def is added. If multiple meta graph defs are associated an asset of the same name, only the first version is retained.</p>
+<p>Each meta graph added to the SavedModel must be annotated with tags. The tags provide a means to identify the specific meta graph to load and restore, along with the shared set of variables and assets.</p>
+<p>Typical usage for the <code>SavedModelBuilder</code>:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">...
+builder <span class="op">=</span> tf.saved_model.builder.SavedModelBuilder(export_dir)
+
+<span class="cf">with</span> tf.Session(graph<span class="op">=</span>tf.Graph()) <span class="im">as</span> sess:
+  ...
+  builder.add_meta_graph_and_variables(sess,
+                                  [<span class="st">&quot;foo-tag&quot;</span>],
+                                  signature_def_map<span class="op">=</span>foo_signatures,
+                                  assets_collection<span class="op">=</span>foo_assets)
+...
+
+<span class="cf">with</span> tf.Session(graph<span class="op">=</span>tf.Graph()) <span class="im">as</span> sess:
+  ...
+  builder.add_meta_graph([<span class="st">&quot;bar-tag&quot;</span>, <span class="st">&quot;baz-tag&quot;</span>])
+...
+
+builder.save()</code></pre></div>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(export_dir)</code></pre></div>
+<h3 id="add_meta_graph">
+<code>add_meta_graph</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">add_meta_graph(
+    tags,
+    signature_def_map<span class="op">=</span><span class="va">None</span>,
+    assets_collection<span class="op">=</span><span class="va">None</span>,
+    legacy_init_op<span class="op">=</span><span class="va">None</span>,
+    clear_devices<span class="op">=</span><span class="va">False</span>,
+    main_op<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Adds the current meta graph to the SavedModel.</p>
+<p>Creates a Saver in the current scope and uses the Saver to export the meta graph def. Invoking this API requires the <code>add_meta_graph_and_variables()</code> API to have been invoked before.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>tags</code></b>: The set of tags to annotate the meta graph def with.</li>
+<li><b><code>signature_def_map</code></b>: The map of signature defs to be added to the meta graph def.</li>
+<li><b><code>assets_collection</code></b>: Assets collection to be saved with SavedModel. Note that this collection should be a subset of the assets saved as part of the first meta graph in the SavedModel.</li>
+<li><b><code>legacy_init_op</code></b>: Legacy support for op or group of ops to execute after the restore op upon a load.</li>
+<li><b><code>clear_devices</code></b>: Set to true if the device info on the default graph should be cleared.</li>
+<li><b><code>main_op</code></b>: Op or group of ops to execute when the graph is loaded.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>AssertionError</code></b>: If the variables for the SavedModel have not been saved yet.</li>
+</ul>
+<h3 id="add_meta_graph_and_variables">
+<code>add_meta_graph_and_variables</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">add_meta_graph_and_variables(
+    sess,
+    tags,
+    signature_def_map<span class="op">=</span><span class="va">None</span>,
+    assets_collection<span class="op">=</span><span class="va">None</span>,
+    legacy_init_op<span class="op">=</span><span class="va">None</span>,
+    clear_devices<span class="op">=</span><span class="va">False</span>,
+    main_op<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Adds the current meta graph to the SavedModel and saves variables.</p>
+<p>Creates a Saver to save the variables from the provided session. Exports the corresponding meta graph def. This function assumes that the variables to be saved have been initialized. For a given <code>SavedModelBuilder</code>, this API must be called exactly once and for the first meta graph to save. For subsequent meta graph defs to be added, the <code>add_meta_graph()</code> API must be used.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>sess</code></b>: The TensorFlow session from which to save the meta graph and variables.</li>
+<li><b><code>tags</code></b>: The set of tags with which to save the meta graph.</li>
+<li><b><code>signature_def_map</code></b>: The map of signature def map to add to the meta graph def.</li>
+<li><b><code>assets_collection</code></b>: Assets collection to be saved with SavedModel.</li>
+<li><b><code>legacy_init_op</code></b>: Legacy support for op or group of ops to execute after the restore op upon a load.</li>
+<li><b><code>clear_devices</code></b>: Set to true if the device info on the default graph should be cleared.</li>
+<li><b><code>main_op</code></b>: Op or group of ops to execute when the graph is loaded.</li>
+</ul>
+<h3 id="save">
+<code>save</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">save(as_text<span class="op">=</span><span class="va">False</span>)</code></pre></div>
+<p>Writes a <code>SavedModel</code> protocol buffer to disk.</p>
+<p>The function writes the SavedModel protocol buffer to the export directory in serialized format.</p>
+<h4 id="args-2">Args:</h4>
+<ul>
+<li><b><code>as_text</code></b>: Writes the SavedModel protocol buffer in text format to disk.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The path to which the SavedModel protocol buffer was written.</p>

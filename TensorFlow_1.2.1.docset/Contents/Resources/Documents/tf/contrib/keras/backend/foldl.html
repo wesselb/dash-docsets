@@ -1,0 +1,21 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.backend.foldl" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.keras.backend.foldl" class="dashAnchor"></a><h1 id="tf.contrib.keras.backend.foldl">tf.contrib.keras.backend.foldl</h1>
+<h3 id="tf.contrib.keras.backend.foldl-1"><code>tf.contrib.keras.backend.foldl</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">foldl(
+    fn,
+    elems,
+    initializer<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/backend.py"><code>tensorflow/contrib/keras/python/keras/backend.py</code></a>.</p>
+<p>Reduce elems using fn to combine them from left to right.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>fn: Callable that will be called upon each element in elems and an
+    accumulator, for instance `lambda acc, x: acc + x`
+elems: tensor
+initializer: The first value used (`elems[0]` in case of None)
+name: A string name for the foldl node in the graph</code></pre>
+<h4 id="returns">Returns:</h4>
+<pre><code>Tensor with same type and shape as `initializer`.</code></pre>

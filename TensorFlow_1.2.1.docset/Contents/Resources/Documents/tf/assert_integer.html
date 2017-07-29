@@ -1,0 +1,28 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.assert_integer" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.assert_integer" class="dashAnchor"></a><h1 id="tf.assert_integer">tf.assert_integer</h1>
+<h3 id="tf.assert_integer-1"><code>tf.assert_integer</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">assert_integer(
+    x,
+    message<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/check_ops.py"><code>tensorflow/python/ops/check_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/check_ops.html">Asserts and boolean checks</a></p>
+<p>Assert that <code>x</code> is of integer dtype.</p>
+<p>Example of adding a dependency to an operation:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> tf.control_dependencies([tf.assert_integer(x)]):
+  output <span class="op">=</span> tf.reduce_sum(x)</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code> whose basetype is integer and is not quantized.</li>
+<li><b><code>message</code></b>: A string to prefix to the default message.</li>
+<li><b><code>name</code></b>: A name for this operation (optional). Defaults to &quot;assert_integer&quot;.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>x.dtype</code> is anything other than non-quantized integer.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>no_op</code> that does nothing. Type can be determined statically.</p>

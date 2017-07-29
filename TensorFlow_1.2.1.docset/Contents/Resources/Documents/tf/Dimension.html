@@ -1,0 +1,215 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.Dimension" /> <meta itemprop="property" content="value"/> <meta itemprop="property" content="__add__"/> <meta itemprop="property" content="__div__"/> <meta itemprop="property" content="__eq__"/> <meta itemprop="property" content="__floordiv__"/> <meta itemprop="property" content="__ge__"/> <meta itemprop="property" content="__gt__"/> <meta itemprop="property" content="__index__"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="__int__"/> <meta itemprop="property" content="__le__"/> <meta itemprop="property" content="__lt__"/> <meta itemprop="property" content="__mod__"/> <meta itemprop="property" content="__mul__"/> <meta itemprop="property" content="__ne__"/> <meta itemprop="property" content="__sub__"/> <meta itemprop="property" content="assert_is_compatible_with"/> <meta itemprop="property" content="is_compatible_with"/> <meta itemprop="property" content="merge_with"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.Dimension" class="dashAnchor"></a><h1 id="tf.dimension">tf.Dimension</h1>
+<h3 id="class-tf.dimension"><code>class tf.Dimension</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/framework/tensor_shape.py"><code>tensorflow/python/framework/tensor_shape.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/framework.md#Defining_new_operations">Building Graphs &gt; Defining new operations</a></p>
+<p>Represents the value of one dimension in a TensorShape.</p>
+<h2 id="properties">Properties</h2>
+<h3 id="value">
+<code>value</code>
+</h3>
+<p>The value of this dimension, or None if it is unknown.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(value)</code></pre></div>
+<p>Creates a new Dimension with the given value.</p>
+<h3 id="__add__">
+<code><strong>add</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__add__</span>(other)</code></pre></div>
+<p>Returns the sum of <code>self</code> and <code>other</code>.</p>
+<p>Dimensions are summed as follows:</p>
+<p>Dimension(m) + Dimension(n) == Dimension(m + n) Dimension(m) + Dimension(None) == Dimension(None) Dimension(None) + Dimension(n) == Dimension(None) Dimension(None) + Dimension(None) == Dimension(None)</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>other</code></b>: Another Dimension.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A Dimension whose value is the sum of <code>self</code> and <code>other</code>.</p>
+<h3 id="__div__">
+<code><strong>div</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__div__</span>(other)</code></pre></div>
+<p>DEPRECATED: Use <code>__floordiv__</code> via <code>x // y</code> instead.</p>
+<p>This function exists only for backwards compatibility purposes; new code should use <code>__floordiv__</code> via the syntax <code>x // y</code>. Using <code>x // y</code> communicates clearly that the result rounds down, and is forward compatible to Python 3.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>other</code></b>: Another <code>Dimension</code>.</li>
+</ul>
+<h4 id="returns-1">Returns:</h4>
+<p>A <code>Dimension</code> whose value is the integer quotient of <code>self</code> and <code>other</code>.</p>
+<h3 id="__eq__">
+<code><strong>eq</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__eq__</span>(other)</code></pre></div>
+<p>Returns true if <code>other</code> has the same known value as this Dimension.</p>
+<h3 id="__floordiv__">
+<code><strong>floordiv</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__floordiv__</span>(other)</code></pre></div>
+<p>Returns the quotient of <code>self</code> and <code>other</code> rounded down.</p>
+<p>Dimensions are divided as follows:</p>
+<p>Dimension(m) // Dimension(n) == Dimension(m // n) Dimension(m) // Dimension(None) == Dimension(None) Dimension(None) // Dimension(n) == Dimension(None) Dimension(None) // Dimension(None) == Dimension(None)</p>
+<h4 id="args-2">Args:</h4>
+<ul>
+<li><b><code>other</code></b>: Another <code>Dimension</code>.</li>
+</ul>
+<h4 id="returns-2">Returns:</h4>
+<p>A <code>Dimension</code> whose value is the integer quotient of <code>self</code> and <code>other</code>.</p>
+<h3 id="__ge__">
+<code><strong>ge</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__ge__</span>(other)</code></pre></div>
+<p>Returns True if <code>self</code> is known to be greater than or equal to <code>other</code>.</p>
+<p>Dimensions are compared as follows:</p>
+<p>Dimension(m) &gt;= Dimension(n) == m &gt;= n Dimension(m) &gt;= Dimension(None) == None Dimension(None) &gt;= Dimension(n) == None Dimension(None) &gt;= Dimension(None) == None</p>
+<h4 id="args-3">Args:</h4>
+<ul>
+<li><b><code>other</code></b>: Another Dimension.</li>
+</ul>
+<h4 id="returns-3">Returns:</h4>
+<p>The value of <code>self.value &gt;= other.value</code> if both are known, otherwise None.</p>
+<h3 id="__gt__">
+<code><strong>gt</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__gt__</span>(other)</code></pre></div>
+<p>Returns True if <code>self</code> is known to be greater than <code>other</code>.</p>
+<p>Dimensions are compared as follows:</p>
+<p>Dimension(m) &gt; Dimension(n) == m &gt; n Dimension(m) &gt; Dimension(None) == None Dimension(None) &gt; Dimension(n) == None Dimension(None) &gt; Dimension(None) == None</p>
+<h4 id="args-4">Args:</h4>
+<ul>
+<li><b><code>other</code></b>: Another Dimension.</li>
+</ul>
+<h4 id="returns-4">Returns:</h4>
+<p>The value of <code>self.value &gt; other.value</code> if both are known, otherwise None.</p>
+<h3 id="__index__">
+<code><strong>index</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__index__</span>()</code></pre></div>
+<h3 id="__int__">
+<code><strong>int</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__int__</span>()</code></pre></div>
+<h3 id="__le__">
+<code><strong>le</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__le__</span>(other)</code></pre></div>
+<p>Returns True if <code>self</code> is known to be less than or equal to <code>other</code>.</p>
+<p>Dimensions are compared as follows:</p>
+<p>Dimension(m) &lt;= Dimension(n) == m &lt;= n Dimension(m) &lt;= Dimension(None) == None Dimension(None) &lt;= Dimension(n) == None Dimension(None) &lt;= Dimension(None) == None</p>
+<h4 id="args-5">Args:</h4>
+<ul>
+<li><b><code>other</code></b>: Another Dimension.</li>
+</ul>
+<h4 id="returns-5">Returns:</h4>
+<p>The value of <code>self.value &lt;= other.value</code> if both are known, otherwise None.</p>
+<h3 id="__lt__">
+<code><strong>lt</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__lt__</span>(other)</code></pre></div>
+<p>Returns True if <code>self</code> is known to be less than <code>other</code>.</p>
+<p>Dimensions are compared as follows:</p>
+<p>Dimension(m) &lt; Dimension(n) == m &lt; n Dimension(m) &lt; Dimension(None) == None Dimension(None) &lt; Dimension(n) == None Dimension(None) &lt; Dimension(None) == None</p>
+<h4 id="args-6">Args:</h4>
+<ul>
+<li><b><code>other</code></b>: Another Dimension.</li>
+</ul>
+<h4 id="returns-6">Returns:</h4>
+<p>The value of <code>self.value &lt; other.value</code> if both are known, otherwise None.</p>
+<h3 id="__mod__">
+<code><strong>mod</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__mod__</span>(other)</code></pre></div>
+<p>Returns <code>self</code> modulo `other.</p>
+<p>Dimension moduli are computed as follows:</p>
+<p>Dimension(m) % Dimension(n) == Dimension(m % n) Dimension(m) % Dimension(None) == Dimension(None) Dimension(None) % Dimension(n) == Dimension(None) Dimension(None) % Dimension(None) == Dimension(None)</p>
+<h4 id="args-7">Args:</h4>
+<ul>
+<li><b><code>other</code></b>: Another Dimension.</li>
+</ul>
+<h4 id="returns-7">Returns:</h4>
+<p>A Dimension whose value is <code>self</code> modulo <code>other</code>.</p>
+<h3 id="__mul__">
+<code><strong>mul</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__mul__</span>(other)</code></pre></div>
+<p>Returns the product of <code>self</code> and <code>other</code>.</p>
+<p>Dimensions are summed as follows:</p>
+<pre><code>  Dimension(m)    * Dimension(n)    == Dimension(m * n)
+  Dimension(m)    * Dimension(None) == Dimension(None)
+  Dimension(None) * Dimension(n)    == Dimension(None)
+  Dimension(None) * Dimension(None) == Dimension(None)</code></pre>
+<h4 id="args-8">Args:</h4>
+<ul>
+<li><b><code>other</code></b>: Another Dimension.</li>
+</ul>
+<h4 id="returns-8">Returns:</h4>
+<p>A Dimension whose value is the product of <code>self</code> and <code>other</code>.</p>
+<h3 id="__ne__">
+<code><strong>ne</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__ne__</span>(other)</code></pre></div>
+<p>Returns true if <code>other</code> has a different known value from <code>self</code>.</p>
+<h3 id="__sub__">
+<code><strong>sub</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__sub__</span>(other)</code></pre></div>
+<p>Returns the subtraction of <code>other</code> from <code>self</code>.</p>
+<p>Dimensions are subtracted as follows:</p>
+<p>Dimension(m) - Dimension(n) == Dimension(m - n) Dimension(m) - Dimension(None) == Dimension(None) Dimension(None) - Dimension(n) == Dimension(None) Dimension(None) - Dimension(None) == Dimension(None)</p>
+<h4 id="args-9">Args:</h4>
+<ul>
+<li><b><code>other</code></b>: Another Dimension.</li>
+</ul>
+<h4 id="returns-9">Returns:</h4>
+<p>A Dimension whose value is the subtraction of sum of <code>other</code> from <code>self</code>.</p>
+<h3 id="assert_is_compatible_with">
+<code>assert_is_compatible_with</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">assert_is_compatible_with(other)</code></pre></div>
+<p>Raises an exception if <code>other</code> is not compatible with this Dimension.</p>
+<h4 id="args-10">Args:</h4>
+<ul>
+<li><b><code>other</code></b>: Another Dimension.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>self</code> and <code>other</code> are not compatible (see is_compatible_with).</li>
+</ul>
+<h3 id="is_compatible_with">
+<code>is_compatible_with</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">is_compatible_with(other)</code></pre></div>
+<p>Returns true if <code>other</code> is compatible with this Dimension.</p>
+<p>Two known Dimensions are compatible if they have the same value. An unknown Dimension is compatible with all other Dimensions.</p>
+<h4 id="args-11">Args:</h4>
+<ul>
+<li><b><code>other</code></b>: Another Dimension.</li>
+</ul>
+<h4 id="returns-10">Returns:</h4>
+<p>True if this Dimension and <code>other</code> are compatible.</p>
+<h3 id="merge_with">
+<code>merge_with</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">merge_with(other)</code></pre></div>
+<p>Returns a Dimension that combines the information in <code>self</code> and <code>other</code>.</p>
+<p>Dimensions are combined as follows:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    Dimension(n)   .merge_with(Dimension(n))    <span class="op">==</span> Dimension(n)
+    Dimension(n)   .merge_with(Dimension(<span class="va">None</span>)) <span class="op">==</span> Dimension(n)
+    Dimension(<span class="va">None</span>).merge_with(Dimension(n))    <span class="op">==</span> Dimension(n)
+    Dimension(<span class="va">None</span>).merge_with(Dimension(<span class="va">None</span>)) <span class="op">==</span> Dimension(<span class="va">None</span>)
+    Dimension(n)   .merge_with(Dimension(m)) raises <span class="pp">ValueError</span> <span class="cf">for</span> n <span class="op">!=</span> m</code></pre></div>
+<h4 id="args-12">Args:</h4>
+<ul>
+<li><b><code>other</code></b>: Another Dimension.</li>
+</ul>
+<h4 id="returns-11">Returns:</h4>
+<p>A Dimension containing the combined information of <code>self</code> and <code>other</code>.</p>
+<h4 id="raises-1">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>self</code> and <code>other</code> are not compatible (see is_compatible_with).</li>
+</ul>

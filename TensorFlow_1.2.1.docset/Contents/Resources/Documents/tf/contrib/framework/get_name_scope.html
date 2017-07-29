@@ -1,0 +1,12 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.framework.get_name_scope" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.framework.get_name_scope" class="dashAnchor"></a><h1 id="tf.contrib.framework.get_name_scope">tf.contrib.framework.get_name_scope</h1>
+<h3 id="tf.contrib.framework.get_name_scope-1"><code>tf.contrib.framework.get_name_scope</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_name_scope()</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/framework/python/ops/ops.py"><code>tensorflow/contrib/framework/python/ops/ops.py</code></a>.</p>
+<p>Returns the current name scope of the default graph.</p>
+<p>For example:</p>
+<p><code>python   with tf.name_scope('scope1'):     with tf.name_scope('scope2'):       print(tf.contrib.framework.get_name_scope())</code> would print the string <code>scope1/scope2</code>.</p>
+<h4 id="returns">Returns:</h4>
+<p>A string represnting the current name scope.</p>

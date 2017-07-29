@@ -1,0 +1,35 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.backend.ctc_decode" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.keras.backend.ctc_decode" class="dashAnchor"></a><h1 id="tf.contrib.keras.backend.ctc_decode">tf.contrib.keras.backend.ctc_decode</h1>
+<h3 id="tf.contrib.keras.backend.ctc_decode-1"><code>tf.contrib.keras.backend.ctc_decode</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">ctc_decode(
+    y_pred,
+    input_length,
+    greedy<span class="op">=</span><span class="va">True</span>,
+    beam_width<span class="op">=</span><span class="dv">100</span>,
+    top_paths<span class="op">=</span><span class="dv">1</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/backend.py"><code>tensorflow/contrib/keras/python/keras/backend.py</code></a>.</p>
+<p>Decodes the output of a softmax.</p>
+<p>Can use either greedy search (also known as best path) or a constrained dictionary search.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>y_pred: tensor `(samples, time_steps, num_categories)`
+    containing the prediction, or output of the softmax.
+input_length: tensor `(samples, )` containing the sequence length for
+    each batch item in `y_pred`.
+greedy: perform much faster best-path search if `true`.
+    This does not use a dictionary.
+beam_width: if `greedy` is `false`: a beam search decoder will be used
+    with a beam of this width.
+top_paths: if `greedy` is `false`,
+    how many of the most probable paths will be returned.</code></pre>
+<h4 id="returns">Returns:</h4>
+<pre><code>Tuple:
+    List: if `greedy` is `true`, returns a list of one element that
+        contains the decoded sequence.
+        If `false`, returns the `top_paths` most probable
+        decoded sequences.
+        Important: blank labels are returned as `-1`.
+    Tensor `(top_paths, )` that contains
+        the log probability of each decoded sequence.</code></pre>

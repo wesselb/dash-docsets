@@ -1,0 +1,32 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.rnn.FusedRNNCellAdaptor" /> <meta itemprop="property" content="__call__"/> <meta itemprop="property" content="__init__"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.rnn.FusedRNNCellAdaptor" class="dashAnchor"></a><h1 id="tf.contrib.rnn.fusedrnncelladaptor">tf.contrib.rnn.FusedRNNCellAdaptor</h1>
+<h3 id="class-tf.contrib.rnn.fusedrnncelladaptor"><code>class tf.contrib.rnn.FusedRNNCellAdaptor</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/rnn/python/ops/fused_rnn_cell.py"><code>tensorflow/contrib/rnn/python/ops/fused_rnn_cell.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.rnn.md#Core_RNN_Cell_wrappers_RNNCells_that_wrap_other_RNNCells_">RNN and Cells (contrib) &gt; Core RNN Cell wrappers (RNNCells that wrap other RNNCells)</a></p>
+<p>This is an adaptor for RNNCell classes to be used with <code>FusedRNNCell</code>.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    cell,
+    use_dynamic_rnn<span class="op">=</span><span class="va">False</span>
+)</code></pre></div>
+<p>Initialize the adaptor.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>cell</code></b>: an instance of a subclass of a <code>rnn_cell.RNNCell</code>.</li>
+<li><b><code>use_dynamic_rnn</code></b>: whether to use dynamic (or static) RNN.</li>
+</ul>
+<h3 id="__call__">
+<code><strong>call</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__call__</span>(
+    inputs,
+    initial_state<span class="op">=</span><span class="va">None</span>,
+    dtype<span class="op">=</span><span class="va">None</span>,
+    sequence_length<span class="op">=</span><span class="va">None</span>,
+    scope<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>

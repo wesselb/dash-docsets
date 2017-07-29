@@ -1,0 +1,35 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.learn.Trainable" /> <meta itemprop="property" content="fit"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.learn.Trainable" class="dashAnchor"></a><h1 id="tf.contrib.learn.trainable">tf.contrib.learn.Trainable</h1>
+<h3 id="class-tf.contrib.learn.trainable"><code>class tf.contrib.learn.Trainable</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/learn/python/learn/trainable.py"><code>tensorflow/contrib/learn/python/learn/trainable.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.learn.md#Estimators">Learn (contrib) &gt; Estimators</a></p>
+<p>Interface for objects that are trainable by, e.g., <code>Experiment</code>.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="fit">
+<code>fit</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">fit(
+    x<span class="op">=</span><span class="va">None</span>,
+    y<span class="op">=</span><span class="va">None</span>,
+    input_fn<span class="op">=</span><span class="va">None</span>,
+    steps<span class="op">=</span><span class="va">None</span>,
+    batch_size<span class="op">=</span><span class="va">None</span>,
+    monitors<span class="op">=</span><span class="va">None</span>,
+    max_steps<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Trains a model given training data <code>x</code> predictions and <code>y</code> labels.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: Matrix of shape [n_samples, n_features...] or the dictionary of Matrices. Can be iterator that returns arrays of features or dictionary of arrays of features. The training input samples for fitting the model. If set, <code>input_fn</code> must be <code>None</code>.</li>
+<li><b><code>y</code></b>: Vector or matrix [n_samples] or [n_samples, n_outputs] or the dictionary of same. Can be iterator that returns array of labels or dictionary of array of labels. The training label values (class labels in classification, real numbers in regression). If set, <code>input_fn</code> must be <code>None</code>. Note: For classification, label values must be integers representing the class index (i.e. values from 0 to n_classes-1).</li>
+<li><b><code>input_fn</code></b>: Input function returning a tuple of: features - <code>Tensor</code> or dictionary of string feature name to <code>Tensor</code>. labels - <code>Tensor</code> or dictionary of <code>Tensor</code> with labels. If input_fn is set, <code>x</code>, <code>y</code>, and <code>batch_size</code> must be <code>None</code>.</li>
+<li><b><code>steps</code></b>: Number of steps for which to train model. If <code>None</code>, train forever. 'steps' works incrementally. If you call two times fit(steps=10) then training occurs in total 20 steps. If you don't want to have incremental behaviour please set <code>max_steps</code> instead. If set, <code>max_steps</code> must be <code>None</code>.</li>
+<li><b><code>batch_size</code></b>: minibatch size to use on the input, defaults to first dimension of <code>x</code>. Must be <code>None</code> if <code>input_fn</code> is provided.</li>
+<li><b><code>monitors</code></b>: List of <code>BaseMonitor</code> subclass instances. Used for callbacks inside the training loop.</li>
+<li><p><b><code>max_steps</code></b>: Number of total steps for which to train model. If <code>None</code>, train forever. If set, <code>steps</code> must be <code>None</code>.</p>
+<p>Two calls to <code>fit(steps=100)</code> means 200 training iterations. On the other hand, two calls to <code>fit(max_steps=100)</code> means that the second call will not do any iteration since first call did all 100 steps.</p></li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p><code>self</code>, for chaining.</p>

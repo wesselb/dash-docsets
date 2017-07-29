@@ -1,0 +1,23 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.crf.crf_binary_score" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.crf.crf_binary_score" class="dashAnchor"></a><h1 id="tf.contrib.crf.crf_binary_score">tf.contrib.crf.crf_binary_score</h1>
+<h3 id="tf.contrib.crf.crf_binary_score-1"><code>tf.contrib.crf.crf_binary_score</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">crf_binary_score(
+    tag_indices,
+    sequence_lengths,
+    transition_params
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/crf/python/ops/crf.py"><code>tensorflow/contrib/crf/python/ops/crf.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.crf.html">CRF (contrib)</a></p>
+<p>Computes the binary scores of tag sequences.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>tag_indices</code></b>: A [batch_size, max_seq_len] matrix of tag indices.</li>
+<li><b><code>sequence_lengths</code></b>: A [batch_size] vector of true sequence lengths.</li>
+<li><b><code>transition_params</code></b>: A [num_tags, num_tags] matrix of binary potentials.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<ul>
+<li><b><code>binary_scores</code></b>: A [batch_size] vector of binary scores.</li>
+</ul>

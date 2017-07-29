@@ -1,0 +1,27 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.assert_type" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.assert_type" class="dashAnchor"></a><h1 id="tf.assert_type">tf.assert_type</h1>
+<h3 id="tf.assert_type-1"><code>tf.assert_type</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">assert_type(
+    tensor,
+    tf_type,
+    message<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/check_ops.py"><code>tensorflow/python/ops/check_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/check_ops.html">Asserts and boolean checks</a></p>
+<p>Statically asserts that the given <code>Tensor</code> is of the specified type.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>tensor</code></b>: A tensorflow <code>Tensor</code>.</li>
+<li><b><code>tf_type</code></b>: A tensorflow type (<code>dtypes.float32</code>, <code>tf.int64</code>, <code>dtypes.bool</code>, etc).</li>
+<li><b><code>message</code></b>: A string to prefix to the default message.</li>
+<li><b><code>name</code></b>: A name to give this <code>Op</code>. Defaults to &quot;assert_type&quot;</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: If the tensors data type doesn't match <code>tf_type</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>no_op</code> that does nothing. Type can be determined statically.</p>

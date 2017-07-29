@@ -1,0 +1,21 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.ffmpeg.encode_audio" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.ffmpeg.encode_audio" class="dashAnchor"></a><h1 id="tf.contrib.ffmpeg.encode_audio">tf.contrib.ffmpeg.encode_audio</h1>
+<h3 id="tf.contrib.ffmpeg.encode_audio-1"><code>tf.contrib.ffmpeg.encode_audio</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">encode_audio(
+    audio,
+    file_format<span class="op">=</span><span class="va">None</span>,
+    samples_per_second<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/ffmpeg/ffmpeg_ops.py"><code>tensorflow/contrib/ffmpeg/ffmpeg_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.ffmpeg.md#Encoding_and_decoding_audio_using_FFmpeg">FFmpeg (contrib) &gt; Encoding and decoding audio using FFmpeg</a></p>
+<p>Creates an op that encodes an audio file using sampled audio from a tensor.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>audio</code></b>: A rank 2 tensor that has time along dimension 0 and channels along dimension 1. Dimension 0 is <code>samples_per_second * length</code> long in seconds.</li>
+<li><b><code>file_format</code></b>: The type of file to encode. &quot;wav&quot; is the only supported format.</li>
+<li><b><code>samples_per_second</code></b>: The number of samples in the audio tensor per second of audio.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A scalar tensor that contains the encoded audio in the specified file format.</p>

@@ -1,0 +1,35 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.graph_editor.get_walks_intersection_ops" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.graph_editor.get_walks_intersection_ops" class="dashAnchor"></a><h1 id="tf.contrib.graph_editor.get_walks_intersection_ops">tf.contrib.graph_editor.get_walks_intersection_ops</h1>
+<h3 id="tf.contrib.graph_editor.get_walks_intersection_ops-1"><code>tf.contrib.graph_editor.get_walks_intersection_ops</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_walks_intersection_ops(
+    forward_seed_ops,
+    backward_seed_ops,
+    forward_inclusive<span class="op">=</span><span class="va">True</span>,
+    backward_inclusive<span class="op">=</span><span class="va">True</span>,
+    within_ops<span class="op">=</span><span class="va">None</span>,
+    control_inputs<span class="op">=</span><span class="va">False</span>,
+    control_outputs<span class="op">=</span><span class="va">None</span>,
+    control_ios<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/graph_editor/select.py"><code>tensorflow/contrib/graph_editor/select.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.graph_editor.md#Module_select">Graph Editor (contrib) &gt; Module: select</a></p>
+<p>Return the intersection of a forward and a backward walk.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>forward_seed_ops</code></b>: an iterable of operations from which the forward graph walk starts. If a list of tensors is given instead, the seed_ops are set to be the consumers of those tensors.</li>
+<li><b><code>backward_seed_ops</code></b>: an iterable of operations from which the backward graph walk starts. If a list of tensors is given instead, the seed_ops are set to be the generators of those tensors.</li>
+<li><b><code>forward_inclusive</code></b>: if True the given forward_seed_ops are also part of the resulting set.</li>
+<li><b><code>backward_inclusive</code></b>: if True the given backward_seed_ops are also part of the resulting set.</li>
+<li><b><code>within_ops</code></b>: an iterable of tf.Operation within which the search is restricted. If within_ops is None, the search is performed within the whole graph.</li>
+<li><b><code>control_inputs</code></b>: A boolean indicating whether control inputs are enabled.</li>
+<li><b><code>control_outputs</code></b>: An instance of util.ControlOutputs or None. If not None, control outputs are enabled.</li>
+<li><b><code>control_ios</code></b>: An instance of util.ControlOutputs or None. If not None, both control inputs and control outputs are enabled. This is equivalent to set control_inputs to True and control_outputs to the util.ControlOutputs instance.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A Python set of all the tf.Operation in the intersection of a forward and a backward walk.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>forward_seed_ops</code> or <code>backward_seed_ops</code> or <code>within_ops</code> cannot be converted to a list of <code>tf.Operation</code>.</li>
+</ul>

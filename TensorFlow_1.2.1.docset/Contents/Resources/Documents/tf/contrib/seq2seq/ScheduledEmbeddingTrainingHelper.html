@@ -1,0 +1,66 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.seq2seq.ScheduledEmbeddingTrainingHelper" /> <meta itemprop="property" content="batch_size"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="initialize"/> <meta itemprop="property" content="next_inputs"/> <meta itemprop="property" content="sample"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.seq2seq.ScheduledEmbeddingTrainingHelper" class="dashAnchor"></a><h1 id="tf.contrib.seq2seq.scheduledembeddingtraininghelper">tf.contrib.seq2seq.ScheduledEmbeddingTrainingHelper</h1>
+<h3 id="class-tf.contrib.seq2seq.scheduledembeddingtraininghelper"><code>class tf.contrib.seq2seq.ScheduledEmbeddingTrainingHelper</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/seq2seq/python/ops/helper.py"><code>tensorflow/contrib/seq2seq/python/ops/helper.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.seq2seq.md#Dynamic_Decoding">Seq2seq Library (contrib) &gt; Dynamic Decoding</a></p>
+<p>A training helper that adds scheduled sampling.</p>
+<p>Returns -1s for sample_ids where no sampling took place; valid sample id values elsewhere.</p>
+<h2 id="properties">Properties</h2>
+<h3 id="batch_size">
+<code>batch_size</code>
+</h3>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    inputs,
+    sequence_length,
+    embedding,
+    sampling_probability,
+    time_major<span class="op">=</span><span class="va">False</span>,
+    seed<span class="op">=</span><span class="va">None</span>,
+    scheduling_seed<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Initializer.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>inputs</code></b>: A (structure of) input tensors.</li>
+<li><b><code>sequence_length</code></b>: An int32 vector tensor.</li>
+<li><b><code>embedding</code></b>: A callable that takes a vector tensor of <code>ids</code> (argmax ids), or the <code>params</code> argument for <code>embedding_lookup</code>.</li>
+<li><b><code>sampling_probability</code></b>: A 0D <code>float32</code> tensor: the probability of sampling categorically from the output ids instead of reading directly from the inputs.</li>
+<li><b><code>time_major</code></b>: Python bool. Whether the tensors in <code>inputs</code> are time major. If <code>False</code> (default), they are assumed to be batch major.</li>
+<li><b><code>seed</code></b>: The sampling seed.</li>
+<li><b><code>scheduling_seed</code></b>: The schedule decision rule sampling seed.</li>
+<li><b><code>name</code></b>: Name scope for any created operations.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>sampling_probability</code> is not a scalar or vector.</li>
+</ul>
+<h3 id="initialize">
+<code>initialize</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">initialize(name<span class="op">=</span><span class="va">None</span>)</code></pre></div>
+<h3 id="next_inputs">
+<code>next_inputs</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">next_inputs(
+    time,
+    outputs,
+    state,
+    sample_ids,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<h3 id="sample">
+<code>sample</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">sample(
+    time,
+    outputs,
+    state,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>

@@ -1,0 +1,37 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.image.resize_images" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.image.resize_images" class="dashAnchor"></a><h1 id="tf.image.resize_images">tf.image.resize_images</h1>
+<h3 id="tf.image.resize_images-1"><code>tf.image.resize_images</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">resize_images(
+    images,
+    size,
+    method<span class="op">=</span>ResizeMethod.BILINEAR,
+    align_corners<span class="op">=</span><span class="va">False</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/image_ops_impl.py"><code>tensorflow/python/ops/image_ops_impl.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/image.md#Resizing">Images &gt; Resizing</a></p>
+<p>Resize <code>images</code> to <code>size</code> using the specified <code>method</code>.</p>
+<p>Resized images will be distorted if their original aspect ratio is not the same as <code>size</code>. To avoid distortions see <a href="../../tf/image/resize_image_with_crop_or_pad.html"><code>tf.image.resize_image_with_crop_or_pad</code></a>.</p>
+<p><code>method</code> can be one of:</p>
+<ul>
+<li><b><code>ResizeMethod.BILINEAR</code></b>: <a href="https://en.wikipedia.org/wiki/Bilinear_interpolation">Bilinear interpolation.</a></li>
+<li><b><code>ResizeMethod.NEAREST_NEIGHBOR</code></b>: <a href="https://en.wikipedia.org/wiki/Nearest-neighbor_interpolation">Nearest neighbor interpolation.</a></li>
+<li><b><code>ResizeMethod.BICUBIC</code></b>: <a href="https://en.wikipedia.org/wiki/Bicubic_interpolation">Bicubic interpolation.</a></li>
+<li><b><code>ResizeMethod.AREA</code></b>: Area interpolation.</li>
+</ul>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>images</code></b>: 4-D Tensor of shape <code>[batch, height, width, channels]</code> or 3-D Tensor of shape <code>[height, width, channels]</code>.</li>
+<li><b><code>size</code></b>: A 1-D int32 Tensor of 2 elements: <code>new_height, new_width</code>. The new size for the images.</li>
+<li><b><code>method</code></b>: ResizeMethod. Defaults to <code>ResizeMethod.BILINEAR</code>.</li>
+<li><b><code>align_corners</code></b>: bool. If true, exactly align all 4 corners of the input and output. Defaults to <code>false</code>.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if the shape of <code>images</code> is incompatible with the shape arguments to this function</li>
+<li><b><code>ValueError</code></b>: if <code>size</code> has invalid shape or type.</li>
+<li><b><code>ValueError</code></b>: if an unsupported resize method is specified.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>If <code>images</code> was 4-D, a 4-D float Tensor of shape <code>[batch, new_height, new_width, channels]</code>. If <code>images</code> was 3-D, a 3-D float Tensor of shape <code>[new_height, new_width, channels]</code>.</p>

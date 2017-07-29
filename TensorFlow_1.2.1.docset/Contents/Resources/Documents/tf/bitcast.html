@@ -1,0 +1,25 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.bitcast" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.bitcast" class="dashAnchor"></a><h1 id="tf.bitcast">tf.bitcast</h1>
+<h3 id="tf.bitcast-1"><code>tf.bitcast</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">bitcast(
+    <span class="bu">input</span>,
+    <span class="bu">type</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_array_ops.py</code>.</p>
+<p>See the guide: <a href="../../../api_guides/python/array_ops.md#Casting">Tensor Transformations &gt; Casting</a></p>
+<p>Bitcasts a tensor from one type to another without copying data.</p>
+<p>Given a tensor <code>input</code>, this operation returns a tensor that has the same buffer data as <code>input</code> with datatype <code>type</code>.</p>
+<p>If the input datatype <code>T</code> is larger than the output datatype <code>type</code> then the shape changes from [...] to [..., sizeof(<code>T</code>)/sizeof(<code>type</code>)].</p>
+<p>If <code>T</code> is smaller than <code>type</code>, the operator requires that the rightmost dimension be equal to sizeof(<code>type</code>)/sizeof(<code>T</code>). The shape then goes from [..., sizeof(<code>type</code>)/sizeof(<code>T</code>)] to [...].</p>
+<p><em>NOTE</em>: Bitcast is implemented as a low-level cast, so machines with different endian orderings will give different results.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int64</code>, <code>int32</code>, <code>uint8</code>, <code>uint16</code>, <code>int16</code>, <code>int8</code>, <code>complex64</code>, <code>complex128</code>, <code>qint8</code>, <code>quint8</code>, <code>qint32</code>, <code>half</code>.</li>
+<li><b><code>type</code></b>: A <code>tf.DType</code> from: <code>tf.float32, tf.float64, tf.int64, tf.int32, tf.uint8, tf.uint16, tf.int16, tf.int8, tf.complex64, tf.complex128, tf.qint8, tf.quint8, tf.qint32, tf.half</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>type</code>.</p>

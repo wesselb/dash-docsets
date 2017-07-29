@@ -1,0 +1,322 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.distributions.bijectors.Bijector" /> <meta itemprop="property" content="dtype"/> <meta itemprop="property" content="event_ndims"/> <meta itemprop="property" content="graph_parents"/> <meta itemprop="property" content="is_constant_jacobian"/> <meta itemprop="property" content="name"/> <meta itemprop="property" content="validate_args"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="forward"/> <meta itemprop="property" content="forward_event_shape"/> <meta itemprop="property" content="forward_event_shape_tensor"/> <meta itemprop="property" content="forward_log_det_jacobian"/> <meta itemprop="property" content="inverse"/> <meta itemprop="property" content="inverse_event_shape"/> <meta itemprop="property" content="inverse_event_shape_tensor"/> <meta itemprop="property" content="inverse_log_det_jacobian"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.distributions.bijectors.Bijector" class="dashAnchor"></a><h1 id="tf.contrib.distributions.bijectors.bijector">tf.contrib.distributions.bijectors.Bijector</h1>
+<h3 id="class-tf.contrib.distributions.bijectors.bijector"><code>class tf.contrib.distributions.bijectors.Bijector</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/distributions/bijector_impl.py"><code>tensorflow/python/ops/distributions/bijector_impl.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../../api_guides/python/contrib.distributions.bijectors.md#Bijectors">Random variable transformations (contrib) &gt; Bijectors</a></p>
+<p>Interface for invertible transformations of a <code>Distribution</code> sample.</p>
+<h4 id="mathematical-details">Mathematical Details</h4>
+<p>A <code>Bijector</code> implements a <a href="https://en.wikipedia.org/wiki/Diffeomorphism">diffeomorphism</a>, i.e., a bijective, differentiable function. A <code>Bijector</code> is used by <code>TransformedDistribution</code> but can be generally used for transforming a <code>Distribution</code> generated <code>Tensor</code>. A <code>Bijector</code> is characterized by three operations:</p>
+<ol style="list-style-type: decimal">
+<li>Forward Evaluation</li>
+</ol>
+<p>Useful for turning one random outcome into another random outcome from a different distribution.</p>
+<ol start="2" style="list-style-type: decimal">
+<li>Inverse Evaluation</li>
+</ol>
+<p>Useful for &quot;reversing&quot; a transformation to compute one probability in terms of another.</p>
+<ol start="3" style="list-style-type: decimal">
+<li>(log o det o Jacobian o inverse)(x)</li>
+</ol>
+<p>&quot;The log of the determinant of the matrix of all first-order partial derivatives of the inverse function.&quot; Useful for inverting a transformation to compute one probability in terms of another. Geometrically, the det(Jacobian) is the volume of the transformation and is used to scale the probability.</p>
+<p>By convention, transformations of random variables are named in terms of the forward transformation. The forward transformation creates samples, the inverse is useful for computing probabilities.</p>
+<h4 id="example-uses">Example Uses</h4>
+<ul>
+<li>Basic properties:</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">x <span class="op">=</span> ...  <span class="co"># A tensor.</span>
+<span class="co"># Evaluate forward transformation.</span>
+fwd_x <span class="op">=</span> my_bijector.forward(x)
+x <span class="op">==</span> my_bijector.inverse(fwd_x)
+x <span class="op">!=</span> my_bijector.forward(fwd_x)  <span class="co"># Not equal because g(x) != g(g(x)).</span></code></pre></div>
+<ul>
+<li>Computing a log-likelihood:</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="kw">def</span> transformed_log_prob(bijector, log_prob, x):
+  <span class="cf">return</span> (bijector.inverse_log_det_jacobian(x) <span class="op">+</span>
+          log_prob(bijector.inverse(x)))</code></pre></div>
+<ul>
+<li>Transforming a random outcome:</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="kw">def</span> transformed_sample(bijector, x):
+  <span class="cf">return</span> bijector.forward(x)</code></pre></div>
+<h4 id="example-bijectors">Example Bijectors</h4>
+<ul>
+<li>&quot;Exponential&quot;</li>
+</ul>
+<p><code>none   Y = g(X) = exp(X)   X ~ Normal(0, 1)  # Univariate.</code></p>
+<p>Implies:</p>
+<p><code>none     g^{-1}(Y) = log(Y)     |Jacobian(g^{-1})(y)| = 1 / y     Y ~ LogNormal(0, 1), i.e.,     prob(Y=y) = |Jacobian(g^{-1})(y)| * prob(X=g^{-1}(y))               = (1 / y) Normal(log(y); 0, 1)</code></p>
+<p>Here is an example of how one might implement the <code>Exp</code> bijector:</p>
+<p>```python class Exp(Bijector):</p>
+<pre><code>  def __init__(self, event_ndims=0, validate_args=False, name=&quot;exp&quot;):
+    super(Exp, self).__init__(
+        event_ndims=event_ndims, validate_args=validate_args, name=name)
+
+  def _forward(self, x):
+    return math_ops.exp(x)
+
+  def _inverse(self, y):
+    return math_ops.log(y)
+
+  def _inverse_log_det_jacobian(self, y):
+    return -self._forward_log_det_jacobian(self._inverse(y))
+
+  def _forward_log_det_jacobian(self, x):
+    if self.event_ndims is None:
+      raise ValueError(&quot;Jacobian requires known event_ndims.&quot;)
+    event_dims = array_ops.shape(x)[-self.event_ndims:]
+    return math_ops.reduce_sum(x, axis=event_dims)
+```</code></pre>
+<ul>
+<li>&quot;Affine&quot;</li>
+</ul>
+<p><code>none   Y = g(X) = sqrtSigma * X + mu   X ~ MultivariateNormal(0, I_d)</code></p>
+<p>Implies:</p>
+<p><code>none     g^{-1}(Y) = inv(sqrtSigma) * (Y - mu)     |Jacobian(g^{-1})(y)| = det(inv(sqrtSigma))     Y ~ MultivariateNormal(mu, sqrtSigma) , i.e.,     prob(Y=y) = |Jacobian(g^{-1})(y)| * prob(X=g^{-1}(y))               = det(sqrtSigma)^(-d) *                 MultivariateNormal(inv(sqrtSigma) * (y - mu); 0, I_d)</code></p>
+<h4 id="jacobian">Jacobian</h4>
+<p>The Jacobian is a reduction over event dims. To see this, consider the <code>Exp</code> <code>Bijector</code> applied to a <code>Tensor</code> which has sample, batch, and event (S, B, E) shape semantics. Suppose the <code>Tensor</code>'s partitioned-shape is <code>(S=[4], B=[2], E=[3, 3])</code>. The shape of the <code>Tensor</code> returned by <code>forward</code> and <code>inverse</code> is unchanged, i.e., <code>[4, 2, 3, 3]</code>. However the shape returned by <code>inverse_log_det_jacobian</code> is <code>[4, 2]</code> because the Jacobian is a reduction over the event dimensions.</p>
+<p>It is sometimes useful to implement the inverse Jacobian as the negative forward Jacobian. For example,</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="kw">def</span> _inverse_log_det_jacobian(<span class="va">self</span>, y):
+   <span class="cf">return</span> <span class="op">-</span><span class="va">self</span>._forward_log_det_jac(<span class="va">self</span>._inverse(y))  <span class="co"># Note negation.</span></code></pre></div>
+<p>The correctness of this approach can be seen from the following claim.</p>
+<ul>
+<li><p>Claim:</p>
+<p>Assume <code>Y = g(X)</code> is a bijection whose derivative exists and is nonzero for its domain, i.e., <code>dY/dX = d/dX g(X) != 0</code>. Then:</p>
+<pre class="none"><code>(log o det o jacobian o g^{-1})(Y) = -(log o det o jacobian o g)(X)</code></pre></li>
+<li><p>Proof:</p>
+<p>From the bijective, nonzero differentiability of <code>g</code>, the <a href="https://en.wikipedia.org/wiki/Inverse_function_theorem">inverse function theorem</a> implies <code>g^{-1}</code> is differentiable in the image of <code>g</code>. Applying the chain rule to <code>y = g(x) = g(g^{-1}(y))</code> yields <code>I = g'(g^{-1}(y))*g^{-1}'(y)</code>. The same theorem also implies <code>g{-1}'</code> is non-singular therefore: <code>inv[ g'(g^{-1}(y)) ] = g^{-1}'(y)</code>. The claim follows from <a href="https://en.wikipedia.org/wiki/Determinant#Multiplicativity_and_matrix_groups">properties of determinant</a>.</p></li>
+</ul>
+<p>Generally its preferable to directly implement the inverse Jacobian. This should have superior numerical stability and will often share subgraphs with the <code>_inverse</code> implementation.</p>
+<h4 id="subclass-requirements">Subclass Requirements</h4>
+<ul>
+<li><p>Subclasses typically implement:</p>
+<ul>
+<li><code>_forward</code>,</li>
+<li><code>_inverse</code>,</li>
+<li><code>_inverse_log_det_jacobian</code>,</li>
+<li><code>_forward_log_det_jacobian</code> (optional).</li>
+</ul></li>
+</ul>
+<p>The <code>_forward_log_det_jacobian</code> is called when the bijector is inverted via the <code>Invert</code> bijector. If undefined, a slightly less efficiently calculation, <code>-1 * _inverse_log_det_jacobian</code>, is used.</p>
+<p>If the bijector changes the shape of the input, you must also implement:</p>
+<pre><code>- _forward_event_shape_tensor,
+- _forward_event_shape (optional),
+- _inverse_event_shape_tensor,
+- _inverse_event_shape (optional).</code></pre>
+<p>By default the event-shape is assumed unchanged from input.</p>
+<ul>
+<li>If the <code>Bijector</code>'s use is limited to <code>TransformedDistribution</code> (or friends like <code>QuantizedDistribution</code>) then depending on your use, you may not need to implement all of <code>_forward</code> and <code>_inverse</code> functions.</li>
+</ul>
+<p>Examples:</p>
+<pre><code>1. Sampling (e.g., `sample`) only requires `_forward`.
+2. Probability functions (e.g., `prob`, `cdf`, `survival`) only require
+   `_inverse` (and related).
+3. Only calling probability functions on the output of `sample` means
+  `_inverse` can be implemented as a cache lookup.</code></pre>
+<p>See &quot;Example Uses&quot; [above] which shows how these functions are used to transform a distribution. (Note: <code>_forward</code> could theoretically be implemented as a cache lookup but this would require controlling the underlying sample generation mechanism.)</p>
+<h2 id="properties">Properties</h2>
+<h3 id="dtype">
+<code>dtype</code>
+</h3>
+<p>dtype of <code>Tensor</code>s transformable by this distribution.</p>
+<h3 id="event_ndims">
+<code>event_ndims</code>
+</h3>
+<p>Returns then number of event dimensions this bijector operates on.</p>
+<h3 id="graph_parents">
+<code>graph_parents</code>
+</h3>
+<p>Returns this <code>Bijector</code>'s graph_parents as a Python list.</p>
+<h3 id="is_constant_jacobian">
+<code>is_constant_jacobian</code>
+</h3>
+<p>Returns true iff the Jacobian is not a function of x.</p>
+<p>Note: Jacobian is either constant for both forward and inverse or neither.</p>
+<h4 id="returns">Returns:</h4>
+<ul>
+<li><b><code>is_constant_jacobian</code></b>: Python <code>bool</code>.</li>
+</ul>
+<h3 id="name">
+<code>name</code>
+</h3>
+<p>Returns the string name of this <code>Bijector</code>.</p>
+<h3 id="validate_args">
+<code>validate_args</code>
+</h3>
+<p>Returns True if Tensor arguments will be validated.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    event_ndims<span class="op">=</span><span class="va">None</span>,
+    graph_parents<span class="op">=</span><span class="va">None</span>,
+    is_constant_jacobian<span class="op">=</span><span class="va">False</span>,
+    validate_args<span class="op">=</span><span class="va">False</span>,
+    dtype<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Constructs Bijector.</p>
+<p>A <code>Bijector</code> transforms random variables into new random variables.</p>
+<p>Examples:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Create the Y = g(X) = X transform which operates on vector events.</span>
+identity <span class="op">=</span> Identity(event_ndims<span class="op">=</span><span class="dv">1</span>)
+
+<span class="co"># Create the Y = g(X) = exp(X) transform which operates on matrices.</span>
+exp <span class="op">=</span> Exp(event_ndims<span class="op">=</span><span class="dv">2</span>)</code></pre></div>
+<p>See <code>Bijector</code> subclass docstring for more details and specific examples.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>event_ndims</code></b>: number of dimensions associated with event coordinates.</li>
+<li><b><code>graph_parents</code></b>: Python list of graph prerequisites of this <code>Bijector</code>.</li>
+<li><b><code>is_constant_jacobian</code></b>: Python <code>bool</code> indicating that the Jacobian is not a function of the input.</li>
+<li><b><code>validate_args</code></b>: Python <code>bool</code>, default <code>False</code>. Whether to validate input with asserts. If <code>validate_args</code> is <code>False</code>, and the inputs are invalid, correct behavior is not guaranteed.</li>
+<li><b><code>dtype</code></b>: <code>tf.dtype</code> supported by this <code>Bijector</code>. <code>None</code> means dtype is not enforced.</li>
+<li><b><code>name</code></b>: The name to give Ops created by the initializer.</li>
+</ul>
+<h3 id="forward">
+<code>forward</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">forward(
+    x,
+    name<span class="op">=</span><span class="st">&#39;forward&#39;</span>
+)</code></pre></div>
+<p>Returns the forward <code>Bijector</code> evaluation, i.e., X = g(Y).</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code>. The input to the &quot;forward&quot; evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+</ul>
+<h4 id="returns-1">Returns:</h4>
+<p><code>Tensor</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>x.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if <code>_forward</code> is not implemented.</li>
+</ul>
+<h3 id="forward_event_shape">
+<code>forward_event_shape</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">forward_event_shape(input_shape)</code></pre></div>
+<p>Shape of a single sample from a single batch as a <code>TensorShape</code>.</p>
+<p>Same meaning as <code>forward_event_shape_tensor</code>. May be only partially defined.</p>
+<h4 id="args-2">Args:</h4>
+<ul>
+<li><b><code>input_shape</code></b>: <code>TensorShape</code> indicating event-portion shape passed into <code>forward</code> function.</li>
+</ul>
+<h4 id="returns-2">Returns:</h4>
+<ul>
+<li><b><code>forward_event_shape_tensor</code></b>: <code>TensorShape</code> indicating event-portion shape after applying <code>forward</code>. Possibly unknown.</li>
+</ul>
+<h3 id="forward_event_shape_tensor">
+<code>forward_event_shape_tensor</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">forward_event_shape_tensor(
+    input_shape,
+    name<span class="op">=</span><span class="st">&#39;forward_event_shape_tensor&#39;</span>
+)</code></pre></div>
+<p>Shape of a single sample from a single batch as an <code>int32</code> 1D <code>Tensor</code>.</p>
+<h4 id="args-3">Args:</h4>
+<ul>
+<li><b><code>input_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape passed into <code>forward</code> function.</li>
+<li><b><code>name</code></b>: name to give to the op</li>
+</ul>
+<h4 id="returns-3">Returns:</h4>
+<ul>
+<li><b><code>forward_event_shape_tensor</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape after applying <code>forward</code>.</li>
+</ul>
+<h3 id="forward_log_det_jacobian">
+<code>forward_log_det_jacobian</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">forward_log_det_jacobian(
+    x,
+    name<span class="op">=</span><span class="st">&#39;forward_log_det_jacobian&#39;</span>
+)</code></pre></div>
+<p>Returns both the forward_log_det_jacobian.</p>
+<h4 id="args-4">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code>. The input to the &quot;forward&quot; Jacobian evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+</ul>
+<h4 id="returns-4">Returns:</h4>
+<p><code>Tensor</code>.</p>
+<h4 id="raises-1">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_forward_log_det_jacobian</code> nor {<code>_inverse</code>, <code>_inverse_log_det_jacobian</code>} are implemented.</li>
+</ul>
+<h3 id="inverse">
+<code>inverse</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">inverse(
+    y,
+    name<span class="op">=</span><span class="st">&#39;inverse&#39;</span>
+)</code></pre></div>
+<p>Returns the inverse <code>Bijector</code> evaluation, i.e., X = g^{-1}(Y).</p>
+<h4 id="args-5">Args:</h4>
+<ul>
+<li><b><code>y</code></b>: <code>Tensor</code>. The input to the &quot;inverse&quot; evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+</ul>
+<h4 id="returns-5">Returns:</h4>
+<p><code>Tensor</code>.</p>
+<h4 id="raises-2">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if <code>_inverse</code> is not implemented.</li>
+</ul>
+<h3 id="inverse_event_shape">
+<code>inverse_event_shape</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">inverse_event_shape(output_shape)</code></pre></div>
+<p>Shape of a single sample from a single batch as a <code>TensorShape</code>.</p>
+<p>Same meaning as <code>inverse_event_shape_tensor</code>. May be only partially defined.</p>
+<h4 id="args-6">Args:</h4>
+<ul>
+<li><b><code>output_shape</code></b>: <code>TensorShape</code> indicating event-portion shape passed into <code>inverse</code> function.</li>
+</ul>
+<h4 id="returns-6">Returns:</h4>
+<ul>
+<li><b><code>inverse_event_shape_tensor</code></b>: <code>TensorShape</code> indicating event-portion shape after applying <code>inverse</code>. Possibly unknown.</li>
+</ul>
+<h3 id="inverse_event_shape_tensor">
+<code>inverse_event_shape_tensor</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">inverse_event_shape_tensor(
+    output_shape,
+    name<span class="op">=</span><span class="st">&#39;inverse_event_shape_tensor&#39;</span>
+)</code></pre></div>
+<p>Shape of a single sample from a single batch as an <code>int32</code> 1D <code>Tensor</code>.</p>
+<h4 id="args-7">Args:</h4>
+<ul>
+<li><b><code>output_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape passed into <code>inverse</code> function.</li>
+<li><b><code>name</code></b>: name to give to the op</li>
+</ul>
+<h4 id="returns-7">Returns:</h4>
+<ul>
+<li><b><code>inverse_event_shape_tensor</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape after applying <code>inverse</code>.</li>
+</ul>
+<h3 id="inverse_log_det_jacobian">
+<code>inverse_log_det_jacobian</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">inverse_log_det_jacobian(
+    y,
+    name<span class="op">=</span><span class="st">&#39;inverse_log_det_jacobian&#39;</span>
+)</code></pre></div>
+<p>Returns the (log o det o Jacobian o inverse)(y).</p>
+<p>Mathematically, returns: <code>log(det(dX/dY))(Y)</code>. (Recall that: <code>X=g^{-1}(Y)</code>.)</p>
+<p>Note that <code>forward_log_det_jacobian</code> is the negative of this function.</p>
+<h4 id="args-8">Args:</h4>
+<ul>
+<li><b><code>y</code></b>: <code>Tensor</code>. The input to the &quot;inverse&quot; Jacobian evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+</ul>
+<h4 id="returns-8">Returns:</h4>
+<p><code>Tensor</code>.</p>
+<h4 id="raises-3">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if <code>_inverse_log_det_jacobian</code> is not implemented.</li>
+</ul>

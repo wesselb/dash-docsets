@@ -1,0 +1,45 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.lookup.index_table_from_tensor" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.lookup.index_table_from_tensor" class="dashAnchor"></a><h1 id="tf.contrib.lookup.index_table_from_tensor">tf.contrib.lookup.index_table_from_tensor</h1>
+<h3 id="tf.contrib.lookup.index_table_from_tensor-1"><code>tf.contrib.lookup.index_table_from_tensor</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">index_table_from_tensor(
+    mapping,
+    num_oov_buckets<span class="op">=</span><span class="dv">0</span>,
+    default_value<span class="op">=-</span><span class="dv">1</span>,
+    hasher_spec<span class="op">=</span>tf.contrib.lookup.FastHashSpec,
+    dtype<span class="op">=</span>tf.string,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/lookup/lookup_ops.py"><code>tensorflow/contrib/lookup/lookup_ops.py</code></a>.</p>
+<p>Returns a lookup table that converts a string tensor into int64 IDs.</p>
+<p>This operation constructs a lookup table to convert tensor of strings into int64 IDs. The mapping can be initialized from a string <code>mapping</code> 1-D tensor where each element is a key and corresponding index within the tensor is the value.</p>
+<p>Any lookup of an out-of-vocabulary token will return a bucket ID based on its hash if <code>num_oov_buckets</code> is greater than zero. Otherwise it is assigned the <code>default_value</code>. The bucket ID range is <code>[mapping size, mapping size + num_oov_buckets]</code>.</p>
+<p>The underlying table must be initialized by calling <code>tf.tables_initializer.run()</code> or <code>table.init.run()</code> once.</p>
+<p>Elements in <code>mapping</code> cannot have duplicates, otherwise when executing the table initializer op, it will throw a <code>FailedPreconditionError</code>.</p>
+<p>Sample Usages:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">mapping_strings <span class="op">=</span> t.constant([<span class="st">&quot;emerson&quot;</span>, <span class="st">&quot;lake&quot;</span>, <span class="st">&quot;palmer&quot;</span>])
+table <span class="op">=</span> tf.contrib.lookup.index_table_from_tensor(
+    mapping<span class="op">=</span>mapping_strings, num_oov_buckets<span class="op">=</span><span class="dv">1</span>, default_value<span class="op">=-</span><span class="dv">1</span>)
+features <span class="op">=</span> tf.constant([<span class="st">&quot;emerson&quot;</span>, <span class="st">&quot;lake&quot;</span>, <span class="st">&quot;and&quot;</span>, <span class="st">&quot;palmer&quot;</span>])
+ids <span class="op">=</span> table.lookup(features)
+...
+tf.tables_initializer().run()
+
+ids.<span class="bu">eval</span>()  <span class="op">==&gt;</span> [<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">2</span>]</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>mapping</code></b>: A 1-D <code>Tensor</code> that specifies the mapping of keys to indices. The type of this object must be castable to <code>dtype</code>.</li>
+<li><b><code>num_oov_buckets</code></b>: The number of out-of-vocabulary buckets.</li>
+<li><b><code>default_value</code></b>: The value to use for out-of-vocabulary feature values. Defaults to -1.</li>
+<li><b><code>hasher_spec</code></b>: A <code>HasherSpec</code> to specify the hash function to use for assignment of out-of-vocabulary buckets.</li>
+<li><b><code>dtype</code></b>: The type of values passed to <code>lookup</code>. Only string and integers are supported.</li>
+<li><b><code>name</code></b>: A name for this op (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The lookup table to map an input <code>Tensor</code> to index <code>int64</code> <code>Tensor</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>mapping</code> is invalid.</li>
+<li><b><code>ValueError</code></b>: If <code>num_oov_buckets</code> is negative.</li>
+</ul>

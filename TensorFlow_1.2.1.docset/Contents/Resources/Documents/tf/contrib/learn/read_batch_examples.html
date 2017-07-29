@@ -1,0 +1,45 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.learn.read_batch_examples" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.learn.read_batch_examples" class="dashAnchor"></a><h1 id="tf.contrib.learn.read_batch_examples">tf.contrib.learn.read_batch_examples</h1>
+<h3 id="tf.contrib.learn.read_batch_examples-1"><code>tf.contrib.learn.read_batch_examples</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">read_batch_examples(
+    file_pattern,
+    batch_size,
+    reader,
+    randomize_input<span class="op">=</span><span class="va">True</span>,
+    num_epochs<span class="op">=</span><span class="va">None</span>,
+    queue_capacity<span class="op">=</span><span class="dv">10000</span>,
+    num_threads<span class="op">=</span><span class="dv">1</span>,
+    read_batch_size<span class="op">=</span><span class="dv">1</span>,
+    parse_fn<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>,
+    seed<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/learn/python/learn/learn_io/graph_io.py"><code>tensorflow/contrib/learn/python/learn/learn_io/graph_io.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.learn.md#Input_processing">Learn (contrib) &gt; Input processing</a></p>
+<p>Adds operations to read, queue, batch <code>Example</code> protos.</p>
+<p>Given file pattern (or list of files), will setup a queue for file names, read <code>Example</code> proto using provided <code>reader</code>, use batch queue to create batches of examples of size <code>batch_size</code>.</p>
+<p>All queue runners are added to the queue runners collection, and may be started via <code>start_queue_runners</code>.</p>
+<p>All ops are added to the default graph.</p>
+<p>Use <code>parse_fn</code> if you need to do parsing / processing on single examples.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>file_pattern</code></b>: List of files or patterns of file paths containing <code>Example</code> records. See <code>tf.gfile.Glob</code> for pattern rules.</li>
+<li><b><code>batch_size</code></b>: An int or scalar <code>Tensor</code> specifying the batch size to use.</li>
+<li><b><code>reader</code></b>: A function or class that returns an object with <code>read</code> method, (filename tensor) -&gt; (example tensor).</li>
+<li><b><code>randomize_input</code></b>: Whether the input should be randomized.</li>
+<li><b><code>num_epochs</code></b>: Integer specifying the number of times to read through the dataset. If <code>None</code>, cycles through the dataset forever. NOTE - If specified, creates a variable that must be initialized, so call <code>tf.global_variables_initializer()</code> and run the op in a session.</li>
+<li><b><code>queue_capacity</code></b>: Capacity for input queue.</li>
+<li><b><code>num_threads</code></b>: The number of threads enqueuing examples. In order to have predicted and repeatable order of reading and enqueueing, such as in prediction and evaluation mode, <code>num_threads</code> should be 1.</li>
+<li><b><code>read_batch_size</code></b>: An int or scalar <code>Tensor</code> specifying the number of records to read at once</li>
+<li><b><code>parse_fn</code></b>: Parsing function, takes <code>Example</code> Tensor returns parsed representation. If <code>None</code>, no parsing is done.</li>
+<li><b><code>name</code></b>: Name of resulting op.</li>
+<li><b><code>seed</code></b>: An integer (optional). Seed used if randomize_input == True.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>String <code>Tensor</code> of batched <code>Example</code> proto.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: for invalid inputs.</li>
+</ul>

@@ -1,0 +1,24 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.floormod" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.floormod" class="dashAnchor"></a><h1 id="tf.floormod">tf.floormod</h1>
+<h3 id="tf.floormod-1"><code>tf.floormod</code></h3>
+<a name="//apple_ref/cpp/Function/tf.mod" class="dashAnchor"></a><h3 id="tf.mod"><code>tf.mod</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">floormod(
+    x,
+    y,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_math_ops.py</code>.</p>
+<p>See the guide: <a href="../../../api_guides/python/math_ops.md#Arithmetic_Operators">Math &gt; Arithmetic Operators</a></p>
+<p>Returns element-wise remainder of division. When <code>x &lt; 0</code> xor <code>y &lt; 0</code> is</p>
+<p>true, this follows Python semantics in that the result here is consistent with a flooring divide. E.g. <code>floor(x / y) * y + mod(x, y) = x</code>.</p>
+<p><em>NOTE</em>: <code>FloorMod</code> supports broadcasting. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>, <code>float32</code>, <code>float64</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code>. Must have the same type as <code>x</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>

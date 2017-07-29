@@ -1,0 +1,23 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.decode_raw" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.decode_raw" class="dashAnchor"></a><h1 id="tf.decode_raw">tf.decode_raw</h1>
+<h3 id="tf.decode_raw-1"><code>tf.decode_raw</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">decode_raw(
+    <span class="bu">bytes</span>,
+    out_type,
+    little_endian<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_parsing_ops.py</code>.</p>
+<p>See the guide: <a href="../../../api_guides/python/io_ops.md#Converting">Inputs and Readers &gt; Converting</a></p>
+<p>Reinterpret the bytes of a string as a vector of numbers.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>bytes</code></b>: A <code>Tensor</code> of type <code>string</code>. All the elements must have the same length.</li>
+<li><b><code>out_type</code></b>: A <code>tf.DType</code> from: <code>tf.half, tf.float32, tf.float64, tf.int32, tf.uint8, tf.int16, tf.int8, tf.int64</code>.</li>
+<li><b><code>little_endian</code></b>: An optional <code>bool</code>. Defaults to <code>True</code>. Whether the input <code>bytes</code> are in little-endian order. Ignored for <code>out_type</code> values that are stored in a single byte like <code>uint8</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>out_type</code>. A Tensor with one more dimension than the input <code>bytes</code>. The added dimension will have size equal to the length of the elements of <code>bytes</code> divided by the number of bytes to represent <code>out_type</code>.</p>

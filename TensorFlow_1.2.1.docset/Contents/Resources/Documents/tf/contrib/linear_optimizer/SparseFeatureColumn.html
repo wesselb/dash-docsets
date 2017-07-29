@@ -1,0 +1,67 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.linear_optimizer.SparseFeatureColumn" /> <meta itemprop="property" content="example_indices"/> <meta itemprop="property" content="feature_indices"/> <meta itemprop="property" content="feature_values"/> <meta itemprop="property" content="__init__"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.linear_optimizer.SparseFeatureColumn" class="dashAnchor"></a><h1 id="tf.contrib.linear_optimizer.sparsefeaturecolumn">tf.contrib.linear_optimizer.SparseFeatureColumn</h1>
+<h3 id="class-tf.contrib.linear_optimizer.sparsefeaturecolumn"><code>class tf.contrib.linear_optimizer.SparseFeatureColumn</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/linear_optimizer/python/ops/sparse_feature_column.py"><code>tensorflow/contrib/linear_optimizer/python/ops/sparse_feature_column.py</code></a>.</p>
+<p>Represents a sparse feature column.</p>
+<p>Contains three tensors representing a sparse feature column, they are example indices (<code>int64</code>), feature indices (<code>int64</code>), and feature values (<code>float</code>). Feature weights are optional, and are treated as <code>1.0f</code> if missing.</p>
+<p>For example, consider a batch of 4 examples, which contains the following features in a particular <code>SparseFeatureColumn</code>:</p>
+<ul>
+<li>Example 0: feature 5, value 1</li>
+<li>Example 1: feature 6, value 1 and feature 10, value 0.5</li>
+<li>Example 2: no features</li>
+<li>Example 3: two copies of feature 2, value 1</li>
+</ul>
+<p>This SparseFeatureColumn will be represented as follows:</p>
+<pre><code> &lt;0, 5,  1&gt;
+ &lt;1, 6,  1&gt;
+ &lt;1, 10, 0.5&gt;
+ &lt;3, 2,  1&gt;
+ &lt;3, 2,  1&gt;</code></pre>
+<p>For a batch of 2 examples below:</p>
+<ul>
+<li>Example 0: feature 5</li>
+<li>Example 1: feature 6</li>
+</ul>
+<p>is represented by <code>SparseFeatureColumn</code> as:</p>
+<pre><code> &lt;0, 5,  1&gt;
+ &lt;1, 6,  1&gt;
+</code></pre>
+<h2 id="properties">Properties</h2>
+<h3 id="example_indices">
+<code>example_indices</code>
+</h3>
+<p>The example indices represented as a dense tensor.</p>
+<h4 id="returns">Returns:</h4>
+<p>A 1-D Tensor of int64 with shape <code>[N]</code>.</p>
+<h3 id="feature_indices">
+<code>feature_indices</code>
+</h3>
+<p>The feature indices represented as a dense tensor.</p>
+<h4 id="returns-1">Returns:</h4>
+<p>A 1-D Tensor of int64 with shape <code>[N]</code>.</p>
+<h3 id="feature_values">
+<code>feature_values</code>
+</h3>
+<p>The feature values represented as a dense tensor.</p>
+<h4 id="returns-2">Returns:</h4>
+<p>May return None, or a 1-D Tensor of float32 with shape <code>[N]</code>.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    example_indices,
+    feature_indices,
+    feature_values
+)</code></pre></div>
+<p>Creates a <code>SparseFeatureColumn</code> representation.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>example_indices</code></b>: A 1-D int64 tensor of shape <code>[N]</code>. Also, accepts python lists, or numpy arrays.</li>
+<li><b><code>feature_indices</code></b>: A 1-D int64 tensor of shape <code>[N]</code>. Also, accepts python lists, or numpy arrays.</li>
+<li><b><code>feature_values</code></b>: An optional 1-D tensor float tensor of shape <code>[N]</code>. Also, accepts python lists, or numpy arrays.</li>
+</ul>
+<h4 id="returns-3">Returns:</h4>
+<p>A <code>SparseFeatureColumn</code></p>

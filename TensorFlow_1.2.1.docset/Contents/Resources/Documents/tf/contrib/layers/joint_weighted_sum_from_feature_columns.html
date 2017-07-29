@@ -1,0 +1,37 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.layers.joint_weighted_sum_from_feature_columns" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.layers.joint_weighted_sum_from_feature_columns" class="dashAnchor"></a><h1 id="tf.contrib.layers.joint_weighted_sum_from_feature_columns">tf.contrib.layers.joint_weighted_sum_from_feature_columns</h1>
+<h3 id="tf.contrib.layers.joint_weighted_sum_from_feature_columns-1"><code>tf.contrib.layers.joint_weighted_sum_from_feature_columns</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">joint_weighted_sum_from_feature_columns(
+    columns_to_tensors,
+    feature_columns,
+    num_outputs,
+    weight_collections<span class="op">=</span><span class="va">None</span>,
+    trainable<span class="op">=</span><span class="va">True</span>,
+    scope<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/layers/python/layers/feature_column_ops.py"><code>tensorflow/contrib/layers/python/layers/feature_column_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.layers.md#Feature_columns">Layers (contrib) &gt; Feature columns</a></p>
+<p>A restricted linear prediction builder based on FeatureColumns.</p>
+<p>As long as all feature columns are unweighted sparse columns this computes the prediction of a linear model which stores all weights in a single variable.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>columns_to_tensors</code></b>: A mapping from feature column to tensors. 'string' key means a base feature (not-transformed). It can have FeatureColumn as a key too. That means that FeatureColumn is already transformed by input pipeline. For example, <code>inflow</code> may have handled transformations.</li>
+<li><b><code>feature_columns</code></b>: A set containing all the feature columns. All items in the set should be instances of classes derived from FeatureColumn.</li>
+<li><b><code>num_outputs</code></b>: An integer specifying number of outputs. Default value is 1.</li>
+<li><b><code>weight_collections</code></b>: List of graph collections to which weights are added.</li>
+<li><b><code>trainable</code></b>: If <code>True</code> also add variables to the graph collection <code>GraphKeys.TRAINABLE_VARIABLES</code> (see tf.Variable).</li>
+<li><b><code>scope</code></b>: Optional scope for variable_scope.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A tuple containing:</p>
+<ul>
+<li>A Tensor which represents predictions of a linear model.</li>
+<li>A list of Variables storing the weights.</li>
+<li>A Variable which is used for bias.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if FeatureColumn cannot be used for linear predictions.</li>
+</ul>

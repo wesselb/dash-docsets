@@ -1,0 +1,23 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.graph_editor.detach_outputs" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.graph_editor.detach_outputs" class="dashAnchor"></a><h1 id="tf.contrib.graph_editor.detach_outputs">tf.contrib.graph_editor.detach_outputs</h1>
+<h3 id="tf.contrib.graph_editor.detach_outputs-1"><code>tf.contrib.graph_editor.detach_outputs</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">detach_outputs(
+    sgv,
+    control_outputs<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/graph_editor/edit.py"><code>tensorflow/contrib/graph_editor/edit.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.graph_editor.md#Module_edit">Graph Editor (contrib) &gt; Module: edit</a></p>
+<p>Detach the output of a subgraph view.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>sgv</code></b>: the subgraph view to be detached. This argument is converted to a subgraph using the same rules as the function subgraph.make_view. Note that sgv is modified in place.</li>
+<li><b><code>control_outputs</code></b>: a util.ControlOutputs instance or None. If not None the control outputs are also detached.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A tuple <code>(sgv, output_placeholders)</code> where <code>sgv</code> is a new subgraph view of the detached subgraph; <code>output_placeholders</code> is a list of the created output placeholders.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>StandardError</code></b>: if sgv cannot be converted to a SubGraphView using the same rules than the function subgraph.make_view.</li>
+</ul>

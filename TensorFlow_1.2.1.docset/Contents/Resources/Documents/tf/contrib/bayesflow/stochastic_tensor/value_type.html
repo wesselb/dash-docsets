@@ -1,0 +1,26 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.bayesflow.stochastic_tensor.value_type" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.bayesflow.stochastic_tensor.value_type" class="dashAnchor"></a><h1 id="tf.contrib.bayesflow.stochastic_tensor.value_type">tf.contrib.bayesflow.stochastic_tensor.value_type</h1>
+<h3 id="tf.contrib.bayesflow.stochastic_tensor.value_type-1"><code>tf.contrib.bayesflow.stochastic_tensor.value_type</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">value_type(
+    <span class="op">*</span>args,
+    <span class="op">**</span>kwds
+)</code></pre></div>
+<p>See the guide: <a href="../../../../../../api_guides/python/contrib.bayesflow.stochastic_tensor.md#Stochastic_Tensor_Value_Types">BayesFlow Stochastic Tensors (contrib) &gt; Stochastic Tensor Value Types</a></p>
+<p>Creates a value type context for any StochasticTensor created within.</p>
+<p>Typical usage:</p>
+<pre><code>with sg.value_type(sg.MeanValue(stop_gradients=True)):
+  st = sg.StochasticTensor(tf.contrib.distributions.Normal, mu=mu,
+                           sigma=sigma)</code></pre>
+<p>In the example above, <code>st.value()</code> (or equivalently, <code>tf.identity(st)</code>) will be the mean value of the Normal distribution, i.e., <code>mu</code> (possibly broadcasted to the shape of <code>sigma</code>). Furthermore, because the <code>MeanValue</code> was marked with <code>stop_gradients=True</code>, this value will have been wrapped in a <code>stop_gradients</code> call to disable any possible backpropagation.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>dist_value_type</code></b>: An instance of <code>MeanValue</code>, <code>SampleValue</code>, or any other stochastic value type.</li>
+</ul>
+<h4 id="yields">Yields:</h4>
+<p>A context for <code>StochasticTensor</code> objects that controls the value created when they are initialized.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>dist_value_type</code> is not an instance of a stochastic value type.</li>
+</ul>

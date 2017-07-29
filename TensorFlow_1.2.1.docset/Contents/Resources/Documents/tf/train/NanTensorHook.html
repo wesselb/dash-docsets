@@ -1,0 +1,69 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.train.NanTensorHook" /> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="after_create_session"/> <meta itemprop="property" content="after_run"/> <meta itemprop="property" content="before_run"/> <meta itemprop="property" content="begin"/> <meta itemprop="property" content="end"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.train.NanTensorHook" class="dashAnchor"></a><h1 id="tf.train.nantensorhook">tf.train.NanTensorHook</h1>
+<h3 id="class-tf.train.nantensorhook"><code>class tf.train.NanTensorHook</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/training/basic_session_run_hooks.py"><code>tensorflow/python/training/basic_session_run_hooks.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/train.md#Training_Hooks">Training &gt; Training Hooks</a></p>
+<p>Monitors the loss tensor and stops training if loss is NaN.</p>
+<p>Can either fail with exception or just stop training.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    loss_tensor,
+    fail_on_nan_loss<span class="op">=</span><span class="va">True</span>
+)</code></pre></div>
+<p>Initializes a <code>NanTensorHook</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>loss_tensor</code></b>: <code>Tensor</code>, the loss tensor.</li>
+<li><b><code>fail_on_nan_loss</code></b>: <code>bool</code>, whether to raise exception when loss is NaN.</li>
+</ul>
+<h3 id="after_create_session">
+<code>after_create_session</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">after_create_session(
+    session,
+    coord
+)</code></pre></div>
+<p>Called when new TensorFlow session is created.</p>
+<p>This is called to signal the hooks that a new session has been created. This has two essential differences with the situation in which <code>begin</code> is called:</p>
+<ul>
+<li>When this is called, the graph is finalized and ops can no longer be added to the graph.</li>
+<li>This method will also be called as a result of recovering a wrapped session, not only at the beginning of the overall session.</li>
+</ul>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>session</code></b>: A TensorFlow Session that has been created.</li>
+<li><b><code>coord</code></b>: A Coordinator object which keeps track of all threads.</li>
+</ul>
+<h3 id="after_run">
+<code>after_run</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">after_run(
+    run_context,
+    run_values
+)</code></pre></div>
+<h3 id="before_run">
+<code>before_run</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">before_run(run_context)</code></pre></div>
+<h3 id="begin">
+<code>begin</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">begin()</code></pre></div>
+<p>Called once before using the session.</p>
+<p>When called, the default graph is the one that will be launched in the session. The hook can modify the graph by adding new operations to it. After the <code>begin()</code> call the graph will be finalized and the other callbacks can not modify the graph anymore. Second call of <code>begin()</code> on the same graph, should not change the graph.</p>
+<h3 id="end">
+<code>end</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">end(session)</code></pre></div>
+<p>Called at the end of session.</p>
+<p>The <code>session</code> argument can be used in case the hook wants to run final ops, such as saving a last checkpoint.</p>
+<p>If <code>session.run()</code> raises exception other than OutOfRangeError or StopIteration then <code>end()</code> is not called. Note the difference between <code>end()</code> and <code>after_run()</code> behavior when <code>session.run()</code> raises OutOfRangeError or StopIteration. In that case <code>end()</code> is called but <code>after_run()</code> is not called.</p>
+<h4 id="args-2">Args:</h4>
+<ul>
+<li><b><code>session</code></b>: A TensorFlow Session that will be soon closed.</li>
+</ul>

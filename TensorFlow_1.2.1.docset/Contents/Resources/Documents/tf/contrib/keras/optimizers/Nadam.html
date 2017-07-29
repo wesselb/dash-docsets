@@ -1,0 +1,73 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.optimizers.Nadam" /> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="from_config"/> <meta itemprop="property" content="get_config"/> <meta itemprop="property" content="get_gradients"/> <meta itemprop="property" content="get_updates"/> <meta itemprop="property" content="get_weights"/> <meta itemprop="property" content="set_weights"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.keras.optimizers.Nadam" class="dashAnchor"></a><h1 id="tf.contrib.keras.optimizers.nadam">tf.contrib.keras.optimizers.Nadam</h1>
+<h3 id="class-tf.contrib.keras.optimizers.nadam"><code>class tf.contrib.keras.optimizers.Nadam</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/optimizers.py"><code>tensorflow/contrib/keras/python/keras/optimizers.py</code></a>.</p>
+<p>Nesterov Adam optimizer.</p>
+<p>Much like Adam is essentially RMSprop with momentum, Nadam is Adam RMSprop with Nesterov momentum.</p>
+<p>Default parameters follow those provided in the paper. It is recommended to leave the parameters of this optimizer at their default values.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>lr: float &gt;= 0. Learning rate.
+beta_1/beta_2: floats, 0 &lt; beta &lt; 1. Generally close to 1.
+epsilon: float &gt;= 0. Fuzz factor.</code></pre>
+<p>References: - <a href="http://cs229.stanford.edu/proj2015/054_report.pdf">Nadam report</a> - <a href="http://www.cs.toronto.edu/~fritz/absps/momentum.pdf">On the importance of initialization and momentum in deep learning</a></p>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    lr<span class="op">=</span><span class="fl">0.002</span>,
+    beta_1<span class="op">=</span><span class="fl">0.9</span>,
+    beta_2<span class="op">=</span><span class="fl">0.999</span>,
+    epsilon<span class="op">=</span><span class="fl">1e-08</span>,
+    schedule_decay<span class="op">=</span><span class="fl">0.004</span>,
+    <span class="op">**</span>kwargs
+)</code></pre></div>
+<h3 id="from_config">
+<code>from_config</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">from_config(
+    cls,
+    config
+)</code></pre></div>
+<h3 id="get_config">
+<code>get_config</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_config()</code></pre></div>
+<h3 id="get_gradients">
+<code>get_gradients</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_gradients(
+    loss,
+    params
+)</code></pre></div>
+<h3 id="get_updates">
+<code>get_updates</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_updates(
+    params,
+    constraints,
+    loss
+)</code></pre></div>
+<h3 id="get_weights">
+<code>get_weights</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_weights()</code></pre></div>
+<p>Returns the current value of the weights of the optimizer.</p>
+<h4 id="returns">Returns:</h4>
+<pre><code>A list of numpy arrays.</code></pre>
+<h3 id="set_weights">
+<code>set_weights</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">set_weights(weights)</code></pre></div>
+<p>Sets the weights of the optimizer, from Numpy arrays.</p>
+<p>Should only be called after computing the gradients (otherwise the optimizer has no weights).</p>
+<h4 id="arguments-1">Arguments:</h4>
+<pre><code>weights: a list of Numpy arrays. The number
+    of arrays and their shape must match
+    number of the dimensions of the weights
+    of the optimizer (i.e. it should match the
+    output of `get_weights`).</code></pre>
+<h4 id="raises">Raises:</h4>
+<pre><code>ValueError: in case of incompatible weight shapes.</code></pre>

@@ -1,0 +1,20 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.train.add_queue_runner" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.train.add_queue_runner" class="dashAnchor"></a><h1 id="tf.train.add_queue_runner">tf.train.add_queue_runner</h1>
+<h3 id="tf.train.add_queue_runner-1"><code>tf.train.add_queue_runner</code></h3>
+<a name="//apple_ref/cpp/Function/tf.train.queue_runner.add_queue_runner" class="dashAnchor"></a><h3 id="tf.train.queue_runner.add_queue_runner"><code>tf.train.queue_runner.add_queue_runner</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">add_queue_runner(
+    qr,
+    collection<span class="op">=</span>tf.GraphKeys.QUEUE_RUNNERS
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/training/queue_runner_impl.py"><code>tensorflow/python/training/queue_runner_impl.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/train.md#Coordinator_and_QueueRunner">Training &gt; Coordinator and QueueRunner</a></p>
+<p>Adds a <code>QueueRunner</code> to a collection in the graph.</p>
+<p>When building a complex model that uses many queues it is often difficult to gather all the queue runners that need to be run. This convenience function allows you to add a queue runner to a well known collection in the graph.</p>
+<p>The companion method <code>start_queue_runners()</code> can be used to start threads for all the collected queue runners.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>qr</code></b>: A <code>QueueRunner</code>.</li>
+<li><b><code>collection</code></b>: A <code>GraphKey</code> specifying the graph collection to add the queue runner to. Defaults to <code>GraphKeys.QUEUE_RUNNERS</code>.</li>
+</ul>

@@ -1,0 +1,29 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.utils.CustomObjectScope" /> <meta itemprop="property" content="__enter__"/> <meta itemprop="property" content="__exit__"/> <meta itemprop="property" content="__init__"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.keras.utils.CustomObjectScope" class="dashAnchor"></a><h1 id="tf.contrib.keras.utils.customobjectscope">tf.contrib.keras.utils.CustomObjectScope</h1>
+<h3 id="class-tf.contrib.keras.utils.customobjectscope"><code>class tf.contrib.keras.utils.CustomObjectScope</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/utils/generic_utils.py"><code>tensorflow/contrib/keras/python/keras/utils/generic_utils.py</code></a>.</p>
+<p>Provides a scope that changes to <code>_GLOBAL_CUSTOM_OBJECTS</code> cannot escape.</p>
+<p>Code within a <code>with</code> statement will be able to access custom objects by name. Changes to global custom objects persist within the enclosing <code>with</code> statement. At end of the <code>with</code> statement, global custom objects are reverted to state at beginning of the <code>with</code> statement.</p>
+<p>Example:</p>
+<p>Consider a custom object <code>MyObject</code></p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    <span class="cf">with</span> CustomObjectScope({<span class="st">&quot;MyObject&quot;</span>:MyObject}):
+        layer <span class="op">=</span> Dense(..., W_regularizer<span class="op">=</span><span class="st">&quot;MyObject&quot;</span>)
+        <span class="co"># save, load, etc. will recognize custom object by name</span></code></pre></div>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(<span class="op">*</span>args)</code></pre></div>
+<h3 id="__enter__">
+<code><strong>enter</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__enter__</span>()</code></pre></div>
+<h3 id="__exit__">
+<code><strong>exit</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__exit__</span>(
+    <span class="op">*</span>args,
+    <span class="op">**</span>kwargs
+)</code></pre></div>

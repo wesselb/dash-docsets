@@ -1,0 +1,15 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.nccl.all_max" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.nccl.all_max" class="dashAnchor"></a><h1 id="tf.contrib.nccl.all_max">tf.contrib.nccl.all_max</h1>
+<h3 id="tf.contrib.nccl.all_max-1"><code>tf.contrib.nccl.all_max</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">all_max(tensors)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/nccl/python/ops/nccl_ops.py"><code>tensorflow/contrib/nccl/python/ops/nccl_ops.py</code></a>.</p>
+<p>Returns a list of tensors with the all-reduce max across <code>tensors</code>.</p>
+<p>The computation is done with an all-reduce operation, so if only some of the returned tensors are evaluated then the computation will hang.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>tensors</code></b>: The input tensors across which to reduce; must be assigned to GPU devices.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>List of tensors, each with the maximum of the input tensors, where tensor i has the same device as <code>tensors[i]</code>.</p>

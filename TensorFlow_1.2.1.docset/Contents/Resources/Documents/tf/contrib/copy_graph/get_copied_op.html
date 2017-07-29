@@ -1,0 +1,21 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.copy_graph.get_copied_op" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.copy_graph.get_copied_op" class="dashAnchor"></a><h1 id="tf.contrib.copy_graph.get_copied_op">tf.contrib.copy_graph.get_copied_op</h1>
+<h3 id="tf.contrib.copy_graph.get_copied_op-1"><code>tf.contrib.copy_graph.get_copied_op</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_copied_op(
+    org_instance,
+    graph,
+    scope<span class="op">=</span><span class="st">&#39;&#39;</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/copy_graph/python/util/copy_elements.py"><code>tensorflow/contrib/copy_graph/python/util/copy_elements.py</code></a>.</p>
+<p>Given an <code>Operation</code> instance from some <code>Graph</code>, returns its namesake from <code>graph</code>, under the specified scope (default <code>&quot;&quot;</code>).</p>
+<p>If a copy of <code>org_instance</code> is present in <code>graph</code> under the given <code>scope</code>, it will be returned.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>org_instance</code></b>: An <code>Operation</code> from some <code>Graph</code>.</li>
+<li><b><code>graph</code></b>: The <code>Graph</code> to be searched for a copr of <code>org_instance</code>.</li>
+<li><b><code>scope</code></b>: The scope <code>org_instance</code> is present in.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The <code>Operation</code> copy from <code>graph</code>.</p>

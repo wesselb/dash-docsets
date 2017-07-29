@@ -1,0 +1,70 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.lookup.LookupInterface" /> <meta itemprop="property" content="init"/> <meta itemprop="property" content="key_dtype"/> <meta itemprop="property" content="name"/> <meta itemprop="property" content="value_dtype"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="check_table_dtypes"/> <meta itemprop="property" content="lookup"/> <meta itemprop="property" content="size"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.lookup.LookupInterface" class="dashAnchor"></a><h1 id="tf.contrib.lookup.lookupinterface">tf.contrib.lookup.LookupInterface</h1>
+<h3 id="class-tf.contrib.lookup.lookupinterface"><code>class tf.contrib.lookup.LookupInterface</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/lookup/lookup_ops.py"><code>tensorflow/contrib/lookup/lookup_ops.py</code></a>.</p>
+<p>Represent a lookup table that persists across different steps.</p>
+<h2 id="properties">Properties</h2>
+<h3 id="init">
+<code>init</code>
+</h3>
+<p>The table initialization op.</p>
+<h3 id="key_dtype">
+<code>key_dtype</code>
+</h3>
+<p>The table key dtype.</p>
+<h3 id="name">
+<code>name</code>
+</h3>
+<p>The name of the table.</p>
+<h3 id="value_dtype">
+<code>value_dtype</code>
+</h3>
+<p>The table value dtype.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    key_dtype,
+    value_dtype,
+    name
+)</code></pre></div>
+<p>Construct a lookup table interface.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>key_dtype</code></b>: The table key type.</li>
+<li><b><code>value_dtype</code></b>: The table value type.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h3 id="check_table_dtypes">
+<code>check_table_dtypes</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">check_table_dtypes(
+    key_dtype,
+    value_dtype
+)</code></pre></div>
+<p>Check that the given key_dtype and value_dtype matches the table dtypes.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>key_dtype</code></b>: The key data type to check.</li>
+<li><b><code>value_dtype</code></b>: The value data type to check.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: when 'key_dtype' or 'value_dtype' doesn't match the table data types.</li>
+</ul>
+<h3 id="lookup">
+<code>lookup</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">lookup(
+    keys,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Looks up <code>keys</code> in a table, outputs the corresponding values.</p>
+<h3 id="size">
+<code>size</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">size(name<span class="op">=</span><span class="va">None</span>)</code></pre></div>
+<p>Compute the number of elements in this table.</p>

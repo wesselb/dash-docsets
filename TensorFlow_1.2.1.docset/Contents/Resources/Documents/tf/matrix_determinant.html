@@ -1,0 +1,20 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.matrix_determinant" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.matrix_determinant" class="dashAnchor"></a><h1 id="tf.matrix_determinant">tf.matrix_determinant</h1>
+<h3 id="tf.matrix_determinant-1"><code>tf.matrix_determinant</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">matrix_determinant(
+    <span class="bu">input</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_linalg_ops.py</code>.</p>
+<p>See the guide: <a href="../../../api_guides/python/math_ops.md#Matrix_Math_Functions">Math &gt; Matrix Math Functions</a></p>
+<p>Computes the determinant of one ore more square matrices.</p>
+<p>The input is a tensor of shape <code>[..., M, M]</code> whose inner-most 2 dimensions form square matrices. The output is a tensor containing the determinants for all input submatrices <code>[..., :, :]</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>. Shape is <code>[..., M, M]</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>input</code>. Shape is <code>[...]</code>.</p>

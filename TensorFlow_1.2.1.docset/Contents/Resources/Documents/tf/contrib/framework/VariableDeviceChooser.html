@@ -1,0 +1,33 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.framework.VariableDeviceChooser" /> <meta itemprop="property" content="__call__"/> <meta itemprop="property" content="__init__"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.framework.VariableDeviceChooser" class="dashAnchor"></a><h1 id="tf.contrib.framework.variabledevicechooser">tf.contrib.framework.VariableDeviceChooser</h1>
+<h3 id="class-tf.contrib.framework.variabledevicechooser"><code>class tf.contrib.framework.VariableDeviceChooser</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/framework/python/ops/variables.py"><code>tensorflow/contrib/framework/python/ops/variables.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.framework.md#Variables">Framework (contrib) &gt; Variables</a></p>
+<p>Device chooser for variables.</p>
+<p>When using a parameter server it will assign them in a round-robin fashion. When not using a parameter server it allows GPU or CPU placement.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    num_tasks<span class="op">=</span><span class="dv">0</span>,
+    job_name<span class="op">=</span><span class="st">&#39;ps&#39;</span>,
+    device_type<span class="op">=</span><span class="st">&#39;CPU&#39;</span>,
+    device_index<span class="op">=</span><span class="dv">0</span>
+)</code></pre></div>
+<p>Initialize VariableDeviceChooser.</p>
+<p>Usage: To use with 2 parameter servers: VariableDeviceChooser(2)</p>
+<p>To use without parameter servers: VariableDeviceChooser() VariableDeviceChooser(device_type='GPU') # For GPU placement</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>num_tasks</code></b>: number of tasks.</li>
+<li><b><code>job_name</code></b>: String, a name for the parameter server job.</li>
+<li><b><code>device_type</code></b>: Optional device type string (e.g. &quot;CPU&quot; or &quot;GPU&quot;)</li>
+<li><b><code>device_index</code></b>: int. Optional device index. If left unspecified, device represents 'any' device_index.</li>
+</ul>
+<h3 id="__call__">
+<code><strong>call</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__call__</span>(op)</code></pre></div>

@@ -1,0 +1,27 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.string_split" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.string_split" class="dashAnchor"></a><h1 id="tf.string_split">tf.string_split</h1>
+<h3 id="tf.string_split-1"><code>tf.string_split</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">string_split(
+    source,
+    delimiter<span class="op">=</span><span class="st">&#39; &#39;</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/string_ops.py"><code>tensorflow/python/ops/string_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/string_ops.md#Splitting">Strings &gt; Splitting</a></p>
+<p>Split elements of <code>source</code> based on <code>delimiter</code> into a <code>SparseTensor</code>.</p>
+<p>Let N be the size of source (typically N will be the batch size). Split each element of <code>source</code> based on <code>delimiter</code> and return a <code>SparseTensor</code> containing the split tokens. Empty tokens are ignored.</p>
+<p>If <code>delimiter</code> is an empty string, each element of the <code>source</code> is split into individual strings, each containing one byte. (This includes splitting multibyte sequences of UTF-8.) If delimiter contains multiple bytes, it is treated as a set of delimiters with each considered a potential split point.</p>
+<p>For example: N = 2, source[0] is 'hello world' and source[1] is 'a b c', then the output will be</p>
+<p>st.indices = [0, 0; 0, 1; 1, 0; 1, 1; 1, 2] st.shape = [2, 3] st.values = ['hello', 'world', 'a', 'b', 'c']</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>source</code></b>: <code>1-D</code> string <code>Tensor</code>, the strings to split.</li>
+<li><b><code>delimiter</code></b>: <code>0-D</code> string <code>Tensor</code>, the delimiter character, the string should be length 0 or 1.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If delimiter is not a string.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>SparseTensor</code> of rank <code>2</code>, the strings split according to the delimiter. The first column of the indices corresponds to the row in <code>source</code> and the second column corresponds to the index of the split component in this row.</p>

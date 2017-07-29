@@ -1,0 +1,23 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.image.resize_nearest_neighbor" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.image.resize_nearest_neighbor" class="dashAnchor"></a><h1 id="tf.image.resize_nearest_neighbor">tf.image.resize_nearest_neighbor</h1>
+<h3 id="tf.image.resize_nearest_neighbor-1"><code>tf.image.resize_nearest_neighbor</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">resize_nearest_neighbor(
+    images,
+    size,
+    align_corners<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_image_ops.py</code>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/image.md#Resizing">Images &gt; Resizing</a></p>
+<p>Resize <code>images</code> to <code>size</code> using nearest neighbor interpolation.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>images</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>uint8</code>, <code>int8</code>, <code>int16</code>, <code>int32</code>, <code>int64</code>, <code>half</code>, <code>float32</code>, <code>float64</code>. 4-D with shape <code>[batch, height, width, channels]</code>.</li>
+<li><b><code>size</code></b>: A 1-D int32 Tensor of 2 elements: <code>new_height, new_width</code>. The new size for the images.</li>
+<li><b><code>align_corners</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>. If true, rescale input by (new_height - 1) / (height - 1), which exactly aligns the 4 corners of images and resized images. If false, rescale by new_height / height. Treat similarly the width dimension.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>images</code>. 4-D with shape <code>[batch, new_height, new_width, channels]</code>.</p>

@@ -1,0 +1,20 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.preprocessing.text.text_to_word_sequence" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.keras.preprocessing.text.text_to_word_sequence" class="dashAnchor"></a><h1 id="tf.contrib.keras.preprocessing.text.text_to_word_sequence">tf.contrib.keras.preprocessing.text.text_to_word_sequence</h1>
+<h3 id="tf.contrib.keras.preprocessing.text.text_to_word_sequence-1"><code>tf.contrib.keras.preprocessing.text.text_to_word_sequence</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">text_to_word_sequence(
+    text,
+    filters<span class="op">=</span><span class="st">&#39;!&quot;#$%&amp;()*+,-./:;&lt;=&gt;?@[</span><span class="ch">\\</span><span class="st">]^_`{|}~</span><span class="ch">\t\n</span><span class="st">&#39;</span>,
+    lower<span class="op">=</span><span class="va">True</span>,
+    split<span class="op">=</span><span class="st">&#39; &#39;</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/preprocessing/text.py"><code>tensorflow/contrib/keras/python/keras/preprocessing/text.py</code></a>.</p>
+<p>Converts a text to a sequence of word indices.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>text: Input text (string).
+filters: Sequence of characters to filter out.
+lower: Whether to convert the input to lowercase.
+split: Sentence split marker (string).</code></pre>
+<h4 id="returns">Returns:</h4>
+<pre><code>A list of integer word indices.</code></pre>

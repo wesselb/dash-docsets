@@ -1,0 +1,32 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.Assert" /></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.Assert" class="dashAnchor"></a><h1 id="tf.assert">tf.Assert</h1>
+<h3 id="tf.assert-1"><code>tf.Assert</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">Assert(
+    condition,
+    data,
+    summarize<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/control_flow_ops.py"><code>tensorflow/python/ops/control_flow_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/control_flow_ops.md#Debugging_Operations">Control Flow &gt; Debugging Operations</a></p>
+<p>Asserts that the given condition is true.</p>
+<p>If <code>condition</code> evaluates to false, print the list of tensors in <code>data</code>. <code>summarize</code> determines how many entries of the tensors to print.</p>
+<p>NOTE: To ensure that Assert executes, one usually attaches a dependency:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Ensure maximum element of x is smaller or equal to 1</span>
+assert_op <span class="op">=</span> tf.Assert(tf.less_equal(tf.reduce_max(x), <span class="dv">1</span>.), [x])
+<span class="cf">with</span> tf.control_dependencies([assert_op]):
+  ... code using x ...</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>condition</code></b>: The condition to evaluate.</li>
+<li><b><code>data</code></b>: The tensors to print out when condition is false.</li>
+<li><b><code>summarize</code></b>: Print this many entries of each tensor.</li>
+<li><b><code>name</code></b>: A name for this operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<ul>
+<li><b><code>assert_op</code></b>: An <code>Operation</code> that, when executed, raises a <code>tf.errors.InvalidArgumentError</code> if <code>condition</code> is not true.</li>
+</ul>
+<p><strong>NOTE</strong> The output of this function should be used. If it is not, a warning will be logged. To mark the output as used, call its .mark_used() method.</p>

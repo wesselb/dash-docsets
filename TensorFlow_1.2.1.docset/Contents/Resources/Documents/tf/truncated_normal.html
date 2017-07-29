@@ -1,0 +1,28 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.truncated_normal" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.truncated_normal" class="dashAnchor"></a><h1 id="tf.truncated_normal">tf.truncated_normal</h1>
+<h3 id="tf.truncated_normal-1"><code>tf.truncated_normal</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">truncated_normal(
+    shape,
+    mean<span class="op">=</span><span class="fl">0.0</span>,
+    stddev<span class="op">=</span><span class="fl">1.0</span>,
+    dtype<span class="op">=</span>tf.float32,
+    seed<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/random_ops.py"><code>tensorflow/python/ops/random_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/constant_op.md#Random_Tensors">Constants, Sequences, and Random Values &gt; Random Tensors</a></p>
+<p>Outputs random values from a truncated normal distribution.</p>
+<p>The generated values follow a normal distribution with specified mean and standard deviation, except that values whose magnitude is more than 2 standard deviations from the mean are dropped and re-picked.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>shape</code></b>: A 1-D integer Tensor or Python array. The shape of the output tensor.</li>
+<li><b><code>mean</code></b>: A 0-D Tensor or Python value of type <code>dtype</code>. The mean of the truncated normal distribution.</li>
+<li><b><code>stddev</code></b>: A 0-D Tensor or Python value of type <code>dtype</code>. The standard deviation of the truncated normal distribution.</li>
+<li><b><code>dtype</code></b>: The type of the output.</li>
+<li><b><code>seed</code></b>: A Python integer. Used to create a random seed for the distribution. See <a href="../tf/set_random_seed.html"><code>tf.set_random_seed</code></a> for behavior.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A tensor of the specified shape filled with random truncated normal values.</p>

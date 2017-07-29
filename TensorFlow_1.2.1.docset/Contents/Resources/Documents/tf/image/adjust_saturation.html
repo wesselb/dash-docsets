@@ -1,0 +1,23 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.image.adjust_saturation" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.image.adjust_saturation" class="dashAnchor"></a><h1 id="tf.image.adjust_saturation">tf.image.adjust_saturation</h1>
+<h3 id="tf.image.adjust_saturation-1"><code>tf.image.adjust_saturation</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">adjust_saturation(
+    image,
+    saturation_factor,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/image_ops_impl.py"><code>tensorflow/python/ops/image_ops_impl.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/image.md#Image_Adjustments">Images &gt; Image Adjustments</a></p>
+<p>Adjust saturation of an RGB image.</p>
+<p>This is a convenience method that converts an RGB image to float representation, converts it to HSV, add an offset to the saturation channel, converts back to RGB and then back to the original data type. If several adjustments are chained it is advisable to minimize the number of redundant conversions.</p>
+<p><code>image</code> is an RGB image. The image saturation is adjusted by converting the image to HSV and multiplying the saturation (S) channel by <code>saturation_factor</code> and clipping. The image is then converted back to RGB.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>image</code></b>: RGB image or images. Size of the last dimension must be 3.</li>
+<li><b><code>saturation_factor</code></b>: float. Factor to multiply the saturation by.</li>
+<li><b><code>name</code></b>: A name for this operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Adjusted image(s), same shape and DType as <code>image</code>.</p>

@@ -1,0 +1,24 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.image.adjust_gamma" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.image.adjust_gamma" class="dashAnchor"></a><h1 id="tf.image.adjust_gamma">tf.image.adjust_gamma</h1>
+<h3 id="tf.image.adjust_gamma-1"><code>tf.image.adjust_gamma</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">adjust_gamma(
+    image,
+    gamma<span class="op">=</span><span class="dv">1</span>,
+    gain<span class="op">=</span><span class="dv">1</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/image_ops_impl.py"><code>tensorflow/python/ops/image_ops_impl.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/image.md#Image_Adjustments">Images &gt; Image Adjustments</a></p>
+<p>Performs Gamma Correction on the input image.</p>
+<p>Also known as Power Law Transform. This function transforms the input image pixelwise according to the equation Out = In**gamma after scaling each pixel to the range 0 to 1.</p>
+<h4 id="args">Args:</h4>
+<p>image : A Tensor. gamma : A scalar. Non negative real number. gain : A scalar. The constant multiplier.</p>
+<h4 id="returns">Returns:</h4>
+<p>A Tensor. Gamma corrected output image.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If gamma is negative.</li>
+</ul>
+<p>Notes: For gamma greater than 1, the histogram will shift towards left and the output image will be darker than the input image. For gamma less than 1, the histogram will shift towards right and the output image will be brighter than the input image.</p>
+<p>References: [1] http://en.wikipedia.org/wiki/Gamma_correction</p>

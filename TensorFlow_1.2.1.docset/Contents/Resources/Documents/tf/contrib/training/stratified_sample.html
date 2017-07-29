@@ -1,0 +1,45 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.training.stratified_sample" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.training.stratified_sample" class="dashAnchor"></a><h1 id="tf.contrib.training.stratified_sample">tf.contrib.training.stratified_sample</h1>
+<h3 id="tf.contrib.training.stratified_sample-1"><code>tf.contrib.training.stratified_sample</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">stratified_sample(
+    tensors,
+    labels,
+    target_probs,
+    batch_size,
+    init_probs<span class="op">=</span><span class="va">None</span>,
+    enqueue_many<span class="op">=</span><span class="va">False</span>,
+    queue_capacity<span class="op">=</span><span class="dv">16</span>,
+    threads_per_queue<span class="op">=</span><span class="dv">1</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/training/python/training/sampling_ops.py"><code>tensorflow/contrib/training/python/training/sampling_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.training.md#Online_data_resampling">Training (contrib) &gt; Online data resampling</a></p>
+<p>Stochastically creates batches based on per-class probabilities.</p>
+<p>This method discards examples. Internally, it creates one queue to amortize the cost of disk reads, and one queue to hold the properly-proportioned batch.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>tensors</code></b>: List of tensors for data. All tensors are either one item or a batch, according to enqueue_many.</li>
+<li><b><code>labels</code></b>: Tensor for label of data. Label is a single integer or a batch, depending on enqueue_many. It is not a one-hot vector.</li>
+<li><b><code>target_probs</code></b>: Target class proportions in batch. An object whose type has a registered Tensor conversion function.</li>
+<li><b><code>batch_size</code></b>: Size of batch to be returned.</li>
+<li><b><code>init_probs</code></b>: Class proportions in the data. An object whose type has a registered Tensor conversion function, or <code>None</code> for estimating the initial distribution.</li>
+<li><b><code>enqueue_many</code></b>: Bool. If true, interpret input tensors as having a batch dimension.</li>
+<li><b><code>queue_capacity</code></b>: Capacity of the large queue that holds input examples.</li>
+<li><b><code>threads_per_queue</code></b>: Number of threads for the large queue that holds input examples and for the final queue with the proper class proportions.</li>
+<li><b><code>name</code></b>: Optional prefix for ops created by this function.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: enqueue_many is True and labels doesn't have a batch dimension, or if enqueue_many is False and labels isn't a scalar.</li>
+<li><b><code>ValueError</code></b>: enqueue_many is True, and batch dimension on data and labels don't match.</li>
+<li><b><code>ValueError</code></b>: if probs don't sum to one.</li>
+<li><b><code>ValueError</code></b>: if a zero initial probability class has a nonzero target probability.</li>
+<li><b><code>TFAssertion</code></b>: if labels aren't integers in [0, num classes).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>(data_batch, label_batch), where data_batch is a list of tensors of the same length as <code>tensors</code></p>
+<p>Example: # Get tensor for a single data and label example. data, label = data_provider.Get(['data', 'label'])</p>
+<p># Get stratified batch according to per-class probabilities. target_probs = [...distribution you want...][data_batch], labels = tf.contrib.training.stratified_sample( [data], label, target_probs)</p>
+<p># Run batch through network. ...</p>

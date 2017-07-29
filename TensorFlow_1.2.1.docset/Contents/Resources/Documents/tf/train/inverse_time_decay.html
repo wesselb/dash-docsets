@@ -1,0 +1,46 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.train.inverse_time_decay" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.train.inverse_time_decay" class="dashAnchor"></a><h1 id="tf.train.inverse_time_decay">tf.train.inverse_time_decay</h1>
+<h3 id="tf.train.inverse_time_decay-1"><code>tf.train.inverse_time_decay</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">inverse_time_decay(
+    learning_rate,
+    global_step,
+    decay_steps,
+    decay_rate,
+    staircase<span class="op">=</span><span class="va">False</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/training/learning_rate_decay.py"><code>tensorflow/python/training/learning_rate_decay.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/train.md#Decaying_the_learning_rate">Training &gt; Decaying the learning rate</a></p>
+<p>Applies inverse time decay to the initial learning rate.</p>
+<p>When training a model, it is often recommended to lower the learning rate as the training progresses. This function applies an inverse decay function to a provided initial learning rate. It requires an <code>global_step</code> value to compute the decayed learning rate. You can just pass a TensorFlow variable that you increment at each training step.</p>
+<p>The function returns the decayed learning rate. It is computed as:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">decayed_learning_rate <span class="op">=</span> learning_rate <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> decay_rate <span class="op">*</span> t)</code></pre></div>
+<p>Example: decay 1/t with a rate of 0.5:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">...
+global_step <span class="op">=</span> tf.Variable(<span class="dv">0</span>, trainable<span class="op">=</span><span class="va">False</span>)
+learning_rate <span class="op">=</span> <span class="fl">0.1</span>
+k <span class="op">=</span> <span class="fl">0.5</span>
+learning_rate <span class="op">=</span> tf.train.inverse_time_decay(learning_rate, global_step, k)
+
+<span class="co"># Passing global_step to minimize() will increment it at each step.</span>
+learning_step <span class="op">=</span> (
+    tf.train.GradientDescentOptimizer(learning_rate)
+    .minimize(...my loss..., global_step<span class="op">=</span>global_step)
+)</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>learning_rate</code></b>: A scalar <code>float32</code> or <code>float64</code> <code>Tensor</code> or a Python number. The initial learning rate.</li>
+<li><b><code>global_step</code></b>: A Python number. Global step to use for the decay computation. Must not be negative.</li>
+<li><b><code>decay_steps</code></b>: How often to apply decay.</li>
+<li><b><code>decay_rate</code></b>: A Python number. The decay rate.</li>
+<li><b><code>staircase</code></b>: Whether to apply decay in a discrete staircase, as opposed to continuous, fashion.</li>
+<li><b><code>name</code></b>: String. Optional name of the operation. Defaults to 'InverseTimeDecay'.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A scalar <code>Tensor</code> of the same type as <code>learning_rate</code>. The decayed learning rate.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>global_step</code> is not supplied.</li>
+</ul>

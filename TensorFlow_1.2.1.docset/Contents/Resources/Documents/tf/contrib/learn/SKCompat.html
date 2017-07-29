@@ -1,0 +1,67 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.learn.SKCompat" /> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="fit"/> <meta itemprop="property" content="get_params"/> <meta itemprop="property" content="predict"/> <meta itemprop="property" content="score"/> <meta itemprop="property" content="set_params"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.learn.SKCompat" class="dashAnchor"></a><h1 id="tf.contrib.learn.skcompat">tf.contrib.learn.SKCompat</h1>
+<h3 id="class-tf.contrib.learn.skcompat"><code>class tf.contrib.learn.SKCompat</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/learn/python/learn/estimators/estimator.py"><code>tensorflow/contrib/learn/python/learn/estimators/estimator.py</code></a>.</p>
+<p>Scikit learn wrapper for TensorFlow Learn Estimator.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(estimator)</code></pre></div>
+<h3 id="fit">
+<code>fit</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">fit(
+    x,
+    y,
+    batch_size<span class="op">=</span><span class="dv">128</span>,
+    steps<span class="op">=</span><span class="va">None</span>,
+    max_steps<span class="op">=</span><span class="va">None</span>,
+    monitors<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<h3 id="get_params">
+<code>get_params</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_params(deep<span class="op">=</span><span class="va">True</span>)</code></pre></div>
+<p>Get parameters for this estimator.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><p><b><code>deep</code></b>: boolean, optional</p>
+<p>If <code>True</code>, will return the parameters for this estimator and contained subobjects that are estimators.</p></li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>params : mapping of string to any Parameter names mapped to their values.</p>
+<h3 id="predict">
+<code>predict</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">predict(
+    x,
+    batch_size<span class="op">=</span><span class="dv">128</span>,
+    outputs<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<h3 id="score">
+<code>score</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">score(
+    x,
+    y,
+    batch_size<span class="op">=</span><span class="dv">128</span>,
+    steps<span class="op">=</span><span class="va">None</span>,
+    metrics<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<h3 id="set_params">
+<code>set_params</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">set_params(<span class="op">**</span>params)</code></pre></div>
+<p>Set the parameters of this estimator.</p>
+<p>The method works on simple estimators as well as on nested objects (such as pipelines). The former have parameters of the form <code>&lt;component&gt;__&lt;parameter&gt;</code> so that it's possible to update each component of a nested object.</p>
+<h4 id="args-1">Args:</h4>
+<p>**params: Parameters.</p>
+<h4 id="returns-1">Returns:</h4>
+<p>self</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If params contain invalid names.</li>
+</ul>

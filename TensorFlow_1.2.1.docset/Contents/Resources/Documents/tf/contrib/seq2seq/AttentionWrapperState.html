@@ -1,0 +1,61 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.seq2seq.AttentionWrapperState" /> <meta itemprop="property" content="alignment_history"/> <meta itemprop="property" content="alignments"/> <meta itemprop="property" content="attention"/> <meta itemprop="property" content="cell_state"/> <meta itemprop="property" content="time"/> <meta itemprop="property" content="__new__"/> <meta itemprop="property" content="clone"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.seq2seq.AttentionWrapperState" class="dashAnchor"></a><h1 id="tf.contrib.seq2seq.attentionwrapperstate">tf.contrib.seq2seq.AttentionWrapperState</h1>
+<h3 id="class-tf.contrib.seq2seq.attentionwrapperstate"><code>class tf.contrib.seq2seq.AttentionWrapperState</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/seq2seq/python/ops/attention_wrapper.py"><code>tensorflow/contrib/seq2seq/python/ops/attention_wrapper.py</code></a>.</p>
+<p><code>namedtuple</code> storing the state of a <code>AttentionWrapper</code>.</p>
+<p>Contains:</p>
+<ul>
+<li><code>cell_state</code>: The state of the wrapped <code>RNNCell</code> at the previous time step.</li>
+<li><code>attention</code>: The attention emitted at the previous time step.</li>
+<li><code>time</code>: int32 scalar containing the current time step.</li>
+<li><code>alignments</code>: The alignment emitted at the previous time step.</li>
+<li><code>alignment_history</code>: (if enabled) a <code>TensorArray</code> containing alignment matrices from all time steps. Call <code>stack()</code> to convert to a <code>Tensor</code>.</li>
+</ul>
+<h2 id="properties">Properties</h2>
+<h3 id="alignment_history">
+<code>alignment_history</code>
+</h3>
+<p>Alias for field number 4</p>
+<h3 id="alignments">
+<code>alignments</code>
+</h3>
+<p>Alias for field number 3</p>
+<h3 id="attention">
+<code>attention</code>
+</h3>
+<p>Alias for field number 1</p>
+<h3 id="cell_state">
+<code>cell_state</code>
+</h3>
+<p>Alias for field number 0</p>
+<h3 id="time">
+<code>time</code>
+</h3>
+<p>Alias for field number 2</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__new__">
+<code><strong>new</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__new__</span>(
+    _cls,
+    cell_state,
+    attention,
+    time,
+    alignments,
+    alignment_history
+)</code></pre></div>
+<p>Create new instance of AttentionWrapperState(cell_state, attention, time, alignments, alignment_history)</p>
+<h3 id="clone">
+<code>clone</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">clone(<span class="op">**</span>kwargs)</code></pre></div>
+<p>Clone this object, overriding components provided by kwargs.</p>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">initial_state <span class="op">=</span> attention_wrapper.zero_state(dtype<span class="op">=</span>..., batch_size<span class="op">=</span>...)
+initial_state <span class="op">=</span> initial_state.clone(cell_state<span class="op">=</span>encoder_state)</code></pre></div>
+<h4 id="args">Args:</h4>
+<p>**kwargs: Any properties of the state object to replace in the returned <code>AttentionWrapperState</code>.</p>
+<h4 id="returns">Returns:</h4>
+<p>A new <code>AttentionWrapperState</code> whose properties are the same as this one, except any overriden properties as provided in <code>kwargs</code>.</p>

@@ -1,0 +1,24 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.image.rotate" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.image.rotate" class="dashAnchor"></a><h1 id="tf.contrib.image.rotate">tf.contrib.image.rotate</h1>
+<h3 id="tf.contrib.image.rotate-1"><code>tf.contrib.image.rotate</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">rotate(
+    images,
+    angles,
+    interpolation<span class="op">=</span><span class="st">&#39;NEAREST&#39;</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/image/python/ops/image_ops.py"><code>tensorflow/contrib/image/python/ops/image_ops.py</code></a>.</p>
+<p>Rotate image(s) by the passed angle(s) in radians.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>images</code></b>: A tensor of shape (num_images, num_rows, num_columns, num_channels) (NHWC), (num_rows, num_columns, num_channels) (HWC), or (num_rows, num_columns) (HW).</li>
+<li><b><code>angles</code></b>: A scalar angle to rotate all images by, or (if images has rank 4) a vector of length num_images, with an angle for each image in the batch.</li>
+<li><b><code>interpolation</code></b>: Interpolation mode. Supported values: &quot;NEAREST&quot;, &quot;BILINEAR&quot;.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Image(s) with the same type and shape as <code>images</code>, rotated by the given angle(s). Empty space due to the rotation will be filled with zeros.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>image</code> is an invalid type.</li>
+</ul>

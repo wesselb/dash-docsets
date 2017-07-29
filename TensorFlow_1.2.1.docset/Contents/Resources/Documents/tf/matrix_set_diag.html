@@ -1,0 +1,28 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.matrix_set_diag" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.matrix_set_diag" class="dashAnchor"></a><h1 id="tf.matrix_set_diag">tf.matrix_set_diag</h1>
+<h3 id="tf.matrix_set_diag-1"><code>tf.matrix_set_diag</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">matrix_set_diag(
+    <span class="bu">input</span>,
+    diagonal,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_array_ops.py</code>.</p>
+<p>See the guide: <a href="../../../api_guides/python/math_ops.md#Matrix_Math_Functions">Math &gt; Matrix Math Functions</a></p>
+<p>Returns a batched matrix tensor with new batched diagonal values.</p>
+<p>Given <code>input</code> and <code>diagonal</code>, this operation returns a tensor with the same shape and values as <code>input</code>, except for the main diagonal of the innermost matrices. These will be overwritten by the values in <code>diagonal</code>.</p>
+<p>The output is computed as follows:</p>
+<p>Assume <code>input</code> has <code>k+1</code> dimensions <code>[I, J, K, ..., M, N]</code> and <code>diagonal</code> has <code>k</code> dimensions <code>[I, J, K, ..., min(M, N)]</code>. Then the output is a tensor of rank <code>k+1</code> with dimensions <code>[I, J, K, ..., M, N]</code> where:</p>
+<ul>
+<li><code>output[i, j, k, ..., m, n] = diagonal[i, j, k, ..., n]</code> for <code>m == n</code>.</li>
+<li><code>output[i, j, k, ..., m, n] = input[i, j, k, ..., m, n]</code> for <code>m != n</code>.</li>
+</ul>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. Rank <code>k+1</code>, where <code>k &gt;= 1</code>.</li>
+<li><b><code>diagonal</code></b>: A <code>Tensor</code>. Must have the same type as <code>input</code>. Rank <code>k</code>, where <code>k &gt;= 1</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>input</code>. Rank <code>k+1</code>, with <code>output.shape = input.shape</code>.</p>

@@ -1,0 +1,71 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.callbacks.Callback" /> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="on_batch_begin"/> <meta itemprop="property" content="on_batch_end"/> <meta itemprop="property" content="on_epoch_begin"/> <meta itemprop="property" content="on_epoch_end"/> <meta itemprop="property" content="on_train_begin"/> <meta itemprop="property" content="on_train_end"/> <meta itemprop="property" content="set_model"/> <meta itemprop="property" content="set_params"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.keras.callbacks.Callback" class="dashAnchor"></a><h1 id="tf.contrib.keras.callbacks.callback">tf.contrib.keras.callbacks.Callback</h1>
+<h3 id="class-tf.contrib.keras.callbacks.callback"><code>class tf.contrib.keras.callbacks.Callback</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/callbacks.py"><code>tensorflow/contrib/keras/python/keras/callbacks.py</code></a>.</p>
+<p>Abstract base class used to build new callbacks.</p>
+<h1 id="properties">Properties</h1>
+<pre><code>params: dict. Training parameters
+    (eg. verbosity, batch size, number of epochs...).
+model: instance of `keras.models.Model`.
+    Reference of the model being trained.</code></pre>
+<p>The <code>logs</code> dictionary that callback methods take as argument will contain keys for quantities relevant to the current batch or epoch.</p>
+<p>Currently, the <code>.fit()</code> method of the <code>Sequential</code> model class will include the following quantities in the <code>logs</code> that it passes to its callbacks:</p>
+<pre><code>on_epoch_end: logs include `acc` and `loss`, and
+    optionally include `val_loss`
+    (if validation is enabled in `fit`), and `val_acc`
+    (if validation and accuracy monitoring are enabled).
+on_batch_begin: logs include `size`,
+    the number of samples in the current batch.
+on_batch_end: logs include `loss`, and optionally `acc`
+    (if accuracy monitoring is enabled).</code></pre>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>()</code></pre></div>
+<h3 id="on_batch_begin">
+<code>on_batch_begin</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_batch_begin(
+    batch,
+    logs<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<h3 id="on_batch_end">
+<code>on_batch_end</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_batch_end(
+    batch,
+    logs<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<h3 id="on_epoch_begin">
+<code>on_epoch_begin</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_epoch_begin(
+    epoch,
+    logs<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<h3 id="on_epoch_end">
+<code>on_epoch_end</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_epoch_end(
+    epoch,
+    logs<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<h3 id="on_train_begin">
+<code>on_train_begin</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_train_begin(logs<span class="op">=</span><span class="va">None</span>)</code></pre></div>
+<h3 id="on_train_end">
+<code>on_train_end</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_train_end(logs<span class="op">=</span><span class="va">None</span>)</code></pre></div>
+<h3 id="set_model">
+<code>set_model</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">set_model(model)</code></pre></div>
+<h3 id="set_params">
+<code>set_params</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">set_params(params)</code></pre></div>

@@ -1,0 +1,184 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tfdbg.DumpingDebugHook" /> <meta itemprop="property" content="graph"/> <meta itemprop="property" content="graph_def"/> <meta itemprop="property" content="sess_str"/> <meta itemprop="property" content="session"/> <meta itemprop="property" content="__enter__"/> <meta itemprop="property" content="__exit__"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="after_create_session"/> <meta itemprop="property" content="after_run"/> <meta itemprop="property" content="as_default"/> <meta itemprop="property" content="before_run"/> <meta itemprop="property" content="begin"/> <meta itemprop="property" content="close"/> <meta itemprop="property" content="end"/> <meta itemprop="property" content="invoke_node_stepper"/> <meta itemprop="property" content="on_run_end"/> <meta itemprop="property" content="on_run_start"/> <meta itemprop="property" content="on_session_init"/> <meta itemprop="property" content="partial_run"/> <meta itemprop="property" content="partial_run_setup"/> <meta itemprop="property" content="prepare_run_debug_urls"/> <meta itemprop="property" content="run"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tfdbg.DumpingDebugHook" class="dashAnchor"></a><h1 id="tfdbg.dumpingdebughook">tfdbg.DumpingDebugHook</h1>
+<h3 id="class-tfdbg.dumpingdebughook"><code>class tfdbg.DumpingDebugHook</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/debug/wrappers/hooks.py"><code>tensorflow/python/debug/wrappers/hooks.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/tfdbg.md#Session_wrapper_class_and_SessionRunHook_implementations">TensorFlow Debugger &gt; Session wrapper class and <code>SessionRunHook</code> implementations</a></p>
+<p>A debugger hook that dumps debug data to filesystem.</p>
+<p>Can be used as a monitor/hook for <code>tf.train.MonitoredSession</code>s and <code>tf.contrib.learn</code>'s <code>Estimator</code>s and <code>Experiment</code>s.</p>
+<h2 id="properties">Properties</h2>
+<h3 id="graph">
+<code>graph</code>
+</h3>
+<h3 id="graph_def">
+<code>graph_def</code>
+</h3>
+<h3 id="sess_str">
+<code>sess_str</code>
+</h3>
+<h3 id="session">
+<code>session</code>
+</h3>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    session_root,
+    watch_fn<span class="op">=</span><span class="va">None</span>,
+    thread_name_filter<span class="op">=</span><span class="va">None</span>,
+    log_usage<span class="op">=</span><span class="va">True</span>
+)</code></pre></div>
+<p>Create a local debugger command-line interface (CLI) hook.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>session_root</code></b>: See doc of <code>dumping_wrapper.DumpingDebugWrapperSession.__init__</code>.</li>
+<li><b><code>watch_fn</code></b>: See doc of <code>dumping_wrapper.DumpingDebugWrapperSession.__init__</code>.</li>
+<li><b><code>thread_name_filter</code></b>: Regular-expression white list for threads on which the wrapper session will be active. See doc of <code>BaseDebugWrapperSession</code> for more details.</li>
+<li><b><code>log_usage</code></b>: (bool) Whether usage is to be logged.</li>
+</ul>
+<h3 id="__enter__">
+<code><strong>enter</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__enter__</span>()</code></pre></div>
+<h3 id="__exit__">
+<code><strong>exit</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__exit__</span>(
+    exec_type,
+    exec_value,
+    exec_tb
+)</code></pre></div>
+<h3 id="after_create_session">
+<code>after_create_session</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">after_create_session(
+    session,
+    coord
+)</code></pre></div>
+<p>Called when new TensorFlow session is created.</p>
+<p>This is called to signal the hooks that a new session has been created. This has two essential differences with the situation in which <code>begin</code> is called:</p>
+<ul>
+<li>When this is called, the graph is finalized and ops can no longer be added to the graph.</li>
+<li>This method will also be called as a result of recovering a wrapped session, not only at the beginning of the overall session.</li>
+</ul>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>session</code></b>: A TensorFlow Session that has been created.</li>
+<li><b><code>coord</code></b>: A Coordinator object which keeps track of all threads.</li>
+</ul>
+<h3 id="after_run">
+<code>after_run</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">after_run(
+    run_context,
+    run_values
+)</code></pre></div>
+<h3 id="as_default">
+<code>as_default</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">as_default()</code></pre></div>
+<h3 id="before_run">
+<code>before_run</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">before_run(run_context)</code></pre></div>
+<h3 id="begin">
+<code>begin</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">begin()</code></pre></div>
+<h3 id="close">
+<code>close</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">close()</code></pre></div>
+<h3 id="end">
+<code>end</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">end(session)</code></pre></div>
+<p>Called at the end of session.</p>
+<p>The <code>session</code> argument can be used in case the hook wants to run final ops, such as saving a last checkpoint.</p>
+<p>If <code>session.run()</code> raises exception other than OutOfRangeError or StopIteration then <code>end()</code> is not called. Note the difference between <code>end()</code> and <code>after_run()</code> behavior when <code>session.run()</code> raises OutOfRangeError or StopIteration. In that case <code>end()</code> is called but <code>after_run()</code> is not called.</p>
+<h4 id="args-2">Args:</h4>
+<ul>
+<li><b><code>session</code></b>: A TensorFlow Session that will be soon closed.</li>
+</ul>
+<h3 id="invoke_node_stepper">
+<code>invoke_node_stepper</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">invoke_node_stepper(
+    node_stepper,
+    restore_variable_values_on_exit<span class="op">=</span><span class="va">True</span>
+)</code></pre></div>
+<p>See doc of BaseDebugWrapperSession.invoke_node_stepper.</p>
+<h3 id="on_run_end">
+<code>on_run_end</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_run_end(request)</code></pre></div>
+<p>See doc of BaseDebugWrapperSession.on_run_end.</p>
+<h3 id="on_run_start">
+<code>on_run_start</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_run_start(request)</code></pre></div>
+<p>See doc of BaseDebugWrapperSession.on_run_start.</p>
+<h3 id="on_session_init">
+<code>on_session_init</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_session_init(request)</code></pre></div>
+<p>See doc of BaseDebugWrapperSession.on_run_start.</p>
+<h3 id="partial_run">
+<code>partial_run</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">partial_run(
+    handle,
+    fetches,
+    feed_dict<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<h3 id="partial_run_setup">
+<code>partial_run_setup</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">partial_run_setup(
+    fetches,
+    feeds<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Sets up the feeds and fetches for partial runs in the session.</p>
+<h3 id="prepare_run_debug_urls">
+<code>prepare_run_debug_urls</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">prepare_run_debug_urls(
+    fetches,
+    feed_dict
+)</code></pre></div>
+<p>Implementation of abstrat method in superclass.</p>
+<p>See doc of <code>NonInteractiveDebugWrapperSession.prepare_run_debug_urls()</code> for details. This implentation creates a run-specific subdirectory under self._session_root and stores information regarding run <code>fetches</code> and <code>feed_dict.keys()</code> in the subdirectory.</p>
+<h4 id="args-3">Args:</h4>
+<ul>
+<li><b><code>fetches</code></b>: Same as the <code>fetches</code> argument to <code>Session.run()</code></li>
+<li><b><code>feed_dict</code></b>: Same as the <code>feed_dict</code> argument to <code>Session.run()</code></li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<ul>
+<li><b><code>debug_urls</code></b>: (<code>str</code> or <code>list</code> of <code>str</code>) file:// debug URLs to be used in this <code>Session.run()</code> call.</li>
+</ul>
+<h3 id="run">
+<code>run</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">run(
+    fetches,
+    feed_dict<span class="op">=</span><span class="va">None</span>,
+    options<span class="op">=</span><span class="va">None</span>,
+    run_metadata<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Wrapper around Session.run() that inserts tensor watch options.</p>
+<h4 id="args-4">Args:</h4>
+<ul>
+<li><b><code>fetches</code></b>: Same as the <code>fetches</code> arg to regular <code>Session.run()</code>.</li>
+<li><b><code>feed_dict</code></b>: Same as the <code>feed_dict</code> arg to regular <code>Session.run()</code>.</li>
+<li><b><code>options</code></b>: Same as the <code>options</code> arg to regular <code>Session.run()</code>.</li>
+<li><b><code>run_metadata</code></b>: Same as the <code>run_metadata</code> arg to regular <code>Session.run()</code>.</li>
+</ul>
+<h4 id="returns-1">Returns:</h4>
+<p>Simply forwards the output of the wrapped <code>Session.run()</code> call.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: On invalid <code>OnRunStartAction</code> value.</li>
+</ul>

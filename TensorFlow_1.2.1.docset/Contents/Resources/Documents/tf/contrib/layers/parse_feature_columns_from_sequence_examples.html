@@ -1,0 +1,25 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.layers.parse_feature_columns_from_sequence_examples" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.layers.parse_feature_columns_from_sequence_examples" class="dashAnchor"></a><h1 id="tf.contrib.layers.parse_feature_columns_from_sequence_examples">tf.contrib.layers.parse_feature_columns_from_sequence_examples</h1>
+<h3 id="tf.contrib.layers.parse_feature_columns_from_sequence_examples-1"><code>tf.contrib.layers.parse_feature_columns_from_sequence_examples</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">parse_feature_columns_from_sequence_examples(
+    serialized,
+    context_feature_columns,
+    sequence_feature_columns,
+    name<span class="op">=</span><span class="va">None</span>,
+    example_name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/layers/python/layers/feature_column_ops.py"><code>tensorflow/contrib/layers/python/layers/feature_column_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.layers.md#Feature_columns">Layers (contrib) &gt; Feature columns</a></p>
+<p>Parses tf.SequenceExamples to extract tensors for given <code>FeatureColumn</code>s.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>serialized</code></b>: A scalar (0-D Tensor) of type string, a single serialized <code>SequenceExample</code> proto.</li>
+<li><b><code>context_feature_columns</code></b>: An iterable containing the feature columns for context features. All items should be instances of classes derived from <code>_FeatureColumn</code>. Can be <code>None</code>.</li>
+<li><b><code>sequence_feature_columns</code></b>: An iterable containing the feature columns for sequence features. All items should be instances of classes derived from <code>_FeatureColumn</code>. Can be <code>None</code>.</li>
+<li><b><code>name</code></b>: A name for this operation (optional).</li>
+<li><b><code>example_name</code></b>: A scalar (0-D Tensor) of type string (optional), the names of the serialized proto.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A tuple consisting of: * <b><code>context_features</code></b>: a dict mapping <code>FeatureColumns</code> from <code>context_feature_columns</code> to their parsed <code>Tensors</code>/<code>SparseTensor</code>s. * <b><code>sequence_features</code></b>: a dict mapping <code>FeatureColumns</code> from <code>sequence_feature_columns</code> to their parsed <code>Tensors</code>/<code>SparseTensor</code>s.</p>

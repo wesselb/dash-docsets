@@ -1,0 +1,29 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.preprocessing.image.random_shear" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.keras.preprocessing.image.random_shear" class="dashAnchor"></a><h1 id="tf.contrib.keras.preprocessing.image.random_shear">tf.contrib.keras.preprocessing.image.random_shear</h1>
+<h3 id="tf.contrib.keras.preprocessing.image.random_shear-1"><code>tf.contrib.keras.preprocessing.image.random_shear</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">random_shear(
+    x,
+    intensity,
+    row_axis<span class="op">=</span><span class="dv">1</span>,
+    col_axis<span class="op">=</span><span class="dv">2</span>,
+    channel_axis<span class="op">=</span><span class="dv">0</span>,
+    fill_mode<span class="op">=</span><span class="st">&#39;nearest&#39;</span>,
+    cval<span class="op">=</span><span class="fl">0.0</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/preprocessing/image.py"><code>tensorflow/contrib/keras/python/keras/preprocessing/image.py</code></a>.</p>
+<p>Performs a random spatial shear of a Numpy image tensor.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>x: Input tensor. Must be 3D.
+intensity: Transformation intensity.
+row_axis: Index of axis for rows in the input tensor.
+col_axis: Index of axis for columns in the input tensor.
+channel_axis: Index of axis for channels in the input tensor.
+fill_mode: Points outside the boundaries of the input
+    are filled according to the given mode
+    (one of `{&#39;constant&#39;, &#39;nearest&#39;, &#39;reflect&#39;, &#39;wrap&#39;}`).
+cval: Value used for points outside the boundaries
+    of the input if `mode=&#39;constant&#39;`.</code></pre>
+<h4 id="returns">Returns:</h4>
+<pre><code>Sheared Numpy image tensor.</code></pre>

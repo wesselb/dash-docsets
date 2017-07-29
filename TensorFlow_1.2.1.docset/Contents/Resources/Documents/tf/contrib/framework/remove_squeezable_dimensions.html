@@ -1,0 +1,22 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.framework.remove_squeezable_dimensions" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.framework.remove_squeezable_dimensions" class="dashAnchor"></a><h1 id="tf.contrib.framework.remove_squeezable_dimensions">tf.contrib.framework.remove_squeezable_dimensions</h1>
+<h3 id="tf.contrib.framework.remove_squeezable_dimensions-1"><code>tf.contrib.framework.remove_squeezable_dimensions</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">remove_squeezable_dimensions(
+    predictions,
+    labels,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/framework/python/framework/tensor_util.py"><code>tensorflow/contrib/framework/python/framework/tensor_util.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.framework.html">Framework (contrib)</a></p>
+<p>Squeeze last dim if ranks of <code>predictions</code> and <code>labels</code> differ by 1.</p>
+<p>This will use static shape if available. Otherwise, it will add graph operations, which could result in a performance hit.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>predictions</code></b>: Predicted values, a <code>Tensor</code> of arbitrary dimensions.</li>
+<li><b><code>labels</code></b>: Label values, a <code>Tensor</code> whose dimensions match <code>predictions</code>.</li>
+<li><b><code>name</code></b>: Name of the op.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Tuple of <code>predictions</code> and <code>labels</code>, possibly with last dim squeezed.</p>

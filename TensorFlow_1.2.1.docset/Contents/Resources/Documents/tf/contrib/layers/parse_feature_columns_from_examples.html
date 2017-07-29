@@ -1,0 +1,51 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.layers.parse_feature_columns_from_examples" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.layers.parse_feature_columns_from_examples" class="dashAnchor"></a><h1 id="tf.contrib.layers.parse_feature_columns_from_examples">tf.contrib.layers.parse_feature_columns_from_examples</h1>
+<h3 id="tf.contrib.layers.parse_feature_columns_from_examples-1"><code>tf.contrib.layers.parse_feature_columns_from_examples</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">parse_feature_columns_from_examples(
+    serialized,
+    feature_columns,
+    name<span class="op">=</span><span class="va">None</span>,
+    example_names<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/layers/python/layers/feature_column_ops.py"><code>tensorflow/contrib/layers/python/layers/feature_column_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.layers.md#Feature_columns">Layers (contrib) &gt; Feature columns</a></p>
+<p>Parses tf.Examples to extract tensors for given feature_columns.</p>
+<p>This is a wrapper of 'tf.parse_example'.</p>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">columns_to_tensor <span class="op">=</span> parse_feature_columns_from_examples(
+    serialized<span class="op">=</span>my_data,
+    feature_columns<span class="op">=</span>my_features)
+
+<span class="co"># Where my_features are:</span>
+<span class="co"># Define features and transformations</span>
+sparse_feature_a <span class="op">=</span> sparse_column_with_keys(
+    column_name<span class="op">=</span><span class="st">&quot;sparse_feature_a&quot;</span>, keys<span class="op">=</span>[<span class="st">&quot;AB&quot;</span>, <span class="st">&quot;CD&quot;</span>, ...])
+
+embedding_feature_a <span class="op">=</span> embedding_column(
+    sparse_id_column<span class="op">=</span>sparse_feature_a, dimension<span class="op">=</span><span class="dv">3</span>, combiner<span class="op">=</span><span class="st">&quot;sum&quot;</span>)
+
+sparse_feature_b <span class="op">=</span> sparse_column_with_hash_bucket(
+    column_name<span class="op">=</span><span class="st">&quot;sparse_feature_b&quot;</span>, hash_bucket_size<span class="op">=</span><span class="dv">1000</span>)
+
+embedding_feature_b <span class="op">=</span> embedding_column(
+    sparse_id_column<span class="op">=</span>sparse_feature_b, dimension<span class="op">=</span><span class="dv">16</span>, combiner<span class="op">=</span><span class="st">&quot;sum&quot;</span>)
+
+crossed_feature_a_x_b <span class="op">=</span> crossed_column(
+    columns<span class="op">=</span>[sparse_feature_a, sparse_feature_b], hash_bucket_size<span class="op">=</span><span class="dv">10000</span>)
+
+real_feature <span class="op">=</span> real_valued_column(<span class="st">&quot;real_feature&quot;</span>)
+real_feature_buckets <span class="op">=</span> bucketized_column(
+    source_column<span class="op">=</span>real_feature, boundaries<span class="op">=</span>[...])
+
+my_features <span class="op">=</span> [embedding_feature_b, real_feature_buckets, embedding_feature_a]</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>serialized</code></b>: A vector (1-D Tensor) of strings, a batch of binary serialized <code>Example</code> protos.</li>
+<li><b><code>feature_columns</code></b>: An iterable containing all the feature columns. All items should be instances of classes derived from _FeatureColumn.</li>
+<li><b><code>name</code></b>: A name for this operation (optional).</li>
+<li><b><code>example_names</code></b>: A vector (1-D Tensor) of strings (optional), the names of the serialized protos in the batch.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>dict</code> mapping FeatureColumn to <code>Tensor</code> and <code>SparseTensor</code> values.</p>

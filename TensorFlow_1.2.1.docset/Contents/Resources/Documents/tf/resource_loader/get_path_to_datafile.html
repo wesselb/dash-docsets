@@ -1,0 +1,19 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.resource_loader.get_path_to_datafile" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.resource_loader.get_path_to_datafile" class="dashAnchor"></a><h1 id="tf.resource_loader.get_path_to_datafile">tf.resource_loader.get_path_to_datafile</h1>
+<h3 id="tf.resource_loader.get_path_to_datafile-1"><code>tf.resource_loader.get_path_to_datafile</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_path_to_datafile(path)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/platform/resource_loader.py"><code>tensorflow/python/platform/resource_loader.py</code></a>.</p>
+<p>Get the path to the specified file in the data dependencies.</p>
+<p>The path is relative to tensorflow/</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>path</code></b>: a string resource path relative to tensorflow/</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The path to the specified file present in the data attribute of py_test or py_binary.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>IOError</code></b>: If the path is not found, or the resource can't be opened.</li>
+</ul>

@@ -1,0 +1,36 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.training.GreedyLoadBalancingStrategy" /> <meta itemprop="property" content="__call__"/> <meta itemprop="property" content="__init__"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.training.GreedyLoadBalancingStrategy" class="dashAnchor"></a><h1 id="tf.contrib.training.greedyloadbalancingstrategy">tf.contrib.training.GreedyLoadBalancingStrategy</h1>
+<h3 id="class-tf.contrib.training.greedyloadbalancingstrategy"><code>class tf.contrib.training.GreedyLoadBalancingStrategy</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/training/python/training/device_setter.py"><code>tensorflow/contrib/training/python/training/device_setter.py</code></a>.</p>
+<p>Returns the least-loaded ps task for op placement.</p>
+<p>The load is calculated by a user-specified load function passed in at construction. There are no units for load, and the load function is responsible for providing an internally consistent measure.</p>
+<p>Note that this strategy is very sensitive to the exact order in which ps ops (typically variables) are created, as it greedily places ops on the least-loaded ps at the point each op is processed.</p>
+<p>One reasonable heuristic is the <code>byte_size_load_fn</code>, which estimates load as the number of bytes that would be used to store and transmit the entire variable. More advanced load functions could consider the difference in access patterns across ops, or trade off CPU-intensive ops with RAM-intensive ops with network bandwidth.</p>
+<p>This class is intended to be used as a <code>ps_strategy</code> in <code>tf.train.replica_device_setter</code>.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    num_tasks,
+    load_fn
+)</code></pre></div>
+<p>Create a new <code>LoadBalancingStrategy</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>num_tasks</code></b>: Number of ps tasks to cycle among.</li>
+<li><b><code>load_fn</code></b>: A callable that takes an <code>Operation</code> and returns a numeric load value for that op.</li>
+</ul>
+<h3 id="__call__">
+<code><strong>call</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__call__</span>(op)</code></pre></div>
+<p>Choose a ps task index for the given <code>Operation</code>.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>op</code></b>: A <code>Operation</code> to be placed on ps.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The next ps task index to use for the <code>Operation</code>. Greedily places the op on the least-loaded ps task so far, as determined by the load function.</p>

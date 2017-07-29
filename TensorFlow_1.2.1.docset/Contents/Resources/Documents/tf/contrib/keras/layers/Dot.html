@@ -1,0 +1,24 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.layers.dot" /></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.keras.layers.Dot" class="dashAnchor"></a><a name="//apple_ref/cpp/Function/tf.contrib.keras.layers.dot" class="dashAnchor"></a><h1 id="tf.contrib.keras.layers.dot">tf.contrib.keras.layers.dot</h1>
+<h3 id="tf.contrib.keras.layers.dot-1"><code>tf.contrib.keras.layers.dot</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">dot(
+    inputs,
+    axes,
+    normalize<span class="op">=</span><span class="va">False</span>,
+    <span class="op">**</span>kwargs
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/layers/merge.py"><code>tensorflow/contrib/keras/python/keras/layers/merge.py</code></a>.</p>
+<p>Functional interface to the <code>Dot</code> layer.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>inputs: A list of input tensors (at least 2).
+axes: Integer or tuple of integers,
+    axis or axes along which to take the dot product.
+normalize: Whether to L2-normalize samples along the
+    dot product axis before taking the dot product.
+    If set to True, then the output of the dot product
+    is the cosine proximity between the two samples.
+**kwargs: Standard layer keyword arguments.</code></pre>
+<h4 id="returns">Returns:</h4>
+<pre><code>A tensor, the dot product of the samples from the inputs.</code></pre>

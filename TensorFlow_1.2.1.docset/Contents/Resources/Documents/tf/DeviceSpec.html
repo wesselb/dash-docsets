@@ -1,0 +1,101 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.DeviceSpec" /> <meta itemprop="property" content="job"/> <meta itemprop="property" content="replica"/> <meta itemprop="property" content="task"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="from_string"/> <meta itemprop="property" content="merge_from"/> <meta itemprop="property" content="parse_from_string"/> <meta itemprop="property" content="to_string"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.DeviceSpec" class="dashAnchor"></a><h1 id="tf.devicespec">tf.DeviceSpec</h1>
+<h3 id="class-tf.devicespec"><code>class tf.DeviceSpec</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/framework/device.py"><code>tensorflow/python/framework/device.py</code></a>.</p>
+<p>Represents a (possibly partial) specification for a TensorFlow device.</p>
+<p><code>DeviceSpec</code>s are used throughout TensorFlow to describe where state is stored and computations occur. Using <code>DeviceSpec</code> allows you to parse device spec strings to verify their validity, merge them or compose them programmatically.</p>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Place the operations on device &quot;GPU:0&quot; in the &quot;ps&quot; job.</span>
+device_spec <span class="op">=</span> DeviceSpec(job<span class="op">=</span><span class="st">&quot;ps&quot;</span>, device_type<span class="op">=</span><span class="st">&quot;GPU&quot;</span>, device_index<span class="op">=</span><span class="dv">0</span>)
+<span class="cf">with</span> tf.device(device_spec):
+  <span class="co"># Both my_var and squared_var will be placed on /job:ps/device:GPU:0.</span>
+  my_var <span class="op">=</span> tf.Variable(..., name<span class="op">=</span><span class="st">&quot;my_variable&quot;</span>)
+  squared_var <span class="op">=</span> tf.square(my_var)</code></pre></div>
+<p>If a <code>DeviceSpec</code> is partially specified, it will be merged with other <code>DeviceSpec</code>s according to the scope in which it is defined. <code>DeviceSpec</code> components defined in inner scopes take precedence over those defined in outer scopes.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> tf.device(DeviceSpec(job<span class="op">=</span><span class="st">&quot;train&quot;</span>, )):
+  <span class="cf">with</span> tf.device(DeviceSpec(job<span class="op">=</span><span class="st">&quot;ps&quot;</span>, device_type<span class="op">=</span><span class="st">&quot;GPU&quot;</span>, device_index<span class="op">=</span><span class="dv">0</span>):
+    <span class="co"># Nodes created here will be assigned to /job:ps/device:GPU:0.</span>
+  <span class="cf">with</span> tf.device(DeviceSpec(device_type<span class="op">=</span><span class="st">&quot;GPU&quot;</span>, device_index<span class="op">=</span><span class="dv">1</span>):
+    <span class="co"># Nodes created here will be assigned to /job:train/device:GPU:1.</span></code></pre></div>
+<p>A <code>DeviceSpec</code> consists of 5 components -- each of which is optionally specified:</p>
+<ul>
+<li>Job: The job name.</li>
+<li>Replica: The replica index.</li>
+<li>Task: The task index.</li>
+<li>Device type: The device type string (e.g. &quot;CPU&quot; or &quot;GPU&quot;).</li>
+<li>Device index: The device index.</li>
+</ul>
+<h2 id="properties">Properties</h2>
+<h3 id="job">
+<code>job</code>
+</h3>
+<h3 id="replica">
+<code>replica</code>
+</h3>
+<h3 id="task">
+<code>task</code>
+</h3>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    job<span class="op">=</span><span class="va">None</span>,
+    replica<span class="op">=</span><span class="va">None</span>,
+    task<span class="op">=</span><span class="va">None</span>,
+    device_type<span class="op">=</span><span class="va">None</span>,
+    device_index<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Create a new <code>DeviceSpec</code> object.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>job</code></b>: string. Optional job name.</li>
+<li><b><code>replica</code></b>: int. Optional replica index.</li>
+<li><b><code>task</code></b>: int. Optional task index.</li>
+<li><b><code>device_type</code></b>: Optional device type string (e.g. &quot;CPU&quot; or &quot;GPU&quot;)</li>
+<li><b><code>device_index</code></b>: int. Optional device index. If left unspecified, device represents 'any' device_index.</li>
+</ul>
+<h3 id="from_string">
+<code>from_string</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">from_string(spec)</code></pre></div>
+<p>Construct a <code>DeviceSpec</code> from a string.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>spec</code></b>: a string of the form /job:<name>/replica:<id>/task:<id>/device:CPU:<id> or /job:<name>/replica:<id>/task:<id>/device:GPU:<id> as cpu and gpu are mutually exclusive. All entries are optional.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A DeviceSpec.</p>
+<h3 id="merge_from">
+<code>merge_from</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">merge_from(dev)</code></pre></div>
+<p>Merge the properties of &quot;dev&quot; into this <code>DeviceSpec</code>.</p>
+<h4 id="args-2">Args:</h4>
+<ul>
+<li><b><code>dev</code></b>: a <code>DeviceSpec</code>.</li>
+</ul>
+<h3 id="parse_from_string">
+<code>parse_from_string</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">parse_from_string(spec)</code></pre></div>
+<p>Parse a <code>DeviceSpec</code> name into its components.</p>
+<h4 id="args-3">Args:</h4>
+<ul>
+<li><b><code>spec</code></b>: a string of the form /job:<name>/replica:<id>/task:<id>/device:CPU:<id> or /job:<name>/replica:<id>/task:<id>/device:GPU:<id> as cpu and gpu are mutually exclusive. All entries are optional.</li>
+</ul>
+<h4 id="returns-1">Returns:</h4>
+<p>The <code>DeviceSpec</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if the spec was not valid.</li>
+</ul>
+<h3 id="to_string">
+<code>to_string</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">to_string()</code></pre></div>
+<p>Return a string representation of this <code>DeviceSpec</code>.</p>
+<h4 id="returns-2">Returns:</h4>
+<p>a string of the form /job:<name>/replica:<id>/task:<id>/device:<device_type>:<id>.</p>

@@ -1,0 +1,24 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.models.load_model" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.keras.models.load_model" class="dashAnchor"></a><h1 id="tf.contrib.keras.models.load_model">tf.contrib.keras.models.load_model</h1>
+<h3 id="tf.contrib.keras.models.load_model-1"><code>tf.contrib.keras.models.load_model</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">load_model(
+    filepath,
+    custom_objects<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/models.py"><code>tensorflow/contrib/keras/python/keras/models.py</code></a>.</p>
+<p>Loads a model saved via <code>save_model</code>.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>filepath: String, path to the saved model.
+custom_objects: Optional dictionary mapping names
+    (strings) to custom classes or functions to be
+    considered during deserialization.</code></pre>
+<h4 id="returns">Returns:</h4>
+<pre><code>A Keras model instance. If an optimizer was found
+as part of the saved model, the model is already
+compiled. Otherwise, the model is uncompiled and
+a warning will be displayed.</code></pre>
+<h4 id="raises">Raises:</h4>
+<pre><code>ImportError: if h5py is not available.
+ValueError: In case of an invalid savefile.</code></pre>

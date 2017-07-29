@@ -1,0 +1,113 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.estimator.EstimatorSpec" /> <meta itemprop="property" content="eval_metric_ops"/> <meta itemprop="property" content="export_outputs"/> <meta itemprop="property" content="loss"/> <meta itemprop="property" content="predictions"/> <meta itemprop="property" content="scaffold"/> <meta itemprop="property" content="train_op"/> <meta itemprop="property" content="training_chief_hooks"/> <meta itemprop="property" content="training_hooks"/> <meta itemprop="property" content="__new__"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.estimator.EstimatorSpec" class="dashAnchor"></a><h1 id="tf.estimator.estimatorspec">tf.estimator.EstimatorSpec</h1>
+<h3 id="class-tf.estimator.estimatorspec"><code>class tf.estimator.EstimatorSpec</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/estimator/model_fn.py"><code>tensorflow/python/estimator/model_fn.py</code></a>.</p>
+<p>Ops and objects returned from a <code>model_fn</code> and passed to <code>Estimator</code>.</p>
+<p><code>EstimatorSpec</code> fully defines the model to be run by <code>Estimator</code>.</p>
+<h2 id="properties">Properties</h2>
+<h3 id="eval_metric_ops">
+<code>eval_metric_ops</code>
+</h3>
+<p>Alias for field number 3</p>
+<h3 id="export_outputs">
+<code>export_outputs</code>
+</h3>
+<p>Alias for field number 4</p>
+<h3 id="loss">
+<code>loss</code>
+</h3>
+<p>Alias for field number 1</p>
+<h3 id="predictions">
+<code>predictions</code>
+</h3>
+<p>Alias for field number 0</p>
+<h3 id="scaffold">
+<code>scaffold</code>
+</h3>
+<p>Alias for field number 7</p>
+<h3 id="train_op">
+<code>train_op</code>
+</h3>
+<p>Alias for field number 2</p>
+<h3 id="training_chief_hooks">
+<code>training_chief_hooks</code>
+</h3>
+<p>Alias for field number 5</p>
+<h3 id="training_hooks">
+<code>training_hooks</code>
+</h3>
+<p>Alias for field number 6</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__new__">
+<code><strong>new</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__new__</span>(
+    cls,
+    mode,
+    predictions<span class="op">=</span><span class="va">None</span>,
+    loss<span class="op">=</span><span class="va">None</span>,
+    train_op<span class="op">=</span><span class="va">None</span>,
+    eval_metric_ops<span class="op">=</span><span class="va">None</span>,
+    export_outputs<span class="op">=</span><span class="va">None</span>,
+    training_chief_hooks<span class="op">=</span><span class="va">None</span>,
+    training_hooks<span class="op">=</span><span class="va">None</span>,
+    scaffold<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Creates a validated <code>EstimatorSpec</code> instance.</p>
+<p>Depending on the value of <code>mode</code>, different arguments are required. Namely * For <code>mode == ModeKeys.TRAIN</code>: required fields are <code>loss</code> and <code>train_op</code>. * For <code>mode == ModeKeys.EVAL</code>: required field is<code>loss</code>. * For <code>mode == ModeKeys.PREDICT</code>: required fields are <code>predictions</code>.</p>
+<p>model_fn can populate all arguments independent of mode. In this case, some arguments will be ignored by <code>Estimator</code>. E.g. <code>train_op</code> will be ignored in eval and infer modes. Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="kw">def</span> my_model_fn(mode, features, labels):
+  predictions <span class="op">=</span> ...
+  loss <span class="op">=</span> ...
+  train_op <span class="op">=</span> ...
+  <span class="cf">return</span> tf.estimator.EstimatorSpec(
+      mode<span class="op">=</span>mode,
+      predictions<span class="op">=</span>predictions,
+      loss<span class="op">=</span>loss,
+      train_op<span class="op">=</span>train_op)</code></pre></div>
+<p>Alternatively, model_fn can just populate the arguments appropriate to the given mode. Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="kw">def</span> my_model_fn(mode, features, labels):
+  <span class="cf">if</span> (mode <span class="op">==</span> tf.estimator.ModeKeys.TRAIN <span class="kw">or</span>
+      mode <span class="op">==</span> tf.estimator.ModeKeys.EVAL):
+    loss <span class="op">=</span> ...
+  <span class="cf">else</span>:
+    loss <span class="op">=</span> <span class="va">None</span>
+  <span class="cf">if</span> mode <span class="op">==</span> tf.estimator.ModeKeys.TRAIN:
+    train_op <span class="op">=</span> ...
+  <span class="cf">else</span>:
+    train_op <span class="op">=</span> <span class="va">None</span>
+  <span class="cf">if</span> mode <span class="op">==</span> tf.estimator.ModeKeys.PREDICT:
+    predictions <span class="op">=</span> ...
+  <span class="cf">else</span>:
+    predictions <span class="op">=</span> <span class="va">None</span>
+
+  <span class="cf">return</span> tf.estimator.EstimatorSpec(
+      mode<span class="op">=</span>mode,
+      predictions<span class="op">=</span>predictions,
+      loss<span class="op">=</span>loss,
+      train_op<span class="op">=</span>train_op)</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>mode</code></b>: A <code>ModeKeys</code>. Specifies if this is training, evaluation or prediction.</li>
+<li><b><code>predictions</code></b>: Predictions <code>Tensor</code> or dict of <code>Tensor</code>.</li>
+<li><b><code>loss</code></b>: Training loss <code>Tensor</code>. Must be either scalar, or with shape <code>[1]</code>.</li>
+<li><b><code>train_op</code></b>: Op for the training step.</li>
+<li><b><code>eval_metric_ops</code></b>: Dict of metric results keyed by name. The values of the dict are the results of calling a metric function, namely a <code>(metric_tensor, update_op)</code> tuple.</li>
+<li><b><code>export_outputs</code></b>: Describes the output signatures to be exported to <code>SavedModel</code> and used during serving. A dict <code>{name: output}</code> where:
+<ul>
+<li>name: An arbitrary name for this output.</li>
+<li>output: an <code>ExportOutput</code> object such as <code>ClassificationOutput</code>, <code>RegressionOutput</code>, or <code>PredictOutput</code>. Single-headed models only need to specify one entry in this dictionary. Multi-headed models should specify one entry for each head, one of which must be named using signature_constants.DEFAULT_SERVING_SIGNATURE_DEF_KEY.</li>
+</ul></li>
+<li><b><code>training_chief_hooks</code></b>: Iterable of <code>tf.train.SessionRunHook</code> objects to run on the chief worker during training.</li>
+<li><b><code>training_hooks</code></b>: Iterable of <code>tf.train.SessionRunHook</code> objects that to run on all workers during training.</li>
+<li><b><code>scaffold</code></b>: A <code>tf.train.Scaffold</code> object that can be used to set initialization, saver, and more to be used in training.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A validated <code>EstimatorSpec</code> object.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If validation fails.</li>
+<li><b><code>TypeError</code></b>: If any of the arguments is not the expected type.</li>
+</ul>

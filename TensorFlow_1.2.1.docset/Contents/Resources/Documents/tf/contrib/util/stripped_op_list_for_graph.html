@@ -1,0 +1,20 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.util.stripped_op_list_for_graph" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.util.stripped_op_list_for_graph" class="dashAnchor"></a><h1 id="tf.contrib.util.stripped_op_list_for_graph">tf.contrib.util.stripped_op_list_for_graph</h1>
+<h3 id="tf.contrib.util.stripped_op_list_for_graph-1"><code>tf.contrib.util.stripped_op_list_for_graph</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">stripped_op_list_for_graph(graph_def)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/framework/meta_graph.py"><code>tensorflow/python/framework/meta_graph.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.util.md#Miscellaneous_Utility_Functions">Utilities (contrib) &gt; Miscellaneous Utility Functions</a></p>
+<p>Collect the stripped OpDefs for ops used by a graph.</p>
+<p>This function computes the <code>stripped_op_list</code> field of <code>MetaGraphDef</code> and similar protos. The result can be communicated from the producer to the consumer, which can then use the C++ function <code>RemoveNewDefaultAttrsFromGraphDef</code> to improve forwards compatibility.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>graph_def</code></b>: A <code>GraphDef</code> proto, as from <code>graph.as_graph_def()</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>An <code>OpList</code> of ops used by the graph.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If an unregistered op is used.</li>
+</ul>

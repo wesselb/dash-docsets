@@ -1,0 +1,32 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.backend.random_uniform_variable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.keras.backend.random_uniform_variable" class="dashAnchor"></a><h1 id="tf.contrib.keras.backend.random_uniform_variable">tf.contrib.keras.backend.random_uniform_variable</h1>
+<h3 id="tf.contrib.keras.backend.random_uniform_variable-1"><code>tf.contrib.keras.backend.random_uniform_variable</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">random_uniform_variable(
+    shape,
+    low,
+    high,
+    dtype<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>,
+    seed<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/backend.py"><code>tensorflow/contrib/keras/python/keras/backend.py</code></a>.</p>
+<p>Instantiates a variable with values drawn from a uniform distribution.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>shape: Tuple of integers, shape of returned Keras variable.
+low: Float, lower boundary of the output interval.
+high: Float, upper boundary of the output interval.
+dtype: String, dtype of returned Keras variable.
+name: String, name of returned Keras variable.
+seed: Integer, random seed.</code></pre>
+<h4 id="returns">Returns:</h4>
+<pre><code>A Keras variable, filled with drawn samples.</code></pre>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    <span class="co"># TensorFlow example</span>
+    <span class="op">&gt;&gt;&gt;</span> kvar <span class="op">=</span> K.random_uniform_variable((<span class="dv">2</span>,<span class="dv">3</span>), <span class="dv">0</span>, <span class="dv">1</span>)
+    <span class="op">&gt;&gt;&gt;</span> kvar
+    <span class="op">&lt;</span>tensorflow.python.ops.variables.Variable <span class="bu">object</span> at <span class="bn">0x10ab40b10</span><span class="op">&gt;</span>
+    <span class="op">&gt;&gt;&gt;</span> K.<span class="bu">eval</span>(kvar)
+    array([[ <span class="fl">0.10940075</span>,  <span class="fl">0.10047495</span>,  <span class="fl">0.476143</span>  ],
+           [ <span class="fl">0.66137183</span>,  <span class="fl">0.00869417</span>,  <span class="fl">0.89220798</span>]], dtype<span class="op">=</span>float32)</code></pre></div>

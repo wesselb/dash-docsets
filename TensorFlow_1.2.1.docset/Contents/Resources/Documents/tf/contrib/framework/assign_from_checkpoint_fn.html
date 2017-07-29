@@ -1,0 +1,28 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.framework.assign_from_checkpoint_fn" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.framework.assign_from_checkpoint_fn" class="dashAnchor"></a><h1 id="tf.contrib.framework.assign_from_checkpoint_fn">tf.contrib.framework.assign_from_checkpoint_fn</h1>
+<h3 id="tf.contrib.framework.assign_from_checkpoint_fn-1"><code>tf.contrib.framework.assign_from_checkpoint_fn</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">assign_from_checkpoint_fn(
+    model_path,
+    var_list,
+    ignore_missing_vars<span class="op">=</span><span class="va">False</span>,
+    reshape_variables<span class="op">=</span><span class="va">False</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/framework/python/ops/variables.py"><code>tensorflow/contrib/framework/python/ops/variables.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.framework.md#Variables">Framework (contrib) &gt; Variables</a></p>
+<p>Returns a function that assigns specific variables from a checkpoint.</p>
+<p>If ignore_missing_vars is True and no variables are found in the checkpoint it returns None.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>model_path</code></b>: The full path to the model checkpoint. To get latest checkpoint use <code>model_path = tf.train.latest_checkpoint(checkpoint_dir)</code></li>
+<li><b><code>var_list</code></b>: A list of <code>Variable</code> objects or a dictionary mapping names in the checkpoint to the corresponding variables to initialize. If empty or <code>None</code>, it would return <code>no_op(), None</code>.</li>
+<li><b><code>ignore_missing_vars</code></b>: Boolean, if True it would ignore variables missing in the checkpoint with a warning instead of failing.</li>
+<li><b><code>reshape_variables</code></b>: Boolean, if True it would automatically reshape variables which are of different shape then the ones stored in the checkpoint but which have the same number of elements.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A function that takes a single argument, a <code>tf.Session</code>, that applies the assignment operation. If no matching variables were found in the checkpoint then <code>None</code> is returned.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If var_list is empty.</li>
+</ul>

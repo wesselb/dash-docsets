@@ -1,0 +1,25 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.shape" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.shape" class="dashAnchor"></a><h1 id="tf.shape">tf.shape</h1>
+<h3 id="tf.shape-1"><code>tf.shape</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">shape(
+    <span class="bu">input</span>,
+    name<span class="op">=</span><span class="va">None</span>,
+    out_type<span class="op">=</span>tf.int32
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/array_ops.py"><code>tensorflow/python/ops/array_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/array_ops.md#Shapes_and_Shaping">Tensor Transformations &gt; Shapes and Shaping</a></p>
+<p>Returns the shape of a tensor.</p>
+<p>This operation returns a 1-D integer tensor representing the shape of <code>input</code>.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># &#39;t&#39; is [[[1, 1, 1], [2, 2, 2]], [[3, 3, 3], [4, 4, 4]]]</span>
+shape(t) <span class="op">==&gt;</span> [<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>]</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code> or <code>SparseTensor</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+<li><b><code>out_type</code></b>: (Optional) The specified output type of the operation (<code>int32</code> or <code>int64</code>). Defaults to <code>tf.int32</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>out_type</code>.</p>

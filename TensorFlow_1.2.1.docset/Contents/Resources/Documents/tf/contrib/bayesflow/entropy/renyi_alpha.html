@@ -1,0 +1,33 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.bayesflow.entropy.renyi_alpha" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.bayesflow.entropy.renyi_alpha" class="dashAnchor"></a><h1 id="tf.contrib.bayesflow.entropy.renyi_alpha">tf.contrib.bayesflow.entropy.renyi_alpha</h1>
+<h3 id="tf.contrib.bayesflow.entropy.renyi_alpha-1"><code>tf.contrib.bayesflow.entropy.renyi_alpha</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">renyi_alpha(
+    step,
+    decay_time,
+    alpha_min,
+    alpha_max<span class="op">=</span><span class="fl">0.99999</span>,
+    name<span class="op">=</span><span class="st">&#39;renyi_alpha&#39;</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/bayesflow/python/ops/entropy_impl.py"><code>tensorflow/contrib/bayesflow/python/ops/entropy_impl.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../../api_guides/python/contrib.bayesflow.entropy.md#Ops">BayesFlow Entropy (contrib) &gt; Ops</a></p>
+<p>Exponentially decaying <code>Tensor</code> appropriate for Renyi ratios.</p>
+<p>When minimizing the Renyi divergence for <code>0 &lt;= alpha &lt; 1</code> (or maximizing the Renyi equivalent of elbo) in high dimensions, it is not uncommon to experience <code>NaN</code> and <code>inf</code> values when <code>alpha</code> is far from <code>1</code>.</p>
+<p>For that reason, it is often desirable to start the optimization with <code>alpha</code> very close to 1, and reduce it to a final <code>alpha_min</code> according to some schedule. The user may even want to optimize using <code>elbo_ratio</code> for some fixed time before switching to Renyi based methods.</p>
+<p>This <code>Op</code> returns an <code>alpha</code> decaying exponentially with step:</p>
+<pre><code>s(step) = (exp{step / decay_time} - 1) / (e - 1)
+t(s) = max(0, min(s, 1)),  (smooth growth from 0 to 1)
+alpha(t) = (1 - t) alpha_min + t alpha_max</code></pre>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>step</code></b>: Non-negative scalar <code>Tensor</code>. Typically the global step or an offset version thereof.</li>
+<li><b><code>decay_time</code></b>: Positive scalar <code>Tensor</code>.</li>
+<li><b><code>alpha_min</code></b>: <code>float</code> or <code>double</code> <code>Tensor</code>. The minimal, final value of <code>alpha</code>, achieved when <code>step &gt;= decay_time</code></li>
+<li><b><code>alpha_max</code></b>: <code>Tensor</code> of same <code>dtype</code> as <code>alpha_min</code>. The maximal, beginning value of <code>alpha</code>, achieved when <code>step == 0</code></li>
+<li><b><code>name</code></b>: A name to give this <code>Op</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<ul>
+<li><b><code>alpha</code></b>: A <code>Tensor</code> of same <code>dtype</code> as <code>alpha_min</code>.</li>
+</ul>

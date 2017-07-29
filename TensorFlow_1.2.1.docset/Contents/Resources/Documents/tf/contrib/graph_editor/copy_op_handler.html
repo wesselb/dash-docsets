@@ -1,0 +1,21 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.graph_editor.copy_op_handler" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.graph_editor.copy_op_handler" class="dashAnchor"></a><h1 id="tf.contrib.graph_editor.copy_op_handler">tf.contrib.graph_editor.copy_op_handler</h1>
+<h3 id="tf.contrib.graph_editor.copy_op_handler-1"><code>tf.contrib.graph_editor.copy_op_handler</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">copy_op_handler(
+    info,
+    op,
+    copy_shape<span class="op">=</span><span class="va">True</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/graph_editor/transform.py"><code>tensorflow/contrib/graph_editor/transform.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.graph_editor.md#Module_transform">Graph Editor (contrib) &gt; Module: transform</a></p>
+<p>Copy a <code>tf.Operation</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>info</code></b>: Transform._TmpInfo instance.</li>
+<li><b><code>op</code></b>: the <code>tf.Operation</code> to be copied.</li>
+<li><b><code>copy_shape</code></b>: also copy the shape of the tensor</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>(op, op_outputs)</code> tuple containing the transformed op and its outputs.</p>

@@ -1,0 +1,29 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.cast" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.cast" class="dashAnchor"></a><h1 id="tf.cast">tf.cast</h1>
+<h3 id="tf.cast-1"><code>tf.cast</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">cast(
+    x,
+    dtype,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/math_ops.py"><code>tensorflow/python/ops/math_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/array_ops.md#Casting">Tensor Transformations &gt; Casting</a></p>
+<p>Casts a tensor to a new type.</p>
+<p>The operation casts <code>x</code> (in case of <code>Tensor</code>) or <code>x.values</code> (in case of <code>SparseTensor</code>) to <code>dtype</code>.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># tensor `a` is [1.8, 2.2], dtype=tf.float</span>
+tf.cast(a, tf.int32) <span class="op">==&gt;</span> [<span class="dv">1</span>, <span class="dv">2</span>]  <span class="co"># dtype=tf.int32</span></code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> or <code>SparseTensor</code>.</li>
+<li><b><code>dtype</code></b>: The destination type.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> or <code>SparseTensor</code> with same shape as <code>x</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>x</code> cannot be cast to the <code>dtype</code>.</li>
+</ul>

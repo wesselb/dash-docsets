@@ -1,0 +1,38 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.accumulate_n" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.accumulate_n" class="dashAnchor"></a><h1 id="tf.accumulate_n">tf.accumulate_n</h1>
+<h3 id="tf.accumulate_n-1"><code>tf.accumulate_n</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">accumulate_n(
+    inputs,
+    shape<span class="op">=</span><span class="va">None</span>,
+    tensor_dtype<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/math_ops.py"><code>tensorflow/python/ops/math_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/math_ops.md#Reduction">Math &gt; Reduction</a></p>
+<p>Returns the element-wise sum of a list of tensors.</p>
+<p>Optionally, pass <code>shape</code> and <code>tensor_dtype</code> for shape and type checking, otherwise, these are inferred.</p>
+<p>NOTE: This operation is not differentiable and cannot be used if inputs depend on trainable variables. Please use <code>tf.add_n</code> for such cases.</p>
+<p>Aside from differentiability, <code>tf.accumulate_n</code> performs the same operation as <code>tf.add_n</code>, but does not wait for all of its inputs to be ready before beginning to sum. This can save memory if inputs are ready at different times, since minimum temporary storage is proportional to the output size rather than the inputs size.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># tensor &#39;a&#39; is [[1, 2], [3, 4]]</span>
+<span class="co"># tensor `b` is [[5, 0], [0, 6]]</span>
+tf.accumulate_n([a, b, a]) <span class="op">==&gt;</span> [[<span class="dv">7</span>, <span class="dv">4</span>], [<span class="dv">6</span>, <span class="dv">14</span>]]
+
+<span class="co"># Explicitly pass shape and type</span>
+tf.accumulate_n([a, b, a], shape<span class="op">=</span>[<span class="dv">2</span>, <span class="dv">2</span>], tensor_dtype<span class="op">=</span>tf.int32)
+  <span class="op">==&gt;</span> [[<span class="dv">7</span>, <span class="dv">4</span>], [<span class="dv">6</span>, <span class="dv">14</span>]]</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>inputs</code></b>: A list of <code>Tensor</code> objects, each with same shape and type.</li>
+<li><b><code>shape</code></b>: Shape of elements of <code>inputs</code>.</li>
+<li><b><code>tensor_dtype</code></b>: The type of <code>inputs</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of same shape and type as the elements of <code>inputs</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>inputs</code> don't all have same shape and dtype or the shape cannot be inferred.</li>
+</ul>

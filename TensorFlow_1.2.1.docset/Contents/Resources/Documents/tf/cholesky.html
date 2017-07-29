@@ -1,0 +1,20 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.cholesky" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.cholesky" class="dashAnchor"></a><h1 id="tf.cholesky">tf.cholesky</h1>
+<h3 id="tf.cholesky-1"><code>tf.cholesky</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">cholesky(
+    <span class="bu">input</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_linalg_ops.py</code>.</p>
+<p>See the guide: <a href="../../../api_guides/python/math_ops.md#Matrix_Math_Functions">Math &gt; Matrix Math Functions</a></p>
+<p>Computes the Cholesky decomposition of one or more square matrices.</p>
+<p>The input is a tensor of shape <code>[..., M, M]</code> whose inner-most 2 dimensions form square matrices, with the same constraints as the single matrix Cholesky decomposition above. The output is a tensor of the same shape as the input containing the Cholesky decompositions for all input submatrices <code>[..., :, :]</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float64</code>, <code>float32</code>. Shape is <code>[..., M, M]</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>input</code>. Shape is <code>[..., M, M]</code>.</p>

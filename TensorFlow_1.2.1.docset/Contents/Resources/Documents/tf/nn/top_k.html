@@ -1,0 +1,30 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.nn.top_k" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.nn.top_k" class="dashAnchor"></a><h1 id="tf.nn.top_k">tf.nn.top_k</h1>
+<h3 id="tf.nn.top_k-1"><code>tf.nn.top_k</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">top_k(
+    <span class="bu">input</span>,
+    k<span class="op">=</span><span class="dv">1</span>,
+    <span class="bu">sorted</span><span class="op">=</span><span class="va">True</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/nn_ops.py"><code>tensorflow/python/ops/nn_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/nn.md#Evaluation">Neural Network &gt; Evaluation</a></p>
+<p>Finds values and indices of the <code>k</code> largest entries for the last dimension.</p>
+<p>If the input is a vector (rank-1), finds the <code>k</code> largest entries in the vector and outputs their values and indices as vectors. Thus <code>values[j]</code> is the <code>j</code>-th largest entry in <code>input</code>, and its index is <code>indices[j]</code>.</p>
+<p>For matrices (resp. higher rank input), computes the top <code>k</code> entries in each row (resp. vector along the last dimension). Thus,</p>
+<pre><code>values.shape = indices.shape = input.shape[:-1] + [k]</code></pre>
+<p>If two elements are equal, the lower-index element appears first.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: 1-D or higher <code>Tensor</code> with last dimension at least <code>k</code>.</li>
+<li><b><code>k</code></b>: 0-D <code>int32</code> <code>Tensor</code>. Number of top elements to look for along the last dimension (along each row for matrices).</li>
+<li><b><code>sorted</code></b>: If true the resulting <code>k</code> elements will be sorted by the values in descending order.</li>
+<li><b><code>name</code></b>: Optional name for the operation.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<ul>
+<li><b><code>values</code></b>: The <code>k</code> largest elements along each last dimensional slice.</li>
+<li><b><code>indices</code></b>: The indices of <code>values</code> within the last dimension of <code>input</code>.</li>
+</ul>

@@ -1,0 +1,32 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.sequence_mask" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.sequence_mask" class="dashAnchor"></a><h1 id="tf.sequence_mask">tf.sequence_mask</h1>
+<h3 id="tf.sequence_mask-1"><code>tf.sequence_mask</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">sequence_mask(
+    lengths,
+    maxlen<span class="op">=</span><span class="va">None</span>,
+    dtype<span class="op">=</span>tf.<span class="bu">bool</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/array_ops.py"><code>tensorflow/python/ops/array_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/array_ops.md#Slicing_and_Joining">Tensor Transformations &gt; Slicing and Joining</a></p>
+<p>Return a mask tensor representing the first N positions of each row.</p>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.sequence_mask([<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">2</span>], <span class="dv">5</span>) <span class="op">=</span>
+  [[<span class="va">True</span>, <span class="va">False</span>, <span class="va">False</span>, <span class="va">False</span>, <span class="va">False</span>],
+   [<span class="va">True</span>, <span class="va">True</span>, <span class="va">True</span>, <span class="va">False</span>, <span class="va">False</span>],
+   [<span class="va">True</span>, <span class="va">True</span>, <span class="va">False</span>, <span class="va">False</span>, <span class="va">False</span>]]</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>lengths</code></b>: 1D integer tensor, all its values &lt; maxlen.</li>
+<li><b><code>maxlen</code></b>: scalar integer tensor, maximum length of each row. Default: use maximum over lengths.</li>
+<li><b><code>dtype</code></b>: output type of the resulting tensor.</li>
+<li><b><code>name</code></b>: name of the op.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A 2D mask tensor, as shown in the example above, cast to specified dtype.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if the arguments have invalid rank.</li>
+</ul>

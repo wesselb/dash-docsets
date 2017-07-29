@@ -1,0 +1,26 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.global_norm" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.global_norm" class="dashAnchor"></a><h1 id="tf.global_norm">tf.global_norm</h1>
+<h3 id="tf.global_norm-1"><code>tf.global_norm</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">global_norm(
+    t_list,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/clip_ops.py"><code>tensorflow/python/ops/clip_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/train.md#Gradient_Clipping">Training &gt; Gradient Clipping</a></p>
+<p>Computes the global norm of multiple tensors.</p>
+<p>Given a tuple or list of tensors <code>t_list</code>, this operation returns the global norm of the elements in all tensors in <code>t_list</code>. The global norm is computed as:</p>
+<p><code>global_norm = sqrt(sum([l2norm(t)**2 for t in t_list]))</code></p>
+<p>Any entries in <code>t_list</code> that are of type None are ignored.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>t_list</code></b>: A tuple or list of mixed <code>Tensors</code>, <code>IndexedSlices</code>, or None.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A 0-D (scalar) <code>Tensor</code> of type <code>float</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>t_list</code> is not a sequence.</li>
+</ul>

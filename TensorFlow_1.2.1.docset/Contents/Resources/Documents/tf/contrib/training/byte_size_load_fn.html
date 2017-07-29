@@ -1,0 +1,20 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.training.byte_size_load_fn" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.training.byte_size_load_fn" class="dashAnchor"></a><h1 id="tf.contrib.training.byte_size_load_fn">tf.contrib.training.byte_size_load_fn</h1>
+<h3 id="tf.contrib.training.byte_size_load_fn-1"><code>tf.contrib.training.byte_size_load_fn</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">byte_size_load_fn(op)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/training/python/training/device_setter.py"><code>tensorflow/contrib/training/python/training/device_setter.py</code></a>.</p>
+<p>Load function that computes the byte size of a single-output <code>Operation</code>.</p>
+<p>This is intended to be used with <code>&quot;Variable&quot;</code> ops, which have a single <code>Tensor</code> output with the contents of the variable. However, it can also be used for calculating the size of any op that has a single output.</p>
+<p>Intended to be used with <code>GreedyLoadBalancingStrategy</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>op</code></b>: An <code>Operation</code> with a single output, typically a &quot;Variable&quot; op.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The number of bytes in the output <code>Tensor</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>op</code> does not have a single output, or if the shape of the single output is not fully-defined.</li>
+</ul>

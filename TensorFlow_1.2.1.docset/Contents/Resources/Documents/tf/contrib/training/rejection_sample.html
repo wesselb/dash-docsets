@@ -1,0 +1,43 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.training.rejection_sample" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.training.rejection_sample" class="dashAnchor"></a><h1 id="tf.contrib.training.rejection_sample">tf.contrib.training.rejection_sample</h1>
+<h3 id="tf.contrib.training.rejection_sample-1"><code>tf.contrib.training.rejection_sample</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">rejection_sample(
+    tensors,
+    accept_prob_fn,
+    batch_size,
+    queue_threads<span class="op">=</span><span class="dv">1</span>,
+    enqueue_many<span class="op">=</span><span class="va">False</span>,
+    prebatch_capacity<span class="op">=</span><span class="dv">16</span>,
+    prebatch_threads<span class="op">=</span><span class="dv">1</span>,
+    runtime_checks<span class="op">=</span><span class="va">False</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/training/python/training/sampling_ops.py"><code>tensorflow/contrib/training/python/training/sampling_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.training.md#Online_data_resampling">Training (contrib) &gt; Online data resampling</a></p>
+<p>Stochastically creates batches by rejection sampling.</p>
+<p>Each list of non-batched tensors is evaluated by <code>accept_prob_fn</code>, to produce a scalar tensor between 0 and 1. This tensor corresponds to the probability of being accepted. When <code>batch_size</code> tensor groups have been accepted, the batch queue will return a mini-batch.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>tensors</code></b>: List of tensors for data. All tensors are either one item or a batch, according to enqueue_many.</li>
+<li><b><code>accept_prob_fn</code></b>: A python lambda that takes a non-batch tensor from each item in <code>tensors</code>, and produces a scalar tensor.</li>
+<li><b><code>batch_size</code></b>: Size of batch to be returned.</li>
+<li><b><code>queue_threads</code></b>: The number of threads for the queue that will hold the final batch.</li>
+<li><b><code>enqueue_many</code></b>: Bool. If true, interpret input tensors as having a batch dimension.</li>
+<li><b><code>prebatch_capacity</code></b>: Capacity for the large queue that is used to convert batched tensors to single examples.</li>
+<li><b><code>prebatch_threads</code></b>: Number of threads for the large queue that is used to convert batched tensors to single examples.</li>
+<li><b><code>runtime_checks</code></b>: Bool. If true, insert runtime checks on the output of <code>accept_prob_fn</code>. Using <code>True</code> might have a performance impact.</li>
+<li><b><code>name</code></b>: Optional prefix for ops created by this function.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: enqueue_many is True and labels doesn't have a batch dimension, or if enqueue_many is False and labels isn't a scalar.</li>
+<li><b><code>ValueError</code></b>: enqueue_many is True, and batch dimension on data and labels don't match.</li>
+<li><b><code>ValueError</code></b>: if a zero initial probability class has a nonzero target probability.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A list of tensors of the same length as <code>tensors</code>, with batch dimension <code>batch_size</code>.</p>
+<p>Example: # Get tensor for a single data and label example. data, label = data_provider.Get(['data', 'label'])</p>
+<p># Get stratified batch according to data tensor. accept_prob_fn = lambda x: (tf.tanh(x[0]) + 1) / 2 data_batch = tf.contrib.training.rejection_sample( [data, label], accept_prob_fn, 16)</p>
+<p># Run batch through network. ...</p>

@@ -1,0 +1,28 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.diag" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.diag" class="dashAnchor"></a><h1 id="tf.diag">tf.diag</h1>
+<h3 id="tf.diag-1"><code>tf.diag</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">diag(
+    diagonal,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_array_ops.py</code>.</p>
+<p>See the guide: <a href="../../../api_guides/python/math_ops.md#Matrix_Math_Functions">Math &gt; Matrix Math Functions</a></p>
+<p>Returns a diagonal tensor with a given diagonal values.</p>
+<p>Given a <code>diagonal</code>, this operation returns a tensor with the <code>diagonal</code> and everything else padded with zeros. The diagonal is computed as follows:</p>
+<p>Assume <code>diagonal</code> has dimensions [D1,..., Dk], then the output is a tensor of rank 2k with dimensions [D1,..., Dk, D1,..., Dk] where:</p>
+<p><code>output[i1,..., ik, i1,..., ik] = diagonal[i1, ..., ik]</code> and 0 everywhere else.</p>
+<p>For example:</p>
+<pre><code># &#39;diagonal&#39; is [1, 2, 3, 4]
+tf.diag(diagonal) ==&gt; [[1, 0, 0, 0]
+                       [0, 2, 0, 0]
+                       [0, 0, 3, 0]
+                       [0, 0, 0, 4]]</code></pre>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>diagonal</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>complex128</code>. Rank k tensor where k is at most 3.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>diagonal</code>.</p>

@@ -1,0 +1,51 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.quantize_v2" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.quantize_v2" class="dashAnchor"></a><h1 id="tf.quantize_v2">tf.quantize_v2</h1>
+<h3 id="tf.quantize_v2-1"><code>tf.quantize_v2</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">quantize_v2(
+    <span class="bu">input</span>,
+    min_range,
+    max_range,
+    T,
+    mode<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_array_ops.py</code>.</p>
+<p>See the guide: <a href="../../../api_guides/python/array_ops.md#Slicing_and_Joining">Tensor Transformations &gt; Slicing and Joining</a></p>
+<p>Quantize the 'input' tensor of type float to 'output' tensor of type 'T'.</p>
+<p>[min_range, max_range] are scalar floats that specify the range for the 'input' data. The 'mode' attribute controls exactly which calculations are used to convert the float values to their quantized equivalents.</p>
+<p>In 'MIN_COMBINED' mode, each value of the tensor will undergo the following:</p>
+<pre><code>out[i] = (in[i] - min_range) * range(T) / (max_range - min_range)
+if T == qint8, out[i] -= (range(T) + 1) / 2.0</code></pre>
+<p>here <code>range(T) = numeric_limits&lt;T&gt;::max() - numeric_limits&lt;T&gt;::min()</code></p>
+<p><em>MIN_COMBINED Mode Example</em></p>
+<p>Assume the input is type float and has a possible range of [0.0, 6.0] and the output type is quint8 ([0, 255]). The min_range and max_range values should be specified as 0.0 and 6.0. Quantizing from float to quint8 will multiply each value of the input by 255/6 and cast to quint8.</p>
+<p>If the output type was qint8 ([-128, 127]), the operation will additionally subtract each value by 128 prior to casting, so that the range of values aligns with the range of qint8.</p>
+<p>If the mode is 'MIN_FIRST', then this approach is used:</p>
+<pre><code>number_of_steps = 1 &lt;&lt; (# of bits in T)
+range_adjust = number_of_steps / (number_of_steps - 1)
+range = (range_max - range_min) * range_adjust
+range_scale = number_of_steps / range
+quantized = round(input * range_scale) - round(range_min * range_scale) +
+  numeric_limits&lt;T&gt;::min()
+quantized = max(quantized, numeric_limits&lt;T&gt;::min())
+quantized = min(quantized, numeric_limits&lt;T&gt;::max())</code></pre>
+<p>The biggest difference between this and MIN_COMBINED is that the minimum range is rounded first, before it's subtracted from the rounded value. With MIN_COMBINED, a small bias is introduced where repeated iterations of quantizing and dequantizing will introduce a larger and larger error.</p>
+<p>One thing to watch out for is that the operator may choose to adjust the requested minimum and maximum values slightly during the quantization process, so you should always use the output ports as the range for further calculations. For example, if the requested minimum and maximum values are close to equal, they will be separated by a small epsilon value to prevent ill-formed quantized buffers from being created. Otherwise, you can end up with buffers where all the quantized values map to the same float value, which causes problems for operations that have to perform further calculations on them.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code> of type <code>float32</code>.</li>
+<li><b><code>min_range</code></b>: A <code>Tensor</code> of type <code>float32</code>. The minimum scalar value possibly produced for the input.</li>
+<li><b><code>max_range</code></b>: A <code>Tensor</code> of type <code>float32</code>. The maximum scalar value possibly produced for the input.</li>
+<li><b><code>T</code></b>: A <code>tf.DType</code> from: <code>tf.qint8, tf.quint8, tf.qint16, tf.quint16, tf.qint32</code>.</li>
+<li><b><code>mode</code></b>: An optional <code>string</code> from: <code>&quot;MIN_COMBINED&quot;, &quot;MIN_FIRST&quot;</code>. Defaults to <code>&quot;MIN_COMBINED&quot;</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A tuple of <code>Tensor</code> objects (output, output_min, output_max).</p>
+<ul>
+<li><b><code>output</code></b>: A <code>Tensor</code> of type <code>T</code>. The quantized data produced from the float input.</li>
+<li><b><code>output_min</code></b>: A <code>Tensor</code> of type <code>float32</code>. The actual minimum scalar value used for the output.</li>
+<li><b><code>output_max</code></b>: A <code>Tensor</code> of type <code>float32</code>. The actual maximum scalar value used for the output.</li>
+</ul>

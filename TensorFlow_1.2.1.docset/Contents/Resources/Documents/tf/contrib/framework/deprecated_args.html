@@ -1,0 +1,28 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.framework.deprecated_args" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.framework.deprecated_args" class="dashAnchor"></a><h1 id="tf.contrib.framework.deprecated_args">tf.contrib.framework.deprecated_args</h1>
+<h3 id="tf.contrib.framework.deprecated_args-1"><code>tf.contrib.framework.deprecated_args</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">deprecated_args(
+    date,
+    instructions,
+    <span class="op">*</span>deprecated_arg_names_or_tuples
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/util/deprecation.py"><code>tensorflow/python/util/deprecation.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.framework.md#Deprecation">Framework (contrib) &gt; Deprecation</a></p>
+<p>Decorator for marking specific function arguments as deprecated.</p>
+<p>This decorator logs a deprecation warning whenever the decorated function is called with the deprecated argument. It has the following format:</p>
+<p>Calling <function> (from <module>) with <arg> is deprecated and will be removed after <date>. Instructions for updating: <instructions></p>
+<p>If <code>date</code> is None, 'after <date>' is replaced with 'in a future version'. <function> includes the class name if it is a method.</p>
+<p>It also edits the docstring of the function: ' (deprecated arguments)' is appended to the first line of the docstring and a deprecation notice is prepended to the rest of the docstring.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>date</code></b>: String or None. The date the function is scheduled to be removed. Must be ISO 8601 (YYYY-MM-DD), or None.</li>
+<li><b><code>instructions</code></b>: String. Instructions on how to update code using the deprecated function. *deprecated_arg_names_or_tuples: String. or 2-Tuple(String, [ok_vals]). The string is the deprecated argument name. Optionally, an ok-value may be provided. If the user provided argument equals this value, the warning is suppressed.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Decorated function or method.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If date is not None or in ISO 8601 format, instructions are empty, the deprecated arguments are not present in the function signature, or the second element of a deprecated_tuple is not a list.</li>
+</ul>

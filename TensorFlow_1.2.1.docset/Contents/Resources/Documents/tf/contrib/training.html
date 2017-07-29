@@ -1,0 +1,37 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.training" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.training" class="dashAnchor"></a><h1 id="module-tf.contrib.training">Module: tf.contrib.training</h1>
+<h3 id="module-tf.contrib.training-1">Module <code>tf.contrib.training</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/training/__init__.py"><code>tensorflow/contrib/training/__init__.py</code></a>.</p>
+<p>Training and input utilities.</p>
+<p>See <a href="../../../../api_guides/python/contrib.training.html">Training (contrib)</a> guide.</p>
+<h2 id="classes">Classes</h2>
+<p><a href="../../tf/contrib/training/FailureTolerator.html"><code>class FailureTolerator</code></a>: Helper for tolerating certain exceptions.</p>
+<p><a href="../../tf/contrib/training/GreedyLoadBalancingStrategy.html"><code>class GreedyLoadBalancingStrategy</code></a>: Returns the least-loaded ps task for op placement.</p>
+<p><a href="../../tf/contrib/training/HParams.html"><code>class HParams</code></a>: Class to hold a set of hyperparameters as name-value pairs.</p>
+<p><a href="../../tf/contrib/training/NextQueuedSequenceBatch.html"><code>class NextQueuedSequenceBatch</code></a>: NextQueuedSequenceBatch stores deferred SequenceQueueingStateSaver data.</p>
+<p><a href="../../tf/contrib/training/SequenceQueueingStateSaver.html"><code>class SequenceQueueingStateSaver</code></a>: SequenceQueueingStateSaver provides access to stateful values from input.</p>
+<p><a href="../../tf/contrib/training/StopAfterNEvalsHook.html"><code>class StopAfterNEvalsHook</code></a>: Run hook used by the evaluation routines to run the <code>eval_ops</code> N times.</p>
+<p><a href="../../tf/contrib/training/SummaryAtEndHook.html"><code>class SummaryAtEndHook</code></a>: A run hook that saves a summary with the results of evaluation.</p>
+<h2 id="functions">Functions</h2>
+<p><a href="../../tf/contrib/training/add_gradients_summaries.html"><code>add_gradients_summaries(...)</code></a>: Add summaries to gradients.</p>
+<p><a href="../../tf/contrib/training/batch_sequences_with_states.html"><code>batch_sequences_with_states(...)</code></a>: Creates batches of segments of sequential input.</p>
+<p><a href="../../tf/contrib/training/bucket.html"><code>bucket(...)</code></a>: Lazy bucketing of input tensors according to <code>which_bucket</code>.</p>
+<p><a href="../../tf/contrib/training/bucket_by_sequence_length.html"><code>bucket_by_sequence_length(...)</code></a>: Lazy bucketing of inputs according to their length.</p>
+<p><a href="../../tf/contrib/training/byte_size_load_fn.html"><code>byte_size_load_fn(...)</code></a>: Load function that computes the byte size of a single-output <code>Operation</code>.</p>
+<p><a href="../../tf/contrib/training/checkpoints_iterator.html"><code>checkpoints_iterator(...)</code></a>: Continuously yield new checkpoint files as they appear.</p>
+<p><a href="../../tf/contrib/training/clip_gradient_norms.html"><code>clip_gradient_norms(...)</code></a>: Clips the gradients by the given value.</p>
+<p><a href="../../tf/contrib/training/create_train_op.html"><code>create_train_op(...)</code></a>: Creates an <code>Operation</code> that evaluates the gradients and returns the loss.</p>
+<p><a href="../../tf/contrib/training/evaluate_once.html"><code>evaluate_once(...)</code></a>: Evaluates the model at the given checkpoint path.</p>
+<p><a href="../../tf/contrib/training/evaluate_repeatedly.html"><code>evaluate_repeatedly(...)</code></a>: Repeatedly searches for a checkpoint in <code>checkpoint_dir</code> and evaluates it.</p>
+<p><a href="../../tf/contrib/training/get_or_create_eval_step.html"><code>get_or_create_eval_step(...)</code></a>: Gets or creates the eval step <code>Tensor</code>.</p>
+<p><a href="../../tf/contrib/training/multiply_gradients.html"><code>multiply_gradients(...)</code></a>: Multiply specified gradients.</p>
+<p><a href="../../tf/contrib/training/parse_values.html"><code>parse_values(...)</code></a>: Parses hyperparameter values from a string into a python map..</p>
+<p><a href="../../tf/contrib/training/python_input.html"><code>python_input(...)</code></a>: Easily feed data from a python generator into TensorFlow queues.</p>
+<p><a href="../../tf/contrib/training/rejection_sample.html"><code>rejection_sample(...)</code></a>: Stochastically creates batches by rejection sampling.</p>
+<p><a href="../../tf/contrib/training/resample_at_rate.html"><code>resample_at_rate(...)</code></a>: Given <code>inputs</code> tensors, stochastically resamples each at a given rate.</p>
+<p><a href="../../tf/contrib/training/stratified_sample.html"><code>stratified_sample(...)</code></a>: Stochastically creates batches based on per-class probabilities.</p>
+<p><a href="../../tf/contrib/training/train.html"><code>train(...)</code></a>: Runs the training loop.</p>
+<p><a href="../../tf/contrib/training/wait_for_new_checkpoint.html"><code>wait_for_new_checkpoint(...)</code></a>: Waits until a new checkpoint file is found.</p>
+<p><a href="../../tf/contrib/training/weighted_resample.html"><code>weighted_resample(...)</code></a>: Performs an approximate weighted resampling of <code>inputs</code>.</p>

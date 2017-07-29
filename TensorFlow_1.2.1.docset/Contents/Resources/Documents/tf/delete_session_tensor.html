@@ -1,0 +1,21 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.delete_session_tensor" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.delete_session_tensor" class="dashAnchor"></a><h1 id="tf.delete_session_tensor">tf.delete_session_tensor</h1>
+<h3 id="tf.delete_session_tensor-1"><code>tf.delete_session_tensor</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">delete_session_tensor(
+    handle,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/session_ops.py"><code>tensorflow/python/ops/session_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/session_ops.md#Tensor_Handle_Operations">Tensor Handle Operations &gt; Tensor Handle Operations</a></p>
+<p>Delete the tensor for the given tensor handle.</p>
+<p>This is EXPERIMENTAL and subject to change.</p>
+<p>Delete the tensor of a given tensor handle. The tensor is produced in a previous run() and stored in the state of the session.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>handle</code></b>: The string representation of a persistent tensor handle.</li>
+<li><b><code>name</code></b>: Optional name prefix for the return tensor.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A pair of graph elements. The first is a placeholder for feeding a tensor handle and the second is a deletion operation.</p>

@@ -1,0 +1,29 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.conj" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.conj" class="dashAnchor"></a><h1 id="tf.conj">tf.conj</h1>
+<h3 id="tf.conj-1"><code>tf.conj</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">conj(
+    x,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/math_ops.py"><code>tensorflow/python/ops/math_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/math_ops.md#Complex_Number_Functions">Math &gt; Complex Number Functions</a></p>
+<p>Returns the complex conjugate of a complex number.</p>
+<p>Given a tensor <code>input</code> of complex numbers, this operation returns a tensor of complex numbers that are the complex conjugate of each element in <code>input</code>. The complex numbers in <code>input</code> must be of the form \(a + bj\), where <em>a</em> is the real part and <em>b</em> is the imaginary part.</p>
+<p>The complex conjugate returned by this operation is of the form \(a - bj\).</p>
+<p>For example:</p>
+<pre><code># tensor &#39;input&#39; is [-2.25 + 4.75j, 3.25 + 5.75j]
+tf.conj(input) ==&gt; [-2.25 - 4.75j, 3.25 - 5.75j]</code></pre>
+<p>If <code>x</code> is real, it is returned unchanged.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code> to conjugate. Must have numeric type.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> that is the conjugate of <code>x</code> (with the same type).</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>x</code> is not a numeric tensor.</li>
+</ul>

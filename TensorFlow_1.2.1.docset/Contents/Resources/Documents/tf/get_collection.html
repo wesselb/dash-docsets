@@ -1,0 +1,20 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.get_collection" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.get_collection" class="dashAnchor"></a><h1 id="tf.get_collection">tf.get_collection</h1>
+<h3 id="tf.get_collection-1"><code>tf.get_collection</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_collection(
+    key,
+    scope<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/framework/ops.py"><code>tensorflow/python/framework/ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/framework.md#Graph_collections">Building Graphs &gt; Graph collections</a></p>
+<p>Wrapper for <code>Graph.get_collection()</code> using the default graph.</p>
+<p>See <a href="../tf/Graph.md#get_collection"><code>tf.Graph.get_collection</code></a> for more details.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>key</code></b>: The key for the collection. For example, the <code>GraphKeys</code> class contains many standard names for collections.</li>
+<li><b><code>scope</code></b>: (Optional.) If supplied, the resulting list is filtered to include only items whose <code>name</code> attribute matches using <code>re.match</code>. Items without a <code>name</code> attribute are never returned if a scope is supplied and the choice or <code>re.match</code> means that a <code>scope</code> without special tokens filters by prefix.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The list of values in the collection with the given <code>name</code>, or an empty list if no value has been added to that collection. The list contains the values in the order under which they were collected.</p>

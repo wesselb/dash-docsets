@@ -1,0 +1,32 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.fake_quant_with_min_max_vars_per_channel_gradient" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.fake_quant_with_min_max_vars_per_channel_gradient" class="dashAnchor"></a><h1 id="tf.fake_quant_with_min_max_vars_per_channel_gradient">tf.fake_quant_with_min_max_vars_per_channel_gradient</h1>
+<h3 id="tf.fake_quant_with_min_max_vars_per_channel_gradient-1"><code>tf.fake_quant_with_min_max_vars_per_channel_gradient</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">fake_quant_with_min_max_vars_per_channel_gradient(
+    gradients,
+    inputs,
+    <span class="bu">min</span>,
+    <span class="bu">max</span>,
+    num_bits<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_array_ops.py</code>.</p>
+<p>See the guide: <a href="../../../api_guides/python/array_ops.md#Fake_quantization">Tensor Transformations &gt; Fake quantization</a></p>
+<p>Compute gradients for a FakeQuantWithMinMaxVarsPerChannel operation.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>gradients</code></b>: A <code>Tensor</code> of type <code>float32</code>. Backpropagated gradients above the FakeQuantWithMinMaxVars operation, shape one of: <code>[d]</code>, <code>[b, d]</code>, <code>[b, h, w, d]</code>.</li>
+<li><b><code>inputs</code></b>: A <code>Tensor</code> of type <code>float32</code>. Values passed as inputs to the FakeQuantWithMinMaxVars operation, shape same as <code>gradients</code>. min, max: Quantization interval, floats of shape <code>[d]</code>.</li>
+<li><b><code>min</code></b>: A <code>Tensor</code> of type <code>float32</code>.</li>
+<li><b><code>max</code></b>: A <code>Tensor</code> of type <code>float32</code>.</li>
+<li><b><code>num_bits</code></b>: An optional <code>int</code>. Defaults to <code>8</code>. The bitwidth of the quantization; between 2 and 8, inclusive.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A tuple of <code>Tensor</code> objects (backprops_wrt_input, backprop_wrt_min, backprop_wrt_max).</p>
+<ul>
+<li><b><code>backprops_wrt_input</code></b>: A <code>Tensor</code> of type <code>float32</code>. Backpropagated gradients w.r.t. inputs, shape same as <code>inputs</code>: <code>gradients * (inputs &gt;= min &amp;&amp; inputs &lt;= max)</code>.</li>
+<li><b><code>backprop_wrt_min</code></b>: A <code>Tensor</code> of type <code>float32</code>. Backpropagated gradients w.r.t. min parameter, shape <code>[d]</code>: <code>sum_per_d(gradients * (inputs &lt; min))</code>.</li>
+<li><b><code>backprop_wrt_max</code></b>: A <code>Tensor</code> of type <code>float32</code>. Backpropagated gradients w.r.t. max parameter, shape <code>[d]</code>: <code>sum_per_d(gradients * (inputs &gt; max))</code>.</li>
+</ul>

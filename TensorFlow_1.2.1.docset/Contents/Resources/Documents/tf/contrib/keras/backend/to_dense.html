@@ -1,0 +1,20 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.backend.to_dense" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.keras.backend.to_dense" class="dashAnchor"></a><h1 id="tf.contrib.keras.backend.to_dense">tf.contrib.keras.backend.to_dense</h1>
+<h3 id="tf.contrib.keras.backend.to_dense-1"><code>tf.contrib.keras.backend.to_dense</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">to_dense(tensor)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/backend.py"><code>tensorflow/contrib/keras/python/keras/backend.py</code></a>.</p>
+<p>Converts a sparse tensor into a dense tensor and returns it.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>tensor: A tensor instance (potentially sparse).</code></pre>
+<h4 id="returns">Returns:</h4>
+<pre><code>A dense tensor.</code></pre>
+<p>Examples:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    <span class="op">&gt;&gt;&gt;</span> <span class="im">from</span> keras <span class="im">import</span> backend <span class="im">as</span> K
+    <span class="op">&gt;&gt;&gt;</span> b <span class="op">=</span> K.placeholder((<span class="dv">2</span>, <span class="dv">2</span>), sparse<span class="op">=</span><span class="va">True</span>)
+    <span class="op">&gt;&gt;&gt;</span> <span class="bu">print</span>(K.is_sparse(b))
+    <span class="va">True</span>
+    <span class="op">&gt;&gt;&gt;</span> c <span class="op">=</span> K.to_dense(b)
+    <span class="op">&gt;&gt;&gt;</span> <span class="bu">print</span>(K.is_sparse(c))
+    <span class="va">False</span></code></pre></div>

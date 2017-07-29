@@ -1,0 +1,37 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.bayesflow.entropy.entropy_shannon" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.bayesflow.entropy.entropy_shannon" class="dashAnchor"></a><h1 id="tf.contrib.bayesflow.entropy.entropy_shannon">tf.contrib.bayesflow.entropy.entropy_shannon</h1>
+<h3 id="tf.contrib.bayesflow.entropy.entropy_shannon-1"><code>tf.contrib.bayesflow.entropy.entropy_shannon</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">entropy_shannon(
+    p,
+    z<span class="op">=</span><span class="va">None</span>,
+    n<span class="op">=</span><span class="va">None</span>,
+    seed<span class="op">=</span><span class="va">None</span>,
+    form<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="st">&#39;entropy_shannon&#39;</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/bayesflow/python/ops/entropy_impl.py"><code>tensorflow/contrib/bayesflow/python/ops/entropy_impl.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../../api_guides/python/contrib.bayesflow.entropy.md#Ops">BayesFlow Entropy (contrib) &gt; Ops</a></p>
+<p>Monte Carlo or deterministic computation of Shannon's entropy.</p>
+<p>Depending on the kwarg <code>form</code>, this <code>Op</code> returns either the analytic entropy of the distribution <code>p</code>, or the sampled entropy:</p>
+<pre><code>-n^{-1} sum_{i=1}^n p.log_prob(z_i),  where z_i ~ p,
+    \approx - E_p[ Log[p(Z)] ]
+    = Entropy[p]</code></pre>
+<p>User supplies either <code>Tensor</code> of samples <code>z</code>, or number of samples to draw <code>n</code></p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>p</code></b>: <code>tf.contrib.distributions.Distribution</code></li>
+<li><b><code>z</code></b>: <code>Tensor</code> of samples from <code>p</code>, produced by <code>p.sample(n)</code> for some <code>n</code>.</li>
+<li><b><code>n</code></b>: Integer <code>Tensor</code>. Number of samples to generate if <code>z</code> is not provided.</li>
+<li><b><code>seed</code></b>: Python integer to seed the random number generator.</li>
+<li><b><code>form</code></b>: Either <code>ELBOForms.analytic_entropy</code> (use formula for entropy of <code>q</code>) or <code>ELBOForms.sample</code> (sample estimate of entropy), or <code>ELBOForms.default</code> (attempt analytic entropy, fallback on sample). Default value is <code>ELBOForms.default</code>.</li>
+<li><b><code>name</code></b>: A name to give this <code>Op</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> with same <code>dtype</code> as <code>p</code>, and shape equal to <code>p.batch_shape</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>form</code> not handled by this function.</li>
+<li><b><code>ValueError</code></b>: If <code>form</code> is <code>ELBOForms.analytic_entropy</code> and <code>n</code> was provided.</li>
+</ul>

@@ -1,0 +1,24 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.framework.reduce_sum_n" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.framework.reduce_sum_n" class="dashAnchor"></a><h1 id="tf.contrib.framework.reduce_sum_n">tf.contrib.framework.reduce_sum_n</h1>
+<h3 id="tf.contrib.framework.reduce_sum_n-1"><code>tf.contrib.framework.reduce_sum_n</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">reduce_sum_n(
+    tensors,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/framework/python/framework/tensor_util.py"><code>tensorflow/contrib/framework/python/framework/tensor_util.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.framework.html">Framework (contrib)</a></p>
+<p>Reduce tensors to a scalar sum.</p>
+<p>This reduces each tensor in <code>tensors</code> to a scalar via <code>tf.reduce_sum</code>, then adds them via <code>tf.add_n</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>tensors</code></b>: List of tensors, all of the same numeric type.</li>
+<li><b><code>name</code></b>: Tensor name, and scope for all other ops.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Total loss tensor, or None if no losses have been configured.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>losses</code> is missing or empty.</li>
+</ul>

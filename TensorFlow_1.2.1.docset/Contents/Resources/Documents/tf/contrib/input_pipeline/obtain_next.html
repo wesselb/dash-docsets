@@ -1,0 +1,18 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.input_pipeline.obtain_next" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.input_pipeline.obtain_next" class="dashAnchor"></a><h1 id="tf.contrib.input_pipeline.obtain_next">tf.contrib.input_pipeline.obtain_next</h1>
+<h3 id="tf.contrib.input_pipeline.obtain_next-1"><code>tf.contrib.input_pipeline.obtain_next</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">obtain_next(
+    string_list_tensor,
+    counter
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/input_pipeline/python/ops/input_pipeline_ops.py"><code>tensorflow/contrib/input_pipeline/python/ops/input_pipeline_ops.py</code></a>.</p>
+<p>Basic wrapper for the ObtainNextOp.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>string_list_tensor</code></b>: A tensor that is a list of strings</li>
+<li><b><code>counter</code></b>: an int64 ref tensor to keep track of which element is returned.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>An op that produces the element at counter + 1 in the list, round robin style.</p>

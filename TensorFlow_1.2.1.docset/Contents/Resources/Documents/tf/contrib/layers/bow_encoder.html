@@ -1,0 +1,36 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.layers.bow_encoder" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.layers.bow_encoder" class="dashAnchor"></a><h1 id="tf.contrib.layers.bow_encoder">tf.contrib.layers.bow_encoder</h1>
+<h3 id="tf.contrib.layers.bow_encoder-1"><code>tf.contrib.layers.bow_encoder</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">bow_encoder(
+    ids,
+    vocab_size,
+    embed_dim,
+    sparse_lookup<span class="op">=</span><span class="va">True</span>,
+    initializer<span class="op">=</span><span class="va">None</span>,
+    regularizer<span class="op">=</span><span class="va">None</span>,
+    trainable<span class="op">=</span><span class="va">True</span>,
+    scope<span class="op">=</span><span class="va">None</span>,
+    reuse<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/layers/python/layers/encoders.py"><code>tensorflow/contrib/layers/python/layers/encoders.py</code></a>.</p>
+<p>Maps a sequence of symbols to a vector per example by averaging embeddings.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>ids</code></b>: <code>[batch_size, doc_length]</code> <code>Tensor</code> or <code>SparseTensor</code> of type <code>int32</code> or <code>int64</code> with symbol ids.</li>
+<li><b><code>vocab_size</code></b>: Integer number of symbols in vocabulary.</li>
+<li><b><code>embed_dim</code></b>: Integer number of dimensions for embedding matrix.</li>
+<li><b><code>sparse_lookup</code></b>: <code>bool</code>, if <code>True</code>, converts ids to a <code>SparseTensor</code> and performs a sparse embedding lookup. This is usually faster, but not desirable if padding tokens should have an embedding. Empty rows are assigned a special embedding.</li>
+<li><b><code>initializer</code></b>: An initializer for the embeddings, if <code>None</code> default for current scope is used.</li>
+<li><b><code>regularizer</code></b>: Optional regularizer for the embeddings.</li>
+<li><b><code>trainable</code></b>: If <code>True</code> also add variables to the graph collection <code>GraphKeys.TRAINABLE_VARIABLES</code> (see tf.Variable).</li>
+<li><b><code>scope</code></b>: Optional string specifying the variable scope for the op, required if <code>reuse=True</code>.</li>
+<li><b><code>reuse</code></b>: If <code>True</code>, variables inside the op will be reused.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Encoding <code>Tensor</code> <code>[batch_size, embed_dim]</code> produced by averaging embeddings.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>embed_dim</code> or <code>vocab_size</code> are not specified.</li>
+</ul>

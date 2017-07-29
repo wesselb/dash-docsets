@@ -1,0 +1,41 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.concat" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.concat" class="dashAnchor"></a><h1 id="tf.concat">tf.concat</h1>
+<h3 id="tf.concat-1"><code>tf.concat</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">concat(
+    values,
+    axis,
+    name<span class="op">=</span><span class="st">&#39;concat&#39;</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/array_ops.py"><code>tensorflow/python/ops/array_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/array_ops.md#Slicing_and_Joining">Tensor Transformations &gt; Slicing and Joining</a></p>
+<p>Concatenates tensors along one dimension.</p>
+<p>Concatenates the list of tensors <code>values</code> along dimension <code>axis</code>. If <code>values[i].shape = [D0, D1, ... Daxis(i), ...Dn]</code>, the concatenated result has shape</p>
+<pre><code>[D0, D1, ... Raxis, ...Dn]</code></pre>
+<p>where</p>
+<pre><code>Raxis = sum(Daxis(i))</code></pre>
+<p>That is, the data from the input tensors is joined along the <code>axis</code> dimension.</p>
+<p>The number of dimensions of the input tensors must match, and all dimensions except <code>axis</code> must be equal.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">t1 <span class="op">=</span> [[<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>], [<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>]]
+t2 <span class="op">=</span> [[<span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>], [<span class="dv">10</span>, <span class="dv">11</span>, <span class="dv">12</span>]]
+tf.concat([t1, t2], <span class="dv">0</span>) <span class="op">==&gt;</span> [[<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>], [<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>], [<span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>], [<span class="dv">10</span>, <span class="dv">11</span>, <span class="dv">12</span>]]
+tf.concat([t1, t2], <span class="dv">1</span>) <span class="op">==&gt;</span> [[<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>], [<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">10</span>, <span class="dv">11</span>, <span class="dv">12</span>]]
+
+<span class="co"># tensor t3 with shape [2, 3]</span>
+<span class="co"># tensor t4 with shape [2, 3]</span>
+tf.shape(tf.concat([t3, t4], <span class="dv">0</span>)) <span class="op">==&gt;</span> [<span class="dv">4</span>, <span class="dv">3</span>]
+tf.shape(tf.concat([t3, t4], <span class="dv">1</span>)) <span class="op">==&gt;</span> [<span class="dv">2</span>, <span class="dv">6</span>]</code></pre></div>
+<p>Note: If you are concatenating along a new axis consider using stack. E.g.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.concat([tf.expand_dims(t, axis) <span class="cf">for</span> t <span class="kw">in</span> tensors], axis)</code></pre></div>
+<p>can be rewritten as</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.stack(tensors, axis<span class="op">=</span>axis)</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>values</code></b>: A list of <code>Tensor</code> objects or a single <code>Tensor</code>.</li>
+<li><b><code>axis</code></b>: 0-D <code>int32</code> <code>Tensor</code>. Dimension along which to concatenate.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> resulting from concatenation of the input tensors.</p>

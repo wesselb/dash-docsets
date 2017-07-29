@@ -1,0 +1,39 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.errors.UnimplementedError" /> <meta itemprop="property" content="error_code"/> <meta itemprop="property" content="message"/> <meta itemprop="property" content="node_def"/> <meta itemprop="property" content="op"/> <meta itemprop="property" content="__init__"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.errors.UnimplementedError" class="dashAnchor"></a><h1 id="tf.errors.unimplementederror">tf.errors.UnimplementedError</h1>
+<h3 id="class-tf.errors.unimplementederror"><code>class tf.errors.UnimplementedError</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/framework/errors_impl.py"><code>tensorflow/python/framework/errors_impl.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/client.md#Error_classes_and_convenience_functions">Running Graphs &gt; Error classes and convenience functions</a></p>
+<p>Raised when an operation has not been implemented.</p>
+<p>Some operations may raise this error when passed otherwise-valid arguments that it does not currently support. For example, running the <a href="../../tf/nn/max_pool.html"><code>tf.nn.max_pool</code></a> operation would raise this error if pooling was requested on the batch dimension, because this is not yet supported.</p>
+<h2 id="properties">Properties</h2>
+<h3 id="error_code">
+<code>error_code</code>
+</h3>
+<p>The integer error code that describes the error.</p>
+<h3 id="message">
+<code>message</code>
+</h3>
+<p>The error message that describes the error.</p>
+<h3 id="node_def">
+<code>node_def</code>
+</h3>
+<p>The <code>NodeDef</code> proto representing the op that failed.</p>
+<h3 id="op">
+<code>op</code>
+</h3>
+<p>The operation that failed, if known.</p>
+<p><em>N.B.</em> If the failed op was synthesized at runtime, e.g. a <code>Send</code> or <code>Recv</code> op, there will be no corresponding <a href="../../tf/Operation.html"><code>tf.Operation</code></a> object. In that case, this will return <code>None</code>, and you should instead use the <a href="../../tf/OpError.md#node_def"><code>tf.OpError.node_def</code></a> to discover information about the op.</p>
+<h4 id="returns">Returns:</h4>
+<p>The <code>Operation</code> that failed, or None.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    node_def,
+    op,
+    message
+)</code></pre></div>
+<p>Creates an <code>UnimplementedError</code>.</p>

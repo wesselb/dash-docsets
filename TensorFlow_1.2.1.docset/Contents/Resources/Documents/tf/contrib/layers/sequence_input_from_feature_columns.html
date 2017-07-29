@@ -1,0 +1,28 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.layers.sequence_input_from_feature_columns" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.layers.sequence_input_from_feature_columns" class="dashAnchor"></a><h1 id="tf.contrib.layers.sequence_input_from_feature_columns">tf.contrib.layers.sequence_input_from_feature_columns</h1>
+<h3 id="tf.contrib.layers.sequence_input_from_feature_columns-1"><code>tf.contrib.layers.sequence_input_from_feature_columns</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">sequence_input_from_feature_columns(
+    <span class="op">*</span>args,
+    <span class="op">**</span>kwargs
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/framework/python/framework/experimental.py"><code>tensorflow/contrib/framework/python/framework/experimental.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.layers.md#Feature_columns">Layers (contrib) &gt; Feature columns</a></p>
+<p>Builds inputs for sequence models from <code>FeatureColumn</code>s. (experimental)</p>
+<p>THIS FUNCTION IS EXPERIMENTAL. It may change or be removed at any time, and without warning.</p>
+<p>See documentation for <code>input_from_feature_columns</code>. The following types of <code>FeatureColumn</code> are permitted in <code>feature_columns</code>: <code>_OneHotColumn</code>, <code>_EmbeddingColumn</code>, <code>_ScatteredEmbeddingColumn</code>, <code>_RealValuedColumn</code>, <code>_DataFrameColumn</code>. In addition, columns in <code>feature_columns</code> may not be constructed using any of the following: <code>ScatteredEmbeddingColumn</code>, <code>BucketizedColumn</code>, <code>CrossedColumn</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>columns_to_tensors</code></b>: A mapping from feature column to tensors. 'string' key means a base feature (not-transformed). It can have FeatureColumn as a key too. That means that FeatureColumn is already transformed by input pipeline.</li>
+<li><b><code>feature_columns</code></b>: A set containing all the feature columns. All items in the set should be instances of classes derived by FeatureColumn.</li>
+<li><b><code>weight_collections</code></b>: List of graph collections to which weights are added.</li>
+<li><b><code>trainable</code></b>: If <code>True</code> also add variables to the graph collection <code>GraphKeys.TRAINABLE_VARIABLES</code> (see tf.Variable).</li>
+<li><b><code>scope</code></b>: Optional scope for variable_scope.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A Tensor which can be consumed by hidden layers in the neural network.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if FeatureColumn cannot be consumed by a neural network.</li>
+</ul>

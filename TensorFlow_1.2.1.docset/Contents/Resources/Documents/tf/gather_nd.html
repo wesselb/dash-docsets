@@ -1,0 +1,77 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.gather_nd" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.gather_nd" class="dashAnchor"></a><h1 id="tf.gather_nd">tf.gather_nd</h1>
+<h3 id="tf.gather_nd-1"><code>tf.gather_nd</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">gather_nd(
+    params,
+    indices,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_array_ops.py</code>.</p>
+<p>See the guide: <a href="../../../api_guides/python/array_ops.md#Slicing_and_Joining">Tensor Transformations &gt; Slicing and Joining</a></p>
+<p>Gather values or slices from <code>params</code> according to <code>indices</code>.</p>
+<p><code>indices</code> is an integer tensor containing indices into <code>params</code>. The last dimension of <code>indices</code> can be at most the rank of <code>params</code>:</p>
+<pre><code>indices.shape[-1] &lt;= params.rank</code></pre>
+<p>The last dimension of <code>indices</code> corresponds to elements (if <code>indices.shape[-1] = params.rank</code>) or slices (if <code>indices.shape[-1] &lt; params.rank</code>) along dimension <code>indices.shape[-1]</code> of <code>params</code>. The output tensor has shape</p>
+<pre><code>indices.shape[:-1] + params.shape[indices.shape[-1]:]</code></pre>
+<p>Some examples below.</p>
+<p>Simple indexing into a matrix:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    indices <span class="op">=</span> [[<span class="dv">0</span>, <span class="dv">0</span>], [<span class="dv">1</span>, <span class="dv">1</span>]]
+    params <span class="op">=</span> [[<span class="st">&#39;a&#39;</span>, <span class="st">&#39;b&#39;</span>], [<span class="st">&#39;c&#39;</span>, <span class="st">&#39;d&#39;</span>]]
+    output <span class="op">=</span> [<span class="st">&#39;a&#39;</span>, <span class="st">&#39;d&#39;</span>]</code></pre></div>
+<p>Slice indexing into a matrix:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    indices <span class="op">=</span> [[<span class="dv">1</span>], [<span class="dv">0</span>]]
+    params <span class="op">=</span> [[<span class="st">&#39;a&#39;</span>, <span class="st">&#39;b&#39;</span>], [<span class="st">&#39;c&#39;</span>, <span class="st">&#39;d&#39;</span>]]
+    output <span class="op">=</span> [[<span class="st">&#39;c&#39;</span>, <span class="st">&#39;d&#39;</span>], [<span class="st">&#39;a&#39;</span>, <span class="st">&#39;b&#39;</span>]]</code></pre></div>
+<p>Indexing into a 3-tensor:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    indices <span class="op">=</span> [[<span class="dv">1</span>]]
+    params <span class="op">=</span> [[[<span class="st">&#39;a0&#39;</span>, <span class="st">&#39;b0&#39;</span>], [<span class="st">&#39;c0&#39;</span>, <span class="st">&#39;d0&#39;</span>]],
+              [[<span class="st">&#39;a1&#39;</span>, <span class="st">&#39;b1&#39;</span>], [<span class="st">&#39;c1&#39;</span>, <span class="st">&#39;d1&#39;</span>]]]
+    output <span class="op">=</span> [[[<span class="st">&#39;a1&#39;</span>, <span class="st">&#39;b1&#39;</span>], [<span class="st">&#39;c1&#39;</span>, <span class="st">&#39;d1&#39;</span>]]]
+
+
+    indices <span class="op">=</span> [[<span class="dv">0</span>, <span class="dv">1</span>], [<span class="dv">1</span>, <span class="dv">0</span>]]
+    params <span class="op">=</span> [[[<span class="st">&#39;a0&#39;</span>, <span class="st">&#39;b0&#39;</span>], [<span class="st">&#39;c0&#39;</span>, <span class="st">&#39;d0&#39;</span>]],
+              [[<span class="st">&#39;a1&#39;</span>, <span class="st">&#39;b1&#39;</span>], [<span class="st">&#39;c1&#39;</span>, <span class="st">&#39;d1&#39;</span>]]]
+    output <span class="op">=</span> [[<span class="st">&#39;c0&#39;</span>, <span class="st">&#39;d0&#39;</span>], [<span class="st">&#39;a1&#39;</span>, <span class="st">&#39;b1&#39;</span>]]
+
+
+    indices <span class="op">=</span> [[<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>], [<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>]]
+    params <span class="op">=</span> [[[<span class="st">&#39;a0&#39;</span>, <span class="st">&#39;b0&#39;</span>], [<span class="st">&#39;c0&#39;</span>, <span class="st">&#39;d0&#39;</span>]],
+              [[<span class="st">&#39;a1&#39;</span>, <span class="st">&#39;b1&#39;</span>], [<span class="st">&#39;c1&#39;</span>, <span class="st">&#39;d1&#39;</span>]]]
+    output <span class="op">=</span> [<span class="st">&#39;b0&#39;</span>, <span class="st">&#39;b1&#39;</span>]</code></pre></div>
+<p>Batched indexing into a matrix:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    indices <span class="op">=</span> [[[<span class="dv">0</span>, <span class="dv">0</span>]], [[<span class="dv">0</span>, <span class="dv">1</span>]]]
+    params <span class="op">=</span> [[<span class="st">&#39;a&#39;</span>, <span class="st">&#39;b&#39;</span>], [<span class="st">&#39;c&#39;</span>, <span class="st">&#39;d&#39;</span>]]
+    output <span class="op">=</span> [[<span class="st">&#39;a&#39;</span>], [<span class="st">&#39;b&#39;</span>]]</code></pre></div>
+<p>Batched slice indexing into a matrix:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    indices <span class="op">=</span> [[[<span class="dv">1</span>]], [[<span class="dv">0</span>]]]
+    params <span class="op">=</span> [[<span class="st">&#39;a&#39;</span>, <span class="st">&#39;b&#39;</span>], [<span class="st">&#39;c&#39;</span>, <span class="st">&#39;d&#39;</span>]]
+    output <span class="op">=</span> [[[<span class="st">&#39;c&#39;</span>, <span class="st">&#39;d&#39;</span>]], [[<span class="st">&#39;a&#39;</span>, <span class="st">&#39;b&#39;</span>]]]</code></pre></div>
+<p>Batched indexing into a 3-tensor:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    indices <span class="op">=</span> [[[<span class="dv">1</span>]], [[<span class="dv">0</span>]]]
+    params <span class="op">=</span> [[[<span class="st">&#39;a0&#39;</span>, <span class="st">&#39;b0&#39;</span>], [<span class="st">&#39;c0&#39;</span>, <span class="st">&#39;d0&#39;</span>]],
+              [[<span class="st">&#39;a1&#39;</span>, <span class="st">&#39;b1&#39;</span>], [<span class="st">&#39;c1&#39;</span>, <span class="st">&#39;d1&#39;</span>]]]
+    output <span class="op">=</span> [[[[<span class="st">&#39;a1&#39;</span>, <span class="st">&#39;b1&#39;</span>], [<span class="st">&#39;c1&#39;</span>, <span class="st">&#39;d1&#39;</span>]]],
+              [[[<span class="st">&#39;a0&#39;</span>, <span class="st">&#39;b0&#39;</span>], [<span class="st">&#39;c0&#39;</span>, <span class="st">&#39;d0&#39;</span>]]]]
+
+    indices <span class="op">=</span> [[[<span class="dv">0</span>, <span class="dv">1</span>], [<span class="dv">1</span>, <span class="dv">0</span>]], [[<span class="dv">0</span>, <span class="dv">0</span>], [<span class="dv">1</span>, <span class="dv">1</span>]]]
+    params <span class="op">=</span> [[[<span class="st">&#39;a0&#39;</span>, <span class="st">&#39;b0&#39;</span>], [<span class="st">&#39;c0&#39;</span>, <span class="st">&#39;d0&#39;</span>]],
+              [[<span class="st">&#39;a1&#39;</span>, <span class="st">&#39;b1&#39;</span>], [<span class="st">&#39;c1&#39;</span>, <span class="st">&#39;d1&#39;</span>]]]
+    output <span class="op">=</span> [[[<span class="st">&#39;c0&#39;</span>, <span class="st">&#39;d0&#39;</span>], [<span class="st">&#39;a1&#39;</span>, <span class="st">&#39;b1&#39;</span>]],
+              [[<span class="st">&#39;a0&#39;</span>, <span class="st">&#39;b0&#39;</span>], [<span class="st">&#39;c1&#39;</span>, <span class="st">&#39;d1&#39;</span>]]]
+
+
+    indices <span class="op">=</span> [[[<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>], [<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>]], [[<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>], [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>]]]
+    params <span class="op">=</span> [[[<span class="st">&#39;a0&#39;</span>, <span class="st">&#39;b0&#39;</span>], [<span class="st">&#39;c0&#39;</span>, <span class="st">&#39;d0&#39;</span>]],
+              [[<span class="st">&#39;a1&#39;</span>, <span class="st">&#39;b1&#39;</span>], [<span class="st">&#39;c1&#39;</span>, <span class="st">&#39;d1&#39;</span>]]]
+    output <span class="op">=</span> [[<span class="st">&#39;b0&#39;</span>, <span class="st">&#39;b1&#39;</span>], [<span class="st">&#39;d0&#39;</span>, <span class="st">&#39;c1&#39;</span>]]</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>params</code></b>: A <code>Tensor</code>. The tensor from which to gather values.</li>
+<li><b><code>indices</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. Index tensor.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>params</code>. Values from <code>params</code> gathered from indices given by <code>indices</code>, with shape <code>indices.shape[:-1] + params.shape[indices.shape[-1]:]</code>.</p>

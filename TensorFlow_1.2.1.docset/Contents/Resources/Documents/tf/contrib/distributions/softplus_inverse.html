@@ -1,0 +1,21 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.distributions.softplus_inverse" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.distributions.softplus_inverse" class="dashAnchor"></a><h1 id="tf.contrib.distributions.softplus_inverse">tf.contrib.distributions.softplus_inverse</h1>
+<h3 id="tf.contrib.distributions.softplus_inverse-1"><code>tf.contrib.distributions.softplus_inverse</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">softplus_inverse(
+    x,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/distributions/util.py"><code>tensorflow/python/ops/distributions/util.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.distributions.md#Utilities">Statistical Distributions (contrib) &gt; Utilities</a></p>
+<p>Computes the inverse softplus, i.e., x = softplus_inverse(softplus(x)).</p>
+<p>Mathematically this op is equivalent to:</p>
+<pre class="none"><code>softplus_inverse = log(exp(x) - 1.)</code></pre>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code>. Non-negative (not enforced), floating-point.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p><code>Tensor</code>. Has the same type/shape as input <code>x</code>.</p>

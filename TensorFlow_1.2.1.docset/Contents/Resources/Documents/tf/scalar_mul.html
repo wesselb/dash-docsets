@@ -1,0 +1,24 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.scalar_mul" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.scalar_mul" class="dashAnchor"></a><h1 id="tf.scalar_mul">tf.scalar_mul</h1>
+<h3 id="tf.scalar_mul-1"><code>tf.scalar_mul</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">scalar_mul(
+    scalar,
+    x
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/math_ops.py"><code>tensorflow/python/ops/math_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/math_ops.md#Arithmetic_Operators">Math &gt; Arithmetic Operators</a></p>
+<p>Multiplies a scalar times a <code>Tensor</code> or <code>IndexedSlices</code> object.</p>
+<p>Intended for use in gradient code which might deal with <code>IndexedSlices</code> objects, which are easy to multiply by a scalar but more expensive to multiply with arbitrary tensors.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>scalar</code></b>: A 0-D scalar <code>Tensor</code>. Must have known shape.</li>
+<li><b><code>x</code></b>: A <code>Tensor</code> or <code>IndexedSlices</code> to be scaled.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p><code>scalar * x</code> of the same type (<code>Tensor</code> or <code>IndexedSlices</code>) as <code>x</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if scalar is not a 0-D <code>scalar</code>.</li>
+</ul>

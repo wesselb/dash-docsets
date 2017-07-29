@@ -1,0 +1,21 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.self_adjoint_eigvals" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.self_adjoint_eigvals" class="dashAnchor"></a><h1 id="tf.self_adjoint_eigvals">tf.self_adjoint_eigvals</h1>
+<h3 id="tf.self_adjoint_eigvals-1"><code>tf.self_adjoint_eigvals</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">self_adjoint_eigvals(
+    tensor,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/linalg_ops.py"><code>tensorflow/python/ops/linalg_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/math_ops.md#Matrix_Math_Functions">Math &gt; Matrix Math Functions</a></p>
+<p>Computes the eigenvalues of one or more self-adjoint matrices.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>tensor</code></b>: <code>Tensor</code> of shape <code>[..., N, N]</code>.</li>
+<li><b><code>name</code></b>: string, optional name of the operation.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<ul>
+<li><b><code>e</code></b>: Eigenvalues. Shape is <code>[..., N]</code>. The vector <code>e[..., :]</code> contains the <code>N</code> eigenvalues of <code>tensor[..., :, :]</code>.</li>
+</ul>

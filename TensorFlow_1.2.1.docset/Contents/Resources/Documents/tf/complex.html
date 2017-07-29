@@ -1,0 +1,27 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.complex" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.complex" class="dashAnchor"></a><h1 id="tf.complex">tf.complex</h1>
+<h3 id="tf.complex-1"><code>tf.complex</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="bu">complex</span>(
+    real,
+    imag,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/math_ops.py"><code>tensorflow/python/ops/math_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/math_ops.md#Complex_Number_Functions">Math &gt; Complex Number Functions</a></p>
+<p>Converts two real numbers to a complex number.</p>
+<p>Given a tensor <code>real</code> representing the real part of a complex number, and a tensor <code>imag</code> representing the imaginary part of a complex number, this operation returns complex numbers elementwise of the form \(a + bj\), where <em>a</em> represents the <code>real</code> part and <em>b</em> represents the <code>imag</code> part.</p>
+<p>The input tensors <code>real</code> and <code>imag</code> must have the same shape.</p>
+<p>For example:</p>
+<pre><code># tensor &#39;real&#39; is [2.25, 3.25]
+# tensor `imag` is [4.75, 5.75]
+tf.complex(real, imag) ==&gt; [[2.25 + 4.75j], [3.25 + 5.75j]]</code></pre>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>real</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>.</li>
+<li><b><code>imag</code></b>: A <code>Tensor</code>. Must have the same type as <code>real</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>complex64</code> or <code>complex128</code>.</p>

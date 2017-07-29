@@ -1,0 +1,34 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.random_uniform" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.random_uniform" class="dashAnchor"></a><h1 id="tf.random_uniform">tf.random_uniform</h1>
+<h3 id="tf.random_uniform-1"><code>tf.random_uniform</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">random_uniform(
+    shape,
+    minval<span class="op">=</span><span class="dv">0</span>,
+    maxval<span class="op">=</span><span class="va">None</span>,
+    dtype<span class="op">=</span>tf.float32,
+    seed<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/random_ops.py"><code>tensorflow/python/ops/random_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/constant_op.md#Random_Tensors">Constants, Sequences, and Random Values &gt; Random Tensors</a></p>
+<p>Outputs random values from a uniform distribution.</p>
+<p>The generated values follow a uniform distribution in the range <code>[minval, maxval)</code>. The lower bound <code>minval</code> is included in the range, while the upper bound <code>maxval</code> is excluded.</p>
+<p>For floats, the default range is <code>[0, 1)</code>. For ints, at least <code>maxval</code> must be specified explicitly.</p>
+<p>In the integer case, the random integers are slightly biased unless <code>maxval - minval</code> is an exact power of two. The bias is small for values of <code>maxval - minval</code> significantly smaller than the range of the output (either <code>2**32</code> or <code>2**64</code>).</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>shape</code></b>: A 1-D integer Tensor or Python array. The shape of the output tensor.</li>
+<li><b><code>minval</code></b>: A 0-D Tensor or Python value of type <code>dtype</code>. The lower bound on the range of random values to generate. Defaults to 0.</li>
+<li><b><code>maxval</code></b>: A 0-D Tensor or Python value of type <code>dtype</code>. The upper bound on the range of random values to generate. Defaults to 1 if <code>dtype</code> is floating point.</li>
+<li><b><code>dtype</code></b>: The type of the output: <code>float32</code>, <code>float64</code>, <code>int32</code>, or <code>int64</code>.</li>
+<li><b><code>seed</code></b>: A Python integer. Used to create a random seed for the distribution. See <a href="../tf/set_random_seed.html"><code>tf.set_random_seed</code></a> for behavior.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A tensor of the specified shape filled with random uniform values.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>dtype</code> is integral and <code>maxval</code> is not specified.</li>
+</ul>

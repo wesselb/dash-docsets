@@ -1,0 +1,30 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.legacy_seq2seq.sequence_loss_by_example" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.legacy_seq2seq.sequence_loss_by_example" class="dashAnchor"></a><h1 id="tf.contrib.legacy_seq2seq.sequence_loss_by_example">tf.contrib.legacy_seq2seq.sequence_loss_by_example</h1>
+<h3 id="tf.contrib.legacy_seq2seq.sequence_loss_by_example-1"><code>tf.contrib.legacy_seq2seq.sequence_loss_by_example</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">sequence_loss_by_example(
+    logits,
+    targets,
+    weights,
+    average_across_timesteps<span class="op">=</span><span class="va">True</span>,
+    softmax_loss_function<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/legacy_seq2seq/python/ops/seq2seq.py"><code>tensorflow/contrib/legacy_seq2seq/python/ops/seq2seq.py</code></a>.</p>
+<p>Weighted cross-entropy loss for a sequence of logits (per example).</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>logits</code></b>: List of 2D Tensors of shape [batch_size x num_decoder_symbols].</li>
+<li><b><code>targets</code></b>: List of 1D batch-sized int32 Tensors of the same length as logits.</li>
+<li><b><code>weights</code></b>: List of 1D batch-sized float-Tensors of the same length as logits.</li>
+<li><b><code>average_across_timesteps</code></b>: If set, divide the returned cost by the total label weight.</li>
+<li><b><code>softmax_loss_function</code></b>: Function (labels, logits) -&gt; loss-batch to be used instead of the standard softmax (the default if this is None). <strong>Note that to avoid confusion, it is required for the function to accept named arguments.</strong></li>
+<li><b><code>name</code></b>: Optional name for this operation, default: &quot;sequence_loss_by_example&quot;.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>1D batch-sized float Tensor: The log-perplexity for each sequence.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If len(logits) is different from len(targets) or len(weights).</li>
+</ul>

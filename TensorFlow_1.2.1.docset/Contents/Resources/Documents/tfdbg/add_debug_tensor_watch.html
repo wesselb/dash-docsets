@@ -1,0 +1,28 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tfdbg.add_debug_tensor_watch" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tfdbg.add_debug_tensor_watch" class="dashAnchor"></a><h1 id="tfdbg.add_debug_tensor_watch">tfdbg.add_debug_tensor_watch</h1>
+<h3 id="tfdbg.add_debug_tensor_watch-1"><code>tfdbg.add_debug_tensor_watch</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">add_debug_tensor_watch(
+    run_options,
+    node_name,
+    output_slot<span class="op">=</span><span class="dv">0</span>,
+    debug_ops<span class="op">=</span><span class="st">&#39;DebugIdentity&#39;</span>,
+    debug_urls<span class="op">=</span><span class="va">None</span>,
+    tolerate_debug_op_creation_failures<span class="op">=</span><span class="va">False</span>,
+    global_step<span class="op">=-</span><span class="dv">1</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/debug/lib/debug_utils.py"><code>tensorflow/python/debug/lib/debug_utils.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/tfdbg.md#Functions_for_adding_debug_watches">TensorFlow Debugger &gt; Functions for adding debug watches</a></p>
+<p>Add watch on a <code>Tensor</code> to <code>RunOptions</code>.</p>
+<p>N.B.: 1. Under certain circumstances, the <code>Tensor</code> may not get actually watched (e.g., if the node of the <code>Tensor</code> is constant-folded during runtime). 2. For debugging purposes, the <code>parallel_iteration</code> attribute of all <code>tf.while_loop</code>s in the graph are set to 1 to prevent any node from being executed multiple times concurrently. This change does not affect subsequent non-debugged runs of the same <code>tf.while_loop</code>s.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>run_options</code></b>: An instance of <code>config_pb2.RunOptions</code> to be modified.</li>
+<li><b><code>node_name</code></b>: (<code>str</code>) name of the node to watch.</li>
+<li><b><code>output_slot</code></b>: (<code>int</code>) output slot index of the tensor from the watched node.</li>
+<li><b><code>debug_ops</code></b>: (<code>str</code> or <code>list</code> of <code>str</code>) name(s) of the debug op(s). Can be a <code>list</code> of <code>str</code> or a single <code>str</code>. The latter case is equivalent to a <code>list</code> of <code>str</code> with only one element. For debug op types with customizable attributes, each debug op string can optionally contain a list of attribute names, in the syntax of: debug_op_name(attr_name_1=attr_value_1;attr_name_2=attr_value_2;...)</li>
+<li><b><code>debug_urls</code></b>: (<code>str</code> or <code>list</code> of <code>str</code>) URL(s) to send debug values to, e.g., <code>file:///tmp/tfdbg_dump_1</code>, <code>grpc://localhost:12345</code>.</li>
+<li><b><code>tolerate_debug_op_creation_failures</code></b>: (<code>bool</code>) Whether to tolerate debug op creation failures by not throwing exceptions.</li>
+<li><b><code>global_step</code></b>: (<code>int</code>) Optional global_step count for this debug tensor watch.</li>
+</ul>

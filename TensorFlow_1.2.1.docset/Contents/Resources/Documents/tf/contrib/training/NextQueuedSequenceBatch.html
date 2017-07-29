@@ -1,0 +1,138 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.training.NextQueuedSequenceBatch" /> <meta itemprop="property" content="batch_size"/> <meta itemprop="property" content="context"/> <meta itemprop="property" content="insertion_index"/> <meta itemprop="property" content="key"/> <meta itemprop="property" content="length"/> <meta itemprop="property" content="next_key"/> <meta itemprop="property" content="sequence"/> <meta itemprop="property" content="sequence_count"/> <meta itemprop="property" content="sequences"/> <meta itemprop="property" content="total_length"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="save_state"/> <meta itemprop="property" content="state"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.training.NextQueuedSequenceBatch" class="dashAnchor"></a><h1 id="tf.contrib.training.nextqueuedsequencebatch">tf.contrib.training.NextQueuedSequenceBatch</h1>
+<h3 id="class-tf.contrib.training.nextqueuedsequencebatch"><code>class tf.contrib.training.NextQueuedSequenceBatch</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/training/python/training/sequence_queueing_state_saver.py"><code>tensorflow/contrib/training/python/training/sequence_queueing_state_saver.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.training.md#Splitting_sequence_inputs_into_minibatches_with_state_saving">Training (contrib) &gt; Splitting sequence inputs into minibatches with state saving</a></p>
+<p>NextQueuedSequenceBatch stores deferred SequenceQueueingStateSaver data.</p>
+<p>This class is instantiated by <code>SequenceQueueingStateSaver</code> and is accessible via its <code>next_batch</code> property.</p>
+<h2 id="properties">Properties</h2>
+<h3 id="batch_size">
+<code>batch_size</code>
+</h3>
+<p>The batch_size of the given batch.</p>
+<p>Usually, this is the batch_size requested when initializing the SQSS, but if allow_small_batch=True this will become smaller when inputs are exhausted.</p>
+<h4 id="returns">Returns:</h4>
+<p>A scalar integer tensor, the batch_size</p>
+<h3 id="context">
+<code>context</code>
+</h3>
+<p>A dict mapping keys of <code>input_context</code> to batched context.</p>
+<h4 id="returns-1">Returns:</h4>
+<p>A dict mapping keys of <code>input_context</code> to tensors. If we had at input:</p>
+<p><code>python   context[&quot;name&quot;].get_shape() == [d1, d2, ...]</code></p>
+<p>then for this property:</p>
+<p><code>python   context[&quot;name&quot;].get_shape() == [batch_size, d1, d2, ...]</code></p>
+<h3 id="insertion_index">
+<code>insertion_index</code>
+</h3>
+<p>The insertion indices of the examples (when they were first added).</p>
+<p>These indices start with the value -2**63 and increase with every call to the prefetch op. Each whole example gets its own insertion index, and this is used to prioritize the example so that its truncated segments appear in adjacent iterations, even if new examples are inserted by the prefetch op between iterations.</p>
+<h4 id="returns-2">Returns:</h4>
+<p>An int64 vector of length <code>batch_size</code>, the insertion indices.</p>
+<h3 id="key">
+<code>key</code>
+</h3>
+<p>The key names of the given truncated unrolled examples.</p>
+<p>The format of the key is:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co">&quot;%05d_of_%05d:%s&quot;</span> <span class="op">%</span> (sequence, sequence_count, original_key)</code></pre></div>
+<p>where <code>original_key</code> is the unique key read in by the prefetcher.</p>
+<h4 id="returns-3">Returns:</h4>
+<p>A string vector of length <code>batch_size</code>, the keys.</p>
+<h3 id="length">
+<code>length</code>
+</h3>
+<p>The lengths of the given truncated unrolled examples.</p>
+<p>For initial iterations, for which <code>sequence * num_unroll &lt; length</code>, this number is <code>num_unroll</code>. For the remainder, this number is between <code>0</code> and <code>num_unroll</code>.</p>
+<h4 id="returns-4">Returns:</h4>
+<p>An integer vector of length <code>batch_size</code>, the lengths.</p>
+<h3 id="next_key">
+<code>next_key</code>
+</h3>
+<p>The key names of the next (in iteration) truncated unrolled examples.</p>
+<p>The format of the key is:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co">&quot;%05d_of_%05d:%s&quot;</span> <span class="op">%</span> (sequence <span class="op">+</span> <span class="dv">1</span>, sequence_count, original_key)</code></pre></div>
+<p>if <code>sequence + 1 &lt; sequence_count</code>, otherwise:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co">&quot;STOP:%s&quot;</span> <span class="op">%</span> original_key</code></pre></div>
+<p>where <code>original_key</code> is the unique key read in by the prefetcher.</p>
+<h4 id="returns-5">Returns:</h4>
+<p>A string vector of length <code>batch_size</code>, the keys.</p>
+<h3 id="sequence">
+<code>sequence</code>
+</h3>
+<p>An int32 vector, length <code>batch_size</code>: the sequence index of each entry.</p>
+<p>When an input is split up, the sequence values</p>
+<pre><code>0, 1, ..., sequence_count - 1</code></pre>
+<p>are assigned to each split.</p>
+<h4 id="returns-6">Returns:</h4>
+<p>An int32 vector <code>Tensor</code>.</p>
+<h3 id="sequence_count">
+<code>sequence_count</code>
+</h3>
+<p>An int32 vector, length <code>batch_size</code>: the sequence count of each entry.</p>
+<p>When an input is split up, the number of splits is equal to: <code>padded_length / num_unroll</code>. This is the sequence_count.</p>
+<h4 id="returns-7">Returns:</h4>
+<p>An int32 vector <code>Tensor</code>.</p>
+<h3 id="sequences">
+<code>sequences</code>
+</h3>
+<p>A dict mapping keys of <code>input_sequences</code> to split and rebatched data.</p>
+<h4 id="returns-8">Returns:</h4>
+<p>A dict mapping keys of <code>input_sequences</code> to tensors. If we had at input:</p>
+<p><code>python   sequences[&quot;name&quot;].get_shape() == [None, d1, d2, ...]</code></p>
+<p>where <code>None</code> meant the sequence time was dynamic, then for this property:</p>
+<p><code>python   sequences[&quot;name&quot;].get_shape() == [batch_size, num_unroll, d1, d2, ...].</code></p>
+<h3 id="total_length">
+<code>total_length</code>
+</h3>
+<p>The lengths of the original (non-truncated) unrolled examples.</p>
+<h4 id="returns-9">Returns:</h4>
+<p>An integer vector of length <code>batch_size</code>, the total lengths.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(state_saver)</code></pre></div>
+<h3 id="save_state">
+<code>save_state</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">save_state(
+    state_name,
+    value,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Returns an op to save the current batch of state <code>state_name</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>state_name</code></b>: string, matches a key provided in <code>initial_states</code>.</li>
+<li><p><b><code>value</code></b>: A <code>Tensor</code>. Its type must match that of <code>initial_states[state_name].dtype</code>. If we had at input:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">initial_states[state_name].get_shape() <span class="op">==</span> [d1, d2, ...]</code></pre></div>
+<p>then the shape of <code>value</code> must match:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.shape(value) <span class="op">==</span> [batch_size, d1, d2, ...]</code></pre></div></li>
+<li><p><b><code>name</code></b>: string (optional). The name scope for newly created ops.</p></li>
+</ul>
+<h4 id="returns-10">Returns:</h4>
+<p>A control flow op that stores the new state of each entry into the state saver. This op must be run for every iteration that accesses data from the state saver (otherwise the state saver will never progress through its states and run out of capacity).</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>KeyError</code></b>: if <code>state_name</code> does not match any of the initial states declared in <code>initial_states</code>.</li>
+</ul>
+<h3 id="state">
+<code>state</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">state(state_name)</code></pre></div>
+<p>Returns batched state tensors.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>state_name</code></b>: string, matches a key provided in <code>initial_states</code>.</li>
+</ul>
+<h4 id="returns-11">Returns:</h4>
+<p>A <code>Tensor</code>: a batched set of states, either initial states (if this is the first run of the given example), or a value as stored during a previous iteration via <code>save_state</code> control flow. Its type is the same as <code>initial_states[&quot;state_name&quot;].dtype</code>. If we had at input:</p>
+<p><code>python   initial_states[state_name].get_shape() == [d1, d2, ...],</code></p>
+<p>then</p>
+<p><code>python   state(state_name).get_shape() == [batch_size, d1, d2, ...]</code></p>
+<h4 id="raises-1">Raises:</h4>
+<ul>
+<li><b><code>KeyError</code></b>: if <code>state_name</code> does not match any of the initial states declared in <code>initial_states</code>.</li>
+</ul>

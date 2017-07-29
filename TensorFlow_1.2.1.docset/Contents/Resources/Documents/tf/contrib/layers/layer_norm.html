@@ -1,0 +1,40 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.layers.layer_norm" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.layers.layer_norm" class="dashAnchor"></a><h1 id="tf.contrib.layers.layer_norm">tf.contrib.layers.layer_norm</h1>
+<h3 id="tf.contrib.layers.layer_norm-1"><code>tf.contrib.layers.layer_norm</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">layer_norm(
+    inputs,
+    center<span class="op">=</span><span class="va">True</span>,
+    scale<span class="op">=</span><span class="va">True</span>,
+    activation_fn<span class="op">=</span><span class="va">None</span>,
+    reuse<span class="op">=</span><span class="va">None</span>,
+    variables_collections<span class="op">=</span><span class="va">None</span>,
+    outputs_collections<span class="op">=</span><span class="va">None</span>,
+    trainable<span class="op">=</span><span class="va">True</span>,
+    scope<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/layers/python/layers/layers.py"><code>tensorflow/contrib/layers/python/layers/layers.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.layers.md#Higher_level_ops_for_building_neural_network_layers">Layers (contrib) &gt; Higher level ops for building neural network layers</a></p>
+<p>Adds a Layer Normalization layer from https://arxiv.org/abs/1607.06450.</p>
+<p>&quot;Layer Normalization&quot;</p>
+<p>Jimmy Lei Ba, Jamie Ryan Kiros, Geoffrey E. Hinton</p>
+<p>Can be used as a normalizer function for conv2d and fully_connected.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>inputs</code></b>: A tensor with 2 or more dimensions. The normalization occurs over all but the first dimension.</li>
+<li><b><code>center</code></b>: If True, add offset of <code>beta</code> to normalized tensor. If False, <code>beta</code> is ignored.</li>
+<li><b><code>scale</code></b>: If True, multiply by <code>gamma</code>. If False, <code>gamma</code> is not used. When the next layer is linear (also e.g. <code>nn.relu</code>), this can be disabled since the scaling can be done by the next layer.</li>
+<li><b><code>activation_fn</code></b>: Activation function, default set to None to skip it and maintain a linear activation.</li>
+<li><b><code>reuse</code></b>: Whether or not the layer and its variables should be reused. To be able to reuse the layer scope must be given.</li>
+<li><b><code>variables_collections</code></b>: Optional collections for the variables.</li>
+<li><b><code>outputs_collections</code></b>: Collections to add the outputs.</li>
+<li><b><code>trainable</code></b>: If <code>True</code> also add variables to the graph collection <code>GraphKeys.TRAINABLE_VARIABLES</code> (see tf.Variable).</li>
+<li><b><code>scope</code></b>: Optional scope for <code>variable_scope</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> representing the output of the operation.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If rank or last dimension of <code>inputs</code> is undefined.</li>
+</ul>

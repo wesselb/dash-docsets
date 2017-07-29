@@ -1,0 +1,28 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.sparse_maximum" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.sparse_maximum" class="dashAnchor"></a><h1 id="tf.sparse_maximum">tf.sparse_maximum</h1>
+<h3 id="tf.sparse_maximum-1"><code>tf.sparse_maximum</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">sparse_maximum(
+    sp_a,
+    sp_b,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/sparse_ops.py"><code>tensorflow/python/ops/sparse_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/sparse_ops.md#Math_Operations">Sparse Tensors &gt; Math Operations</a></p>
+<p>Returns the element-wise max of two SparseTensors.</p>
+<p>Assumes the two SparseTensors have the same shape, i.e., no broadcasting. Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">sp_zero <span class="op">=</span> sparse_tensor.SparseTensor([[<span class="dv">0</span>]], [<span class="dv">0</span>], [<span class="dv">7</span>])
+sp_one <span class="op">=</span> sparse_tensor.SparseTensor([[<span class="dv">1</span>]], [<span class="dv">1</span>], [<span class="dv">7</span>])
+res <span class="op">=</span> tf.sparse_maximum(sp_zero, sp_one).<span class="bu">eval</span>()
+<span class="co"># &quot;res&quot; should be equal to SparseTensor([[0], [1]], [0, 1], [7]).</span></code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>sp_a</code></b>: a <code>SparseTensor</code> operand whose dtype is real, and indices lexicographically ordered.</li>
+<li><b><code>sp_b</code></b>: the other <code>SparseTensor</code> operand with the same requirements (and the same shape).</li>
+<li><b><code>name</code></b>: optional name of the operation.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<ul>
+<li><b><code>output</code></b>: the output SparseTensor.</li>
+</ul>

@@ -1,0 +1,175 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.opt.MovingAverageOptimizer" /> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="apply_gradients"/> <meta itemprop="property" content="compute_gradients"/> <meta itemprop="property" content="get_name"/> <meta itemprop="property" content="get_slot"/> <meta itemprop="property" content="get_slot_names"/> <meta itemprop="property" content="minimize"/> <meta itemprop="property" content="swapping_saver"/> <meta itemprop="property" content="GATE_GRAPH"/> <meta itemprop="property" content="GATE_NONE"/> <meta itemprop="property" content="GATE_OP"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.opt.MovingAverageOptimizer" class="dashAnchor"></a><h1 id="tf.contrib.opt.movingaverageoptimizer">tf.contrib.opt.MovingAverageOptimizer</h1>
+<h3 id="class-tf.contrib.opt.movingaverageoptimizer"><code>class tf.contrib.opt.MovingAverageOptimizer</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/opt/python/training/moving_average_optimizer.py"><code>tensorflow/contrib/opt/python/training/moving_average_optimizer.py</code></a>.</p>
+<p>Optimizer that computes a moving average of the variables.</p>
+<p>Empirically it has been found that using the moving average of the trained parameters of a deep network is better than using its trained parameters directly. This optimizer allows you to compute this moving average and swap the variables at save time so that any code outside of the training loop will use by default the averaged values instead of the original ones.</p>
+<p>Example of usage:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">
+<span class="op">//</span> Encapsulate your favorite optimizer (here the momentum one)
+<span class="op">//</span> inside the MovingAverageOptimizer.
+opt <span class="op">=</span> tf.train.MomentumOptimizer(learning_rate, FLAGS.momentum)
+opt <span class="op">=</span> tf.contrib.opt.MovingAverageOptimizer(opt)
+<span class="op">//</span> Then create your model <span class="kw">and</span> <span class="bu">all</span> its variables.
+model <span class="op">=</span> build_model()
+<span class="op">//</span> Add the training op that optimizes using opt.
+<span class="op">//</span> This needs to be called before swapping_saver().
+opt.minimize(cost, var_list)
+<span class="op">//</span> Then create your saver like this:
+saver <span class="op">=</span> opt.swapping_saver()
+<span class="op">//</span> Pass it to your training loop.
+    slim.learning.train(
+        model,
+        ...
+        saver<span class="op">=</span>saver)</code></pre></div>
+<p>Note that for evaluation, the normal saver should be used instead of swapping_saver().</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    opt,
+    average_decay<span class="op">=</span><span class="fl">0.9999</span>,
+    num_updates<span class="op">=</span><span class="va">None</span>,
+    sequential_update<span class="op">=</span><span class="va">True</span>
+)</code></pre></div>
+<p>Construct a new MovingAverageOptimizer.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>opt</code></b>: A tf.Optimizer that will be used to compute and apply gradients.</li>
+<li><b><code>average_decay</code></b>: Float. Decay to use to maintain the moving averages of trained variables. See tf.train.ExponentialMovingAverage for details.</li>
+<li><b><code>num_updates</code></b>: Optional count of number of updates applied to variables. See tf.train.ExponentialMovingAverage for details.</li>
+<li><b><code>sequential_update</code></b>: Bool. If False, will compute the moving average at the same time as the model is updated, potentially doing benign data races. If True, will update the moving average after gradient updates.</li>
+</ul>
+<h3 id="apply_gradients">
+<code>apply_gradients</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">apply_gradients(
+    grads_and_vars,
+    global_step<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<h3 id="compute_gradients">
+<code>compute_gradients</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">compute_gradients(
+    loss,
+    var_list<span class="op">=</span><span class="va">None</span>,
+    gate_gradients<span class="op">=</span>GATE_OP,
+    aggregation_method<span class="op">=</span><span class="va">None</span>,
+    colocate_gradients_with_ops<span class="op">=</span><span class="va">False</span>,
+    grad_loss<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Compute gradients of <code>loss</code> for the variables in <code>var_list</code>.</p>
+<p>This is the first part of <code>minimize()</code>. It returns a list of (gradient, variable) pairs where &quot;gradient&quot; is the gradient for &quot;variable&quot;. Note that &quot;gradient&quot; can be a <code>Tensor</code>, an <code>IndexedSlices</code>, or <code>None</code> if there is no gradient for the given variable.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>loss</code></b>: A Tensor containing the value to minimize.</li>
+<li><b><code>var_list</code></b>: Optional list or tuple of <code>tf.Variable</code> to update to minimize <code>loss</code>. Defaults to the list of variables collected in the graph under the key <code>GraphKey.TRAINABLE_VARIABLES</code>.</li>
+<li><b><code>gate_gradients</code></b>: How to gate the computation of gradients. Can be <code>GATE_NONE</code>, <code>GATE_OP</code>, or <code>GATE_GRAPH</code>.</li>
+<li><b><code>aggregation_method</code></b>: Specifies the method used to combine gradient terms. Valid values are defined in the class <code>AggregationMethod</code>.</li>
+<li><b><code>colocate_gradients_with_ops</code></b>: If True, try colocating gradients with the corresponding op.</li>
+<li><b><code>grad_loss</code></b>: Optional. A <code>Tensor</code> holding the gradient computed for <code>loss</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A list of (gradient, variable) pairs. Variable is always present, but gradient can be <code>None</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>var_list</code> contains anything else than <code>Variable</code> objects.</li>
+<li><b><code>ValueError</code></b>: If some arguments are invalid.</li>
+</ul>
+<h3 id="get_name">
+<code>get_name</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_name()</code></pre></div>
+<h3 id="get_slot">
+<code>get_slot</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_slot(
+    var,
+    name
+)</code></pre></div>
+<p>Return a slot named <code>name</code> created for <code>var</code> by the Optimizer.</p>
+<p>Some <code>Optimizer</code> subclasses use additional variables. For example <code>Momentum</code> and <code>Adagrad</code> use variables to accumulate updates. This method gives access to these <code>Variable</code> objects if for some reason you need them.</p>
+<p>Use <code>get_slot_names()</code> to get the list of slot names created by the <code>Optimizer</code>.</p>
+<h4 id="args-2">Args:</h4>
+<ul>
+<li><b><code>var</code></b>: A variable passed to <code>minimize()</code> or <code>apply_gradients()</code>.</li>
+<li><b><code>name</code></b>: A string.</li>
+</ul>
+<h4 id="returns-1">Returns:</h4>
+<p>The <code>Variable</code> for the slot if it was created, <code>None</code> otherwise.</p>
+<h3 id="get_slot_names">
+<code>get_slot_names</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_slot_names()</code></pre></div>
+<p>Return a list of the names of slots created by the <code>Optimizer</code>.</p>
+<p>See <code>get_slot()</code>.</p>
+<h4 id="returns-2">Returns:</h4>
+<p>A list of strings.</p>
+<h3 id="minimize">
+<code>minimize</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">minimize(
+    loss,
+    global_step<span class="op">=</span><span class="va">None</span>,
+    var_list<span class="op">=</span><span class="va">None</span>,
+    gate_gradients<span class="op">=</span>GATE_OP,
+    aggregation_method<span class="op">=</span><span class="va">None</span>,
+    colocate_gradients_with_ops<span class="op">=</span><span class="va">False</span>,
+    name<span class="op">=</span><span class="va">None</span>,
+    grad_loss<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Add operations to minimize <code>loss</code> by updating <code>var_list</code>.</p>
+<p>This method simply combines calls <code>compute_gradients()</code> and <code>apply_gradients()</code>. If you want to process the gradient before applying them call <code>compute_gradients()</code> and <code>apply_gradients()</code> explicitly instead of using this function.</p>
+<h4 id="args-3">Args:</h4>
+<ul>
+<li><b><code>loss</code></b>: A <code>Tensor</code> containing the value to minimize.</li>
+<li><b><code>global_step</code></b>: Optional <code>Variable</code> to increment by one after the variables have been updated.</li>
+<li><b><code>var_list</code></b>: Optional list or tuple of <code>Variable</code> objects to update to minimize <code>loss</code>. Defaults to the list of variables collected in the graph under the key <code>GraphKeys.TRAINABLE_VARIABLES</code>.</li>
+<li><b><code>gate_gradients</code></b>: How to gate the computation of gradients. Can be <code>GATE_NONE</code>, <code>GATE_OP</code>, or <code>GATE_GRAPH</code>.</li>
+<li><b><code>aggregation_method</code></b>: Specifies the method used to combine gradient terms. Valid values are defined in the class <code>AggregationMethod</code>.</li>
+<li><b><code>colocate_gradients_with_ops</code></b>: If True, try colocating gradients with the corresponding op.</li>
+<li><b><code>name</code></b>: Optional name for the returned operation.</li>
+<li><b><code>grad_loss</code></b>: Optional. A <code>Tensor</code> holding the gradient computed for <code>loss</code>.</li>
+</ul>
+<h4 id="returns-3">Returns:</h4>
+<p>An Operation that updates the variables in <code>var_list</code>. If <code>global_step</code> was not <code>None</code>, that operation also increments <code>global_step</code>.</p>
+<h4 id="raises-1">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If some of the variables are not <code>Variable</code> objects.</li>
+</ul>
+<h3 id="swapping_saver">
+<code>swapping_saver</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">swapping_saver(
+    var_list<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="st">&#39;swapping_saver&#39;</span>,
+    <span class="op">**</span>kwargs
+)</code></pre></div>
+<p>Create a saver swapping moving averages and variables.</p>
+<p>You should use this saver during training. It will save the moving averages of the trained parameters under the original parameter names. For evaluations or inference you should use a regular saver and it will automatically use the moving averages for the trained variable.</p>
+<p>You must call this function after all variables have been created and after you have called Optimizer.minimize().</p>
+<h4 id="args-4">Args:</h4>
+<ul>
+<li><b><code>var_list</code></b>: List of variables to save, as per <code>Saver()</code>. If set to None, will save all the variables that have been created before this call.</li>
+<li><b><code>name</code></b>: The name of the saver. **kwargs: Keyword arguments of <code>Saver()</code>.</li>
+</ul>
+<h4 id="returns-4">Returns:</h4>
+<p>A <code>tf.train.Saver</code> object.</p>
+<h4 id="raises-2">Raises:</h4>
+<ul>
+<li><b><code>RuntimeError</code></b>: If apply_gradients or minimize has not been called before.</li>
+</ul>
+<h2 id="class-members">Class Members</h2>
+<h3 id="GATE_GRAPH">
+<code>GATE_GRAPH</code>
+</h3>
+<h3 id="GATE_NONE">
+<code>GATE_NONE</code>
+</h3>
+<h3 id="GATE_OP">
+<code>GATE_OP</code>
+</h3>

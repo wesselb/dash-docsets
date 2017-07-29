@@ -1,0 +1,55 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.layers.separable_conv2d" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.layers.separable_conv2d" class="dashAnchor"></a><h1 id="tf.contrib.layers.separable_conv2d">tf.contrib.layers.separable_conv2d</h1>
+<h3 id="tf.contrib.layers.separable_conv2d-1"><code>tf.contrib.layers.separable_conv2d</code></h3>
+<a name="//apple_ref/cpp/Function/tf.contrib.layers.separable_convolution2d" class="dashAnchor"></a><h3 id="tf.contrib.layers.separable_convolution2d"><code>tf.contrib.layers.separable_convolution2d</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">separable_conv2d(
+    inputs,
+    num_outputs,
+    kernel_size,
+    depth_multiplier,
+    stride<span class="op">=</span><span class="dv">1</span>,
+    padding<span class="op">=</span><span class="st">&#39;SAME&#39;</span>,
+    rate<span class="op">=</span><span class="dv">1</span>,
+    activation_fn<span class="op">=</span>tf.nn.relu,
+    normalizer_fn<span class="op">=</span><span class="va">None</span>,
+    normalizer_params<span class="op">=</span><span class="va">None</span>,
+    weights_initializer<span class="op">=</span>initializers.xavier_initializer(),
+    weights_regularizer<span class="op">=</span><span class="va">None</span>,
+    biases_initializer<span class="op">=</span>tf.zeros_initializer(),
+    biases_regularizer<span class="op">=</span><span class="va">None</span>,
+    reuse<span class="op">=</span><span class="va">None</span>,
+    variables_collections<span class="op">=</span><span class="va">None</span>,
+    outputs_collections<span class="op">=</span><span class="va">None</span>,
+    trainable<span class="op">=</span><span class="va">True</span>,
+    scope<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/layers/python/layers/layers.py"><code>tensorflow/contrib/layers/python/layers/layers.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.layers.md#Higher_level_ops_for_building_neural_network_layers">Layers (contrib) &gt; Higher level ops for building neural network layers</a></p>
+<p>Adds a depth-separable 2D convolution with optional batch_norm layer.</p>
+<p>This op first performs a depthwise convolution that acts separately on channels, creating a variable called <code>depthwise_weights</code>. If <code>num_outputs</code> is not None, it adds a pointwise convolution that mixes channels, creating a variable called <code>pointwise_weights</code>. Then, if <code>normalizer_fn</code> is None, it adds bias to the result, creating a variable called 'biases', otherwise, the <code>normalizer_fn</code> is applied. It finally applies an activation function to produce the end result.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>inputs</code></b>: A tensor of size [batch_size, height, width, channels].</li>
+<li><b><code>num_outputs</code></b>: The number of pointwise convolution output filters. If is None, then we skip the pointwise convolution stage.</li>
+<li><b><code>kernel_size</code></b>: A list of length 2: [kernel_height, kernel_width] of of the filters. Can be an int if both values are the same.</li>
+<li><b><code>depth_multiplier</code></b>: The number of depthwise convolution output channels for each input channel. The total number of depthwise convolution output channels will be equal to <code>num_filters_in * depth_multiplier</code>.</li>
+<li><b><code>stride</code></b>: A list of length 2: [stride_height, stride_width], specifying the depthwise convolution stride. Can be an int if both strides are the same.</li>
+<li><b><code>padding</code></b>: One of 'VALID' or 'SAME'.</li>
+<li><b><code>rate</code></b>: A list of length 2: [rate_height, rate_width], specifying the dilation rates for atrous convolution. Can be an int if both rates are the same. If any value is larger than one, then both stride values need to be one.</li>
+<li><b><code>activation_fn</code></b>: Activation function. The default value is a ReLU function. Explicitly set it to None to skip it and maintain a linear activation.</li>
+<li><b><code>normalizer_fn</code></b>: Normalization function to use instead of <code>biases</code>. If <code>normalizer_fn</code> is provided then <code>biases_initializer</code> and <code>biases_regularizer</code> are ignored and <code>biases</code> are not created nor added. default set to None for no normalizer function</li>
+<li><b><code>normalizer_params</code></b>: Normalization function parameters.</li>
+<li><b><code>weights_initializer</code></b>: An initializer for the weights.</li>
+<li><b><code>weights_regularizer</code></b>: Optional regularizer for the weights.</li>
+<li><b><code>biases_initializer</code></b>: An initializer for the biases. If None skip biases.</li>
+<li><b><code>biases_regularizer</code></b>: Optional regularizer for the biases.</li>
+<li><b><code>reuse</code></b>: Whether or not the layer and its variables should be reused. To be able to reuse the layer scope must be given.</li>
+<li><b><code>variables_collections</code></b>: Optional list of collections for all the variables or a dictionary containing a different list of collection per variable.</li>
+<li><b><code>outputs_collections</code></b>: Collection to add the outputs.</li>
+<li><b><code>trainable</code></b>: Whether or not the variables should be trainable or not.</li>
+<li><b><code>scope</code></b>: Optional scope for variable_scope.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> representing the output of the operation.</p>

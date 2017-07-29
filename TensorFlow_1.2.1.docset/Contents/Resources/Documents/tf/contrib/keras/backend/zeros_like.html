@@ -1,0 +1,26 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.backend.zeros_like" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.keras.backend.zeros_like" class="dashAnchor"></a><h1 id="tf.contrib.keras.backend.zeros_like">tf.contrib.keras.backend.zeros_like</h1>
+<h3 id="tf.contrib.keras.backend.zeros_like-1"><code>tf.contrib.keras.backend.zeros_like</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">zeros_like(
+    x,
+    dtype<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/backend.py"><code>tensorflow/contrib/keras/python/keras/backend.py</code></a>.</p>
+<p>Instantiates an all-zeros variable of the same shape as another tensor.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>x: Keras variable or Keras tensor.
+dtype: String, dtype of returned Keras variable.
+     None uses the dtype of x.
+name: String, name for the variable to create.</code></pre>
+<h4 id="returns">Returns:</h4>
+<pre><code>A Keras variable with the shape of x filled with zeros.</code></pre>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    <span class="op">&gt;&gt;&gt;</span> <span class="im">from</span> keras <span class="im">import</span> backend <span class="im">as</span> K
+    <span class="op">&gt;&gt;&gt;</span> kvar <span class="op">=</span> K.variable(np.random.random((<span class="dv">2</span>,<span class="dv">3</span>)))
+    <span class="op">&gt;&gt;&gt;</span> kvar_zeros <span class="op">=</span> K.zeros_like(kvar)
+    <span class="op">&gt;&gt;&gt;</span> K.<span class="bu">eval</span>(kvar_zeros)
+    array([[ <span class="dv">0</span>.,  <span class="dv">0</span>.,  <span class="dv">0</span>.],
+           [ <span class="dv">0</span>.,  <span class="dv">0</span>.,  <span class="dv">0</span>.]], dtype<span class="op">=</span>float32)</code></pre></div>

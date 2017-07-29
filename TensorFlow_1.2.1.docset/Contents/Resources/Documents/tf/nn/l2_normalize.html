@@ -1,0 +1,26 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.nn.l2_normalize" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.nn.l2_normalize" class="dashAnchor"></a><h1 id="tf.nn.l2_normalize">tf.nn.l2_normalize</h1>
+<h3 id="tf.nn.l2_normalize-1"><code>tf.nn.l2_normalize</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">l2_normalize(
+    x,
+    dim,
+    epsilon<span class="op">=</span><span class="fl">1e-12</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/nn_impl.py"><code>tensorflow/python/ops/nn_impl.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/nn.md#Normalization">Neural Network &gt; Normalization</a></p>
+<p>Normalizes along dimension <code>dim</code> using an L2 norm.</p>
+<p>For a 1-D tensor with <code>dim = 0</code>, computes</p>
+<pre><code>output = x / sqrt(max(sum(x**2), epsilon))</code></pre>
+<p>For <code>x</code> with more dimensions, independently normalizes each 1-D slice along dimension <code>dim</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>.</li>
+<li><b><code>dim</code></b>: Dimension along which to normalize. A scalar or a vector of integers.</li>
+<li><b><code>epsilon</code></b>: A lower bound value for the norm. Will use <code>sqrt(epsilon)</code> as the divisor if <code>norm &lt; sqrt(epsilon)</code>.</li>
+<li><b><code>name</code></b>: A name for this operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> with the same shape as <code>x</code>.</p>

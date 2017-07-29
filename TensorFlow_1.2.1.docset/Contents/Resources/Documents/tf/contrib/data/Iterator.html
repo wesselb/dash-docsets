@@ -1,0 +1,162 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.data.Iterator" /> <meta itemprop="property" content="initializer"/> <meta itemprop="property" content="output_shapes"/> <meta itemprop="property" content="output_types"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="dispose_op"/> <meta itemprop="property" content="from_dataset"/> <meta itemprop="property" content="from_structure"/> <meta itemprop="property" content="get_next"/> <meta itemprop="property" content="make_initializer"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.data.Iterator" class="dashAnchor"></a><h1 id="tf.contrib.data.iterator">tf.contrib.data.Iterator</h1>
+<h3 id="class-tf.contrib.data.iterator"><code>class tf.contrib.data.Iterator</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/data/python/ops/dataset_ops.py"><code>tensorflow/contrib/data/python/ops/dataset_ops.py</code></a>.</p>
+<p>Represents the state of iterating through a <code>Dataset</code>.</p>
+<h2 id="properties">Properties</h2>
+<h3 id="initializer">
+<code>initializer</code>
+</h3>
+<p>A <code>tf.Operation</code> that should be run to initialize this iterator.</p>
+<h4 id="returns">Returns:</h4>
+<p>A <code>tf.Operation</code> that should be run to initialize this iterator</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If this iterator initializes itself automatically.</li>
+</ul>
+<h3 id="output_shapes">
+<code>output_shapes</code>
+</h3>
+<p>Returns the shape of each component of an element of this iterator.</p>
+<h4 id="returns-1">Returns:</h4>
+<p>A nested structure of <code>tf.TensorShape</code> objects corresponding to each component of an element of this iterator.</p>
+<h3 id="output_types">
+<code>output_types</code>
+</h3>
+<p>Returns the type of each component of an element of this iterator.</p>
+<h4 id="returns-2">Returns:</h4>
+<p>A nested structure of <code>tf.DType</code> objects corresponding to each component of an element of this iterator.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    iterator_resource,
+    initializer,
+    output_types,
+    output_shapes
+)</code></pre></div>
+<p>Creates a new iterator from the given iterator resource.</p>
+<p>NOTE(mrry): Most users will not call this initializer directly, and will instead use <code>Iterator.from_dataset()</code> or <code>Dataset.make_one_shot_iterator()</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>iterator_resource</code></b>: A <code>tf.resource</code> scalar <code>tf.Tensor</code> representing the iterator.</li>
+<li><b><code>initializer</code></b>: A <code>tf.Operation</code> that should be run to initialize this iterator.</li>
+<li><b><code>output_types</code></b>: A nested structure of <code>tf.DType</code> objects corresponding to each component of an element of this iterator.</li>
+<li><b><code>output_shapes</code></b>: A nested structure of <code>tf.TensorShape</code> objects corresponding to each component of an element of this dataset.</li>
+</ul>
+<h3 id="dispose_op">
+<code>dispose_op</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">dispose_op(name<span class="op">=</span><span class="va">None</span>)</code></pre></div>
+<p>Returns a <code>tf.Operation</code> that destroys this iterator.</p>
+<p>The returned operation may be used to release any resources consumed by this iterator without closing the session.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>name</code></b>: (Optional.) A name for the created operation.</li>
+</ul>
+<h4 id="returns-3">Returns:</h4>
+<p>A <code>tf.Operation</code>.</p>
+<h3 id="from_dataset">
+<code>from_dataset</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">from_dataset(
+    dataset,
+    shared_name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Creates a new, uninitialized <code>Iterator</code> from the given <code>Dataset</code>.</p>
+<p>To initialize this iterator, you must run its <code>initializer</code>:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">dataset <span class="op">=</span> ...
+iterator <span class="op">=</span> Iterator.from_dataset(dataset)
+<span class="co"># ...</span>
+sess.run(iterator.initializer)</code></pre></div>
+<h4 id="args-2">Args:</h4>
+<ul>
+<li><b><code>dataset</code></b>: A <code>Dataset</code> object.</li>
+<li><b><code>shared_name</code></b>: (Optional.) If non-empty, this iterator will be shared under the given name across multiple sessions that share the same devices (e.g. when using a remote server).</li>
+</ul>
+<h4 id="returns-4">Returns:</h4>
+<p>An <code>Iterator</code>.</p>
+<h3 id="from_structure">
+<code>from_structure</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">from_structure(
+    output_types,
+    output_shapes<span class="op">=</span><span class="va">None</span>,
+    shared_name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Creates a new, uninitialized <code>Iterator</code> with the given structure.</p>
+<p>This iterator-constructing method can be used to create an iterator that is reusable with many different datasets.</p>
+<p>The returned iterator is not bound to a particular dataset, and it has no <code>initializer</code>. To initialize the iterator, run the operation returned by <code>Iterator.make_initializer(dataset)</code>.</p>
+<p>The following is an example</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">iterator <span class="op">=</span> Iterator.from_structure(tf.int64, tf.TensorShape([]))
+
+dataset_range <span class="op">=</span> Dataset.<span class="bu">range</span>(<span class="dv">10</span>)
+range_initializer <span class="op">=</span> iterator.make_initializer(dataset_range)
+
+dataset_evens <span class="op">=</span> dataset_range.<span class="bu">filter</span>(<span class="kw">lambda</span> x: x <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span>)
+evens_initializer <span class="op">=</span> iterator.make_initializer(dataset_evens)
+
+<span class="co"># Define a model based on the iterator; in this example, the model_fn</span>
+<span class="co"># is expected to take scalar tf.int64 Tensors as input (see</span>
+<span class="co"># the definition of &#39;iterator&#39; above).</span>
+prediction, loss <span class="op">=</span> model_fn(iterator.get_next())
+
+<span class="co"># Train for `num_epochs`, where for each epoch, we first iterate over</span>
+<span class="co"># dataset_range, and then iterate over dataset_evens.</span>
+<span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(num_epochs):
+  <span class="co"># Initialize the iterator to `dataset_range`</span>
+  sess.run(range_initializer)
+  <span class="cf">while</span> <span class="va">True</span>:
+    <span class="cf">try</span>:
+      pred, loss_val <span class="op">=</span> sess.run([prediction, loss])
+    <span class="cf">except</span> tf.errors.OutOfRangeError:
+      <span class="cf">break</span>
+
+  <span class="co"># Initialize the iterator to `dataset_evens`</span>
+  sess.run(evens_initializer)
+  <span class="cf">while</span> <span class="va">True</span>:
+    <span class="cf">try</span>:
+      pred, loss_val <span class="op">=</span> sess.run([prediction, loss])
+    <span class="cf">except</span> tf.errors.OutOfRangeError:
+      <span class="cf">break</span></code></pre></div>
+<h4 id="args-3">Args:</h4>
+<ul>
+<li><b><code>output_types</code></b>: A nested structure of <code>tf.DType</code> objects corresponding to each component of an element of this iterator.</li>
+<li><b><code>output_shapes</code></b>: (Optional.) A nested structure of <code>tf.TensorShape</code> objects corresponding to each component of an element of this dataset. If omitted, each component will have an unconstrainted shape.</li>
+<li><b><code>shared_name</code></b>: (Optional.) If non-empty, this iterator will be shared under the given name across multiple sessions that share the same devices (e.g. when using a remote server).</li>
+</ul>
+<h4 id="returns-5">Returns:</h4>
+<p>An <code>Iterator</code>.</p>
+<h4 id="raises-1">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: If the structures of <code>output_shapes</code> and <code>output_types</code> are not the same.</li>
+</ul>
+<h3 id="get_next">
+<code>get_next</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_next(name<span class="op">=</span><span class="va">None</span>)</code></pre></div>
+<p>Returns a nested structure of <code>tf.Tensor</code>s containing the next element.</p>
+<h4 id="args-4">Args:</h4>
+<ul>
+<li><b><code>name</code></b>: (Optional.) A name for the created operation.</li>
+</ul>
+<h4 id="returns-6">Returns:</h4>
+<p>A nested structure of <code>tf.Tensor</code> objects.</p>
+<h3 id="make_initializer">
+<code>make_initializer</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">make_initializer(dataset)</code></pre></div>
+<p>Returns a <code>tf.Operation</code> that initializes this iterator on <code>dataset</code>.</p>
+<h4 id="args-5">Args:</h4>
+<ul>
+<li><b><code>dataset</code></b>: A <code>Dataset</code> with compatible structure to this iterator.</li>
+</ul>
+<h4 id="returns-7">Returns:</h4>
+<p>A <code>tf.Operation</code> that can be run to initialize this iterator on the given <code>dataset</code>.</p>
+<h4 id="raises-2">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>dataset</code> and this iterator do not have a compatible element structure.</li>
+</ul>

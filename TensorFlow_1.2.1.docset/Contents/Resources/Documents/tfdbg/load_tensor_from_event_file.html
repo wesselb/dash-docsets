@@ -1,0 +1,16 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tfdbg.load_tensor_from_event_file" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tfdbg.load_tensor_from_event_file" class="dashAnchor"></a><h1 id="tfdbg.load_tensor_from_event_file">tfdbg.load_tensor_from_event_file</h1>
+<h3 id="tfdbg.load_tensor_from_event_file-1"><code>tfdbg.load_tensor_from_event_file</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">load_tensor_from_event_file(event_file_path)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/debug/lib/debug_data.py"><code>tensorflow/python/debug/lib/debug_data.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/tfdbg.md#Functions_for_loading_debug_dump_data">TensorFlow Debugger &gt; Functions for loading debug-dump data</a></p>
+<p>Load a tensor from an event file.</p>
+<p>Assumes that the event file contains a <code>Event</code> protobuf and the <code>Event</code> protobuf contains a <code>Tensor</code> value.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>event_file_path</code></b>: (<code>str</code>) path to the event file.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The tensor value loaded from the event file, as a <code>numpy.ndarray</code>. For uninitialized Tensors, returns <code>None</code>. For Tensors of data types that cannot be converted to <code>numpy.ndarray</code> (e.g., <code>tf.resource</code>), return <code>None</code>.</p>

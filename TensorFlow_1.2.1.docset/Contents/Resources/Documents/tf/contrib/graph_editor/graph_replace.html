@@ -1,0 +1,29 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.graph_editor.graph_replace" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.graph_editor.graph_replace" class="dashAnchor"></a><h1 id="tf.contrib.graph_editor.graph_replace">tf.contrib.graph_editor.graph_replace</h1>
+<h3 id="tf.contrib.graph_editor.graph_replace-1"><code>tf.contrib.graph_editor.graph_replace</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">graph_replace(
+    target_ts,
+    replacement_ts,
+    dst_scope<span class="op">=</span><span class="st">&#39;&#39;</span>,
+    src_scope<span class="op">=</span><span class="st">&#39;&#39;</span>,
+    reuse_dst_scope<span class="op">=</span><span class="va">False</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/graph_editor/transform.py"><code>tensorflow/contrib/graph_editor/transform.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.graph_editor.md#Module_transform">Graph Editor (contrib) &gt; Module: transform</a></p>
+<p>Create a new graph which compute the targets from the replaced Tensors.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>target_ts</code></b>: a single tf.Tensor or an iterable of tf.Tensor.</li>
+<li><b><code>replacement_ts</code></b>: dictionary mapping from original tensors to replaced tensors</li>
+<li><b><code>dst_scope</code></b>: the destination scope.</li>
+<li><b><code>src_scope</code></b>: the source scope.</li>
+<li><b><code>reuse_dst_scope</code></b>: if True the dst_scope is re-used if it already exists. Otherwise, the scope is given a unique name based on the one given by appending an underscore followed by a digit (default).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A single tf.Tensor or a list of target tf.Tensor, depending on the type of the input argument <code>target_ts</code>. The returned tensors are recomputed using the tensors from replacement_ts.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if the targets are not connected to replacement_ts.</li>
+</ul>

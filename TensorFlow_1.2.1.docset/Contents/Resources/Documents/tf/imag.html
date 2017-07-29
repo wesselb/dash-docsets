@@ -1,0 +1,23 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.imag" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.imag" class="dashAnchor"></a><h1 id="tf.imag">tf.imag</h1>
+<h3 id="tf.imag-1"><code>tf.imag</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">imag(
+    <span class="bu">input</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/math_ops.py"><code>tensorflow/python/ops/math_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/math_ops.md#Complex_Number_Functions">Math &gt; Complex Number Functions</a></p>
+<p>Returns the imaginary part of a complex number.</p>
+<p>Given a tensor <code>input</code> of complex numbers, this operation returns a tensor of type <code>float32</code> or <code>float64</code> that is the imaginary part of each element in <code>input</code>. All elements in <code>input</code> must be complex numbers of the form \(a + bj\), where <em>a</em> is the real part and <em>b</em> is the imaginary part returned by this operation.</p>
+<p>For example:</p>
+<pre><code># tensor &#39;input&#39; is [-2.25 + 4.75j, 3.25 + 5.75j]
+tf.imag(input) ==&gt; [4.75, 5.75]</code></pre>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>complex64</code>, <code>complex128</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>float32</code> or <code>float64</code>.</p>

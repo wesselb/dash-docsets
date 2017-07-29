@@ -1,0 +1,28 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.losses.compute_weighted_loss" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.losses.compute_weighted_loss" class="dashAnchor"></a><h1 id="tf.losses.compute_weighted_loss">tf.losses.compute_weighted_loss</h1>
+<h3 id="tf.losses.compute_weighted_loss-1"><code>tf.losses.compute_weighted_loss</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">compute_weighted_loss(
+    losses,
+    weights<span class="op">=</span><span class="fl">1.0</span>,
+    scope<span class="op">=</span><span class="va">None</span>,
+    loss_collection<span class="op">=</span>tf.GraphKeys.LOSSES,
+    reduction<span class="op">=</span>Reduction.SUM_BY_NONZERO_WEIGHTS
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/losses/losses_impl.py"><code>tensorflow/python/ops/losses/losses_impl.py</code></a>.</p>
+<p>Computes the weighted loss.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>losses</code></b>: <code>Tensor</code> of shape <code>[batch_size, d1, ... dN]</code>.</li>
+<li><b><code>weights</code></b>: Optional <code>Tensor</code> whose rank is either 0, or the same rank as <code>losses</code>, and must be broadcastable to <code>losses</code> (i.e., all dimensions must be either <code>1</code>, or the same as the corresponding <code>losses</code> dimension).</li>
+<li><b><code>scope</code></b>: the scope for the operations performed in computing the loss.</li>
+<li><b><code>loss_collection</code></b>: the loss will be added to these collections.</li>
+<li><b><code>reduction</code></b>: Type of reduction to apply to loss.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Weighted loss <code>Tensor</code> of the same type as <code>losses</code>. If <code>reduction</code> is <code>NONE</code>, this has the same shape as <code>losses</code>; otherwise, it is scalar.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>weights</code> is <code>None</code> or the shape is not compatible with <code>losses</code>, or if the number of dimensions (rank) of either <code>losses</code> or <code>weights</code> is missing.</li>
+</ul>

@@ -1,0 +1,39 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.reduce_join" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.reduce_join" class="dashAnchor"></a><h1 id="tf.reduce_join">tf.reduce_join</h1>
+<h3 id="tf.reduce_join-1"><code>tf.reduce_join</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">reduce_join(
+    inputs,
+    axis<span class="op">=</span><span class="va">None</span>,
+    keep_dims<span class="op">=</span><span class="va">False</span>,
+    separator<span class="op">=</span><span class="st">&#39;&#39;</span>,
+    name<span class="op">=</span><span class="va">None</span>,
+    reduction_indices<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/string_ops.py"><code>tensorflow/python/ops/string_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/string_ops.md#Joining">Strings &gt; Joining</a></p>
+<p>Joins a string Tensor across the given dimensions.</p>
+<p>Computes the string join across dimensions in the given string Tensor of shape <code>[d_0, d_1, ..., d_n-1]</code>. Returns a new Tensor created by joining the input strings with the given separator (default: empty string). Negative indices are counted backwards from the end, with <code>-1</code> being equivalent to <code>n - 1</code>.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># tensor `a` is [[&quot;a&quot;, &quot;b&quot;], [&quot;c&quot;, &quot;d&quot;]]</span>
+tf.reduce_join(a, <span class="dv">0</span>) <span class="op">==&gt;</span> [<span class="st">&quot;ac&quot;</span>, <span class="st">&quot;bd&quot;</span>]
+tf.reduce_join(a, <span class="dv">1</span>) <span class="op">==&gt;</span> [<span class="st">&quot;ab&quot;</span>, <span class="st">&quot;cd&quot;</span>]
+tf.reduce_join(a, <span class="op">-</span><span class="dv">2</span>) <span class="op">=</span> tf.reduce_join(a, <span class="dv">0</span>) <span class="op">==&gt;</span> [<span class="st">&quot;ac&quot;</span>, <span class="st">&quot;bd&quot;</span>]
+tf.reduce_join(a, <span class="op">-</span><span class="dv">1</span>) <span class="op">=</span> tf.reduce_join(a, <span class="dv">1</span>) <span class="op">==&gt;</span> [<span class="st">&quot;ab&quot;</span>, <span class="st">&quot;cd&quot;</span>]
+tf.reduce_join(a, <span class="dv">0</span>, keep_dims<span class="op">=</span><span class="va">True</span>) <span class="op">==&gt;</span> [[<span class="st">&quot;ac&quot;</span>, <span class="st">&quot;bd&quot;</span>]]
+tf.reduce_join(a, <span class="dv">1</span>, keep_dims<span class="op">=</span><span class="va">True</span>) <span class="op">==&gt;</span> [[<span class="st">&quot;ab&quot;</span>], [<span class="st">&quot;cd&quot;</span>]]
+tf.reduce_join(a, <span class="dv">0</span>, separator<span class="op">=</span><span class="st">&quot;.&quot;</span>) <span class="op">==&gt;</span> [<span class="st">&quot;a.c&quot;</span>, <span class="st">&quot;b.d&quot;</span>]
+tf.reduce_join(a, [<span class="dv">0</span>, <span class="dv">1</span>]) <span class="op">==&gt;</span> [<span class="st">&quot;acbd&quot;</span>]
+tf.reduce_join(a, [<span class="dv">1</span>, <span class="dv">0</span>]) <span class="op">==&gt;</span> [<span class="st">&quot;abcd&quot;</span>]
+tf.reduce_join(a, []) <span class="op">==&gt;</span> [<span class="st">&quot;abcd&quot;</span>]</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>inputs</code></b>: A <code>Tensor</code> of type <code>string</code>. The input to be joined. All reduced indices must have non-zero size.</li>
+<li><b><code>axis</code></b>: A <code>Tensor</code> of type <code>int32</code>. The dimensions to reduce over. Dimensions are reduced in the order specified. Omitting <code>axis</code> is equivalent to passing <code>[n-1, n-2, ..., 0]</code>. Negative indices from <code>-n</code> to <code>-1</code> are supported.</li>
+<li><b><code>keep_dims</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>. If <code>True</code>, retain reduced dimensions with length <code>1</code>.</li>
+<li><b><code>separator</code></b>: An optional <code>string</code>. Defaults to <code>&quot;&quot;</code>. The separator to use when joining.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>string</code>. Has shape equal to that of the input with reduced dimensions removed or set to <code>1</code> depending on <code>keep_dims</code>.</p>

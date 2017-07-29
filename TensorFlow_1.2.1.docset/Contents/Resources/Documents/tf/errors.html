@@ -1,0 +1,47 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.errors" /> <meta itemprop="property" content="ABORTED"/> <meta itemprop="property" content="ALREADY_EXISTS"/> <meta itemprop="property" content="CANCELLED"/> <meta itemprop="property" content="DATA_LOSS"/> <meta itemprop="property" content="DEADLINE_EXCEEDED"/> <meta itemprop="property" content="FAILED_PRECONDITION"/> <meta itemprop="property" content="INTERNAL"/> <meta itemprop="property" content="INVALID_ARGUMENT"/> <meta itemprop="property" content="NOT_FOUND"/> <meta itemprop="property" content="OK"/> <meta itemprop="property" content="OUT_OF_RANGE"/> <meta itemprop="property" content="PERMISSION_DENIED"/> <meta itemprop="property" content="RESOURCE_EXHAUSTED"/> <meta itemprop="property" content="UNAUTHENTICATED"/> <meta itemprop="property" content="UNAVAILABLE"/> <meta itemprop="property" content="UNIMPLEMENTED"/> <meta itemprop="property" content="UNKNOWN"/></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.errors" class="dashAnchor"></a><h1 id="module-tf.errors">Module: tf.errors</h1>
+<h3 id="module-tf.errors-1">Module <code>tf.errors</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/framework/errors.py"><code>tensorflow/python/framework/errors.py</code></a>.</p>
+<p>Exception types for TensorFlow errors.</p>
+<h2 id="classes">Classes</h2>
+<p><a href="../tf/errors/AbortedError.html"><code>class AbortedError</code></a>: The operation was aborted, typically due to a concurrent action.</p>
+<p><a href="../tf/errors/AlreadyExistsError.html"><code>class AlreadyExistsError</code></a>: Raised when an entity that we attempted to create already exists.</p>
+<p><a href="../tf/errors/CancelledError.html"><code>class CancelledError</code></a>: Raised when an operation or step is cancelled.</p>
+<p><a href="../tf/errors/DataLossError.html"><code>class DataLossError</code></a>: Raised when unrecoverable data loss or corruption is encountered.</p>
+<p><a href="../tf/errors/DeadlineExceededError.html"><code>class DeadlineExceededError</code></a>: Raised when a deadline expires before an operation could complete.</p>
+<p><a href="../tf/errors/FailedPreconditionError.html"><code>class FailedPreconditionError</code></a>: Operation was rejected because the system is not in a state to execute it.</p>
+<p><a href="../tf/errors/InternalError.html"><code>class InternalError</code></a>: Raised when the system experiences an internal error.</p>
+<p><a href="../tf/errors/InvalidArgumentError.html"><code>class InvalidArgumentError</code></a>: Raised when an operation receives an invalid argument.</p>
+<p><a href="../tf/errors/NotFoundError.html"><code>class NotFoundError</code></a>: Raised when a requested entity (e.g., a file or directory) was not found.</p>
+<p><a href="../tf/OpError.html"><code>class OpError</code></a>: A generic error that is raised when TensorFlow execution fails.</p>
+<p><a href="../tf/errors/OutOfRangeError.html"><code>class OutOfRangeError</code></a>: Raised when an operation iterates past the valid input range.</p>
+<p><a href="../tf/errors/PermissionDeniedError.html"><code>class PermissionDeniedError</code></a>: Raised when the caller does not have permission to run an operation.</p>
+<p><a href="../tf/errors/ResourceExhaustedError.html"><code>class ResourceExhaustedError</code></a>: Some resource has been exhausted.</p>
+<p><a href="../tf/errors/UnauthenticatedError.html"><code>class UnauthenticatedError</code></a>: The request does not have valid authentication credentials.</p>
+<p><a href="../tf/errors/UnavailableError.html"><code>class UnavailableError</code></a>: Raised when the runtime is currently unavailable.</p>
+<p><a href="../tf/errors/UnimplementedError.html"><code>class UnimplementedError</code></a>: Raised when an operation has not been implemented.</p>
+<p><a href="../tf/errors/UnknownError.html"><code>class UnknownError</code></a>: Unknown error.</p>
+<h2 id="functions">Functions</h2>
+<p><a href="../tf/errors/error_code_from_exception_type.html"><code>error_code_from_exception_type(...)</code></a></p>
+<p><a href="../tf/errors/exception_type_from_error_code.html"><code>exception_type_from_error_code(...)</code></a></p>
+<p><a href="../tf/errors/raise_exception_on_not_ok_status.html"><code>raise_exception_on_not_ok_status(...)</code></a></p>
+<h2 id="other-members">Other Members</h2>
+<p><code>ABORTED</code></p>
+<p><code>ALREADY_EXISTS</code></p>
+<p><code>CANCELLED</code></p>
+<p><code>DATA_LOSS</code></p>
+<p><code>DEADLINE_EXCEEDED</code></p>
+<p><code>FAILED_PRECONDITION</code></p>
+<p><code>INTERNAL</code></p>
+<p><code>INVALID_ARGUMENT</code></p>
+<p><code>NOT_FOUND</code></p>
+<p><code>OK</code></p>
+<p><code>OUT_OF_RANGE</code></p>
+<p><code>PERMISSION_DENIED</code></p>
+<p><code>RESOURCE_EXHAUSTED</code></p>
+<p><code>UNAUTHENTICATED</code></p>
+<p><code>UNAVAILABLE</code></p>
+<p><code>UNIMPLEMENTED</code></p>
+<p><code>UNKNOWN</code></p>

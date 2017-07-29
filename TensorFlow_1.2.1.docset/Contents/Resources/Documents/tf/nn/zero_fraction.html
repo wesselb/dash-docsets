@@ -1,0 +1,22 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.nn.zero_fraction" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.nn.zero_fraction" class="dashAnchor"></a><h1 id="tf.nn.zero_fraction">tf.nn.zero_fraction</h1>
+<h3 id="tf.nn.zero_fraction-1"><code>tf.nn.zero_fraction</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">zero_fraction(
+    value,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/nn_impl.py"><code>tensorflow/python/ops/nn_impl.py</code></a>.</p>
+<p>Returns the fraction of zeros in <code>value</code>.</p>
+<p>If <code>value</code> is empty, the result is <code>nan</code>.</p>
+<p>This is useful in summaries to measure and report sparsity. For example,</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    z <span class="op">=</span> tf.nn.relu(...)
+    summ <span class="op">=</span> tf.summary.scalar(<span class="st">&#39;sparsity&#39;</span>, tf.nn.zero_fraction(z))</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>value</code></b>: A tensor of numeric type.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The fraction of zeros in <code>value</code>, with type <code>float32</code>.</p>

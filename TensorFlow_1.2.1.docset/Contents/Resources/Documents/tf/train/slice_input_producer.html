@@ -1,0 +1,34 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.train.slice_input_producer" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.train.slice_input_producer" class="dashAnchor"></a><h1 id="tf.train.slice_input_producer">tf.train.slice_input_producer</h1>
+<h3 id="tf.train.slice_input_producer-1"><code>tf.train.slice_input_producer</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">slice_input_producer(
+    tensor_list,
+    num_epochs<span class="op">=</span><span class="va">None</span>,
+    shuffle<span class="op">=</span><span class="va">True</span>,
+    seed<span class="op">=</span><span class="va">None</span>,
+    capacity<span class="op">=</span><span class="dv">32</span>,
+    shared_name<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/training/input.py"><code>tensorflow/python/training/input.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/io_ops.md#Input_pipeline">Inputs and Readers &gt; Input pipeline</a></p>
+<p>Produces a slice of each <code>Tensor</code> in <code>tensor_list</code>.</p>
+<p>Implemented using a Queue -- a <code>QueueRunner</code> for the Queue is added to the current <code>Graph</code>'s <code>QUEUE_RUNNER</code> collection.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>tensor_list</code></b>: A list of <code>Tensor</code> objects. Every <code>Tensor</code> in <code>tensor_list</code> must have the same size in the first dimension.</li>
+<li><b><code>num_epochs</code></b>: An integer (optional). If specified, <code>slice_input_producer</code> produces each slice <code>num_epochs</code> times before generating an <code>OutOfRange</code> error. If not specified, <code>slice_input_producer</code> can cycle through the slices an unlimited number of times.</li>
+<li><b><code>shuffle</code></b>: Boolean. If true, the integers are randomly shuffled within each epoch.</li>
+<li><b><code>seed</code></b>: An integer (optional). Seed used if shuffle == True.</li>
+<li><b><code>capacity</code></b>: An integer. Sets the queue capacity.</li>
+<li><b><code>shared_name</code></b>: (optional). If set, this queue will be shared under the given name across multiple sessions.</li>
+<li><b><code>name</code></b>: A name for the operations (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A list of tensors, one for each element of <code>tensor_list</code>. If the tensor in <code>tensor_list</code> has shape <code>[N, a, b, .., z]</code>, then the corresponding output tensor will have shape <code>[a, b, ..., z]</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>slice_input_producer</code> produces nothing from <code>tensor_list</code>.</li>
+</ul>

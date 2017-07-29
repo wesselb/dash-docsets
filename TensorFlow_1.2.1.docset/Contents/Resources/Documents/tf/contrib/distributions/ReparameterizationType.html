@@ -1,0 +1,28 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.distributions.ReparameterizationType" /> <meta itemprop="property" content="__eq__"/> <meta itemprop="property" content="__init__"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.distributions.ReparameterizationType" class="dashAnchor"></a><h1 id="tf.contrib.distributions.reparameterizationtype">tf.contrib.distributions.ReparameterizationType</h1>
+<h3 id="class-tf.contrib.distributions.reparameterizationtype"><code>class tf.contrib.distributions.ReparameterizationType</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/distributions/distribution.py"><code>tensorflow/python/ops/distributions/distribution.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.distributions.md#Base_classes">Statistical Distributions (contrib) &gt; Base classes</a></p>
+<p>Instances of this class represent how sampling is reparameterized.</p>
+<p>Two static instances exist in the distritributions library, signifying one of two possible properties for samples from a distribution:</p>
+<p><code>FULLY_REPARAMETERIZED</code>: Samples from the distribution are fully reparameterized, and straight-through gradients are supported.</p>
+<p><code>NOT_REPARAMETERIZED</code>: Samples from the distribution are not fully reparameterized, and straight-through gradients are either partially unsupported or are not supported at all. In this case, for purposes of e.g. RL or variational inference, it is generally safest to wrap the sample results in a <code>stop_gradients</code> call and instead use policy gradients / surrogate loss instead.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(rep_type)</code></pre></div>
+<h3 id="__eq__">
+<code><strong>eq</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__eq__</span>(other)</code></pre></div>
+<p>Determine if this <code>ReparameterizationType</code> is equal to another.</p>
+<p>Since RepaparameterizationType instances are constant static global instances, equality checks if two instances' id() values are equal.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>other</code></b>: Object to compare against.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p><code>self is other</code>.</p>

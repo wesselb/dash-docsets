@@ -1,0 +1,29 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.nn.conv3d" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.nn.conv3d" class="dashAnchor"></a><h1 id="tf.nn.conv3d">tf.nn.conv3d</h1>
+<h3 id="tf.nn.conv3d-1"><code>tf.nn.conv3d</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">conv3d(
+    <span class="bu">input</span>,
+    <span class="bu">filter</span>,
+    strides,
+    padding,
+    data_format<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_nn_ops.py</code>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/nn.md#Convolution">Neural Network &gt; Convolution</a></p>
+<p>Computes a 3-D convolution given 5-D <code>input</code> and <code>filter</code> tensors.</p>
+<p>In signal processing, cross-correlation is a measure of similarity of two waveforms as a function of a time-lag applied to one of them. This is also known as a sliding dot product or sliding inner-product.</p>
+<p>Our Conv3D implements a form of cross-correlation.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>. Shape <code>[batch, in_depth, in_height, in_width, in_channels]</code>.</li>
+<li><b><code>filter</code></b>: A <code>Tensor</code>. Must have the same type as <code>input</code>. Shape <code>[filter_depth, filter_height, filter_width, in_channels, out_channels]</code>. <code>in_channels</code> must match between <code>input</code> and <code>filter</code>.</li>
+<li><b><code>strides</code></b>: A list of <code>ints</code> that has length <code>&gt;= 5</code>. 1-D tensor of length 5. The stride of the sliding window for each dimension of <code>input</code>. Must have <code>strides[0] = strides[4] = 1</code>.</li>
+<li><b><code>padding</code></b>: A <code>string</code> from: <code>&quot;SAME&quot;, &quot;VALID&quot;</code>. The type of padding algorithm to use.</li>
+<li><b><code>data_format</code></b>: An optional <code>string</code> from: <code>&quot;NDHWC&quot;, &quot;NCDHW&quot;</code>. Defaults to <code>&quot;NDHWC&quot;</code>. The data format of the input and output data. With the default format &quot;NDHWC&quot;, the data is stored in the order of: [batch, in_depth, in_height, in_width, in_channels]. Alternatively, the format could be &quot;NCDHW&quot;, the data storage order is: [batch, in_channels, in_depth, in_height, in_width].</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>input</code>.</p>

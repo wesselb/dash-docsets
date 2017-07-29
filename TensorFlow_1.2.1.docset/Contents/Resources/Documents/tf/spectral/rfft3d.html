@@ -1,0 +1,25 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.spectral.rfft3d" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.spectral.rfft3d" class="dashAnchor"></a><h1 id="tf.spectral.rfft3d">tf.spectral.rfft3d</h1>
+<h3 id="tf.spectral.rfft3d-1"><code>tf.spectral.rfft3d</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">rfft3d(
+    input_tensor,
+    fft_length<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/spectral_ops.py"><code>tensorflow/python/ops/spectral_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/spectral_ops.md#Fourier_Transform_Functions">Spectral Functions &gt; Fourier Transform Functions</a></p>
+<p>3D real-valued fast Fourier transform.</p>
+<p>Computes the 3-dimensional discrete Fourier transform of a real-valued signal over the inner-most 3 dimensions of <code>input</code>.</p>
+<p>Since the DFT of a real signal is Hermitian-symmetric, <code>RFFT3D</code> only returns the <code>fft_length / 2 + 1</code> unique components of the FFT for the inner-most dimension of <code>output</code>: the zero-frequency term, followed by the <code>fft_length / 2</code> positive-frequency terms.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code> of type <code>float32</code>. A float32 tensor.</li>
+<li><b><code>fft_length</code></b>: A <code>Tensor</code> of type <code>int32</code>. An int32 tensor of shape [3]. The FFT length for each dimension.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>complex64</code>. A complex64 tensor of the same rank as <code>input</code>. The inner-most 3 dimensions of <code>input</code> are replaced with the their 3D Fourier transform. The inner-most dimension contains <code>fft_length / 2 + 1</code> unique frequency components.</p>
+<h4 id="numpy-compatibility">numpy compatibility</h4>
+<p>Equivalent to np.fft.rfftn with 3 dimensions.</p>

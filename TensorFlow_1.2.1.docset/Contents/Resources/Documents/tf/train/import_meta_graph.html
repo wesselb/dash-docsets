@@ -1,0 +1,52 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.train.import_meta_graph" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.train.import_meta_graph" class="dashAnchor"></a><h1 id="tf.train.import_meta_graph">tf.train.import_meta_graph</h1>
+<h3 id="tf.train.import_meta_graph-1"><code>tf.train.import_meta_graph</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">import_meta_graph(
+    meta_graph_or_file,
+    clear_devices<span class="op">=</span><span class="va">False</span>,
+    import_scope<span class="op">=</span><span class="va">None</span>,
+    <span class="op">**</span>kwargs
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/training/saver.py"><code>tensorflow/python/training/saver.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/state_ops.md#Exporting_and_Importing_Meta_Graphs">Variables &gt; Exporting and Importing Meta Graphs</a></p>
+<p>Recreates a Graph saved in a <code>MetaGraphDef</code> proto.</p>
+<p>This function takes a <code>MetaGraphDef</code> protocol buffer as input. If the argument is a file containing a <code>MetaGraphDef</code> protocol buffer , it constructs a protocol buffer from the file content. The function then adds all the nodes from the <code>graph_def</code> field to the current graph, recreates all the collections, and returns a saver constructed from the <code>saver_def</code> field.</p>
+<p>In combination with <code>export_meta_graph()</code>, this function can be used to</p>
+<ul>
+<li><p>Serialize a graph along with other Python objects such as <code>QueueRunner</code>, <code>Variable</code> into a <code>MetaGraphDef</code>.</p></li>
+<li><p>Restart training from a saved graph and checkpoints.</p></li>
+<li><p>Run inference from a saved graph and checkpoints.</p></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">...
+<span class="co"># Create a saver.</span>
+saver <span class="op">=</span> tf.train.Saver(...variables...)
+<span class="co"># Remember the training_op we want to run by adding it to a collection.</span>
+tf.add_to_collection(<span class="st">&#39;train_op&#39;</span>, train_op)
+sess <span class="op">=</span> tf.Session()
+<span class="cf">for</span> step <span class="kw">in</span> <span class="bu">xrange</span>(<span class="dv">1000000</span>):
+    sess.run(train_op)
+    <span class="cf">if</span> step <span class="op">%</span> <span class="dv">1000</span> <span class="op">==</span> <span class="dv">0</span>:
+        <span class="co"># Saves checkpoint, which by default also exports a meta_graph</span>
+        <span class="co"># named &#39;my-model-global_step.meta&#39;.</span>
+        saver.save(sess, <span class="st">&#39;my-model&#39;</span>, global_step<span class="op">=</span>step)</code></pre></div>
+<p>Later we can continue training from this saved <code>meta_graph</code> without building the model from scratch.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> tf.Session() <span class="im">as</span> sess:
+  new_saver <span class="op">=</span> tf.train.import_meta_graph(<span class="st">&#39;my-save-dir/my-model-10000.meta&#39;</span>)
+  new_saver.restore(sess, <span class="st">&#39;my-save-dir/my-model-10000&#39;</span>)
+  <span class="co"># tf.get_collection() returns a list. In this example we only want the</span>
+  <span class="co"># first one.</span>
+  train_op <span class="op">=</span> tf.get_collection(<span class="st">&#39;train_op&#39;</span>)[<span class="dv">0</span>]
+  <span class="cf">for</span> step <span class="kw">in</span> <span class="bu">xrange</span>(<span class="dv">1000000</span>):
+    sess.run(train_op)</code></pre></div>
+<p>NOTE: Restarting training from saved <code>meta_graph</code> only works if the device assignments have not changed.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>meta_graph_or_file</code></b>: <code>MetaGraphDef</code> protocol buffer or filename (including the path) containing a <code>MetaGraphDef</code>.</li>
+<li><b><code>clear_devices</code></b>: Whether or not to clear the device field for an <code>Operation</code> or <code>Tensor</code> during import.</li>
+<li><b><code>import_scope</code></b>: Optional <code>string</code>. Name scope to add. Only used when initializing from protocol buffer. **kwargs: Optional keyed arguments.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A saver constructed from <code>saver_def</code> in <code>MetaGraphDef</code> or None.</p>
+<p>A None value is returned if no variables exist in the <code>MetaGraphDef</code> (i.e., there are no variables to restore).</p>

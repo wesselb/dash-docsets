@@ -1,0 +1,28 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.layers.weighted_sparse_column" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.layers.weighted_sparse_column" class="dashAnchor"></a><h1 id="tf.contrib.layers.weighted_sparse_column">tf.contrib.layers.weighted_sparse_column</h1>
+<h3 id="tf.contrib.layers.weighted_sparse_column-1"><code>tf.contrib.layers.weighted_sparse_column</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">weighted_sparse_column(
+    sparse_id_column,
+    weight_column_name,
+    dtype<span class="op">=</span>tf.float32
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/layers/python/layers/feature_column.py"><code>tensorflow/contrib/layers/python/layers/feature_column.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.layers.md#Feature_columns">Layers (contrib) &gt; Feature columns</a></p>
+<p>Creates a _SparseColumn by combining sparse_id_column with a weight column.</p>
+<p>Example:</p>
+<p><code>python   sparse_feature = sparse_column_with_hash_bucket(column_name=&quot;sparse_col&quot;,                                                   hash_bucket_size=1000)   weighted_feature = weighted_sparse_column(sparse_id_column=sparse_feature,                                             weight_column_name=&quot;weights_col&quot;)</code></p>
+<p>This configuration assumes that input dictionary of model contains the following two items: * (key=&quot;sparse_col&quot;, value=sparse_tensor) where sparse_tensor is a SparseTensor. * (key=&quot;weights_col&quot;, value=weights_tensor) where weights_tensor is a SparseTensor. Following are assumed to be true: * sparse_tensor.indices = weights_tensor.indices * sparse_tensor.dense_shape = weights_tensor.dense_shape</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>sparse_id_column</code></b>: A <code>_SparseColumn</code> which is created by <code>sparse_column_with_*</code> functions.</li>
+<li><b><code>weight_column_name</code></b>: A string defining a sparse column name which represents weight or value of the corresponding sparse id feature.</li>
+<li><b><code>dtype</code></b>: Type of weights, such as <code>tf.float32</code>. Only floating and integer weights are supported.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A _WeightedSparseColumn composed of two sparse features: one represents id, the other represents weight (value) of the id feature in that example.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if dtype is not convertible to float.</li>
+</ul>

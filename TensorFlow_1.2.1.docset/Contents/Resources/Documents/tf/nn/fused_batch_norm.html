@@ -1,0 +1,42 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.nn.fused_batch_norm" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.nn.fused_batch_norm" class="dashAnchor"></a><h1 id="tf.nn.fused_batch_norm">tf.nn.fused_batch_norm</h1>
+<h3 id="tf.nn.fused_batch_norm-1"><code>tf.nn.fused_batch_norm</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">fused_batch_norm(
+    x,
+    scale,
+    offset,
+    mean<span class="op">=</span><span class="va">None</span>,
+    variance<span class="op">=</span><span class="va">None</span>,
+    epsilon<span class="op">=</span><span class="fl">0.001</span>,
+    data_format<span class="op">=</span><span class="st">&#39;NHWC&#39;</span>,
+    is_training<span class="op">=</span><span class="va">True</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/nn_impl.py"><code>tensorflow/python/ops/nn_impl.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/nn.md#Normalization">Neural Network &gt; Normalization</a></p>
+<p>Batch normalization.</p>
+<p>As described in http://arxiv.org/abs/1502.03167.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: Input <code>Tensor</code> of 4 dimensions.</li>
+<li><b><code>scale</code></b>: A <code>Tensor</code> of 1 dimension for scaling.</li>
+<li><b><code>offset</code></b>: A <code>Tensor</code> of 1 dimension for bias.</li>
+<li><b><code>mean</code></b>: A <code>Tensor</code> of 1 dimension for population mean used for inference.</li>
+<li><b><code>variance</code></b>: A <code>Tensor</code> of 1 dimension for population variance used for inference.</li>
+<li><b><code>epsilon</code></b>: A small float number added to the variance of x.</li>
+<li><b><code>data_format</code></b>: The data format for x. Either &quot;NHWC&quot; (default) or &quot;NCHW&quot;.</li>
+<li><b><code>is_training</code></b>: A bool value to specify if the operation is used for training or inference.</li>
+<li><b><code>name</code></b>: A name for this operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<ul>
+<li><b><code>y</code></b>: A 4D Tensor for the normalized, scaled, offsetted x.</li>
+<li><b><code>batch_mean</code></b>: A 1D Tensor for the mean of x.</li>
+<li><b><code>batch_var</code></b>: A 1D Tensor for the variance of x.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If mean or variance is not None when is_training is True.</li>
+</ul>

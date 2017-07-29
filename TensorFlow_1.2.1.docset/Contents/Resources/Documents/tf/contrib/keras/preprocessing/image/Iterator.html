@@ -1,0 +1,37 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.preprocessing.image.Iterator" /> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="__iter__"/> <meta itemprop="property" content="__next__"/> <meta itemprop="property" content="reset"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.keras.preprocessing.image.Iterator" class="dashAnchor"></a><h1 id="tf.contrib.keras.preprocessing.image.iterator">tf.contrib.keras.preprocessing.image.Iterator</h1>
+<h3 id="class-tf.contrib.keras.preprocessing.image.iterator"><code>class tf.contrib.keras.preprocessing.image.Iterator</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/preprocessing/image.py"><code>tensorflow/contrib/keras/python/keras/preprocessing/image.py</code></a>.</p>
+<p>Abstract base class for image data iterators.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>n: Integer, total number of samples in the dataset to loop over.
+batch_size: Integer, size of a batch.
+shuffle: Boolean, whether to shuffle the data between epochs.
+seed: Random seeding for data shuffling.</code></pre>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    n,
+    batch_size,
+    shuffle,
+    seed
+)</code></pre></div>
+<h3 id="__iter__">
+<code><strong>iter</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__iter__</span>()</code></pre></div>
+<h3 id="__next__">
+<code><strong>next</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__next__</span>(
+    <span class="op">*</span>args,
+    <span class="op">**</span>kwargs
+)</code></pre></div>
+<h3 id="reset">
+<code>reset</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">reset()</code></pre></div>

@@ -1,0 +1,47 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.training.bucket_by_sequence_length" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.training.bucket_by_sequence_length" class="dashAnchor"></a><h1 id="tf.contrib.training.bucket_by_sequence_length">tf.contrib.training.bucket_by_sequence_length</h1>
+<h3 id="tf.contrib.training.bucket_by_sequence_length-1"><code>tf.contrib.training.bucket_by_sequence_length</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">bucket_by_sequence_length(
+    input_length,
+    tensors,
+    batch_size,
+    bucket_boundaries,
+    num_threads<span class="op">=</span><span class="dv">1</span>,
+    capacity<span class="op">=</span><span class="dv">32</span>,
+    bucket_capacities<span class="op">=</span><span class="va">None</span>,
+    shapes<span class="op">=</span><span class="va">None</span>,
+    dynamic_pad<span class="op">=</span><span class="va">False</span>,
+    allow_smaller_final_batch<span class="op">=</span><span class="va">False</span>,
+    keep_input<span class="op">=</span><span class="va">True</span>,
+    shared_name<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/training/python/training/bucket_ops.py"><code>tensorflow/contrib/training/python/training/bucket_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.training.md#Bucketing">Training (contrib) &gt; Bucketing</a></p>
+<p>Lazy bucketing of inputs according to their length.</p>
+<p>This method calls <code>tf.contrib.training.bucket</code> under the hood, after first subdividing the bucket boundaries into separate buckets and identifying which bucket the given <code>input_length</code> belongs to. See the documentation for <code>which_bucket</code> for details of the other arguments.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input_length</code></b>: <code>int32</code> scalar <code>Tensor</code>, the sequence length of tensors.</li>
+<li><b><code>tensors</code></b>: The list or dictionary of tensors, representing a single element, to bucket. Nested lists are not supported.</li>
+<li><b><code>batch_size</code></b>: The new batch size pulled from the queue (all queues will have the same size). If a list is passed in then each bucket will have a different batch_size. (python int, int32 scalar or iterable of integers of length num_buckets).</li>
+<li><b><code>bucket_boundaries</code></b>: int list, increasing non-negative numbers. The edges of the buckets to use when bucketing tensors. Two extra buckets are created, one for <code>input_length &lt; bucket_boundaries[0]</code> and one for <code>input_length &gt;= bucket_boundaries[-1]</code>.</li>
+<li><b><code>num_threads</code></b>: An integer. The number of threads enqueuing <code>tensors</code>.</li>
+<li><b><code>capacity</code></b>: An integer. The maximum number of minibatches in the top queue, and also the maximum number of elements within each bucket.</li>
+<li><b><code>bucket_capacities</code></b>: (Optional) None or a list of integers, the capacities of each bucket. If None, capacity is used (default). If specified, it must be a list of integers of length one larger than bucket_boundaries. Its i-th element is used as capacity for the i-th bucket queue.</li>
+<li><b><code>shapes</code></b>: (Optional) The shapes for each example. Defaults to the inferred shapes for <code>tensors</code>.</li>
+<li><b><code>dynamic_pad</code></b>: Boolean. Allow variable dimensions in input shapes. The given dimensions are padded upon dequeue so that tensors within a batch have the same shapes.</li>
+<li><b><code>allow_smaller_final_batch</code></b>: (Optional) Boolean. If <code>True</code>, allow the final batches to be smaller if there are insufficient items left in the queues.</li>
+<li><b><code>keep_input</code></b>: A <code>bool</code> scalar Tensor. If provided, this tensor controls whether the input is added to the queue or not. If it evaluates <code>True</code>, then <code>tensors</code> are added to the bucket; otherwise they are dropped. This tensor essentially acts as a filtering mechanism.</li>
+<li><b><code>shared_name</code></b>: (Optional). If set, the queues will be shared under the given name across multiple sessions.</li>
+<li><b><code>name</code></b>: (Optional) A name for the operations.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A tuple <code>(sequence_length, outputs)</code> where <code>sequence_length</code> is a 1-D <code>Tensor</code> of size <code>batch_size</code> and <code>outputs</code> is a list or dictionary of batched, bucketed, outputs corresponding to elements of <code>tensors</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>bucket_boundaries</code> is not a list of python integers.</li>
+<li><b><code>ValueError</code></b>: if <code>bucket_boundaries</code> is empty or contains non-increasing values or if batch_size is a list and it's length doesn't equal the number of buckets.</li>
+</ul>

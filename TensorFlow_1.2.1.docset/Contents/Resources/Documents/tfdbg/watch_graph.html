@@ -1,0 +1,33 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tfdbg.watch_graph" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tfdbg.watch_graph" class="dashAnchor"></a><h1 id="tfdbg.watch_graph">tfdbg.watch_graph</h1>
+<h3 id="tfdbg.watch_graph-1"><code>tfdbg.watch_graph</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">watch_graph(
+    run_options,
+    graph,
+    debug_ops<span class="op">=</span><span class="st">&#39;DebugIdentity&#39;</span>,
+    debug_urls<span class="op">=</span><span class="va">None</span>,
+    node_name_regex_whitelist<span class="op">=</span><span class="va">None</span>,
+    op_type_regex_whitelist<span class="op">=</span><span class="va">None</span>,
+    tensor_dtype_regex_whitelist<span class="op">=</span><span class="va">None</span>,
+    tolerate_debug_op_creation_failures<span class="op">=</span><span class="va">False</span>,
+    global_step<span class="op">=-</span><span class="dv">1</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/debug/lib/debug_utils.py"><code>tensorflow/python/debug/lib/debug_utils.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/tfdbg.md#Functions_for_adding_debug_watches">TensorFlow Debugger &gt; Functions for adding debug watches</a></p>
+<p>Add debug watches to <code>RunOptions</code> for a TensorFlow graph.</p>
+<p>To watch all <code>Tensor</code>s on the graph, let both <code>node_name_regex_whitelist</code> and <code>op_type_regex_whitelist</code> be the default (<code>None</code>).</p>
+<p>N.B.: 1. Under certain circumstances, the <code>Tensor</code> may not get actually watched (e.g., if the node of the <code>Tensor</code> is constant-folded during runtime). 2. For debugging purposes, the <code>parallel_iteration</code> attribute of all <code>tf.while_loop</code>s in the graph are set to 1 to prevent any node from being executed multiple times concurrently. This change does not affect subsequent non-debugged runs of the same <code>tf.while_loop</code>s.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>run_options</code></b>: An instance of <code>config_pb2.RunOptions</code> to be modified.</li>
+<li><b><code>graph</code></b>: An instance of <code>ops.Graph</code>.</li>
+<li><b><code>debug_ops</code></b>: (<code>str</code> or <code>list</code> of <code>str</code>) name(s) of the debug op(s) to use.</li>
+<li><b><code>debug_urls</code></b>: URLs to send debug values to. Can be a list of strings, a single string, or None. The case of a single string is equivalent to a list consisting of a single string, e.g., <code>file:///tmp/tfdbg_dump_1</code>, <code>grpc://localhost:12345</code>. For debug op types with customizable attributes, each debug op name string can optionally contain a list of attribute names, in the syntax of: debug_op_name(attr_name_1=attr_value_1;attr_name_2=attr_value_2;...)</li>
+<li><b><code>node_name_regex_whitelist</code></b>: Regular-expression whitelist for node_name, e.g., <code>&quot;(weight_[0-9]+|bias_.*)&quot;</code></li>
+<li><b><code>op_type_regex_whitelist</code></b>: Regular-expression whitelist for the op type of nodes, e.g., <code>&quot;(Variable|Add)&quot;</code>. If both <code>node_name_regex_whitelist</code> and <code>op_type_regex_whitelist</code> are set, the two filtering operations will occur in a logical <code>AND</code> relation. In other words, a node will be included if and only if it hits both whitelists.</li>
+<li><b><code>tensor_dtype_regex_whitelist</code></b>: Regular-experssion whitelist for Tensor data type, e.g., <code>&quot;^int.*&quot;</code>. This whitelist operates in logical <code>AND</code> relations to the two whitelists above.</li>
+<li><b><code>tolerate_debug_op_creation_failures</code></b>: (<code>bool</code>) whether debug op creation failures (e.g., due to dtype incompatibility) are to be tolerated by not throwing exceptions.</li>
+<li><b><code>global_step</code></b>: (<code>int</code>) Optional global_step count for this debug tensor watch.</li>
+</ul>

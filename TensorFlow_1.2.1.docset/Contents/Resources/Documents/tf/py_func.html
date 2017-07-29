@@ -1,0 +1,36 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.py_func" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.py_func" class="dashAnchor"></a><h1 id="tf.py_func">tf.py_func</h1>
+<h3 id="tf.py_func-1"><code>tf.py_func</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">py_func(
+    func,
+    inp,
+    Tout,
+    stateful<span class="op">=</span><span class="va">True</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/script_ops.py"><code>tensorflow/python/ops/script_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/script_ops.md#Script_Language_Operators">Wraps python functions &gt; Script Language Operators</a></p>
+<p>Wraps a python function and uses it as a TensorFlow op.</p>
+<p>Given a python function <code>func</code>, which takes numpy arrays as its inputs and returns numpy arrays as its outputs, wrap this function as an operation in a TensorFlow graph. The following snippet constructs a simple TensorFlow graph that invokes the <code>np.sinh()</code> NumPy function as a operation in the graph:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="kw">def</span> my_func(x):
+  <span class="co"># x will be a numpy array with the contents of the placeholder below</span>
+  <span class="cf">return</span> np.sinh(x)
+inp <span class="op">=</span> tf.placeholder(tf.float32)
+y <span class="op">=</span> tf.py_func(my_func, [inp], tf.float32)</code></pre></div>
+<p><strong>N.B.</strong> The <code>tf.py_func()</code> operation has the following known limitations:</p>
+<ul>
+<li><p>The body of the function (i.e. <code>func</code>) will not be serialized in a <code>GraphDef</code>. Therefore, you should not use this function if you need to serialize your model and restore it in a different environment.</p></li>
+<li><p>The operation must run in the same address space as the Python program that calls <code>tf.py_func()</code>. If you are using distributed TensorFlow, you must run a <code>tf.train.Server</code> in the same process as the program that calls <code>tf.py_func()</code> and you must pin the created operation to a device in that server (e.g. using <code>with tf.device():</code>).</p></li>
+</ul>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>func</code></b>: A Python function, which accepts a list of NumPy <code>ndarray</code> objects having element types that match the corresponding <code>tf.Tensor</code> objects in <code>inp</code>, and returns a list of <code>ndarray</code> objects (or a single <code>ndarray</code>) having element types that match the corresponding values in <code>Tout</code>.</li>
+<li><b><code>inp</code></b>: A list of <code>Tensor</code> objects.</li>
+<li><b><code>Tout</code></b>: A list or tuple of tensorflow data types or a single tensorflow data type if there is only one, indicating what <code>func</code> returns.</li>
+<li><b><code>stateful</code></b>: (Boolean.) If True, the function should be considered stateful. If a function is stateless, when given the same input it will return the same output and have no observable side effects. Optimizations such as common subexpression elimination are only performed on stateless operations.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A list of <code>Tensor</code> or a single <code>Tensor</code> which <code>func</code> computes.</p>

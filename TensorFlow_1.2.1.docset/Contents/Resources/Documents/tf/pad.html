@@ -1,0 +1,48 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.pad" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.pad" class="dashAnchor"></a><h1 id="tf.pad">tf.pad</h1>
+<h3 id="tf.pad-1"><code>tf.pad</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">pad(
+    tensor,
+    paddings,
+    mode<span class="op">=</span><span class="st">&#39;CONSTANT&#39;</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/array_ops.py"><code>tensorflow/python/ops/array_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/array_ops.md#Slicing_and_Joining">Tensor Transformations &gt; Slicing and Joining</a></p>
+<p>Pads a tensor.</p>
+<p>This operation pads a <code>tensor</code> according to the <code>paddings</code> you specify. <code>paddings</code> is an integer tensor with shape <code>[n, 2]</code>, where n is the rank of <code>tensor</code>. For each dimension D of <code>input</code>, <code>paddings[D, 0]</code> indicates how many values to add before the contents of <code>tensor</code> in that dimension, and <code>paddings[D, 1]</code> indicates how many values to add after the contents of <code>tensor</code> in that dimension. If <code>mode</code> is &quot;REFLECT&quot; then both <code>paddings[D, 0]</code> and <code>paddings[D, 1]</code> must be no greater than <code>tensor.dim_size(D) - 1</code>. If <code>mode</code> is &quot;SYMMETRIC&quot; then both <code>paddings[D, 0]</code> and <code>paddings[D, 1]</code> must be no greater than <code>tensor.dim_size(D)</code>.</p>
+<p>The padded size of each dimension D of the output is:</p>
+<p><code>paddings[D, 0] + tensor.dim_size(D) + paddings[D, 1]</code></p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># &#39;t&#39; is [[1, 2, 3], [4, 5, 6]].</span>
+<span class="co"># &#39;paddings&#39; is [[1, 1,], [2, 2]].</span>
+<span class="co"># rank of &#39;t&#39; is 2.</span>
+pad(t, paddings, <span class="st">&quot;CONSTANT&quot;</span>) <span class="op">==&gt;</span> [[<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>],
+                                  [<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">0</span>],
+                                  [<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">0</span>],
+                                  [<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>]]
+
+pad(t, paddings, <span class="st">&quot;REFLECT&quot;</span>) <span class="op">==&gt;</span> [[<span class="dv">6</span>, <span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">5</span>, <span class="dv">4</span>],
+                                 [<span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">1</span>],
+                                 [<span class="dv">6</span>, <span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">5</span>, <span class="dv">4</span>],
+                                 [<span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">1</span>]]
+
+pad(t, paddings, <span class="st">&quot;SYMMETRIC&quot;</span>) <span class="op">==&gt;</span> [[<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">2</span>],
+                                   [<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">2</span>],
+                                   [<span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">6</span>, <span class="dv">5</span>],
+                                   [<span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">6</span>, <span class="dv">5</span>]]</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>tensor</code></b>: A <code>Tensor</code>.</li>
+<li><b><code>paddings</code></b>: A <code>Tensor</code> of type <code>int32</code>.</li>
+<li><b><code>mode</code></b>: One of &quot;CONSTANT&quot;, &quot;REFLECT&quot;, or &quot;SYMMETRIC&quot; (case-insensitive)</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>tensor</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: When mode is not one of &quot;CONSTANT&quot;, &quot;REFLECT&quot;, or &quot;SYMMETRIC&quot;.</li>
+</ul>

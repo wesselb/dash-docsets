@@ -1,0 +1,30 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.preprocessing.sequence.pad_sequences" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.keras.preprocessing.sequence.pad_sequences" class="dashAnchor"></a><h1 id="tf.contrib.keras.preprocessing.sequence.pad_sequences">tf.contrib.keras.preprocessing.sequence.pad_sequences</h1>
+<h3 id="tf.contrib.keras.preprocessing.sequence.pad_sequences-1"><code>tf.contrib.keras.preprocessing.sequence.pad_sequences</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">pad_sequences(
+    sequences,
+    maxlen<span class="op">=</span><span class="va">None</span>,
+    dtype<span class="op">=</span><span class="st">&#39;int32&#39;</span>,
+    padding<span class="op">=</span><span class="st">&#39;pre&#39;</span>,
+    truncating<span class="op">=</span><span class="st">&#39;pre&#39;</span>,
+    value<span class="op">=</span><span class="fl">0.0</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/preprocessing/sequence.py"><code>tensorflow/contrib/keras/python/keras/preprocessing/sequence.py</code></a>.</p>
+<p>Pads each sequence to the same length (length of the longest sequence).</p>
+<p>If maxlen is provided, any sequence longer than maxlen is truncated to maxlen. Truncation happens off either the beginning (default) or the end of the sequence.</p>
+<p>Supports post-padding and pre-padding (default).</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>sequences: list of lists where each element is a sequence
+maxlen: int, maximum length
+dtype: type to cast the resulting sequence.
+padding: &#39;pre&#39; or &#39;post&#39;, pad either before or after each sequence.
+truncating: &#39;pre&#39; or &#39;post&#39;, remove values from sequences larger than
+    maxlen either in the beginning or in the end of the sequence
+value: float, value to pad the sequences to the desired value.</code></pre>
+<h4 id="returns">Returns:</h4>
+<pre><code>x: numpy array with dimensions (number_of_sequences, maxlen)</code></pre>
+<h4 id="raises">Raises:</h4>
+<pre><code>ValueError: in case of invalid values for `truncating` or `padding`,
+    or in case of invalid shape for a `sequences` entry.</code></pre>

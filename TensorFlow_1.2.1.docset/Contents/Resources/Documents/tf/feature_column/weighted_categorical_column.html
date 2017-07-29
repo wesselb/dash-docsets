@@ -1,0 +1,35 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.feature_column.weighted_categorical_column" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.feature_column.weighted_categorical_column" class="dashAnchor"></a><h1 id="tf.feature_column.weighted_categorical_column">tf.feature_column.weighted_categorical_column</h1>
+<h3 id="tf.feature_column.weighted_categorical_column-1"><code>tf.feature_column.weighted_categorical_column</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">weighted_categorical_column(
+    categorical_column,
+    weight_feature_key,
+    dtype<span class="op">=</span>tf.float32
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/feature_column/feature_column.py"><code>tensorflow/python/feature_column/feature_column.py</code></a>.</p>
+<p>Applies weight values to a <code>_CategoricalColumn</code>.</p>
+<p>Use this when each of your sparse inputs has both an ID and a value. For example, if you're representing text documents as a collection of word frequencies, you can provide 2 parallel sparse input features ('terms' and 'frequencies' below).</p>
+<p>Example:</p>
+<p>Input <code>tf.Example</code> objects: [ features { feature { key: &quot;terms&quot; value {bytes_list {value: &quot;very&quot; value: &quot;model&quot;}} } feature { key: &quot;frequencies&quot; value {float_list {value: 0.3 value: 0.1}} } }, features { feature { key: &quot;terms&quot; value {bytes_list {value: &quot;when&quot; value: &quot;course&quot; value: &quot;human&quot;}} } feature { key: &quot;frequencies&quot; value {float_list {value: 0.4 value: 0.1 value: 0.2}} } }]</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">categorical_column <span class="op">=</span> categorical_column_with_hash_bucket(
+    column_name<span class="op">=</span><span class="st">&#39;terms&#39;</span>, hash_bucket_size<span class="op">=</span><span class="dv">1000</span>)
+weighted_column <span class="op">=</span> weighted_categorical_column(
+    categorical_column<span class="op">=</span>categorical_column, weight_feature_key<span class="op">=</span><span class="st">&#39;frequencies&#39;</span>)
+columns <span class="op">=</span> [weighted_column, ...]
+features <span class="op">=</span> tf.parse_example(..., features<span class="op">=</span>make_parse_example_spec(columns))
+linear_prediction, _, _ <span class="op">=</span> linear_model(features, columns)</code></pre></div>
+<p>This assumes the input dictionary contains a <code>SparseTensor</code> for key 'terms', and a <code>SparseTensor</code> for key 'frequencies'. These 2 tensors must have the same indices and dense shape.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>categorical_column</code></b>: A <code>_CategoricalColumn</code> created by <code>categorical_column_with_*</code> functions.</li>
+<li><b><code>weight_feature_key</code></b>: String key for weight values.</li>
+<li><b><code>dtype</code></b>: Type of weights, such as <code>tf.float32</code>. Only float and integer weights are supported.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>_CategoricalColumn</code> composed of two sparse features: one represents id, the other represents weight (value) of the id feature in that example.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>dtype</code> is not convertible to float.</li>
+</ul>

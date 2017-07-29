@@ -1,0 +1,21 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.verify_tensor_all_finite" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.verify_tensor_all_finite" class="dashAnchor"></a><h1 id="tf.verify_tensor_all_finite">tf.verify_tensor_all_finite</h1>
+<h3 id="tf.verify_tensor_all_finite-1"><code>tf.verify_tensor_all_finite</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">verify_tensor_all_finite(
+    t,
+    msg,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/numerics.py"><code>tensorflow/python/ops/numerics.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/control_flow_ops.md#Debugging_Operations">Control Flow &gt; Debugging Operations</a></p>
+<p>Assert that the tensor does not contain any NaN's or Inf's.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>t</code></b>: Tensor to check.</li>
+<li><b><code>msg</code></b>: Message to log on failure.</li>
+<li><b><code>name</code></b>: A name for this operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Same tensor as <code>t</code>.</p>

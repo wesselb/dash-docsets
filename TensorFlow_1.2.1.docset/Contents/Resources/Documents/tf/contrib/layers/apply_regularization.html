@@ -1,0 +1,24 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.layers.apply_regularization" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.layers.apply_regularization" class="dashAnchor"></a><h1 id="tf.contrib.layers.apply_regularization">tf.contrib.layers.apply_regularization</h1>
+<h3 id="tf.contrib.layers.apply_regularization-1"><code>tf.contrib.layers.apply_regularization</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">apply_regularization(
+    regularizer,
+    weights_list<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/layers/python/layers/regularizers.py"><code>tensorflow/contrib/layers/python/layers/regularizers.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.layers.md#Regularizers">Layers (contrib) &gt; Regularizers</a></p>
+<p>Returns the summed penalty by applying <code>regularizer</code> to the <code>weights_list</code>.</p>
+<p>Adding a regularization penalty over the layer weights and embedding weights can help prevent overfitting the training data. Regularization over layer biases is less common/useful, but assuming proper data preprocessing/mean subtraction, it usually shouldn't hurt much either.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>regularizer</code></b>: A function that takes a single <code>Tensor</code> argument and returns a scalar <code>Tensor</code> output.</li>
+<li><b><code>weights_list</code></b>: List of weights <code>Tensors</code> or <code>Variables</code> to apply <code>regularizer</code> over. Defaults to the <code>GraphKeys.WEIGHTS</code> collection if <code>None</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A scalar representing the overall regularization penalty.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>regularizer</code> does not return a scalar output, or if we find no weights.</li>
+</ul>

@@ -1,0 +1,21 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.nn.l2_loss" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.nn.l2_loss" class="dashAnchor"></a><h1 id="tf.nn.l2_loss">tf.nn.l2_loss</h1>
+<h3 id="tf.nn.l2_loss-1"><code>tf.nn.l2_loss</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">l2_loss(
+    t,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_nn_ops.py</code>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/nn.md#Losses">Neural Network &gt; Losses</a></p>
+<p>L2 Loss.</p>
+<p>Computes half the L2 norm of a tensor without the <code>sqrt</code>:</p>
+<pre><code>output = sum(t ** 2) / 2</code></pre>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>t</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>. Typically 2-D, but may have any dimensions.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>t</code>. 0-D.</p>

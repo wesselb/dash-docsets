@@ -1,0 +1,24 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.assign_sub" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.assign_sub" class="dashAnchor"></a><h1 id="tf.assign_sub">tf.assign_sub</h1>
+<h3 id="tf.assign_sub-1"><code>tf.assign_sub</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">assign_sub(
+    ref,
+    value,
+    use_locking<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/state_ops.py"><code>tensorflow/python/ops/state_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/state_ops.md#Variable_helper_functions">Variables &gt; Variable helper functions</a></p>
+<p>Update 'ref' by subtracting 'value' from it.</p>
+<p>This operation outputs &quot;ref&quot; after the update is done. This makes it easier to chain operations that need to use the reset value.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>ref</code></b>: A mutable <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int64</code>, <code>int32</code>, <code>uint8</code>, <code>uint16</code>, <code>int16</code>, <code>int8</code>, <code>complex64</code>, <code>complex128</code>, <code>qint8</code>, <code>quint8</code>, <code>qint32</code>, <code>half</code>. Should be from a <code>Variable</code> node.</li>
+<li><b><code>value</code></b>: A <code>Tensor</code>. Must have the same type as <code>ref</code>. The value to be subtracted to the variable.</li>
+<li><b><code>use_locking</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>. If True, the subtraction will be protected by a lock; otherwise the behavior is undefined, but may exhibit less contention.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Same as &quot;ref&quot;. Returned as a convenience for operations that want to use the new value after the variable has been updated.</p>

@@ -1,0 +1,87 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.staging.StagingArea" /> <meta itemprop="property" content="dtypes"/> <meta itemprop="property" content="name"/> <meta itemprop="property" content="names"/> <meta itemprop="property" content="shapes"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="get"/> <meta itemprop="property" content="put"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.staging.StagingArea" class="dashAnchor"></a><h1 id="tf.contrib.staging.stagingarea">tf.contrib.staging.StagingArea</h1>
+<h3 id="class-tf.contrib.staging.stagingarea"><code>class tf.contrib.staging.StagingArea</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/data_flow_ops.py"><code>tensorflow/python/ops/data_flow_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.staging.html">Staging (contrib)</a></p>
+<p>Class for staging inputs. No ordering guarantees.</p>
+<p>A <code>StagingArea</code> is a TensorFlow data structure that stores tensors across multiple steps, and exposes operations that can put and get tensors.</p>
+<p>Each <code>StagingArea</code> element is a tuple of one or more tensors, where each tuple component has a static dtype, and may have a static shape.</p>
+<p>The capacity of a <code>StagingArea</code> is unbounded and supports multiple concurrent producers and consumers; and provides exactly-once delivery.</p>
+<p>Each element of a <code>StagingArea</code> is a fixed-length tuple of tensors whose dtypes are described by <code>dtypes</code>, and whose shapes are optionally described by the <code>shapes</code> argument.</p>
+<p>If the <code>shapes</code> argument is specified, each component of a staging area element must have the respective fixed shape. If it is unspecified, different elements may have different shapes,</p>
+<h2 id="properties">Properties</h2>
+<h3 id="dtypes">
+<code>dtypes</code>
+</h3>
+<p>The list of dtypes for each component of a staging area element.</p>
+<h3 id="name">
+<code>name</code>
+</h3>
+<p>The name of the staging area.</p>
+<h3 id="names">
+<code>names</code>
+</h3>
+<p>The list of names for each component of a staging area element.</p>
+<h3 id="shapes">
+<code>shapes</code>
+</h3>
+<p>The list of shapes for each component of a staging area element.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    dtypes,
+    shapes<span class="op">=</span><span class="va">None</span>,
+    names<span class="op">=</span><span class="va">None</span>,
+    shared_name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Constructs a staging area object.</p>
+<p>The two optional lists, <code>shapes</code> and <code>names</code>, must be of the same length as <code>dtypes</code> if provided. The values at a given index <code>i</code> indicate the shape and name to use for the corresponding queue component in <code>dtypes</code>.</p>
+<p>The device scope at the time of object creation determines where the storage for the <code>StagingArea</code> will reside. Calls to <code>put</code> will incur a copy to this memory space, if necessary. Tensors returned by <code>get</code> will be placed according to the device scope when <code>get</code> is called.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>dtypes</code></b>: A list of types. The length of dtypes must equal the number of tensors in each element.</li>
+<li><b><code>shapes</code></b>: (Optional.) Constraints on the shapes of tensors in an element. A list of shape tuples or None. This list is the same length as dtypes. If the shape of any tensors in the element are constrained, all must be; shapes can be None if the shapes should not be constrained.</li>
+<li><b><code>names</code></b>: (Optional.) If provided, the <code>get()</code> and <code>put()</code> methods will use dictionaries with these names as keys. Must be None or a list or tuple of the same length as <code>dtypes</code>.</li>
+<li><b><code>shared_name</code></b>: (Optional.) A name to be used for the shared object. By passing the same name to two different python objects they will share the underlying staging area. Must be a string.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If one of the arguments is invalid.</li>
+</ul>
+<h3 id="get">
+<code>get</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get(name<span class="op">=</span><span class="va">None</span>)</code></pre></div>
+<p>Gets one element from this staging area.</p>
+<p>If the staging area is empty when this operation executes, it will block until there is an element to dequeue.</p>
+<p>Note that unlike others ops that can block, like the queue Dequeue operations, this can stop other work from happening. To avoid this, the intended use is for this to be called only when there will be an element already available. One method for doing this in a training loop would be to run a <code>put()</code> call during a warmup session.run call, and then call both <code>get()</code> and <code>put()</code> in each subsequent step.</p>
+<p>The placement of the returned tensor will be determined by the current device scope when this function is called.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The tuple of tensors that was gotten.</p>
+<h3 id="put">
+<code>put</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">put(
+    values,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Create an op that places a value into the staging area.</p>
+<h4 id="args-2">Args:</h4>
+<ul>
+<li><b><code>values</code></b>: Tensor (or a tuple of Tensors) to place into the staging area.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns-1">Returns:</h4>
+<pre><code>The created op.</code></pre>
+<h4 id="raises-1">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If the number or type of inputs don't match the staging area.</li>
+</ul>

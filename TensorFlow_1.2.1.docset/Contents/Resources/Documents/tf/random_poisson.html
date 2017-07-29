@@ -1,0 +1,30 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.random_poisson" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.random_poisson" class="dashAnchor"></a><h1 id="tf.random_poisson">tf.random_poisson</h1>
+<h3 id="tf.random_poisson-1"><code>tf.random_poisson</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">random_poisson(
+    lam,
+    shape,
+    dtype<span class="op">=</span>tf.float32,
+    seed<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/random_ops.py"><code>tensorflow/python/ops/random_ops.py</code></a>.</p>
+<p>Draws <code>shape</code> samples from each of the given Poisson distribution(s).</p>
+<p><code>lam</code> is the rate parameter describing the distribution(s).</p>
+<p>Example:</p>
+<p>samples = tf.random_poisson([0.5, 1.5], [10]) # samples has shape [10, 2], where each slice [:, 0] and [:, 1] represents # the samples drawn from each distribution</p>
+<p>samples = tf.random_poisson([12.2, 3.3], [7, 5]) # samples has shape [7, 5, 2], where each slice [:, :, 0] and [:, :, 1] # represents the 7x5 samples drawn from each of the two distributions</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>lam</code></b>: A Tensor or Python value or N-D array of type <code>dtype</code>. <code>lam</code> provides the rate parameter(s) describing the poisson distribution(s) to sample.</li>
+<li><b><code>shape</code></b>: A 1-D integer Tensor or Python array. The shape of the output samples to be drawn per &quot;rate&quot;-parameterized distribution.</li>
+<li><b><code>dtype</code></b>: The type of <code>lam</code> and the output: <code>float16</code>, <code>float32</code>, or <code>float64</code>.</li>
+<li><b><code>seed</code></b>: A Python integer. Used to create a random seed for the distributions. See <a href="../tf/set_random_seed.html"><code>tf.set_random_seed</code></a> for behavior.</li>
+<li><b><code>name</code></b>: Optional name for the operation.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<ul>
+<li><b><code>samples</code></b>: a <code>Tensor</code> of shape <code>tf.concat(shape, tf.shape(lam))</code> with values of type <code>dtype</code>.</li>
+</ul>

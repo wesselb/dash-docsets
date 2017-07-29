@@ -1,0 +1,19 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.utils.custom_object_scope" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.keras.utils.custom_object_scope" class="dashAnchor"></a><h1 id="tf.contrib.keras.utils.custom_object_scope">tf.contrib.keras.utils.custom_object_scope</h1>
+<h3 id="tf.contrib.keras.utils.custom_object_scope-1"><code>tf.contrib.keras.utils.custom_object_scope</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">custom_object_scope(<span class="op">*</span>args)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/utils/generic_utils.py"><code>tensorflow/contrib/keras/python/keras/utils/generic_utils.py</code></a>.</p>
+<p>Provides a scope that changes to <code>_GLOBAL_CUSTOM_OBJECTS</code> cannot escape.</p>
+<p>Convenience wrapper for <code>CustomObjectScope</code>. Code within a <code>with</code> statement will be able to access custom objects by name. Changes to global custom objects persist within the enclosing <code>with</code> statement. At end of the <code>with</code> statement, global custom objects are reverted to state at beginning of the <code>with</code> statement.</p>
+<p>Example:</p>
+<p>Consider a custom object <code>MyObject</code></p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    <span class="cf">with</span> custom_object_scope({<span class="st">&quot;MyObject&quot;</span>:MyObject}):
+        layer <span class="op">=</span> Dense(..., W_regularizer<span class="op">=</span><span class="st">&quot;MyObject&quot;</span>)
+        <span class="co"># save, load, etc. will recognize custom object by name</span></code></pre></div>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>*args: Variable length list of dictionaries of name,
+    class pairs to add to custom objects.</code></pre>
+<h4 id="returns">Returns:</h4>
+<pre><code>Object of type `CustomObjectScope`.</code></pre>

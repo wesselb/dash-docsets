@@ -1,0 +1,19 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.as_dtype" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.as_dtype" class="dashAnchor"></a><h1 id="tf.as_dtype">tf.as_dtype</h1>
+<h3 id="tf.as_dtype-1"><code>tf.as_dtype</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">as_dtype(type_value)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/framework/dtypes.py"><code>tensorflow/python/framework/dtypes.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/framework.md#Tensor_types">Building Graphs &gt; Tensor types</a></p>
+<p>Converts the given <code>type_value</code> to a <code>DType</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>type_value</code></b>: A value that can be converted to a <code>tf.DType</code> object. This may currently be a <code>tf.DType</code> object, a <a href="https://www.tensorflow.org/code/tensorflow/core/framework/types.proto"><code>DataType</code> enum</a>, a string type name, or a <code>numpy.dtype</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>DType</code> corresponding to <code>type_value</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>type_value</code> cannot be converted to a <code>DType</code>.</li>
+</ul>

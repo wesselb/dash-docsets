@@ -1,0 +1,23 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.framework.zero_initializer" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.framework.zero_initializer" class="dashAnchor"></a><h1 id="tf.contrib.framework.zero_initializer">tf.contrib.framework.zero_initializer</h1>
+<h3 id="tf.contrib.framework.zero_initializer-1"><code>tf.contrib.framework.zero_initializer</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">zero_initializer(
+    ref,
+    use_locking<span class="op">=</span><span class="va">True</span>,
+    name<span class="op">=</span><span class="st">&#39;zero_initializer&#39;</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/framework/python/ops/variables.py"><code>tensorflow/contrib/framework/python/ops/variables.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.framework.md#Variables">Framework (contrib) &gt; Variables</a></p>
+<p>Initialize 'ref' with all zeros, ref tensor should be uninitialized. If already initialized, you will get ValueError. This op is intended to save memory during initialization. #### Args:</p>
+<ul>
+<li><b><code>ref</code></b>: ref of the tensor need to be zero initialized.</li>
+<li><b><code>name</code></b>: optional name for this operation.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>ref that initialized.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If ref tensor is initialized.</li>
+</ul>

@@ -1,0 +1,27 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.lin_space" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.lin_space" class="dashAnchor"></a><h1 id="tf.lin_space">tf.lin_space</h1>
+<h3 id="tf.lin_space-1"><code>tf.lin_space</code></h3>
+<a name="//apple_ref/cpp/Function/tf.linspace" class="dashAnchor"></a><h3 id="tf.linspace"><code>tf.linspace</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">lin_space(
+    start,
+    stop,
+    num,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_math_ops.py</code>.</p>
+<p>See the guide: <a href="../../../api_guides/python/constant_op.md#Sequences">Constants, Sequences, and Random Values &gt; Sequences</a></p>
+<p>Generates values in an interval.</p>
+<p>A sequence of <code>num</code> evenly-spaced values are generated beginning at <code>start</code>. If <code>num &gt; 1</code>, the values in the sequence increase by <code>stop - start / num - 1</code>, so that the last one is exactly <code>stop</code>.</p>
+<p>For example:</p>
+<pre><code>tf.linspace(10.0, 12.0, 3, name=&quot;linspace&quot;) =&gt; [ 10.0  11.0  12.0]</code></pre>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>start</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>. First entry in the range.</li>
+<li><b><code>stop</code></b>: A <code>Tensor</code>. Must have the same type as <code>start</code>. Last entry in the range.</li>
+<li><b><code>num</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. Number of values to generate.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>start</code>. 1-D. The generated values.</p>

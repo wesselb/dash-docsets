@@ -1,0 +1,21 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.image.adjust_brightness" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.image.adjust_brightness" class="dashAnchor"></a><h1 id="tf.image.adjust_brightness">tf.image.adjust_brightness</h1>
+<h3 id="tf.image.adjust_brightness-1"><code>tf.image.adjust_brightness</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">adjust_brightness(
+    image,
+    delta
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/image_ops_impl.py"><code>tensorflow/python/ops/image_ops_impl.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/image.md#Image_Adjustments">Images &gt; Image Adjustments</a></p>
+<p>Adjust the brightness of RGB or Grayscale images.</p>
+<p>This is a convenience method that converts an RGB image to float representation, adjusts its brightness, and then converts it back to the original data type. If several adjustments are chained it is advisable to minimize the number of redundant conversions.</p>
+<p>The value <code>delta</code> is added to all components of the tensor <code>image</code>. Both <code>image</code> and <code>delta</code> are converted to <code>float</code> before adding (and <code>image</code> is scaled appropriately if it is in fixed-point representation). For regular images, <code>delta</code> should be in the range <code>[0,1)</code>, as it is added to the image in floating point representation, where pixel values are in the <code>[0,1)</code> range.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>image</code></b>: A tensor.</li>
+<li><b><code>delta</code></b>: A scalar. Amount to add to the pixel values.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A brightness-adjusted tensor of the same shape and type as <code>image</code>.</p>

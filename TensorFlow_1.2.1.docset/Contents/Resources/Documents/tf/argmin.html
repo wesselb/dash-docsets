@@ -1,0 +1,23 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.argmin" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.argmin" class="dashAnchor"></a><h1 id="tf.argmin">tf.argmin</h1>
+<h3 id="tf.argmin-1"><code>tf.argmin</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">argmin(
+    <span class="bu">input</span>,
+    axis<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>,
+    dimension<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/math_ops.py"><code>tensorflow/python/ops/math_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/math_ops.md#Sequence_Comparison_and_Indexing">Math &gt; Sequence Comparison and Indexing</a></p>
+<p>Returns the index with the smallest value across axes of a tensor.</p>
+<p>Note that in case of ties the identity of the return value is not guaranteed.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int64</code>, <code>int32</code>, <code>uint8</code>, <code>uint16</code>, <code>int16</code>, <code>int8</code>, <code>complex64</code>, <code>complex128</code>, <code>qint8</code>, <code>quint8</code>, <code>qint32</code>, <code>half</code>.</li>
+<li><b><code>axis</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. int32, 0 &lt;= axis &lt; rank(input). Describes which axis of the input Tensor to reduce across. For vectors, use axis = 0.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>int64</code>.</p>

@@ -1,0 +1,35 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.layers.sparse_column_with_integerized_feature" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.layers.sparse_column_with_integerized_feature" class="dashAnchor"></a><h1 id="tf.contrib.layers.sparse_column_with_integerized_feature">tf.contrib.layers.sparse_column_with_integerized_feature</h1>
+<h3 id="tf.contrib.layers.sparse_column_with_integerized_feature-1"><code>tf.contrib.layers.sparse_column_with_integerized_feature</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">sparse_column_with_integerized_feature(
+    column_name,
+    bucket_size,
+    combiner<span class="op">=</span><span class="st">&#39;sum&#39;</span>,
+    dtype<span class="op">=</span>tf.int64
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/layers/python/layers/feature_column.py"><code>tensorflow/contrib/layers/python/layers/feature_column.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.layers.md#Feature_columns">Layers (contrib) &gt; Feature columns</a></p>
+<p>Creates an integerized _SparseColumn.</p>
+<p>Use this when your features are already pre-integerized into int64 IDs, that is, when the set of values to output is already coming in as what's desired in the output. Integerized means we can use the feature value itself as id.</p>
+<p>Typically this is used for reading contiguous ranges of integers indexes, but it doesn't have to be. The output value is simply copied from the input_feature, whatever it is. Just be aware, however, that if you have large gaps of unused integers it might affect what you feed those in (for instance, if you make up a one-hot tensor from these, the unused integers will appear as values in the tensor which are always zero.)</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>column_name</code></b>: A string defining sparse column name.</li>
+<li><b><code>bucket_size</code></b>: An int that is &gt; 1. The number of buckets. It should be bigger than maximum feature. In other words features in this column should be an int64 in range [0, bucket_size)</li>
+<li><b><code>combiner</code></b>: A string specifying how to reduce if the sparse column is multivalent. Currently &quot;mean&quot;, &quot;sqrtn&quot; and &quot;sum&quot; are supported, with &quot;sum&quot; the default. &quot;sqrtn&quot; often achieves good accuracy, in particular with bag-of-words columns.
+<ul>
+<li>&quot;sum&quot;: do not normalize features in the column</li>
+<li>&quot;mean&quot;: do l1 normalization on features in the column</li>
+<li>&quot;sqrtn&quot;: do l2 normalization on features in the column For more information: <code>tf.embedding_lookup_sparse</code>.</li>
+</ul></li>
+<li><b><code>dtype</code></b>: Type of features. It should be an integer type. Default value is dtypes.int64.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>An integerized _SparseColumn definition.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: bucket_size is not greater than 1.</li>
+<li><b><code>ValueError</code></b>: dtype is not integer.</li>
+</ul>

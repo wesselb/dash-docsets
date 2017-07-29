@@ -1,0 +1,58 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.seq2seq.GreedyEmbeddingHelper" /> <meta itemprop="property" content="batch_size"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="initialize"/> <meta itemprop="property" content="next_inputs"/> <meta itemprop="property" content="sample"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.seq2seq.GreedyEmbeddingHelper" class="dashAnchor"></a><h1 id="tf.contrib.seq2seq.greedyembeddinghelper">tf.contrib.seq2seq.GreedyEmbeddingHelper</h1>
+<h3 id="class-tf.contrib.seq2seq.greedyembeddinghelper"><code>class tf.contrib.seq2seq.GreedyEmbeddingHelper</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/seq2seq/python/ops/helper.py"><code>tensorflow/contrib/seq2seq/python/ops/helper.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.seq2seq.md#Dynamic_Decoding">Seq2seq Library (contrib) &gt; Dynamic Decoding</a></p>
+<p>A helper for use during inference.</p>
+<p>Uses the argmax of the output (treated as logits) and passes the result through an embedding layer to get the next input.</p>
+<h2 id="properties">Properties</h2>
+<h3 id="batch_size">
+<code>batch_size</code>
+</h3>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    embedding,
+    start_tokens,
+    end_token
+)</code></pre></div>
+<p>Initializer.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>embedding</code></b>: A callable that takes a vector tensor of <code>ids</code> (argmax ids), or the <code>params</code> argument for <code>embedding_lookup</code>. The returned tensor will be passed to the decoder input.</li>
+<li><b><code>start_tokens</code></b>: <code>int32</code> vector shaped <code>[batch_size]</code>, the start tokens.</li>
+<li><b><code>end_token</code></b>: <code>int32</code> scalar, the token that marks end of decoding.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>start_tokens</code> is not a 1D tensor or <code>end_token</code> is not a scalar.</li>
+</ul>
+<h3 id="initialize">
+<code>initialize</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">initialize(name<span class="op">=</span><span class="va">None</span>)</code></pre></div>
+<h3 id="next_inputs">
+<code>next_inputs</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">next_inputs(
+    time,
+    outputs,
+    state,
+    sample_ids,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>next_inputs_fn for GreedyEmbeddingHelper.</p>
+<h3 id="sample">
+<code>sample</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">sample(
+    time,
+    outputs,
+    state,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>sample for GreedyEmbeddingHelper.</p>

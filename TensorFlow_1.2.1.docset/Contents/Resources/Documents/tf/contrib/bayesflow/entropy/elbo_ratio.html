@@ -1,0 +1,48 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.bayesflow.entropy.elbo_ratio" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.bayesflow.entropy.elbo_ratio" class="dashAnchor"></a><h1 id="tf.contrib.bayesflow.entropy.elbo_ratio">tf.contrib.bayesflow.entropy.elbo_ratio</h1>
+<h3 id="tf.contrib.bayesflow.entropy.elbo_ratio-1"><code>tf.contrib.bayesflow.entropy.elbo_ratio</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">elbo_ratio(
+    log_p,
+    q,
+    z<span class="op">=</span><span class="va">None</span>,
+    n<span class="op">=</span><span class="va">None</span>,
+    seed<span class="op">=</span><span class="va">None</span>,
+    form<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="st">&#39;elbo_ratio&#39;</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/bayesflow/python/ops/entropy_impl.py"><code>tensorflow/contrib/bayesflow/python/ops/entropy_impl.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../../api_guides/python/contrib.bayesflow.entropy.md#Ops">BayesFlow Entropy (contrib) &gt; Ops</a></p>
+<p>Estimate of the ratio appearing in the <code>ELBO</code> and <code>KL</code> divergence.</p>
+<p>With <code>p(z) := exp{log_p(z)}</code>, this <code>Op</code> returns an approximation of</p>
+<pre><code>E_q[ Log[p(Z) / q(Z)] ]</code></pre>
+<p>The term <code>E_q[ Log[p(Z)] ]</code> is always computed as a sample mean. The term <code>E_q[ Log[q(z)] ]</code> can be computed with samples, or an exact formula if <code>q.entropy()</code> is defined. This is controlled with the kwarg <code>form</code>.</p>
+<p>This log-ratio appears in different contexts:</p>
+<h4 id="klq-p"><code>KL[q || p]</code></h4>
+<p>If <code>log_p(z) = Log[p(z)]</code> for distribution <code>p</code>, this <code>Op</code> approximates the negative Kullback-Leibler divergence.</p>
+<pre><code>elbo_ratio(log_p, q, n=100) = -1 * KL[q || p],
+KL[q || p] = E[ Log[q(Z)] - Log[p(Z)] ]</code></pre>
+<p>Note that if <code>p</code> is a <code>Distribution</code>, then <code>distributions.kl_divergence(q, p)</code> may be defined and available as an exact result.</p>
+<h4 id="elbo">ELBO</h4>
+<p>If <code>log_p(z) = Log[p(z, x)]</code> is the log joint of a distribution <code>p</code>, this is the Evidence Lower BOund (ELBO):</p>
+<pre><code>ELBO ~= E[ Log[p(Z, x)] - Log[q(Z)] ]
+      = Log[p(x)] - KL[q || p]
+     &lt;= Log[p(x)]</code></pre>
+<p>User supplies either <code>Tensor</code> of samples <code>z</code>, or number of samples to draw <code>n</code></p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>log_p</code></b>: Callable mapping samples from <code>q</code> to <code>Tensors</code> with shape broadcastable to <code>q.batch_shape</code>. For example, <code>log_p</code> works &quot;just like&quot; <code>q.log_prob</code>.</li>
+<li><b><code>q</code></b>: <code>tf.contrib.distributions.Distribution</code>.</li>
+<li><b><code>z</code></b>: <code>Tensor</code> of samples from <code>q</code>, produced by <code>q.sample(n)</code> for some <code>n</code>.</li>
+<li><b><code>n</code></b>: Integer <code>Tensor</code>. Number of samples to generate if <code>z</code> is not provided.</li>
+<li><b><code>seed</code></b>: Python integer to seed the random number generator.</li>
+<li><b><code>form</code></b>: Either <code>ELBOForms.analytic_entropy</code> (use formula for entropy of <code>q</code>) or <code>ELBOForms.sample</code> (sample estimate of entropy), or <code>ELBOForms.default</code> (attempt analytic entropy, fallback on sample). Default value is <code>ELBOForms.default</code>.</li>
+<li><b><code>name</code></b>: A name to give this <code>Op</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Scalar <code>Tensor</code> holding sample mean KL divergence. <code>shape</code> is the batch shape of <code>q</code>, and <code>dtype</code> is the same as <code>q</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>form</code> is not handled by this function.</li>
+</ul>

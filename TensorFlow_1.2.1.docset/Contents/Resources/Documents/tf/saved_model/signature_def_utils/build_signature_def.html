@@ -1,0 +1,20 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.saved_model.signature_def_utils.build_signature_def" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.saved_model.signature_def_utils.build_signature_def" class="dashAnchor"></a><h1 id="tf.saved_model.signature_def_utils.build_signature_def">tf.saved_model.signature_def_utils.build_signature_def</h1>
+<h3 id="tf.saved_model.signature_def_utils.build_signature_def-1"><code>tf.saved_model.signature_def_utils.build_signature_def</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">build_signature_def(
+    inputs<span class="op">=</span><span class="va">None</span>,
+    outputs<span class="op">=</span><span class="va">None</span>,
+    method_name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/saved_model/signature_def_utils_impl.py"><code>tensorflow/python/saved_model/signature_def_utils_impl.py</code></a>.</p>
+<p>Utility function to build a SignatureDef protocol buffer.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>inputs</code></b>: Inputs of the SignatureDef defined as a proto map of string to tensor info.</li>
+<li><b><code>outputs</code></b>: Outputs of the SignatureDef defined as a proto map of string to tensor info.</li>
+<li><b><code>method_name</code></b>: Method name of the SignatureDef as a string.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A SignatureDef protocol buffer constructed based on the supplied arguments.</p>

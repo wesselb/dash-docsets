@@ -1,0 +1,24 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.summary.tensor_summary" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.summary.tensor_summary" class="dashAnchor"></a><h1 id="tf.summary.tensor_summary">tf.summary.tensor_summary</h1>
+<h3 id="tf.summary.tensor_summary-1"><code>tf.summary.tensor_summary</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tensor_summary(
+    name,
+    tensor,
+    summary_description<span class="op">=</span><span class="va">None</span>,
+    collections<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/summary_ops.py"><code>tensorflow/python/ops/summary_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/summary.md#Generation_of_Summaries">Summary Operations &gt; Generation of Summaries</a></p>
+<p>Outputs a <code>Summary</code> protocol buffer with a serialized tensor.proto.</p>
+<p>The generated <a href="https://www.tensorflow.org/code/tensorflow/core/framework/summary.proto"><code>Summary</code></a> has one summary value containing the input tensor.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>name</code></b>: A name for the generated node. Will also serve as the series name in TensorBoard.</li>
+<li><b><code>tensor</code></b>: A tensor of any type and shape to serialize.</li>
+<li><b><code>summary_description</code></b>: Optional summary_pb2.SummaryDescription()</li>
+<li><b><code>collections</code></b>: Optional list of graph collections keys. The new summary op is added to these collections. Defaults to <code>[GraphKeys.SUMMARIES]</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A scalar <code>Tensor</code> of type <code>string</code>. The serialized <code>Summary</code> protocol buffer.</p>

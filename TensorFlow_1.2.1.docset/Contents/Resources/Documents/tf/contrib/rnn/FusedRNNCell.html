@@ -1,0 +1,37 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.rnn.FusedRNNCell" /> <meta itemprop="property" content="__call__"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.rnn.FusedRNNCell" class="dashAnchor"></a><h1 id="tf.contrib.rnn.fusedrnncell">tf.contrib.rnn.FusedRNNCell</h1>
+<h3 id="class-tf.contrib.rnn.fusedrnncell"><code>class tf.contrib.rnn.FusedRNNCell</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/rnn/python/ops/fused_rnn_cell.py"><code>tensorflow/contrib/rnn/python/ops/fused_rnn_cell.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.rnn.md#Core_RNN_Cell_wrappers_RNNCells_that_wrap_other_RNNCells_">RNN and Cells (contrib) &gt; Core RNN Cell wrappers (RNNCells that wrap other RNNCells)</a></p>
+<p>Abstract object representing a fused RNN cell.</p>
+<p>A fused RNN cell represents the entire RNN expanded over the time dimension. In effect, this represents an entire recurrent network.</p>
+<p>Unlike RNN cells which are subclasses of <code>rnn_cell.RNNCell</code>, a <code>FusedRNNCell</code> operates on the entire time sequence at once, by putting the loop over time inside the cell. This usually leads to much more efficient, but more complex and less flexible implementations.</p>
+<p>Every <code>FusedRNNCell</code> must implement <code>__call__</code> with the following signature.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__call__">
+<code><strong>call</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__call__</span>(
+    inputs,
+    initial_state<span class="op">=</span><span class="va">None</span>,
+    dtype<span class="op">=</span><span class="va">None</span>,
+    sequence_length<span class="op">=</span><span class="va">None</span>,
+    scope<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Run this fused RNN on inputs, starting from the given state.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>inputs</code></b>: <code>3-D</code> tensor with shape <code>[time_len x batch_size x input_size]</code> or a list of <code>time_len</code> tensors of shape <code>[batch_size x input_size]</code>.</li>
+<li><b><code>initial_state</code></b>: either a tensor with shape <code>[batch_size x state_size]</code> or a tuple with shapes <code>[batch_size x s] for s in state_size</code>, if the cell takes tuples. If this is not provided, the cell is expected to create a zero initial state of type <code>dtype</code>.</li>
+<li><b><code>dtype</code></b>: The data type for the initial state and expected output. Required if <code>initial_state</code> is not provided or RNN state has a heterogeneous dtype.</li>
+<li><b><code>sequence_length</code></b>: Specifies the length of each sequence in inputs. An <code>int32</code> or <code>int64</code> vector (tensor) size <code>[batch_size]</code>, values in <code>[0, time_len)</code>. Defaults to <code>time_len</code> for each element.</li>
+<li><b><code>scope</code></b>: <code>VariableScope</code> or <code>string</code> for the created subgraph; defaults to class name.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A pair containing:</p>
+<ul>
+<li>Output: A <code>3-D</code> tensor of shape <code>[time_len x batch_size x output_size]</code> or a list of <code>time_len</code> tensors of shape <code>[batch_size x output_size]</code>, to match the type of the <code>inputs</code>.</li>
+<li>Final state: Either a single <code>2-D</code> tensor, or a tuple of tensors matching the arity and shapes of <code>initial_state</code>.</li>
+</ul>

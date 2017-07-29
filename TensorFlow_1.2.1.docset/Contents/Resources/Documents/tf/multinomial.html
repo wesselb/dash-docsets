@@ -1,0 +1,27 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.multinomial" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.multinomial" class="dashAnchor"></a><h1 id="tf.multinomial">tf.multinomial</h1>
+<h3 id="tf.multinomial-1"><code>tf.multinomial</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">multinomial(
+    logits,
+    num_samples,
+    seed<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/random_ops.py"><code>tensorflow/python/ops/random_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/constant_op.md#Random_Tensors">Constants, Sequences, and Random Values &gt; Random Tensors</a></p>
+<p>Draws samples from a multinomial distribution.</p>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># samples has shape [1, 5], where each value is either 0 or 1 with equal</span>
+<span class="co"># probability.</span>
+samples <span class="op">=</span> tf.multinomial(tf.log([[<span class="dv">10</span>., <span class="dv">10</span>.]]), <span class="dv">5</span>)</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>logits</code></b>: 2-D Tensor with shape <code>[batch_size, num_classes]</code>. Each slice <code>[i, :]</code> represents the log-odds for all classes.</li>
+<li><b><code>num_samples</code></b>: 0-D. Number of independent samples to draw for each row slice.</li>
+<li><b><code>seed</code></b>: A Python integer. Used to create a random seed for the distribution. See <a href="../tf/set_random_seed.html"><code>tf.set_random_seed</code></a> for behavior.</li>
+<li><b><code>name</code></b>: Optional name for the operation.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The drawn samples of shape <code>[batch_size, num_samples]</code>.</p>

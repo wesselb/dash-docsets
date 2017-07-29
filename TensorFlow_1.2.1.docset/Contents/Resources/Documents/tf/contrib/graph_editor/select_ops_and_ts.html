@@ -1,0 +1,21 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.graph_editor.select_ops_and_ts" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.graph_editor.select_ops_and_ts" class="dashAnchor"></a><h1 id="tf.contrib.graph_editor.select_ops_and_ts">tf.contrib.graph_editor.select_ops_and_ts</h1>
+<h3 id="tf.contrib.graph_editor.select_ops_and_ts-1"><code>tf.contrib.graph_editor.select_ops_and_ts</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">select_ops_and_ts(
+    <span class="op">*</span>args,
+    <span class="op">**</span>kwargs
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/graph_editor/select.py"><code>tensorflow/contrib/graph_editor/select.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.graph_editor.md#Module_select">Graph Editor (contrib) &gt; Module: select</a></p>
+<p>Helper to select operations and tensors.</p>
+<h4 id="args">Args:</h4>
+<p>*args: list of 1) regular expressions (compiled or not) or 2) (array of) <code>tf.Operation</code> 3) (array of) tf.Tensor. Regular expressions matching tensors must start with the comment <code>&quot;(?#ts)&quot;</code>, for instance: <code>&quot;(?#ts)^foo/.*&quot;</code>. **kwargs: 'graph': <code>tf.Graph</code> in which to perform the regex query.This is required when using regex. 'positive_filter': an elem if selected only if <code>positive_filter(elem)</code> is <code>True</code>. This is optional.</p>
+<h4 id="returns">Returns:</h4>
+<p>A tuple <code>(ops, ts)</code> where: <code>ops</code> is a list of <code>tf.Operation</code>, and <code>ts</code> is a list of <code>tf.Tensor</code></p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: if the optional keyword argument graph is not a <code>tf.Graph</code> or if an argument in args is not an (array of) <code>tf.Tensor</code> or an (array of) <code>tf.Operation</code> or a string or a regular expression.</li>
+<li><b><code>ValueError</code></b>: if one of the keyword arguments is unexpected or if a regular expression is used without passing a graph as a keyword argument.</li>
+</ul>

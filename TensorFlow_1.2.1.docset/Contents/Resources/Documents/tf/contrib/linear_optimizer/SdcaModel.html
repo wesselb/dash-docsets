@@ -1,0 +1,147 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.linear_optimizer.SdcaModel" /> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="approximate_duality_gap"/> <meta itemprop="property" content="minimize"/> <meta itemprop="property" content="predictions"/> <meta itemprop="property" content="regularized_loss"/> <meta itemprop="property" content="unregularized_loss"/> <meta itemprop="property" content="update_weights"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.linear_optimizer.SdcaModel" class="dashAnchor"></a><h1 id="tf.contrib.linear_optimizer.sdcamodel">tf.contrib.linear_optimizer.SdcaModel</h1>
+<h3 id="class-tf.contrib.linear_optimizer.sdcamodel"><code>class tf.contrib.linear_optimizer.SdcaModel</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/linear_optimizer/python/ops/sdca_ops.py"><code>tensorflow/contrib/linear_optimizer/python/ops/sdca_ops.py</code></a>.</p>
+<p>Stochastic dual coordinate ascent solver for linear models.</p>
+<p>This class currently only supports a single machine (multi-threaded) implementation. We expect the weights and duals to fit in a single machine.</p>
+<p>Loss functions supported:</p>
+<ul>
+<li>Binary logistic loss</li>
+<li>Squared loss</li>
+<li>Hinge loss</li>
+<li>Smooth hinge loss</li>
+</ul>
+<p>This class defines an optimizer API to train a linear model.</p>
+<h3 id="usage">Usage</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Create a solver with the desired parameters.</span>
+lr <span class="op">=</span> tf.contrib.linear_optimizer.SdcaModel(examples, variables, options)
+min_op <span class="op">=</span> lr.minimize()
+opt_op <span class="op">=</span> lr.update_weights(min_op)
+
+predictions <span class="op">=</span> lr.predictions(examples)
+<span class="co"># Primal loss + L1 loss + L2 loss.</span>
+regularized_loss <span class="op">=</span> lr.regularized_loss(examples)
+<span class="co"># Primal loss only</span>
+unregularized_loss <span class="op">=</span> lr.unregularized_loss(examples)
+
+examples: {
+  sparse_features: <span class="bu">list</span> of SparseFeatureColumn.
+  dense_features: <span class="bu">list</span> of dense tensors of <span class="bu">type</span> float32.
+  example_labels: a tensor of <span class="bu">type</span> float32 <span class="kw">and</span> shape [Num examples]
+  example_weights: a tensor of <span class="bu">type</span> float32 <span class="kw">and</span> shape [Num examples]
+  example_ids: a tensor of <span class="bu">type</span> string <span class="kw">and</span> shape [Num examples]
+}
+variables: {
+  sparse_features_weights: <span class="bu">list</span> of tensors of shape [vocab size]
+  dense_features_weights: <span class="bu">list</span> of tensors of shape [dense_feature_dimension]
+}
+options: {
+  symmetric_l1_regularization: <span class="fl">0.0</span>
+  symmetric_l2_regularization: <span class="fl">1.0</span>
+  loss_type: <span class="st">&quot;logistic_loss&quot;</span>
+  num_loss_partitions: <span class="dv">1</span> (Optional, <span class="cf">with</span> default value of <span class="dv">1</span>. Number of
+  partitions of the <span class="kw">global</span> loss function, <span class="dv">1</span> means single machine solver,
+  <span class="kw">and</span> <span class="op">&gt;</span><span class="dv">1</span> when we have more than one optimizer working concurrently.)
+  num_table_shards: <span class="dv">1</span> (Optional, <span class="cf">with</span> default value of <span class="dv">1</span>. Number of shards
+  of the internal state table, typically <span class="bu">set</span> to match the number of
+  parameter servers <span class="cf">for</span> large data sets.
+}</code></pre></div>
+<p>In the training program you will just have to run the returned Op from minimize().</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Execute opt_op and train for num_steps.</span>
+<span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(num_steps):
+  opt_op.run()
+
+<span class="co"># You can also check for convergence by calling</span>
+lr.approximate_duality_gap()</code></pre></div>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    examples,
+    variables,
+    options
+)</code></pre></div>
+<p>Create a new sdca optimizer.</p>
+<h3 id="approximate_duality_gap">
+<code>approximate_duality_gap</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">approximate_duality_gap()</code></pre></div>
+<p>Add operations to compute the approximate duality gap.</p>
+<h4 id="returns">Returns:</h4>
+<p>An Operation that computes the approximate duality gap over all examples.</p>
+<h3 id="minimize">
+<code>minimize</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">minimize(
+    global_step<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Add operations to train a linear model by minimizing the loss function.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>global_step</code></b>: Optional <code>Variable</code> to increment by one after the variables have been updated.</li>
+<li><b><code>name</code></b>: Optional name for the returned operation.</li>
+</ul>
+<h4 id="returns-1">Returns:</h4>
+<p>An Operation that updates the variables passed in the constructor.</p>
+<h3 id="predictions">
+<code>predictions</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">predictions(examples)</code></pre></div>
+<p>Add operations to compute predictions by the model.</p>
+<p>If logistic_loss is being used, predicted probabilities are returned. Otherwise, (raw) linear predictions (w*x) are returned.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>examples</code></b>: Examples to compute predictions on.</li>
+</ul>
+<h4 id="returns-2">Returns:</h4>
+<p>An Operation that computes the predictions for examples.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if examples are not well defined.</li>
+</ul>
+<h3 id="regularized_loss">
+<code>regularized_loss</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">regularized_loss(examples)</code></pre></div>
+<p>Add operations to compute the loss with regularization loss included.</p>
+<h4 id="args-2">Args:</h4>
+<ul>
+<li><b><code>examples</code></b>: Examples to compute loss on.</li>
+</ul>
+<h4 id="returns-3">Returns:</h4>
+<p>An Operation that computes mean (regularized) loss for given set of examples.</p>
+<h4 id="raises-1">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if examples are not well defined.</li>
+</ul>
+<h3 id="unregularized_loss">
+<code>unregularized_loss</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">unregularized_loss(examples)</code></pre></div>
+<p>Add operations to compute the loss (without the regularization loss).</p>
+<h4 id="args-3">Args:</h4>
+<ul>
+<li><b><code>examples</code></b>: Examples to compute unregularized loss on.</li>
+</ul>
+<h4 id="returns-4">Returns:</h4>
+<p>An Operation that computes mean (unregularized) loss for given set of examples.</p>
+<h4 id="raises-2">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if examples are not well defined.</li>
+</ul>
+<h3 id="update_weights">
+<code>update_weights</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">update_weights(train_op)</code></pre></div>
+<p>Updates the model weights.</p>
+<p>This function must be called on at least one worker after <code>minimize</code>. In distributed training this call can be omitted on non-chief workers to speed up training.</p>
+<h4 id="args-4">Args:</h4>
+<ul>
+<li><b><code>train_op</code></b>: The operation returned by the <code>minimize</code> call.</li>
+</ul>
+<h4 id="returns-5">Returns:</h4>
+<p>An Operation that updates the model weights.</p>

@@ -1,0 +1,20 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.layers.summarize_tensor" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.layers.summarize_tensor" class="dashAnchor"></a><h1 id="tf.contrib.layers.summarize_tensor">tf.contrib.layers.summarize_tensor</h1>
+<h3 id="tf.contrib.layers.summarize_tensor-1"><code>tf.contrib.layers.summarize_tensor</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">summarize_tensor(
+    tensor,
+    tag<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/layers/python/layers/summaries.py"><code>tensorflow/contrib/layers/python/layers/summaries.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.layers.md#Summaries">Layers (contrib) &gt; Summaries</a></p>
+<p>Summarize a tensor using a suitable summary type.</p>
+<p>This function adds a summary op for <code>tensor</code>. The type of summary depends on the shape of <code>tensor</code>. For scalars, a <code>scalar_summary</code> is created, for all other tensors, <code>histogram_summary</code> is used.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>tensor</code></b>: The tensor to summarize</li>
+<li><b><code>tag</code></b>: The tag to use, if None then use tensor's op's name.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The summary op created or None for string tensors.</p>

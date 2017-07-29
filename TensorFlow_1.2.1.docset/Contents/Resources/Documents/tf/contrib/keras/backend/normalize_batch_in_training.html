@@ -1,0 +1,23 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.backend.normalize_batch_in_training" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.keras.backend.normalize_batch_in_training" class="dashAnchor"></a><h1 id="tf.contrib.keras.backend.normalize_batch_in_training">tf.contrib.keras.backend.normalize_batch_in_training</h1>
+<h3 id="tf.contrib.keras.backend.normalize_batch_in_training-1"><code>tf.contrib.keras.backend.normalize_batch_in_training</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">normalize_batch_in_training(
+    x,
+    gamma,
+    beta,
+    reduction_axes,
+    epsilon<span class="op">=</span><span class="fl">0.001</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/backend.py"><code>tensorflow/contrib/keras/python/keras/backend.py</code></a>.</p>
+<p>Computes mean and std for batch then apply batch_normalization on batch.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>x: Input tensor or variable.
+gamma: Tensor by which to scale the input.
+beta: Tensor with which to center the input.
+reduction_axes: iterable of integers,
+    axes over which to normalize.
+epsilon: Fuzz factor.</code></pre>
+<h4 id="returns">Returns:</h4>
+<pre><code>A tuple length of 3, `(normalized_tensor, mean, variance)`.</code></pre>

@@ -1,0 +1,37 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.matrix_diag" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.matrix_diag" class="dashAnchor"></a><h1 id="tf.matrix_diag">tf.matrix_diag</h1>
+<h3 id="tf.matrix_diag-1"><code>tf.matrix_diag</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">matrix_diag(
+    diagonal,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_array_ops.py</code>.</p>
+<p>See the guide: <a href="../../../api_guides/python/math_ops.md#Matrix_Math_Functions">Math &gt; Matrix Math Functions</a></p>
+<p>Returns a batched diagonal tensor with a given batched diagonal values.</p>
+<p>Given a <code>diagonal</code>, this operation returns a tensor with the <code>diagonal</code> and everything else padded with zeros. The diagonal is computed as follows:</p>
+<p>Assume <code>diagonal</code> has <code>k</code> dimensions <code>[I, J, K, ..., N]</code>, then the output is a tensor of rank <code>k+1</code> with dimensions [I, J, K, ..., N, N]` where:</p>
+<p><code>output[i, j, k, ..., m, n] = 1{m=n} * diagonal[i, j, k, ..., n]</code>.</p>
+<p>For example:</p>
+<pre><code># &#39;diagonal&#39; is [[1, 2, 3, 4], [5, 6, 7, 8]]
+
+and diagonal.shape = (2, 4)
+
+tf.matrix_diag(diagonal) ==&gt; [[[1, 0, 0, 0]
+                                     [0, 2, 0, 0]
+                                     [0, 0, 3, 0]
+                                     [0, 0, 0, 4]],
+                                    [[5, 0, 0, 0]
+                                     [0, 6, 0, 0]
+                                     [0, 0, 7, 0]
+                                     [0, 0, 0, 8]]]
+
+which has shape (2, 4, 4)</code></pre>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>diagonal</code></b>: A <code>Tensor</code>. Rank <code>k</code>, where <code>k &gt;= 1</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>diagonal</code>. Rank <code>k+1</code>, with <code>output.shape = diagonal.shape + [diagonal.shape[-1]]</code>.</p>

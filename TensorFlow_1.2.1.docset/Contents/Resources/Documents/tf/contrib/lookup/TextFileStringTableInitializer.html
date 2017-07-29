@@ -1,0 +1,63 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.lookup.TextFileStringTableInitializer" /> <meta itemprop="property" content="key_dtype"/> <meta itemprop="property" content="value_dtype"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="initialize"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.lookup.TextFileStringTableInitializer" class="dashAnchor"></a><h1 id="tf.contrib.lookup.textfilestringtableinitializer">tf.contrib.lookup.TextFileStringTableInitializer</h1>
+<h3 id="class-tf.contrib.lookup.textfilestringtableinitializer"><code>class tf.contrib.lookup.TextFileStringTableInitializer</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/lookup/lookup_ops.py"><code>tensorflow/contrib/lookup/lookup_ops.py</code></a>.</p>
+<p>Table initializer for <code>int64</code> IDs to string tables from a text file.</p>
+<h2 id="properties">Properties</h2>
+<h3 id="key_dtype">
+<code>key_dtype</code>
+</h3>
+<p>The expected table key dtype.</p>
+<h3 id="value_dtype">
+<code>value_dtype</code>
+</h3>
+<p>The expected table value dtype.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    filename,
+    key_column_index<span class="op">=</span>TextFileIndex.LINE_NUMBER,
+    value_column_index<span class="op">=</span>TextFileIndex.WHOLE_LINE,
+    vocab_size<span class="op">=</span><span class="va">None</span>,
+    delimiter<span class="op">=</span><span class="st">&#39;</span><span class="ch">\t</span><span class="st">&#39;</span>,
+    name<span class="op">=</span><span class="st">&#39;text_file_string_table_init&#39;</span>
+)</code></pre></div>
+<p>Constructs an initializer for an id-to-string table from a text file.</p>
+<p>It populates a table that its key and value types are int64 and string, respectively. It generates one key-value pair per line. The content of the key and value are specified by <code>key_column_index</code> and <code>value_column_index</code>.</p>
+<ul>
+<li>TextFileIndex.LINE_NUMBER means use the line number starting from zero, expects data type int64.</li>
+<li>TextFileIndex.WHOLE_LINE means use the whole line content, expects data type string.</li>
+<li>A value &gt;=0 means use the index (starting at zero) of the split line based on <code>delimiter</code>.</li>
+</ul>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>filename</code></b>: The filename of the text file to be used for initialization. The path must be accessible from wherever the graph is initialized (eg. trainer or eval workers). The filename may be a scalar <code>Tensor</code>.</li>
+<li><b><code>key_column_index</code></b>: The column index from the text file to get the keys from. The default is 0 that represents the whole line content.</li>
+<li><b><code>value_column_index</code></b>: The column index from the text file to get the values from. The default is to use the line number, starting from zero.</li>
+<li><b><code>vocab_size</code></b>: The number of elements in the file, if known.</li>
+<li><b><code>delimiter</code></b>: The delimiter to separate fields in a line.</li>
+<li><b><code>name</code></b>: Optional name for the op.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: when the filename is empty, or when the table key and value data types do not match the expected data types.</li>
+</ul>
+<h3 id="initialize">
+<code>initialize</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">initialize(table)</code></pre></div>
+<p>Initializes the table from a text file.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>table</code></b>: The table to be initialized.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The operation that initializes the table.</p>
+<h4 id="raises-1">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: when the keys and values data types do not match the table key and value data types.</li>
+</ul>

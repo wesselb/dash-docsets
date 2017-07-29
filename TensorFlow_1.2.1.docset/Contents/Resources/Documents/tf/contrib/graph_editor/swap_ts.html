@@ -1,0 +1,29 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.graph_editor.swap_ts" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.graph_editor.swap_ts" class="dashAnchor"></a><h1 id="tf.contrib.graph_editor.swap_ts">tf.contrib.graph_editor.swap_ts</h1>
+<h3 id="tf.contrib.graph_editor.swap_ts-1"><code>tf.contrib.graph_editor.swap_ts</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">swap_ts(
+    ts0,
+    ts1,
+    can_modify<span class="op">=</span><span class="va">None</span>,
+    cannot_modify<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/graph_editor/reroute.py"><code>tensorflow/contrib/graph_editor/reroute.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.graph_editor.md#Module_reroute">Graph Editor (contrib) &gt; Module: reroute</a></p>
+<p>For each tensor's pair, swap the end of (t0,t1).</p>
+<p>B0 B1 B0 B1 | | =&gt; X A0 A1 A0 A1</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>ts0</code></b>: an object convertible to a list of <code>tf.Tensor</code>.</li>
+<li><b><code>ts1</code></b>: an object convertible to a list of <code>tf.Tensor</code>.</li>
+<li><b><code>can_modify</code></b>: iterable of operations which can be modified. Any operation outside within_ops will be left untouched by this function.</li>
+<li><b><code>cannot_modify</code></b>: iterable of operations which cannot be modified. Any operation within cannot_modify will be left untouched by this function.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The number of individual modifications made by the function.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: if ts0 or ts1 cannot be converted to a list of tf.Tensor.</li>
+<li><b><code>TypeError</code></b>: if can_modify or cannot_modify is not None and cannot be converted to a list of tf.Operation.</li>
+</ul>

@@ -1,0 +1,44 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.rnn.LSTMBlockWrapper" /> <meta itemprop="property" content="num_units"/> <meta itemprop="property" content="__call__"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.rnn.LSTMBlockWrapper" class="dashAnchor"></a><h1 id="tf.contrib.rnn.lstmblockwrapper">tf.contrib.rnn.LSTMBlockWrapper</h1>
+<h3 id="class-tf.contrib.rnn.lstmblockwrapper"><code>class tf.contrib.rnn.LSTMBlockWrapper</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/rnn/python/ops/lstm_ops.py"><code>tensorflow/contrib/rnn/python/ops/lstm_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.rnn.md#Core_RNN_Cell_wrappers_RNNCells_that_wrap_other_RNNCells_">RNN and Cells (contrib) &gt; Core RNN Cell wrappers (RNNCells that wrap other RNNCells)</a></p>
+<p>This is a helper class that provides housekeeping for LSTM cells.</p>
+<p>This may be useful for alternative LSTM and similar type of cells. The subclasses must implement <code>_call_cell</code> method and <code>num_units</code> property.</p>
+<h2 id="properties">Properties</h2>
+<h3 id="num_units">
+<code>num_units</code>
+</h3>
+<p>Number of units in this cell (output dimension).</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__call__">
+<code><strong>call</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__call__</span>(
+    inputs,
+    initial_state<span class="op">=</span><span class="va">None</span>,
+    dtype<span class="op">=</span><span class="va">None</span>,
+    sequence_length<span class="op">=</span><span class="va">None</span>,
+    scope<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Run this LSTM on inputs, starting from the given state.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>inputs</code></b>: <code>3-D</code> tensor with shape <code>[time_len, batch_size, input_size]</code> or a list of <code>time_len</code> tensors of shape <code>[batch_size, input_size]</code>.</li>
+<li><b><code>initial_state</code></b>: a tuple <code>(initial_cell_state, initial_output)</code> with tensors of shape <code>[batch_size, self._num_units]</code>. If this is not provided, the cell is expected to create a zero initial state of type <code>dtype</code>.</li>
+<li><b><code>dtype</code></b>: The data type for the initial state and expected output. Required if <code>initial_state</code> is not provided or RNN state has a heterogeneous dtype.</li>
+<li><b><code>sequence_length</code></b>: Specifies the length of each sequence in inputs. An <code>int32</code> or <code>int64</code> vector (tensor) size <code>[batch_size]</code>, values in <code>[0, time_len).</code> Defaults to <code>time_len</code> for each element.</li>
+<li><b><code>scope</code></b>: <code>VariableScope</code> for the created subgraph; defaults to class name.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A pair containing:</p>
+<ul>
+<li>Output: A <code>3-D</code> tensor of shape <code>[time_len, batch_size, output_size]</code> or a list of time_len tensors of shape <code>[batch_size, output_size]</code>, to match the type of the <code>inputs</code>.</li>
+<li>Final state: a tuple <code>(cell_state, output)</code> matching <code>initial_state</code>.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: in case of shape mismatches</li>
+</ul>

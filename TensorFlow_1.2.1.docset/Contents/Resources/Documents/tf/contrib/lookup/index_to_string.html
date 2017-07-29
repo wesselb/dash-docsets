@@ -1,0 +1,35 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.lookup.index_to_string" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.lookup.index_to_string" class="dashAnchor"></a><h1 id="tf.contrib.lookup.index_to_string">tf.contrib.lookup.index_to_string</h1>
+<h3 id="tf.contrib.lookup.index_to_string-1"><code>tf.contrib.lookup.index_to_string</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">index_to_string(
+    tensor,
+    mapping,
+    default_value<span class="op">=</span><span class="st">&#39;UNK&#39;</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/lookup/lookup_ops.py"><code>tensorflow/contrib/lookup/lookup_ops.py</code></a>.</p>
+<p>Maps <code>tensor</code> of indices into string values based on <code>mapping</code>. (deprecated)</p>
+<p>THIS FUNCTION IS DEPRECATED. It will be removed after 2017-01-07. Instructions for updating: This op will be removed after the deprecation date. Please switch to index_to_string_table_from_tensor and call the lookup method of the returned table.</p>
+<p>This operation converts <code>int64</code> indices into string values. The mapping is initialized from a string <code>mapping</code> tensor where each element is a value and the corresponding index within the tensor is the key.</p>
+<p>Any input which does not have a corresponding index in 'mapping' (an out-of-vocabulary entry) is assigned the <code>default_value</code></p>
+<p>The underlying table must be initialized by calling <code>tf.tables_initializer.run()</code> once.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">mapping_string <span class="op">=</span> t.constant([<span class="st">&quot;emerson&quot;</span>, <span class="st">&quot;lake&quot;</span>, <span class="st">&quot;palmer&quot;</span>)
+indices <span class="op">=</span> tf.constant([<span class="dv">1</span>, <span class="dv">5</span>], tf.int64)
+values <span class="op">=</span> tf.contrib.lookup.index_to_string(
+    indices, mapping<span class="op">=</span>mapping_string, default_value<span class="op">=</span><span class="st">&quot;UNKNOWN&quot;</span>)
+...
+tf.tables_initializer().run()
+
+values.<span class="bu">eval</span>() <span class="op">==&gt;</span> [<span class="st">&quot;lake&quot;</span>, <span class="st">&quot;UNKNOWN&quot;</span>]</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>tensor</code></b>: A <code>int64</code> <code>Tensor</code> with the indices to map to strings.</li>
+<li><b><code>mapping</code></b>: A 1-D string <code>Tensor</code> that specifies the strings to map from indices.</li>
+<li><b><code>default_value</code></b>: The string value to use for out-of-vocabulary indices.</li>
+<li><b><code>name</code></b>: A name for this op (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The strings values associated to the indices. The resultant dense feature value tensor has the same shape as the corresponding <code>indices</code>.</p>

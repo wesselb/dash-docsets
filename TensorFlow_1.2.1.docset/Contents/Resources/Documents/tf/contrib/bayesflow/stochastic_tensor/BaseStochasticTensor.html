@@ -1,0 +1,39 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.bayesflow.stochastic_tensor.BaseStochasticTensor" /> <meta itemprop="property" content="dtype"/> <meta itemprop="property" content="graph"/> <meta itemprop="property" content="name"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="loss"/> <meta itemprop="property" content="value"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.bayesflow.stochastic_tensor.BaseStochasticTensor" class="dashAnchor"></a><h1 id="tf.contrib.bayesflow.stochastic_tensor.basestochastictensor">tf.contrib.bayesflow.stochastic_tensor.BaseStochasticTensor</h1>
+<h3 id="class-tf.contrib.bayesflow.stochastic_tensor.basestochastictensor"><code>class tf.contrib.bayesflow.stochastic_tensor.BaseStochasticTensor</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/bayesflow/python/ops/stochastic_tensor_impl.py"><code>tensorflow/contrib/bayesflow/python/ops/stochastic_tensor_impl.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../../api_guides/python/contrib.bayesflow.stochastic_tensor.md#Stochastic_Tensor_Classes">BayesFlow Stochastic Tensors (contrib) &gt; Stochastic Tensor Classes</a></p>
+<p>Base Class for Tensor-like objects that emit stochastic values.</p>
+<h2 id="properties">Properties</h2>
+<h3 id="dtype">
+<code>dtype</code>
+</h3>
+<h3 id="graph">
+<code>graph</code>
+</h3>
+<h3 id="name">
+<code>name</code>
+</h3>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>()</code></pre></div>
+<h3 id="loss">
+<code>loss</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">loss(sample_loss)</code></pre></div>
+<p>Returns the term to add to the surrogate loss.</p>
+<p>This method is called by <code>surrogate_loss</code>. The input <code>sample_loss</code> should have already had <code>stop_gradient</code> applied to it. This is because the surrogate_loss usually provides a Monte Carlo sample term of the form <code>differentiable_surrogate * sample_loss</code> where <code>sample_loss</code> is considered constant with respect to the input for purposes of the gradient.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>sample_loss</code></b>: <code>Tensor</code>, sample loss downstream of this <code>StochasticTensor</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Either <code>None</code> or a <code>Tensor</code>.</p>
+<h3 id="value">
+<code>value</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">value(name<span class="op">=</span><span class="va">None</span>)</code></pre></div>

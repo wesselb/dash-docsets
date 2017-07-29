@@ -1,0 +1,28 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.training.weighted_resample" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.training.weighted_resample" class="dashAnchor"></a><h1 id="tf.contrib.training.weighted_resample">tf.contrib.training.weighted_resample</h1>
+<h3 id="tf.contrib.training.weighted_resample-1"><code>tf.contrib.training.weighted_resample</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">weighted_resample(
+    inputs,
+    weights,
+    overall_rate,
+    scope<span class="op">=</span><span class="va">None</span>,
+    mean_decay<span class="op">=</span><span class="fl">0.999</span>,
+    seed<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/training/python/training/resample.py"><code>tensorflow/contrib/training/python/training/resample.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.training.md#Online_data_resampling">Training (contrib) &gt; Online data resampling</a></p>
+<p>Performs an approximate weighted resampling of <code>inputs</code>.</p>
+<p>This method chooses elements from <code>inputs</code> where each item's rate of selection is proportional to its value in <code>weights</code>, and the average rate of selection across all inputs (and many invocations!) is <code>overall_rate</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>inputs</code></b>: A list of tensors whose first dimension is <code>batch_size</code>.</li>
+<li><b><code>weights</code></b>: A <code>[batch_size]</code>-shaped tensor with each batch member's weight.</li>
+<li><b><code>overall_rate</code></b>: Desired overall rate of resampling.</li>
+<li><b><code>scope</code></b>: Scope to use for the op.</li>
+<li><b><code>mean_decay</code></b>: How quickly to decay the running estimate of the mean weight.</li>
+<li><b><code>seed</code></b>: Random seed.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A list of tensors exactly like <code>inputs</code>, but with an unknown (and possibly zero) first dimension. A tensor containing the effective resampling rate used for each output.</p>

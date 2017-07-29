@@ -1,0 +1,10 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.learn.NotFittedError" /></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.learn.NotFittedError" class="dashAnchor"></a><h1 id="tf.contrib.learn.notfittederror">tf.contrib.learn.NotFittedError</h1>
+<h3 id="class-tf.contrib.learn.notfittederror"><code>class tf.contrib.learn.NotFittedError</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/learn/python/learn/estimators/_sklearn.py"><code>tensorflow/contrib/learn/python/learn/estimators/_sklearn.py</code></a>.</p>
+<p>Exception class to raise if estimator is used before fitting.</p>
+<p>This class inherits from both ValueError and AttributeError to help with exception handling and backward compatibility.</p>
+<p>Examples: &gt;&gt;&gt; from sklearn.svm import LinearSVC &gt;&gt;&gt; from sklearn.exceptions import NotFittedError &gt;&gt;&gt; try: ... LinearSVC().predict([[1, 2], [2, 3], [3, 4]]) ... except NotFittedError as e: ... print(repr(e)) ... # doctest: +NORMALIZE_WHITESPACE +ELLIPSIS NotFittedError('This LinearSVC instance is not fitted yet',)</p>
+<p>Copied from https://github.com/scikit-learn/scikit-learn/master/sklearn/exceptions.py</p>

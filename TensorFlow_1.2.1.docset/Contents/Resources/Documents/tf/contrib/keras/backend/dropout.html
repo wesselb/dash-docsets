@@ -1,0 +1,22 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.backend.dropout" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.keras.backend.dropout" class="dashAnchor"></a><h1 id="tf.contrib.keras.backend.dropout">tf.contrib.keras.backend.dropout</h1>
+<h3 id="tf.contrib.keras.backend.dropout-1"><code>tf.contrib.keras.backend.dropout</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">dropout(
+    x,
+    level,
+    noise_shape<span class="op">=</span><span class="va">None</span>,
+    seed<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/backend.py"><code>tensorflow/contrib/keras/python/keras/backend.py</code></a>.</p>
+<p>Sets entries in <code>x</code> to zero at random, while scaling the entire tensor.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>x: tensor
+level: fraction of the entries in the tensor
+    that will be set to 0.
+noise_shape: shape for randomly generated keep/drop flags,
+    must be broadcastable to the shape of `x`
+seed: random seed to ensure determinism.</code></pre>
+<h4 id="returns">Returns:</h4>
+<pre><code>A tensor.</code></pre>

@@ -1,0 +1,26 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.convert_to_tensor_or_sparse_tensor" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.convert_to_tensor_or_sparse_tensor" class="dashAnchor"></a><h1 id="tf.convert_to_tensor_or_sparse_tensor">tf.convert_to_tensor_or_sparse_tensor</h1>
+<a name="//apple_ref/cpp/Function/tf.contrib.framework.convert_to_tensor_or_sparse_tensor" class="dashAnchor"></a><h3 id="tf.contrib.framework.convert_to_tensor_or_sparse_tensor"><code>tf.contrib.framework.convert_to_tensor_or_sparse_tensor</code></h3>
+<h3 id="tf.convert_to_tensor_or_sparse_tensor-1"><code>tf.convert_to_tensor_or_sparse_tensor</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">convert_to_tensor_or_sparse_tensor(
+    value,
+    dtype<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/framework/sparse_tensor.py"><code>tensorflow/python/framework/sparse_tensor.py</code></a>.</p>
+<p>See the guides: <a href="../../../api_guides/python/framework.md#Utility_functions">Building Graphs &gt; Utility functions</a>, <a href="../../../api_guides/python/contrib.framework.html">Framework (contrib)</a></p>
+<p>Converts value to a <code>SparseTensor</code> or <code>Tensor</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>value</code></b>: A <code>SparseTensor</code>, <code>SparseTensorValue</code>, or an object whose type has a registered <code>Tensor</code> conversion function.</li>
+<li><b><code>dtype</code></b>: Optional element type for the returned tensor. If missing, the type is inferred from the type of <code>value</code>.</li>
+<li><b><code>name</code></b>: Optional name to use if a new <code>Tensor</code> is created.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>SparseTensor</code> or <code>Tensor</code> based on <code>value</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>RuntimeError</code></b>: If result type is incompatible with <code>dtype</code>.</li>
+</ul>

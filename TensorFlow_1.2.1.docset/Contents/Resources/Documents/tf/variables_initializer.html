@@ -1,0 +1,22 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.variables_initializer" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.variables_initializer" class="dashAnchor"></a><h1 id="tf.variables_initializer">tf.variables_initializer</h1>
+<h3 id="tf.variables_initializer-1"><code>tf.variables_initializer</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">variables_initializer(
+    var_list,
+    name<span class="op">=</span><span class="st">&#39;init&#39;</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/variables.py"><code>tensorflow/python/ops/variables.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/state_ops.md#Variable_helper_functions">Variables &gt; Variable helper functions</a></p>
+<p>Returns an Op that initializes a list of variables.</p>
+<p>After you launch the graph in a session, you can run the returned Op to initialize all the variables in <code>var_list</code>. This Op runs all the initializers of the variables in <code>var_list</code> in parallel.</p>
+<p>Calling <code>initialize_variables()</code> is equivalent to passing the list of initializers to <code>Group()</code>.</p>
+<p>If <code>var_list</code> is empty, however, the function still returns an Op that can be run. That Op just has no effect.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>var_list</code></b>: List of <code>Variable</code> objects to initialize.</li>
+<li><b><code>name</code></b>: Optional name for the returned operation.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>An Op that run the initializers of all the specified variables.</p>

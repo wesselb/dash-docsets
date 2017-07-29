@@ -1,0 +1,23 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.losses.get_total_loss" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.losses.get_total_loss" class="dashAnchor"></a><h1 id="tf.losses.get_total_loss">tf.losses.get_total_loss</h1>
+<h3 id="tf.losses.get_total_loss-1"><code>tf.losses.get_total_loss</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_total_loss(
+    add_regularization_losses<span class="op">=</span><span class="va">True</span>,
+    name<span class="op">=</span><span class="st">&#39;total_loss&#39;</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/losses/util.py"><code>tensorflow/python/ops/losses/util.py</code></a>.</p>
+<p>Returns a tensor whose value represents the total loss.</p>
+<p>In particular, this adds any losses you have added with <code>tf.add_loss()</code> to any regularization losses that have been added by regularization parameters on layers constructors e.g. <code>tf.layers</code>. Be very sure to use this if you are constructing a loss_op manually. Otherwise regularization arguments on <code>tf.layers</code> methods will not function.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>add_regularization_losses</code></b>: A boolean indicating whether or not to use the regularization losses in the sum.</li>
+<li><b><code>name</code></b>: The name of the returned tensor.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> whose value represents the total loss.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>losses</code> is not iterable.</li>
+</ul>

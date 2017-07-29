@@ -1,0 +1,50 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.opt.ExternalOptimizerInterface" /> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="minimize"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.opt.ExternalOptimizerInterface" class="dashAnchor"></a><h1 id="tf.contrib.opt.externaloptimizerinterface">tf.contrib.opt.ExternalOptimizerInterface</h1>
+<h3 id="class-tf.contrib.opt.externaloptimizerinterface"><code>class tf.contrib.opt.ExternalOptimizerInterface</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/opt/python/training/external_optimizer.py"><code>tensorflow/contrib/opt/python/training/external_optimizer.py</code></a>.</p>
+<p>Base class for interfaces with external optimization algorithms.</p>
+<p>Subclass this and implement <code>_minimize</code> in order to wrap a new optimization algorithm.</p>
+<p><code>ExternalOptimizerInterface</code> should not be instantiated directly; instead use e.g. <code>ScipyOptimizerInterface</code>.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    loss,
+    var_list<span class="op">=</span><span class="va">None</span>,
+    equalities<span class="op">=</span><span class="va">None</span>,
+    inequalities<span class="op">=</span><span class="va">None</span>,
+    <span class="op">**</span>optimizer_kwargs
+)</code></pre></div>
+<p>Initialize a new interface instance.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>loss</code></b>: A scalar <code>Tensor</code> to be minimized.</li>
+<li><b><code>var_list</code></b>: Optional list of <code>Variable</code> objects to update to minimize <code>loss</code>. Defaults to the list of variables collected in the graph under the key <code>GraphKeys.TRAINABLE_VARIABLES</code>.</li>
+<li><b><code>equalities</code></b>: Optional list of equality constraint scalar <code>Tensor</code>s to be held equal to zero.</li>
+<li><b><code>inequalities</code></b>: Optional list of inequality constraint scalar <code>Tensor</code>s to be kept nonnegative. **optimizer_kwargs: Other subclass-specific keyword arguments.</li>
+</ul>
+<h3 id="minimize">
+<code>minimize</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">minimize(
+    session<span class="op">=</span><span class="va">None</span>,
+    feed_dict<span class="op">=</span><span class="va">None</span>,
+    fetches<span class="op">=</span><span class="va">None</span>,
+    step_callback<span class="op">=</span><span class="va">None</span>,
+    loss_callback<span class="op">=</span><span class="va">None</span>,
+    <span class="op">**</span>run_kwargs
+)</code></pre></div>
+<p>Minimize a scalar <code>Tensor</code>.</p>
+<p>Variables subject to optimization are updated in-place at the end of optimization.</p>
+<p>Note that this method does <em>not</em> just return a minimization <code>Op</code>, unlike <code>Optimizer.minimize()</code>; instead it actually performs minimization by executing commands to control a <code>Session</code>.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>session</code></b>: A <code>Session</code> instance.</li>
+<li><b><code>feed_dict</code></b>: A feed dict to be passed to calls to <code>session.run</code>.</li>
+<li><b><code>fetches</code></b>: A list of <code>Tensor</code>s to fetch and supply to <code>loss_callback</code> as positional arguments.</li>
+<li><b><code>step_callback</code></b>: A function to be called at each optimization step; arguments are the current values of all optimization variables flattened into a single vector.</li>
+<li><b><code>loss_callback</code></b>: A function to be called every time the loss and gradients are computed, with evaluated fetches supplied as positional arguments. **run_kwargs: kwargs to pass to <code>session.run</code>.</li>
+</ul>

@@ -1,0 +1,33 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.image.decode_png" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.image.decode_png" class="dashAnchor"></a><h1 id="tf.image.decode_png">tf.image.decode_png</h1>
+<h3 id="tf.image.decode_png-1"><code>tf.image.decode_png</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">decode_png(
+    contents,
+    channels<span class="op">=</span><span class="va">None</span>,
+    dtype<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_image_ops.py</code>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/image.md#Encoding_and_Decoding">Images &gt; Encoding and Decoding</a></p>
+<p>Decode a PNG-encoded image to a uint8 or uint16 tensor.</p>
+<p>The attr <code>channels</code> indicates the desired number of color channels for the decoded image.</p>
+<p>Accepted values are:</p>
+<ul>
+<li>0: Use the number of channels in the PNG-encoded image.</li>
+<li>1: output a grayscale image.</li>
+<li>3: output an RGB image.</li>
+<li>4: output an RGBA image.</li>
+</ul>
+<p>If needed, the PNG-encoded image is transformed to match the requested number of color channels.</p>
+<p>This op also supports decoding JPEGs and non-animated GIFs since the interface is the same, though it is cleaner to use <code>tf.image.decode_image</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>contents</code></b>: A <code>Tensor</code> of type <code>string</code>. 0-D. The PNG-encoded image.</li>
+<li><b><code>channels</code></b>: An optional <code>int</code>. Defaults to <code>0</code>. Number of color channels for the decoded image.</li>
+<li><b><code>dtype</code></b>: An optional <code>tf.DType</code> from: <code>tf.uint8, tf.uint16</code>. Defaults to <code>tf.uint8</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>dtype</code>. 3-D with shape <code>[height, width, channels]</code>.</p>

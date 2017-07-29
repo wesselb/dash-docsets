@@ -1,0 +1,35 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.nn.conv1d" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.nn.conv1d" class="dashAnchor"></a><h1 id="tf.nn.conv1d">tf.nn.conv1d</h1>
+<h3 id="tf.nn.conv1d-1"><code>tf.nn.conv1d</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">conv1d(
+    value,
+    filters,
+    stride,
+    padding,
+    use_cudnn_on_gpu<span class="op">=</span><span class="va">None</span>,
+    data_format<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/nn_ops.py"><code>tensorflow/python/ops/nn_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/nn.md#Convolution">Neural Network &gt; Convolution</a></p>
+<p>Computes a 1-D convolution given 3-D input and filter tensors.</p>
+<p>Given an input tensor of shape [batch, in_width, in_channels] if data_format is &quot;NHWC&quot;, or [batch, in_channels, in_width] if data_format is &quot;NCHW&quot;, and a filter / kernel tensor of shape [filter_width, in_channels, out_channels], this op reshapes the arguments to pass them to conv2d to perform the equivalent convolution operation.</p>
+<p>Internally, this op reshapes the input tensors and invokes <code>tf.nn.conv2d</code>. For example, if <code>data_format</code> does not start with &quot;NC&quot;, a tensor of shape [batch, in_width, in_channels] is reshaped to [batch, 1, in_width, in_channels], and the filter is reshaped to [1, filter_width, in_channels, out_channels]. The result is then reshaped back to [batch, out_width, out_channels] (where out_width is a function of the stride and padding as in conv2d) and returned to the caller.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>value</code></b>: A 3D <code>Tensor</code>. Must be of type <code>float32</code> or <code>float64</code>.</li>
+<li><b><code>filters</code></b>: A 3D <code>Tensor</code>. Must have the same type as <code>input</code>.</li>
+<li><b><code>stride</code></b>: An <code>integer</code>. The number of entries by which the filter is moved right at each step.</li>
+<li><b><code>padding</code></b>: 'SAME' or 'VALID'</li>
+<li><b><code>use_cudnn_on_gpu</code></b>: An optional <code>bool</code>. Defaults to <code>True</code>.</li>
+<li><b><code>data_format</code></b>: An optional <code>string</code> from <code>&quot;NHWC&quot;, &quot;NCHW&quot;</code>. Defaults to <code>&quot;NHWC&quot;</code>, the data is stored in the order of [batch, in_width, in_channels]. The <code>&quot;NCHW&quot;</code> format stores data as [batch, in_channels, in_width].</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as input.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>data_format</code> is invalid.</li>
+</ul>

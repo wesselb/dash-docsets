@@ -1,0 +1,33 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.seq2seq.sequence_loss" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.seq2seq.sequence_loss" class="dashAnchor"></a><h1 id="tf.contrib.seq2seq.sequence_loss">tf.contrib.seq2seq.sequence_loss</h1>
+<h3 id="tf.contrib.seq2seq.sequence_loss-1"><code>tf.contrib.seq2seq.sequence_loss</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">sequence_loss(
+    logits,
+    targets,
+    weights,
+    average_across_timesteps<span class="op">=</span><span class="va">True</span>,
+    average_across_batch<span class="op">=</span><span class="va">True</span>,
+    softmax_loss_function<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/seq2seq/python/ops/loss.py"><code>tensorflow/contrib/seq2seq/python/ops/loss.py</code></a>.</p>
+<p>Weighted cross-entropy loss for a sequence of logits.</p>
+<p>Depending on the values of <code>average_across_timesteps</code> and <code>average_across_batch</code>, the return Tensor will have rank 0, 1, or 2 as these arguments reduce the cross-entropy at each target, which has shape <code>[batch_size, sequence_length]</code>, over their respective dimensions. For example, if <code>average_across_timesteps</code> is <code>True</code> and <code>average_across_batch</code> is <code>False</code>, then the return Tensor will have shape <code>[batch_size]</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>logits</code></b>: A Tensor of shape <code>[batch_size, sequence_length, num_decoder_symbols]</code> and dtype float. The logits correspond to the prediction across all classes at each timestep.</li>
+<li><b><code>targets</code></b>: A Tensor of shape <code>[batch_size, sequence_length]</code> and dtype int. The target represents the true class at each timestep.</li>
+<li><b><code>weights</code></b>: A Tensor of shape <code>[batch_size, sequence_length]</code> and dtype float. <code>weights</code> constitutes the weighting of each prediction in the sequence. When using <code>weights</code> as masking, set all valid timesteps to 1 and all padded timesteps to 0, e.g. a mask returned by <code>tf.sequence_mask</code>.</li>
+<li><b><code>average_across_timesteps</code></b>: If set, sum the cost across the sequence dimension and divide the cost by the total label weight across timesteps.</li>
+<li><b><code>average_across_batch</code></b>: If set, sum the cost across the batch dimension and divide the returned cost by the batch size.</li>
+<li><b><code>softmax_loss_function</code></b>: Function (labels, logits) -&gt; loss-batch to be used instead of the standard softmax (the default if this is None). <strong>Note that to avoid confusion, it is required for the function to accept named arguments.</strong></li>
+<li><b><code>name</code></b>: Optional name for this operation, defaults to &quot;sequence_loss&quot;.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A float Tensor of rank 0, 1, or 2 depending on the <code>average_across_timesteps</code> and <code>average_across_batch</code> arguments. By default, it has rank 0 (scalar) and is the weighted average cross-entropy (log-perplexity) per symbol.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: logits does not have 3 dimensions or targets does not have 2 dimensions or weights does not have 2 dimensions.</li>
+</ul>

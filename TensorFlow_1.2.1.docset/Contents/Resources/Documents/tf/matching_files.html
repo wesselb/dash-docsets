@@ -1,0 +1,20 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.matching_files" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.matching_files" class="dashAnchor"></a><h1 id="tf.matching_files">tf.matching_files</h1>
+<h3 id="tf.matching_files-1"><code>tf.matching_files</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">matching_files(
+    pattern,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_io_ops.py</code>.</p>
+<p>See the guide: <a href="../../../api_guides/python/io_ops.md#Dealing_with_the_filesystem">Inputs and Readers &gt; Dealing with the filesystem</a></p>
+<p>Returns the set of files matching one or more glob patterns.</p>
+<p>Note that this routine only supports wildcard characters in the basename portion of the pattern, not in the directory portion.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>pattern</code></b>: A <code>Tensor</code> of type <code>string</code>. Shell wildcard pattern(s). Scalar or vector of type string.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>string</code>. A vector of matching filenames.</p>

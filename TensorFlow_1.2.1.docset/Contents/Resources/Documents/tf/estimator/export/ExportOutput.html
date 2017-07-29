@@ -1,0 +1,19 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.estimator.export.ExportOutput" /> <meta itemprop="property" content="as_signature_def"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.estimator.export.ExportOutput" class="dashAnchor"></a><h1 id="tf.estimator.export.exportoutput">tf.estimator.export.ExportOutput</h1>
+<h3 id="class-tf.estimator.export.exportoutput"><code>class tf.estimator.export.ExportOutput</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/estimator/export/export_output.py"><code>tensorflow/python/estimator/export/export_output.py</code></a>.</p>
+<p>Represents an output of a model that can be served.</p>
+<p>These typically correspond to model heads.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="as_signature_def">
+<code>as_signature_def</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">as_signature_def(receiver_tensors)</code></pre></div>
+<p>Generate a SignatureDef proto for inclusion in a MetaGraphDef.</p>
+<p>The SignatureDef will specify outputs as described in this ExportOutput, and will use the provided receiver_tensors as inputs.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>receiver_tensors</code></b>: a <code>Tensor</code>, or a dict of string to <code>Tensor</code>, specifying input nodes that will be fed.</li>
+</ul>

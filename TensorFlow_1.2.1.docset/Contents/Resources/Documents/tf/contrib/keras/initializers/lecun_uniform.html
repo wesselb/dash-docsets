@@ -1,0 +1,14 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.initializers.lecun_uniform" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.keras.initializers.lecun_uniform" class="dashAnchor"></a><h1 id="tf.contrib.keras.initializers.lecun_uniform">tf.contrib.keras.initializers.lecun_uniform</h1>
+<h3 id="tf.contrib.keras.initializers.lecun_uniform-1"><code>tf.contrib.keras.initializers.lecun_uniform</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">lecun_uniform(seed<span class="op">=</span><span class="va">None</span>)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/initializers.py"><code>tensorflow/contrib/keras/python/keras/initializers.py</code></a>.</p>
+<p>LeCun uniform initializer.</p>
+<p>It draws samples from a uniform distribution within [-limit, limit] where <code>limit</code> is <code>sqrt(3 / fan_in)</code> where <code>fan_in</code> is the number of input units in the weight tensor.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>seed: A Python integer. Used to seed the random generator.</code></pre>
+<h4 id="returns">Returns:</h4>
+<pre><code>An initializer.</code></pre>
+<p>References: LeCun 98, Efficient Backprop, http://yann.lecun.com/exdb/publis/pdf/lecun-98b.pdf</p>

@@ -1,0 +1,30 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.train.range_input_producer" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.train.range_input_producer" class="dashAnchor"></a><h1 id="tf.train.range_input_producer">tf.train.range_input_producer</h1>
+<h3 id="tf.train.range_input_producer-1"><code>tf.train.range_input_producer</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">range_input_producer(
+    limit,
+    num_epochs<span class="op">=</span><span class="va">None</span>,
+    shuffle<span class="op">=</span><span class="va">True</span>,
+    seed<span class="op">=</span><span class="va">None</span>,
+    capacity<span class="op">=</span><span class="dv">32</span>,
+    shared_name<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/training/input.py"><code>tensorflow/python/training/input.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/io_ops.md#Input_pipeline">Inputs and Readers &gt; Input pipeline</a></p>
+<p>Produces the integers from 0 to limit-1 in a queue.</p>
+<p>Note: if <code>num_epochs</code> is not <code>None</code>, this function creates local counter <code>epochs</code>. Use <code>local_variables_initializer()</code> to initialize local variables.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>limit</code></b>: An int32 scalar tensor.</li>
+<li><b><code>num_epochs</code></b>: An integer (optional). If specified, <code>range_input_producer</code> produces each integer <code>num_epochs</code> times before generating an OutOfRange error. If not specified, <code>range_input_producer</code> can cycle through the integers an unlimited number of times.</li>
+<li><b><code>shuffle</code></b>: Boolean. If true, the integers are randomly shuffled within each epoch.</li>
+<li><b><code>seed</code></b>: An integer (optional). Seed used if shuffle == True.</li>
+<li><b><code>capacity</code></b>: An integer. Sets the queue capacity.</li>
+<li><b><code>shared_name</code></b>: (optional). If set, this queue will be shared under the given name across multiple sessions.</li>
+<li><b><code>name</code></b>: A name for the operations (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A Queue with the output integers. A <code>QueueRunner</code> for the Queue is added to the current <code>Graph</code>'s <code>QUEUE_RUNNER</code> collection.</p>

@@ -1,0 +1,41 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.scatter_nd_add" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.scatter_nd_add" class="dashAnchor"></a><h1 id="tf.scatter_nd_add">tf.scatter_nd_add</h1>
+<h3 id="tf.scatter_nd_add-1"><code>tf.scatter_nd_add</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">scatter_nd_add(
+    ref,
+    indices,
+    updates,
+    use_locking<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_state_ops.py</code>.</p>
+<p>See the guide: <a href="../../../api_guides/python/state_ops.md#Sparse_Variable_Updates">Variables &gt; Sparse Variable Updates</a></p>
+<p>Applies sparse addition between <code>updates</code> and individual values or slices</p>
+<p>within a given variable according to <code>indices</code>.</p>
+<p><code>ref</code> is a <code>Tensor</code> with rank <code>P</code> and <code>indices</code> is a <code>Tensor</code> of rank <code>Q</code>.</p>
+<p><code>indices</code> must be integer tensor, containing indices into <code>ref</code>. It must be shape <code>[d_0, ..., d_{Q-2}, K]</code> where <code>0 &lt; K &lt;= P</code>.</p>
+<p>The innermost dimension of <code>indices</code> (with length <code>K</code>) corresponds to indices into elements (if <code>K = P</code>) or slices (if <code>K &lt; P</code>) along the <code>K</code>th dimension of <code>ref</code>.</p>
+<p><code>updates</code> is <code>Tensor</code> of rank <code>Q-1+P-K</code> with shape:</p>
+<pre><code>[d_0, ..., d_{Q-2}, ref.shape[K], ..., ref.shape[P-1]].</code></pre>
+<p>For example, say we want to add 4 scattered elements to a rank-1 tensor to 8 elements. In Python, that addition would look like this:</p>
+<pre><code>ref = tf.Variable([1, 2, 3, 4, 5, 6, 7, 8])
+indices = tf.constant([[4], [3], [1], [7]])
+updates = tf.constant([9, 10, 11, 12])
+add = tf.scatter_nd_add(ref, indices, updates)
+with tf.Session() as sess:
+  print sess.run(add)</code></pre>
+<p>The resulting update to ref would look like this:</p>
+<pre><code>[1, 13, 3, 14, 14, 6, 7, 20]</code></pre>
+<p>See <a href="#scatter_nd">tf.scatter_nd</a> for more details about how to make updates to slices.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>ref</code></b>: A mutable <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int64</code>, <code>int32</code>, <code>uint8</code>, <code>uint16</code>, <code>int16</code>, <code>int8</code>, <code>complex64</code>, <code>complex128</code>, <code>qint8</code>, <code>quint8</code>, <code>qint32</code>, <code>half</code>. A mutable Tensor. Should be from a Variable node.</li>
+<li><b><code>indices</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. A Tensor. Must be one of the following types: int32, int64. A tensor of indices into ref.</li>
+<li><b><code>updates</code></b>: A <code>Tensor</code>. Must have the same type as <code>ref</code>. A Tensor. Must have the same type as ref. A tensor of updated values to add to ref.</li>
+<li><b><code>use_locking</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>. An optional bool. Defaults to True. If True, the assignment will be protected by a lock; otherwise the behavior is undefined, but may exhibit less contention.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A mutable <code>Tensor</code>. Has the same type as <code>ref</code>. Same as ref. Returned as a convenience for operations that want to use the updated values after the update is done.</p>

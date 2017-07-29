@@ -1,0 +1,23 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.python_io.tf_record_iterator" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.python_io.tf_record_iterator" class="dashAnchor"></a><h1 id="tf.python_io.tf_record_iterator">tf.python_io.tf_record_iterator</h1>
+<h3 id="tf.python_io.tf_record_iterator-1"><code>tf.python_io.tf_record_iterator</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf_record_iterator(
+    path,
+    options<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/lib/io/tf_record.py"><code>tensorflow/python/lib/io/tf_record.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/python_io.html">Data IO (Python functions)</a></p>
+<p>An iterator that read the records from a TFRecords file.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>path</code></b>: The path to the TFRecords file.</li>
+<li><b><code>options</code></b>: (optional) A TFRecordOptions object.</li>
+</ul>
+<h4 id="yields">Yields:</h4>
+<p>Strings.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>IOError</code></b>: If <code>path</code> cannot be opened for reading.</li>
+</ul>

@@ -1,0 +1,27 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.rank" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.rank" class="dashAnchor"></a><h1 id="tf.rank">tf.rank</h1>
+<h3 id="tf.rank-1"><code>tf.rank</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">rank(
+    <span class="bu">input</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/array_ops.py"><code>tensorflow/python/ops/array_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/array_ops.md#Shapes_and_Shaping">Tensor Transformations &gt; Shapes and Shaping</a></p>
+<p>Returns the rank of a tensor.</p>
+<p>This operation returns an integer representing the rank of <code>input</code>.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># &#39;t&#39; is [[[1, 1, 1], [2, 2, 2]], [[3, 3, 3], [4, 4, 4]]]</span>
+<span class="co"># shape of tensor &#39;t&#39; is [2, 2, 3]</span>
+rank(t) <span class="op">==&gt;</span> <span class="dv">3</span></code></pre></div>
+<p><strong>Note</strong>: The rank of a tensor is not the same as the rank of a matrix. The rank of a tensor is the number of indices required to uniquely select each element of the tensor. Rank is also known as &quot;order&quot;, &quot;degree&quot;, or &quot;ndims.&quot;</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code> or <code>SparseTensor</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>int32</code>.</p>
+<h4 id="numpy-compatibility">numpy compatibility</h4>
+<p>Equivalent to np.ndim</p>

@@ -1,0 +1,20 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.preprocessing.sequence.make_sampling_table" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.keras.preprocessing.sequence.make_sampling_table" class="dashAnchor"></a><h1 id="tf.contrib.keras.preprocessing.sequence.make_sampling_table">tf.contrib.keras.preprocessing.sequence.make_sampling_table</h1>
+<h3 id="tf.contrib.keras.preprocessing.sequence.make_sampling_table-1"><code>tf.contrib.keras.preprocessing.sequence.make_sampling_table</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">make_sampling_table(
+    size,
+    sampling_factor<span class="op">=</span><span class="fl">1e-05</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/preprocessing/sequence.py"><code>tensorflow/contrib/keras/python/keras/preprocessing/sequence.py</code></a>.</p>
+<p>Generates a word rank-based probabilistic sampling table.</p>
+<p>This generates an array where the ith element is the probability that a word of rank i would be sampled, according to the sampling distribution used in word2vec.</p>
+<p>The word2vec formula is: p(word) = min(1, sqrt(word.frequency/sampling_factor) / (word.frequency/sampling_factor))</p>
+<p>We assume that the word frequencies follow Zipf's law (s=1) to derive a numerical approximation of frequency(rank): frequency(rank) ~ 1/(rank * (log(rank) + gamma) + 1/2 - 1/(12*rank)) where gamma is the Euler-Mascheroni constant.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>size: int, number of possible words to sample.
+sampling_factor: the sampling factor in the word2vec formula.</code></pre>
+<h4 id="returns">Returns:</h4>
+<pre><code>A 1D Numpy array of length `size` where the ith entry
+is the probability that a word of rank i should be sampled.</code></pre>

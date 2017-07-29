@@ -1,0 +1,26 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.summary.scalar" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.summary.scalar" class="dashAnchor"></a><h1 id="tf.summary.scalar">tf.summary.scalar</h1>
+<h3 id="tf.summary.scalar-1"><code>tf.summary.scalar</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">scalar(
+    name,
+    tensor,
+    collections<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/summary/summary.py"><code>tensorflow/python/summary/summary.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/summary.md#Generation_of_Summaries">Summary Operations &gt; Generation of Summaries</a></p>
+<p>Outputs a <code>Summary</code> protocol buffer containing a single scalar value.</p>
+<p>The generated Summary has a Tensor.proto containing the input Tensor.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>name</code></b>: A name for the generated node. Will also serve as the series name in TensorBoard.</li>
+<li><b><code>tensor</code></b>: A real numeric Tensor containing a single value.</li>
+<li><b><code>collections</code></b>: Optional list of graph collections keys. The new summary op is added to these collections. Defaults to <code>[GraphKeys.SUMMARIES]</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A scalar <code>Tensor</code> of type <code>string</code>. Which contains a <code>Summary</code> protobuf.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If tensor has the wrong shape or type.</li>
+</ul>

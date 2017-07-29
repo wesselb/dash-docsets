@@ -1,0 +1,32 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.meshgrid" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.meshgrid" class="dashAnchor"></a><h1 id="tf.meshgrid">tf.meshgrid</h1>
+<h3 id="tf.meshgrid-1"><code>tf.meshgrid</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">meshgrid(
+    <span class="op">*</span>args,
+    <span class="op">**</span>kwargs
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/array_ops.py"><code>tensorflow/python/ops/array_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/array_ops.md#Shapes_and_Shaping">Tensor Transformations &gt; Shapes and Shaping</a></p>
+<p>Broadcasts parameters for evaluation on an N-D grid.</p>
+<p>Given N one-dimensional coordinate arrays <code>*args</code>, returns a list <code>outputs</code> of N-D coordinate arrays for evaluating expressions on an N-D grid.</p>
+<p>Notes:</p>
+<p><code>meshgrid</code> supports cartesian ('xy') and matrix ('ij') indexing conventions. When the <code>indexing</code> argument is set to 'xy' (the default), the broadcasting instructions for the first two dimensions are swapped.</p>
+<p>Examples:</p>
+<p>Calling <code>X, Y = meshgrid(x, y)</code> with the tensors</p>
+<pre class="prettyprint"><code>  x = [1, 2, 3]
+  y = [4, 5, 6]</code></pre>
+<p>results in</p>
+<pre class="prettyprint"><code>  X = [[1, 2, 3],
+       [1, 2, 3],
+       [1, 2, 3]]
+  Y = [[4, 4, 4],
+       [5, 5, 5],
+       [6, 6, 6]]</code></pre>
+<h4 id="args">Args:</h4>
+<p><em>args: <code>Tensor</code>s with rank 1. </em> <b><code>indexing</code></b>: Either 'xy' or 'ij' (optional, default: 'xy'). * <b><code>name</code></b>: A name for the operation (optional).</p>
+<h4 id="returns">Returns:</h4>
+<ul>
+<li><b><code>outputs</code></b>: A list of N <code>Tensor</code>s with rank N.</li>
+</ul>

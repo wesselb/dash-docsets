@@ -1,0 +1,22 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.saved_model.get_signature_def_by_key" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.saved_model.get_signature_def_by_key" class="dashAnchor"></a><h1 id="tf.contrib.saved_model.get_signature_def_by_key">tf.contrib.saved_model.get_signature_def_by_key</h1>
+<h3 id="tf.contrib.saved_model.get_signature_def_by_key-1"><code>tf.contrib.saved_model.get_signature_def_by_key</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_signature_def_by_key(
+    meta_graph_def,
+    signature_def_key
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/saved_model/python/saved_model/signature_def_utils.py"><code>tensorflow/contrib/saved_model/python/saved_model/signature_def_utils.py</code></a>.</p>
+<p>Utility function to get a SignatureDef protocol buffer by its key.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>meta_graph_def</code></b>: MetaGraphDef protocol buffer with the SignatureDefMap to look up.</li>
+<li><b><code>signature_def_key</code></b>: Key of the SignatureDef protocol buffer to find in the SignatureDefMap.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A SignatureDef protocol buffer corresponding to the supplied key, if it exists.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If no entry corresponding to the supplied key is found in the SignatureDefMap of the MetaGraphDef.</li>
+</ul>

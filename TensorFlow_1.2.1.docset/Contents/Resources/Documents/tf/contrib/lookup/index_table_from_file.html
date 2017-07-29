@@ -1,0 +1,49 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.lookup.index_table_from_file" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.lookup.index_table_from_file" class="dashAnchor"></a><h1 id="tf.contrib.lookup.index_table_from_file">tf.contrib.lookup.index_table_from_file</h1>
+<h3 id="tf.contrib.lookup.index_table_from_file-1"><code>tf.contrib.lookup.index_table_from_file</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">index_table_from_file(
+    vocabulary_file<span class="op">=</span><span class="va">None</span>,
+    num_oov_buckets<span class="op">=</span><span class="dv">0</span>,
+    vocab_size<span class="op">=</span><span class="va">None</span>,
+    default_value<span class="op">=-</span><span class="dv">1</span>,
+    hasher_spec<span class="op">=</span>tf.contrib.lookup.FastHashSpec,
+    key_dtype<span class="op">=</span>tf.string,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/lookup/lookup_ops.py"><code>tensorflow/contrib/lookup/lookup_ops.py</code></a>.</p>
+<p>Returns a lookup table that converts a string tensor into int64 IDs.</p>
+<p>This operation constructs a lookup table to convert tensor of strings into int64 IDs. The mapping can be initialized from a vocabulary file specified in <code>vocabulary_file</code>, where the whole line is the key and the zero-based line number is the ID.</p>
+<p>Any lookup of an out-of-vocabulary token will return a bucket ID based on its hash if <code>num_oov_buckets</code> is greater than zero. Otherwise it is assigned the <code>default_value</code>. The bucket ID range is <code>[vocabulary size, vocabulary size + num_oov_buckets]</code>.</p>
+<p>The underlying table must be initialized by calling <code>tf.tables_initializer.run()</code> or <code>table.init.run()</code> once.</p>
+<p>Sample Usages:</p>
+<p>If we have a vocabulary file &quot;test.txt&quot; with the following content:</p>
+<pre><code>emerson
+lake
+palmer</code></pre>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">features <span class="op">=</span> tf.constant([<span class="st">&quot;emerson&quot;</span>, <span class="st">&quot;lake&quot;</span>, <span class="st">&quot;and&quot;</span>, <span class="st">&quot;palmer&quot;</span>])
+table <span class="op">=</span> tf.contrib.lookup.index_table_from_file(
+    vocabulary_file<span class="op">=</span><span class="st">&quot;test.txt&quot;</span>, num_oov_buckets<span class="op">=</span><span class="dv">1</span>)
+ids <span class="op">=</span> table.lookup(features)
+...
+tf.tables_initializer().run()
+
+ids.<span class="bu">eval</span>()  <span class="op">==&gt;</span> [<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">2</span>]  <span class="co"># where 3 is the out-of-vocabulary bucket</span></code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>vocabulary_file</code></b>: The vocabulary filename.</li>
+<li><b><code>num_oov_buckets</code></b>: The number of out-of-vocabulary buckets.</li>
+<li><b><code>vocab_size</code></b>: Number of the elements in the vocabulary, if known.</li>
+<li><b><code>default_value</code></b>: The value to use for out-of-vocabulary feature values. Defaults to -1.</li>
+<li><b><code>hasher_spec</code></b>: A <code>HasherSpec</code> to specify the hash function to use for assignation of out-of-vocabulary buckets.</li>
+<li><b><code>key_dtype</code></b>: The <code>key</code> data type.</li>
+<li><b><code>name</code></b>: A name for this op (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The lookup table to map a <code>key_dtype</code> <code>Tensor</code> to index <code>int64</code> <code>Tensor</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>vocabulary_file</code> is not set.</li>
+<li><b><code>ValueError</code></b>: If <code>num_oov_buckets</code> is negative or <code>vocab_size</code> is not greater than zero.</li>
+</ul>

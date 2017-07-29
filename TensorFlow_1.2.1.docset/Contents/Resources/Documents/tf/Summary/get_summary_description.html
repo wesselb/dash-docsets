@@ -1,0 +1,20 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.summary.get_summary_description" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.summary.get_summary_description" class="dashAnchor"></a><h1 id="tf.summary.get_summary_description">tf.summary.get_summary_description</h1>
+<h3 id="tf.summary.get_summary_description-1"><code>tf.summary.get_summary_description</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_summary_description(node_def)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/summary/summary.py"><code>tensorflow/python/summary/summary.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/summary.md#Utilities">Summary Operations &gt; Utilities</a></p>
+<p>Given a TensorSummary node_def, retrieve its SummaryDescription.</p>
+<p>When a Summary op is instantiated, a SummaryDescription of associated metadata is stored in its NodeDef. This method retrieves the description.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>node_def</code></b>: the node_def_pb2.NodeDef of a TensorSummary op</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>a summary_pb2.SummaryDescription</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if the node is not a summary op.</li>
+</ul>

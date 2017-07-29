@@ -1,0 +1,18 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.graph_util.must_run_on_cpu" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.graph_util.must_run_on_cpu" class="dashAnchor"></a><h1 id="tf.graph_util.must_run_on_cpu">tf.graph_util.must_run_on_cpu</h1>
+<h3 id="tf.graph_util.must_run_on_cpu-1"><code>tf.graph_util.must_run_on_cpu</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">must_run_on_cpu(
+    node,
+    pin_variables_on_cpu<span class="op">=</span><span class="va">False</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/framework/graph_util_impl.py"><code>tensorflow/python/framework/graph_util_impl.py</code></a>.</p>
+<p>Returns True if the given node_def must run on CPU, otherwise False.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>node</code></b>: The node to be assigned to a device. Could be either an ops.Operation or NodeDef.</li>
+<li><b><code>pin_variables_on_cpu</code></b>: If True, this function will return False if node_def represents a variable-related op.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>True if the given node must run on CPU, otherwise False.</p>

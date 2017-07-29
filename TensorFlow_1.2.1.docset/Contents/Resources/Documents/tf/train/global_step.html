@@ -1,0 +1,27 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.train.global_step" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.train.global_step" class="dashAnchor"></a><h1 id="tf.train.global_step">tf.train.global_step</h1>
+<h3 id="tf.train.global_step-1"><code>tf.train.global_step</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">global_step(
+    sess,
+    global_step_tensor
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/training/training_util.py"><code>tensorflow/python/training/training_util.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/train.md#Training_Utilities">Training &gt; Training Utilities</a></p>
+<p>Small helper to get the global step.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Creates a variable to hold the global_step.</span>
+global_step_tensor <span class="op">=</span> tf.Variable(<span class="dv">10</span>, trainable<span class="op">=</span><span class="va">False</span>, name<span class="op">=</span><span class="st">&#39;global_step&#39;</span>)
+<span class="co"># Creates a session.</span>
+sess <span class="op">=</span> tf.Session()
+<span class="co"># Initializes the variable.</span>
+<span class="bu">print</span>(<span class="st">&#39;global_step: </span><span class="sc">%s</span><span class="st">&#39;</span> <span class="op">%</span> tf.train.global_step(sess, global_step_tensor))
+
+global_step: <span class="dv">10</span></code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>sess</code></b>: A TensorFlow <code>Session</code> object.</li>
+<li><b><code>global_step_tensor</code></b>: <code>Tensor</code> or the <code>name</code> of the operation that contains the global step.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The global step value.</p>

@@ -1,0 +1,23 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.sigmoid" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.sigmoid" class="dashAnchor"></a><h1 id="tf.sigmoid">tf.sigmoid</h1>
+<a name="//apple_ref/cpp/Function/tf.nn.sigmoid" class="dashAnchor"></a><h3 id="tf.nn.sigmoid"><code>tf.nn.sigmoid</code></h3>
+<h3 id="tf.sigmoid-1"><code>tf.sigmoid</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">sigmoid(
+    x,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/math_ops.py"><code>tensorflow/python/ops/math_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/nn.md#Activation_Functions">Neural Network &gt; Activation Functions</a></p>
+<p>Computes sigmoid of <code>x</code> element-wise.</p>
+<p>Specifically, <code>y = 1 / (1 + exp(-x))</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A Tensor with type <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>complex64</code>, <code>int64</code>, or <code>qint32</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A Tensor with the same type as <code>x</code> if <code>x.dtype != qint32</code> otherwise the return type is <code>quint8</code>.</p>
+<h4 id="numpy-compatibility">numpy compatibility</h4>
+<p>Equivalent to np.scipy.special.expit</p>

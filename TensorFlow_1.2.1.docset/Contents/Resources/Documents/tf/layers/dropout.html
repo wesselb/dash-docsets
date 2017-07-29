@@ -1,0 +1,27 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.layers.dropout" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.layers.dropout" class="dashAnchor"></a><h1 id="tf.layers.dropout">tf.layers.dropout</h1>
+<h3 id="tf.layers.dropout-1"><code>tf.layers.dropout</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">dropout(
+    inputs,
+    rate<span class="op">=</span><span class="fl">0.5</span>,
+    noise_shape<span class="op">=</span><span class="va">None</span>,
+    seed<span class="op">=</span><span class="va">None</span>,
+    training<span class="op">=</span><span class="va">False</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/layers/core.py"><code>tensorflow/python/layers/core.py</code></a>.</p>
+<p>Applies Dropout to the input.</p>
+<p>Dropout consists in randomly setting a fraction <code>rate</code> of input units to 0 at each update during training time, which helps prevent overfitting. The units that are kept are scaled by <code>1 / (1 - rate)</code>, so that their sum is unchanged at training time and inference time.</p>
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>inputs</code></b>: Tensor input.</li>
+<li><b><code>rate</code></b>: The dropout rate, between 0 and 1. E.g. &quot;rate=0.1&quot; would drop out 10% of input units.</li>
+<li><b><code>noise_shape</code></b>: 1D tensor of type <code>int32</code> representing the shape of the binary dropout mask that will be multiplied with the input. For instance, if your inputs have shape <code>(batch_size, timesteps, features)</code>, and you want the dropout mask to be the same for all timesteps, you can use <code>noise_shape=[batch_size, 1, features]</code>.</li>
+<li><b><code>seed</code></b>: A Python integer. Used to create random seeds. See <a href="../../tf/set_random_seed.html"><code>tf.set_random_seed</code></a> for behavior.</li>
+<li><b><code>training</code></b>: Either a Python boolean, or a TensorFlow boolean scalar tensor (e.g. a placeholder). Whether to return the output in training mode (apply dropout) or in inference mode (return the input untouched).</li>
+<li><b><code>name</code></b>: The name of the layer (string).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Output tensor.</p>

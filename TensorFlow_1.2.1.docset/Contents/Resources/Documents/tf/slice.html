@@ -1,0 +1,37 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.slice" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.slice" class="dashAnchor"></a><h1 id="tf.slice">tf.slice</h1>
+<h3 id="tf.slice-1"><code>tf.slice</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="bu">slice</span>(
+    input_,
+    begin,
+    size,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/array_ops.py"><code>tensorflow/python/ops/array_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/array_ops.md#Slicing_and_Joining">Tensor Transformations &gt; Slicing and Joining</a></p>
+<p>Extracts a slice from a tensor.</p>
+<p>This operation extracts a slice of size <code>size</code> from a tensor <code>input</code> starting at the location specified by <code>begin</code>. The slice <code>size</code> is represented as a tensor shape, where <code>size[i]</code> is the number of elements of the 'i'th dimension of <code>input</code> that you want to slice. The starting location (<code>begin</code>) for the slice is represented as an offset in each dimension of <code>input</code>. In other words, <code>begin[i]</code> is the offset into the 'i'th dimension of <code>input</code> that you want to slice from.</p>
+<p><code>begin</code> is zero-based; <code>size</code> is one-based. If <code>size[i]</code> is -1, all remaining elements in dimension i are included in the slice. In other words, this is equivalent to setting:</p>
+<p><code>size[i] = input.dim_size(i) - begin[i]</code></p>
+<p>This operation requires that:</p>
+<p><code>0 &lt;= begin[i] &lt;= begin[i] + size[i] &lt;= Di  for i in [0, n]</code></p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># &#39;input&#39; is [[[1, 1, 1], [2, 2, 2]],</span>
+<span class="co">#             [[3, 3, 3], [4, 4, 4]],</span>
+<span class="co">#             [[5, 5, 5], [6, 6, 6]]]</span>
+tf.<span class="bu">slice</span>(<span class="bu">input</span>, [<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>], [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3</span>]) <span class="op">==&gt;</span> [[[<span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">3</span>]]]
+tf.<span class="bu">slice</span>(<span class="bu">input</span>, [<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>], [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]) <span class="op">==&gt;</span> [[[<span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">3</span>],
+                                            [<span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">4</span>]]]
+tf.<span class="bu">slice</span>(<span class="bu">input</span>, [<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>], [<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">3</span>]) <span class="op">==&gt;</span> [[[<span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">3</span>]],
+                                           [[<span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>]]]</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input_</code></b>: A <code>Tensor</code>.</li>
+<li><b><code>begin</code></b>: An <code>int32</code> or <code>int64</code> <code>Tensor</code>.</li>
+<li><b><code>size</code></b>: An <code>int32</code> or <code>int64</code> <code>Tensor</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> the same type as <code>input</code>.</p>

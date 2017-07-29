@@ -1,0 +1,46 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.FixedLenSequenceFeature" /> <meta itemprop="property" content="allow_missing"/> <meta itemprop="property" content="default_value"/> <meta itemprop="property" content="dtype"/> <meta itemprop="property" content="shape"/> <meta itemprop="property" content="__new__"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.FixedLenSequenceFeature" class="dashAnchor"></a><h1 id="tf.fixedlensequencefeature">tf.FixedLenSequenceFeature</h1>
+<h3 id="class-tf.fixedlensequencefeature"><code>class tf.FixedLenSequenceFeature</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/parsing_ops.py"><code>tensorflow/python/ops/parsing_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/io_ops.md#Converting">Inputs and Readers &gt; Converting</a></p>
+<p>Configuration for parsing a variable-length input feature into a <code>Tensor</code>.</p>
+<p>The resulting <code>Tensor</code> of parsing a single <code>SequenceExample</code> or <code>Example</code> has a static <code>shape</code> of <code>[None] + shape</code> and the specified <code>dtype</code>. The resulting <code>Tensor</code> of parsing a <code>batch_size</code> many <code>Example</code>s has a static <code>shape</code> of <code>[batch_size, None] + shape</code> and the specified <code>dtype</code>. The entries in the <code>batch</code> from different <code>Examples</code> will be padded with <code>default_value</code> to the maximum length present in the <code>batch</code>.</p>
+<p>To treat a sparse input as dense, provide <code>allow_missing=True</code>; otherwise, the parse functions will fail on any examples missing this feature.</p>
+<h4 id="fields">Fields:</h4>
+<ul>
+<li><b><code>shape</code></b>: Shape of input data for dimension 2 and higher. First dimension is of variable length <code>None</code>.</li>
+<li><b><code>dtype</code></b>: Data type of input.</li>
+<li><b><code>allow_missing</code></b>: Whether to allow this feature to be missing from a feature list item. Is available only for parsing <code>SequenceExample</code> not for parsing <code>Examples</code>.</li>
+<li><b><code>default_value</code></b>: Scalar value to be used to pad multiple <code>Example</code>s to their maximum length. Irrelevant for parsing a single <code>Example</code> or <code>SequenceExample</code>. Defaults to &quot;&quot; for dtype string and 0 otherwise (optional).</li>
+</ul>
+<h2 id="properties">Properties</h2>
+<h3 id="allow_missing">
+<code>allow_missing</code>
+</h3>
+<p>Alias for field number 2</p>
+<h3 id="default_value">
+<code>default_value</code>
+</h3>
+<p>Alias for field number 3</p>
+<h3 id="dtype">
+<code>dtype</code>
+</h3>
+<p>Alias for field number 1</p>
+<h3 id="shape">
+<code>shape</code>
+</h3>
+<p>Alias for field number 0</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__new__">
+<code><strong>new</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__new__</span>(
+    _cls,
+    shape,
+    dtype,
+    allow_missing<span class="op">=</span><span class="va">False</span>,
+    default_value<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Create new instance of FixedLenSequenceFeature(shape, dtype, allow_missing, default_value)</p>

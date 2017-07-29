@@ -1,0 +1,23 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.layers.bucketized_column" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.layers.bucketized_column" class="dashAnchor"></a><h1 id="tf.contrib.layers.bucketized_column">tf.contrib.layers.bucketized_column</h1>
+<h3 id="tf.contrib.layers.bucketized_column-1"><code>tf.contrib.layers.bucketized_column</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">bucketized_column(
+    source_column,
+    boundaries
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/layers/python/layers/feature_column.py"><code>tensorflow/contrib/layers/python/layers/feature_column.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.layers.md#Feature_columns">Layers (contrib) &gt; Feature columns</a></p>
+<p>Creates a _BucketizedColumn for discretizing dense input.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>source_column</code></b>: A _RealValuedColumn defining dense column.</li>
+<li><b><code>boundaries</code></b>: A list or tuple of floats specifying the boundaries. It has to be sorted.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A _BucketizedColumn.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if 'boundaries' is empty or not sorted.</li>
+</ul>

@@ -1,0 +1,19 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.learn.extract_pandas_labels" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.learn.extract_pandas_labels" class="dashAnchor"></a><h1 id="tf.contrib.learn.extract_pandas_labels">tf.contrib.learn.extract_pandas_labels</h1>
+<h3 id="tf.contrib.learn.extract_pandas_labels-1"><code>tf.contrib.learn.extract_pandas_labels</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">extract_pandas_labels(labels)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/learn/python/learn/learn_io/pandas_io.py"><code>tensorflow/contrib/learn/python/learn/learn_io/pandas_io.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.learn.md#Input_processing">Learn (contrib) &gt; Input processing</a></p>
+<p>Extract data from pandas.DataFrame for labels.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>labels</code></b>: <code>pandas.DataFrame</code> or <code>pandas.Series</code> containing one column of labels to be extracted.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A numpy <code>ndarray</code> of labels from the DataFrame.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if more than one column is found or type is not int, float or bool.</li>
+</ul>

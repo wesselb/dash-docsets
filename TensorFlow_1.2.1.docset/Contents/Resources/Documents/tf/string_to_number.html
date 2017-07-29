@@ -1,0 +1,22 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.string_to_number" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.string_to_number" class="dashAnchor"></a><h1 id="tf.string_to_number">tf.string_to_number</h1>
+<h3 id="tf.string_to_number-1"><code>tf.string_to_number</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">string_to_number(
+    string_tensor,
+    out_type<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_parsing_ops.py</code>.</p>
+<p>See the guide: <a href="../../../api_guides/python/array_ops.md#Casting">Tensor Transformations &gt; Casting</a></p>
+<p>Converts each string in the input Tensor to the specified numeric type.</p>
+<p>(Note that int32 overflow results in an error while float overflow results in a rounded value.)</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>string_tensor</code></b>: A <code>Tensor</code> of type <code>string</code>.</li>
+<li><b><code>out_type</code></b>: An optional <code>tf.DType</code> from: <code>tf.float32, tf.float64, tf.int32, tf.int64</code>. Defaults to <code>tf.float32</code>. The numeric type to interpret each string in <code>string_tensor</code> as.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>out_type</code>. A Tensor of the same shape as the input <code>string_tensor</code>.</p>

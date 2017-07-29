@@ -1,0 +1,24 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.serialize_many_sparse" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.serialize_many_sparse" class="dashAnchor"></a><h1 id="tf.serialize_many_sparse">tf.serialize_many_sparse</h1>
+<h3 id="tf.serialize_many_sparse-1"><code>tf.serialize_many_sparse</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">serialize_many_sparse(
+    sp_input,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/sparse_ops.py"><code>tensorflow/python/ops/sparse_ops.py</code></a>.</p>
+<p>Serialize an <code>N</code>-minibatch <code>SparseTensor</code> into an <code>[N, 3]</code> string <code>Tensor</code>.</p>
+<p>The <code>SparseTensor</code> must have rank <code>R</code> greater than 1, and the first dimension is treated as the minibatch dimension. Elements of the <code>SparseTensor</code> must be sorted in increasing order of this first dimension. The serialized <code>SparseTensor</code> objects going into each row of the output <code>Tensor</code> will have rank <code>R-1</code>.</p>
+<p>The minibatch size <code>N</code> is extracted from <code>sparse_shape[0]</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>sp_input</code></b>: The input rank <code>R</code> <code>SparseTensor</code>.</li>
+<li><b><code>name</code></b>: A name prefix for the returned tensors (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A string matrix (2-D <code>Tensor</code>) with <code>N</code> rows and <code>3</code> columns. Each column represents serialized <code>SparseTensor</code>'s indices, values, and shape (respectively).</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>sp_input</code> is not a <code>SparseTensor</code>.</li>
+</ul>

@@ -1,0 +1,25 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.saved_model.loader.load" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.saved_model.loader.load" class="dashAnchor"></a><h1 id="tf.saved_model.loader.load">tf.saved_model.loader.load</h1>
+<h3 id="tf.saved_model.loader.load-1"><code>tf.saved_model.loader.load</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">load(
+    sess,
+    tags,
+    export_dir,
+    <span class="op">**</span>saver_kwargs
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/saved_model/loader_impl.py"><code>tensorflow/python/saved_model/loader_impl.py</code></a>.</p>
+<p>Loads the model from a SavedModel as specified by tags.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>sess</code></b>: The TensorFlow session to restore the variables.</li>
+<li><b><code>tags</code></b>: Set of string tags to identify the required MetaGraphDef. These should correspond to the tags used when saving the variables using the SavedModel <code>save()</code> API.</li>
+<li><b><code>export_dir</code></b>: Directory in which the SavedModel protocol buffer and variables to be loaded are located. **saver_kwargs: Optional keyword arguments passed through to Saver.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The <code>MetaGraphDef</code> protocol buffer loaded in the provided session. This can be used to further extract signature-defs, collection-defs, etc.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>RuntimeError</code></b>: MetaGraphDef associated with the tags cannot be found.</li>
+</ul>

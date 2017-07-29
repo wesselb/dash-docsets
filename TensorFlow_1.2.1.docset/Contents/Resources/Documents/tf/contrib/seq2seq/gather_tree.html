@@ -1,0 +1,24 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.seq2seq.gather_tree" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.seq2seq.gather_tree" class="dashAnchor"></a><h1 id="tf.contrib.seq2seq.gather_tree">tf.contrib.seq2seq.gather_tree</h1>
+<h3 id="tf.contrib.seq2seq.gather_tree-1"><code>tf.contrib.seq2seq.gather_tree</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">gather_tree(
+    step_ids,
+    parent_ids,
+    sequence_length,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/contrib/seq2seq/ops/gen_beam_search_ops.py</code>.</p>
+<p>Calculates the full beams from the per-step ids and parent beam ids.</p>
+<p>This op implements the following mathematical equations:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">TODO(ebrevdo): fill <span class="kw">in</span></code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>step_ids</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>. <code>[max_time, batch_size, beam_width]</code>.</li>
+<li><b><code>parent_ids</code></b>: A <code>Tensor</code>. Must have the same type as <code>step_ids</code>. <code>[max_time, batch_size, beam_width]</code>.</li>
+<li><b><code>sequence_length</code></b>: A <code>Tensor</code>. Must have the same type as <code>step_ids</code>. <code>[batch_size, beam_width]</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>step_ids</code>. <code>[max_time, batch_size, beam_width]</code>.</p>

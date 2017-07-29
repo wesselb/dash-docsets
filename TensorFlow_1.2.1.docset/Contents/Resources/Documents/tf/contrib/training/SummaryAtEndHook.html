@@ -1,0 +1,74 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.training.SummaryAtEndHook" /> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="after_create_session"/> <meta itemprop="property" content="after_run"/> <meta itemprop="property" content="before_run"/> <meta itemprop="property" content="begin"/> <meta itemprop="property" content="end"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.training.SummaryAtEndHook" class="dashAnchor"></a><h1 id="tf.contrib.training.summaryatendhook">tf.contrib.training.SummaryAtEndHook</h1>
+<h3 id="class-tf.contrib.training.summaryatendhook"><code>class tf.contrib.training.SummaryAtEndHook</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/training/python/training/evaluation.py"><code>tensorflow/contrib/training/python/training/evaluation.py</code></a>.</p>
+<p>A run hook that saves a summary with the results of evaluation.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    log_dir<span class="op">=</span><span class="va">None</span>,
+    summary_writer<span class="op">=</span><span class="va">None</span>,
+    summary_op<span class="op">=</span><span class="va">None</span>,
+    feed_dict<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Constructs the Summary Hook.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>log_dir</code></b>: The directory where the summary events are saved to. Used only when <code>summary_writer</code> is not specified.</li>
+<li><b><code>summary_writer</code></b>: A <code>tf.summary.FileWriter</code> to write summary events with.</li>
+<li><b><code>summary_op</code></b>: The summary op to run. If left as <code>None</code>, then all summaries in the tf.GraphKeys.SUMMARIES collection are used.</li>
+<li><b><code>feed_dict</code></b>: An optional feed dictionary to use when evaluating the summaries.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If both <code>log_dir</code> and <code>summary_writer</code> are <code>None</code>.</li>
+</ul>
+<h3 id="after_create_session">
+<code>after_create_session</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">after_create_session(
+    session,
+    coord
+)</code></pre></div>
+<h3 id="after_run">
+<code>after_run</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">after_run(
+    run_context,
+    run_values
+)</code></pre></div>
+<p>Called after each call to run().</p>
+<p>The <code>run_values</code> argument contains results of requested ops/tensors by <code>before_run()</code>.</p>
+<p>The <code>run_context</code> argument is the same one send to <code>before_run</code> call. <code>run_context.request_stop()</code> can be called to stop the iteration.</p>
+<p>If <code>session.run()</code> raises any exceptions then <code>after_run()</code> is not called.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>run_context</code></b>: A <code>SessionRunContext</code> object.</li>
+<li><b><code>run_values</code></b>: A SessionRunValues object.</li>
+</ul>
+<h3 id="before_run">
+<code>before_run</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">before_run(run_context)</code></pre></div>
+<p>Called before each call to run().</p>
+<p>You can return from this call a <code>SessionRunArgs</code> object indicating ops or tensors to add to the upcoming <code>run()</code> call. These ops/tensors will be run together with the ops/tensors originally passed to the original run() call. The run args you return can also contain feeds to be added to the run() call.</p>
+<p>The <code>run_context</code> argument is a <code>SessionRunContext</code> that provides information about the upcoming <code>run()</code> call: the originally requested op/tensors, the TensorFlow Session.</p>
+<p>At this point graph is finalized and you can not add ops.</p>
+<h4 id="args-2">Args:</h4>
+<ul>
+<li><b><code>run_context</code></b>: A <code>SessionRunContext</code> object.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>None or a <code>SessionRunArgs</code> object.</p>
+<h3 id="begin">
+<code>begin</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">begin()</code></pre></div>
+<h3 id="end">
+<code>end</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">end(session)</code></pre></div>

@@ -1,0 +1,97 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.learn.ModelFnOps" /> <meta itemprop="property" content="eval_metric_ops"/> <meta itemprop="property" content="loss"/> <meta itemprop="property" content="mode"/> <meta itemprop="property" content="output_alternatives"/> <meta itemprop="property" content="predictions"/> <meta itemprop="property" content="scaffold"/> <meta itemprop="property" content="train_op"/> <meta itemprop="property" content="training_chief_hooks"/> <meta itemprop="property" content="training_hooks"/> <meta itemprop="property" content="__new__"/> <meta itemprop="property" content="estimator_spec"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.learn.ModelFnOps" class="dashAnchor"></a><h1 id="tf.contrib.learn.modelfnops">tf.contrib.learn.ModelFnOps</h1>
+<h3 id="class-tf.contrib.learn.modelfnops"><code>class tf.contrib.learn.ModelFnOps</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/learn/python/learn/estimators/model_fn.py"><code>tensorflow/contrib/learn/python/learn/estimators/model_fn.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.learn.md#Estimators">Learn (contrib) &gt; Estimators</a></p>
+<p>Ops returned from a model_fn.</p>
+<h2 id="properties">Properties</h2>
+<h3 id="eval_metric_ops">
+<code>eval_metric_ops</code>
+</h3>
+<p>Alias for field number 3</p>
+<h3 id="loss">
+<code>loss</code>
+</h3>
+<p>Alias for field number 1</p>
+<h3 id="mode">
+<code>mode</code>
+</h3>
+<p>Alias for field number 8</p>
+<h3 id="output_alternatives">
+<code>output_alternatives</code>
+</h3>
+<p>Alias for field number 4</p>
+<h3 id="predictions">
+<code>predictions</code>
+</h3>
+<p>Alias for field number 0</p>
+<h3 id="scaffold">
+<code>scaffold</code>
+</h3>
+<p>Alias for field number 7</p>
+<h3 id="train_op">
+<code>train_op</code>
+</h3>
+<p>Alias for field number 2</p>
+<h3 id="training_chief_hooks">
+<code>training_chief_hooks</code>
+</h3>
+<p>Alias for field number 5</p>
+<h3 id="training_hooks">
+<code>training_hooks</code>
+</h3>
+<p>Alias for field number 6</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__new__">
+<code><strong>new</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__new__</span>(
+    cls,
+    mode,
+    predictions<span class="op">=</span><span class="va">None</span>,
+    loss<span class="op">=</span><span class="va">None</span>,
+    train_op<span class="op">=</span><span class="va">None</span>,
+    eval_metric_ops<span class="op">=</span><span class="va">None</span>,
+    output_alternatives<span class="op">=</span><span class="va">None</span>,
+    training_chief_hooks<span class="op">=</span><span class="va">None</span>,
+    training_hooks<span class="op">=</span><span class="va">None</span>,
+    scaffold<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Creates a validated <code>ModelFnOps</code> instance.</p>
+<p>For a multi-headed model, the predictions dict here will contain the outputs of all of the heads. However: at serving time, requests will be made specifically for one or more heads, and the RPCs used for these requests may differ by problem type (i.e., regression, classification, other). The purpose of the output_alternatives dict is to aid in exporting a SavedModel from which such head-specific queries can be served. These output_alternatives will be combined with input_alternatives (see <code>saved_model_export_utils</code>) to produce a set of <code>SignatureDef</code>s specifying the valid requests that can be served from this model.</p>
+<p>For a single-headed model, it is still adviseable to provide output_alternatives with a single entry, because this is how the problem type is communicated for export and serving. If output_alternatives is not given, the resulting SavedModel will support only one head of unspecified type.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>mode</code></b>: One of <code>ModeKeys</code>. Specifies if this training, evaluation or prediction.</li>
+<li><b><code>predictions</code></b>: Predictions <code>Tensor</code> or dict of <code>Tensor</code>.</li>
+<li><b><code>loss</code></b>: Training loss <code>Tensor</code>.</li>
+<li><b><code>train_op</code></b>: Op for the training step.</li>
+<li><b><code>eval_metric_ops</code></b>: Dict of metric results keyed by name. The values of the dict are the results of calling a metric function, such as <code>Tensor</code>.</li>
+<li><b><code>output_alternatives</code></b>: a dict of <code>{submodel_name: (problem_type, {tensor_name: Tensor})}</code>, where <code>submodel_name</code> is a submodel identifier that should be consistent across the pipeline (here likely taken from the name of each <code>Head</code>, for models that use them), <code>problem_type</code> is a <code>ProblemType</code>, <code>tensor_name</code> is a symbolic name for an output Tensor possibly but not necessarily taken from <code>PredictionKey</code>, and <code>Tensor</code> is the corresponding output Tensor itself.</li>
+<li><b><code>training_chief_hooks</code></b>: A list of <code>SessionRunHook</code> objects that will be run on the chief worker during training.</li>
+<li><b><code>training_hooks</code></b>: A list of <code>SessionRunHook</code> objects that will be run on all workers during training.</li>
+<li><b><code>scaffold</code></b>: A <code>tf.train.Scaffold</code> object that can be used to set initialization, saver, and more to be used in training.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A validated <code>ModelFnOps</code> object.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If validation fails.</li>
+</ul>
+<h3 id="estimator_spec">
+<code>estimator_spec</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">estimator_spec(default_serving_output_alternative_key<span class="op">=</span><span class="va">None</span>)</code></pre></div>
+<p>Creates an equivalent <code>EstimatorSpec</code>.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>default_serving_output_alternative_key</code></b>: Required for multiple heads. If you have multiple entries in <code>output_alternatives</code> dict (comparable to multiple heads), <code>EstimatorSpec</code> requires a default head that will be used if a Servo request does not explicitly mention which head to infer on. Pass the key of the output alternative here that you want to designate as default. A separate ExportOutpout for this default head wil be added to the export_outputs dict with the special key signature_constants.DEFAULT_SERVING_SIGNATURE_DEF_KEY, unless there is already an enry in output_alternatives with this special key.</li>
+</ul>
+<h4 id="returns-1">Returns:</h4>
+<p>Instance of <code>EstimatorSpec</code> that is equivalent to this <code>ModelFnOps</code></p>
+<h4 id="raises-1">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If problem type is unknown.</li>
+</ul>

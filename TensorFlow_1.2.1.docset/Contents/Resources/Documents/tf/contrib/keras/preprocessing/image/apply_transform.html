@@ -1,0 +1,25 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.preprocessing.image.apply_transform" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.keras.preprocessing.image.apply_transform" class="dashAnchor"></a><h1 id="tf.contrib.keras.preprocessing.image.apply_transform">tf.contrib.keras.preprocessing.image.apply_transform</h1>
+<h3 id="tf.contrib.keras.preprocessing.image.apply_transform-1"><code>tf.contrib.keras.preprocessing.image.apply_transform</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">apply_transform(
+    x,
+    transform_matrix,
+    channel_axis<span class="op">=</span><span class="dv">0</span>,
+    fill_mode<span class="op">=</span><span class="st">&#39;nearest&#39;</span>,
+    cval<span class="op">=</span><span class="fl">0.0</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/preprocessing/image.py"><code>tensorflow/contrib/keras/python/keras/preprocessing/image.py</code></a>.</p>
+<p>Apply the image transformation specified by a matrix.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>x: 2D numpy array, single image.
+transform_matrix: Numpy array specifying the geometric transformation.
+channel_axis: Index of axis for channels in the input tensor.
+fill_mode: Points outside the boundaries of the input
+    are filled according to the given mode
+    (one of `{&#39;constant&#39;, &#39;nearest&#39;, &#39;reflect&#39;, &#39;wrap&#39;}`).
+cval: Value used for points outside the boundaries
+    of the input if `mode=&#39;constant&#39;`.</code></pre>
+<h4 id="returns">Returns:</h4>
+<pre><code>The transformed version of the input.</code></pre>

@@ -1,0 +1,58 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.data.read_batch_features" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.data.read_batch_features" class="dashAnchor"></a><h1 id="tf.contrib.data.read_batch_features">tf.contrib.data.read_batch_features</h1>
+<h3 id="tf.contrib.data.read_batch_features-1"><code>tf.contrib.data.read_batch_features</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">read_batch_features(
+    file_pattern,
+    batch_size,
+    features,
+    reader,
+    reader_args<span class="op">=</span><span class="va">None</span>,
+    randomize_input<span class="op">=</span><span class="va">True</span>,
+    num_epochs<span class="op">=</span><span class="va">None</span>,
+    capacity<span class="op">=</span><span class="dv">10000</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/data/python/ops/dataset_ops.py"><code>tensorflow/contrib/data/python/ops/dataset_ops.py</code></a>.</p>
+<p>Reads batches of Examples.</p>
+<p>Example:</p>
+<pre><code>serialized_examples = [
+  features {
+    feature { key: &quot;age&quot; value { int64_list { value: [ 0 ] } } }
+    feature { key: &quot;gender&quot; value { bytes_list { value: [ &quot;f&quot; ] } } }
+    feature { key: &quot;kws&quot; value { bytes_list { value: [ &quot;code&quot;, &quot;art&quot; ] } } }
+  },
+  features {
+    feature { key: &quot;age&quot; value { int64_list { value: [] } } }
+    feature { key: &quot;gender&quot; value { bytes_list { value: [ &quot;f&quot; ] } } }
+    feature { key: &quot;kws&quot; value { bytes_list { value: [ &quot;sports&quot; ] } } }
+  }
+]</code></pre>
+<p>We can use arguments:</p>
+<pre><code>features: {
+  &quot;age&quot;: FixedLenFeature([], dtype=tf.int64, default_value=-1),
+  &quot;gender&quot;: FixedLenFeature([], dtype=tf.string),
+  &quot;kws&quot;: VarLenFeature(dtype=tf.string),
+}</code></pre>
+<p>And the expected output is:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">{
+  <span class="st">&quot;age&quot;</span>: [[<span class="dv">0</span>], [<span class="op">-</span><span class="dv">1</span>]],
+  <span class="st">&quot;gender&quot;</span>: [[<span class="st">&quot;f&quot;</span>], [<span class="st">&quot;f&quot;</span>]],
+  <span class="st">&quot;kws&quot;</span>: SparseTensor(
+    indices<span class="op">=</span>[[<span class="dv">0</span>, <span class="dv">0</span>], [<span class="dv">0</span>, <span class="dv">1</span>], [<span class="dv">1</span>, <span class="dv">0</span>]],
+    values<span class="op">=</span>[<span class="st">&quot;code&quot;</span>, <span class="st">&quot;art&quot;</span>, <span class="st">&quot;sports&quot;</span>]
+    dense_shape<span class="op">=</span>[<span class="dv">2</span>, <span class="dv">2</span>]),
+}</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>file_pattern</code></b>: List of files or patterns of file paths containing <code>Example</code> records. See <code>tf.gfile.Glob</code> for pattern rules.</li>
+<li><b><code>batch_size</code></b>: An int representing the number of consecutive elements of this dataset to combine in a single batch.</li>
+<li><b><code>features</code></b>: A <code>dict</code> mapping feature keys to <code>FixedLenFeature</code> or <code>VarLenFeature</code> values. See <code>tf.parse_example</code>.</li>
+<li><b><code>reader</code></b>: A function or class that can be called with a <code>filenames</code> tensor and (optional) <code>reader_args</code> and returns a <code>Dataset</code> of serialized Examples.</li>
+<li><b><code>reader_args</code></b>: Additional arguments to pass to the reader class.</li>
+<li><b><code>randomize_input</code></b>: Whether the input should be randomized.</li>
+<li><b><code>num_epochs</code></b>: Integer specifying the number of times to read through the dataset. If None, cycles through the dataset forever.</li>
+<li><b><code>capacity</code></b>: Capacity of the ShuffleDataset. A large capacity ensures better shuffling but would increase memory usage and startup time.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A dict from keys in features to Tensor or SparseTensor objects.</p>

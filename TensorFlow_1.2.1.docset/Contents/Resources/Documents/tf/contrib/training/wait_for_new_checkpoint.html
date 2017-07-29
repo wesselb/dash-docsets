@@ -1,0 +1,22 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.training.wait_for_new_checkpoint" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.training.wait_for_new_checkpoint" class="dashAnchor"></a><h1 id="tf.contrib.training.wait_for_new_checkpoint">tf.contrib.training.wait_for_new_checkpoint</h1>
+<h3 id="tf.contrib.training.wait_for_new_checkpoint-1"><code>tf.contrib.training.wait_for_new_checkpoint</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">wait_for_new_checkpoint(
+    checkpoint_dir,
+    last_checkpoint<span class="op">=</span><span class="va">None</span>,
+    seconds_to_sleep<span class="op">=</span><span class="dv">1</span>,
+    timeout<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/training/python/training/evaluation.py"><code>tensorflow/contrib/training/python/training/evaluation.py</code></a>.</p>
+<p>Waits until a new checkpoint file is found.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>checkpoint_dir</code></b>: The directory in which checkpoints are saved.</li>
+<li><b><code>last_checkpoint</code></b>: The last checkpoint path used or <code>None</code> if we're expecting a checkpoint for the first time.</li>
+<li><b><code>seconds_to_sleep</code></b>: The number of seconds to sleep for before looking for a new checkpoint.</li>
+<li><b><code>timeout</code></b>: The maximum amount of time to wait. If left as <code>None</code>, then the process will wait indefinitely.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>a new checkpoint path, or None if the timeout was reached.</p>

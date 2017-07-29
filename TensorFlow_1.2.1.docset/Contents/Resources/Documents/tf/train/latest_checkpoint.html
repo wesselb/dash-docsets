@@ -1,0 +1,19 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.train.latest_checkpoint" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.train.latest_checkpoint" class="dashAnchor"></a><h1 id="tf.train.latest_checkpoint">tf.train.latest_checkpoint</h1>
+<h3 id="tf.train.latest_checkpoint-1"><code>tf.train.latest_checkpoint</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">latest_checkpoint(
+    checkpoint_dir,
+    latest_filename<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/training/saver.py"><code>tensorflow/python/training/saver.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/state_ops.md#Saving_and_Restoring_Variables">Variables &gt; Saving and Restoring Variables</a></p>
+<p>Finds the filename of latest saved checkpoint file.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>checkpoint_dir</code></b>: Directory where the variables were saved.</li>
+<li><b><code>latest_filename</code></b>: Optional name for the protocol buffer file that contains the list of most recent checkpoint filenames. See the corresponding argument to <code>Saver.save()</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The full path to the latest checkpoint or <code>None</code> if no checkpoint was found.</p>

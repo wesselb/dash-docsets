@@ -1,0 +1,18 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.assert_proper_iterable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.assert_proper_iterable" class="dashAnchor"></a><h1 id="tf.assert_proper_iterable">tf.assert_proper_iterable</h1>
+<h3 id="tf.assert_proper_iterable-1"><code>tf.assert_proper_iterable</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">assert_proper_iterable(values)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/check_ops.py"><code>tensorflow/python/ops/check_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/check_ops.html">Asserts and boolean checks</a></p>
+<p>Static assert that values is a &quot;proper&quot; iterable.</p>
+<p><code>Ops</code> that expect iterables of <code>Tensor</code> can call this to validate input. Useful since <code>Tensor</code>, <code>ndarray</code>, byte/text type are all iterables themselves.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>values</code></b>: Object to be checked.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>values</code> is not iterable or is one of <code>Tensor</code>, <code>SparseTensor</code>, <code>np.array</code>, <code>tf.compat.bytes_or_text_types</code>.</li>
+</ul>

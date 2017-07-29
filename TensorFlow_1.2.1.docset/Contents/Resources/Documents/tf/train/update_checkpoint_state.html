@@ -1,0 +1,26 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.train.update_checkpoint_state" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.train.update_checkpoint_state" class="dashAnchor"></a><h1 id="tf.train.update_checkpoint_state">tf.train.update_checkpoint_state</h1>
+<h3 id="tf.train.update_checkpoint_state-1"><code>tf.train.update_checkpoint_state</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">update_checkpoint_state(
+    save_dir,
+    model_checkpoint_path,
+    all_model_checkpoint_paths<span class="op">=</span><span class="va">None</span>,
+    latest_filename<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/training/saver.py"><code>tensorflow/python/training/saver.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/state_ops.md#Saving_and_Restoring_Variables">Variables &gt; Saving and Restoring Variables</a></p>
+<p>Updates the content of the 'checkpoint' file.</p>
+<p>This updates the checkpoint file containing a CheckpointState proto.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>save_dir</code></b>: Directory where the model was saved.</li>
+<li><b><code>model_checkpoint_path</code></b>: The checkpoint file.</li>
+<li><b><code>all_model_checkpoint_paths</code></b>: List of strings. Paths to all not-yet-deleted checkpoints, sorted from oldest to newest. If this is a non-empty list, the last element must be equal to model_checkpoint_path. These paths are also saved in the CheckpointState proto.</li>
+<li><b><code>latest_filename</code></b>: Optional name of the checkpoint file. Default to 'checkpoint'.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>RuntimeError</code></b>: If any of the model checkpoint paths conflict with the file containing CheckpointSate.</li>
+</ul>

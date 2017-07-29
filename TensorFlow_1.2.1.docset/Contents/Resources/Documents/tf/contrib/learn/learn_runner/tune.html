@@ -1,0 +1,30 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.learn.learn_runner.tune" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.learn.learn_runner.tune" class="dashAnchor"></a><h1 id="tf.contrib.learn.learn_runner.tune">tf.contrib.learn.learn_runner.tune</h1>
+<h3 id="tf.contrib.learn.learn_runner.tune-1"><code>tf.contrib.learn.learn_runner.tune</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tune(
+    <span class="op">*</span>args,
+    <span class="op">**</span>kwargs
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/framework/python/framework/experimental.py"><code>tensorflow/contrib/framework/python/framework/experimental.py</code></a>.</p>
+<p>Tune an experiment with hyper-parameters. (experimental)</p>
+<p>THIS FUNCTION IS EXPERIMENTAL. It may change or be removed at any time, and without warning.</p>
+<p>It iterates trials by running the Experiment for each trial with the corresponding hyper-parameters. For each trial, it retrieves the hyper-parameters from <code>tuner</code>, creates an Experiment by calling experiment_fn, and then reports the measure back to <code>tuner</code>.</p>
+<p>Example:</p>
+<pre><code>  def _create_my_experiment(run_config, hparams):
+    hidden_units = [hparams.unit_per_layer] * hparams.num_hidden_layers
+
+    return tf.contrib.learn.Experiment(
+        estimator=DNNClassifier(config=run_config, hidden_units=hidden_units),
+        train_input_fn=my_train_input,
+        eval_input_fn=my_eval_input)
+
+  tuner = create_tuner(study_configuration, objective_key)
+
+  learn_runner.tune(experiment_fn=_create_my_experiment, tuner)</code></pre>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>experiment_fn</code></b>: A function that creates an <code>Experiment</code>. It should accept an argument <code>run_config</code> which should be used to create the <code>Estimator</code> ( passed as <code>config</code> to its constructor), and an argument <code>hparams</code>, which should be used for hyper-parameters tuning. It must return an <code>Experiment</code>.</li>
+<li><b><code>tuner</code></b>: A <code>Tuner</code> instance.</li>
+</ul>

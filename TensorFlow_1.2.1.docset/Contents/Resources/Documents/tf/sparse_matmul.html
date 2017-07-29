@@ -1,0 +1,29 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.sparse_matmul" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.sparse_matmul" class="dashAnchor"></a><h1 id="tf.sparse_matmul">tf.sparse_matmul</h1>
+<h3 id="tf.sparse_matmul-1"><code>tf.sparse_matmul</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">sparse_matmul(
+    a,
+    b,
+    transpose_a<span class="op">=</span><span class="va">None</span>,
+    transpose_b<span class="op">=</span><span class="va">None</span>,
+    a_is_sparse<span class="op">=</span><span class="va">None</span>,
+    b_is_sparse<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_math_ops.py</code>.</p>
+<p>Multiply matrix &quot;a&quot; by matrix &quot;b&quot;.</p>
+<p>The inputs must be two-dimensional matrices and the inner dimension of &quot;a&quot; must match the outer dimension of &quot;b&quot;. This op is optimized for the case where at least one of &quot;a&quot; or &quot;b&quot; is sparse. The breakeven for using this versus a dense matrix multiply on one platform was 30% zero values in the sparse matrix.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>a</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>bfloat16</code>.</li>
+<li><b><code>b</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>bfloat16</code>.</li>
+<li><b><code>transpose_a</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>.</li>
+<li><b><code>transpose_b</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>.</li>
+<li><b><code>a_is_sparse</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>.</li>
+<li><b><code>b_is_sparse</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>float32</code>.</p>

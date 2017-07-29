@@ -1,0 +1,52 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.applications.Xception" /></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.keras.applications.Xception" class="dashAnchor"></a><a name="//apple_ref/cpp/Function/tf.contrib.keras.applications.xception" class="dashAnchor"></a><h1 id="tf.contrib.keras.applications.xception">tf.contrib.keras.applications.Xception</h1>
+<h3 id="tf.contrib.keras.applications.xception-1"><code>tf.contrib.keras.applications.Xception</code></h3>
+<a name="//apple_ref/cpp/Class/tf.contrib.keras.applications.xception.Xception" class="dashAnchor"></a><h3 id="tf.contrib.keras.applications.xception.xception"><code>tf.contrib.keras.applications.xception.Xception</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">Xception(
+    include_top<span class="op">=</span><span class="va">True</span>,
+    weights<span class="op">=</span><span class="st">&#39;imagenet&#39;</span>,
+    input_tensor<span class="op">=</span><span class="va">None</span>,
+    input_shape<span class="op">=</span><span class="va">None</span>,
+    pooling<span class="op">=</span><span class="va">None</span>,
+    classes<span class="op">=</span><span class="dv">1000</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/applications/xception.py"><code>tensorflow/contrib/keras/python/keras/applications/xception.py</code></a>.</p>
+<p>Instantiates the Xception architecture.</p>
+<p>Optionally loads weights pre-trained on ImageNet. This model is available for TensorFlow only, and can only be used with inputs following the TensorFlow data format <code>(width, height, channels)</code>. You should set <code>image_data_format=&quot;channels_last&quot;</code> in your Keras config located at ~/.keras/keras.json.</p>
+<p>Note that the default input image size for this model is 299x299.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>include_top: whether to include the fully-connected
+    layer at the top of the network.
+weights: one of `None` (random initialization)
+    or &quot;imagenet&quot; (pre-training on ImageNet).
+input_tensor: optional Keras tensor (i.e. output of `layers.Input()`)
+    to use as image input for the model.
+input_shape: optional shape tuple, only to be specified
+    if `include_top` is False (otherwise the input shape
+    has to be `(299, 299, 3)`.
+    It should have exactly 3 inputs channels,
+    and width and height should be no smaller than 71.
+    E.g. `(150, 150, 3)` would be one valid value.
+pooling: Optional pooling mode for feature extraction
+    when `include_top` is `False`.
+    - `None` means that the output of the model will be
+        the 4D tensor output of the
+        last convolutional layer.
+    - `avg` means that global average pooling
+        will be applied to the output of the
+        last convolutional layer, and thus
+        the output of the model will be a 2D tensor.
+    - `max` means that global max pooling will
+        be applied.
+classes: optional number of classes to classify images
+    into, only to be specified if `include_top` is True, and
+    if no `weights` argument is specified.</code></pre>
+<h4 id="returns">Returns:</h4>
+<pre><code>A Keras model instance.</code></pre>
+<h4 id="raises">Raises:</h4>
+<pre><code>ValueError: in case of invalid argument for `weights`,
+    or invalid input shape.
+RuntimeError: If attempting to run this model with a
+    backend that does not support separable convolutions.</code></pre>

@@ -1,0 +1,22 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.nn.relu_layer" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.nn.relu_layer" class="dashAnchor"></a><h1 id="tf.nn.relu_layer">tf.nn.relu_layer</h1>
+<h3 id="tf.nn.relu_layer-1"><code>tf.nn.relu_layer</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">relu_layer(
+    x,
+    weights,
+    biases,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/nn_impl.py"><code>tensorflow/python/ops/nn_impl.py</code></a>.</p>
+<p>Computes Relu(x * weight + biases).</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: a 2D tensor. Dimensions typically: batch, in_units</li>
+<li><b><code>weights</code></b>: a 2D tensor. Dimensions typically: in_units, out_units</li>
+<li><b><code>biases</code></b>: a 1D tensor. Dimensions: out_units</li>
+<li><b><code>name</code></b>: A name for the operation (optional). If not specified &quot;nn_relu_layer&quot; is used.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A 2-D Tensor computing relu(matmul(x, weights) + biases). Dimensions typically: batch, out_units.</p>

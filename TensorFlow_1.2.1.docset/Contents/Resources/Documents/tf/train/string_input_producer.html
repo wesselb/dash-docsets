@@ -1,0 +1,36 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.train.string_input_producer" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.train.string_input_producer" class="dashAnchor"></a><h1 id="tf.train.string_input_producer">tf.train.string_input_producer</h1>
+<h3 id="tf.train.string_input_producer-1"><code>tf.train.string_input_producer</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">string_input_producer(
+    string_tensor,
+    num_epochs<span class="op">=</span><span class="va">None</span>,
+    shuffle<span class="op">=</span><span class="va">True</span>,
+    seed<span class="op">=</span><span class="va">None</span>,
+    capacity<span class="op">=</span><span class="dv">32</span>,
+    shared_name<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>,
+    cancel_op<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/training/input.py"><code>tensorflow/python/training/input.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/io_ops.md#Input_pipeline">Inputs and Readers &gt; Input pipeline</a></p>
+<p>Output strings (e.g. filenames) to a queue for an input pipeline.</p>
+<p>Note: if <code>num_epochs</code> is not <code>None</code>, this function creates local counter <code>epochs</code>. Use <code>local_variables_initializer()</code> to initialize local variables.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>string_tensor</code></b>: A 1-D string tensor with the strings to produce.</li>
+<li><b><code>num_epochs</code></b>: An integer (optional). If specified, <code>string_input_producer</code> produces each string from <code>string_tensor</code> <code>num_epochs</code> times before generating an <code>OutOfRange</code> error. If not specified, <code>string_input_producer</code> can cycle through the strings in <code>string_tensor</code> an unlimited number of times.</li>
+<li><b><code>shuffle</code></b>: Boolean. If true, the strings are randomly shuffled within each epoch.</li>
+<li><b><code>seed</code></b>: An integer (optional). Seed used if shuffle == True.</li>
+<li><b><code>capacity</code></b>: An integer. Sets the queue capacity.</li>
+<li><b><code>shared_name</code></b>: (optional). If set, this queue will be shared under the given name across multiple sessions. All sessions open to the device which has this queue will be able to access it via the shared_name. Using this in a distributed setting means each name will only be seen by one of the sessions which has access to this operation.</li>
+<li><b><code>name</code></b>: A name for the operations (optional).</li>
+<li><b><code>cancel_op</code></b>: Cancel op for the queue (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A queue with the output strings. A <code>QueueRunner</code> for the Queue is added to the current <code>Graph</code>'s <code>QUEUE_RUNNER</code> collection.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If the string_tensor is a null Python list. At runtime, will fail with an assertion if string_tensor becomes a null tensor.</li>
+</ul>

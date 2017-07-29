@@ -1,0 +1,31 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.qr" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.qr" class="dashAnchor"></a><h1 id="tf.qr">tf.qr</h1>
+<h3 id="tf.qr-1"><code>tf.qr</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">qr(
+    <span class="bu">input</span>,
+    full_matrices<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_linalg_ops.py</code>.</p>
+<p>See the guide: <a href="../../../api_guides/python/math_ops.md#Matrix_Math_Functions">Math &gt; Matrix Math Functions</a></p>
+<p>Computes the QR decompositions of one or more matrices.</p>
+<p>Computes the QR decomposition of each inner matrix in <code>tensor</code> such that <code>tensor[..., :, :] = q[..., :, :] * r[..., :,:])</code></p>
+<pre class="prettyprint"><code># a is a tensor.
+# q is a tensor of orthonormal matrices.
+# r is a tensor of upper triangular matrices.
+q, r = qr(a)
+q_full, r_full = qr(a, full_matrices=True)</code></pre>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float64</code>, <code>float32</code>, <code>complex64</code>, <code>complex128</code>. A tensor of shape <code>[..., M, N]</code> whose inner-most 2 dimensions form matrices of size <code>[M, N]</code>. Let <code>P</code> be the minimum of <code>M</code> and <code>N</code>.</li>
+<li><b><code>full_matrices</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>. If true, compute full-sized <code>q</code> and <code>r</code>. If false (the default), compute only the leading <code>P</code> columns of <code>q</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A tuple of <code>Tensor</code> objects (q, r).</p>
+<ul>
+<li><b><code>q</code></b>: A <code>Tensor</code>. Has the same type as <code>input</code>. Orthonormal basis for range of <code>a</code>. If <code>full_matrices</code> is <code>False</code> then shape is <code>[..., M, P]</code>; if <code>full_matrices</code> is <code>True</code> then shape is <code>[..., M, M]</code>.</li>
+<li><b><code>r</code></b>: A <code>Tensor</code>. Has the same type as <code>input</code>. Triangular factor. If <code>full_matrices</code> is <code>False</code> then shape is <code>[..., P, N]</code>. If <code>full_matrices</code> is <code>True</code> then shape is <code>[..., M, N]</code>.</li>
+</ul>

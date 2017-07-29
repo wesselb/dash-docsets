@@ -1,0 +1,40 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.legacy_seq2seq.embedding_attention_seq2seq" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.legacy_seq2seq.embedding_attention_seq2seq" class="dashAnchor"></a><h1 id="tf.contrib.legacy_seq2seq.embedding_attention_seq2seq">tf.contrib.legacy_seq2seq.embedding_attention_seq2seq</h1>
+<h3 id="tf.contrib.legacy_seq2seq.embedding_attention_seq2seq-1"><code>tf.contrib.legacy_seq2seq.embedding_attention_seq2seq</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">embedding_attention_seq2seq(
+    encoder_inputs,
+    decoder_inputs,
+    cell,
+    num_encoder_symbols,
+    num_decoder_symbols,
+    embedding_size,
+    num_heads<span class="op">=</span><span class="dv">1</span>,
+    output_projection<span class="op">=</span><span class="va">None</span>,
+    feed_previous<span class="op">=</span><span class="va">False</span>,
+    dtype<span class="op">=</span><span class="va">None</span>,
+    scope<span class="op">=</span><span class="va">None</span>,
+    initial_state_attention<span class="op">=</span><span class="va">False</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/legacy_seq2seq/python/ops/seq2seq.py"><code>tensorflow/contrib/legacy_seq2seq/python/ops/seq2seq.py</code></a>.</p>
+<p>Embedding sequence-to-sequence model with attention.</p>
+<p>This model first embeds encoder_inputs by a newly created embedding (of shape [num_encoder_symbols x input_size]). Then it runs an RNN to encode embedded encoder_inputs into a state vector. It keeps the outputs of this RNN at every step to use for attention later. Next, it embeds decoder_inputs by another newly created embedding (of shape [num_decoder_symbols x input_size]). Then it runs attention decoder, initialized with the last encoder state, on embedded decoder_inputs and attending to encoder outputs.</p>
+<p>Warning: when output_projection is None, the size of the attention vectors and variables will be made proportional to num_decoder_symbols, can be large.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>encoder_inputs</code></b>: A list of 1D int32 Tensors of shape [batch_size].</li>
+<li><b><code>decoder_inputs</code></b>: A list of 1D int32 Tensors of shape [batch_size].</li>
+<li><b><code>cell</code></b>: tf.nn.rnn_cell.RNNCell defining the cell function and size.</li>
+<li><b><code>num_encoder_symbols</code></b>: Integer; number of symbols on the encoder side.</li>
+<li><b><code>num_decoder_symbols</code></b>: Integer; number of symbols on the decoder side.</li>
+<li><b><code>embedding_size</code></b>: Integer, the length of the embedding vector for each symbol.</li>
+<li><b><code>num_heads</code></b>: Number of attention heads that read from attention_states.</li>
+<li><b><code>output_projection</code></b>: None or a pair (W, B) of output projection weights and biases; W has shape [output_size x num_decoder_symbols] and B has shape [num_decoder_symbols]; if provided and feed_previous=True, each fed previous output will first be multiplied by W and added B.</li>
+<li><b><code>feed_previous</code></b>: Boolean or scalar Boolean Tensor; if True, only the first of decoder_inputs will be used (the &quot;GO&quot; symbol), and all other decoder inputs will be taken from previous outputs (as in embedding_rnn_decoder). If False, decoder_inputs are used as given (the standard decoder case).</li>
+<li><b><code>dtype</code></b>: The dtype of the initial RNN state (default: tf.float32).</li>
+<li><b><code>scope</code></b>: VariableScope for the created subgraph; defaults to &quot;embedding_attention_seq2seq&quot;.</li>
+<li><b><code>initial_state_attention</code></b>: If False (default), initial attentions are zero. If True, initialize the attentions from the initial state and attention states.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A tuple of the form (outputs, state), where: outputs: A list of the same length as decoder_inputs of 2D Tensors with shape [batch_size x num_decoder_symbols] containing the generated outputs. state: The state of each decoder cell at the final time-step. It is a 2D Tensor of shape [batch_size x cell.state_size].</p>

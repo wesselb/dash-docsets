@@ -1,0 +1,37 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.gather" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.gather" class="dashAnchor"></a><h1 id="tf.gather">tf.gather</h1>
+<h3 id="tf.gather-1"><code>tf.gather</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">gather(
+    params,
+    indices,
+    validate_indices<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_array_ops.py</code>.</p>
+<p>See the guides: <a href="../../../api_guides/python/array_ops.md#Slicing_and_Joining">Tensor Transformations &gt; Slicing and Joining</a>, <a href="../../../api_guides/python/state_ops.md#Sparse_Variable_Updates">Variables &gt; Sparse Variable Updates</a></p>
+<p>Gather slices from <code>params</code> according to <code>indices</code>.</p>
+<p><code>indices</code> must be an integer tensor of any dimension (usually 0-D or 1-D). Produces an output tensor with shape <code>indices.shape + params.shape[1:]</code> where:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    <span class="co"># Scalar indices</span>
+    output[:, ..., :] <span class="op">=</span> params[indices, :, ... :]
+
+    <span class="co"># Vector indices</span>
+    output[i, :, ..., :] <span class="op">=</span> params[indices[i], :, ... :]
+
+    <span class="co"># Higher rank indices</span>
+    output[i, ..., j, :, ... :] <span class="op">=</span> params[indices[i, ..., j], :, ..., :]</code></pre></div>
+<p>If <code>indices</code> is a permutation and <code>len(indices) == params.shape[0]</code> then this operation will permute <code>params</code> accordingly.</p>
+<p><code>validate_indices</code>: DEPRECATED. If this operation is assigned to CPU, values in <code>indices</code> are always validated to be within range. If assigned to GPU, out-of-bound indices result in safe but unspecified behavior, which may include raising an error.</p>
+<div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+<p><img style="width:100%" src="https://www.tensorflow.org/images/Gather.png" alt></p>
+</div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>params</code></b>: A <code>Tensor</code>.</li>
+<li><b><code>indices</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>.</li>
+<li><b><code>validate_indices</code></b>: An optional <code>bool</code>. Defaults to <code>True</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>params</code>.</p>

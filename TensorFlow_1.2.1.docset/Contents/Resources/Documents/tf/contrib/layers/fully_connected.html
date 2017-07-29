@@ -1,0 +1,49 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.layers.fully_connected" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.layers.fully_connected" class="dashAnchor"></a><h1 id="tf.contrib.layers.fully_connected">tf.contrib.layers.fully_connected</h1>
+<h3 id="tf.contrib.layers.fully_connected-1"><code>tf.contrib.layers.fully_connected</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">fully_connected(
+    inputs,
+    num_outputs,
+    activation_fn<span class="op">=</span>tf.nn.relu,
+    normalizer_fn<span class="op">=</span><span class="va">None</span>,
+    normalizer_params<span class="op">=</span><span class="va">None</span>,
+    weights_initializer<span class="op">=</span>initializers.xavier_initializer(),
+    weights_regularizer<span class="op">=</span><span class="va">None</span>,
+    biases_initializer<span class="op">=</span>tf.zeros_initializer(),
+    biases_regularizer<span class="op">=</span><span class="va">None</span>,
+    reuse<span class="op">=</span><span class="va">None</span>,
+    variables_collections<span class="op">=</span><span class="va">None</span>,
+    outputs_collections<span class="op">=</span><span class="va">None</span>,
+    trainable<span class="op">=</span><span class="va">True</span>,
+    scope<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/layers/python/layers/layers.py"><code>tensorflow/contrib/layers/python/layers/layers.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.layers.md#Higher_level_ops_for_building_neural_network_layers">Layers (contrib) &gt; Higher level ops for building neural network layers</a></p>
+<p>Adds a fully connected layer.</p>
+<p><code>fully_connected</code> creates a variable called <code>weights</code>, representing a fully connected weight matrix, which is multiplied by the <code>inputs</code> to produce a <code>Tensor</code> of hidden units. If a <code>normalizer_fn</code> is provided (such as <code>batch_norm</code>), it is then applied. Otherwise, if <code>normalizer_fn</code> is None and a <code>biases_initializer</code> is provided then a <code>biases</code> variable would be created and added the hidden units. Finally, if <code>activation_fn</code> is not <code>None</code>, it is applied to the hidden units as well.</p>
+<p>Note: that if <code>inputs</code> have a rank greater than 2, then <code>inputs</code> is flattened prior to the initial matrix multiply by <code>weights</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>inputs</code></b>: A tensor of at least rank 2 and static value for the last dimension; i.e. <code>[batch_size, depth]</code>, <code>[None, None, None, channels]</code>.</li>
+<li><b><code>num_outputs</code></b>: Integer or long, the number of output units in the layer.</li>
+<li><b><code>activation_fn</code></b>: Activation function. The default value is a ReLU function. Explicitly set it to None to skip it and maintain a linear activation.</li>
+<li><b><code>normalizer_fn</code></b>: Normalization function to use instead of <code>biases</code>. If <code>normalizer_fn</code> is provided then <code>biases_initializer</code> and <code>biases_regularizer</code> are ignored and <code>biases</code> are not created nor added. default set to None for no normalizer function</li>
+<li><b><code>normalizer_params</code></b>: Normalization function parameters.</li>
+<li><b><code>weights_initializer</code></b>: An initializer for the weights.</li>
+<li><b><code>weights_regularizer</code></b>: Optional regularizer for the weights.</li>
+<li><b><code>biases_initializer</code></b>: An initializer for the biases. If None skip biases.</li>
+<li><b><code>biases_regularizer</code></b>: Optional regularizer for the biases.</li>
+<li><b><code>reuse</code></b>: Whether or not the layer and its variables should be reused. To be able to reuse the layer scope must be given.</li>
+<li><b><code>variables_collections</code></b>: Optional list of collections for all the variables or a dictionary containing a different list of collections per variable.</li>
+<li><b><code>outputs_collections</code></b>: Collection to add the outputs.</li>
+<li><b><code>trainable</code></b>: If <code>True</code> also add variables to the graph collection <code>GraphKeys.TRAINABLE_VARIABLES</code> (see tf.Variable).</li>
+<li><b><code>scope</code></b>: Optional scope for variable_scope.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The tensor variable representing the result of the series of operations.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If x has rank less than 2 or if its last dimension is not set.</li>
+</ul>

@@ -1,0 +1,13 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.local_variables" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.local_variables" class="dashAnchor"></a><h1 id="tf.local_variables">tf.local_variables</h1>
+<h3 id="tf.local_variables-1"><code>tf.local_variables</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">local_variables()</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/variables.py"><code>tensorflow/python/ops/variables.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/state_ops.md#Variable_helper_functions">Variables &gt; Variable helper functions</a></p>
+<p>Returns local variables.</p>
+<p>Local variables - per process variables, usually not saved/restored to checkpoint and used for temporary or intermediate values. For example, they can be used as counters for metrics computation or number of epochs this machine has read data. The <code>tf.contrib.framework.local_variable()</code> function automatically adds the new variable to <code>GraphKeys.LOCAL_VARIABLES</code>. This convenience function returns the contents of that collection.</p>
+<p>An alternative to local variables are global variables. See <a href="../tf/global_variables.html"><code>tf.global_variables</code></a></p>
+<h4 id="returns">Returns:</h4>
+<p>A list of local <code>Variable</code> objects.</p>

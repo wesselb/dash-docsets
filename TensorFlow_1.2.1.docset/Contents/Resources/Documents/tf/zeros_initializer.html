@@ -1,0 +1,44 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.zeros_initializer" /> <meta itemprop="property" content="__call__"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="from_config"/> <meta itemprop="property" content="get_config"/></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.zeros_initializer" class="dashAnchor"></a><h1 id="tf.zeros_initializer">tf.zeros_initializer</h1>
+<a name="//apple_ref/cpp/Class/tf.contrib.keras.initializers.Zeros" class="dashAnchor"></a><h3 id="class-tf.contrib.keras.initializers.zeros"><code>class tf.contrib.keras.initializers.Zeros</code></h3>
+<h3 id="class-tf.zeros_initializer"><code>class tf.zeros_initializer</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/init_ops.py"><code>tensorflow/python/ops/init_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/state_ops.md#Sharing_Variables">Variables &gt; Sharing Variables</a></p>
+<p>Initializer that generates tensors initialized to 0.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(dtype<span class="op">=</span>tf.float32)</code></pre></div>
+<h3 id="__call__">
+<code><strong>call</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__call__</span>(
+    shape,
+    dtype<span class="op">=</span><span class="va">None</span>,
+    partition_info<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<h3 id="from_config">
+<code>from_config</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">from_config(
+    cls,
+    config
+)</code></pre></div>
+<p>Instantiates an initializer from a configuration dictionary.</p>
+<p>Example:</p>
+<pre><code>initializer = RandomUniform(-1, 1)
+config = initializer.get_config()
+initializer = RandomUniform.from_config(config)</code></pre>
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>config</code></b>: A Python dictionary. It will typically be the output of <code>get_config</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>An Initializer instance.</p>
+<h3 id="get_config">
+<code>get_config</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_config()</code></pre></div>

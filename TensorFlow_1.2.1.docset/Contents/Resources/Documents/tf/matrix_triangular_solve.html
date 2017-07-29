@@ -1,0 +1,30 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.matrix_triangular_solve" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.matrix_triangular_solve" class="dashAnchor"></a><h1 id="tf.matrix_triangular_solve">tf.matrix_triangular_solve</h1>
+<h3 id="tf.matrix_triangular_solve-1"><code>tf.matrix_triangular_solve</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">matrix_triangular_solve(
+    matrix,
+    rhs,
+    lower<span class="op">=</span><span class="va">None</span>,
+    adjoint<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_linalg_ops.py</code>.</p>
+<p>See the guide: <a href="../../../api_guides/python/math_ops.md#Matrix_Math_Functions">Math &gt; Matrix Math Functions</a></p>
+<p>Solves systems of linear equations with upper or lower triangular matrices by</p>
+<p>backsubstitution.</p>
+<p><code>matrix</code> is a tensor of shape <code>[..., M, M]</code> whose inner-most 2 dimensions form square matrices. If <code>lower</code> is <code>True</code> then the strictly upper triangular part of each inner-most matrix is assumed to be zero and not accessed. If <code>lower</code> is False then the strictly lower triangular part of each inner-most matrix is assumed to be zero and not accessed. <code>rhs</code> is a tensor of shape <code>[..., M, K]</code>.</p>
+<p>The output is a tensor of shape <code>[..., M, K]</code>. If <code>adjoint</code> is <code>True</code> then the innermost matrices in output<code>satisfy matrix equations</code>matrix[..., :, :] * output[..., :, :] = rhs[..., :, :]<code>. If</code>adjoint<code>is</code>False<code>then the strictly then the  innermost matrices in</code>output<code>satisfy matrix equations</code>adjoint(matrix[..., i, k]) * output[..., k, j] = rhs[..., i, j]`.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>matrix</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float64</code>, <code>float32</code>. Shape is <code>[..., M, M]</code>.</li>
+<li><b><code>rhs</code></b>: A <code>Tensor</code>. Must have the same type as <code>matrix</code>. Shape is <code>[..., M, K]</code>.</li>
+<li><b><code>lower</code></b>: An optional <code>bool</code>. Defaults to <code>True</code>. Boolean indicating whether the innermost matrices in <code>matrix</code> are lower or upper triangular.</li>
+<li><p><b><code>adjoint</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>. Boolean indicating whether to solve with <code>matrix</code> or its (block-wise) adjoint.</p></li>
+<li><p><b><code>name</code></b>: A name for the operation (optional).</p></li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>matrix</code>. Shape is <code>[..., M, K]</code>.</p>
+<h4 id="numpy-compatibility">numpy compatibility</h4>
+<pre><code>Equivalent to np.linalg.triangular_solve</code></pre>

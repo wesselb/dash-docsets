@@ -1,0 +1,43 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.estimator.inputs.numpy_input_fn" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.estimator.inputs.numpy_input_fn" class="dashAnchor"></a><h1 id="tf.estimator.inputs.numpy_input_fn">tf.estimator.inputs.numpy_input_fn</h1>
+<h3 id="tf.estimator.inputs.numpy_input_fn-1"><code>tf.estimator.inputs.numpy_input_fn</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">numpy_input_fn(
+    x,
+    y<span class="op">=</span><span class="va">None</span>,
+    batch_size<span class="op">=</span><span class="dv">128</span>,
+    num_epochs<span class="op">=</span><span class="dv">1</span>,
+    shuffle<span class="op">=</span><span class="va">None</span>,
+    queue_capacity<span class="op">=</span><span class="dv">1000</span>,
+    num_threads<span class="op">=</span><span class="dv">1</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/estimator/inputs/numpy_io.py"><code>tensorflow/python/estimator/inputs/numpy_io.py</code></a>.</p>
+<p>Returns input function that would feed dict of numpy arrays into the model.</p>
+<p>This returns a function outputting <code>features</code> and <code>target</code> based on the dict of numpy arrays. The dict <code>features</code> has the same keys as the <code>x</code>.</p>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">age <span class="op">=</span> np.arange(<span class="dv">4</span>) <span class="op">*</span> <span class="fl">1.0</span>
+height <span class="op">=</span> np.arange(<span class="dv">32</span>, <span class="dv">36</span>)
+x <span class="op">=</span> {<span class="st">&#39;age&#39;</span>: age, <span class="st">&#39;height&#39;</span>: height}
+y <span class="op">=</span> np.arange(<span class="op">-</span><span class="dv">32</span>, <span class="op">-</span><span class="dv">28</span>)
+
+<span class="cf">with</span> tf.Session() <span class="im">as</span> session:
+  input_fn <span class="op">=</span> numpy_io.numpy_input_fn(
+      x, y, batch_size<span class="op">=</span><span class="dv">2</span>, shuffle<span class="op">=</span><span class="va">False</span>, num_epochs<span class="op">=</span><span class="dv">1</span>)</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: dict of numpy array object.</li>
+<li><b><code>y</code></b>: numpy array object. <code>None</code> if absent.</li>
+<li><b><code>batch_size</code></b>: Integer, size of batches to return.</li>
+<li><b><code>num_epochs</code></b>: Integer, number of epochs to iterate over data. If <code>None</code> will run forever.</li>
+<li><b><code>shuffle</code></b>: Boolean, if True shuffles the queue. Avoid shuffle at prediction time.</li>
+<li><b><code>queue_capacity</code></b>: Integer, size of queue to accumulate.</li>
+<li><b><code>num_threads</code></b>: Integer, number of threads used for reading and enqueueing. In order to have predicted and repeatable order of reading and enqueueing, such as in prediction and evaluation mode, <code>num_threads</code> should be 1.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Function, that has signature of ()-&gt;(dict of <code>features</code>, <code>target</code>)</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if the shape of <code>y</code> mismatches the shape of values in <code>x</code> (i.e., values in <code>x</code> have same shape).</li>
+<li><b><code>TypeError</code></b>: <code>x</code> is not a dict or <code>shuffle</code> is not bool.</li>
+</ul>

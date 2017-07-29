@@ -1,0 +1,39 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.learn.LogisticRegressor" /></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.learn.LogisticRegressor" class="dashAnchor"></a><h1 id="tf.contrib.learn.logisticregressor">tf.contrib.learn.LogisticRegressor</h1>
+<h3 id="tf.contrib.learn.logisticregressor-1"><code>tf.contrib.learn.LogisticRegressor</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">LogisticRegressor(
+    model_fn,
+    thresholds<span class="op">=</span><span class="va">None</span>,
+    model_dir<span class="op">=</span><span class="va">None</span>,
+    config<span class="op">=</span><span class="va">None</span>,
+    feature_engineering_fn<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/learn/python/learn/estimators/logistic_regressor.py"><code>tensorflow/contrib/learn/python/learn/estimators/logistic_regressor.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.learn.md#Estimators">Learn (contrib) &gt; Estimators</a></p>
+<p>Builds a logistic regression Estimator for binary classification.</p>
+<p>This method provides a basic Estimator with some additional metrics for custom binary classification models, including AUC, precision/recall and accuracy.</p>
+<p>Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">  <span class="co"># See tf.contrib.learn.Estimator(...) for details on model_fn structure</span>
+  <span class="kw">def</span> my_model_fn(...):
+    <span class="cf">pass</span>
+
+  estimator <span class="op">=</span> LogisticRegressor(model_fn<span class="op">=</span>my_model_fn)
+
+  <span class="co"># Input builders</span>
+  <span class="kw">def</span> input_fn_train:
+    <span class="cf">pass</span>
+
+  estimator.fit(input_fn<span class="op">=</span>input_fn_train)
+  estimator.predict(x<span class="op">=</span>x)</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>model_fn</code></b>: Model function with the signature: <code>(features, labels, mode) -&gt; (predictions, loss, train_op)</code>. Expects the returned predictions to be probabilities in [0.0, 1.0].</li>
+<li><b><code>thresholds</code></b>: List of floating point thresholds to use for accuracy, precision, and recall metrics. If <code>None</code>, defaults to <code>[0.5]</code>.</li>
+<li><b><code>model_dir</code></b>: Directory to save model parameters, graphs, etc. This can also be used to load checkpoints from the directory into a estimator to continue training a previously saved model.</li>
+<li><b><code>config</code></b>: A RunConfig configuration object.</li>
+<li><b><code>feature_engineering_fn</code></b>: Feature engineering function. Takes features and labels which are the output of <code>input_fn</code> and returns features and labels which will be fed into the model.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>tf.contrib.learn.Estimator</code> instance.</p>

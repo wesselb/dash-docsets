@@ -1,0 +1,73 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.learn.learn_runner.run" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.learn.learn_runner.run" class="dashAnchor"></a><h1 id="tf.contrib.learn.learn_runner.run">tf.contrib.learn.learn_runner.run</h1>
+<h3 id="tf.contrib.learn.learn_runner.run-1"><code>tf.contrib.learn.learn_runner.run</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">run(
+    experiment_fn,
+    output_dir<span class="op">=</span><span class="va">None</span>,
+    schedule<span class="op">=</span><span class="va">None</span>,
+    run_config<span class="op">=</span><span class="va">None</span>,
+    hparams<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/learn/python/learn/learn_runner.py"><code>tensorflow/contrib/learn/python/learn/learn_runner.py</code></a>.</p>
+<p>Make and run an experiment.</p>
+<p>It creates an Experiment by calling <code>experiment_fn</code>. Then it calls the function named as <code>schedule</code> of the Experiment.</p>
+<p>If schedule is not provided, then the default schedule for the current task type is used. The defaults are as follows:</p>
+<ul>
+<li>'ps' maps to 'serve'</li>
+<li>'worker' maps to 'train'</li>
+<li>'master' maps to 'local_run'</li>
+</ul>
+<p>If the experiment's config does not include a task type, then an exception is raised.</p>
+<p>Example with <code>run_config</code> (Recommended):</p>
+<pre><code>  def _create_my_experiment(run_config, hparams):
+
+      # You can change a subset of the run_config properties as
+      #   run_config = run_config.replace(save_checkpoints_steps=500)
+
+      return tf.contrib.learn.Experiment(
+        estimator=my_estimator(config=run_config, hparams=hparams),
+        train_input_fn=my_train_input,
+        eval_input_fn=my_eval_input)
+
+  learn_runner.run(
+    experiment_fn=_create_my_experiment,
+    run_config=run_config_lib.RunConfig(model_dir=&quot;some/output/dir&quot;),
+    schedule=&quot;train_and_evaluate&quot;,
+    hparams=_create_default_hparams())</code></pre>
+<p>or simply as</p>
+<pre><code>  learn_runner.run(
+    experiment_fn=_create_my_experiment,
+    run_config=run_config_lib.RunConfig(model_dir=&quot;some/output/dir&quot;))</code></pre>
+<p>if <code>hparams</code> is not used by the <code>Estimator</code>. On a single machine, <code>schedule</code> defaults to <code>train_and_evaluate</code>.</p>
+<p>Example with <code>output_dir</code> (deprecated):</p>
+<pre><code>  def _create_my_experiment(output_dir):
+      return tf.contrib.learn.Experiment(
+        estimator=my_estimator(model_dir=output_dir),
+        train_input_fn=my_train_input,
+        eval_input_fn=my_eval_input)
+
+  learn_runner.run(
+    experiment_fn=_create_my_experiment,
+    output_dir=&quot;some/output/dir&quot;,
+    schedule=&quot;train&quot;)</code></pre>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>experiment_fn</code></b>: A function that creates an <code>Experiment</code>. It could be one of the two following signatures:
+<ol style="list-style-type: decimal">
+<li>[Deprecated] It accepts an argument <code>output_dir</code> which should be used to create the <code>Estimator</code> (passed as <code>model_dir</code> to its constructor). It must return an <code>Experiment</code>. For this case, <code>run_config</code> and <code>hparams</code> must be None.</li>
+<li>It accpets two arguments <code>run_config</code> and <code>hparams</code>, which should be used to create the <code>Estimator</code> (<code>run_config</code> passed as <code>config</code> to its constructor; <code>hparams</code> used as the hyper-paremeters of the model). It must return an <code>Experiment</code>. For this case, <code>output_dir</code> must be None.</li>
+</ol></li>
+<li><b><code>output_dir</code></b>: Base output directory [Deprecated].</li>
+<li><b><code>schedule</code></b>: The name of the method in the <code>Experiment</code> to run.</li>
+<li><b><code>run_config</code></b>: <code>RunConfig</code> instance. The <code>run_config.model_dir</code> must be non-empty. If <code>run_config</code> is set, <code>output_dir</code> must be None.</li>
+<li><b><code>hparams</code></b>: <code>HParams</code> instance. The default hyper-parameters, which will be passed to the <code>experiment_fn</code> if <code>run_config</code> is not None.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The return value of function <code>schedule</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If both <code>output_dir</code> and <code>run_config</code> are empty or set, <code>schedule</code> is None but no task type is set in the built experiment's config, the task type has no default, <code>run_config.model_dir</code> is empty or <code>schedule</code> doesn't reference a member of <code>Experiment</code>.</li>
+<li><b><code>TypeError</code></b>: <code>schedule</code> references non-callable member.</li>
+</ul>

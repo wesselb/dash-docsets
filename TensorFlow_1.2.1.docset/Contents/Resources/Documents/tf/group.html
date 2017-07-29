@@ -1,0 +1,22 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.group" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.group" class="dashAnchor"></a><h1 id="tf.group">tf.group</h1>
+<h3 id="tf.group-1"><code>tf.group</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">group(
+    <span class="op">*</span>inputs,
+    <span class="op">**</span>kwargs
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/control_flow_ops.py"><code>tensorflow/python/ops/control_flow_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/control_flow_ops.md#Control_Flow_Operations">Control Flow &gt; Control Flow Operations</a></p>
+<p>Create an op that groups multiple operations.</p>
+<p>When this op finishes, all ops in <code>input</code> have finished. This op has no output.</p>
+<p>See also <a href="../tf/tuple.html">tuple</a> and <a href="../tf/control_dependencies.html">control_dependencies</a>.</p>
+<h4 id="args">Args:</h4>
+<p>*inputs: Zero or more tensors to group. **kwargs: Optional parameters to pass when constructing the NodeDef. * <b><code>name</code></b>: A name for this operation (optional).</p>
+<h4 id="returns">Returns:</h4>
+<p>An Operation that executes all its inputs.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If an unknown keyword argument is provided.</li>
+</ul>

@@ -1,0 +1,44 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.legacy_seq2seq.attention_decoder" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.legacy_seq2seq.attention_decoder" class="dashAnchor"></a><h1 id="tf.contrib.legacy_seq2seq.attention_decoder">tf.contrib.legacy_seq2seq.attention_decoder</h1>
+<h3 id="tf.contrib.legacy_seq2seq.attention_decoder-1"><code>tf.contrib.legacy_seq2seq.attention_decoder</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">attention_decoder(
+    decoder_inputs,
+    initial_state,
+    attention_states,
+    cell,
+    output_size<span class="op">=</span><span class="va">None</span>,
+    num_heads<span class="op">=</span><span class="dv">1</span>,
+    loop_function<span class="op">=</span><span class="va">None</span>,
+    dtype<span class="op">=</span><span class="va">None</span>,
+    scope<span class="op">=</span><span class="va">None</span>,
+    initial_state_attention<span class="op">=</span><span class="va">False</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/legacy_seq2seq/python/ops/seq2seq.py"><code>tensorflow/contrib/legacy_seq2seq/python/ops/seq2seq.py</code></a>.</p>
+<p>RNN decoder with attention for the sequence-to-sequence model.</p>
+<p>In this context &quot;attention&quot; means that, during decoding, the RNN can look up information in the additional tensor attention_states, and it does this by focusing on a few entries from the tensor. This model has proven to yield especially good results in a number of sequence-to-sequence tasks. This implementation is based on http://arxiv.org/abs/1412.7449 (see below for details). It is recommended for complex sequence-to-sequence tasks.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>decoder_inputs</code></b>: A list of 2D Tensors [batch_size x input_size].</li>
+<li><b><code>initial_state</code></b>: 2D Tensor [batch_size x cell.state_size].</li>
+<li><b><code>attention_states</code></b>: 3D Tensor [batch_size x attn_length x attn_size].</li>
+<li><b><code>cell</code></b>: tf.nn.rnn_cell.RNNCell defining the cell function and size.</li>
+<li><b><code>output_size</code></b>: Size of the output vectors; if None, we use cell.output_size.</li>
+<li><b><code>num_heads</code></b>: Number of attention heads that read from attention_states.</li>
+<li><b><code>loop_function</code></b>: If not None, this function will be applied to i-th output in order to generate i+1-th input, and decoder_inputs will be ignored, except for the first element (&quot;GO&quot; symbol). This can be used for decoding, but also for training to emulate http://arxiv.org/abs/1506.03099. Signature -- loop_function(prev, i) = next
+<ul>
+<li>prev is a 2D Tensor of shape [batch_size x output_size],</li>
+<li>i is an integer, the step number (when advanced control is needed),</li>
+<li>next is a 2D Tensor of shape [batch_size x input_size].</li>
+</ul></li>
+<li><b><code>dtype</code></b>: The dtype to use for the RNN initial state (default: tf.float32).</li>
+<li><b><code>scope</code></b>: VariableScope for the created subgraph; default: &quot;attention_decoder&quot;.</li>
+<li><b><code>initial_state_attention</code></b>: If False (default), initial attentions are zero. If True, initialize the attentions from the initial state and attention states -- useful when we wish to resume decoding from a previously stored decoder state and attention states.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A tuple of the form (outputs, state), where: outputs: A list of the same length as decoder_inputs of 2D Tensors of shape [batch_size x output_size]. These represent the generated outputs. Output i is computed from input i (which is either the i-th element of decoder_inputs or loop_function(output {i-1}, i)) as follows. First, we run the cell on a combination of the input and previous attention masks: cell_output, new_state = cell(linear(input, prev_attn), prev_state). Then, we calculate new attention masks: new_attn = softmax(V^T * tanh(W * attention_states + U * new_state)) and then we calculate the output: output = linear(cell_output, new_attn). state: The state of each decoder cell the final time-step. It is a 2D Tensor of shape [batch_size x cell.state_size].</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: when num_heads is not positive, there are no inputs, shapes of attention_states are not set, or input size cannot be inferred from the input.</li>
+</ul>

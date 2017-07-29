@@ -1,0 +1,82 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.matmul" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.matmul" class="dashAnchor"></a><h1 id="tf.matmul">tf.matmul</h1>
+<h3 id="tf.matmul-1"><code>tf.matmul</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">matmul(
+    a,
+    b,
+    transpose_a<span class="op">=</span><span class="va">False</span>,
+    transpose_b<span class="op">=</span><span class="va">False</span>,
+    adjoint_a<span class="op">=</span><span class="va">False</span>,
+    adjoint_b<span class="op">=</span><span class="va">False</span>,
+    a_is_sparse<span class="op">=</span><span class="va">False</span>,
+    b_is_sparse<span class="op">=</span><span class="va">False</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/math_ops.py"><code>tensorflow/python/ops/math_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/math_ops.md#Matrix_Math_Functions">Math &gt; Matrix Math Functions</a></p>
+<p>Multiplies matrix <code>a</code> by matrix <code>b</code>, producing <code>a</code> * <code>b</code>.</p>
+<p>The inputs must be matrices (or tensors of rank &gt; 2, representing batches of matrices), with matching inner dimensions, possibly after transposition.</p>
+<p>Both matrices must be of the same type. The supported types are: <code>float16</code>, <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>complex64</code>, <code>complex128</code>.</p>
+<p>Either matrix can be transposed or adjointed (conjugated and transposed) on the fly by setting one of the corresponding flag to <code>True</code>. These are <code>False</code> by default.</p>
+<p>If one or both of the matrices contain a lot of zeros, a more efficient multiplication algorithm can be used by setting the corresponding <code>a_is_sparse</code> or <code>b_is_sparse</code> flag to <code>True</code>. These are <code>False</code> by default. This optimization is only available for plain matrices (rank-2 tensors) with datatypes <code>bfloat16</code> or <code>float32</code>.</p>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># 2-D tensor `a`</span>
+a <span class="op">=</span> tf.constant([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>], shape<span class="op">=</span>[<span class="dv">2</span>, <span class="dv">3</span>]) <span class="op">=&gt;</span> [[<span class="dv">1</span>. <span class="dv">2</span>. <span class="dv">3</span>.]
+                                                      [<span class="dv">4</span>. <span class="dv">5</span>. <span class="dv">6</span>.]]
+<span class="co"># 2-D tensor `b`</span>
+b <span class="op">=</span> tf.constant([<span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">10</span>, <span class="dv">11</span>, <span class="dv">12</span>], shape<span class="op">=</span>[<span class="dv">3</span>, <span class="dv">2</span>]) <span class="op">=&gt;</span> [[<span class="dv">7</span>. <span class="dv">8</span>.]
+                                                         [<span class="dv">9</span>. <span class="dv">10</span>.]
+                                                         [<span class="dv">11</span>. <span class="dv">12</span>.]]
+c <span class="op">=</span> tf.matmul(a, b) <span class="op">=&gt;</span> [[<span class="dv">58</span> <span class="dv">64</span>]
+                        [<span class="dv">139</span> <span class="dv">154</span>]]
+
+
+<span class="co"># 3-D tensor `a`</span>
+a <span class="op">=</span> tf.constant(np.arange(<span class="dv">1</span>, <span class="dv">13</span>, dtype<span class="op">=</span>np.int32),
+                shape<span class="op">=</span>[<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>])                  <span class="op">=&gt;</span> [[[ <span class="dv">1</span>.  <span class="dv">2</span>.  <span class="dv">3</span>.]
+                                                       [ <span class="dv">4</span>.  <span class="dv">5</span>.  <span class="dv">6</span>.]],
+                                                      [[ <span class="dv">7</span>.  <span class="dv">8</span>.  <span class="dv">9</span>.]
+                                                       [<span class="dv">10</span>. <span class="dv">11</span>. <span class="dv">12</span>.]]]
+
+<span class="co"># 3-D tensor `b`</span>
+b <span class="op">=</span> tf.constant(np.arange(<span class="dv">13</span>, <span class="dv">25</span>, dtype<span class="op">=</span>np.int32),
+                shape<span class="op">=</span>[<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">2</span>])                   <span class="op">=&gt;</span> [[[<span class="dv">13</span>. <span class="dv">14</span>.]
+                                                        [<span class="dv">15</span>. <span class="dv">16</span>.]
+                                                        [<span class="dv">17</span>. <span class="dv">18</span>.]],
+                                                       [[<span class="dv">19</span>. <span class="dv">20</span>.]
+                                                        [<span class="dv">21</span>. <span class="dv">22</span>.]
+                                                        [<span class="dv">23</span>. <span class="dv">24</span>.]]]
+c <span class="op">=</span> tf.matmul(a, b) <span class="op">=&gt;</span> [[[ <span class="dv">94</span> <span class="dv">100</span>]
+                         [<span class="dv">229</span> <span class="dv">244</span>]],
+                        [[<span class="dv">508</span> <span class="dv">532</span>]
+                         [<span class="dv">697</span> <span class="dv">730</span>]]]
+
+<span class="co"># Since python &gt;= 3.5 the @ operator is supported (see PEP 465).</span>
+<span class="co"># In TensorFlow, it simply calls the `tf.matmul()` function, so the</span>
+<span class="co"># following lines are equivalent:</span>
+d <span class="op">=</span> a <span class="op">@</span> b <span class="op">@</span> [[<span class="dv">10</span>.], [<span class="dv">11</span>.]]
+d <span class="op">=</span> tf.matmul(tf.matmul(a, b), [[<span class="dv">10</span>.], [<span class="dv">11</span>.]])</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>a</code></b>: <code>Tensor</code> of type <code>float16</code>, <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>complex64</code>, <code>complex128</code> and rank &gt; 1.</li>
+<li><b><code>b</code></b>: <code>Tensor</code> with same type and rank as <code>a</code>.</li>
+<li><b><code>transpose_a</code></b>: If <code>True</code>, <code>a</code> is transposed before multiplication.</li>
+<li><b><code>transpose_b</code></b>: If <code>True</code>, <code>b</code> is transposed before multiplication.</li>
+<li><b><code>adjoint_a</code></b>: If <code>True</code>, <code>a</code> is conjugated and transposed before multiplication.</li>
+<li><b><code>adjoint_b</code></b>: If <code>True</code>, <code>b</code> is conjugated and transposed before multiplication.</li>
+<li><b><code>a_is_sparse</code></b>: If <code>True</code>, <code>a</code> is treated as a sparse matrix.</li>
+<li><b><code>b_is_sparse</code></b>: If <code>True</code>, <code>b</code> is treated as a sparse matrix.</li>
+<li><b><code>name</code></b>: Name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of the same type as <code>a</code> and <code>b</code> where each inner-most matrix is the product of the corresponding matrices in <code>a</code> and <code>b</code>, e.g. if all transpose or adjoint attributes are <code>False</code>:</p>
+<p><code>output</code>[..., i, j] = sum_k (<code>a</code>[..., i, k] * <code>b</code>[..., k, j]), for all indices i, j.</p>
+<ul>
+<li><b><code>Note</code></b>: This is matrix product, not element-wise product.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If transpose_a and adjoint_a, or transpose_b and adjoint_b are both set to True.</li>
+</ul>

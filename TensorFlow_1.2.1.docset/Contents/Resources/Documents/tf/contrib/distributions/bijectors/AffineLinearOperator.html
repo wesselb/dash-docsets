@@ -1,0 +1,249 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.distributions.bijectors.AffineLinearOperator" /> <meta itemprop="property" content="dtype"/> <meta itemprop="property" content="event_ndims"/> <meta itemprop="property" content="graph_parents"/> <meta itemprop="property" content="is_constant_jacobian"/> <meta itemprop="property" content="name"/> <meta itemprop="property" content="scale"/> <meta itemprop="property" content="shift"/> <meta itemprop="property" content="validate_args"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="forward"/> <meta itemprop="property" content="forward_event_shape"/> <meta itemprop="property" content="forward_event_shape_tensor"/> <meta itemprop="property" content="forward_log_det_jacobian"/> <meta itemprop="property" content="inverse"/> <meta itemprop="property" content="inverse_event_shape"/> <meta itemprop="property" content="inverse_event_shape_tensor"/> <meta itemprop="property" content="inverse_log_det_jacobian"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.distributions.bijectors.AffineLinearOperator" class="dashAnchor"></a><h1 id="tf.contrib.distributions.bijectors.affinelinearoperator">tf.contrib.distributions.bijectors.AffineLinearOperator</h1>
+<h3 id="class-tf.contrib.distributions.bijectors.affinelinearoperator"><code>class tf.contrib.distributions.bijectors.AffineLinearOperator</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/distributions/python/ops/bijectors/affine_linear_operator_impl.py"><code>tensorflow/contrib/distributions/python/ops/bijectors/affine_linear_operator_impl.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../../api_guides/python/contrib.distributions.bijectors.md#Bijectors">Random variable transformations (contrib) &gt; Bijectors</a></p>
+<p>Compute <code>Y = g(X; shift, scale) = scale @ X + shift</code>.</p>
+<p><code>shift</code> is a numeric <code>Tensor</code> and <code>scale</code> is a <code>LinearOperator</code>.</p>
+<p>If <code>X</code> is a scalar then the forward transformation is: <code>scale * X + shift</code> where <code>*</code> denotes the scalar product.</p>
+<p>Note: we don't always simply transpose <code>X</code> (but write it this way for brevity). Actually the input <code>X</code> undergoes the following transformation before being premultiplied by <code>scale</code>:</p>
+<ol style="list-style-type: decimal">
+<li>If there are no sample dims, we call <code>X = tf.expand_dims(X, 0)</code>, i.e., <code>new_sample_shape = [1]</code>. Otherwise do nothing.</li>
+<li>The sample shape is flattened to have one dimension, i.e., <code>new_sample_shape = [n]</code> where <code>n = tf.reduce_prod(old_sample_shape)</code>.</li>
+<li>The sample dim is cyclically rotated left by 1, i.e., <code>new_shape = [B1,...,Bb, k, n]</code> where <code>n</code> is as above, <code>k</code> is the event_shape, and <code>B1,...,Bb</code> are the batch shapes for each of <code>b</code> batch dimensions.</li>
+</ol>
+<p>(For more details see <code>shape.make_batch_of_event_sample_matrices</code>.)</p>
+<p>The result of the above transformation is that <code>X</code> can be regarded as a batch of matrices where each column is a draw from the distribution. After premultiplying by <code>scale</code>, we take the inverse of this procedure. The input <code>Y</code> also undergoes the same transformation before/after premultiplying by <code>inv(scale)</code>.</p>
+<p>Example Use:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">linalg <span class="op">=</span> tf.contrib.linalg
+
+x <span class="op">=</span> [<span class="dv">1</span>., <span class="dv">2</span>, <span class="dv">3</span>]
+
+shift <span class="op">=</span> [<span class="op">-</span><span class="dv">1</span>., <span class="dv">0</span>., <span class="dv">1</span>]
+diag <span class="op">=</span> [<span class="dv">1</span>., <span class="dv">2</span>, <span class="dv">3</span>]
+scale <span class="op">=</span> linalg.LinearOperatorDiag(diag)
+affine <span class="op">=</span> AffineLinearOperator(shift, scale)
+<span class="co"># In this case, `forward` is equivalent to:</span>
+<span class="co"># y = scale @ x + shift</span>
+y <span class="op">=</span> affine.forward(x)  <span class="co"># [0., 4, 10]</span>
+
+shift <span class="op">=</span> [<span class="dv">2</span>., <span class="dv">3</span>, <span class="dv">1</span>]
+tril <span class="op">=</span> [[<span class="dv">1</span>., <span class="dv">0</span>, <span class="dv">0</span>],
+        [<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">0</span>],
+        [<span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">1</span>]]
+scale <span class="op">=</span> linalg.LinearOperatorTriL(tril)
+affine <span class="op">=</span> AffineLinearOperator(shift, scale)
+<span class="co"># In this case, `forward` is equivalent to:</span>
+<span class="co"># np.squeeze(np.matmul(tril, np.expand_dims(x, -1)), -1) + shift</span>
+y <span class="op">=</span> affine.forward(x)  <span class="co"># [3., 7, 11]</span></code></pre></div>
+<h2 id="properties">Properties</h2>
+<h3 id="dtype">
+<code>dtype</code>
+</h3>
+<p>dtype of <code>Tensor</code>s transformable by this distribution.</p>
+<h3 id="event_ndims">
+<code>event_ndims</code>
+</h3>
+<p>Returns then number of event dimensions this bijector operates on.</p>
+<h3 id="graph_parents">
+<code>graph_parents</code>
+</h3>
+<p>Returns this <code>Bijector</code>'s graph_parents as a Python list.</p>
+<h3 id="is_constant_jacobian">
+<code>is_constant_jacobian</code>
+</h3>
+<p>Returns true iff the Jacobian is not a function of x.</p>
+<p>Note: Jacobian is either constant for both forward and inverse or neither.</p>
+<h4 id="returns">Returns:</h4>
+<ul>
+<li><b><code>is_constant_jacobian</code></b>: Python <code>bool</code>.</li>
+</ul>
+<h3 id="name">
+<code>name</code>
+</h3>
+<p>Returns the string name of this <code>Bijector</code>.</p>
+<h3 id="scale">
+<code>scale</code>
+</h3>
+<p>The <code>scale</code> <code>LinearOperator</code> in <code>Y = scale @ X + shift</code>.</p>
+<h3 id="shift">
+<code>shift</code>
+</h3>
+<p>The <code>shift</code> <code>Tensor</code> in <code>Y = scale @ X + shift</code>.</p>
+<h3 id="validate_args">
+<code>validate_args</code>
+</h3>
+<p>Returns True if Tensor arguments will be validated.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    shift<span class="op">=</span><span class="va">None</span>,
+    scale<span class="op">=</span><span class="va">None</span>,
+    event_ndims<span class="op">=</span><span class="dv">1</span>,
+    validate_args<span class="op">=</span><span class="va">False</span>,
+    name<span class="op">=</span><span class="st">&#39;affine_linear_operator&#39;</span>
+)</code></pre></div>
+<p>Instantiates the <code>AffineLinearOperator</code> bijector.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>shift</code></b>: Floating-point <code>Tensor</code>.</li>
+<li><b><code>scale</code></b>: Subclass of <code>LinearOperator</code>. Represents the (batch) positive definite matrix <code>M</code> in <code>R^{k x k}</code>.</li>
+<li><b><code>event_ndims</code></b>: Scalar <code>integer</code> <code>Tensor</code> indicating the number of dimensions associated with a particular draw from the distribution. Must be 0 or 1.</li>
+<li><b><code>validate_args</code></b>: Python <code>bool</code> indicating whether arguments should be checked for correctness.</li>
+<li><b><code>name</code></b>: Python <code>str</code> name given to ops managed by this object.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>event_ndims</code> is not 0 or 1.</li>
+<li><b><code>TypeError</code></b>: if <code>scale</code> is not a <code>LinearOperator</code>.</li>
+<li><b><code>TypeError</code></b>: if <code>shift.dtype</code> does not match <code>scale.dtype</code>.</li>
+<li><b><code>ValueError</code></b>: if not <code>scale.is_non_singular</code>.</li>
+</ul>
+<h3 id="forward">
+<code>forward</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">forward(
+    x,
+    name<span class="op">=</span><span class="st">&#39;forward&#39;</span>
+)</code></pre></div>
+<p>Returns the forward <code>Bijector</code> evaluation, i.e., X = g(Y).</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code>. The input to the &quot;forward&quot; evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+</ul>
+<h4 id="returns-1">Returns:</h4>
+<p><code>Tensor</code>.</p>
+<h4 id="raises-1">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>x.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if <code>_forward</code> is not implemented.</li>
+</ul>
+<h3 id="forward_event_shape">
+<code>forward_event_shape</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">forward_event_shape(input_shape)</code></pre></div>
+<p>Shape of a single sample from a single batch as a <code>TensorShape</code>.</p>
+<p>Same meaning as <code>forward_event_shape_tensor</code>. May be only partially defined.</p>
+<h4 id="args-2">Args:</h4>
+<ul>
+<li><b><code>input_shape</code></b>: <code>TensorShape</code> indicating event-portion shape passed into <code>forward</code> function.</li>
+</ul>
+<h4 id="returns-2">Returns:</h4>
+<ul>
+<li><b><code>forward_event_shape_tensor</code></b>: <code>TensorShape</code> indicating event-portion shape after applying <code>forward</code>. Possibly unknown.</li>
+</ul>
+<h3 id="forward_event_shape_tensor">
+<code>forward_event_shape_tensor</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">forward_event_shape_tensor(
+    input_shape,
+    name<span class="op">=</span><span class="st">&#39;forward_event_shape_tensor&#39;</span>
+)</code></pre></div>
+<p>Shape of a single sample from a single batch as an <code>int32</code> 1D <code>Tensor</code>.</p>
+<h4 id="args-3">Args:</h4>
+<ul>
+<li><b><code>input_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape passed into <code>forward</code> function.</li>
+<li><b><code>name</code></b>: name to give to the op</li>
+</ul>
+<h4 id="returns-3">Returns:</h4>
+<ul>
+<li><b><code>forward_event_shape_tensor</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape after applying <code>forward</code>.</li>
+</ul>
+<h3 id="forward_log_det_jacobian">
+<code>forward_log_det_jacobian</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">forward_log_det_jacobian(
+    x,
+    name<span class="op">=</span><span class="st">&#39;forward_log_det_jacobian&#39;</span>
+)</code></pre></div>
+<p>Returns both the forward_log_det_jacobian.</p>
+<h4 id="args-4">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code>. The input to the &quot;forward&quot; Jacobian evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+</ul>
+<h4 id="returns-4">Returns:</h4>
+<p><code>Tensor</code>.</p>
+<h4 id="raises-2">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if neither <code>_forward_log_det_jacobian</code> nor {<code>_inverse</code>, <code>_inverse_log_det_jacobian</code>} are implemented.</li>
+</ul>
+<h3 id="inverse">
+<code>inverse</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">inverse(
+    y,
+    name<span class="op">=</span><span class="st">&#39;inverse&#39;</span>
+)</code></pre></div>
+<p>Returns the inverse <code>Bijector</code> evaluation, i.e., X = g^{-1}(Y).</p>
+<h4 id="args-5">Args:</h4>
+<ul>
+<li><b><code>y</code></b>: <code>Tensor</code>. The input to the &quot;inverse&quot; evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+</ul>
+<h4 id="returns-5">Returns:</h4>
+<p><code>Tensor</code>.</p>
+<h4 id="raises-3">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if <code>_inverse</code> is not implemented.</li>
+</ul>
+<h3 id="inverse_event_shape">
+<code>inverse_event_shape</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">inverse_event_shape(output_shape)</code></pre></div>
+<p>Shape of a single sample from a single batch as a <code>TensorShape</code>.</p>
+<p>Same meaning as <code>inverse_event_shape_tensor</code>. May be only partially defined.</p>
+<h4 id="args-6">Args:</h4>
+<ul>
+<li><b><code>output_shape</code></b>: <code>TensorShape</code> indicating event-portion shape passed into <code>inverse</code> function.</li>
+</ul>
+<h4 id="returns-6">Returns:</h4>
+<ul>
+<li><b><code>inverse_event_shape_tensor</code></b>: <code>TensorShape</code> indicating event-portion shape after applying <code>inverse</code>. Possibly unknown.</li>
+</ul>
+<h3 id="inverse_event_shape_tensor">
+<code>inverse_event_shape_tensor</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">inverse_event_shape_tensor(
+    output_shape,
+    name<span class="op">=</span><span class="st">&#39;inverse_event_shape_tensor&#39;</span>
+)</code></pre></div>
+<p>Shape of a single sample from a single batch as an <code>int32</code> 1D <code>Tensor</code>.</p>
+<h4 id="args-7">Args:</h4>
+<ul>
+<li><b><code>output_shape</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape passed into <code>inverse</code> function.</li>
+<li><b><code>name</code></b>: name to give to the op</li>
+</ul>
+<h4 id="returns-7">Returns:</h4>
+<ul>
+<li><b><code>inverse_event_shape_tensor</code></b>: <code>Tensor</code>, <code>int32</code> vector indicating event-portion shape after applying <code>inverse</code>.</li>
+</ul>
+<h3 id="inverse_log_det_jacobian">
+<code>inverse_log_det_jacobian</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">inverse_log_det_jacobian(
+    y,
+    name<span class="op">=</span><span class="st">&#39;inverse_log_det_jacobian&#39;</span>
+)</code></pre></div>
+<p>Returns the (log o det o Jacobian o inverse)(y).</p>
+<p>Mathematically, returns: <code>log(det(dX/dY))(Y)</code>. (Recall that: <code>X=g^{-1}(Y)</code>.)</p>
+<p>Note that <code>forward_log_det_jacobian</code> is the negative of this function.</p>
+<h4 id="args-8">Args:</h4>
+<ul>
+<li><b><code>y</code></b>: <code>Tensor</code>. The input to the &quot;inverse&quot; Jacobian evaluation.</li>
+<li><b><code>name</code></b>: The name to give this op.</li>
+</ul>
+<h4 id="returns-8">Returns:</h4>
+<p><code>Tensor</code>.</p>
+<h4 id="raises-4">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>self.dtype</code> is specified and <code>y.dtype</code> is not <code>self.dtype</code>.</li>
+<li><b><code>NotImplementedError</code></b>: if <code>_inverse_log_det_jacobian</code> is not implemented.</li>
+</ul>

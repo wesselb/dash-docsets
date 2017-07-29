@@ -1,0 +1,23 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.add_n" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.add_n" class="dashAnchor"></a><h1 id="tf.add_n">tf.add_n</h1>
+<h3 id="tf.add_n-1"><code>tf.add_n</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">add_n(
+    inputs,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/math_ops.py"><code>tensorflow/python/ops/math_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/math_ops.md#Basic_Math_Functions">Math &gt; Basic Math Functions</a></p>
+<p>Adds all input tensors element-wise.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>inputs</code></b>: A list of <code>Tensor</code> objects, each with same shape and type.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of same shape and type as the elements of <code>inputs</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>inputs</code> don't all have same shape and dtype or the shape cannot be inferred.</li>
+</ul>

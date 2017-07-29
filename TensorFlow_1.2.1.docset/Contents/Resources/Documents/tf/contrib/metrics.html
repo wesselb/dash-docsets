@@ -1,0 +1,52 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.metrics" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.metrics" class="dashAnchor"></a><h1 id="module-tf.contrib.metrics">Module: tf.contrib.metrics</h1>
+<h3 id="module-tf.contrib.metrics-1">Module <code>tf.contrib.metrics</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/metrics/__init__.py"><code>tensorflow/contrib/metrics/__init__.py</code></a>.</p>
+<p>Ops for evaluation metrics and summary statistics.</p>
+<p>See the <a href="../../../../api_guides/python/contrib.metrics.html">Metrics (contrib)</a> guide.</p>
+<h2 id="functions">Functions</h2>
+<p><a href="../../tf/contrib/metrics/accuracy.html"><code>accuracy(...)</code></a>: Computes the percentage of times that predictions matches labels.</p>
+<p><a href="../../tf/contrib/metrics/aggregate_metric_map.html"><code>aggregate_metric_map(...)</code></a>: Aggregates the metric names to tuple dictionary.</p>
+<p><a href="../../tf/contrib/metrics/aggregate_metrics.html"><code>aggregate_metrics(...)</code></a>: Aggregates the metric value tensors and update ops into two lists.</p>
+<p><a href="../../tf/contrib/metrics/auc_using_histogram.html"><code>auc_using_histogram(...)</code></a>: AUC computed by maintaining histograms.</p>
+<p><a href="../../tf/contrib/metrics/confusion_matrix.html"><code>confusion_matrix(...)</code></a>: Deprecated. Use tf.confusion_matrix instead.</p>
+<p><a href="../../tf/sets/set_difference.html"><code>set_difference(...)</code></a>: Compute set difference of elements in last dimension of <code>a</code> and <code>b</code>.</p>
+<p><a href="../../tf/sets/set_intersection.html"><code>set_intersection(...)</code></a>: Compute set intersection of elements in last dimension of <code>a</code> and <code>b</code>.</p>
+<p><a href="../../tf/sets/set_size.html"><code>set_size(...)</code></a>: Compute number of unique elements along last dimension of <code>a</code>.</p>
+<p><a href="../../tf/sets/set_union.html"><code>set_union(...)</code></a>: Compute set union of elements in last dimension of <code>a</code> and <code>b</code>.</p>
+<p><a href="../../tf/contrib/metrics/streaming_accuracy.html"><code>streaming_accuracy(...)</code></a>: Calculates how often <code>predictions</code> matches <code>labels</code>.</p>
+<p><a href="../../tf/contrib/metrics/streaming_auc.html"><code>streaming_auc(...)</code></a>: Computes the approximate AUC via a Riemann sum.</p>
+<p><a href="../../tf/contrib/metrics/streaming_concat.html"><code>streaming_concat(...)</code></a>: Concatenate values along an axis across batches.</p>
+<p><a href="../../tf/contrib/metrics/streaming_covariance.html"><code>streaming_covariance(...)</code></a>: Computes the unbiased sample covariance between <code>predictions</code> and <code>labels</code>.</p>
+<p><a href="../../tf/contrib/metrics/streaming_false_negatives.html"><code>streaming_false_negatives(...)</code></a>: Computes the total number of false negatives.</p>
+<p><a href="../../tf/contrib/metrics/streaming_false_negatives_at_thresholds.html"><code>streaming_false_negatives_at_thresholds(...)</code></a></p>
+<p><a href="../../tf/contrib/metrics/streaming_false_positives.html"><code>streaming_false_positives(...)</code></a>: Sum the weights of false positives.</p>
+<p><a href="../../tf/contrib/metrics/streaming_false_positives_at_thresholds.html"><code>streaming_false_positives_at_thresholds(...)</code></a></p>
+<p><a href="../../tf/contrib/metrics/streaming_mean.html"><code>streaming_mean(...)</code></a>: Computes the (weighted) mean of the given values.</p>
+<p><a href="../../tf/contrib/metrics/streaming_mean_absolute_error.html"><code>streaming_mean_absolute_error(...)</code></a>: Computes the mean absolute error between the labels and predictions.</p>
+<p><a href="../../tf/contrib/metrics/streaming_mean_cosine_distance.html"><code>streaming_mean_cosine_distance(...)</code></a>: Computes the cosine distance between the labels and predictions.</p>
+<p><a href="../../tf/contrib/metrics/streaming_mean_iou.html"><code>streaming_mean_iou(...)</code></a>: Calculate per-step mean Intersection-Over-Union (mIOU).</p>
+<p><a href="../../tf/contrib/metrics/streaming_mean_relative_error.html"><code>streaming_mean_relative_error(...)</code></a>: Computes the mean relative error by normalizing with the given values.</p>
+<p><a href="../../tf/contrib/metrics/streaming_mean_squared_error.html"><code>streaming_mean_squared_error(...)</code></a>: Computes the mean squared error between the labels and predictions.</p>
+<p><a href="../../tf/contrib/metrics/streaming_mean_tensor.html"><code>streaming_mean_tensor(...)</code></a>: Computes the element-wise (weighted) mean of the given tensors.</p>
+<p><a href="../../tf/contrib/metrics/streaming_pearson_correlation.html"><code>streaming_pearson_correlation(...)</code></a>: Computes Pearson correlation coefficient between <code>predictions</code>, <code>labels</code>.</p>
+<p><a href="../../tf/contrib/metrics/streaming_percentage_less.html"><code>streaming_percentage_less(...)</code></a>: Computes the percentage of values less than the given threshold.</p>
+<p><a href="../../tf/contrib/metrics/streaming_precision.html"><code>streaming_precision(...)</code></a>: Computes the precision of the predictions with respect to the labels.</p>
+<p><a href="../../tf/contrib/metrics/streaming_precision_at_thresholds.html"><code>streaming_precision_at_thresholds(...)</code></a>: Computes precision values for different <code>thresholds</code> on <code>predictions</code>.</p>
+<p><a href="../../tf/contrib/metrics/streaming_recall.html"><code>streaming_recall(...)</code></a>: Computes the recall of the predictions with respect to the labels.</p>
+<p><a href="../../tf/contrib/metrics/streaming_recall_at_k.html"><code>streaming_recall_at_k(...)</code></a>: Computes the recall@k of the predictions with respect to dense labels. (deprecated)</p>
+<p><a href="../../tf/contrib/metrics/streaming_recall_at_thresholds.html"><code>streaming_recall_at_thresholds(...)</code></a>: Computes various recall values for different <code>thresholds</code> on <code>predictions</code>.</p>
+<p><a href="../../tf/contrib/metrics/streaming_root_mean_squared_error.html"><code>streaming_root_mean_squared_error(...)</code></a>: Computes the root mean squared error between the labels and predictions.</p>
+<p><a href="../../tf/contrib/metrics/streaming_sensitivity_at_specificity.html"><code>streaming_sensitivity_at_specificity(...)</code></a>: Computes the specificity at a given sensitivity.</p>
+<p><a href="../../tf/contrib/metrics/streaming_sparse_average_precision_at_k.html"><code>streaming_sparse_average_precision_at_k(...)</code></a>: Computes average precision@k of predictions with respect to sparse labels.</p>
+<p><a href="../../tf/contrib/metrics/streaming_sparse_average_precision_at_top_k.html"><code>streaming_sparse_average_precision_at_top_k(...)</code></a>: Computes average precision@k of predictions with respect to sparse labels.</p>
+<p><a href="../../tf/contrib/metrics/streaming_sparse_precision_at_k.html"><code>streaming_sparse_precision_at_k(...)</code></a>: Computes precision@k of the predictions with respect to sparse labels.</p>
+<p><a href="../../tf/contrib/metrics/streaming_sparse_precision_at_top_k.html"><code>streaming_sparse_precision_at_top_k(...)</code></a>: Computes precision@k of top-k predictions with respect to sparse labels.</p>
+<p><a href="../../tf/contrib/metrics/streaming_sparse_recall_at_k.html"><code>streaming_sparse_recall_at_k(...)</code></a>: Computes recall@k of the predictions with respect to sparse labels.</p>
+<p><a href="../../tf/contrib/metrics/streaming_specificity_at_sensitivity.html"><code>streaming_specificity_at_sensitivity(...)</code></a>: Computes the specificity at a given sensitivity.</p>
+<p><a href="../../tf/contrib/metrics/streaming_true_negatives.html"><code>streaming_true_negatives(...)</code></a>: Sum the weights of true_negatives.</p>
+<p><a href="../../tf/contrib/metrics/streaming_true_negatives_at_thresholds.html"><code>streaming_true_negatives_at_thresholds(...)</code></a></p>
+<p><a href="../../tf/contrib/metrics/streaming_true_positives.html"><code>streaming_true_positives(...)</code></a>: Sum the weights of true_positives.</p>
+<p><a href="../../tf/contrib/metrics/streaming_true_positives_at_thresholds.html"><code>streaming_true_positives_at_thresholds(...)</code></a></p>

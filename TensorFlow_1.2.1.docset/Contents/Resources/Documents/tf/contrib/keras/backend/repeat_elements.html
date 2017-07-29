@@ -1,0 +1,21 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.backend.repeat_elements" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.keras.backend.repeat_elements" class="dashAnchor"></a><h1 id="tf.contrib.keras.backend.repeat_elements">tf.contrib.keras.backend.repeat_elements</h1>
+<h3 id="tf.contrib.keras.backend.repeat_elements-1"><code>tf.contrib.keras.backend.repeat_elements</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">repeat_elements(
+    x,
+    rep,
+    axis
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/backend.py"><code>tensorflow/contrib/keras/python/keras/backend.py</code></a>.</p>
+<p>Repeats the elements of a tensor along an axis, like <code>np.repeat</code>.</p>
+<p>If <code>x</code> has shape <code>(s1, s2, s3)</code> and <code>axis</code> is <code>1</code>, the output will have shape <code>(s1, s2 * rep, s3)</code>.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>x: Tensor or variable.
+rep: Python integer, number of times to repeat.
+axis: Axis along which to repeat.</code></pre>
+<h4 id="raises">Raises:</h4>
+<pre><code>ValueError: In case `x.shape[axis]` is undefined.</code></pre>
+<h4 id="returns">Returns:</h4>
+<pre><code>A tensor.</code></pre>

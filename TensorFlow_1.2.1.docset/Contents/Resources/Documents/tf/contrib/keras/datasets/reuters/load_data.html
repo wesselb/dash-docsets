@@ -1,0 +1,36 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.datasets.reuters.load_data" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.keras.datasets.reuters.load_data" class="dashAnchor"></a><h1 id="tf.contrib.keras.datasets.reuters.load_data">tf.contrib.keras.datasets.reuters.load_data</h1>
+<h3 id="tf.contrib.keras.datasets.reuters.load_data-1"><code>tf.contrib.keras.datasets.reuters.load_data</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">load_data(
+    path<span class="op">=</span><span class="st">&#39;reuters.npz&#39;</span>,
+    num_words<span class="op">=</span><span class="va">None</span>,
+    skip_top<span class="op">=</span><span class="dv">0</span>,
+    maxlen<span class="op">=</span><span class="va">None</span>,
+    test_split<span class="op">=</span><span class="fl">0.2</span>,
+    seed<span class="op">=</span><span class="dv">113</span>,
+    start_char<span class="op">=</span><span class="dv">1</span>,
+    oov_char<span class="op">=</span><span class="dv">2</span>,
+    index_from<span class="op">=</span><span class="dv">3</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/datasets/reuters.py"><code>tensorflow/contrib/keras/python/keras/datasets/reuters.py</code></a>.</p>
+<p>Loads the Reuters newswire classification dataset.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>path: where to cache the data (relative to `~/.keras/dataset`).
+num_words: max number of words to include. Words are ranked
+    by how often they occur (in the training set) and only
+    the most frequent words are kept
+skip_top: skip the top N most frequently occurring words
+    (which may not be informative).
+maxlen: truncate sequences after this length.
+test_split: Fraction of the dataset to be used as test data.
+seed: random seed for sample shuffling.
+start_char: The start of a sequence will be marked with this character.
+    Set to 1 because 0 is usually the padding character.
+oov_char: words that were cut out because of the `num_words`
+    or `skip_top` limit will be replaced with this character.
+index_from: index actual words with this index and higher.</code></pre>
+<h4 id="returns">Returns:</h4>
+<pre><code>Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.</code></pre>
+<p>Note that the 'out of vocabulary' character is only used for words that were present in the training set but are not included because they're not making the <code>num_words</code> cut here. Words that were not seen in the training set but are in the test set have simply been skipped.</p>

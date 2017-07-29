@@ -1,0 +1,85 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.callbacks.ModelCheckpoint" /> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="on_batch_begin"/> <meta itemprop="property" content="on_batch_end"/> <meta itemprop="property" content="on_epoch_begin"/> <meta itemprop="property" content="on_epoch_end"/> <meta itemprop="property" content="on_train_begin"/> <meta itemprop="property" content="on_train_end"/> <meta itemprop="property" content="set_model"/> <meta itemprop="property" content="set_params"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.keras.callbacks.ModelCheckpoint" class="dashAnchor"></a><h1 id="tf.contrib.keras.callbacks.modelcheckpoint">tf.contrib.keras.callbacks.ModelCheckpoint</h1>
+<h3 id="class-tf.contrib.keras.callbacks.modelcheckpoint"><code>class tf.contrib.keras.callbacks.ModelCheckpoint</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/callbacks.py"><code>tensorflow/contrib/keras/python/keras/callbacks.py</code></a>.</p>
+<p>Save the model after every epoch.</p>
+<p><code>filepath</code> can contain named formatting options, which will be filled the value of <code>epoch</code> and keys in <code>logs</code> (passed in <code>on_epoch_end</code>).</p>
+<p>For example: if <code>filepath</code> is <code>weights.{epoch:02d}-{val_loss:.2f}.hdf5</code>, then the model checkpoints will be saved with the epoch number and the validation loss in the filename.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>filepath: string, path to save the model file.
+monitor: quantity to monitor.
+verbose: verbosity mode, 0 or 1.
+save_best_only: if `save_best_only=True`,
+    the latest best model according to
+    the quantity monitored will not be overwritten.
+mode: one of {auto, min, max}.
+    If `save_best_only=True`, the decision
+    to overwrite the current save file is made
+    based on either the maximization or the
+    minimization of the monitored quantity. For `val_acc`,
+    this should be `max`, for `val_loss` this should
+    be `min`, etc. In `auto` mode, the direction is
+    automatically inferred from the name of the monitored quantity.
+save_weights_only: if True, then only the model&#39;s weights will be
+    saved (`model.save_weights(filepath)`), else the full model
+    is saved (`model.save(filepath)`).
+period: Interval (number of epochs) between checkpoints.</code></pre>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    filepath,
+    monitor<span class="op">=</span><span class="st">&#39;val_loss&#39;</span>,
+    verbose<span class="op">=</span><span class="dv">0</span>,
+    save_best_only<span class="op">=</span><span class="va">False</span>,
+    save_weights_only<span class="op">=</span><span class="va">False</span>,
+    mode<span class="op">=</span><span class="st">&#39;auto&#39;</span>,
+    period<span class="op">=</span><span class="dv">1</span>
+)</code></pre></div>
+<h3 id="on_batch_begin">
+<code>on_batch_begin</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_batch_begin(
+    batch,
+    logs<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<h3 id="on_batch_end">
+<code>on_batch_end</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_batch_end(
+    batch,
+    logs<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<h3 id="on_epoch_begin">
+<code>on_epoch_begin</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_epoch_begin(
+    epoch,
+    logs<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<h3 id="on_epoch_end">
+<code>on_epoch_end</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_epoch_end(
+    epoch,
+    logs<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<h3 id="on_train_begin">
+<code>on_train_begin</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_train_begin(logs<span class="op">=</span><span class="va">None</span>)</code></pre></div>
+<h3 id="on_train_end">
+<code>on_train_end</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_train_end(logs<span class="op">=</span><span class="va">None</span>)</code></pre></div>
+<h3 id="set_model">
+<code>set_model</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">set_model(model)</code></pre></div>
+<h3 id="set_params">
+<code>set_params</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">set_params(params)</code></pre></div>

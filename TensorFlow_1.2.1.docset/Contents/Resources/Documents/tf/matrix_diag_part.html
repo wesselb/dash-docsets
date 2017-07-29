@@ -1,0 +1,38 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.matrix_diag_part" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.matrix_diag_part" class="dashAnchor"></a><h1 id="tf.matrix_diag_part">tf.matrix_diag_part</h1>
+<h3 id="tf.matrix_diag_part-1"><code>tf.matrix_diag_part</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">matrix_diag_part(
+    <span class="bu">input</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_array_ops.py</code>.</p>
+<p>See the guide: <a href="../../../api_guides/python/math_ops.md#Matrix_Math_Functions">Math &gt; Matrix Math Functions</a></p>
+<p>Returns the batched diagonal part of a batched tensor.</p>
+<p>This operation returns a tensor with the <code>diagonal</code> part of the batched <code>input</code>. The <code>diagonal</code> part is computed as follows:</p>
+<p>Assume <code>input</code> has <code>k</code> dimensions <code>[I, J, K, ..., M, N]</code>, then the output is a tensor of rank <code>k - 1</code> with dimensions <code>[I, J, K, ..., min(M, N)]</code> where:</p>
+<p><code>diagonal[i, j, k, ..., n] = input[i, j, k, ..., n, n]</code>.</p>
+<p>The input must be at least a matrix.</p>
+<p>For example:</p>
+<pre><code># &#39;input&#39; is [[[1, 0, 0, 0]
+               [0, 2, 0, 0]
+               [0, 0, 3, 0]
+               [0, 0, 0, 4]],
+              [[5, 0, 0, 0]
+               [0, 6, 0, 0]
+               [0, 0, 7, 0]
+               [0, 0, 0, 8]]]
+
+and input.shape = (2, 4, 4)
+
+tf.matrix_diag_part(input) ==&gt; [[1, 2, 3, 4], [5, 6, 7, 8]]
+
+which has shape (2, 4)</code></pre>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. Rank <code>k</code> tensor where <code>k &gt;= 2</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>input</code>. The extracted diagonal(s) having shape <code>diagonal.shape = input.shape[:-2] + [min(input.shape[-2:])]</code>.</p>

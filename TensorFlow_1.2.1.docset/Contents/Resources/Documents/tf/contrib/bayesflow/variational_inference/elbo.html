@@ -1,0 +1,49 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.bayesflow.variational_inference.elbo" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.bayesflow.variational_inference.elbo" class="dashAnchor"></a><h1 id="tf.contrib.bayesflow.variational_inference.elbo">tf.contrib.bayesflow.variational_inference.elbo</h1>
+<h3 id="tf.contrib.bayesflow.variational_inference.elbo-1"><code>tf.contrib.bayesflow.variational_inference.elbo</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">elbo(
+    log_likelihood,
+    variational_with_prior<span class="op">=</span><span class="va">None</span>,
+    keep_batch_dim<span class="op">=</span><span class="va">True</span>,
+    form<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="st">&#39;ELBO&#39;</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/bayesflow/python/ops/variational_inference_impl.py"><code>tensorflow/contrib/bayesflow/python/ops/variational_inference_impl.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../../api_guides/python/contrib.bayesflow.variational_inference.md#Ops">BayesFlow Variational Inference (contrib) &gt; Ops</a></p>
+<p>Evidence Lower BOund. <code>log p(x) &gt;= ELBO</code>.</p>
+<p>Optimization objective for inference of hidden variables by variational inference.</p>
+<p>This function is meant to be used in conjunction with <code>StochasticTensor</code>. The user should build out the inference network, using <code>StochasticTensor</code>s as latent variables, and the generative network. <code>elbo</code> at minimum needs <code>p(x|Z)</code> and assumes that all <code>StochasticTensor</code>s upstream of <code>p(x|Z)</code> are the variational distributions. Use <code>register_prior</code> to register <code>Distribution</code> priors for each <code>StochasticTensor</code>. Alternatively, pass in <code>variational_with_prior</code> specifying all variational distributions and their priors.</p>
+<p>Mathematical details:</p>
+<pre><code>log p(x) =  log \int p(x, Z) dZ
+         =  log \int \frac {q(Z)p(x, Z)}{q(Z)} dZ
+         =  log E_q[\frac {p(x, Z)}{q(Z)}]
+         &gt;= E_q[log \frac {p(x, Z)}{q(Z)}] = L[q; p, x]  # ELBO
+
+L[q; p, x] = E_q[log p(x|Z)p(Z)] - E_q[log q(Z)]
+           = E_q[log p(x|Z)p(Z)] + H[q]           (1)
+           = E_q[log p(x|Z)] - KL(q || p)         (2)
+
+H - Entropy
+KL - Kullback-Leibler divergence</code></pre>
+<p>See section 2.2 of Stochastic Variational Inference by Hoffman et al. for more, including the ELBO's equivalence to minimizing <code>KL(q(Z)||p(Z|x))</code> in the fully Bayesian setting. https://arxiv.org/pdf/1206.7051.pdf.</p>
+<p><code>form</code> specifies which form of the ELBO is used. <code>form=ELBOForms.default</code> tries, in order of preference: analytic KL, analytic entropy, sampling.</p>
+<p>Multiple entries in the <code>variational_with_prior</code> dict implies a factorization. e.g. <code>q(Z) = q(z1)q(z2)q(z3)</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>log_likelihood</code></b>: <code>Tensor</code> log p(x|Z).</li>
+<li><b><code>variational_with_prior</code></b>: dict from <code>StochasticTensor</code> q(Z) to <code>Distribution</code> p(Z). If <code>None</code>, defaults to all <code>StochasticTensor</code> objects upstream of <code>log_likelihood</code> with priors registered with <code>register_prior</code>.</li>
+<li><b><code>keep_batch_dim</code></b>: bool. Whether to keep the batch dimension when summing entropy/KL term. When the sample is per data point, this should be True; otherwise (e.g. in a Bayesian NN), this should be False.</li>
+<li><b><code>form</code></b>: ELBOForms constant. Controls how the ELBO is computed. Defaults to ELBOForms.default.</li>
+<li><b><code>name</code></b>: name to prefix ops with.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p><code>Tensor</code> ELBO of the same type and shape as <code>log_likelihood</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: if variationals in <code>variational_with_prior</code> are not <code>StochasticTensor</code>s or if priors are not <code>Distribution</code>s.</li>
+<li><b><code>TypeError</code></b>: if form is not a valid ELBOForms constant.</li>
+<li><b><code>ValueError</code></b>: if <code>variational_with_prior</code> is None and there are no <code>StochasticTensor</code>s upstream of <code>log_likelihood</code>.</li>
+<li><b><code>ValueError</code></b>: if any variational does not have a prior passed or registered.</li>
+</ul>

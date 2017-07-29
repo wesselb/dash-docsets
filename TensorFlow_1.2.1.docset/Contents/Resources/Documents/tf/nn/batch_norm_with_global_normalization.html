@@ -1,0 +1,32 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.nn.batch_norm_with_global_normalization" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.nn.batch_norm_with_global_normalization" class="dashAnchor"></a><h1 id="tf.nn.batch_norm_with_global_normalization">tf.nn.batch_norm_with_global_normalization</h1>
+<h3 id="tf.nn.batch_norm_with_global_normalization-1"><code>tf.nn.batch_norm_with_global_normalization</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">batch_norm_with_global_normalization(
+    t,
+    m,
+    v,
+    beta,
+    gamma,
+    variance_epsilon,
+    scale_after_normalization,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/nn_impl.py"><code>tensorflow/python/ops/nn_impl.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/nn.md#Normalization">Neural Network &gt; Normalization</a></p>
+<p>Batch normalization.</p>
+<p>This op is deprecated. See <code>tf.nn.batch_normalization</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>t</code></b>: A 4D input Tensor.</li>
+<li><b><code>m</code></b>: A 1D mean Tensor with size matching the last dimension of t. This is the first output from tf.nn.moments, or a saved moving average thereof.</li>
+<li><b><code>v</code></b>: A 1D variance Tensor with size matching the last dimension of t. This is the second output from tf.nn.moments, or a saved moving average thereof.</li>
+<li><b><code>beta</code></b>: A 1D beta Tensor with size matching the last dimension of t. An offset to be added to the normalized tensor.</li>
+<li><b><code>gamma</code></b>: A 1D gamma Tensor with size matching the last dimension of t. If &quot;scale_after_normalization&quot; is true, this tensor will be multiplied with the normalized tensor.</li>
+<li><b><code>variance_epsilon</code></b>: A small float number to avoid dividing by 0.</li>
+<li><b><code>scale_after_normalization</code></b>: A bool indicating whether the resulted tensor needs to be multiplied with gamma.</li>
+<li><b><code>name</code></b>: A name for this operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A batch-normalized <code>t</code>.</p>

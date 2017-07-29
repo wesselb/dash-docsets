@@ -1,0 +1,32 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.nn.quantized_relu_x" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.nn.quantized_relu_x" class="dashAnchor"></a><h1 id="tf.nn.quantized_relu_x">tf.nn.quantized_relu_x</h1>
+<h3 id="tf.nn.quantized_relu_x-1"><code>tf.nn.quantized_relu_x</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">quantized_relu_x(
+    features,
+    max_value,
+    min_features,
+    max_features,
+    out_type<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_nn_ops.py</code>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/nn.md#Candidate_Sampling">Neural Network &gt; Candidate Sampling</a></p>
+<p>Computes Quantized Rectified Linear X: <code>min(max(features, 0), max_value)</code></p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>features</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>qint8</code>, <code>quint8</code>, <code>qint16</code>, <code>quint16</code>, <code>qint32</code>.</li>
+<li><b><code>max_value</code></b>: A <code>Tensor</code> of type <code>float32</code>.</li>
+<li><b><code>min_features</code></b>: A <code>Tensor</code> of type <code>float32</code>. The float value that the lowest quantized value represents.</li>
+<li><b><code>max_features</code></b>: A <code>Tensor</code> of type <code>float32</code>. The float value that the highest quantized value represents.</li>
+<li><b><code>out_type</code></b>: An optional <code>tf.DType</code> from: <code>tf.qint8, tf.quint8, tf.qint16, tf.quint16, tf.qint32</code>. Defaults to <code>tf.quint8</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A tuple of <code>Tensor</code> objects (activations, min_activations, max_activations).</p>
+<ul>
+<li><b><code>activations</code></b>: A <code>Tensor</code> of type <code>out_type</code>. Has the same output shape as &quot;features&quot;.</li>
+<li><b><code>min_activations</code></b>: A <code>Tensor</code> of type <code>float32</code>. The float value that the lowest quantized value represents.</li>
+<li><b><code>max_activations</code></b>: A <code>Tensor</code> of type <code>float32</code>. The float value that the highest quantized value represents.</li>
+</ul>

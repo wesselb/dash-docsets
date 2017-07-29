@@ -1,0 +1,22 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.learn.multi_head" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.learn.multi_head" class="dashAnchor"></a><h1 id="tf.contrib.learn.multi_head">tf.contrib.learn.multi_head</h1>
+<h3 id="tf.contrib.learn.multi_head-1"><code>tf.contrib.learn.multi_head</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">multi_head(
+    heads,
+    loss_weights<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/learn/python/learn/estimators/head.py"><code>tensorflow/contrib/learn/python/learn/estimators/head.py</code></a>.</p>
+<p>Creates a MultiHead stemming from same logits/hidden layer.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>heads</code></b>: list of Head objects.</li>
+<li><b><code>loss_weights</code></b>: optional list of weights to be used to merge losses from each head. All losses are weighted equally if not provided.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A instance of <code>Head</code> that merges multiple heads.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if heads and loss_weights have different size.</li>
+</ul>

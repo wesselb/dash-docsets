@@ -1,0 +1,26 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.layers.average_pooling3d" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.layers.average_pooling3d" class="dashAnchor"></a><h1 id="tf.layers.average_pooling3d">tf.layers.average_pooling3d</h1>
+<h3 id="tf.layers.average_pooling3d-1"><code>tf.layers.average_pooling3d</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">average_pooling3d(
+    inputs,
+    pool_size,
+    strides,
+    padding<span class="op">=</span><span class="st">&#39;valid&#39;</span>,
+    data_format<span class="op">=</span><span class="st">&#39;channels_last&#39;</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/layers/pooling.py"><code>tensorflow/python/layers/pooling.py</code></a>.</p>
+<p>Average pooling layer for 3D inputs (e.g. volumes).</p>
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>inputs</code></b>: The tensor over which to pool. Must have rank 5.</li>
+<li><b><code>pool_size</code></b>: An integer or tuple/list of 3 integers: (pool_depth, pool_height, pool_width) specifying the size of the pooling window. Can be a single integer to specify the same value for all spatial dimensions.</li>
+<li><b><code>strides</code></b>: An integer or tuple/list of 3 integers, specifying the strides of the pooling operation. Can be a single integer to specify the same value for all spatial dimensions.</li>
+<li><b><code>padding</code></b>: A string. The padding method, either 'valid' or 'same'. Case-insensitive.</li>
+<li><b><code>data_format</code></b>: A string. The ordering of the dimensions in the inputs. <code>channels_last</code> (default) and <code>channels_first</code> are supported. <code>channels_last</code> corresponds to inputs with shape <code>(batch, depth, height, width, channels)</code> while <code>channels_first</code> corresponds to inputs with shape <code>(batch, channels, depth, height, width)</code>.</li>
+<li><b><code>name</code></b>: A string, the name of the layer.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Output tensor.</p>

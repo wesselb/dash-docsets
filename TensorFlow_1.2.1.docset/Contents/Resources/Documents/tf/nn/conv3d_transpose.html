@@ -1,0 +1,34 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.nn.conv3d_transpose" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.nn.conv3d_transpose" class="dashAnchor"></a><h1 id="tf.nn.conv3d_transpose">tf.nn.conv3d_transpose</h1>
+<h3 id="tf.nn.conv3d_transpose-1"><code>tf.nn.conv3d_transpose</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">conv3d_transpose(
+    value,
+    <span class="bu">filter</span>,
+    output_shape,
+    strides,
+    padding<span class="op">=</span><span class="st">&#39;SAME&#39;</span>,
+    data_format<span class="op">=</span><span class="st">&#39;NDHWC&#39;</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/nn_ops.py"><code>tensorflow/python/ops/nn_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/nn.md#Convolution">Neural Network &gt; Convolution</a></p>
+<p>The transpose of <code>conv3d</code>.</p>
+<p>This operation is sometimes called &quot;deconvolution&quot; after <a href="http://www.matthewzeiler.com/pubs/cvpr2010/cvpr2010.pdf">Deconvolutional Networks</a>, but is actually the transpose (gradient) of <code>conv3d</code> rather than an actual deconvolution.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>value</code></b>: A 5-D <code>Tensor</code> of type <code>float</code> and shape <code>[batch, depth, height, width, in_channels]</code>.</li>
+<li><b><code>filter</code></b>: A 5-D <code>Tensor</code> with the same type as <code>value</code> and shape <code>[depth, height, width, output_channels, in_channels]</code>. <code>filter</code>'s <code>in_channels</code> dimension must match that of <code>value</code>.</li>
+<li><b><code>output_shape</code></b>: A 1-D <code>Tensor</code> representing the output shape of the deconvolution op.</li>
+<li><b><code>strides</code></b>: A list of ints. The stride of the sliding window for each dimension of the input tensor.</li>
+<li><b><code>padding</code></b>: A string, either <code>'VALID'</code> or <code>'SAME'</code>. The padding algorithm. See the <a href="../../tf/nn/convolution.html">comment here</a></li>
+<li><b><code>data_format</code></b>: A string, either <code>'NDHWC'</code> or <code>'NCDHW</code>' specifying the layout of the input and output tensors. Defaults to <code>'NDHWC'</code>.</li>
+<li><b><code>name</code></b>: Optional name for the returned tensor.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> with the same type as <code>value</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If input/output depth does not match <code>filter</code>'s shape, or if padding is other than <code>'VALID'</code> or <code>'SAME'</code>.</li>
+</ul>

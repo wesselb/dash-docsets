@@ -1,0 +1,38 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.sparse_to_dense" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.sparse_to_dense" class="dashAnchor"></a><h1 id="tf.sparse_to_dense">tf.sparse_to_dense</h1>
+<h3 id="tf.sparse_to_dense-1"><code>tf.sparse_to_dense</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">sparse_to_dense(
+    sparse_indices,
+    output_shape,
+    sparse_values,
+    default_value<span class="op">=</span><span class="dv">0</span>,
+    validate_indices<span class="op">=</span><span class="va">True</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/sparse_ops.py"><code>tensorflow/python/ops/sparse_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/sparse_ops.md#Conversion">Sparse Tensors &gt; Conversion</a></p>
+<p>Converts a sparse representation into a dense tensor.</p>
+<p>Builds an array <code>dense</code> with shape <code>output_shape</code> such that</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># If sparse_indices is scalar</span>
+dense[i] <span class="op">=</span> (i <span class="op">==</span> sparse_indices ? sparse_values : default_value)
+
+<span class="co"># If sparse_indices is a vector, then for each i</span>
+dense[sparse_indices[i]] <span class="op">=</span> sparse_values[i]
+
+<span class="co"># If sparse_indices is an n by d matrix, then for each i in [0, n)</span>
+dense[sparse_indices[i][<span class="dv">0</span>], ..., sparse_indices[i][d<span class="op">-</span><span class="dv">1</span>]] <span class="op">=</span> sparse_values[i]</code></pre></div>
+<p>All other values in <code>dense</code> are set to <code>default_value</code>. If <code>sparse_values</code> is a scalar, all sparse indices are set to this single value.</p>
+<p>Indices should be sorted in lexicographic order, and indices must not contain any repeats. If <code>validate_indices</code> is True, these properties are checked during execution.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>sparse_indices</code></b>: A 0-D, 1-D, or 2-D <code>Tensor</code> of type <code>int32</code> or <code>int64</code>. <code>sparse_indices[i]</code> contains the complete index where <code>sparse_values[i]</code> will be placed.</li>
+<li><b><code>output_shape</code></b>: A 1-D <code>Tensor</code> of the same type as <code>sparse_indices</code>. Shape of the dense output tensor.</li>
+<li><b><code>sparse_values</code></b>: A 0-D or 1-D <code>Tensor</code>. Values corresponding to each row of <code>sparse_indices</code>, or a scalar value to be used for all sparse indices.</li>
+<li><b><code>default_value</code></b>: A 0-D <code>Tensor</code> of the same type as <code>sparse_values</code>. Value to set for indices not specified in <code>sparse_indices</code>. Defaults to zero.</li>
+<li><b><code>validate_indices</code></b>: A boolean value. If True, indices are checked to make sure they are sorted in lexicographic order and that there are no repeats.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Dense <code>Tensor</code> of shape <code>output_shape</code>. Has the same type as <code>sparse_values</code>.</p>

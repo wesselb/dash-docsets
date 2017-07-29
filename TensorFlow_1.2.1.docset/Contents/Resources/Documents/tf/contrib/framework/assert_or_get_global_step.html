@@ -1,0 +1,20 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.framework.assert_or_get_global_step" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.framework.assert_or_get_global_step" class="dashAnchor"></a><h1 id="tf.contrib.framework.assert_or_get_global_step">tf.contrib.framework.assert_or_get_global_step</h1>
+<h3 id="tf.contrib.framework.assert_or_get_global_step-1"><code>tf.contrib.framework.assert_or_get_global_step</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">assert_or_get_global_step(
+    graph<span class="op">=</span><span class="va">None</span>,
+    global_step_tensor<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/framework/python/ops/variables.py"><code>tensorflow/contrib/framework/python/ops/variables.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.framework.md#Variables">Framework (contrib) &gt; Variables</a></p>
+<p>Verifies that a global step tensor is valid or gets one if None is given.</p>
+<p>If <code>global_step_tensor</code> is not None, check that it is a valid global step tensor (using <code>assert_global_step</code>). Otherwise find a global step tensor using <code>get_global_step</code> and return it.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>graph</code></b>: The graph to find the global step tensor for.</li>
+<li><b><code>global_step_tensor</code></b>: The tensor to check for suitability as a global step. If None is given (the default), find a global step tensor.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A tensor suitable as a global step, or <code>None</code> if none was provided and none was found.</p>

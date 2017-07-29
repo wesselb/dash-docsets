@@ -1,0 +1,22 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.serialize_sparse" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.serialize_sparse" class="dashAnchor"></a><h1 id="tf.serialize_sparse">tf.serialize_sparse</h1>
+<h3 id="tf.serialize_sparse-1"><code>tf.serialize_sparse</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">serialize_sparse(
+    sp_input,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/sparse_ops.py"><code>tensorflow/python/ops/sparse_ops.py</code></a>.</p>
+<p>Serialize a <code>SparseTensor</code> into a string 3-vector (1-D <code>Tensor</code>) object.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>sp_input</code></b>: The input <code>SparseTensor</code>.</li>
+<li><b><code>name</code></b>: A name prefix for the returned tensors (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A string 3-vector (1D <code>Tensor</code>), with each column representing the serialized <code>SparseTensor</code>'s indices, values, and shape (respectively).</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>sp_input</code> is not a <code>SparseTensor</code>.</li>
+</ul>

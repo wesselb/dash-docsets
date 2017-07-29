@@ -1,0 +1,20 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.backend.in_top_k" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.keras.backend.in_top_k" class="dashAnchor"></a><h1 id="tf.contrib.keras.backend.in_top_k">tf.contrib.keras.backend.in_top_k</h1>
+<h3 id="tf.contrib.keras.backend.in_top_k-1"><code>tf.contrib.keras.backend.in_top_k</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">in_top_k(
+    predictions,
+    targets,
+    k
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/backend.py"><code>tensorflow/contrib/keras/python/keras/backend.py</code></a>.</p>
+<p>Returns whether the <code>targets</code> are in the top <code>k</code> <code>predictions</code>.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>predictions: A tensor of shape `(batch_size, classes)` and type `float32`.
+targets: A 1D tensor of length `batch_size` and type `int32` or `int64`.
+k: An `int`, number of top elements to consider.</code></pre>
+<h4 id="returns">Returns:</h4>
+<pre><code>A 1D tensor of length `batch_size` and type `bool`.
+`output[i]` is `True` if `predictions[i, targets[i]]` is within top-`k`
+values of `predictions[i]`.</code></pre>

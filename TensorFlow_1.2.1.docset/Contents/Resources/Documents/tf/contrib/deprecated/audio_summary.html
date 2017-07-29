@@ -1,0 +1,34 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.deprecated.audio_summary" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.deprecated.audio_summary" class="dashAnchor"></a><h1 id="tf.contrib.deprecated.audio_summary">tf.contrib.deprecated.audio_summary</h1>
+<h3 id="tf.contrib.deprecated.audio_summary-1"><code>tf.contrib.deprecated.audio_summary</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">audio_summary(
+    tag,
+    tensor,
+    sample_rate,
+    max_outputs<span class="op">=</span><span class="dv">3</span>,
+    collections<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/logging_ops.py"><code>tensorflow/python/ops/logging_ops.py</code></a>.</p>
+<p>Outputs a <code>Summary</code> protocol buffer with audio. (deprecated)</p>
+<p>THIS FUNCTION IS DEPRECATED. It will be removed after 2016-11-30. Instructions for updating: Please switch to tf.summary.audio. Note that tf.summary.audio uses the node name instead of the tag. This means that TensorFlow will automatically de-duplicate summary names based on the scope they are created in.</p>
+<p>This op is deprecated. Please switch to tf.summary.audio. For an explanation of why this op was deprecated, and information on how to migrate, look <a href="https://github.com/tensorflow/tensorflow/blob/master/tensorflow/contrib/deprecated/__init__.py">'here'</a></p>
+<p>The summary has up to <code>max_outputs</code> summary values containing audio. The audio is built from <code>tensor</code> which must be 3-D with shape <code>[batch_size, frames, channels]</code> or 2-D with shape <code>[batch_size, frames]</code>. The values are assumed to be in the range of <code>[-1.0, 1.0]</code> with a sample rate of <code>sample_rate</code>.</p>
+<p>The <code>tag</code> argument is a scalar <code>Tensor</code> of type <code>string</code>. It is used to build the <code>tag</code> of the summary values:</p>
+<ul>
+<li>If <code>max_outputs</code> is 1, the summary value tag is '<em>tag</em>/audio'.</li>
+<li>If <code>max_outputs</code> is greater than 1, the summary value tags are generated sequentially as '<em>tag</em>/audio/0', '<em>tag</em>/audio/1', etc.</li>
+</ul>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>tag</code></b>: A scalar <code>Tensor</code> of type <code>string</code>. Used to build the <code>tag</code> of the summary values.</li>
+<li><b><code>tensor</code></b>: A 3-D <code>float32</code> <code>Tensor</code> of shape <code>[batch_size, frames, channels]</code> or a 2-D <code>float32</code> <code>Tensor</code> of shape <code>[batch_size, frames]</code>.</li>
+<li><b><code>sample_rate</code></b>: A Scalar <code>float32</code> <code>Tensor</code> indicating the sample rate of the signal in hertz.</li>
+<li><b><code>max_outputs</code></b>: Max number of batch elements to generate audio for.</li>
+<li><b><code>collections</code></b>: Optional list of ops.GraphKeys. The collections to add the summary to. Defaults to [ops.GraphKeys.SUMMARIES]</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A scalar <code>Tensor</code> of type <code>string</code>. The serialized <code>Summary</code> protocol buffer.</p>

@@ -1,0 +1,19 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.train.match_filenames_once" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.train.match_filenames_once" class="dashAnchor"></a><h1 id="tf.train.match_filenames_once">tf.train.match_filenames_once</h1>
+<h3 id="tf.train.match_filenames_once-1"><code>tf.train.match_filenames_once</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">match_filenames_once(
+    pattern,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/training/input.py"><code>tensorflow/python/training/input.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/io_ops.md#Input_pipeline">Inputs and Readers &gt; Input pipeline</a></p>
+<p>Save the list of files matching pattern, so it is only computed once.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>pattern</code></b>: A file pattern (glob), or 1D tensor of file patterns.</li>
+<li><b><code>name</code></b>: A name for the operations (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A variable that is initialized to the list of files matching the pattern(s).</p>

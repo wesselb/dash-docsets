@@ -1,0 +1,59 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.framework" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.framework" class="dashAnchor"></a><h1 id="module-tf.contrib.framework">Module: tf.contrib.framework</h1>
+<h3 id="module-tf.contrib.framework-1">Module <code>tf.contrib.framework</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/framework/__init__.py"><code>tensorflow/contrib/framework/__init__.py</code></a>.</p>
+<p>Framework utilities.</p>
+<p>See the <a href="../../../../api_guides/python/contrib.framework.html">Framework (contrib)</a> guide.</p>
+<h2 id="classes">Classes</h2>
+<p><a href="../../tf/contrib/framework/VariableDeviceChooser.html"><code>class VariableDeviceChooser</code></a>: Device chooser for variables.</p>
+<h2 id="functions">Functions</h2>
+<p><a href="../../tf/contrib/framework/add_arg_scope.html"><code>add_arg_scope(...)</code></a>: Decorates a function with args so it can be used within an arg_scope.</p>
+<p><a href="../../tf/contrib/framework/add_model_variable.html"><code>add_model_variable(...)</code></a>: Adds a variable to the <code>GraphKeys.MODEL_VARIABLES</code> collection.</p>
+<p><a href="../../tf/contrib/framework/arg_scope.html"><code>arg_scope(...)</code></a>: Stores the default arguments for the given set of list_ops.</p>
+<p><a href="../../tf/contrib/framework/arg_scoped_arguments.html"><code>arg_scoped_arguments(...)</code></a>: Returns the list kwargs that arg_scope can set for a func.</p>
+<p><a href="../../tf/contrib/framework/assert_global_step.html"><code>assert_global_step(...)</code></a></p>
+<p><a href="../../tf/contrib/framework/assert_or_get_global_step.html"><code>assert_or_get_global_step(...)</code></a>: Verifies that a global step tensor is valid or gets one if None is given.</p>
+<p><a href="../../tf/assert_same_float_dtype.html"><code>assert_same_float_dtype(...)</code></a>: Validate and return float type based on <code>tensors</code> and <code>dtype</code>.</p>
+<p><a href="../../tf/assert_scalar.html"><code>assert_scalar(...)</code></a></p>
+<p><a href="../../tf/contrib/framework/assert_scalar_int.html"><code>assert_scalar_int(...)</code></a>: Assert <code>tensor</code> is 0-D, of type <code>tf.int32</code> or <code>tf.int64</code>.</p>
+<p><a href="../../tf/contrib/framework/assign_from_checkpoint.html"><code>assign_from_checkpoint(...)</code></a>: Creates an operation to assign specific variables from a checkpoint.</p>
+<p><a href="../../tf/contrib/framework/assign_from_checkpoint_fn.html"><code>assign_from_checkpoint_fn(...)</code></a>: Returns a function that assigns specific variables from a checkpoint.</p>
+<p><a href="../../tf/contrib/framework/assign_from_values.html"><code>assign_from_values(...)</code></a>: Creates an assignment operation from a given mapping.</p>
+<p><a href="../../tf/contrib/framework/assign_from_values_fn.html"><code>assign_from_values_fn(...)</code></a>: Returns a function that assigns specific variables from the given values.</p>
+<p><a href="../../tf/convert_to_tensor_or_sparse_tensor.html"><code>convert_to_tensor_or_sparse_tensor(...)</code></a>: Converts value to a <code>SparseTensor</code> or <code>Tensor</code>.</p>
+<p><a href="../../tf/contrib/framework/create_global_step.html"><code>create_global_step(...)</code></a>: Create global step tensor in graph.</p>
+<p><a href="../../tf/contrib/framework/deprecated.html"><code>deprecated(...)</code></a>: Decorator for marking functions or methods deprecated.</p>
+<p><a href="../../tf/contrib/framework/deprecated_arg_values.html"><code>deprecated_arg_values(...)</code></a>: Decorator for marking specific function argument values as deprecated.</p>
+<p><a href="../../tf/contrib/framework/deprecated_args.html"><code>deprecated_args(...)</code></a>: Decorator for marking specific function arguments as deprecated.</p>
+<p><a href="../../tf/contrib/framework/filter_variables.html"><code>filter_variables(...)</code></a>: Filter a list of variables using regular expressions.</p>
+<p><a href="../../tf/contrib/framework/get_global_step.html"><code>get_global_step(...)</code></a></p>
+<p><a href="../../tf/contrib/framework/get_graph_from_inputs.html"><code>get_graph_from_inputs(...)</code></a>: Returns the appropriate graph to use for the given inputs.</p>
+<p><a href="../../tf/contrib/framework/get_local_variables.html"><code>get_local_variables(...)</code></a>: Gets the list of local variables, filtered by scope and/or suffix.</p>
+<p><a href="../../tf/contrib/framework/get_model_variables.html"><code>get_model_variables(...)</code></a>: Gets the list of model variables, filtered by scope and/or suffix.</p>
+<p><a href="../../tf/contrib/framework/get_name_scope.html"><code>get_name_scope(...)</code></a>: Returns the current name scope of the default graph.</p>
+<p><a href="../../tf/contrib/framework/get_or_create_global_step.html"><code>get_or_create_global_step(...)</code></a>: Returns and create (if necessary) the global step tensor.</p>
+<p><a href="../../tf/contrib/framework/get_trainable_variables.html"><code>get_trainable_variables(...)</code></a>: Gets the list of trainable variables, filtered by scope and/or suffix.</p>
+<p><a href="../../tf/contrib/framework/get_unique_variable.html"><code>get_unique_variable(...)</code></a>: Gets the variable uniquely identified by that var_op_name.</p>
+<p><a href="../../tf/contrib/framework/get_variable_full_name.html"><code>get_variable_full_name(...)</code></a>: Returns the full name of a variable.</p>
+<p><a href="../../tf/contrib/framework/get_variables.html"><code>get_variables(...)</code></a>: Gets the list of variables, filtered by scope and/or suffix.</p>
+<p><a href="../../tf/contrib/framework/get_variables_by_name.html"><code>get_variables_by_name(...)</code></a>: Gets the list of variables that were given that name.</p>
+<p><a href="../../tf/contrib/framework/get_variables_by_suffix.html"><code>get_variables_by_suffix(...)</code></a>: Gets the list of variables that end with the given suffix.</p>
+<p><a href="../../tf/contrib/framework/get_variables_to_restore.html"><code>get_variables_to_restore(...)</code></a>: Gets the list of the variables to restore.</p>
+<p><a href="../../tf/contrib/framework/has_arg_scope.html"><code>has_arg_scope(...)</code></a>: Checks whether a func has been decorated with <span class="citation">@add_arg_scope</span> or not.</p>
+<p><a href="../../tf/contrib/framework/init_from_checkpoint.html"><code>init_from_checkpoint(...)</code></a>: Using assignment map initializes current variables with loaded tensors.</p>
+<p><a href="../../tf/contrib/framework/is_tensor.html"><code>is_tensor(...)</code></a>: Check whether <code>x</code> is of tensor type.</p>
+<p><a href="../../tf/contrib/framework/list_variables.html"><code>list_variables(...)</code></a>: Returns list of all variables in the latest checkpoint.</p>
+<p><a href="../../tf/contrib/framework/load_checkpoint.html"><code>load_checkpoint(...)</code></a>: Returns CheckpointReader for latest checkpoint.</p>
+<p><a href="../../tf/contrib/framework/load_variable.html"><code>load_variable(...)</code></a>: Returns a Tensor with the contents of the given variable in the checkpoint.</p>
+<p><a href="../../tf/contrib/framework/local_variable.html"><code>local_variable(...)</code></a>: Create variable and add it to <code>GraphKeys.LOCAL_VARIABLES</code> collection.</p>
+<p><a href="../../tf/contrib/framework/model_variable.html"><code>model_variable(...)</code></a>: Gets an existing model variable with these parameters or creates a new one.</p>
+<p><a href="../../tf/contrib/framework/prepend_name_scope.html"><code>prepend_name_scope(...)</code></a>: Prepends name scope to a name.</p>
+<p><a href="../../tf/contrib/framework/reduce_sum_n.html"><code>reduce_sum_n(...)</code></a>: Reduce tensors to a scalar sum.</p>
+<p><a href="../../tf/contrib/framework/remove_squeezable_dimensions.html"><code>remove_squeezable_dimensions(...)</code></a>: Squeeze last dim if ranks of <code>predictions</code> and <code>labels</code> differ by 1.</p>
+<p><a href="../../tf/contrib/framework/strip_name_scope.html"><code>strip_name_scope(...)</code></a>: Removes name scope from a name.</p>
+<p><a href="../../tf/contrib/framework/variable.html"><code>variable(...)</code></a>: Gets an existing variable with these parameters or creates a new one.</p>
+<p><a href="../../tf/contrib/framework/with_same_shape.html"><code>with_same_shape(...)</code></a>: Assert tensors are the same shape, from the same graph.</p>
+<p><a href="../../tf/contrib/framework/with_shape.html"><code>with_shape(...)</code></a>: Asserts tensor has expected shape.</p>
+<p><a href="../../tf/contrib/framework/zero_initializer.html"><code>zero_initializer(...)</code></a>: Initialize 'ref' with all zeros, ref tensor should be uninitialized.</p>

@@ -1,0 +1,23 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.backend.resize_images" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.keras.backend.resize_images" class="dashAnchor"></a><h1 id="tf.contrib.keras.backend.resize_images">tf.contrib.keras.backend.resize_images</h1>
+<h3 id="tf.contrib.keras.backend.resize_images-1"><code>tf.contrib.keras.backend.resize_images</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">resize_images(
+    x,
+    height_factor,
+    width_factor,
+    data_format
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/backend.py"><code>tensorflow/contrib/keras/python/keras/backend.py</code></a>.</p>
+<p>Resizes the images contained in a 4D tensor.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>x: Tensor or variable to resize.
+height_factor: Positive integer.
+width_factor: Positive integer.
+data_format: One of `&quot;channels_first&quot;`, `&quot;channels_last&quot;`.</code></pre>
+<h4 id="returns">Returns:</h4>
+<pre><code>A tensor.</code></pre>
+<h4 id="raises">Raises:</h4>
+<pre><code>ValueError: if `data_format` is neither
+    `channels_last` or `channels_first`.</code></pre>

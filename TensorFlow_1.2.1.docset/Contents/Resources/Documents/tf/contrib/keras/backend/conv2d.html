@@ -1,0 +1,29 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.backend.conv2d" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.keras.backend.conv2d" class="dashAnchor"></a><h1 id="tf.contrib.keras.backend.conv2d">tf.contrib.keras.backend.conv2d</h1>
+<h3 id="tf.contrib.keras.backend.conv2d-1"><code>tf.contrib.keras.backend.conv2d</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">conv2d(
+    x,
+    kernel,
+    strides<span class="op">=</span>(<span class="dv">1</span>, <span class="dv">1</span>),
+    padding<span class="op">=</span><span class="st">&#39;valid&#39;</span>,
+    data_format<span class="op">=</span><span class="va">None</span>,
+    dilation_rate<span class="op">=</span>(<span class="dv">1</span>, <span class="dv">1</span>)
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/backend.py"><code>tensorflow/contrib/keras/python/keras/backend.py</code></a>.</p>
+<p>2D convolution.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>x: Tensor or variable.
+kernel: kernel tensor.
+strides: strides tuple.
+padding: string, `&quot;same&quot;` or `&quot;valid&quot;`.
+data_format: `&quot;channels_last&quot;` or `&quot;channels_first&quot;`.
+    Whether to use Theano or TensorFlow data format
+    for inputs/kernels/ouputs.
+dilation_rate: tuple of 2 integers.</code></pre>
+<h4 id="returns">Returns:</h4>
+<pre><code>A tensor, result of 2D convolution.</code></pre>
+<h4 id="raises">Raises:</h4>
+<pre><code>ValueError: if `data_format` is neither `channels_last` or
+`channels_first`.</code></pre>

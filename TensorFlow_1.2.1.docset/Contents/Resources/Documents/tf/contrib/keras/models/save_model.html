@@ -1,0 +1,24 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.keras.models.save_model" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.keras.models.save_model" class="dashAnchor"></a><h1 id="tf.contrib.keras.models.save_model">tf.contrib.keras.models.save_model</h1>
+<h3 id="tf.contrib.keras.models.save_model-1"><code>tf.contrib.keras.models.save_model</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">save_model(
+    model,
+    filepath,
+    overwrite<span class="op">=</span><span class="va">True</span>,
+    include_optimizer<span class="op">=</span><span class="va">True</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/keras/python/keras/models.py"><code>tensorflow/contrib/keras/python/keras/models.py</code></a>.</p>
+<p>Save a model to a HDF5 file.</p>
+<p>The saved model contains: - the model's configuration (topology) - the model's weights - the model's optimizer's state (if any)</p>
+<p>Thus the saved model can be reinstantiated in the exact same state, without any of the code used for model definition or training.</p>
+<h4 id="arguments">Arguments:</h4>
+<pre><code>model: Keras model instance to be saved.
+filepath: String, path where to save the model.
+overwrite: Whether we should overwrite any existing
+    model at the target location, or instead
+    ask the user with a manual prompt.
+include_optimizer: If True, save optimizer&#39;s state together.</code></pre>
+<h4 id="raises">Raises:</h4>
+<pre><code>ImportError: if h5py is not available.</code></pre>

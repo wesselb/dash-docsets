@@ -1,0 +1,26 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.losses.compute_weighted_loss" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.losses.compute_weighted_loss" class="dashAnchor"></a><h1 id="tf.contrib.losses.compute_weighted_loss">tf.contrib.losses.compute_weighted_loss</h1>
+<h3 id="tf.contrib.losses.compute_weighted_loss-1"><code>tf.contrib.losses.compute_weighted_loss</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">compute_weighted_loss(
+    losses,
+    weights<span class="op">=</span><span class="fl">1.0</span>,
+    scope<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/losses/python/losses/loss_ops.py"><code>tensorflow/contrib/losses/python/losses/loss_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.losses.md#Loss_operations_for_use_in_neural_networks_">Losses (contrib) &gt; Loss operations for use in neural networks.</a></p>
+<p>Computes the weighted loss. (deprecated)</p>
+<p>THIS FUNCTION IS DEPRECATED. It will be removed after 2016-12-30. Instructions for updating: Use tf.losses.compute_weighted_loss instead.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>losses</code></b>: A tensor of size [batch_size, d1, ... dN].</li>
+<li><b><code>weights</code></b>: A tensor of size [1] or [batch_size, d1, ... dK] where K &lt; N.</li>
+<li><b><code>scope</code></b>: the scope for the operations performed in computing the loss.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A scalar <code>Tensor</code> that returns the weighted loss.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>weights</code> is <code>None</code> or the shape is not compatible with <code>losses</code>, or if the number of dimensions (rank) of either <code>losses</code> or <code>weights</code> is missing.</li>
+</ul>

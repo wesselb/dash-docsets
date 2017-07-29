@@ -1,0 +1,22 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.image.decode_gif" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.image.decode_gif" class="dashAnchor"></a><h1 id="tf.image.decode_gif">tf.image.decode_gif</h1>
+<h3 id="tf.image.decode_gif-1"><code>tf.image.decode_gif</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">decode_gif(
+    contents,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_image_ops.py</code>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/image.md#Encoding_and_Decoding">Images &gt; Encoding and Decoding</a></p>
+<p>Decode the first frame of a GIF-encoded image to a uint8 tensor.</p>
+<p>GIF with frame or transparency compression are not supported convert animated GIF from compressed to uncompressed by:</p>
+<pre><code>convert $src.gif -coalesce $dst.gif</code></pre>
+<p>This op also supports decoding JPEGs and PNGs, though it is cleaner to use <code>tf.image.decode_image</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>contents</code></b>: A <code>Tensor</code> of type <code>string</code>. 0-D. The GIF-encoded image.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>uint8</code>. 4-D with shape <code>[num_frames, height, width, 3]</code>. RGB order</p>

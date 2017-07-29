@@ -1,0 +1,42 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.seq2seq.Helper" /> <meta itemprop="property" content="batch_size"/> <meta itemprop="property" content="initialize"/> <meta itemprop="property" content="next_inputs"/> <meta itemprop="property" content="sample"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.contrib.seq2seq.Helper" class="dashAnchor"></a><h1 id="tf.contrib.seq2seq.helper">tf.contrib.seq2seq.Helper</h1>
+<h3 id="class-tf.contrib.seq2seq.helper"><code>class tf.contrib.seq2seq.Helper</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/seq2seq/python/ops/helper.py"><code>tensorflow/contrib/seq2seq/python/ops/helper.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.seq2seq.md#Dynamic_Decoding">Seq2seq Library (contrib) &gt; Dynamic Decoding</a></p>
+<p>Interface for implementing sampling in seq2seq decoders.</p>
+<p>Helper instances are used by <code>BasicDecoder</code>.</p>
+<h2 id="properties">Properties</h2>
+<h3 id="batch_size">
+<code>batch_size</code>
+</h3>
+<p>Batch size of tensor returned by <code>sample</code>.</p>
+<p>Returns a scalar int32 tensor.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="initialize">
+<code>initialize</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">initialize(name<span class="op">=</span><span class="va">None</span>)</code></pre></div>
+<p>Returns <code>(initial_finished, initial_inputs)</code>.</p>
+<h3 id="next_inputs">
+<code>next_inputs</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">next_inputs(
+    time,
+    outputs,
+    state,
+    sample_ids,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Returns <code>(finished, next_inputs, next_state)</code>.</p>
+<h3 id="sample">
+<code>sample</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">sample(
+    time,
+    outputs,
+    state,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Returns <code>sample_ids</code>.</p>

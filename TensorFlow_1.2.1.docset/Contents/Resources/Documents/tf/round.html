@@ -1,0 +1,22 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.round" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.round" class="dashAnchor"></a><h1 id="tf.round">tf.round</h1>
+<h3 id="tf.round-1"><code>tf.round</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="bu">round</span>(
+    x,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/ops/math_ops.py"><code>tensorflow/python/ops/math_ops.py</code></a>.</p>
+<p>See the guide: <a href="../../../api_guides/python/math_ops.md#Basic_Math_Functions">Math &gt; Basic Math Functions</a></p>
+<p>Rounds the values of a tensor to the nearest integer, element-wise.</p>
+<p>Rounds half to even. Also known as bankers rounding. If you want to round according to the current system rounding mode use tf::cint. For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># &#39;a&#39; is [0.9, 2.5, 2.3, 1.5, -4.5]</span>
+tf.<span class="bu">round</span>(a) <span class="op">==&gt;</span> [ <span class="fl">1.0</span>, <span class="fl">2.0</span>, <span class="fl">2.0</span>, <span class="fl">2.0</span>, <span class="op">-</span><span class="fl">4.0</span> ]</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> of type <code>float32</code> or <code>float64</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of same shape and type as <code>x</code>.</p>

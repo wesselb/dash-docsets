@@ -1,0 +1,21 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.write_file" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.write_file" class="dashAnchor"></a><h1 id="tf.write_file">tf.write_file</h1>
+<h3 id="tf.write_file-1"><code>tf.write_file</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">write_file(
+    filename,
+    contents,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_io_ops.py</code>.</p>
+<p>See the guide: <a href="../../../api_guides/python/io_ops.md#Dealing_with_the_filesystem">Inputs and Readers &gt; Dealing with the filesystem</a></p>
+<p>Writes contents to the file at input filename. Creates file if not existing.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>filename</code></b>: A <code>Tensor</code> of type <code>string</code>. scalar. The name of the file to which we write the contents.</li>
+<li><b><code>contents</code></b>: A <code>Tensor</code> of type <code>string</code>. scalar. The content to be written to the output file.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The created Operation.</p>

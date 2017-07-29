@@ -1,0 +1,51 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.space_to_depth" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.space_to_depth" class="dashAnchor"></a><h1 id="tf.space_to_depth">tf.space_to_depth</h1>
+<h3 id="tf.space_to_depth-1"><code>tf.space_to_depth</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">space_to_depth(
+    <span class="bu">input</span>,
+    block_size,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_array_ops.py</code>.</p>
+<p>See the guide: <a href="../../../api_guides/python/array_ops.md#Slicing_and_Joining">Tensor Transformations &gt; Slicing and Joining</a></p>
+<p>SpaceToDepth for tensors of type T.</p>
+<p>Rearranges blocks of spatial data, into depth. More specifically, this op outputs a copy of the input tensor where values from the <code>height</code> and <code>width</code> dimensions are moved to the <code>depth</code> dimension. The attr <code>block_size</code> indicates the input block size and how the data is moved.</p>
+<ul>
+<li>Non-overlapping blocks of size <code>block_size x block size</code> are rearranged into depth at each location.</li>
+<li>The depth of the output tensor is <code>input_depth * block_size * block_size</code>.</li>
+<li>The input tensor's height and width must be divisible by block_size.</li>
+</ul>
+<p>That is, assuming the input is in the shape: <code>[batch, height, width, depth]</code>, the shape of the output will be: <code>[batch, height/block_size, width/block_size, depth*block_size*block_size]</code></p>
+<p>This operation requires that the input tensor be of rank 4, and that <code>block_size</code> be &gt;=1 and a divisor of both the input <code>height</code> and <code>width</code>.</p>
+<p>This operation is useful for resizing the activations between convolutions (but keeping all data), e.g. instead of pooling. It is also useful for training purely convolutional models.</p>
+<p>For example, given this input of shape <code>[1, 2, 2, 1]</code>, and block_size of 2:</p>
+<pre><code>x = [[[[1], [2]],
+      [[3], [4]]]]</code></pre>
+<p>This operation will output a tensor of shape <code>[1, 1, 1, 4]</code>:</p>
+<pre><code>[[[[1, 2, 3, 4]]]]</code></pre>
+<p>Here, the input has a batch of 1 and each batch element has shape <code>[2, 2, 1]</code>, the corresponding output will have a single element (i.e. width and height are both 1) and will have a depth of 4 channels (1 * block_size * block_size). The output element shape is <code>[1, 1, 4]</code>.</p>
+<p>For an input tensor with larger depth, here of shape <code>[1, 2, 2, 3]</code>, e.g.</p>
+<pre><code>x = [[[[1, 2, 3], [4, 5, 6]],
+      [[7, 8, 9], [10, 11, 12]]]]</code></pre>
+<p>This operation, for block_size of 2, will return the following tensor of shape <code>[1, 1, 1, 12]</code></p>
+<pre><code>[[[[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]]]]</code></pre>
+<p>Similarly, for the following input of shape <code>[1 4 4 1]</code>, and a block size of 2:</p>
+<pre><code>x = [[[[1],   [2],  [5],  [6]],
+      [[3],   [4],  [7],  [8]],
+      [[9],  [10], [13],  [14]],
+      [[11], [12], [15],  [16]]]]</code></pre>
+<p>the operator will return the following tensor of shape <code>[1 2 2 4]</code>:</p>
+<pre><code>x = [[[[1, 2, 3, 4],
+       [5, 6, 7, 8]],
+      [[9, 10, 11, 12],
+       [13, 14, 15, 16]]]]</code></pre>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>.</li>
+<li><b><code>block_size</code></b>: An <code>int</code> that is <code>&gt;= 2</code>. The size of the spatial block.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>input</code>.</p>

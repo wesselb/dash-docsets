@@ -1,0 +1,22 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.string_join" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.string_join" class="dashAnchor"></a><h1 id="tf.string_join">tf.string_join</h1>
+<h3 id="tf.string_join-1"><code>tf.string_join</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">string_join(
+    inputs,
+    separator<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <code>tensorflow/python/ops/gen_string_ops.py</code>.</p>
+<p>See the guide: <a href="../../../api_guides/python/string_ops.md#Joining">Strings &gt; Joining</a></p>
+<p>Joins the strings in the given list of string tensors into one tensor;</p>
+<p>with the given separator (default is an empty separator).</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>inputs</code></b>: A list of at least 1 <code>Tensor</code> objects with type <code>string</code>. A list of string tensors. The tensors must all have the same shape, or be scalars. Scalars may be mixed in; these will be broadcast to the shape of non-scalar inputs.</li>
+<li><b><code>separator</code></b>: An optional <code>string</code>. Defaults to <code>&quot;&quot;</code>. string, an optional join separator.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>string</code>.</p>

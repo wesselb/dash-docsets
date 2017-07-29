@@ -1,0 +1,93 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.train.Scaffold" /> <meta itemprop="property" content="init_feed_dict"/> <meta itemprop="property" content="init_fn"/> <meta itemprop="property" content="init_op"/> <meta itemprop="property" content="local_init_op"/> <meta itemprop="property" content="ready_for_local_init_op"/> <meta itemprop="property" content="ready_op"/> <meta itemprop="property" content="saver"/> <meta itemprop="property" content="summary_op"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="finalize"/> <meta itemprop="property" content="get_or_default"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.train.Scaffold" class="dashAnchor"></a><h1 id="tf.train.scaffold">tf.train.Scaffold</h1>
+<h3 id="class-tf.train.scaffold"><code>class tf.train.Scaffold</code></h3>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/python/training/monitored_session.py"><code>tensorflow/python/training/monitored_session.py</code></a>.</p>
+<p>See the guide: <a href="../../../../api_guides/python/train.md#Distributed_execution">Training &gt; Distributed execution</a></p>
+<p>Structure to create or gather pieces commonly needed to train a model.</p>
+<p>When you build a model for training you usually need ops to initialize variables, a <code>Saver</code> to checkpoint them, an op to collect summaries for the visualizer, and so on.</p>
+<p>Various libraries built on top of the core TensorFlow library take care of creating some or all of these pieces and storing them in well known collections in the graph. The <code>Scaffold</code> class helps pick these pieces from the graph collections, creating and adding them to the collections if needed.</p>
+<p>If you call the scaffold constructor without any arguments, it will pick pieces from the collections, creating default ones if needed when <code>scaffold.finalize()</code> is called. You can pass arguments to the constructor to provide your own pieces. Pieces that you pass to the constructor are not added to the graph collections.</p>
+<p>The following pieces are directly accessible as attributes of the <code>Scaffold</code> object:</p>
+<ul>
+<li><code>saver</code>: A <code>tf.train.Saver</code> object taking care of saving the variables. Picked from and stored into the <code>SAVERS</code> collection in the graph by default.</li>
+<li><code>init_op</code>: An op to run to initialize the variables. Picked from and stored into the <code>INIT_OP</code> collection in the graph by default.</li>
+<li><code>ready_op</code>: An op to verify that the variables are initialized. Picked from and stored into the <code>READY_OP</code> collection in the graph by default.</li>
+<li><code>ready_for_local_init_op</code>: An op to verify that global state has been initialized and it is alright to run <code>local_init_op</code>. Picked from and stored into the <code>READY_FOR_LOCAL_INIT_OP</code> collection in the graph by default. This is needed when the initialization of local variables depends on the values of global variables.</li>
+<li><code>local_init_op</code>: An op to initialize the local variables. Picked from and stored into the <code>LOCAL_INIT_OP</code> collection in the graph by default.</li>
+<li><code>summary_op</code>: An op to run and merge the summaries in the graph. Picked from and stored into the <code>SUMMARY_OP</code> collection in the graph by default.</li>
+<li><code>global_step</code>: A tensor containing the global step counter. Picked from and stored into the <code>GLOBAL_STEP</code> collection in the graph by default.</li>
+</ul>
+<p>You can also pass the following additional pieces to the constructor:</p>
+<ul>
+<li><code>init_feed_dict</code>: A session feed dictionary that should be used when running the init op.</li>
+<li><code>init_fn</code>: A callable to run run after the init op to perform additional initializations. The callable will be called as <code>init_fn(scaffold, session)</code>.</li>
+</ul>
+<h2 id="properties">Properties</h2>
+<h3 id="init_feed_dict">
+<code>init_feed_dict</code>
+</h3>
+<h3 id="init_fn">
+<code>init_fn</code>
+</h3>
+<h3 id="init_op">
+<code>init_op</code>
+</h3>
+<h3 id="local_init_op">
+<code>local_init_op</code>
+</h3>
+<h3 id="ready_for_local_init_op">
+<code>ready_for_local_init_op</code>
+</h3>
+<h3 id="ready_op">
+<code>ready_op</code>
+</h3>
+<h3 id="saver">
+<code>saver</code>
+</h3>
+<h3 id="summary_op">
+<code>summary_op</code>
+</h3>
+<h2 id="methods">Methods</h2>
+<h3 id="__init__">
+<code><strong>init</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    init_op<span class="op">=</span><span class="va">None</span>,
+    init_feed_dict<span class="op">=</span><span class="va">None</span>,
+    init_fn<span class="op">=</span><span class="va">None</span>,
+    ready_op<span class="op">=</span><span class="va">None</span>,
+    ready_for_local_init_op<span class="op">=</span><span class="va">None</span>,
+    local_init_op<span class="op">=</span><span class="va">None</span>,
+    summary_op<span class="op">=</span><span class="va">None</span>,
+    saver<span class="op">=</span><span class="va">None</span>,
+    copy_from_scaffold<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Create a scaffold.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>init_op</code></b>: Optional op for initializing variables.</li>
+<li><b><code>init_feed_dict</code></b>: Optional session feed dictionary to use when running the init_op.</li>
+<li><b><code>init_fn</code></b>: Optional function to use to initialize the model after running the init_op. Will be called as <code>init_fn(scaffold, session)</code>.</li>
+<li><b><code>ready_op</code></b>: Optional op to verify that the variables are initialized. Must return an empty 1D string tensor when the variables are initialized, or a non-empty 1D string tensor listing the names of the non-initialized variables.</li>
+<li><b><code>ready_for_local_init_op</code></b>: Optional op to verify that the global variables are initialized and <code>local_init_op</code> can be run. Must return an empty 1D string tensor when the global variables are initialized, or a non-empty 1D string tensor listing the names of the non-initialized global variables.</li>
+<li><b><code>local_init_op</code></b>: Optional op to initialize local variables.</li>
+<li><b><code>summary_op</code></b>: Optional op to gather all summaries. Must return a scalar string tensor containing a serialized <code>Summary</code> proto.</li>
+<li><b><code>saver</code></b>: Optional <code>tf.train.Saver</code> object to use to save and restore variables.</li>
+<li><b><code>copy_from_scaffold</code></b>: Optional scaffold object to copy fields from. Its fields will be overwritten by the provided fields in this function.</li>
+</ul>
+<h3 id="finalize">
+<code>finalize</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">finalize()</code></pre></div>
+<p>Creates operations if needed and finalizes the graph.</p>
+<h3 id="get_or_default">
+<code>get_or_default</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_or_default(
+    arg_name,
+    collection_key,
+    default_constructor
+)</code></pre></div>
+<p>Get from cache or create a default operation.</p>

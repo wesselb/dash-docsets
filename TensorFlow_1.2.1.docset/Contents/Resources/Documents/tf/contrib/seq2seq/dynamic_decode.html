@@ -1,0 +1,35 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.contrib.seq2seq.dynamic_decode" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.contrib.seq2seq.dynamic_decode" class="dashAnchor"></a><h1 id="tf.contrib.seq2seq.dynamic_decode">tf.contrib.seq2seq.dynamic_decode</h1>
+<h3 id="tf.contrib.seq2seq.dynamic_decode-1"><code>tf.contrib.seq2seq.dynamic_decode</code></h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">dynamic_decode(
+    decoder,
+    output_time_major<span class="op">=</span><span class="va">False</span>,
+    impute_finished<span class="op">=</span><span class="va">False</span>,
+    maximum_iterations<span class="op">=</span><span class="va">None</span>,
+    parallel_iterations<span class="op">=</span><span class="dv">32</span>,
+    swap_memory<span class="op">=</span><span class="va">False</span>,
+    scope<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://www.tensorflow.org/code/tensorflow/contrib/seq2seq/python/ops/decoder.py"><code>tensorflow/contrib/seq2seq/python/ops/decoder.py</code></a>.</p>
+<p>See the guide: <a href="../../../../../api_guides/python/contrib.seq2seq.md#Dynamic_Decoding">Seq2seq Library (contrib) &gt; Dynamic Decoding</a></p>
+<p>Perform dynamic decoding with <code>decoder</code>.</p>
+<p>Calls initialize() once and step() repeatedly on the Decoder object.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>decoder</code></b>: A <code>Decoder</code> instance.</li>
+<li><b><code>output_time_major</code></b>: Python boolean. Default: <code>False</code> (batch major). If <code>True</code>, outputs are returned as time major tensors (this mode is faster). Otherwise, outputs are returned as batch major tensors (this adds extra time to the computation).</li>
+<li><b><code>impute_finished</code></b>: Python boolean. If <code>True</code>, then states for batch entries which are marked as finished get copied through and the corresponding outputs get zeroed out. This causes some slowdown at each time step, but ensures that the final state and outputs have the correct values and that backprop ignores time steps that were marked as finished.</li>
+<li><b><code>maximum_iterations</code></b>: <code>int32</code> scalar, maximum allowed number of decoding steps. Default is <code>None</code> (decode until the decoder is fully done).</li>
+<li><b><code>parallel_iterations</code></b>: Argument passed to <code>tf.while_loop</code>.</li>
+<li><b><code>swap_memory</code></b>: Argument passed to <code>tf.while_loop</code>.</li>
+<li><b><code>scope</code></b>: Optional variable scope to use.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p><code>(final_outputs, final_state, final_sequence_lengths)</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>decoder</code> is not an instance of <code>Decoder</code>.</li>
+<li><b><code>ValueError</code></b>: if <code>maximum_iterations</code> is provided but is not a scalar.</li>
+</ul>
