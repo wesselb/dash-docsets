@@ -1,0 +1,98 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.metrics.SparseCategoricalCrossentropy" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="reset_states"/> <meta itemprop="property" content="result"/> <meta itemprop="property" content="update_state"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.keras.metrics.SparseCategoricalCrossentropy" class="dashAnchor"></a><h1 id="tf.keras.metrics.sparsecategoricalcrossentropy">tf.keras.metrics.SparseCategoricalCrossentropy</h1>
+<h2 id="class-sparsecategoricalcrossentropy">Class <code>SparseCategoricalCrossentropy</code></h2>
+<p>Computes the crossentropy metric between the labels and predictions.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.keras.metrics.SparseCategoricalCrossentropy</code></li>
+<li>Class <code>tf.compat.v2.keras.metrics.SparseCategoricalCrossentropy</code></li>
+<li>Class <code>tf.compat.v2.metrics.SparseCategoricalCrossentropy</code></li>
+<li>Class <code>tf.keras.metrics.SparseCategoricalCrossentropy</code></li>
+<li>Class <code>tf.metrics.SparseCategoricalCrossentropy</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/metrics.py"><code>python/keras/metrics.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Use this crossentropy metric when there are two or more label classes. We expect labels to be provided as integers. If you want to provide labels using <code>one-hot</code> representation, please use <code>CategoricalCrossentropy</code> metric. There should be <code># classes</code> floating point values per feature for <code>y_pred</code> and a single floating point value per feature for <code>y_true</code>.</p>
+<p>In the snippet below, there is a single floating point value per example for <code>y_true</code> and <code># classes</code> floating pointing values per example for <code>y_pred</code>. The shape of <code>y_true</code> is <code>[batch_size]</code> and the shape of <code>y_pred</code> is <code>[batch_size, num_classes]</code>.</p>
+<h4 id="usage">Usage:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">m <span class="op">=</span> tf.keras.metrics.SparseCategoricalCrossentropy()
+m.update_state(
+  [<span class="dv">1</span>, <span class="dv">2</span>],
+  [[<span class="fl">0.05</span>, <span class="fl">0.95</span>, <span class="dv">0</span>], [<span class="fl">0.1</span>, <span class="fl">0.8</span>, <span class="fl">0.1</span>]])
+
+<span class="co"># y_true = one_hot(y_true) = [[0, 1, 0], [0, 0, 1]]</span>
+<span class="co"># logits = log(y_pred)</span>
+<span class="co"># softmax = exp(logits) / sum(exp(logits), axis=-1)</span>
+<span class="co"># softmax = [[0.05, 0.95, EPSILON], [0.1, 0.8, 0.1]]</span>
+
+<span class="co"># xent = -sum(y * log(softmax), 1)</span>
+<span class="co"># log(softmax) = [[-2.9957, -0.0513, -16.1181], [-2.3026, -0.2231, -2.3026]]</span>
+<span class="co"># y_true * log(softmax) = [[0, -0.0513, 0], [0, 0, -2.3026]]</span>
+
+<span class="co"># xent = [0.0513, 2.3026]</span>
+<span class="co"># Reduced xent = (0.0513 + 2.3026) / 2</span>
+
+<span class="bu">print</span>(<span class="st">&#39;Final result: &#39;</span>, m.result().numpy())  <span class="co"># Final result: 1.176</span></code></pre></div>
+<p>Usage with tf.keras API:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">model <span class="op">=</span> tf.keras.Model(inputs, outputs)
+model.<span class="bu">compile</span>(
+  <span class="st">&#39;sgd&#39;</span>,
+  loss<span class="op">=</span><span class="st">&#39;mse&#39;</span>,
+  metrics<span class="op">=</span>[tf.keras.metrics.SparseCategoricalCrossentropy()])</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>name</code></b>: (Optional) string name of the metric instance.</li>
+<li><b><code>dtype</code></b>: (Optional) data type of the metric result.</li>
+<li><b><code>from_logits</code></b>: (Optional ) Whether <code>y_pred</code> is expected to be a logits tensor. By default, we assume that <code>y_pred</code> encodes a probability distribution.</li>
+<li><b><code>axis</code></b>: (Optional) Defaults to -1. The dimension along which the metric is computed.</li>
+</ul>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    name<span class="op">=</span><span class="st">&#39;sparse_categorical_crossentropy&#39;</span>,
+    dtype<span class="op">=</span><span class="va">None</span>,
+    from_logits<span class="op">=</span><span class="va">False</span>,
+    axis<span class="op">=-</span><span class="dv">1</span>
+)</code></pre></div>
+<p>Creates a <code>MeanMetricWrapper</code> instance.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>fn</code></b>: The metric function to wrap, with signature <code>fn(y_true, y_pred, **kwargs)</code>.</li>
+<li><b><code>name</code></b>: (Optional) string name of the metric instance.</li>
+<li><b><code>dtype</code></b>: (Optional) data type of the metric result.</li>
+<li><b><code>**kwargs</code></b>: The keyword arguments that are passed on to <code>fn</code>.</li>
+</ul>
+<h2 id="methods">Methods</h2>
+<h3 id="reset_states">
+<code>reset_states</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">reset_states()</code></pre></div>
+<p>Resets all of the metric state variables.</p>
+<p>This function is called between epochs/steps, when a metric is evaluated during training.</p>
+<h3 id="result">
+<code>result</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">result()</code></pre></div>
+<p>Computes and returns the metric value tensor.</p>
+<p>Result computation is an idempotent operation that simply calculates the metric value using the state variables.</p>
+<h3 id="update_state">
+<code>update_state</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">update_state(
+    y_true,
+    y_pred,
+    sample_weight<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Accumulates metric statistics.</p>
+<p><code>y_true</code> and <code>y_pred</code> should have the same shape.</p>
+<h4 id="args-2">Args:</h4>
+<ul>
+<li><b><code>y_true</code></b>: The ground truth values.</li>
+<li><b><code>y_pred</code></b>: The predicted values.</li>
+<li><b><code>sample_weight</code></b>: Optional weighting of each example. Defaults to 1. Can be a <code>Tensor</code> whose rank is either 0, or the same rank as <code>y_true</code>, and must be broadcastable to <code>y_true</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Update op.</p>

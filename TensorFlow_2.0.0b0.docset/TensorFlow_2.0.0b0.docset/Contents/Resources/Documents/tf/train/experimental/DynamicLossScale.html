@@ -1,0 +1,66 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.train.experimental.DynamicLossScale" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="increment_period"/> <meta itemprop="property" content="initial_loss_scale"/> <meta itemprop="property" content="multiplier"/> <meta itemprop="property" content="__call__"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="from_config"/> <meta itemprop="property" content="get_config"/> <meta itemprop="property" content="update"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.train.experimental.DynamicLossScale" class="dashAnchor"></a><h1 id="tf.train.experimental.dynamiclossscale">tf.train.experimental.DynamicLossScale</h1>
+<h2 id="class-dynamiclossscale">Class <code>DynamicLossScale</code></h2>
+<p>Loss scale that dynamically adjusts itself.</p>
+<p>Inherits From: <a href="../../../tf/train/experimental/LossScale.html"><code>LossScale</code></a></p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.train.experimental.DynamicLossScale</code></li>
+<li>Class <code>tf.compat.v2.train.experimental.DynamicLossScale</code></li>
+<li>Class <code>tf.train.experimental.DynamicLossScale</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/training/experimental/loss_scale.py"><code>python/training/experimental/loss_scale.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Dynamic loss scaling works by adjusting the loss scale as training progresses. The goal is to keep the loss scale as high as possible without overflowing the gradients. As long as the gradients do not overflow, raising the loss scale never hurts.</p>
+<p>The algorithm starts by setting the loss scale to an initial value. Every N steps that the gradients are finite, the loss scale is increased by some factor. However, if a NaN or Inf gradient is found, the gradients for that step are not applied, and the loss scale is decreased by the factor. This process tends to keep the loss scale as high as possible without gradients overflowing.</p>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    initial_loss_scale<span class="op">=</span>(<span class="dv">2</span> <span class="op">**</span> <span class="dv">15</span>),
+    increment_period<span class="op">=</span><span class="dv">2000</span>,
+    multiplier<span class="op">=</span><span class="fl">2.0</span>
+)</code></pre></div>
+<p>Creates the dynamic loss scale.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>initial_loss_scale</code></b>: A Python float. The loss scale to use at the beginning. It's better to start this at a very high number, because a loss scale that is too high gets lowered far more quickly than a loss scale that is to low gets raised. The default is 2 ** 15, which is approximately half the maximum float16 value.</li>
+<li><b><code>increment_period</code></b>: Increases loss scale every <code>increment_period</code> consecutive steps that finite gradients are encountered. If a nonfinite gradient is encountered, the count is reset back to zero.</li>
+<li><b><code>multiplier</code></b>: The multiplier to use when increasing or decreasing the loss scale.</li>
+</ul>
+<h2 id="properties">Properties</h2>
+<h3 id="increment_period">
+<code>increment_period</code>
+</h3>
+<h3 id="initial_loss_scale">
+<code>initial_loss_scale</code>
+</h3>
+<h3 id="multiplier">
+<code>multiplier</code>
+</h3>
+<h2 id="methods">Methods</h2>
+<h3 id="__call__">
+<code><strong>call</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__call__</span>()</code></pre></div>
+<p>Returns the current loss scale as a scalar <code>float32</code> tensor.</p>
+<h3 id="from_config">
+<code>from_config</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">from_config(
+    cls,
+    config
+)</code></pre></div>
+<p>Creates the LossScale from its config.</p>
+<h3 id="get_config">
+<code>get_config</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_config()</code></pre></div>
+<p>Returns the config of this loss scale.</p>
+<h3 id="update">
+<code>update</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">update(grads)</code></pre></div>
+<p>Updates loss scale based on if gradients are finite in current step.</p>

@@ -1,0 +1,23 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.image.rgb_to_yuv" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.image.rgb_to_yuv" class="dashAnchor"></a><h1 id="tf.image.rgb_to_yuv">tf.image.rgb_to_yuv</h1>
+<p>Converts one or more images from RGB to YUV.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.image.rgb_to_yuv</code></li>
+<li><code>tf.compat.v2.image.rgb_to_yuv</code></li>
+<li><code>tf.image.rgb_to_yuv</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.image.rgb_to_yuv(images)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/image_ops_impl.py"><code>python/ops/image_ops_impl.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Outputs a tensor of the same shape as the <code>images</code> tensor, containing the YUV value of the pixels. The output is only well defined if the value in images are in [0,1].</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>images</code></b>: 2-D or higher rank. Image data to convert. Last dimension must be size 3.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<ul>
+<li><b><code>images</code></b>: tensor with the same shape as <code>images</code>.</li>
+</ul>

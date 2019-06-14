@@ -1,0 +1,35 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.layers.GlobalMaxPool1D" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="__init__"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.keras.layers.GlobalMaxPool1D" class="dashAnchor"></a><h1 id="tf.keras.layers.globalmaxpool1d">tf.keras.layers.GlobalMaxPool1D</h1>
+<h2 id="class-globalmaxpool1d">Class <code>GlobalMaxPool1D</code></h2>
+<p>Global max pooling operation for temporal data.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.keras.layers.GlobalMaxPool1D</code></li>
+<li>Class <code>tf.compat.v1.keras.layers.GlobalMaxPooling1D</code></li>
+<li>Class <code>tf.compat.v2.keras.layers.GlobalMaxPool1D</code></li>
+<li>Class <code>tf.compat.v2.keras.layers.GlobalMaxPooling1D</code></li>
+<li>Class <code>tf.keras.layers.GlobalMaxPool1D</code></li>
+<li>Class <code>tf.keras.layers.GlobalMaxPooling1D</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/layers/pooling.py"><code>python/keras/layers/pooling.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>data_format</code></b>: A string, one of <code>channels_last</code> (default) or <code>channels_first</code>. The ordering of the dimensions in the inputs. <code>channels_last</code> corresponds to inputs with shape <code>(batch, steps, features)</code> while <code>channels_first</code> corresponds to inputs with shape <code>(batch, features, steps)</code>.</li>
+</ul>
+<h4 id="input-shape">Input shape:</h4>
+<ul>
+<li>If <code>data_format='channels_last'</code>: 3D tensor with shape: <code>(batch_size, steps, features)</code></li>
+<li>If <code>data_format='channels_first'</code>: 3D tensor with shape: <code>(batch_size, features, steps)</code></li>
+</ul>
+<h4 id="output-shape">Output shape:</h4>
+<p>2D tensor with shape <code>(batch_size, features)</code>.</p>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    data_format<span class="op">=</span><span class="st">&#39;channels_last&#39;</span>,
+    <span class="op">**</span>kwargs
+)</code></pre></div>

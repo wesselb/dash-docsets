@@ -1,0 +1,33 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.nn.moments" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.nn.moments" class="dashAnchor"></a><h1 id="tf.compat.v1.nn.moments">tf.compat.v1.nn.moments</h1>
+<p>Calculate the mean and variance of <code>x</code>.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.nn.moments(
+    x,
+    axes,
+    shift<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>,
+    keep_dims<span class="op">=</span><span class="va">None</span>,
+    keepdims<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/nn_impl.py"><code>python/ops/nn_impl.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>The mean and variance are calculated by aggregating the contents of <code>x</code> across <code>axes</code>. If <code>x</code> is 1-D and <code>axes = [0]</code> this is just the mean and variance of a vector.</p>
+<p>Note: shift is currently not used; the true mean is computed and used.</p>
+<p>When using these moments for batch normalization (see <a href="../../../../tf/nn/batch_normalization.html"><code>tf.nn.batch_normalization</code></a>):</p>
+<ul>
+<li>for so-called &quot;global normalization&quot;, used with convolutional filters with shape <code>[batch, height, width, depth]</code>, pass <code>axes=[0, 1, 2]</code>.</li>
+<li>for simple batch normalization pass <code>axes=[0]</code> (batch only).</li>
+</ul>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>.</li>
+<li><b><code>axes</code></b>: Array of ints. Axes along which to compute mean and variance.</li>
+<li><b><code>shift</code></b>: Not used in the current implementation</li>
+<li><b><code>name</code></b>: Name used to scope the operations that compute the moments.</li>
+<li><b><code>keep_dims</code></b>: produce moments with the same dimensionality as the input.</li>
+<li><b><code>keepdims</code></b>: Alias to keep_dims.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Two <code>Tensor</code> objects: <code>mean</code> and <code>variance</code>.</p>

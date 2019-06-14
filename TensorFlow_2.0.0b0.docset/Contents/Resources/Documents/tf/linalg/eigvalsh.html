@@ -1,0 +1,28 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.linalg.eigvalsh" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.linalg.eigvalsh" class="dashAnchor"></a><h1 id="tf.linalg.eigvalsh">tf.linalg.eigvalsh</h1>
+<p>Computes the eigenvalues of one or more self-adjoint matrices.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.linalg.eigvalsh</code></li>
+<li><code>tf.compat.v1.self_adjoint_eigvals</code></li>
+<li><code>tf.compat.v2.linalg.eigvalsh</code></li>
+<li><code>tf.linalg.eigvalsh</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.linalg.eigvalsh(
+    tensor,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/linalg_ops.py"><code>python/ops/linalg_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Note: If your program backpropagates through this function, you should replace it with a call to tf.linalg.eigh (possibly ignoring the second output) to avoid computing the eigen decomposition twice. This is because the eigenvectors are used to compute the gradient w.r.t. the eigenvalues. See _SelfAdjointEigV2Grad in linalg_grad.py.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>tensor</code></b>: <code>Tensor</code> of shape <code>[..., N, N]</code>.</li>
+<li><b><code>name</code></b>: string, optional name of the operation.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<ul>
+<li><b><code>e</code></b>: Eigenvalues. Shape is <code>[..., N]</code>. The vector <code>e[..., :]</code> contains the <code>N</code> eigenvalues of <code>tensor[..., :, :]</code>.</li>
+</ul>

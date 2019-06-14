@@ -1,0 +1,30 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.activations.relu" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.keras.activations.relu" class="dashAnchor"></a><h1 id="tf.keras.activations.relu">tf.keras.activations.relu</h1>
+<p>Rectified Linear Unit.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.keras.activations.relu</code></li>
+<li><code>tf.compat.v2.keras.activations.relu</code></li>
+<li><code>tf.keras.activations.relu</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.keras.activations.relu(
+    x,
+    alpha<span class="op">=</span><span class="fl">0.0</span>,
+    max_value<span class="op">=</span><span class="va">None</span>,
+    threshold<span class="op">=</span><span class="dv">0</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/activations.py"><code>python/keras/activations.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>With default values, it returns element-wise <code>max(x, 0)</code>.</p>
+<p>Otherwise, it follows: <code>f(x) = max_value</code> for <code>x &gt;= max_value</code>, <code>f(x) = x</code> for <code>threshold &lt;= x &lt; max_value</code>, <code>f(x) = alpha * (x - threshold)</code> otherwise.</p>
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>x</code></b>: A tensor or variable.</li>
+<li><b><code>alpha</code></b>: A scalar, slope of negative section (default=<code>0.</code>).</li>
+<li><b><code>max_value</code></b>: float. Saturation threshold.</li>
+<li><b><code>threshold</code></b>: float. Threshold value for thresholded activation.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A tensor.</p>

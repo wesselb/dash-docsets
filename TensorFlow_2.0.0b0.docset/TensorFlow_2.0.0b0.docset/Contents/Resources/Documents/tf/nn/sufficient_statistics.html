@@ -1,0 +1,36 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.nn.sufficient_statistics" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.nn.sufficient_statistics" class="dashAnchor"></a><h1 id="tf.nn.sufficient_statistics">tf.nn.sufficient_statistics</h1>
+<p>Calculate the sufficient statistics for the mean and variance of <code>x</code>.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v2.nn.sufficient_statistics</code></li>
+<li><code>tf.nn.sufficient_statistics</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.nn.sufficient_statistics(
+    x,
+    axes,
+    shift<span class="op">=</span><span class="va">None</span>,
+    keepdims<span class="op">=</span><span class="va">False</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/nn_impl.py"><code>python/ops/nn_impl.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>These sufficient statistics are computed using the one pass algorithm on an input that's optionally shifted. See: https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Computing_shifted_data</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>.</li>
+<li><b><code>axes</code></b>: Array of ints. Axes along which to compute mean and variance.</li>
+<li><b><code>shift</code></b>: A <code>Tensor</code> containing the value by which to shift the data for numerical stability, or <code>None</code> if no shift is to be performed. A shift close to the true mean provides the most numerically stable results.</li>
+<li><b><code>keepdims</code></b>: produce statistics with the same dimensionality as the input.</li>
+<li><b><code>name</code></b>: Name used to scope the operations that compute the sufficient stats.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Four <code>Tensor</code> objects of the same type as <code>x</code>:</p>
+<ul>
+<li>the count (number of elements to average over).</li>
+<li>the (possibly shifted) sum of the elements in the array.</li>
+<li>the (possibly shifted) sum of squares of the elements in the array.</li>
+<li>the shift by which the mean must be corrected or None if <code>shift</code> is None.</li>
+</ul>

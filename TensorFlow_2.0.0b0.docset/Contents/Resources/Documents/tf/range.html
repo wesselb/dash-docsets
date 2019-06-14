@@ -1,0 +1,48 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.range" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.range" class="dashAnchor"></a><h1 id="tf.range">tf.range</h1>
+<p>Creates a sequence of numbers.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.range</code></li>
+<li><code>tf.compat.v2.range</code></li>
+<li><code>tf.range</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.<span class="bu">range</span>(limit, delta<span class="op">=</span><span class="dv">1</span>, dtype<span class="op">=</span><span class="va">None</span>, name<span class="op">=</span><span class="st">&#39;range&#39;</span>)
+tf.<span class="bu">range</span>(start, limit, delta<span class="op">=</span><span class="dv">1</span>, dtype<span class="op">=</span><span class="va">None</span>, name<span class="op">=</span><span class="st">&#39;range&#39;</span>)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/math_ops.py"><code>python/ops/math_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Creates a sequence of numbers that begins at <code>start</code> and extends by increments of <code>delta</code> up to but not including <code>limit</code>.</p>
+<p>The dtype of the resulting tensor is inferred from the inputs unless it is provided explicitly.</p>
+<p>Like the Python builtin <code>range</code>, <code>start</code> defaults to 0, so that <code>range(n) = range(0, n)</code>.</p>
+<h4 id="for-example">For example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">start <span class="op">=</span> <span class="dv">3</span>
+limit <span class="op">=</span> <span class="dv">18</span>
+delta <span class="op">=</span> <span class="dv">3</span>
+tf.<span class="bu">range</span>(start, limit, delta)  <span class="co"># [3, 6, 9, 12, 15]</span>
+
+start <span class="op">=</span> <span class="dv">3</span>
+limit <span class="op">=</span> <span class="dv">1</span>
+delta <span class="op">=</span> <span class="op">-</span><span class="fl">0.5</span>
+tf.<span class="bu">range</span>(start, limit, delta)  <span class="co"># [3, 2.5, 2, 1.5]</span>
+
+limit <span class="op">=</span> <span class="dv">5</span>
+tf.<span class="bu">range</span>(limit)  <span class="co"># [0, 1, 2, 3, 4]</span></code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>start</code></b>: A 0-D <code>Tensor</code> (scalar). Acts as first entry in the range if <code>limit</code> is not None; otherwise, acts as range limit and first entry defaults to 0.</li>
+<li><b><code>limit</code></b>: A 0-D <code>Tensor</code> (scalar). Upper limit of sequence, exclusive. If None, defaults to the value of <code>start</code> while the first entry of the range defaults to 0.</li>
+<li><b><code>delta</code></b>: A 0-D <code>Tensor</code> (scalar). Number that increments <code>start</code>. Defaults to</li>
+</ul>
+<ol style="list-style-type: decimal">
+<li></li>
+</ol>
+<ul>
+<li><b><code>dtype</code></b>: The type of the elements of the resulting tensor.</li>
+<li><b><code>name</code></b>: A name for the operation. Defaults to &quot;range&quot;.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>An 1-D <code>Tensor</code> of type <code>dtype</code>.</p>
+<h4 id="numpy-compatibility">Numpy Compatibility</h4>
+<p>Equivalent to np.arange</p>

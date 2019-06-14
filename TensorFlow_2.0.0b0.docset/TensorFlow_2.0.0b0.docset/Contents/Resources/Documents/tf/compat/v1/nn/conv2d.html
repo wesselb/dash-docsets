@@ -1,0 +1,43 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.nn.conv2d" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.nn.conv2d" class="dashAnchor"></a><h1 id="tf.compat.v1.nn.conv2d">tf.compat.v1.nn.conv2d</h1>
+<p>Computes a 2-D convolution given 4-D <code>input</code> and <code>filter</code> tensors.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.nn.conv2d(
+    <span class="bu">input</span>,
+    <span class="bu">filter</span><span class="op">=</span><span class="va">None</span>,
+    strides<span class="op">=</span><span class="va">None</span>,
+    padding<span class="op">=</span><span class="va">None</span>,
+    use_cudnn_on_gpu<span class="op">=</span><span class="va">True</span>,
+    data_format<span class="op">=</span><span class="st">&#39;NHWC&#39;</span>,
+    dilations<span class="op">=</span>[<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>],
+    name<span class="op">=</span><span class="va">None</span>,
+    filters<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/nn_ops.py"><code>python/ops/nn_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Given an input tensor of shape <code>[batch, in_height, in_width, in_channels]</code> and a filter / kernel tensor of shape <code>[filter_height, filter_width, in_channels, out_channels]</code>, this op performs the following:</p>
+<ol style="list-style-type: decimal">
+<li>Flattens the filter to a 2-D matrix with shape <code>[filter_height * filter_width * in_channels, output_channels]</code>.</li>
+<li>Extracts image patches from the input tensor to form a <em>virtual</em> tensor of shape <code>[batch, out_height, out_width,    filter_height * filter_width * in_channels]</code>.</li>
+<li>For each patch, right-multiplies the filter matrix and the image patch vector.</li>
+</ol>
+<p>In detail, with the default NHWC format,</p>
+<pre><code>output[b, i, j, k] =
+    sum_{di, dj, q} input[b, strides[1] * i + di, strides[2] * j + dj, q]
+                    * filter[di, dj, q, k]</code></pre>
+<p>Must have <code>strides[0] = strides[3] = 1</code>. For the most common case of the same horizontal and vertices strides, <code>strides = [1, stride, stride, 1]</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>bfloat16</code>, <code>float32</code>, <code>float64</code>. A 4-D tensor. The dimension order is interpreted according to the value of <code>data_format</code>, see below for details.</li>
+<li><b><code>filter</code></b>: A <code>Tensor</code>. Must have the same type as <code>input</code>. A 4-D tensor of shape <code>[filter_height, filter_width, in_channels, out_channels]</code></li>
+<li><b><code>strides</code></b>: An int or list of <code>ints</code> that has length <code>1</code>, <code>2</code> or <code>4</code>. The stride of the sliding window for each dimension of <code>input</code>. If a single value is given it is replicated in the <code>H</code> and <code>W</code> dimension. By default the <code>N</code> and <code>C</code> dimensions are set to 1. The dimension order is determined by the value of <code>data_format</code>, see below for details.</li>
+<li><b><code>padding</code></b>: Either the <code>string</code> <code>&quot;SAME&quot;</code> or <code>&quot;VALID&quot;</code> indicating the type of padding algorithm to use, or a list indicating the explicit paddings at the start and end of each dimension. When explicit padding is used and data_format is <code>&quot;NHWC&quot;</code>, this should be in the form <code>[[0, 0], [pad_top,   pad_bottom], [pad_left, pad_right], [0, 0]]</code>. When explicit padding used and data_format is <code>&quot;NCHW&quot;</code>, this should be in the form <code>[[0, 0], [0, 0],   [pad_top, pad_bottom], [pad_left, pad_right]]</code>.</li>
+<li><b><code>use_cudnn_on_gpu</code></b>: An optional <code>bool</code>. Defaults to <code>True</code>.</li>
+<li><b><code>data_format</code></b>: An optional <code>string</code> from: <code>&quot;NHWC&quot;, &quot;NCHW&quot;</code>. Defaults to <code>&quot;NHWC&quot;</code>. Specify the data format of the input and output data. With the default format &quot;NHWC&quot;, the data is stored in the order of: [batch, height, width, channels]. Alternatively, the format could be &quot;NCHW&quot;, the data storage order of: [batch, channels, height, width].</li>
+<li><b><code>dilations</code></b>: An int or list of <code>ints</code> that has length <code>1</code>, <code>2</code> or <code>4</code>, defaults to 1. The dilation factor for each dimension of<code>input</code>. If a single value is given it is replicated in the <code>H</code> and <code>W</code> dimension. By default the <code>N</code> and <code>C</code> dimensions are set to 1. If set to k &gt; 1, there will be k-1 skipped cells between each filter element on that dimension. The dimension order is determined by the value of <code>data_format</code>, see above for details. Dilations in the batch and depth dimensions if a 4-d tensor must be 1.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+<li><b><code>filters</code></b>: Alias for filter.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>input</code>.</p>

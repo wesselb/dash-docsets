@@ -1,0 +1,31 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.config.experimental.set_visible_devices" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.config.experimental.set_visible_devices" class="dashAnchor"></a><h1 id="tf.config.experimental.set_visible_devices">tf.config.experimental.set_visible_devices</h1>
+<p>Set the list of visible devices.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.config.experimental.set_visible_devices</code></li>
+<li><code>tf.compat.v2.config.experimental.set_visible_devices</code></li>
+<li><code>tf.config.experimental.set_visible_devices</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.config.experimental.set_visible_devices(
+    devices,
+    device_type<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/framework/config.py"><code>python/framework/config.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Sets the list of PhysicalDevices to be marked as visible to the runtime. Any devices that are not marked as visible means TensorFlow will not allocate memory on it and will not be able to place any operations on it as no LogicalDevice will be created on it. By default all discovered devices are marked as visible.</p>
+<p>The following example demonstrates disabling the first GPU on the machine.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">physical_devices <span class="op">=</span> config.experimental.list_physical_devices(<span class="st">&#39;GPU&#39;</span>)
+<span class="cf">assert</span> <span class="bu">len</span>(physical_devices) <span class="op">&gt;</span> <span class="dv">0</span>, <span class="st">&quot;Not enough GPU hardware devices available&quot;</span>
+<span class="co"># Disable first GPU</span>
+tf.config.experimental.set_visible_devices(physical_devices[<span class="dv">1</span>:], <span class="st">&#39;GPU&#39;</span>)
+logical_devices <span class="op">=</span> config.experimental.list_logical_devices(<span class="st">&#39;GPU&#39;</span>)
+<span class="co"># Logical device was not created for first GPU</span>
+<span class="cf">assert</span> <span class="bu">len</span>(logical_devices) <span class="op">==</span> <span class="bu">len</span>(physical_devices) <span class="op">-</span> <span class="dv">1</span></code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>devices</code></b>: (optional) List of PhysicalDevice objects to make visible</li>
+<li><b><code>device_type</code></b>: (optional) Device types to limit visibility configuration to. Other device types will be left unaltered.</li>
+</ul>

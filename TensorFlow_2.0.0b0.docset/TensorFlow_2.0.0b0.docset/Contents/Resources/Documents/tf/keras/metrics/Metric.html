@@ -1,0 +1,109 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.metrics.Metric" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="add_weight"/> <meta itemprop="property" content="reset_states"/> <meta itemprop="property" content="result"/> <meta itemprop="property" content="update_state"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.keras.metrics.Metric" class="dashAnchor"></a><h1 id="tf.keras.metrics.metric">tf.keras.metrics.Metric</h1>
+<h2 id="class-metric">Class <code>Metric</code></h2>
+<p>Encapsulates metric logic and state.</p>
+<p>Inherits From: <a href="../../../tf/keras/layers/Layer.html"><code>Layer</code></a></p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.keras.metrics.Metric</code></li>
+<li>Class <code>tf.compat.v2.keras.metrics.Metric</code></li>
+<li>Class <code>tf.compat.v2.metrics.Metric</code></li>
+<li>Class <code>tf.keras.metrics.Metric</code></li>
+<li>Class <code>tf.metrics.Metric</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/metrics.py"><code>python/keras/metrics.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="usage">Usage:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">m <span class="op">=</span> SomeMetric(...)
+<span class="cf">for</span> <span class="bu">input</span> <span class="kw">in</span> ...:
+  m.update_state(<span class="bu">input</span>)
+<span class="bu">print</span>(<span class="st">&#39;Final result: &#39;</span>, m.result().numpy())</code></pre></div>
+<p>Usage with tf.keras API:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">model <span class="op">=</span> tf.keras.Sequential()
+model.add(tf.keras.layers.Dense(<span class="dv">64</span>, activation<span class="op">=</span><span class="st">&#39;relu&#39;</span>))
+model.add(tf.keras.layers.Dense(<span class="dv">64</span>, activation<span class="op">=</span><span class="st">&#39;relu&#39;</span>))
+model.add(tf.keras.layers.Dense(<span class="dv">10</span>, activation<span class="op">=</span><span class="st">&#39;softmax&#39;</span>))
+
+model.<span class="bu">compile</span>(optimizer<span class="op">=</span>tf.compat.v1.train.RMSPropOptimizer(<span class="fl">0.01</span>),
+              loss<span class="op">=</span>tf.keras.losses.categorical_crossentropy,
+              metrics<span class="op">=</span>[tf.keras.metrics.CategoricalAccuracy()])
+
+data <span class="op">=</span> np.random.random((<span class="dv">1000</span>, <span class="dv">32</span>))
+labels <span class="op">=</span> np.random.random((<span class="dv">1000</span>, <span class="dv">10</span>))
+
+dataset <span class="op">=</span> tf.data.Dataset.from_tensor_slices((data, labels))
+dataset <span class="op">=</span> dataset.batch(<span class="dv">32</span>)
+dataset <span class="op">=</span> dataset.repeat()
+
+model.fit(dataset, epochs<span class="op">=</span><span class="dv">10</span>, steps_per_epoch<span class="op">=</span><span class="dv">30</span>)</code></pre></div>
+<p>To be implemented by subclasses: * <code>__init__()</code>: All state variables should be created in this method by calling <code>self.add_weight()</code> like: <code>self.var = self.add_weight(...)</code> * <code>update_state()</code>: Has all updates to the state variables like: self.var.assign_add(...). * <code>result()</code>: Computes and returns a value for the metric from the state variables.</p>
+<p>Example subclass implementation:</p>
+<pre><code>class BinaryTruePositives(tf.keras.metrics.Metric):
+
+  def __init__(self, name=&#39;binary_true_positives&#39;, **kwargs):
+    super(BinaryTruePositives, self).__init__(name=name, **kwargs)
+    self.true_positives = self.add_weight(name=&#39;tp&#39;, initializer=&#39;zeros&#39;)
+
+  def update_state(self, y_true, y_pred, sample_weight=None):
+    y_true = tf.cast(y_true, tf.bool)
+    y_pred = tf.cast(y_pred, tf.bool)
+
+    values = tf.logical_and(tf.equal(y_true, True), tf.equal(y_pred, True))
+    values = tf.cast(values, self.dtype)
+    if sample_weight is not None:
+      sample_weight = tf.cast(sample_weight, self.dtype)
+      sample_weight = tf.broadcast_weights(sample_weight, values)
+      values = tf.multiply(values, sample_weight)
+    self.true_positives.assign_add(tf.reduce_sum(values))
+
+  def result(self):
+    return self.true_positives</code></pre>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    name<span class="op">=</span><span class="va">None</span>,
+    dtype<span class="op">=</span><span class="va">None</span>,
+    <span class="op">**</span>kwargs
+)</code></pre></div>
+<h2 id="methods">Methods</h2>
+<h3 id="add_weight">
+<code>add_weight</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">add_weight(
+    name,
+    shape<span class="op">=</span>(),
+    aggregation<span class="op">=</span>tf.compat.v1.VariableAggregation.SUM,
+    synchronization<span class="op">=</span>tf.VariableSynchronization.ON_READ,
+    initializer<span class="op">=</span><span class="va">None</span>,
+    dtype<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Adds state variable. Only for use by subclasses.</p>
+<h3 id="reset_states">
+<code>reset_states</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">reset_states()</code></pre></div>
+<p>Resets all of the metric state variables.</p>
+<p>This function is called between epochs/steps, when a metric is evaluated during training.</p>
+<h3 id="result">
+<code>result</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">result()</code></pre></div>
+<p>Computes and returns the metric value tensor.</p>
+<p>Result computation is an idempotent operation that simply calculates the metric value using the state variables.</p>
+<h3 id="update_state">
+<code>update_state</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">update_state(
+    <span class="op">*</span>args,
+    <span class="op">**</span>kwargs
+)</code></pre></div>
+<p>Accumulates statistics for the metric.</p>
+<p>Note: This function is executed as a graph function in graph mode. This means: a) Operations on the same resource are executed in textual order. This should make it easier to do things like add the updated value of a variable to another, for example. b) You don't need to worry about collecting the update ops to execute. All update ops added to the graph by this function will be executed. As a result, code should generally work the same way with graph or eager execution.</p>
+<p>Please use <code>tf.config.experimental_run_functions_eagerly(True)</code> to execute this function eagerly for debugging or profiling.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>*args</code></b>: * <b><code>**kwargs</code></b>: A mini-batch of inputs to the Metric.</li>
+</ul>

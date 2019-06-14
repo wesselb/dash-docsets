@@ -1,0 +1,29 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.math.imag" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.math.imag" class="dashAnchor"></a><h1 id="tf.math.imag">tf.math.imag</h1>
+<p>Returns the imaginary part of a complex (or real) tensor.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.imag</code></li>
+<li><code>tf.compat.v1.math.imag</code></li>
+<li><code>tf.compat.v2.math.imag</code></li>
+<li><code>tf.math.imag</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.math.imag(
+    <span class="bu">input</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/math_ops.py"><code>python/ops/math_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Given a tensor <code>input</code>, this operation returns a tensor of type <code>float</code> that is the imaginary part of each element in <code>input</code> considered as a complex number. If <code>input</code> is real, a tensor of all zeros is returned.</p>
+<h4 id="for-example">For example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">x <span class="op">=</span> tf.constant([<span class="op">-</span><span class="fl">2.25</span> <span class="op">+</span> <span class="fl">4.</span>75j, <span class="fl">3.25</span> <span class="op">+</span> <span class="fl">5.</span>75j])
+tf.math.imag(x)  <span class="co"># [4.75, 5.75]</span></code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float</code>, <code>double</code>, <code>complex64</code>, <code>complex128</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>float32</code> or <code>float64</code>.</p>

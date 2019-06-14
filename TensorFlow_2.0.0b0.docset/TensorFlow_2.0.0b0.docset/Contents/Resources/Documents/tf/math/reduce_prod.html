@@ -1,0 +1,33 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.math.reduce_prod" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.math.reduce_prod" class="dashAnchor"></a><h1 id="tf.math.reduce_prod">tf.math.reduce_prod</h1>
+<p>Computes the product of elements across dimensions of a tensor.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v2.math.reduce_prod</code></li>
+<li><code>tf.compat.v2.reduce_prod</code></li>
+<li><code>tf.math.reduce_prod</code></li>
+<li><code>tf.reduce_prod</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.math.reduce_prod(
+    input_tensor,
+    axis<span class="op">=</span><span class="va">None</span>,
+    keepdims<span class="op">=</span><span class="va">False</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/math_ops.py"><code>python/ops/math_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Reduces <code>input_tensor</code> along the dimensions given in <code>axis</code>. Unless <code>keepdims</code> is true, the rank of the tensor is reduced by 1 for each entry in <code>axis</code>. If <code>keepdims</code> is true, the reduced dimensions are retained with length 1.</p>
+<p>If <code>axis</code> is None, all dimensions are reduced, and a tensor with a single element is returned.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input_tensor</code></b>: The tensor to reduce. Should have numeric type.</li>
+<li><b><code>axis</code></b>: The dimensions to reduce. If <code>None</code> (the default), reduces all dimensions. Must be in the range <code>[-rank(input_tensor),   rank(input_tensor))</code>.</li>
+<li><b><code>keepdims</code></b>: If true, retains reduced dimensions with length 1.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The reduced tensor.</p>
+<h4 id="numpy-compatibility">Numpy Compatibility</h4>
+<p>Equivalent to np.prod</p>

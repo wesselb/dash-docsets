@@ -1,0 +1,18 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.keras.backend.get_session" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.keras.backend.get_session" class="dashAnchor"></a><h1 id="tf.compat.v1.keras.backend.get_session">tf.compat.v1.keras.backend.get_session</h1>
+<p>Returns the TF session to be used by the backend.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.keras.backend.get_session(op_input_list<span class="op">=</span>())</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/backend.py"><code>python/keras/backend.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>If a default TensorFlow session is available, we will return it.</p>
+<p>Else, we will return the global Keras session assuming it matches the current graph.</p>
+<p>If no global Keras session exists at this point: we will create a new global session.</p>
+<p>Note that you can manually set the global session via <code>K.set_session(sess)</code>.</p>
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>op_input_list</code></b>: An option sequence of tensors or ops, which will be used to determine the current graph. Otherwise the default graph will be used.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A TensorFlow session.</p>

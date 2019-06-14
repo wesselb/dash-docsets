@@ -1,0 +1,38 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.parallel_stack" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.parallel_stack" class="dashAnchor"></a><h1 id="tf.parallel_stack">tf.parallel_stack</h1>
+<p>Stacks a list of rank-<code>R</code> tensors into one rank-<code>(R+1)</code> tensor in parallel.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.parallel_stack</code></li>
+<li><code>tf.compat.v2.parallel_stack</code></li>
+<li><code>tf.parallel_stack</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.parallel_stack(
+    values,
+    name<span class="op">=</span><span class="st">&#39;parallel_stack&#39;</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/array_ops.py"><code>python/ops/array_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Requires that the shape of inputs be known at graph construction time.</p>
+<p>Packs the list of tensors in <code>values</code> into a tensor with rank one higher than each tensor in <code>values</code>, by packing them along the first dimension. Given a list of length <code>N</code> of tensors of shape <code>(A, B, C)</code>; the <code>output</code> tensor will have the shape <code>(N, A, B, C)</code>.</p>
+<h4 id="for-example">For example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">x <span class="op">=</span> tf.constant([<span class="dv">1</span>, <span class="dv">4</span>])
+y <span class="op">=</span> tf.constant([<span class="dv">2</span>, <span class="dv">5</span>])
+z <span class="op">=</span> tf.constant([<span class="dv">3</span>, <span class="dv">6</span>])
+tf.parallel_stack([x, y, z])  <span class="co"># [[1, 4], [2, 5], [3, 6]]</span></code></pre></div>
+<p>The difference between <code>stack</code> and <code>parallel_stack</code> is that <code>stack</code> requires all the inputs be computed before the operation will begin but doesn't require that the input shapes be known during graph construction.</p>
+<p><code>parallel_stack</code> will copy pieces of the input into the output as they become available, in some situations this can provide a performance benefit.</p>
+<p>Unlike <code>stack</code>, <code>parallel_stack</code> does NOT support backpropagation.</p>
+<p>This is the opposite of unstack. The numpy equivalent is</p>
+<pre><code>tf.parallel_stack([x, y, z]) = np.asarray([x, y, z])</code></pre>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>values</code></b>: A list of <code>Tensor</code> objects with the same shape and type.</li>
+<li><b><code>name</code></b>: A name for this operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<ul>
+<li><b><code>output</code></b>: A stacked <code>Tensor</code> with the same type as <code>values</code>.</li>
+</ul>

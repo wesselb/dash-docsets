@@ -1,0 +1,28 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.saved_model.predict_signature_def" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.saved_model.predict_signature_def" class="dashAnchor"></a><h1 id="tf.compat.v1.saved_model.predict_signature_def">tf.compat.v1.saved_model.predict_signature_def</h1>
+<p>Creates prediction signature from given inputs and outputs.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.saved_model.predict_signature_def</code></li>
+<li><code>tf.compat.v1.saved_model.signature_def_utils.predict_signature_def</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.saved_model.predict_signature_def(
+    inputs,
+    outputs
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/saved_model/signature_def_utils_impl.py"><code>python/saved_model/signature_def_utils_impl.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>This function produces signatures intended for use with the TensorFlow Serving Predict API (tensorflow_serving/apis/prediction_service.proto). This API imposes no constraints on the input and output types.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>inputs</code></b>: dict of string to <code>Tensor</code>.</li>
+<li><b><code>outputs</code></b>: dict of string to <code>Tensor</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A prediction-flavored signature_def.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If inputs or outputs is <code>None</code>.</li>
+</ul>

@@ -1,0 +1,62 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.name_scope" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="name"/> <meta itemprop="property" content="__enter__"/> <meta itemprop="property" content="__exit__"/> <meta itemprop="property" content="__init__"/></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.name_scope" class="dashAnchor"></a><h1 id="tf.name_scope">tf.name_scope</h1>
+<h2 id="class-name_scope">Class <code>name_scope</code></h2>
+<p>A context manager for use when defining a Python op.</p>
+<p>Inherits From: <a href="../tf/compat/v1/keras/backend/name_scope.html"><code>name_scope</code></a></p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v2.name_scope</code></li>
+<li>Class <code>tf.name_scope</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/framework/ops.py"><code>python/framework/ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>This context manager pushes a name scope, which will make the name of all operations added within it have a prefix.</p>
+<p>For example, to define a new Python op called <code>my_op</code>:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="kw">def</span> my_op(a, b, c, name<span class="op">=</span><span class="va">None</span>):
+  <span class="cf">with</span> tf.name_scope(<span class="st">&quot;MyOp&quot;</span>) <span class="im">as</span> scope:
+    a <span class="op">=</span> tf.convert_to_tensor(a, name<span class="op">=</span><span class="st">&quot;a&quot;</span>)
+    b <span class="op">=</span> tf.convert_to_tensor(b, name<span class="op">=</span><span class="st">&quot;b&quot;</span>)
+    c <span class="op">=</span> tf.convert_to_tensor(c, name<span class="op">=</span><span class="st">&quot;c&quot;</span>)
+    <span class="co"># Define some computation that uses `a`, `b`, and `c`.</span>
+    <span class="cf">return</span> foo_op(..., name<span class="op">=</span>scope)</code></pre></div>
+<p>When executed, the Tensors <code>a</code>, <code>b</code>, <code>c</code>, will have names <code>MyOp/a</code>, <code>MyOp/b</code>, and <code>MyOp/c</code>.</p>
+<p>If the scope name already exists, the name will be made unique by appending <code>_n</code>. For example, calling <code>my_op</code> the second time will generate <code>MyOp_1/a</code>, etc.</p>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(name)</code></pre></div>
+<p>Initialize the context manager.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>name</code></b>: The prefix to use on all names created within the name scope.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If name is None, or not a string.</li>
+</ul>
+<h2 id="properties">Properties</h2>
+<h3 id="name">
+<code>name</code>
+</h3>
+<h2 id="methods">Methods</h2>
+<h3 id="__enter__">
+<code><strong>enter</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__enter__</span>()</code></pre></div>
+<p>Start the scope block.</p>
+<h4 id="returns">Returns:</h4>
+<p>The scope name.</p>
+<h4 id="raises-1">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if neither <code>name</code> nor <code>default_name</code> is provided but <code>values</code> are.</li>
+</ul>
+<h3 id="__exit__">
+<code><strong>exit</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__exit__</span>(
+    type_arg,
+    value_arg,
+    traceback_arg
+)</code></pre></div>

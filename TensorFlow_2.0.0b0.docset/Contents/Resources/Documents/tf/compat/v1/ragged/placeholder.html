@@ -1,0 +1,28 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.ragged.placeholder" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.ragged.placeholder" class="dashAnchor"></a><h1 id="tf.compat.v1.ragged.placeholder">tf.compat.v1.ragged.placeholder</h1>
+<p>Creates a placeholder for a <a href="../../../../tf/RaggedTensor.html"><code>tf.RaggedTensor</code></a> that will always be fed.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.ragged.placeholder(
+    dtype,
+    ragged_rank,
+    value_shape<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/ragged/ragged_factory_ops.py"><code>python/ops/ragged/ragged_factory_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p><strong>Important</strong>: This ragged tensor will produce an error if evaluated. Its value must be fed using the <code>feed_dict</code> optional argument to <code>Session.run()</code>, <code>Tensor.eval()</code>, or <code>Operation.run()</code>.</p>
+<p><span class="citation">@compatibility</span>{eager} Placeholders are not compatible with eager execution.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>dtype</code></b>: The data type for the <code>RaggedTensor</code>.</li>
+<li><b><code>ragged_rank</code></b>: The ragged rank for the <code>RaggedTensor</code></li>
+<li><b><code>value_shape</code></b>: The shape for individual flat values in the <code>RaggedTensor</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>RaggedTensor</code> that may be used as a handle for feeding a value, but not evaluated directly.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>RuntimeError</code></b>: if eager execution is enabled</li>
+</ul>

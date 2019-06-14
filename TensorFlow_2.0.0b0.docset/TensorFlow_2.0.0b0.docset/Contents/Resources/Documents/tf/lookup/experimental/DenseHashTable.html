@@ -1,0 +1,200 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.lookup.experimental.DenseHashTable" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="key_dtype"/> <meta itemprop="property" content="name"/> <meta itemprop="property" content="resource_handle"/> <meta itemprop="property" content="value_dtype"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="erase"/> <meta itemprop="property" content="export"/> <meta itemprop="property" content="insert"/> <meta itemprop="property" content="insert_or_assign"/> <meta itemprop="property" content="lookup"/> <meta itemprop="property" content="remove"/> <meta itemprop="property" content="size"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.lookup.experimental.DenseHashTable" class="dashAnchor"></a><h1 id="tf.lookup.experimental.densehashtable">tf.lookup.experimental.DenseHashTable</h1>
+<h2 id="class-densehashtable">Class <code>DenseHashTable</code></h2>
+<p>A generic mutable hash table implementation using tensors as backing store.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.lookup.experimental.DenseHashTable</code></li>
+<li>Class <code>tf.compat.v2.lookup.experimental.DenseHashTable</code></li>
+<li>Class <code>tf.lookup.experimental.DenseHashTable</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/lookup_ops.py"><code>python/ops/lookup_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Data can be inserted by calling the insert method and removed by calling the remove method. It does not support initialization via the init method.</p>
+<p>It uses &quot;open addressing&quot; with quadratic reprobing to resolve collisions. Compared to <code>MutableHashTable</code> the insert, remove and lookup operations in a <code>DenseHashTable</code> are typically faster, but memory usage can be higher. However, <code>DenseHashTable</code> does not require additional memory for temporary tensors created during checkpointing and restore operations.</p>
+<h4 id="example-usage">Example usage:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">table <span class="op">=</span> tf.lookup.DenseHashTable(key_dtype<span class="op">=</span>tf.int64,
+                                 value_dtype<span class="op">=</span>tf.int64,
+                                 default_value<span class="op">=-</span><span class="dv">1</span>,
+                                 empty_key<span class="op">=</span><span class="dv">0</span>,
+                                 deleted_key<span class="op">=-</span><span class="dv">1</span>)
+
+sess.run(table.insert(keys, values))
+out <span class="op">=</span> table.lookup(query_keys)
+<span class="bu">print</span>(out.<span class="bu">eval</span>())</code></pre></div>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    key_dtype,
+    value_dtype,
+    default_value,
+    empty_key,
+    deleted_key,
+    initial_num_buckets<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="st">&#39;MutableDenseHashTable&#39;</span>,
+    checkpoint<span class="op">=</span><span class="va">True</span>
+)</code></pre></div>
+<p>Creates an empty <code>DenseHashTable</code> object.</p>
+<p>Creates a table, the type of its keys and values are specified by key_dtype and value_dtype, respectively.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>key_dtype</code></b>: the type of the key tensors.</li>
+<li><b><code>value_dtype</code></b>: the type of the value tensors.</li>
+<li><b><code>default_value</code></b>: The value to use if a key is missing in the table.</li>
+<li><b><code>empty_key</code></b>: the key to use to represent empty buckets internally. Must not be used in insert, remove or lookup operations.</li>
+<li><b><code>deleted_key</code></b>: the key to use to represent deleted buckets internally. Must not be used in insert, remove or lookup operations and be different from the empty_key.</li>
+<li><b><code>initial_num_buckets</code></b>: the initial number of buckets.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+<li><b><code>checkpoint</code></b>: if True, the contents of the table are saved to and restored from checkpoints. If <code>shared_name</code> is empty for a checkpointed table, it is shared using the table node name.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>DenseHashTable</code> object.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If checkpoint is True and no name was specified.</li>
+</ul>
+<h2 id="properties">Properties</h2>
+<h3 id="key_dtype">
+<code>key_dtype</code>
+</h3>
+<p>The table key dtype.</p>
+<h3 id="name">
+<code>name</code>
+</h3>
+<p>The name of the table.</p>
+<h3 id="resource_handle">
+<code>resource_handle</code>
+</h3>
+<p>Returns the resource handle associated with this Resource.</p>
+<h3 id="value_dtype">
+<code>value_dtype</code>
+</h3>
+<p>The table value dtype.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="erase">
+<code>erase</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">erase(
+    keys,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Removes <code>keys</code> and its associated values from the table.</p>
+<p>If a key is not present in the table, it is silently ignored.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>keys</code></b>: Keys to remove. Can be a tensor of any shape. Must match the table's key type.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns-1">Returns:</h4>
+<p>The created Operation.</p>
+<h4 id="raises-1">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: when <code>keys</code> do not match the table data types.</li>
+</ul>
+<h3 id="export">
+<code>export</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">export(name<span class="op">=</span><span class="va">None</span>)</code></pre></div>
+<p>Returns tensors of all keys and values in the table.</p>
+<h4 id="args-2">Args:</h4>
+<ul>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns-2">Returns:</h4>
+<p>A pair of tensors with the first tensor containing all keys and the second tensors containing all values in the table.</p>
+<h3 id="insert">
+<code>insert</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">insert(
+    keys,
+    values,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Associates <code>keys</code> with <code>values</code>.</p>
+<h4 id="args-3">Args:</h4>
+<ul>
+<li><b><code>keys</code></b>: Keys to insert. Can be a tensor of any shape. Must match the table's key type.</li>
+<li><b><code>values</code></b>: Values to be associated with keys. Must be a tensor of the same shape as <code>keys</code> and match the table's value type.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns-3">Returns:</h4>
+<p>The created Operation.</p>
+<h4 id="raises-2">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: when <code>keys</code> or <code>values</code> doesn't match the table data types.</li>
+</ul>
+<h3 id="insert_or_assign">
+<code>insert_or_assign</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">insert_or_assign(
+    keys,
+    values,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Associates <code>keys</code> with <code>values</code>.</p>
+<h4 id="args-4">Args:</h4>
+<ul>
+<li><b><code>keys</code></b>: Keys to insert. Can be a tensor of any shape. Must match the table's key type.</li>
+<li><b><code>values</code></b>: Values to be associated with keys. Must be a tensor of the same shape as <code>keys</code> and match the table's value type.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns-4">Returns:</h4>
+<p>The created Operation.</p>
+<h4 id="raises-3">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: when <code>keys</code> or <code>values</code> doesn't match the table data types.</li>
+</ul>
+<h3 id="lookup">
+<code>lookup</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">lookup(
+    keys,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Looks up <code>keys</code> in a table, outputs the corresponding values.</p>
+<p>The <code>default_value</code> is used for keys not present in the table.</p>
+<h4 id="args-5">Args:</h4>
+<ul>
+<li><b><code>keys</code></b>: Keys to look up. Can be a tensor of any shape. Must match the table's key_dtype.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns-5">Returns:</h4>
+<p>A tensor containing the values in the same shape as <code>keys</code> using the table's value type.</p>
+<h4 id="raises-4">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: when <code>keys</code> do not match the table data types.</li>
+</ul>
+<h3 id="remove">
+<code>remove</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">remove(
+    keys,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Removes <code>keys</code> and its associated values from the table.</p>
+<p>If a key is not present in the table, it is silently ignored.</p>
+<h4 id="args-6">Args:</h4>
+<ul>
+<li><b><code>keys</code></b>: Keys to remove. Can be a tensor of any shape. Must match the table's key type.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns-6">Returns:</h4>
+<p>The created Operation.</p>
+<h4 id="raises-5">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: when <code>keys</code> do not match the table data types.</li>
+</ul>
+<h3 id="size">
+<code>size</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">size(name<span class="op">=</span><span class="va">None</span>)</code></pre></div>
+<p>Compute the number of elements in this table.</p>
+<h4 id="args-7">Args:</h4>
+<ul>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns-7">Returns:</h4>
+<p>A scalar tensor containing the number of elements in this table.</p>

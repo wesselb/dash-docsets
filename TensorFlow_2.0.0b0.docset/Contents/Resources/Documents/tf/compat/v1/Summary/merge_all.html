@@ -1,0 +1,25 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.summary.merge_all" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.summary.merge_all" class="dashAnchor"></a><h1 id="tf.compat.v1.summary.merge_all">tf.compat.v1.summary.merge_all</h1>
+<p>Merges all summaries collected in the default graph.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.summary.merge_all(
+    key<span class="op">=</span>tf.GraphKeys.SUMMARIES,
+    scope<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/summary/summary.py"><code>python/summary/summary.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>key</code></b>: <code>GraphKey</code> used to collect the summaries. Defaults to <code>GraphKeys.SUMMARIES</code>.</li>
+<li><b><code>scope</code></b>: Optional scope used to filter the summary ops, using <code>re.match</code></li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>If no summaries were collected, returns None. Otherwise returns a scalar <code>Tensor</code> of type <code>string</code> containing the serialized <code>Summary</code> protocol buffer resulting from the merging.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>RuntimeError</code></b>: If called with eager execution enabled.</li>
+</ul>
+<h4 id="eager-compatibility">Eager Compatibility</h4>
+<p>Not compatible with eager execution. To write TensorBoard summaries under eager execution, use <code>tf.contrib.summary</code> instead.</p>

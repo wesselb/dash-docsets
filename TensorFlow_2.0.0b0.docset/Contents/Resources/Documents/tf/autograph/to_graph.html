@@ -1,0 +1,48 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.autograph.to_graph" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.autograph.to_graph" class="dashAnchor"></a><h1 id="tf.autograph.to_graph">tf.autograph.to_graph</h1>
+<p>Converts a Python entity into a TensorFlow graph.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.autograph.to_graph</code></li>
+<li><code>tf.compat.v2.autograph.to_graph</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.autograph.to_graph(
+    entity,
+    recursive<span class="op">=</span><span class="va">True</span>,
+    experimental_optional_features<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/autograph/impl/api.py"><code>python/autograph/impl/api.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Also see: <a href="../../tf/autograph/to_code.html"><code>tf.autograph.to_code</code></a>, <a href="../../tf/function.html"><code>tf.function</code></a>.</p>
+<p>Unlike <a href="../../tf/function.html"><code>tf.function</code></a>, <code>to_graph</code> is a low-level transpiler that converts Python code to TensorFlow graph code. It does not implement any caching, variable management or create any actual ops, and is best used where greater control over the generated TensorFlow graph is desired. Another difference from <a href="../../tf/function.html"><code>tf.function</code></a> is that <code>to_graph</code> will not wrap the graph into a TensorFlow function or a Python callable. Internally, <a href="../../tf/function.html"><code>tf.function</code></a> uses <code>to_graph</code>.</p>
+<p><em>Example Usage</em></p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">  <span class="kw">def</span> foo(x):
+    <span class="cf">if</span> x <span class="op">&gt;</span> <span class="dv">0</span>:
+      y <span class="op">=</span> x <span class="op">*</span> x
+    <span class="cf">else</span>:
+      y <span class="op">=</span> <span class="op">-</span>x
+    <span class="cf">return</span> y
+
+  converted_foo <span class="op">=</span> to_graph(foo)
+
+  x <span class="op">=</span> tf.constant(<span class="dv">1</span>)
+  y <span class="op">=</span> converted_foo(x)  <span class="co"># converted_foo is a TensorFlow Op-like.</span>
+  <span class="cf">assert</span> is_tensor(y)</code></pre></div>
+<p>Supported Python entities include: * functions * classes * object methods</p>
+<p>Functions are converted into new functions with converted code.</p>
+<p>Classes are converted by generating a new class whose methods use converted code.</p>
+<p>Methods are converted into unbound function that have an additional first argument called <code>self</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>entity</code></b>: Python callable or class to convert.</li>
+<li><b><code>recursive</code></b>: Whether to recursively convert any functions that the converted function may call.</li>
+<li><b><code>experimental_optional_features</code></b>: <code>None</code>, a tuple of, or a single <a href="../../tf/autograph/experimental/Feature.html"><code>tf.autograph.experimental.Feature</code></a> value. Controls the use of optional features in the conversion process.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Same as <code>entity</code>, the converted Python function or class.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If the entity could not be converted.</li>
+</ul>

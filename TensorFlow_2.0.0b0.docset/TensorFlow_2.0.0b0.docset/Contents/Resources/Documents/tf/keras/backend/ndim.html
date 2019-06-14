@@ -1,0 +1,29 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.backend.ndim" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.keras.backend.ndim" class="dashAnchor"></a><h1 id="tf.keras.backend.ndim">tf.keras.backend.ndim</h1>
+<p>Returns the number of axes in a tensor, as an integer.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.keras.backend.ndim</code></li>
+<li><code>tf.compat.v2.keras.backend.ndim</code></li>
+<li><code>tf.keras.backend.ndim</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.keras.backend.ndim(x)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/backend.py"><code>python/keras/backend.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>x</code></b>: Tensor or variable.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Integer (scalar), number of axes.</p>
+<h4 id="examples">Examples:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    <span class="op">&gt;&gt;&gt;</span> <span class="im">from</span> keras <span class="im">import</span> backend <span class="im">as</span> K
+    <span class="op">&gt;&gt;&gt;</span> <span class="bu">input</span> <span class="op">=</span> K.placeholder(shape<span class="op">=</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">5</span>))
+    <span class="op">&gt;&gt;&gt;</span> val <span class="op">=</span> np.array([[<span class="dv">1</span>, <span class="dv">2</span>], [<span class="dv">3</span>, <span class="dv">4</span>]])
+    <span class="op">&gt;&gt;&gt;</span> kvar <span class="op">=</span> K.variable(value<span class="op">=</span>val)
+    <span class="op">&gt;&gt;&gt;</span> K.ndim(<span class="bu">input</span>)
+    <span class="dv">3</span>
+    <span class="op">&gt;&gt;&gt;</span> K.ndim(kvar)
+    <span class="dv">2</span></code></pre></div>

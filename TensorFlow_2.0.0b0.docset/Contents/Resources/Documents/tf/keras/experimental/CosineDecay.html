@@ -1,0 +1,71 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.experimental.CosineDecay" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="__call__"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="from_config"/> <meta itemprop="property" content="get_config"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.keras.experimental.CosineDecay" class="dashAnchor"></a><h1 id="tf.keras.experimental.cosinedecay">tf.keras.experimental.CosineDecay</h1>
+<h2 id="class-cosinedecay">Class <code>CosineDecay</code></h2>
+<p>A LearningRateSchedule that uses a cosine decay schedule.</p>
+<p>Inherits From: <a href="../../../tf/keras/optimizers/schedules/LearningRateSchedule.html"><code>LearningRateSchedule</code></a></p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.keras.experimental.CosineDecay</code></li>
+<li>Class <code>tf.compat.v2.keras.experimental.CosineDecay</code></li>
+<li>Class <code>tf.keras.experimental.CosineDecay</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/optimizer_v2/learning_rate_schedule.py"><code>python/keras/optimizer_v2/learning_rate_schedule.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    initial_learning_rate,
+    decay_steps,
+    alpha<span class="op">=</span><span class="fl">0.0</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Applies cosine decay to the learning rate.</p>
+<p>See [Loshchilov &amp; Hutter, ICLR2016], SGDR: Stochastic Gradient Descent with Warm Restarts. https://arxiv.org/abs/1608.03983</p>
+<p>When training a model, it is often recommended to lower the learning rate as the training progresses. This schedule applies a cosine decay function to an optimizer step, given a provided initial learning rate. It requires a <code>step</code> value to compute the decayed learning rate. You can just pass a TensorFlow variable that you increment at each training step.</p>
+<p>The schedule a 1-arg callable that produces a decayed learning rate when passed the current optimizer step. This can be useful for changing the learning rate value across different invocations of optimizer functions. It is computed as:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="kw">def</span> decayed_learning_rate(step):
+  step <span class="op">=</span> <span class="bu">min</span>(step, decay_steps)
+  cosine_decay <span class="op">=</span> <span class="fl">0.5</span> <span class="op">*</span> (<span class="dv">1</span> <span class="op">+</span> cos(pi <span class="op">*</span> step <span class="op">/</span> decay_steps))
+  decayed <span class="op">=</span> (<span class="dv">1</span> <span class="op">-</span> alpha) <span class="op">*</span> cosine_decay <span class="op">+</span> alpha
+  <span class="cf">return</span> initial_learning_rate <span class="op">*</span> decayed</code></pre></div>
+<h4 id="example-usage">Example usage:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">decay_steps <span class="op">=</span> <span class="dv">1000</span>
+lr_decayed_fn <span class="op">=</span> tf.keras.experimental.CosineDecay(
+    initial_learning_rate, global_step, decay_steps)</code></pre></div>
+<p>You can pass this schedule directly into a <a href="../../../tf/keras/optimizers/Optimizer.html"><code>tf.keras.optimizers.Optimizer</code></a> as the learning rate. The learning rate schedule is also serializable and deserializable using <a href="../../../tf/keras/optimizers/schedules/serialize.html"><code>tf.keras.optimizers.schedules.serialize</code></a> and <a href="../../../tf/keras/optimizers/schedules/deserialize.html"><code>tf.keras.optimizers.schedules.deserialize</code></a>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>initial_learning_rate</code></b>: A scalar <code>float32</code> or <code>float64</code> Tensor or a Python number. The initial learning rate.</li>
+<li><b><code>decay_steps</code></b>: A scalar <code>int32</code> or <code>int64</code> <code>Tensor</code> or a Python number. Number of steps to decay over.</li>
+<li><b><code>alpha</code></b>: A scalar <code>float32</code> or <code>float64</code> Tensor or a Python number. Minimum learning rate value as a fraction of initial_learning_rate.</li>
+<li><b><code>name</code></b>: String. Optional name of the operation. Defaults to 'CosineDecay'.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A 1-arg callable learning rate schedule that takes the current optimizer step and outputs the decayed learning rate, a scalar <code>Tensor</code> of the same type as <code>initial_learning_rate</code>.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__call__">
+<code><strong>call</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__call__</span>(step)</code></pre></div>
+<p>Call self as a function.</p>
+<h3 id="from_config">
+<code>from_config</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">from_config(
+    cls,
+    config
+)</code></pre></div>
+<p>Instantiates a <code>LearningRateSchedule</code> from its config.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>config</code></b>: Output of <code>get_config()</code>.</li>
+</ul>
+<h4 id="returns-1">Returns:</h4>
+<p>A <code>LearningRateSchedule</code> instance.</p>
+<h3 id="get_config">
+<code>get_config</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_config()</code></pre></div>

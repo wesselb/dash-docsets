@@ -1,0 +1,88 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.TensorSpec" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="dtype"/> <meta itemprop="property" content="name"/> <meta itemprop="property" content="shape"/> <meta itemprop="property" content="__eq__"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="__ne__"/> <meta itemprop="property" content="from_spec"/> <meta itemprop="property" content="from_tensor"/> <meta itemprop="property" content="is_compatible_with"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.TensorSpec" class="dashAnchor"></a><h1 id="tf.tensorspec">tf.TensorSpec</h1>
+<h2 id="class-tensorspec">Class <code>TensorSpec</code></h2>
+<p>Describes a tf.Tensor.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.TensorSpec</code></li>
+<li>Class <code>tf.compat.v1.TensorSpec</code></li>
+<li>Class <code>tf.compat.v2.TensorSpec</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/framework/tensor_spec.py"><code>python/framework/tensor_spec.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Metadata for describing the <a href="../tf/Tensor.html"><code>tf.Tensor</code></a> objects accepted or returned by some TensorFlow APIs.</p>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    shape,
+    dtype<span class="op">=</span>tf.dtypes.float32,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Creates a TensorSpec.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>shape</code></b>: Value convertible to <a href="../tf/TensorShape.html"><code>tf.TensorShape</code></a>. The shape of the tensor.</li>
+<li><b><code>dtype</code></b>: Value convertible to <a href="../tf/dtypes/DType.html"><code>tf.DType</code></a>. The type of the tensor values.</li>
+<li><b><code>name</code></b>: Optional name for the Tensor.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: If shape is not convertible to a <a href="../tf/TensorShape.html"><code>tf.TensorShape</code></a>, or dtype is not convertible to a <a href="../tf/dtypes/DType.html"><code>tf.DType</code></a>.</li>
+</ul>
+<h2 id="properties">Properties</h2>
+<h3 id="dtype">
+<code>dtype</code>
+</h3>
+<p>Returns the <code>dtype</code> of elements in the tensor.</p>
+<h3 id="name">
+<code>name</code>
+</h3>
+<p>Returns the (optionally provided) name of the described tensor.</p>
+<h3 id="shape">
+<code>shape</code>
+</h3>
+<p>Returns the <code>TensorShape</code> that represents the shape of the tensor.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__eq__">
+<code><strong>eq</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__eq__</span>(other)</code></pre></div>
+<p>Return self==value.</p>
+<h3 id="__ne__">
+<code><strong>ne</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__ne__</span>(other)</code></pre></div>
+<p>Return self!=value.</p>
+<h3 id="from_spec">
+<code>from_spec</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="at">@classmethod</span>
+from_spec(
+    cls,
+    spec,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<h3 id="from_tensor">
+<code>from_tensor</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="at">@classmethod</span>
+from_tensor(
+    cls,
+    tensor,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<h3 id="is_compatible_with">
+<code>is_compatible_with</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">is_compatible_with(spec_or_tensor)</code></pre></div>
+<p>Returns True if spec_or_tensor is compatible with this TensorSpec.</p>
+<p>Two tensors are considered compatible if they have the same dtype and their shapes are compatible (see <a href="../tf/TensorShape.md#is_compatible_with"><code>tf.TensorShape.is_compatible_with</code></a>).</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>spec_or_tensor</code></b>: A tf.TensorSpec or a tf.Tensor</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>True if spec_or_tensor is compatible with self.</p>

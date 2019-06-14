@@ -1,0 +1,26 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.where" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.where" class="dashAnchor"></a><h1 id="tf.where">tf.where</h1>
+<p>Return the elements, either from <code>x</code> or <code>y</code>, depending on the <code>condition</code>.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.where_v2</code></li>
+<li><code>tf.compat.v2.where</code></li>
+<li><code>tf.where</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.where(
+    condition,
+    x<span class="op">=</span><span class="va">None</span>,
+    y<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/array_ops.py"><code>python/ops/array_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>If both <code>x</code> and <code>y</code> are None, then this operation returns the coordinates of true elements of <code>condition</code>. The coordinates are returned in a 2-D tensor where the first dimension (rows) represents the number of true elements, and the second dimension (columns) represents the coordinates of the true elements. Keep in mind, the shape of the output tensor can vary depending on how many true values there are in input. Indices are output in row-major order. If both non-None, <code>condition</code>, <code>x</code> and <code>y</code> must be broadcastable to the same shape. The <code>condition</code> tensor acts as a mask that chooses, based on the value at each element, whether the corresponding element / row in the output should be taken from <code>x</code> (if true) or <code>y</code> (if false). Args: condition: A <code>Tensor</code> of type <code>bool</code> x: A Tensor which is of the same type as <code>y</code>, and may be broadcastable with <code>condition</code> and <code>y</code>. y: A Tensor which is of the same type as <code>x</code>, and may be broadcastable with <code>condition</code> and <code>x</code>. name: A name of the operation (optional).</p>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> with the same type as <code>x</code> and <code>y</code>, and shape that is broadcasted from <code>condition</code>, <code>x</code>, and <code>y</code>, if <code>x</code>, <code>y</code> are non-None. A <code>Tensor</code> with shape <code>(num_true, dim_size(condition))</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: When exactly one of <code>x</code> or <code>y</code> is non-None.</li>
+</ul>

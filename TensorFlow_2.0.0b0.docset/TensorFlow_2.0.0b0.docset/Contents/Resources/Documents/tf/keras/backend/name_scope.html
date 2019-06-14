@@ -1,0 +1,27 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.backend.name_scope" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.keras.backend.name_scope" class="dashAnchor"></a><h1 id="tf.keras.backend.name_scope">tf.keras.backend.name_scope</h1>
+<p>A context manager for use when defining a Python op.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v2.keras.backend.name_scope</code></li>
+<li><code>tf.keras.backend.name_scope</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.keras.backend.name_scope(name)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/backend.py"><code>python/keras/backend.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>This context manager pushes a name scope, which will make the name of all operations added within it have a prefix.</p>
+<p>For example, to define a new Python op called <code>my_op</code>:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="kw">def</span> my_op(a):
+  <span class="cf">with</span> tf.name_scope(<span class="st">&quot;MyOp&quot;</span>) <span class="im">as</span> scope:
+    a <span class="op">=</span> tf.convert_to_tensor(a, name<span class="op">=</span><span class="st">&quot;a&quot;</span>)
+    <span class="co"># Define some computation that uses `a`.</span>
+    <span class="cf">return</span> foo_op(..., name<span class="op">=</span>scope)</code></pre></div>
+<p>When executed, the Tensor <code>a</code> will have the name <code>MyOp/a</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>name</code></b>: The prefix to use on all names created within the name scope.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Name scope context manager.</p>

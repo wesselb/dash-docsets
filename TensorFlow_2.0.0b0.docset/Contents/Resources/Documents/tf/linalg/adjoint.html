@@ -1,0 +1,30 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.linalg.adjoint" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.linalg.adjoint" class="dashAnchor"></a><h1 id="tf.linalg.adjoint">tf.linalg.adjoint</h1>
+<p>Transposes the last two dimensions of and conjugates tensor <code>matrix</code>.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.linalg.adjoint</code></li>
+<li><code>tf.compat.v2.linalg.adjoint</code></li>
+<li><code>tf.linalg.adjoint</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.linalg.adjoint(
+    matrix,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/linalg/linalg_impl.py"><code>python/ops/linalg/linalg_impl.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="for-example">For example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">x <span class="op">=</span> tf.constant([[<span class="dv">1</span> <span class="op">+</span> 1j, <span class="dv">2</span> <span class="op">+</span> 2j, <span class="dv">3</span> <span class="op">+</span> 3j],
+                 [<span class="dv">4</span> <span class="op">+</span> 4j, <span class="dv">5</span> <span class="op">+</span> 5j, <span class="dv">6</span> <span class="op">+</span> 6j]])
+tf.linalg.adjoint(x)  <span class="co"># [[1 - 1j, 4 - 4j],</span>
+                      <span class="co">#  [2 - 2j, 5 - 5j],</span>
+                      <span class="co">#  [3 - 3j, 6 - 6j]]</span></code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>matrix</code></b>: A <code>Tensor</code>. Must be <code>float16</code>, <code>float32</code>, <code>float64</code>, <code>complex64</code>, or <code>complex128</code> with shape <code>[..., M, M]</code>.</li>
+<li><b><code>name</code></b>: A name to give this <code>Op</code> (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The adjoint (a.k.a. Hermitian transpose a.k.a. conjugate transpose) of matrix.</p>

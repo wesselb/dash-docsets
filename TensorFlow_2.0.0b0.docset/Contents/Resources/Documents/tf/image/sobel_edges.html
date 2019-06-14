@@ -1,0 +1,20 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.image.sobel_edges" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.image.sobel_edges" class="dashAnchor"></a><h1 id="tf.image.sobel_edges">tf.image.sobel_edges</h1>
+<p>Returns a tensor holding Sobel edge maps.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.image.sobel_edges</code></li>
+<li><code>tf.compat.v2.image.sobel_edges</code></li>
+<li><code>tf.image.sobel_edges</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.image.sobel_edges(image)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/image_ops_impl.py"><code>python/ops/image_ops_impl.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>image</code></b>: Image tensor with shape [batch_size, h, w, d] and type float32 or float64. The image(s) must be 2x2 or larger.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Tensor holding edge maps for each channel. Returns a tensor with shape [batch_size, h, w, d, 2] where the last two dimensions hold [[dy[0], dx[0]], [dy[1], dx[1]], ..., [dy[d-1], dx[d-1]]] calculated using the Sobel filter.</p>

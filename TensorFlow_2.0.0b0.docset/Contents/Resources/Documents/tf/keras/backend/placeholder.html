@@ -1,0 +1,39 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.backend.placeholder" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.keras.backend.placeholder" class="dashAnchor"></a><h1 id="tf.keras.backend.placeholder">tf.keras.backend.placeholder</h1>
+<p>Instantiates a placeholder tensor and returns it.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.keras.backend.placeholder</code></li>
+<li><code>tf.compat.v2.keras.backend.placeholder</code></li>
+<li><code>tf.keras.backend.placeholder</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.keras.backend.placeholder(
+    shape<span class="op">=</span><span class="va">None</span>,
+    ndim<span class="op">=</span><span class="va">None</span>,
+    dtype<span class="op">=</span><span class="va">None</span>,
+    sparse<span class="op">=</span><span class="va">False</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/backend.py"><code>python/keras/backend.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>shape</code></b>: Shape of the placeholder (integer tuple, may include <code>None</code> entries).</li>
+<li><b><code>ndim</code></b>: Number of axes of the tensor. At least one of {<code>shape</code>, <code>ndim</code>} must be specified. If both are specified, <code>shape</code> is used.</li>
+<li><b><code>dtype</code></b>: Placeholder type.</li>
+<li><b><code>sparse</code></b>: Boolean, whether the placeholder should have a sparse type.</li>
+<li><b><code>name</code></b>: Optional name string for the placeholder.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If called with eager execution.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Tensor instance (with Keras metadata included).</p>
+<h4 id="examples">Examples:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    <span class="op">&gt;&gt;&gt;</span> <span class="im">from</span> keras <span class="im">import</span> backend <span class="im">as</span> K
+    <span class="op">&gt;&gt;&gt;</span> input_ph <span class="op">=</span> K.placeholder(shape<span class="op">=</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">5</span>))
+    <span class="op">&gt;&gt;&gt;</span> input_ph
+    <span class="op">&lt;</span>tf.Tensor <span class="st">&#39;Placeholder_4:0&#39;</span> shape<span class="op">=</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">5</span>) dtype<span class="op">=</span>float32<span class="op">&gt;</span></code></pre></div>

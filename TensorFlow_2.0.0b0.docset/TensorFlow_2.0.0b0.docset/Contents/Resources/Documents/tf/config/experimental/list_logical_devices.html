@@ -1,0 +1,29 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.config.experimental.list_logical_devices" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.config.experimental.list_logical_devices" class="dashAnchor"></a><h1 id="tf.config.experimental.list_logical_devices">tf.config.experimental.list_logical_devices</h1>
+<p>Return a list of logical devices created by runtime.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.config.experimental.list_logical_devices</code></li>
+<li><code>tf.compat.v2.config.experimental.list_logical_devices</code></li>
+<li><code>tf.config.experimental.list_logical_devices</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.config.experimental.list_logical_devices(device_type<span class="op">=</span><span class="va">None</span>)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/framework/config.py"><code>python/framework/config.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Logical devices may correspond to physical devices or remote devices in the cluster. Operations and tensors may be placed on these devices by using the <code>name</code> of the LogicalDevice.</p>
+<h4 id="for-example">For example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">logical_devices <span class="op">=</span> tf.config.experimental.list_logical_devices(<span class="st">&#39;GPU&#39;</span>)
+<span class="co"># Allocate on GPU:0</span>
+<span class="cf">with</span> tf.device(logical_devices[<span class="dv">0</span>].name):
+  one <span class="op">=</span> tf.constant(<span class="dv">1</span>)
+<span class="co"># Allocate on GPU:1</span>
+<span class="cf">with</span> tf.device(logical_devices[<span class="dv">1</span>].name):
+  two <span class="op">=</span> tf.constant(<span class="dv">2</span>)</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>device_type</code></b>: (optional) Device type to filter by such as &quot;CPU&quot; or &quot;GPU&quot;</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>List of LogicalDevice objects</p>

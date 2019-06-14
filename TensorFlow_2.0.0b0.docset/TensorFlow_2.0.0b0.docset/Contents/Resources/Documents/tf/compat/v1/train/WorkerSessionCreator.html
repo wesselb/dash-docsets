@@ -1,0 +1,31 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.train.WorkerSessionCreator" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="create_session"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.compat.v1.train.WorkerSessionCreator" class="dashAnchor"></a><h1 id="tf.compat.v1.train.workersessioncreator">tf.compat.v1.train.WorkerSessionCreator</h1>
+<h2 id="class-workersessioncreator">Class <code>WorkerSessionCreator</code></h2>
+<p>Creates a tf.compat.v1.Session for a worker.</p>
+<p>Inherits From: <a href="../../../../tf/compat/v1/train/SessionCreator.html"><code>SessionCreator</code></a></p>
+<p>Defined in <a href="/code/stable/tensorflow/python/training/monitored_session.py"><code>python/training/monitored_session.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    scaffold<span class="op">=</span><span class="va">None</span>,
+    master<span class="op">=</span><span class="st">&#39;&#39;</span>,
+    config<span class="op">=</span><span class="va">None</span>,
+    max_wait_secs<span class="op">=</span>(<span class="dv">30</span> <span class="op">*</span> <span class="dv">60</span>)
+)</code></pre></div>
+<p>Initializes a worker session creator.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>scaffold</code></b>: A <code>Scaffold</code> used for gathering or building supportive ops. If not specified a default one is created. It's used to finalize the graph.</li>
+<li><b><code>master</code></b>: <code>String</code> representation of the TensorFlow master to use.</li>
+<li><b><code>config</code></b>: <code>ConfigProto</code> proto used to configure the session.</li>
+<li><b><code>max_wait_secs</code></b>: Maximum time to wait for the session to become available.</li>
+</ul>
+<h2 id="methods">Methods</h2>
+<h3 id="create_session">
+<code>create_session</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">create_session()</code></pre></div>

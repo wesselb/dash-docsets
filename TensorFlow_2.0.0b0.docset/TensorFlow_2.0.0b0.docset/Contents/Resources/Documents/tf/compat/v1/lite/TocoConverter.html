@@ -1,0 +1,63 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.lite.TocoConverter" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="from_frozen_graph"/> <meta itemprop="property" content="from_keras_model_file"/> <meta itemprop="property" content="from_saved_model"/> <meta itemprop="property" content="from_session"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.compat.v1.lite.TocoConverter" class="dashAnchor"></a><h1 id="tf.compat.v1.lite.tococonverter">tf.compat.v1.lite.TocoConverter</h1>
+<h2 id="class-tococonverter">Class <code>TocoConverter</code></h2>
+<p>Convert a TensorFlow model into <code>output_format</code> using TOCO.</p>
+<p>Defined in <a href="/code/stable/tensorflow/lite/python/lite.py"><code>lite/python/lite.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>This class has been deprecated. Please use <code>lite.TFLiteConverter</code> instead.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="from_frozen_graph">
+<code>from_frozen_graph</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="at">@classmethod</span>
+from_frozen_graph(
+    cls,
+    graph_def_file,
+    input_arrays,
+    output_arrays,
+    input_shapes<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Creates a TocoConverter class from a file containing a frozen graph. (deprecated)</p>
+<p>Warning: THIS FUNCTION IS DEPRECATED. It will be removed in a future version. Instructions for updating: Use <code>lite.TFLiteConverter.from_frozen_graph</code> instead.</p>
+<h3 id="from_keras_model_file">
+<code>from_keras_model_file</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="at">@classmethod</span>
+from_keras_model_file(
+    cls,
+    model_file,
+    input_arrays<span class="op">=</span><span class="va">None</span>,
+    input_shapes<span class="op">=</span><span class="va">None</span>,
+    output_arrays<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Creates a TocoConverter class from a tf.keras model file. (deprecated)</p>
+<p>Warning: THIS FUNCTION IS DEPRECATED. It will be removed in a future version. Instructions for updating: Use <code>lite.TFLiteConverter.from_keras_model_file</code> instead.</p>
+<h3 id="from_saved_model">
+<code>from_saved_model</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="at">@classmethod</span>
+from_saved_model(
+    cls,
+    saved_model_dir,
+    input_arrays<span class="op">=</span><span class="va">None</span>,
+    input_shapes<span class="op">=</span><span class="va">None</span>,
+    output_arrays<span class="op">=</span><span class="va">None</span>,
+    tag_set<span class="op">=</span><span class="va">None</span>,
+    signature_key<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Creates a TocoConverter class from a SavedModel. (deprecated)</p>
+<p>Warning: THIS FUNCTION IS DEPRECATED. It will be removed in a future version. Instructions for updating: Use <code>lite.TFLiteConverter.from_saved_model</code> instead.</p>
+<h3 id="from_session">
+<code>from_session</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="at">@classmethod</span>
+from_session(
+    cls,
+    sess,
+    input_tensors,
+    output_tensors
+)</code></pre></div>
+<p>Creates a TocoConverter class from a TensorFlow Session. (deprecated)</p>
+<p>Warning: THIS FUNCTION IS DEPRECATED. It will be removed in a future version. Instructions for updating: Use <code>lite.TFLiteConverter.from_session</code> instead.</p>

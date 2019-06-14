@@ -1,0 +1,62 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.edit_distance" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.edit_distance" class="dashAnchor"></a><h1 id="tf.edit_distance">tf.edit_distance</h1>
+<p>Computes the Levenshtein distance between sequences.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.edit_distance</code></li>
+<li><code>tf.compat.v2.edit_distance</code></li>
+<li><code>tf.edit_distance</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.edit_distance(
+    hypothesis,
+    truth,
+    normalize<span class="op">=</span><span class="va">True</span>,
+    name<span class="op">=</span><span class="st">&#39;edit_distance&#39;</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/array_ops.py"><code>python/ops/array_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>This operation takes variable-length sequences (<code>hypothesis</code> and <code>truth</code>), each provided as a <code>SparseTensor</code>, and computes the Levenshtein distance. You can normalize the edit distance by length of <code>truth</code> by setting <code>normalize</code> to true.</p>
+<p>For example, given the following input:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># &#39;hypothesis&#39; is a tensor of shape `[2, 1]` with variable-length values:</span>
+<span class="co">#   (0,0) = [&quot;a&quot;]</span>
+<span class="co">#   (1,0) = [&quot;b&quot;]</span>
+hypothesis <span class="op">=</span> tf.SparseTensor(
+    [[<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>],
+     [<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>]],
+    [<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>],
+    (<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>))
+
+<span class="co"># &#39;truth&#39; is a tensor of shape `[2, 2]` with variable-length values:</span>
+<span class="co">#   (0,0) = []</span>
+<span class="co">#   (0,1) = [&quot;a&quot;]</span>
+<span class="co">#   (1,0) = [&quot;b&quot;, &quot;c&quot;]</span>
+<span class="co">#   (1,1) = [&quot;a&quot;]</span>
+truth <span class="op">=</span> tf.SparseTensor(
+    [[<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>],
+     [<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>],
+     [<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>],
+     [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>]],
+    [<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;c&quot;</span>, <span class="st">&quot;a&quot;</span>],
+    (<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>))
+
+normalize <span class="op">=</span> <span class="va">True</span></code></pre></div>
+<p>This operation would return the following:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># &#39;output&#39; is a tensor of shape `[2, 2]` with edit distances normalized</span>
+<span class="co"># by &#39;truth&#39; lengths.</span>
+output <span class="op">==&gt;</span> [[inf, <span class="fl">1.0</span>],  <span class="co"># (0,0): no truth, (0,1): no hypothesis</span>
+           [<span class="fl">0.5</span>, <span class="fl">1.0</span>]]  <span class="co"># (1,0): addition, (1,1): no hypothesis</span></code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>hypothesis</code></b>: A <code>SparseTensor</code> containing hypothesis sequences.</li>
+<li><b><code>truth</code></b>: A <code>SparseTensor</code> containing truth sequences.</li>
+<li><b><code>normalize</code></b>: A <code>bool</code>. If <code>True</code>, normalizes the Levenshtein distance by length of <code>truth.</code></li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A dense <code>Tensor</code> with rank <code>R - 1</code>, where R is the rank of the <code>SparseTensor</code> inputs <code>hypothesis</code> and <code>truth</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: If either <code>hypothesis</code> or <code>truth</code> are not a <code>SparseTensor</code>.</li>
+</ul>

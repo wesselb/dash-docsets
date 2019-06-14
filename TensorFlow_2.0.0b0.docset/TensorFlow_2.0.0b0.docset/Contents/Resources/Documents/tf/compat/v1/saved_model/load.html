@@ -1,0 +1,34 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.saved_model.load" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.saved_model.load" class="dashAnchor"></a><h1 id="tf.compat.v1.saved_model.load">tf.compat.v1.saved_model.load</h1>
+<p>Loads the model from a SavedModel as specified by tags. (deprecated)</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.saved_model.load</code></li>
+<li><code>tf.compat.v1.saved_model.loader.load</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.saved_model.load(
+    sess,
+    tags,
+    export_dir,
+    import_scope<span class="op">=</span><span class="va">None</span>,
+    <span class="op">**</span>saver_kwargs
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/saved_model/loader_impl.py"><code>python/saved_model/loader_impl.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Warning: THIS FUNCTION IS DEPRECATED. It will be removed in a future version. Instructions for updating: This function will only be available through the v1 compatibility library as tf.compat.v1.saved_model.loader.load or tf.compat.v1.saved_model.load. There will be a new function for importing SavedModels in Tensorflow 2.0.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>sess</code></b>: The TensorFlow session to restore the variables.</li>
+<li><b><code>tags</code></b>: Set of string tags to identify the required MetaGraphDef. These should correspond to the tags used when saving the variables using the SavedModel <code>save()</code> API.</li>
+<li><b><code>export_dir</code></b>: Directory in which the SavedModel protocol buffer and variables to be loaded are located.</li>
+<li><b><code>import_scope</code></b>: Optional <code>string</code> -- if specified, prepend this string followed by '/' to all loaded tensor names. This scope is applied to tensor instances loaded into the passed session, but it is <em>not</em> written through to the static <code>MetaGraphDef</code> protocol buffer that is returned.</li>
+<li><b><code>**saver_kwargs</code></b>: Optional keyword arguments passed through to Saver.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The <code>MetaGraphDef</code> protocol buffer loaded in the provided session. This can be used to further extract signature-defs, collection-defs, etc.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>RuntimeError</code></b>: MetaGraphDef associated with the tags cannot be found.</li>
+</ul>

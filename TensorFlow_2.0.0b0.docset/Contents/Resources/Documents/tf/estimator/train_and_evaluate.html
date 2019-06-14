@@ -1,0 +1,121 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.estimator.train_and_evaluate" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.estimator.train_and_evaluate" class="dashAnchor"></a><h1 id="tf.estimator.train_and_evaluate">tf.estimator.train_and_evaluate</h1>
+<p>Train and evaluate the <code>estimator</code>.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.estimator.train_and_evaluate</code></li>
+<li><code>tf.compat.v2.estimator.train_and_evaluate</code></li>
+<li><code>tf.estimator.train_and_evaluate</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.estimator.train_and_evaluate(
+    estimator,
+    train_spec,
+    eval_spec
+)</code></pre></div>
+<p>Defined in <a href="https://github.com/tensorflow/estimator/tree/master/tensorflow_estimator/python/estimator/training.py"><code>python/estimator/training.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>This utility function trains, evaluates, and (optionally) exports the model by using the given <code>estimator</code>. All training related specification is held in <code>train_spec</code>, including training <code>input_fn</code> and training max steps, etc. All evaluation and export related specification is held in <code>eval_spec</code>, including evaluation <code>input_fn</code>, steps, etc.</p>
+<p>This utility function provides consistent behavior for both local (non-distributed) and distributed configurations. The default distribution configuration is parameter server-based between-graph replication. For other types of distribution configurations such as all-reduce training, please use <a href="https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/distribute">DistributionStrategies</a>.</p>
+<p>Overfitting: In order to avoid overfitting, it is recommended to set up the training <code>input_fn</code> to shuffle the training data properly.</p>
+<p>Stop condition: In order to support both distributed and non-distributed configuration reliably, the only supported stop condition for model training is <code>train_spec.max_steps</code>. If <code>train_spec.max_steps</code> is <code>None</code>, the model is trained forever. <em>Use with care</em> if model stop condition is different. For example, assume that the model is expected to be trained with one epoch of training data, and the training <code>input_fn</code> is configured to throw <code>OutOfRangeError</code> after going through one epoch, which stops the <code>Estimator.train</code>. For a three-training-worker distributed configuration, each training worker is likely to go through the whole epoch independently. So, the model will be trained with three epochs of training data instead of one epoch.</p>
+<p>Example of local (non-distributed) training:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Set up feature columns.</span>
+categorial_feature_a <span class="op">=</span> categorial_column_with_hash_bucket(...)
+categorial_feature_a_emb <span class="op">=</span> embedding_column(
+    categorical_column<span class="op">=</span>categorial_feature_a, ...)
+...  <span class="co"># other feature columns</span>
+
+estimator <span class="op">=</span> DNNClassifier(
+    feature_columns<span class="op">=</span>[categorial_feature_a_emb, ...],
+    hidden_units<span class="op">=</span>[<span class="dv">1024</span>, <span class="dv">512</span>, <span class="dv">256</span>])
+
+<span class="co"># Or set up the model directory</span>
+<span class="co">#   estimator = DNNClassifier(</span>
+<span class="co">#       config=tf.estimator.RunConfig(</span>
+<span class="co">#           model_dir=&#39;/my_model&#39;, save_summary_steps=100),</span>
+<span class="co">#       feature_columns=[categorial_feature_a_emb, ...],</span>
+<span class="co">#       hidden_units=[1024, 512, 256])</span>
+
+<span class="co"># Input pipeline for train and evaluate.</span>
+<span class="kw">def</span> train_input_fn(): <span class="co"># returns x, y</span>
+  <span class="co"># please shuffle the data.</span>
+  <span class="cf">pass</span>
+<span class="kw">def</span> eval_input_fn(): <span class="co"># returns x, y</span>
+  <span class="cf">pass</span>
+
+train_spec <span class="op">=</span> tf.estimator.TrainSpec(input_fn<span class="op">=</span>train_input_fn, max_steps<span class="op">=</span><span class="dv">1000</span>)
+eval_spec <span class="op">=</span> tf.estimator.EvalSpec(input_fn<span class="op">=</span>eval_input_fn)
+
+tf.estimator.train_and_evaluate(estimator, train_spec, eval_spec)</code></pre></div>
+<p>Note that in current implementation <code>estimator.evaluate</code> will be called multiple times. This means that evaluation graph (including eval_input_fn) will be re-created for each <code>evaluate</code> call. <code>estimator.train</code> will be called only once.</p>
+<p>Example of distributed training:</p>
+<p>Regarding the example of distributed training, the code above can be used without a change (Please do make sure that the <code>RunConfig.model_dir</code> for all workers is set to the same directory, i.e., a shared file system all workers can read and write). The only extra work to do is setting the environment variable <code>TF_CONFIG</code> properly for each worker correspondingly.</p>
+<p>Also see <a href="https://www.tensorflow.org/deploy/distributed">Distributed TensorFlow</a>.</p>
+<p>Setting environment variable depends on the platform. For example, on Linux, it can be done as follows (<code>$</code> is the shell prompt):</p>
+<pre><code>$ TF_CONFIG=&#39;&lt;replace_with_real_content&gt;&#39; python train_model.py</code></pre>
+<p>For the content in <code>TF_CONFIG</code>, assume that the training cluster spec looks like:</p>
+<pre><code>cluster = {&quot;chief&quot;: [&quot;host0:2222&quot;],
+           &quot;worker&quot;: [&quot;host1:2222&quot;, &quot;host2:2222&quot;, &quot;host3:2222&quot;],
+           &quot;ps&quot;: [&quot;host4:2222&quot;, &quot;host5:2222&quot;]}</code></pre>
+<p>Example of <code>TF_CONFIG</code> for chief training worker (must have one and only one):</p>
+<pre><code># This should be a JSON string, which is set as environment variable. Usually
+# the cluster manager handles that.
+TF_CONFIG=&#39;{
+    &quot;cluster&quot;: {
+        &quot;chief&quot;: [&quot;host0:2222&quot;],
+        &quot;worker&quot;: [&quot;host1:2222&quot;, &quot;host2:2222&quot;, &quot;host3:2222&quot;],
+        &quot;ps&quot;: [&quot;host4:2222&quot;, &quot;host5:2222&quot;]
+    },
+    &quot;task&quot;: {&quot;type&quot;: &quot;chief&quot;, &quot;index&quot;: 0}
+}&#39;</code></pre>
+<p>Note that the chief worker also does the model training job, similar to other non-chief training workers (see next paragraph). In addition to the model training, it manages some extra work, e.g., checkpoint saving and restoring, writing summaries, etc.</p>
+<p>Example of <code>TF_CONFIG</code> for non-chief training worker (optional, could be multiple):</p>
+<pre><code># This should be a JSON string, which is set as environment variable. Usually
+# the cluster manager handles that.
+TF_CONFIG=&#39;{
+    &quot;cluster&quot;: {
+        &quot;chief&quot;: [&quot;host0:2222&quot;],
+        &quot;worker&quot;: [&quot;host1:2222&quot;, &quot;host2:2222&quot;, &quot;host3:2222&quot;],
+        &quot;ps&quot;: [&quot;host4:2222&quot;, &quot;host5:2222&quot;]
+    },
+    &quot;task&quot;: {&quot;type&quot;: &quot;worker&quot;, &quot;index&quot;: 0}
+}&#39;</code></pre>
+<p>where the <code>task.index</code> should be set as 0, 1, 2, in this example, respectively for non-chief training workers.</p>
+<p>Example of <code>TF_CONFIG</code> for parameter server, aka ps (could be multiple):</p>
+<pre><code># This should be a JSON string, which is set as environment variable. Usually
+# the cluster manager handles that.
+TF_CONFIG=&#39;{
+    &quot;cluster&quot;: {
+        &quot;chief&quot;: [&quot;host0:2222&quot;],
+        &quot;worker&quot;: [&quot;host1:2222&quot;, &quot;host2:2222&quot;, &quot;host3:2222&quot;],
+        &quot;ps&quot;: [&quot;host4:2222&quot;, &quot;host5:2222&quot;]
+    },
+    &quot;task&quot;: {&quot;type&quot;: &quot;ps&quot;, &quot;index&quot;: 0}
+}&#39;</code></pre>
+<p>where the <code>task.index</code> should be set as 0 and 1, in this example, respectively for parameter servers.</p>
+<p>Example of <code>TF_CONFIG</code> for evaluator task. Evaluator is a special task that is not part of the training cluster. There could be only one. It is used for model evaluation.</p>
+<pre><code># This should be a JSON string, which is set as environment variable. Usually
+# the cluster manager handles that.
+TF_CONFIG=&#39;{
+    &quot;cluster&quot;: {
+        &quot;chief&quot;: [&quot;host0:2222&quot;],
+        &quot;worker&quot;: [&quot;host1:2222&quot;, &quot;host2:2222&quot;, &quot;host3:2222&quot;],
+        &quot;ps&quot;: [&quot;host4:2222&quot;, &quot;host5:2222&quot;]
+    },
+    &quot;task&quot;: {&quot;type&quot;: &quot;evaluator&quot;, &quot;index&quot;: 0}
+}&#39;</code></pre>
+<p>When <code>distribute</code> or <code>experimental_distribute.train_distribute</code> and <code>experimental_distribute.remote_cluster</code> is set, this method will start a client running on the current host which connects to the <code>remote_cluster</code> for training and evaluation.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>estimator</code></b>: An <code>Estimator</code> instance to train and evaluate.</li>
+<li><b><code>train_spec</code></b>: A <code>TrainSpec</code> instance to specify the training specification.</li>
+<li><b><code>eval_spec</code></b>: A <code>EvalSpec</code> instance to specify the evaluation and export specification.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A tuple of the result of the <code>evaluate</code> call to the <code>Estimator</code> and the export results using the specified <code>ExportStrategy</code>. Currently, the return value is undefined for distributed training mode.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if environment variable <code>TF_CONFIG</code> is incorrectly set.</li>
+</ul>

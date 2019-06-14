@@ -1,0 +1,40 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.layers.Layer" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="graph"/> <meta itemprop="property" content="scope_name"/> <meta itemprop="property" content="__init__"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.compat.v1.layers.Layer" class="dashAnchor"></a><h1 id="tf.compat.v1.layers.layer">tf.compat.v1.layers.Layer</h1>
+<h2 id="class-layer">Class <code>Layer</code></h2>
+<p>Base layer class.</p>
+<p>Inherits From: <a href="../../../../tf/keras/layers/Layer.html"><code>Layer</code></a></p>
+<p>Defined in <a href="/code/stable/tensorflow/python/layers/base.py"><code>python/layers/base.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>It is considered legacy, and we recommend the use of <a href="../../../../tf/keras/layers/Layer.html"><code>tf.keras.layers.Layer</code></a> instead.</p>
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>trainable</code></b>: Boolean, whether the layer's variables should be trainable.</li>
+<li><b><code>name</code></b>: String name of the layer.</li>
+<li><b><code>dtype</code></b>: Default dtype of the layer's weights (default of <code>None</code> means use the type of the first input).</li>
+</ul>
+<p>Read-only properties: name: The name of the layer (string). dtype: Default dtype of the layer's weights (default of <code>None</code> means use the type of the first input). trainable_variables: List of trainable variables. non_trainable_variables: List of non-trainable variables. variables: List of all variables of this layer, trainable and non-trainable. updates: List of update ops of this layer. losses: List of losses added by this layer. trainable_weights: List of variables to be included in backprop. non_trainable_weights: List of variables that should not be included in backprop. weights: The concatenation of the lists trainable_weights and non_trainable_weights (in this order).</p>
+<h4 id="mutable-properties">Mutable properties:</h4>
+<ul>
+<li><b><code>trainable</code></b>: Whether the layer should be trained (boolean).</li>
+<li><b><code>input_spec</code></b>: Optional (list of) <code>InputSpec</code> object(s) specifying the constraints on inputs that can be accepted by the layer.</li>
+</ul>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    trainable<span class="op">=</span><span class="va">True</span>,
+    name<span class="op">=</span><span class="va">None</span>,
+    dtype<span class="op">=</span><span class="va">None</span>,
+    <span class="op">**</span>kwargs
+)</code></pre></div>
+<h2 id="properties">Properties</h2>
+<h3 id="graph">
+<code>graph</code>
+</h3>
+<p>DEPRECATED FUNCTION</p>
+<p>Warning: THIS FUNCTION IS DEPRECATED. It will be removed in a future version. Instructions for updating: Stop using this property because tf.layers layers no longer track their graph.</p>
+<h3 id="scope_name">
+<code>scope_name</code>
+</h3>

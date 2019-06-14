@@ -1,0 +1,26 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.load_library" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.load_library" class="dashAnchor"></a><h1 id="tf.load_library">tf.load_library</h1>
+<p>Loads a TensorFlow plugin.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.load_library</code></li>
+<li><code>tf.compat.v2.load_library</code></li>
+<li><code>tf.load_library</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.load_library(library_location)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/framework/load_library.py"><code>python/framework/load_library.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>&quot;library_location&quot; can be a path to a specific shared object, or a folder. If it is a folder, all shared objects that are named &quot;libtfkernel*&quot; will be loaded. When the library is loaded, kernels registered in the library via the <code>REGISTER_*</code> macros are made available in the TensorFlow process.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>library_location</code></b>: Path to the plugin or the folder of plugins. Relative or absolute filesystem path to a dynamic library file or folder.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>None</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>OSError</code></b>: When the file to be loaded is not found.</li>
+<li><b><code>RuntimeError</code></b>: when unable to load the library.</li>
+</ul>

@@ -1,0 +1,38 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.forward_compatibility_horizon" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.forward_compatibility_horizon" class="dashAnchor"></a><h1 id="tf.compat.forward_compatibility_horizon">tf.compat.forward_compatibility_horizon</h1>
+<p>Context manager for testing forward compatibility of generated graphs.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.forward_compatibility_horizon</code></li>
+<li><code>tf.compat.v1.compat.forward_compatibility_horizon</code></li>
+<li><code>tf.compat.v2.compat.forward_compatibility_horizon</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.forward_compatibility_horizon(
+    year,
+    month,
+    day
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/compat/compat.py"><code>python/compat/compat.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>See <a href="https://tensorflow.org/guide/version_compat#backward_forward">Version compatibility</a>.</p>
+<p>To ensure forward compatibility of generated graphs (see <code>forward_compatible</code>) with older binaries, new features can be gated with:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">if</span> compat.forward_compatible(year<span class="op">=</span><span class="dv">2018</span>, month<span class="op">=</span><span class="dv">08</span>, date<span class="op">=</span><span class="dv">01</span>):
+  generate_graph_with_new_features()
+<span class="cf">else</span>:
+  generate_graph_so_older_binaries_can_consume_it()</code></pre></div>
+<p>However, when adding new features, one may want to unittest it before the forward compatibility window expires. This context manager enables such tests. For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">from</span> tensorflow.python.compat <span class="im">import</span> compat
+
+<span class="kw">def</span> testMyNewFeature(<span class="va">self</span>):
+  <span class="cf">with</span> compat.forward_compatibility_horizon(<span class="dv">2018</span>, <span class="dv">08</span>, <span class="dv">02</span>):
+     <span class="co"># Test that generate_graph_with_new_features() has an effect</span></code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>year</code></b>: A year (e.g., 2018). Must be an <code>int</code>.</li>
+<li><b><code>month</code></b>: A month (1 &lt;= month &lt;= 12) in year. Must be an <code>int</code>.</li>
+<li><b><code>day</code></b>: A day (1 &lt;= day &lt;= 31, or 30, or 29, or 28) in month. Must be an <code>int</code>.</li>
+</ul>
+<h4 id="yields">Yields:</h4>
+<p>Nothing.</p>

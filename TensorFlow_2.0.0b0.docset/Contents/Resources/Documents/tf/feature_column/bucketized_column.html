@@ -1,0 +1,59 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.feature_column.bucketized_column" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.feature_column.bucketized_column" class="dashAnchor"></a><h1 id="tf.feature_column.bucketized_column">tf.feature_column.bucketized_column</h1>
+<p>Represents discretized dense input.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.feature_column.bucketized_column</code></li>
+<li><code>tf.compat.v2.feature_column.bucketized_column</code></li>
+<li><code>tf.feature_column.bucketized_column</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.feature_column.bucketized_column(
+    source_column,
+    boundaries
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/feature_column/feature_column_v2.py"><code>python/feature_column/feature_column_v2.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Buckets include the left boundary, and exclude the right boundary. Namely, <code>boundaries=[0., 1., 2.]</code> generates buckets <code>(-inf, 0.)</code>, <code>[0., 1.)</code>, <code>[1., 2.)</code>, and <code>[2., +inf)</code>.</p>
+<p>For example, if the inputs are</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">boundaries <span class="op">=</span> [<span class="dv">0</span>, <span class="dv">10</span>, <span class="dv">100</span>]
+<span class="bu">input</span> tensor <span class="op">=</span> [[<span class="op">-</span><span class="dv">5</span>, <span class="dv">10000</span>]
+                [<span class="dv">150</span>,   <span class="dv">10</span>]
+                [<span class="dv">5</span>,    <span class="dv">100</span>]]</code></pre></div>
+<p>then the output will be</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">output <span class="op">=</span> [[<span class="dv">0</span>, <span class="dv">3</span>]
+          [<span class="dv">3</span>, <span class="dv">2</span>]
+          [<span class="dv">1</span>, <span class="dv">3</span>]]</code></pre></div>
+<h4 id="example">Example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">price <span class="op">=</span> numeric_column(<span class="st">&#39;price&#39;</span>)
+bucketized_price <span class="op">=</span> bucketized_column(price, boundaries<span class="op">=</span>[...])
+columns <span class="op">=</span> [bucketized_price, ...]
+features <span class="op">=</span> tf.io.parse_example(..., features<span class="op">=</span>make_parse_example_spec(columns))
+linear_prediction <span class="op">=</span> linear_model(features, columns)
+
+<span class="co"># or</span>
+columns <span class="op">=</span> [bucketized_price, ...]
+features <span class="op">=</span> tf.io.parse_example(..., features<span class="op">=</span>make_parse_example_spec(columns))
+dense_tensor <span class="op">=</span> input_layer(features, columns)</code></pre></div>
+<p><code>bucketized_column</code> can also be crossed with another categorical column using <code>crossed_column</code>:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">price <span class="op">=</span> numeric_column(<span class="st">&#39;price&#39;</span>)
+<span class="co"># bucketized_column converts numerical feature to a categorical one.</span>
+bucketized_price <span class="op">=</span> bucketized_column(price, boundaries<span class="op">=</span>[...])
+<span class="co"># &#39;keywords&#39; is a string feature.</span>
+price_x_keywords <span class="op">=</span> crossed_column([bucketized_price, <span class="st">&#39;keywords&#39;</span>], 50K)
+columns <span class="op">=</span> [price_x_keywords, ...]
+features <span class="op">=</span> tf.io.parse_example(..., features<span class="op">=</span>make_parse_example_spec(columns))
+linear_prediction <span class="op">=</span> linear_model(features, columns)</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>source_column</code></b>: A one-dimensional dense column which is generated with <code>numeric_column</code>.</li>
+<li><b><code>boundaries</code></b>: A sorted list or tuple of floats specifying the boundaries.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>BucketizedColumn</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>source_column</code> is not a numeric column, or if it is not one-dimensional.</li>
+<li><b><code>ValueError</code></b>: If <code>boundaries</code> is not a sorted list or tuple.</li>
+</ul>

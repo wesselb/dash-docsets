@@ -1,0 +1,36 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.image.central_crop" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.image.central_crop" class="dashAnchor"></a><h1 id="tf.image.central_crop">tf.image.central_crop</h1>
+<p>Crop the central region of the image(s).</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.image.central_crop</code></li>
+<li><code>tf.compat.v2.image.central_crop</code></li>
+<li><code>tf.image.central_crop</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.image.central_crop(
+    image,
+    central_fraction
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/image_ops_impl.py"><code>python/ops/image_ops_impl.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Remove the outer parts of an image but retain the central region of the image along each dimension. If we specify central_fraction = 0.5, this function returns the region marked with &quot;X&quot; in the below diagram.</p>
+<pre><code> --------
+|        |
+|  XXXX  |
+|  XXXX  |
+|        |   where &quot;X&quot; is the central 50% of the image.
+ --------</code></pre>
+<p>This function works on either a single image (<code>image</code> is a 3-D Tensor), or a batch of images (<code>image</code> is a 4-D Tensor).</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>image</code></b>: Either a 3-D float Tensor of shape [height, width, depth], or a 4-D Tensor of shape [batch_size, height, width, depth].</li>
+<li><b><code>central_fraction</code></b>: float (0, 1], fraction of size to crop</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if central_crop_fraction is not within (0, 1].</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>3-D / 4-D float Tensor, as per the input.</p>

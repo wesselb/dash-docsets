@@ -1,0 +1,26 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.config.experimental.get_memory_growth" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.config.experimental.get_memory_growth" class="dashAnchor"></a><h1 id="tf.config.experimental.get_memory_growth">tf.config.experimental.get_memory_growth</h1>
+<p>Get if memory growth is enabled for a PhysicalDevice.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.config.experimental.get_memory_growth</code></li>
+<li><code>tf.compat.v2.config.experimental.get_memory_growth</code></li>
+<li><code>tf.config.experimental.get_memory_growth</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.config.experimental.get_memory_growth(device)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/framework/config.py"><code>python/framework/config.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>A PhysicalDevice with memory growth set will not allocate all memory on the device upfront.</p>
+<h4 id="for-example">For example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">physical_devices <span class="op">=</span> config.experimental.list_physical_devices(<span class="st">&#39;GPU&#39;</span>)
+<span class="cf">assert</span> <span class="bu">len</span>(physical_devices) <span class="op">&gt;</span> <span class="dv">0</span>, <span class="st">&quot;Not enough GPU hardware devices available&quot;</span>
+tf.config.experimental.set_memory_growth(physical_devices[<span class="dv">0</span>], <span class="va">True</span>)
+<span class="cf">assert</span> tf.config.experimental.get_memory_growth(physical_devices[<span class="dv">0</span>]) <span class="op">==</span> <span class="va">True</span></code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>device</code></b>: PhysicalDevice to query</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Current memory growth setting.</p>

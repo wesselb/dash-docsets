@@ -1,0 +1,38 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.layers.PReLU" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="__init__"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.keras.layers.PReLU" class="dashAnchor"></a><h1 id="tf.keras.layers.prelu">tf.keras.layers.PReLU</h1>
+<h2 id="class-prelu">Class <code>PReLU</code></h2>
+<p>Parametric Rectified Linear Unit.</p>
+<p>Inherits From: <a href="../../../tf/keras/layers/Layer.html"><code>Layer</code></a></p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.keras.layers.PReLU</code></li>
+<li>Class <code>tf.compat.v2.keras.layers.PReLU</code></li>
+<li>Class <code>tf.keras.layers.PReLU</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/layers/advanced_activations.py"><code>python/keras/layers/advanced_activations.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="it-follows">It follows:</h4>
+<p><code>f(x) = alpha * x for x &lt; 0</code>, <code>f(x) = x for x &gt;= 0</code>, where <code>alpha</code> is a learned array with the same shape as x.</p>
+<h4 id="input-shape">Input shape:</h4>
+<p>Arbitrary. Use the keyword argument <code>input_shape</code> (tuple of integers, does not include the samples axis) when using this layer as the first layer in a model.</p>
+<h4 id="output-shape">Output shape:</h4>
+<p>Same shape as the input.</p>
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>alpha_initializer</code></b>: Initializer function for the weights.</li>
+<li><b><code>alpha_regularizer</code></b>: Regularizer for the weights.</li>
+<li><b><code>alpha_constraint</code></b>: Constraint for the weights.</li>
+<li><b><code>shared_axes</code></b>: The axes along which to share learnable parameters for the activation function. For example, if the incoming feature maps are from a 2D convolution with output shape <code>(batch, height, width, channels)</code>, and you wish to share parameters across space so that each filter only has one set of parameters, set <code>shared_axes=[1, 2]</code>.</li>
+</ul>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    alpha_initializer<span class="op">=</span><span class="st">&#39;zeros&#39;</span>,
+    alpha_regularizer<span class="op">=</span><span class="va">None</span>,
+    alpha_constraint<span class="op">=</span><span class="va">None</span>,
+    shared_axes<span class="op">=</span><span class="va">None</span>,
+    <span class="op">**</span>kwargs
+)</code></pre></div>

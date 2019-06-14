@@ -1,0 +1,33 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.image.random_saturation" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.image.random_saturation" class="dashAnchor"></a><h1 id="tf.image.random_saturation">tf.image.random_saturation</h1>
+<p>Adjust the saturation of RGB images by a random factor.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.image.random_saturation</code></li>
+<li><code>tf.compat.v2.image.random_saturation</code></li>
+<li><code>tf.image.random_saturation</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.image.random_saturation(
+    image,
+    lower,
+    upper,
+    seed<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/image_ops_impl.py"><code>python/ops/image_ops_impl.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Equivalent to <code>adjust_saturation()</code> but uses a <code>saturation_factor</code> randomly picked in the interval <code>[lower, upper]</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>image</code></b>: RGB image or images. Size of the last dimension must be 3.</li>
+<li><b><code>lower</code></b>: float. Lower bound for the random saturation factor.</li>
+<li><b><code>upper</code></b>: float. Upper bound for the random saturation factor.</li>
+<li><b><code>seed</code></b>: An operation-specific seed. It will be used in conjunction with the graph-level seed to determine the real seeds that will be used in this operation. Please see the documentation of set_random_seed for its interaction with the graph-level random seed.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Adjusted image(s), same shape and DType as <code>image</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>upper &lt;= lower</code> or if <code>lower &lt; 0</code>.</li>
+</ul>

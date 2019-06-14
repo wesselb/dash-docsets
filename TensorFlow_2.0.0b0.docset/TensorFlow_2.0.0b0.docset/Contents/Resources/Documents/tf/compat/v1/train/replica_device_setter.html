@@ -1,0 +1,46 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.train.replica_device_setter" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.train.replica_device_setter" class="dashAnchor"></a><h1 id="tf.compat.v1.train.replica_device_setter">tf.compat.v1.train.replica_device_setter</h1>
+<p>Return a <code>device function</code> to use when building a Graph for replicas.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.train.replica_device_setter(
+    ps_tasks<span class="op">=</span><span class="dv">0</span>,
+    ps_device<span class="op">=</span><span class="st">&#39;/job:ps&#39;</span>,
+    worker_device<span class="op">=</span><span class="st">&#39;/job:worker&#39;</span>,
+    merge_devices<span class="op">=</span><span class="va">True</span>,
+    cluster<span class="op">=</span><span class="va">None</span>,
+    ps_ops<span class="op">=</span><span class="va">None</span>,
+    ps_strategy<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/training/device_setter.py"><code>python/training/device_setter.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Device Functions are used in <code>with tf.device(device_function):</code> statement to automatically assign devices to <code>Operation</code> objects as they are constructed, Device constraints are added from the inner-most context first, working outwards. The merging behavior adds constraints to fields that are yet unset by a more inner context. Currently the fields are (job, task, cpu/gpu).</p>
+<p>If <code>cluster</code> is <code>None</code>, and <code>ps_tasks</code> is 0, the returned function is a no-op. Otherwise, the value of <code>ps_tasks</code> is derived from <code>cluster</code>.</p>
+<p>By default, only Variable ops are placed on ps tasks, and the placement strategy is round-robin over all ps tasks. A custom <code>ps_strategy</code> may be used to do more intelligent placement, such as <code>tf.contrib.training.GreedyLoadBalancingStrategy</code>.</p>
+<p>For example,</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># To build a cluster with two ps jobs on hosts ps0 and ps1, and 3 worker</span>
+<span class="co"># jobs on hosts worker0, worker1 and worker2.</span>
+cluster_spec <span class="op">=</span> {
+    <span class="st">&quot;ps&quot;</span>: [<span class="st">&quot;ps0:2222&quot;</span>, <span class="st">&quot;ps1:2222&quot;</span>],
+    <span class="st">&quot;worker&quot;</span>: [<span class="st">&quot;worker0:2222&quot;</span>, <span class="st">&quot;worker1:2222&quot;</span>, <span class="st">&quot;worker2:2222&quot;</span>]}
+<span class="cf">with</span>
+tf.device(tf.compat.v1.train.replica_device_setter(cluster<span class="op">=</span>cluster_spec)):
+  <span class="co"># Build your graph</span>
+  v1 <span class="op">=</span> tf.Variable(...)  <span class="co"># assigned to /job:ps/task:0</span>
+  v2 <span class="op">=</span> tf.Variable(...)  <span class="co"># assigned to /job:ps/task:1</span>
+  v3 <span class="op">=</span> tf.Variable(...)  <span class="co"># assigned to /job:ps/task:0</span>
+<span class="co"># Run compute</span></code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>ps_tasks</code></b>: Number of tasks in the <code>ps</code> job. Ignored if <code>cluster</code> is provided.</li>
+<li><b><code>ps_device</code></b>: String. Device of the <code>ps</code> job. If empty no <code>ps</code> job is used. Defaults to <code>ps</code>.</li>
+<li><b><code>worker_device</code></b>: String. Device of the <code>worker</code> job. If empty no <code>worker</code> job is used.</li>
+<li><b><code>merge_devices</code></b>: <code>Boolean</code>. If <code>True</code>, merges or only sets a device if the device constraint is completely unset. merges device specification rather than overriding them.</li>
+<li><b><code>cluster</code></b>: <code>ClusterDef</code> proto or <code>ClusterSpec</code>.</li>
+<li><b><code>ps_ops</code></b>: List of strings representing <code>Operation</code> types that need to be placed on <code>ps</code> devices. If <code>None</code>, defaults to <code>STANDARD_PS_OPS</code>.</li>
+<li><b><code>ps_strategy</code></b>: A callable invoked for every ps <code>Operation</code> (i.e. matched by <code>ps_ops</code>), that takes the <code>Operation</code> and returns the ps task index to use. If <code>None</code>, defaults to a round-robin strategy across all <code>ps</code> devices.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A function to pass to <code>tf.device()</code>.</p>
+<h4 id="raises">Raises:</h4>
+<p>TypeError if <code>cluster</code> is not a dictionary or <code>ClusterDef</code> protocol buffer, or if <code>ps_strategy</code> is provided but not a callable.</p>

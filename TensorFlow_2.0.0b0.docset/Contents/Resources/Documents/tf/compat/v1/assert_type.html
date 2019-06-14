@@ -1,0 +1,31 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.assert_type" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.assert_type" class="dashAnchor"></a><h1 id="tf.compat.v1.assert_type">tf.compat.v1.assert_type</h1>
+<p>Statically asserts that the given <code>Tensor</code> is of the specified type.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.assert_type</code></li>
+<li><code>tf.compat.v1.debugging.assert_type</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.assert_type(
+    tensor,
+    tf_type,
+    message<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/check_ops.py"><code>python/ops/check_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>tensor</code></b>: A <code>Tensor</code>.</li>
+<li><b><code>tf_type</code></b>: A tensorflow type (<code>dtypes.float32</code>, <a href="../../../tf.md#int64"><code>tf.int64</code></a>, <code>dtypes.bool</code>, etc).</li>
+<li><b><code>message</code></b>: A string to prefix to the default message.</li>
+<li><b><code>name</code></b>: A name to give this <code>Op</code>. Defaults to &quot;assert_type&quot;</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: If the tensors data type doesn't match <code>tf_type</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>no_op</code> that does nothing. Type can be determined statically.</p>

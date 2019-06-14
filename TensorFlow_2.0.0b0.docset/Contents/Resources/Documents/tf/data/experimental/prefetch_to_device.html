@@ -1,0 +1,25 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.data.experimental.prefetch_to_device" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.data.experimental.prefetch_to_device" class="dashAnchor"></a><h1 id="tf.data.experimental.prefetch_to_device">tf.data.experimental.prefetch_to_device</h1>
+<p>A transformation that prefetches dataset values to the given <code>device</code>.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.data.experimental.prefetch_to_device</code></li>
+<li><code>tf.compat.v2.data.experimental.prefetch_to_device</code></li>
+<li><code>tf.data.experimental.prefetch_to_device</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.data.experimental.prefetch_to_device(
+    device,
+    buffer_size<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/data/experimental/ops/prefetching_ops.py"><code>python/data/experimental/ops/prefetching_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>NOTE: Although the transformation creates a <a href="../../../tf/data/Dataset.html"><code>tf.data.Dataset</code></a>, the transformation must be the final <code>Dataset</code> in the input pipeline.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>device</code></b>: A string. The name of a device to which elements will be prefetched.</li>
+<li><b><code>buffer_size</code></b>: (Optional.) The number of elements to buffer on <code>device</code>. Defaults to an automatically chosen value.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Dataset</code> transformation function, which can be passed to <a href="../../../tf/data/Dataset.md#apply"><code>tf.data.Dataset.apply</code></a>.</p>

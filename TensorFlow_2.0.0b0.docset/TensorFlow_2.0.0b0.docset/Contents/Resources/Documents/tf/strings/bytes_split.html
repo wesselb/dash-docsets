@@ -1,0 +1,31 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.strings.bytes_split" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.strings.bytes_split" class="dashAnchor"></a><h1 id="tf.strings.bytes_split">tf.strings.bytes_split</h1>
+<p>Split string elements of <code>input</code> into bytes.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.strings.bytes_split</code></li>
+<li><code>tf.compat.v2.strings.bytes_split</code></li>
+<li><code>tf.strings.bytes_split</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.strings.bytes_split(
+    <span class="bu">input</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/ragged/ragged_string_ops.py"><code>python/ops/ragged/ragged_string_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="examples">Examples:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="op">&gt;&gt;&gt;</span> tf.strings.to_bytes(<span class="st">&#39;hello&#39;</span>)
+[<span class="st">&#39;h&#39;</span>, <span class="st">&#39;e&#39;</span>, <span class="st">&#39;l&#39;</span>, <span class="st">&#39;l&#39;</span>, <span class="st">&#39;o&#39;</span>]
+<span class="op">&gt;&gt;&gt;</span> tf.strings.to_bytes([<span class="st">&#39;hello&#39;</span>, <span class="st">&#39;123&#39;</span>])
+<span class="op">&lt;</span>RaggedTensor [[<span class="st">&#39;h&#39;</span>, <span class="st">&#39;e&#39;</span>, <span class="st">&#39;l&#39;</span>, <span class="st">&#39;l&#39;</span>, <span class="st">&#39;o&#39;</span>], [<span class="st">&#39;1&#39;</span>, <span class="st">&#39;2&#39;</span>, <span class="st">&#39;3&#39;</span>]]<span class="op">&gt;</span></code></pre></div>
+<p>Note that this op splits strings into bytes, not unicode characters. To split strings into unicode characters, use <a href="../../tf/strings/unicode_split.html"><code>tf.strings.unicode_split</code></a>.</p>
+<p>See also: <a href="../../tf/io/decode_raw.html"><code>tf.io.decode_raw</code></a>, <a href="../../tf/strings/split.html"><code>tf.strings.split</code></a>, <a href="../../tf/strings/unicode_split.html"><code>tf.strings.unicode_split</code></a>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A string <code>Tensor</code> or <code>RaggedTensor</code>: the strings to split. Must have a statically known rank (<code>N</code>).</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>RaggedTensor</code> of rank <code>N+1</code>: the bytes that make up the soruce strings.</p>

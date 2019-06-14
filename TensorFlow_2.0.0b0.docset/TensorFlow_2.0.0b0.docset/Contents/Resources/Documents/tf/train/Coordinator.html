@@ -1,0 +1,172 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.train.Coordinator" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="joined"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="clear_stop"/> <meta itemprop="property" content="join"/> <meta itemprop="property" content="raise_requested_exception"/> <meta itemprop="property" content="register_thread"/> <meta itemprop="property" content="request_stop"/> <meta itemprop="property" content="should_stop"/> <meta itemprop="property" content="stop_on_exception"/> <meta itemprop="property" content="wait_for_stop"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.train.Coordinator" class="dashAnchor"></a><h1 id="tf.train.coordinator">tf.train.Coordinator</h1>
+<h2 id="class-coordinator">Class <code>Coordinator</code></h2>
+<p>A coordinator for threads.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.train.Coordinator</code></li>
+<li>Class <code>tf.compat.v2.train.Coordinator</code></li>
+<li>Class <code>tf.train.Coordinator</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/training/coordinator.py"><code>python/training/coordinator.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>This class implements a simple mechanism to coordinate the termination of a set of threads.</p>
+<h4 id="usage">Usage:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Create a coordinator.</span>
+coord <span class="op">=</span> Coordinator()
+<span class="co"># Start a number of threads, passing the coordinator to each of them.</span>
+...start thread <span class="dv">1</span>...(coord, ...)
+...start thread N...(coord, ...)
+<span class="co"># Wait for all the threads to terminate.</span>
+coord.join(threads)</code></pre></div>
+<p>Any of the threads can call <code>coord.request_stop()</code> to ask for all the threads to stop. To cooperate with the requests, each thread must check for <code>coord.should_stop()</code> on a regular basis. <code>coord.should_stop()</code> returns <code>True</code> as soon as <code>coord.request_stop()</code> has been called.</p>
+<p>A typical thread running with a coordinator will do something like:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">while</span> <span class="kw">not</span> coord.should_stop():
+  ...do some work...</code></pre></div>
+<h4 id="exception-handling">Exception handling:</h4>
+<p>A thread can report an exception to the coordinator as part of the <code>request_stop()</code> call. The exception will be re-raised from the <code>coord.join()</code> call.</p>
+<h4 id="thread-code">Thread code:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">try</span>:
+  <span class="cf">while</span> <span class="kw">not</span> coord.should_stop():
+    ...do some work...
+<span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:
+  coord.request_stop(e)</code></pre></div>
+<h4 id="main-code">Main code:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">try</span>:
+  ...
+  coord <span class="op">=</span> Coordinator()
+  <span class="co"># Start a number of threads, passing the coordinator to each of them.</span>
+  ...start thread <span class="dv">1</span>...(coord, ...)
+  ...start thread N...(coord, ...)
+  <span class="co"># Wait for all the threads to terminate.</span>
+  coord.join(threads)
+<span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:
+  ...exception that was passed to coord.request_stop()</code></pre></div>
+<p>To simplify the thread implementation, the Coordinator provides a context handler <code>stop_on_exception()</code> that automatically requests a stop if an exception is raised. Using the context handler the thread code above can be written as:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> coord.stop_on_exception():
+  <span class="cf">while</span> <span class="kw">not</span> coord.should_stop():
+    ...do some work...</code></pre></div>
+<h4 id="grace-period-for-stopping">Grace period for stopping:</h4>
+<p>After a thread has called <code>coord.request_stop()</code> the other threads have a fixed time to stop, this is called the 'stop grace period' and defaults to 2 minutes. If any of the threads is still alive after the grace period expires <code>coord.join()</code> raises a RuntimeError reporting the laggards.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">try</span>:
+  ...
+  coord <span class="op">=</span> Coordinator()
+  <span class="co"># Start a number of threads, passing the coordinator to each of them.</span>
+  ...start thread <span class="dv">1</span>...(coord, ...)
+  ...start thread N...(coord, ...)
+  <span class="co"># Wait for all the threads to terminate, give them 10s grace period</span>
+  coord.join(threads, stop_grace_period_secs<span class="op">=</span><span class="dv">10</span>)
+<span class="cf">except</span> <span class="pp">RuntimeError</span>:
+  ...one of the threads took more than 10s to stop after request_stop()
+  ...was called.
+<span class="cf">except</span> <span class="pp">Exception</span>:
+  ...exception that was passed to coord.request_stop()</code></pre></div>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(clean_stop_exception_types<span class="op">=</span><span class="va">None</span>)</code></pre></div>
+<p>Create a new Coordinator.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>clean_stop_exception_types</code></b>: Optional tuple of Exception types that should cause a clean stop of the coordinator. If an exception of one of these types is reported to <code>request_stop(ex)</code> the coordinator will behave as if <code>request_stop(None)</code> was called. Defaults to <code>(tf.errors.OutOfRangeError,)</code> which is used by input queues to signal the end of input. When feeding training data from a Python iterator it is common to add <code>StopIteration</code> to this list.</li>
+</ul>
+<h2 id="properties">Properties</h2>
+<h3 id="joined">
+<code>joined</code>
+</h3>
+<h2 id="methods">Methods</h2>
+<h3 id="clear_stop">
+<code>clear_stop</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">clear_stop()</code></pre></div>
+<p>Clears the stop flag.</p>
+<p>After this is called, calls to <code>should_stop()</code> will return <code>False</code>.</p>
+<h3 id="join">
+<code>join</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">join(
+    threads<span class="op">=</span><span class="va">None</span>,
+    stop_grace_period_secs<span class="op">=</span><span class="dv">120</span>,
+    ignore_live_threads<span class="op">=</span><span class="va">False</span>
+)</code></pre></div>
+<p>Wait for threads to terminate.</p>
+<p>This call blocks until a set of threads have terminated. The set of thread is the union of the threads passed in the <code>threads</code> argument and the list of threads that registered with the coordinator by calling <code>Coordinator.register_thread()</code>.</p>
+<p>After the threads stop, if an <code>exc_info</code> was passed to <code>request_stop</code>, that exception is re-raised.</p>
+<p>Grace period handling: When <code>request_stop()</code> is called, threads are given 'stop_grace_period_secs' seconds to terminate. If any of them is still alive after that period expires, a <code>RuntimeError</code> is raised. Note that if an <code>exc_info</code> was passed to <code>request_stop()</code> then it is raised instead of that <code>RuntimeError</code>.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>threads</code></b>: List of <code>threading.Threads</code>. The started threads to join in addition to the registered threads.</li>
+<li><b><code>stop_grace_period_secs</code></b>: Number of seconds given to threads to stop after <code>request_stop()</code> has been called.</li>
+<li><b><code>ignore_live_threads</code></b>: If <code>False</code>, raises an error if any of the threads are still alive after <code>stop_grace_period_secs</code>.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>RuntimeError</code></b>: If any thread is still alive after <code>request_stop()</code> is called and the grace period expires.</li>
+</ul>
+<h3 id="raise_requested_exception">
+<code>raise_requested_exception</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">raise_requested_exception()</code></pre></div>
+<p>If an exception has been passed to <code>request_stop</code>, this raises it.</p>
+<h3 id="register_thread">
+<code>register_thread</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">register_thread(thread)</code></pre></div>
+<p>Register a thread to join.</p>
+<h4 id="args-2">Args:</h4>
+<ul>
+<li><b><code>thread</code></b>: A Python thread to join.</li>
+</ul>
+<h3 id="request_stop">
+<code>request_stop</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">request_stop(ex<span class="op">=</span><span class="va">None</span>)</code></pre></div>
+<p>Request that the threads stop.</p>
+<p>After this is called, calls to <code>should_stop()</code> will return <code>True</code>.</p>
+<p>Note: If an exception is being passed in, in must be in the context of handling the exception (i.e. <code>try: ... except Exception as ex: ...</code>) and not a newly created one.</p>
+<h4 id="args-3">Args:</h4>
+<ul>
+<li><b><code>ex</code></b>: Optional <code>Exception</code>, or Python <code>exc_info</code> tuple as returned by <code>sys.exc_info()</code>. If this is the first call to <code>request_stop()</code> the corresponding exception is recorded and re-raised from <code>join()</code>.</li>
+</ul>
+<h3 id="should_stop">
+<code>should_stop</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">should_stop()</code></pre></div>
+<p>Check if stop was requested.</p>
+<h4 id="returns">Returns:</h4>
+<p>True if a stop was requested.</p>
+<h3 id="stop_on_exception">
+<code>stop_on_exception</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">stop_on_exception(
+    <span class="op">*</span>args,
+    <span class="op">**</span>kwds
+)</code></pre></div>
+<p>Context manager to request stop when an Exception is raised.</p>
+<p>Code that uses a coordinator must catch exceptions and pass them to the <code>request_stop()</code> method to stop the other threads managed by the coordinator.</p>
+<p>This context handler simplifies the exception handling. Use it as follows:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> coord.stop_on_exception():
+  <span class="co"># Any exception raised in the body of the with</span>
+  <span class="co"># clause is reported to the coordinator before terminating</span>
+  <span class="co"># the execution of the body.</span>
+  ...body...</code></pre></div>
+<p>This is completely equivalent to the slightly longer code:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">try</span>:
+  ...body...
+<span class="cf">except</span>:
+  coord.request_stop(sys.exc_info())</code></pre></div>
+<h4 id="yields">Yields:</h4>
+<p>nothing.</p>
+<h3 id="wait_for_stop">
+<code>wait_for_stop</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">wait_for_stop(timeout<span class="op">=</span><span class="va">None</span>)</code></pre></div>
+<p>Wait till the Coordinator is told to stop.</p>
+<h4 id="args-4">Args:</h4>
+<ul>
+<li><b><code>timeout</code></b>: Float. Sleep for up to that many seconds waiting for should_stop() to become True.</li>
+</ul>
+<h4 id="returns-1">Returns:</h4>
+<p>True if the Coordinator is told stop, False if the timeout expired.</p>

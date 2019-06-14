@@ -1,0 +1,29 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.io.decode_raw" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.io.decode_raw" class="dashAnchor"></a><h1 id="tf.io.decode_raw">tf.io.decode_raw</h1>
+<p>Convert raw byte strings into tensors.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v2.io.decode_raw</code></li>
+<li><code>tf.io.decode_raw</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.io.decode_raw(
+    input_bytes,
+    out_type,
+    little_endian<span class="op">=</span><span class="va">True</span>,
+    fixed_length<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/parsing_ops.py"><code>python/ops/parsing_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input_bytes</code></b>: Each element of the input Tensor is converted to an array of bytes.</li>
+<li><b><code>out_type</code></b>: <code>DType</code> of the output. Acceptable types are <code>half</code>, <code>float</code>, <code>double</code>, <code>int32</code>, <code>uint16</code>, <code>uint8</code>, <code>int16</code>, <code>int8</code>, <code>int64</code>.</li>
+<li><b><code>little_endian</code></b>: Whether the <code>input_bytes</code> data is in little-endian format. Data will be converted into host byte order if necessary.</li>
+<li><b><code>fixed_length</code></b>: If set, the first <code>fixed_length</code> bytes of each element will be converted. Data will be zero-padded or truncated to the specified length.</li>
+</ul>
+<p><code>fixed_length</code> must be a multiple of the size of <code>out_type</code>. <code>fixed_length</code> must be specified if the elements of <code>input_bytes</code> are of variable length. * <b><code>name</code></b>: A name for the operation (optional).</p>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> object storing the decoded bytes.</p>

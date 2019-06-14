@@ -1,0 +1,25 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.autograph.trace" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.autograph.trace" class="dashAnchor"></a><h1 id="tf.autograph.trace">tf.autograph.trace</h1>
+<p>Traces argument information at compilation time.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.autograph.trace</code></li>
+<li><code>tf.compat.v1.autograph.trace</code></li>
+<li><code>tf.compat.v2.autograph.trace</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.autograph.trace(<span class="op">*</span>args)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/autograph/utils/ag_logging.py"><code>python/autograph/utils/ag_logging.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p><code>trace</code> is useful when debugging, and it always executes during the tracing phase, that is, when the TF graph is constructed.</p>
+<p><em>Example usage</em></p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">import</span> tensorflow <span class="im">as</span> tf
+
+<span class="cf">for</span> i <span class="kw">in</span> tf.<span class="bu">range</span>(<span class="dv">10</span>):
+  tf.autograph.trace(i)
+<span class="co"># Output: &lt;Tensor ...&gt;</span></code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>*args</code></b>: Arguments to print to <code>sys.stdout</code>.</li>
+</ul>

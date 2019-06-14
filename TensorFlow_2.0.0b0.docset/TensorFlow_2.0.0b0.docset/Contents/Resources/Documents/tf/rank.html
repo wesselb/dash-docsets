@@ -1,0 +1,32 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.rank" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.rank" class="dashAnchor"></a><h1 id="tf.rank">tf.rank</h1>
+<p>Returns the rank of a tensor.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.rank</code></li>
+<li><code>tf.compat.v2.rank</code></li>
+<li><code>tf.rank</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.rank(
+    <span class="bu">input</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/array_ops.py"><code>python/ops/array_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Returns a 0-D <code>int32</code> <code>Tensor</code> representing the rank of <code>input</code>.</p>
+<h4 id="for-example">For example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># shape of tensor &#39;t&#39; is [2, 2, 3]</span>
+t <span class="op">=</span> tf.constant([[[<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>], [<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>]], [[<span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">3</span>], [<span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">4</span>]]])
+tf.rank(t)  <span class="co"># 3</span></code></pre></div>
+<p><strong>Note</strong>: The rank of a tensor is not the same as the rank of a matrix. The rank of a tensor is the number of indices required to uniquely select each element of the tensor. Rank is also known as &quot;order&quot;, &quot;degree&quot;, or &quot;ndims.&quot;</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code> or <code>SparseTensor</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>int32</code>.</p>
+<h4 id="numpy-compatibility">Numpy Compatibility</h4>
+<p>Equivalent to np.ndim</p>

@@ -1,0 +1,96 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.distribute.ReplicaContext" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="devices"/> <meta itemprop="property" content="num_replicas_in_sync"/> <meta itemprop="property" content="replica_id_in_sync_group"/> <meta itemprop="property" content="strategy"/> <meta itemprop="property" content="__enter__"/> <meta itemprop="property" content="__exit__"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="all_reduce"/> <meta itemprop="property" content="merge_call"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.distribute.ReplicaContext" class="dashAnchor"></a><h1 id="tf.distribute.replicacontext">tf.distribute.ReplicaContext</h1>
+<h2 id="class-replicacontext">Class <code>ReplicaContext</code></h2>
+<p><a href="../../tf/distribute/Strategy.html"><code>tf.distribute.Strategy</code></a> API when in a replica context.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.distribute.ReplicaContext</code></li>
+<li>Class <code>tf.compat.v2.distribute.ReplicaContext</code></li>
+<li>Class <code>tf.distribute.ReplicaContext</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/distribute/distribute_lib.py"><code>python/distribute/distribute_lib.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>To be used inside your replicated step function, such as in a <a href="../../tf/distribute/Strategy.md#experimental_run_v2"><code>tf.distribute.Strategy.experimental_run_v2</code></a> call.</p>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    strategy,
+    replica_id_in_sync_group
+)</code></pre></div>
+<p>Initialize self. See help(type(self)) for accurate signature.</p>
+<h2 id="properties">Properties</h2>
+<h3 id="devices">
+<code>devices</code>
+</h3>
+<p>The devices this replica is to be executed on, as a tuple of strings.</p>
+<h3 id="num_replicas_in_sync">
+<code>num_replicas_in_sync</code>
+</h3>
+<p>Returns number of replicas over which gradients are aggregated.</p>
+<h3 id="replica_id_in_sync_group">
+<code>replica_id_in_sync_group</code>
+</h3>
+<p>Which replica is being defined, from 0 to <code>num_replicas_in_sync - 1</code>.</p>
+<h3 id="strategy">
+<code>strategy</code>
+</h3>
+<p>The current <a href="../../tf/distribute/Strategy.html"><code>tf.distribute.Strategy</code></a> object.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__enter__">
+<code><strong>enter</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__enter__</span>()</code></pre></div>
+<h3 id="__exit__">
+<code><strong>exit</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__exit__</span>(
+    exception_type,
+    exception_value,
+    traceback
+)</code></pre></div>
+<h3 id="all_reduce">
+<code>all_reduce</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">all_reduce(
+    reduce_op,
+    value
+)</code></pre></div>
+<p>All-reduces the given <code>Tensor</code> nest across replicas.</p>
+<p>If <code>all_reduce</code> is called in any replica, it must be called in all replicas. The nested structure and <code>Tensor</code> shapes must be identical in all replicas.</p>
+<p>IMPORTANT: The ordering of communications must be identical in all replicas.</p>
+<p>Example with two replicas: Replica 0 <code>value</code>: {'a': 1, 'b': [40, 1]} Replica 1 <code>value</code>: {'a': 3, 'b': [ 2, 98]}</p>
+<p>If <code>reduce_op</code> == <code>SUM</code>: Result (on all replicas): {'a': 4, 'b': [42, 99]}</p>
+<p>If <code>reduce_op</code> == <code>MEAN</code>: Result (on all replicas): {'a': 2, 'b': [21, 49.5]}</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>reduce_op</code></b>: Reduction type, an instance of <a href="../../tf/distribute/ReduceOp.html"><code>tf.distribute.ReduceOp</code></a> enum.</li>
+<li><b><code>value</code></b>: The nested structure of <code>Tensor</code>s to all-reduced. The structure must be compatible with <a href="../../tf/nest.html"><code>tf.nest</code></a>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> nest with the reduced <code>value</code>s from each replica.</p>
+<h3 id="merge_call">
+<code>merge_call</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">merge_call(
+    merge_fn,
+    args<span class="op">=</span>(),
+    kwargs<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Merge args across replicas and run <code>merge_fn</code> in a cross-replica context.</p>
+<p>This allows communication and coordination when there are multiple calls to a model function triggered by a call to <code>strategy.experimental_run_v2(model_fn, ...)</code>.</p>
+<p>See <a href="../../tf/distribute/Strategy.md#experimental_run_v2"><code>tf.distribute.Strategy.experimental_run_v2</code></a> for an explanation.</p>
+<p>If not inside a distributed scope, this is equivalent to:</p>
+<pre><code>strategy = tf.distribute.get_strategy()
+with cross-replica-context(strategy):
+  return merge_fn(strategy, *args, **kwargs)</code></pre>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>merge_fn</code></b>: function that joins arguments from threads that are given as PerReplica. It accepts <a href="../../tf/distribute/Strategy.html"><code>tf.distribute.Strategy</code></a> object as the first argument.</li>
+<li><b><code>args</code></b>: List or tuple with positional per-thread arguments for <code>merge_fn</code>.</li>
+<li><b><code>kwargs</code></b>: Dict with keyword per-thread arguments for <code>merge_fn</code>.</li>
+</ul>
+<h4 id="returns-1">Returns:</h4>
+<p>The return value of <code>merge_fn</code>, except for <code>PerReplica</code> values which are unpacked.</p>

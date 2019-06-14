@@ -1,0 +1,25 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.train.load_checkpoint" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.train.load_checkpoint" class="dashAnchor"></a><h1 id="tf.train.load_checkpoint">tf.train.load_checkpoint</h1>
+<p>Returns <code>CheckpointReader</code> for checkpoint found in <code>ckpt_dir_or_file</code>.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.train.load_checkpoint</code></li>
+<li><code>tf.compat.v2.train.load_checkpoint</code></li>
+<li><code>tf.train.load_checkpoint</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.train.load_checkpoint(ckpt_dir_or_file)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/training/checkpoint_utils.py"><code>python/training/checkpoint_utils.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>If <code>ckpt_dir_or_file</code> resolves to a directory with multiple checkpoints, reader for the latest checkpoint is returned.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>ckpt_dir_or_file</code></b>: Directory with checkpoints file or path to checkpoint file.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p><code>CheckpointReader</code> object.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>ckpt_dir_or_file</code> resolves to a directory with no checkpoints.</li>
+</ul>

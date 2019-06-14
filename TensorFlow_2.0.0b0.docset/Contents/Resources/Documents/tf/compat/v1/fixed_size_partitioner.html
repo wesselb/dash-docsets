@@ -1,0 +1,18 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.fixed_size_partitioner" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.fixed_size_partitioner" class="dashAnchor"></a><h1 id="tf.compat.v1.fixed_size_partitioner">tf.compat.v1.fixed_size_partitioner</h1>
+<p>Partitioner to specify a fixed number of shards along given axis.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.fixed_size_partitioner(
+    num_shards,
+    axis<span class="op">=</span><span class="dv">0</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/partitioned_variables.py"><code>python/ops/partitioned_variables.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>num_shards</code></b>: <code>int</code>, number of shards to partition variable.</li>
+<li><b><code>axis</code></b>: <code>int</code>, axis to partition on.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A partition function usable as the <code>partitioner</code> argument to <code>variable_scope</code> and <code>get_variable</code>.</p>

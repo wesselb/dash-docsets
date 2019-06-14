@@ -1,0 +1,38 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.feature_column.make_parse_example_spec" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.feature_column.make_parse_example_spec" class="dashAnchor"></a><h1 id="tf.compat.v1.feature_column.make_parse_example_spec">tf.compat.v1.feature_column.make_parse_example_spec</h1>
+<p>Creates parsing spec dictionary from input feature_columns.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.feature_column.make_parse_example_spec(feature_columns)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/feature_column/feature_column.py"><code>python/feature_column/feature_column.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>The returned dictionary can be used as arg 'features' in <a href="../../../../tf/io/parse_example.html"><code>tf.io.parse_example</code></a>.</p>
+<h4 id="typical-usage-example">Typical usage example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Define features and transformations</span>
+feature_a <span class="op">=</span> categorical_column_with_vocabulary_file(...)
+feature_b <span class="op">=</span> numeric_column(...)
+feature_c_bucketized <span class="op">=</span> bucketized_column(numeric_column(<span class="st">&quot;feature_c&quot;</span>), ...)
+feature_a_x_feature_c <span class="op">=</span> crossed_column(
+    columns<span class="op">=</span>[<span class="st">&quot;feature_a&quot;</span>, feature_c_bucketized], ...)
+
+feature_columns <span class="op">=</span> <span class="bu">set</span>(
+    [feature_b, feature_c_bucketized, feature_a_x_feature_c])
+features <span class="op">=</span> tf.io.parse_example(
+    serialized<span class="op">=</span>serialized_examples,
+    features<span class="op">=</span>make_parse_example_spec(feature_columns))</code></pre></div>
+<p>For the above example, make_parse_example_spec would return the dict:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">{
+    <span class="st">&quot;feature_a&quot;</span>: parsing_ops.VarLenFeature(tf.string),
+    <span class="st">&quot;feature_b&quot;</span>: parsing_ops.FixedLenFeature([<span class="dv">1</span>], dtype<span class="op">=</span>tf.float32),
+    <span class="st">&quot;feature_c&quot;</span>: parsing_ops.FixedLenFeature([<span class="dv">1</span>], dtype<span class="op">=</span>tf.float32)
+}</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>feature_columns</code></b>: An iterable containing all feature columns. All items should be instances of classes derived from <code>_FeatureColumn</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A dict mapping each feature key to a <code>FixedLenFeature</code> or <code>VarLenFeature</code> value.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If any of the given <code>feature_columns</code> is not a <code>_FeatureColumn</code> instance.</li>
+</ul>

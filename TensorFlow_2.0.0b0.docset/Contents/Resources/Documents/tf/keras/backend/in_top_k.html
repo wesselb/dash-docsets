@@ -1,0 +1,26 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.backend.in_top_k" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.keras.backend.in_top_k" class="dashAnchor"></a><h1 id="tf.keras.backend.in_top_k">tf.keras.backend.in_top_k</h1>
+<p>Returns whether the <code>targets</code> are in the top <code>k</code> <code>predictions</code>.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.keras.backend.in_top_k</code></li>
+<li><code>tf.compat.v2.keras.backend.in_top_k</code></li>
+<li><code>tf.keras.backend.in_top_k</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.keras.backend.in_top_k(
+    predictions,
+    targets,
+    k
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/backend.py"><code>python/keras/backend.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>predictions</code></b>: A tensor of shape <code>(batch_size, classes)</code> and type <code>float32</code>.</li>
+<li><b><code>targets</code></b>: A 1D tensor of length <code>batch_size</code> and type <code>int32</code> or <code>int64</code>.</li>
+<li><b><code>k</code></b>: An <code>int</code>, number of top elements to consider.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A 1D tensor of length <code>batch_size</code> and type <code>bool</code>. <code>output[i]</code> is <code>True</code> if <code>predictions[i, targets[i]]</code> is within top-<code>k</code> values of <code>predictions[i]</code>.</p>

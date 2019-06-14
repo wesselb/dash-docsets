@@ -1,0 +1,28 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.data.experimental.make_batched_features_dataset" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.data.experimental.make_batched_features_dataset" class="dashAnchor"></a><h1 id="tf.data.experimental.make_batched_features_dataset">tf.data.experimental.make_batched_features_dataset</h1>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v2.data.experimental.make_batched_features_dataset</code></li>
+<li><code>tf.data.experimental.make_batched_features_dataset</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.data.experimental.make_batched_features_dataset(
+    file_pattern,
+    batch_size,
+    features,
+    reader<span class="op">=</span>tf.compat.v1.data.TFRecordDataset,
+    label_key<span class="op">=</span><span class="va">None</span>,
+    reader_args<span class="op">=</span><span class="va">None</span>,
+    num_epochs<span class="op">=</span><span class="va">None</span>,
+    shuffle<span class="op">=</span><span class="va">True</span>,
+    shuffle_buffer_size<span class="op">=</span><span class="dv">10000</span>,
+    shuffle_seed<span class="op">=</span><span class="va">None</span>,
+    prefetch_buffer_size<span class="op">=</span>dataset_ops.AUTOTUNE,
+    reader_num_threads<span class="op">=</span><span class="dv">1</span>,
+    parser_num_threads<span class="op">=</span><span class="dv">2</span>,
+    sloppy_ordering<span class="op">=</span><span class="va">False</span>,
+    drop_final_batch<span class="op">=</span><span class="va">False</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/data/experimental/ops/readers.py"><code>python/data/experimental/ops/readers.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->

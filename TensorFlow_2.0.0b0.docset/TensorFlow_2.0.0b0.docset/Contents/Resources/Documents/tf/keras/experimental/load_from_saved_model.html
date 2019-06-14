@@ -1,0 +1,40 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.experimental.load_from_saved_model" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.keras.experimental.load_from_saved_model" class="dashAnchor"></a><h1 id="tf.keras.experimental.load_from_saved_model">tf.keras.experimental.load_from_saved_model</h1>
+<p>Loads a keras Model from a SavedModel created by <code>export_saved_model()</code>.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.keras.experimental.load_from_saved_model</code></li>
+<li><code>tf.compat.v2.keras.experimental.load_from_saved_model</code></li>
+<li><code>tf.keras.experimental.load_from_saved_model</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.keras.experimental.load_from_saved_model(
+    saved_model_path,
+    custom_objects<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/saving/saved_model.py"><code>python/keras/saving/saved_model.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>This function reinstantiates model state by: 1) loading model topology from json (this will eventually come from metagraph). 2) loading model weights from checkpoint.</p>
+<h4 id="example">Example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">import</span> tensorflow <span class="im">as</span> tf
+
+<span class="co"># Create a tf.keras model.</span>
+model <span class="op">=</span> tf.keras.Sequential()
+model.add(tf.keras.layers.Dense(<span class="dv">1</span>, input_shape<span class="op">=</span>[<span class="dv">10</span>]))
+model.summary()
+
+<span class="co"># Save the tf.keras model in the SavedModel format.</span>
+path <span class="op">=</span> <span class="st">&#39;/tmp/simple_keras_model&#39;</span>
+tf.keras.experimental.export_saved_model(model, path)
+
+<span class="co"># Load the saved keras model back.</span>
+new_model <span class="op">=</span> tf.keras.experimental.load_from_saved_model(path)
+new_model.summary()</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>saved_model_path</code></b>: a string specifying the path to an existing SavedModel.</li>
+<li><b><code>custom_objects</code></b>: Optional dictionary mapping names (strings) to custom classes or functions to be considered during deserialization.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>a keras.Model instance.</p>

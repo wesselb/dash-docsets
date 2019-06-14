@@ -1,0 +1,73 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.utils.Sequence" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="__getitem__"/> <meta itemprop="property" content="__iter__"/> <meta itemprop="property" content="__len__"/> <meta itemprop="property" content="on_epoch_end"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.keras.utils.Sequence" class="dashAnchor"></a><h1 id="tf.keras.utils.sequence">tf.keras.utils.Sequence</h1>
+<h2 id="class-sequence">Class <code>Sequence</code></h2>
+<p>Base object for fitting to a sequence of data, such as a dataset.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.keras.utils.Sequence</code></li>
+<li>Class <code>tf.compat.v2.keras.utils.Sequence</code></li>
+<li>Class <code>tf.keras.utils.Sequence</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/utils/data_utils.py"><code>python/keras/utils/data_utils.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Every <code>Sequence</code> must implement the <code>__getitem__</code> and the <code>__len__</code> methods. If you want to modify your dataset between epochs you may implement <code>on_epoch_end</code>. The method <code>__getitem__</code> should return a complete batch.</p>
+<h4 id="notes">Notes:</h4>
+<p><code>Sequence</code> are a safer way to do multiprocessing. This structure guarantees that the network will only train once on each sample per epoch which is not the case with generators.</p>
+<h4 id="examples">Examples:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    <span class="im">from</span> skimage.io <span class="im">import</span> imread
+    <span class="im">from</span> skimage.transform <span class="im">import</span> resize
+    <span class="im">import</span> numpy <span class="im">as</span> np
+    <span class="im">import</span> math
+
+    <span class="co"># Here, `x_set` is list of path to the images</span>
+    <span class="co"># and `y_set` are the associated classes.</span>
+
+    <span class="kw">class</span> CIFAR10Sequence(Sequence):
+
+        <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, x_set, y_set, batch_size):
+            <span class="va">self</span>.x, <span class="va">self</span>.y <span class="op">=</span> x_set, y_set
+            <span class="va">self</span>.batch_size <span class="op">=</span> batch_size
+
+        <span class="kw">def</span> <span class="fu">__len__</span>(<span class="va">self</span>):
+            <span class="cf">return</span> math.ceil(<span class="bu">len</span>(<span class="va">self</span>.x) <span class="op">/</span> <span class="va">self</span>.batch_size)
+
+        <span class="kw">def</span> <span class="fu">__getitem__</span>(<span class="va">self</span>, idx):
+            batch_x <span class="op">=</span> <span class="va">self</span>.x[idx <span class="op">*</span> <span class="va">self</span>.batch_size:(idx <span class="op">+</span> <span class="dv">1</span>) <span class="op">*</span>
+            <span class="va">self</span>.batch_size]
+            batch_y <span class="op">=</span> <span class="va">self</span>.y[idx <span class="op">*</span> <span class="va">self</span>.batch_size:(idx <span class="op">+</span> <span class="dv">1</span>) <span class="op">*</span>
+            <span class="va">self</span>.batch_size]
+
+            <span class="cf">return</span> np.array([
+                resize(imread(file_name), (<span class="dv">200</span>, <span class="dv">200</span>))
+                   <span class="cf">for</span> file_name <span class="kw">in</span> batch_x]), np.array(batch_y)</code></pre></div>
+<h2 id="methods">Methods</h2>
+<h3 id="__getitem__">
+<code><strong>getitem</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__getitem__</span>(index)</code></pre></div>
+<p>Gets batch at position <code>index</code>.</p>
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>index</code></b>: position of the batch in the Sequence.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A batch</p>
+<h3 id="__iter__">
+<code><strong>iter</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__iter__</span>()</code></pre></div>
+<p>Create a generator that iterate over the Sequence.</p>
+<h3 id="__len__">
+<code><strong>len</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__len__</span>()</code></pre></div>
+<p>Number of batch in the Sequence.</p>
+<h4 id="returns-1">Returns:</h4>
+<p>The number of batches in the Sequence.</p>
+<h3 id="on_epoch_end">
+<code>on_epoch_end</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_epoch_end()</code></pre></div>
+<p>Method called at the end of every epoch.</p>

@@ -1,0 +1,39 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.scatter_update" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.scatter_update" class="dashAnchor"></a><h1 id="tf.compat.v1.scatter_update">tf.compat.v1.scatter_update</h1>
+<p>Applies sparse updates to a variable reference.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.scatter_update(
+    ref,
+    indices,
+    updates,
+    use_locking<span class="op">=</span><span class="va">True</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/state_ops.py"><code>python/ops/state_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>This operation computes</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    <span class="co"># Scalar indices</span>
+    ref[indices, ...] <span class="op">=</span> updates[...]
+
+    <span class="co"># Vector indices (for each i)</span>
+    ref[indices[i], ...] <span class="op">=</span> updates[i, ...]
+
+    <span class="co"># High rank indices (for each i, ..., j)</span>
+    ref[indices[i, ..., j], ...] <span class="op">=</span> updates[i, ..., j, ...]</code></pre></div>
+<p>This operation outputs <code>ref</code> after the update is done. This makes it easier to chain operations that need to use the reset value.</p>
+<p>If values in <code>ref</code> is to be updated more than once, because there are duplicate entries in <code>indices</code>, the order at which the updates happen for each value is undefined.</p>
+<p>Requires <code>updates.shape = indices.shape + ref.shape[1:]</code>.</p>
+<div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+<p><img style="width:100%" src="https://www.tensorflow.org/images/ScatterUpdate.png" alt></p>
+</div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>ref</code></b>: A <code>Variable</code>.</li>
+<li><b><code>indices</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. A tensor of indices into the first dimension of <code>ref</code>.</li>
+<li><b><code>updates</code></b>: A <code>Tensor</code>. Must have the same type as <code>ref</code>. A tensor of updated values to store in <code>ref</code>.</li>
+<li><b><code>use_locking</code></b>: An optional <code>bool</code>. Defaults to <code>True</code>. If True, the assignment will be protected by a lock; otherwise the behavior is undefined, but may exhibit less contention.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Same as <code>ref</code>. Returned as a convenience for operations that want to use the updated values after the update is done.</p>

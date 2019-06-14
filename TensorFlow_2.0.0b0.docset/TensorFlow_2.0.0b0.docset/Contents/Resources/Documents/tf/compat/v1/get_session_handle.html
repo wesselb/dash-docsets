@@ -1,0 +1,33 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.get_session_handle" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.get_session_handle" class="dashAnchor"></a><h1 id="tf.compat.v1.get_session_handle">tf.compat.v1.get_session_handle</h1>
+<p>Return the handle of <code>data</code>.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.get_session_handle(
+    data,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/session_ops.py"><code>python/ops/session_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>This is EXPERIMENTAL and subject to change.</p>
+<p>Keep <code>data</code> &quot;in-place&quot; in the runtime and create a handle that can be used to retrieve <code>data</code> in a subsequent run().</p>
+<p>Combined with <code>get_session_tensor</code>, we can keep a tensor produced in one run call in place, and use it as the input in a future run call.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>data</code></b>: A tensor to be stored in the session.</li>
+<li><b><code>name</code></b>: Optional name prefix for the return tensor.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A scalar string tensor representing a unique handle for <code>data</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>data</code> is not a Tensor.</li>
+</ul>
+<h4 id="example">Example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">c <span class="op">=</span> tf.multiply(a, b)
+h <span class="op">=</span> tf.compat.v1.get_session_handle(c)
+h <span class="op">=</span> sess.run(h)
+
+p, a <span class="op">=</span> tf.compat.v1.get_session_tensor(h.handle, tf.float32)
+b <span class="op">=</span> tf.multiply(a, <span class="dv">10</span>)
+c <span class="op">=</span> sess.run(b, feed_dict<span class="op">=</span>{p: h.handle})</code></pre></div>

@@ -1,0 +1,35 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.quantization.fake_quant_with_min_max_args_gradient" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.quantization.fake_quant_with_min_max_args_gradient" class="dashAnchor"></a><h1 id="tf.quantization.fake_quant_with_min_max_args_gradient">tf.quantization.fake_quant_with_min_max_args_gradient</h1>
+<p>Compute gradients for a FakeQuantWithMinMaxArgs operation.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.fake_quant_with_min_max_args_gradient</code></li>
+<li><code>tf.compat.v1.quantization.fake_quant_with_min_max_args_gradient</code></li>
+<li><code>tf.compat.v2.quantization.fake_quant_with_min_max_args_gradient</code></li>
+<li><code>tf.quantization.fake_quant_with_min_max_args_gradient</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.quantization.fake_quant_with_min_max_args_gradient(
+    gradients,
+    inputs,
+    <span class="bu">min</span><span class="op">=-</span><span class="dv">6</span>,
+    <span class="bu">max</span><span class="op">=</span><span class="dv">6</span>,
+    num_bits<span class="op">=</span><span class="dv">8</span>,
+    narrow_range<span class="op">=</span><span class="va">False</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in generated file: <code>python/ops/gen_array_ops.py</code>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>gradients</code></b>: A <code>Tensor</code> of type <code>float32</code>. Backpropagated gradients above the FakeQuantWithMinMaxArgs operation.</li>
+<li><b><code>inputs</code></b>: A <code>Tensor</code> of type <code>float32</code>. Values passed as inputs to the FakeQuantWithMinMaxArgs operation.</li>
+<li><b><code>min</code></b>: An optional <code>float</code>. Defaults to <code>-6</code>.</li>
+<li><b><code>max</code></b>: An optional <code>float</code>. Defaults to <code>6</code>.</li>
+<li><b><code>num_bits</code></b>: An optional <code>int</code>. Defaults to <code>8</code>.</li>
+<li><b><code>narrow_range</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>float32</code>.</p>

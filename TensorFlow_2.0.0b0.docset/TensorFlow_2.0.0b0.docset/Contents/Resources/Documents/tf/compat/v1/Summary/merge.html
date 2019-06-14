@@ -1,0 +1,28 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.summary.merge" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.summary.merge" class="dashAnchor"></a><h1 id="tf.compat.v1.summary.merge">tf.compat.v1.summary.merge</h1>
+<p>Merges summaries.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.summary.merge(
+    inputs,
+    collections<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/summary/summary.py"><code>python/summary/summary.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>This op creates a <a href="https://www.tensorflow.org/code/tensorflow/core/framework/summary.proto"><code>Summary</code></a> protocol buffer that contains the union of all the values in the input summaries.</p>
+<p>When the Op is run, it reports an <code>InvalidArgument</code> error if multiple values in the summaries to merge use the same tag.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>inputs</code></b>: A list of <code>string</code> <code>Tensor</code> objects containing serialized <code>Summary</code> protocol buffers.</li>
+<li><b><code>collections</code></b>: Optional list of graph collections keys. The new summary op is added to these collections. Defaults to <code>[]</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A scalar <code>Tensor</code> of type <code>string</code>. The serialized <code>Summary</code> protocol buffer resulting from the merging.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>RuntimeError</code></b>: If called with eager mode enabled.</li>
+</ul>
+<h4 id="eager-compatibility">Eager Compatibility</h4>
+<p>Not compatible with eager execution. To write TensorBoard summaries under eager execution, use <code>tf.contrib.summary</code> instead.</p>

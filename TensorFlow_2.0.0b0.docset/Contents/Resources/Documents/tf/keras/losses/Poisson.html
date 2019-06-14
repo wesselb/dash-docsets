@@ -1,0 +1,39 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.losses.poisson" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.keras.losses.Poisson" class="dashAnchor"></a><a name="//apple_ref/cpp/Function/tf.keras.losses.poisson" class="dashAnchor"></a><h1 id="tf.keras.losses.poisson">tf.keras.losses.poisson</h1>
+<p>Computes the Poisson loss between y_true and y_pred.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.keras.losses.poisson</code></li>
+<li><code>tf.compat.v1.keras.metrics.poisson</code></li>
+<li><code>tf.compat.v2.keras.losses.poisson</code></li>
+<li><code>tf.compat.v2.keras.metrics.poisson</code></li>
+<li><code>tf.compat.v2.losses.poisson</code></li>
+<li><code>tf.compat.v2.metrics.poisson</code></li>
+<li><code>tf.keras.losses.poisson</code></li>
+<li><code>tf.keras.metrics.poisson</code></li>
+<li><code>tf.losses.poisson</code></li>
+<li><code>tf.metrics.poisson</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.keras.losses.poisson(
+    y_true,
+    y_pred
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/losses.py"><code>python/keras/losses.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>The Poisson loss is the mean of the elements of the <code>Tensor</code> <code>y_pred - y_true * log(y_pred)</code>.</p>
+<h4 id="usage">Usage:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">loss <span class="op">=</span> tf.keras.losses.poisson([<span class="fl">1.4</span>, <span class="fl">9.3</span>, <span class="fl">2.2</span>], [<span class="fl">4.3</span>, <span class="fl">8.2</span>, <span class="fl">12.2</span>])
+<span class="bu">print</span>(<span class="st">&#39;Loss: &#39;</span>, loss.numpy())  <span class="co"># Loss: -0.8045559</span></code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>y_true</code></b>: Tensor of true targets.</li>
+<li><b><code>y_pred</code></b>: Tensor of predicted targets.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> with the mean Poisson loss.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>InvalidArgumentError</code></b>: If <code>y_true</code> and <code>y_pred</code> have incompatible shapes.</li>
+</ul>

@@ -1,0 +1,50 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.sparse_placeholder" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.sparse_placeholder" class="dashAnchor"></a><h1 id="tf.compat.v1.sparse_placeholder">tf.compat.v1.sparse_placeholder</h1>
+<p>Inserts a placeholder for a sparse tensor that will be always fed.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.sparse.placeholder</code></li>
+<li><code>tf.compat.v1.sparse_placeholder</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.sparse_placeholder(
+    dtype,
+    shape<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/array_ops.py"><code>python/ops/array_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p><strong>Important</strong>: This sparse tensor will produce an error if evaluated. Its value must be fed using the <code>feed_dict</code> optional argument to <code>Session.run()</code>, <code>Tensor.eval()</code>, or <code>Operation.run()</code>.</p>
+<h4 id="for-example">For example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">x <span class="op">=</span> tf.compat.v1.sparse.placeholder(tf.float32)
+y <span class="op">=</span> tf.sparse.reduce_sum(x)
+
+<span class="cf">with</span> tf.compat.v1.Session() <span class="im">as</span> sess:
+  <span class="bu">print</span>(sess.run(y))  <span class="co"># ERROR: will fail because x was not fed.</span>
+
+  indices <span class="op">=</span> np.array([[<span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">0</span>], [<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">1</span>]], dtype<span class="op">=</span>np.int64)
+  values <span class="op">=</span> np.array([<span class="fl">1.0</span>, <span class="fl">2.0</span>], dtype<span class="op">=</span>np.float32)
+  shape <span class="op">=</span> np.array([<span class="dv">7</span>, <span class="dv">9</span>, <span class="dv">2</span>], dtype<span class="op">=</span>np.int64)
+  <span class="bu">print</span>(sess.run(y, feed_dict<span class="op">=</span>{
+    x: tf.compat.v1.SparseTensorValue(indices, values, shape)}))  <span class="co"># Will</span>
+    succeed.
+  <span class="bu">print</span>(sess.run(y, feed_dict<span class="op">=</span>{
+    x: (indices, values, shape)}))  <span class="co"># Will succeed.</span>
+
+  sp <span class="op">=</span> tf.SparseTensor(indices<span class="op">=</span>indices, values<span class="op">=</span>values, dense_shape<span class="op">=</span>shape)
+  sp_value <span class="op">=</span> sp.<span class="bu">eval</span>(session<span class="op">=</span>sess)
+  <span class="bu">print</span>(sess.run(y, feed_dict<span class="op">=</span>{x: sp_value}))  <span class="co"># Will succeed.</span></code></pre></div>
+<p><span class="citation">@compatibility</span>{eager} Placeholders are not compatible with eager execution.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>dtype</code></b>: The type of <code>values</code> elements in the tensor to be fed.</li>
+<li><b><code>shape</code></b>: The shape of the tensor to be fed (optional). If the shape is not specified, you can feed a sparse tensor of any shape.</li>
+<li><b><code>name</code></b>: A name for prefixing the operations (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>SparseTensor</code> that may be used as a handle for feeding a value, but not evaluated directly.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>RuntimeError</code></b>: if eager execution is enabled</li>
+</ul>

@@ -1,0 +1,30 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.backend.normalize_batch_in_training" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.keras.backend.normalize_batch_in_training" class="dashAnchor"></a><h1 id="tf.keras.backend.normalize_batch_in_training">tf.keras.backend.normalize_batch_in_training</h1>
+<p>Computes mean and std for batch then apply batch_normalization on batch.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.keras.backend.normalize_batch_in_training</code></li>
+<li><code>tf.compat.v2.keras.backend.normalize_batch_in_training</code></li>
+<li><code>tf.keras.backend.normalize_batch_in_training</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.keras.backend.normalize_batch_in_training(
+    x,
+    gamma,
+    beta,
+    reduction_axes,
+    epsilon<span class="op">=</span><span class="fl">0.001</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/backend.py"><code>python/keras/backend.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>x</code></b>: Input tensor or variable.</li>
+<li><b><code>gamma</code></b>: Tensor by which to scale the input.</li>
+<li><b><code>beta</code></b>: Tensor with which to center the input.</li>
+<li><b><code>reduction_axes</code></b>: iterable of integers, axes over which to normalize.</li>
+<li><b><code>epsilon</code></b>: Fuzz factor.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A tuple length of 3, <code>(normalized_tensor, mean, variance)</code>.</p>

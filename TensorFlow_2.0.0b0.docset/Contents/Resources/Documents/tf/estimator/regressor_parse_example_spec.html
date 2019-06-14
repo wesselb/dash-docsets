@@ -1,0 +1,91 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.estimator.regressor_parse_example_spec" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.estimator.regressor_parse_example_spec" class="dashAnchor"></a><h1 id="tf.estimator.regressor_parse_example_spec">tf.estimator.regressor_parse_example_spec</h1>
+<p>Generates parsing spec for tf.parse_example to be used with regressors.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v2.estimator.regressor_parse_example_spec</code></li>
+<li><code>tf.estimator.regressor_parse_example_spec</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.estimator.regressor_parse_example_spec(
+    feature_columns,
+    label_key,
+    label_dtype<span class="op">=</span>tf.dtypes.float32,
+    label_default<span class="op">=</span><span class="va">None</span>,
+    label_dimension<span class="op">=</span><span class="dv">1</span>,
+    weight_column<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://github.com/tensorflow/estimator/tree/master/tensorflow_estimator/python/estimator/canned/parsing_utils.py"><code>python/estimator/canned/parsing_utils.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>If users keep data in tf.Example format, they need to call tf.parse_example with a proper feature spec. There are two main things that this utility helps:</p>
+<ul>
+<li>Users need to combine parsing spec of features with labels and weights (if any) since they are all parsed from same tf.Example instance. This utility combines these specs.</li>
+<li>It is difficult to map expected label by a regressor such as <code>DNNRegressor</code> to corresponding tf.parse_example spec. This utility encodes it by getting related information from users (key, dtype).</li>
+</ul>
+<p>Example output of parsing spec:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Define features and transformations</span>
+feature_b <span class="op">=</span> tf.feature_column.numeric_column(...)
+feature_c_bucketized <span class="op">=</span> tf.feature_column.bucketized_column(
+  tf.feature_column.numeric_column(<span class="st">&quot;feature_c&quot;</span>), ...)
+feature_a_x_feature_c <span class="op">=</span> tf.feature_column.crossed_column(
+    columns<span class="op">=</span>[<span class="st">&quot;feature_a&quot;</span>, feature_c_bucketized], ...)
+
+feature_columns <span class="op">=</span> [feature_b, feature_c_bucketized, feature_a_x_feature_c]
+parsing_spec <span class="op">=</span> tf.estimator.regressor_parse_example_spec(
+    feature_columns, label_key<span class="op">=</span><span class="st">&#39;my-label&#39;</span>)
+
+<span class="co"># For the above example, regressor_parse_example_spec would return the dict:</span>
+<span class="cf">assert</span> parsing_spec <span class="op">==</span> {
+  <span class="st">&quot;feature_a&quot;</span>: parsing_ops.VarLenFeature(tf.string),
+  <span class="st">&quot;feature_b&quot;</span>: parsing_ops.FixedLenFeature([<span class="dv">1</span>], dtype<span class="op">=</span>tf.float32),
+  <span class="st">&quot;feature_c&quot;</span>: parsing_ops.FixedLenFeature([<span class="dv">1</span>], dtype<span class="op">=</span>tf.float32)
+  <span class="st">&quot;my-label&quot;</span> : parsing_ops.FixedLenFeature([<span class="dv">1</span>], dtype<span class="op">=</span>tf.float32)
+}</code></pre></div>
+<p>Example usage with a regressor:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">feature_columns <span class="op">=</span> <span class="co"># define features via tf.feature_column</span>
+estimator <span class="op">=</span> DNNRegressor(
+    hidden_units<span class="op">=</span>[<span class="dv">256</span>, <span class="dv">64</span>, <span class="dv">16</span>],
+    feature_columns<span class="op">=</span>feature_columns,
+    weight_column<span class="op">=</span><span class="st">&#39;example-weight&#39;</span>,
+    label_dimension<span class="op">=</span><span class="dv">3</span>)
+<span class="co"># This label configuration tells the regressor the following:</span>
+<span class="co"># * weights are retrieved with key &#39;example-weight&#39;</span>
+<span class="co"># * label is a 3 dimension tensor with float32 dtype.</span>
+
+
+<span class="co"># Input builders</span>
+<span class="kw">def</span> input_fn_train():  <span class="co"># Returns a tuple of features and labels.</span>
+  features <span class="op">=</span> tf.contrib.learn.read_keyed_batch_features(
+      file_pattern<span class="op">=</span>train_files,
+      batch_size<span class="op">=</span>batch_size,
+      <span class="co"># creates parsing configuration for tf.parse_example</span>
+      features<span class="op">=</span>tf.estimator.classifier_parse_example_spec(
+          feature_columns,
+          label_key<span class="op">=</span><span class="st">&#39;my-label&#39;</span>,
+          label_dimension<span class="op">=</span><span class="dv">3</span>,
+          weight_column<span class="op">=</span><span class="st">&#39;example-weight&#39;</span>),
+      reader<span class="op">=</span>tf.RecordIOReader)
+   labels <span class="op">=</span> features.pop(<span class="st">&#39;my-label&#39;</span>)
+   <span class="cf">return</span> features, labels
+
+estimator.train(input_fn<span class="op">=</span>input_fn_train)</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>feature_columns</code></b>: An iterable containing all feature columns. All items should be instances of classes derived from <code>_FeatureColumn</code>.</li>
+<li><b><code>label_key</code></b>: A string identifying the label. It means tf.Example stores labels with this key.</li>
+<li><b><code>label_dtype</code></b>: A <code>tf.dtype</code> identifies the type of labels. By default it is <a href="../../tf.md#float32"><code>tf.float32</code></a>.</li>
+<li><b><code>label_default</code></b>: used as label if label_key does not exist in given tf.Example. By default default_value is none, which means <code>tf.parse_example</code> will error out if there is any missing label.</li>
+<li><b><code>label_dimension</code></b>: Number of regression targets per example. This is the size of the last dimension of the labels and logits <code>Tensor</code> objects (typically, these have shape <code>[batch_size, label_dimension]</code>).</li>
+<li><b><code>weight_column</code></b>: A string or a <code>NumericColumn</code> created by <a href="../../tf/feature_column/numeric_column.html"><code>tf.feature_column.numeric_column</code></a> defining feature column representing weights. It is used to down weight or boost examples during training. It will be multiplied by the loss of the example. If it is a string, it is used as a key to fetch weight tensor from the <code>features</code>. If it is a <code>NumericColumn</code>, raw tensor is fetched by key <code>weight_column.key</code>, then weight_column.normalizer_fn is applied on it to get weight tensor.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A dict mapping each feature key to a <code>FixedLenFeature</code> or <code>VarLenFeature</code> value.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If label is used in <code>feature_columns</code>.</li>
+<li><b><code>ValueError</code></b>: If weight_column is used in <code>feature_columns</code>.</li>
+<li><b><code>ValueError</code></b>: If any of the given <code>feature_columns</code> is not a <code>_FeatureColumn</code> instance.</li>
+<li><b><code>ValueError</code></b>: If <code>weight_column</code> is not a <code>NumericColumn</code> instance.</li>
+<li><b><code>ValueError</code></b>: if label_key is None.</li>
+</ul>

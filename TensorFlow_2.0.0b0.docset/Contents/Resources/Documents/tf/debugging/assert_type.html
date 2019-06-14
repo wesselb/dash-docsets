@@ -1,0 +1,30 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.debugging.assert_type" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.debugging.assert_type" class="dashAnchor"></a><h1 id="tf.debugging.assert_type">tf.debugging.assert_type</h1>
+<p>Asserts that the given <code>Tensor</code> is of the specified type.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v2.debugging.assert_type</code></li>
+<li><code>tf.debugging.assert_type</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.debugging.assert_type(
+    tensor,
+    tf_type,
+    message<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/check_ops.py"><code>python/ops/check_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>This can always be checked statically, so this method returns nothing.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>tensor</code></b>: A <code>Tensor</code>.</li>
+<li><b><code>tf_type</code></b>: A tensorflow type (<code>dtypes.float32</code>, <a href="../../tf.md#int64"><code>tf.int64</code></a>, <code>dtypes.bool</code>, etc).</li>
+<li><b><code>message</code></b>: A string to prefix to the default message.</li>
+<li><b><code>name</code></b>: A name for this operation. Defaults to &quot;assert_type&quot;</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: If the tensor's data type doesn't match <code>tf_type</code>.</li>
+</ul>

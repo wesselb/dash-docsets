@@ -1,0 +1,31 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.math.lbeta" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.math.lbeta" class="dashAnchor"></a><h1 id="tf.math.lbeta">tf.math.lbeta</h1>
+<p>Computes \(ln(|Beta(x)|)\), reducing along the last dimension.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.lbeta</code></li>
+<li><code>tf.compat.v1.math.lbeta</code></li>
+<li><code>tf.compat.v2.math.lbeta</code></li>
+<li><code>tf.math.lbeta</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.math.lbeta(
+    x,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/special_math_ops.py"><code>python/ops/special_math_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Given one-dimensional <code>z = [z_0,...,z_{K-1}]</code>, we define</p>
+<p><br /><span class="math display"><em>B</em><em>e</em><em>t</em><em>a</em>(<em>z</em>)=∏<sub><em>j</em></sub><em>G</em><em>a</em><em>m</em><em>m</em><em>a</em>(<em>z</em><sub><em>j</em></sub>)/<em>G</em><em>a</em><em>m</em><em>m</em><em>a</em>(∑<sub><em>j</em></sub><em>z</em><sub><em>j</em></sub>)</span><br /></p>
+<p>And for <code>n + 1</code> dimensional <code>x</code> with shape <code>[N1, ..., Nn, K]</code>, we define <br /><span class="math display"><em>l</em><em>b</em><em>e</em><em>t</em><em>a</em>(<em>x</em>)[<em>i</em>1, ..., <em>i</em><em>n</em>]=<em>L</em><em>o</em><em>g</em>(|<em>B</em><em>e</em><em>t</em><em>a</em>(<em>x</em>[<em>i</em>1, ..., <em>i</em><em>n</em>, :])|)</span><br />.</p>
+<p>In other words, the last dimension is treated as the <code>z</code> vector.</p>
+<p>Note that if <code>z = [u, v]</code>, then \(Beta(z) = int_0^1 t^{u-1} (1 - t)^{v-1} dt\), which defines the traditional bivariate beta function.</p>
+<p>If the last dimension is empty, we follow the convention that the sum over the empty set is zero, and the product is one.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A rank <code>n + 1</code> <code>Tensor</code>, <code>n &gt;= 0</code> with type <code>float</code>, or <code>double</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The logarithm of \(|Beta(x)|\) reducing along the last dimension.</p>

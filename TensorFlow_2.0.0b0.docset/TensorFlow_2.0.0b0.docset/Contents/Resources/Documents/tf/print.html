@@ -1,0 +1,69 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.print" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.print" class="dashAnchor"></a><h1 id="tf.print">tf.print</h1>
+<p>Print the specified inputs.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.print</code></li>
+<li><code>tf.compat.v2.print</code></li>
+<li><code>tf.print</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.<span class="bu">print</span>(
+    <span class="op">*</span>inputs,
+    <span class="op">**</span>kwargs
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/logging_ops.py"><code>python/ops/logging_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Returns an operator that prints the specified inputs to a desired output stream or logging level. The inputs may be dense or sparse Tensors, primitive python objects, data structures that contain Tensors, and printable python objects. Printed tensors will recursively show the first and last <code>summarize</code> elements of each dimension.</p>
+<p>With eager execution enabled and/or inside a <code>tf.contrib.eager.defun</code> this operator will automatically execute, and users only need to call <a href="../tf/print.html"><code>tf.print</code></a> without using the return value. When constructing graphs outside of a <code>tf.contrib.eager.defun</code>, one must either include the returned op in the input to <code>session.run</code>, or use the operator as a control dependency for executed ops by specifying <code>with tf.control_dependencies([print_op])</code>.</p>
+<h4 id="example">Example:</h4>
+<p>Single-input usage:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.enable_eager_execution()
+tensor <span class="op">=</span> tf.<span class="bu">range</span>(<span class="dv">10</span>)
+tf.<span class="bu">print</span>(tensor, output_stream<span class="op">=</span>sys.stderr)</code></pre></div>
+<p>(This prints &quot;[0 1 2 ... 7 8 9]&quot; to sys.stderr)</p>
+<p>Multi-input usage:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.enable_eager_execution()
+tensor <span class="op">=</span> tf.<span class="bu">range</span>(<span class="dv">10</span>)
+tf.<span class="bu">print</span>(<span class="st">&quot;tensors:&quot;</span>, tensor, {<span class="dv">2</span>: tensor <span class="op">*</span> <span class="dv">2</span>}, output_stream<span class="op">=</span>sys.stdout)</code></pre></div>
+<p>(This prints &quot;tensors: [0 1 2 ... 7 8 9] {2: [0 2 4 ... 14 16 18]}&quot; to sys.stdout)</p>
+<p>Usage in a defun:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.enable_eager_execution()
+
+<span class="at">@tf.contrib.eager.defun</span>
+<span class="kw">def</span> f():
+    tensor <span class="op">=</span> tf.<span class="bu">range</span>(<span class="dv">10</span>)
+    tf.<span class="bu">print</span>(tensor, output_stream<span class="op">=</span>sys.stderr)
+    <span class="cf">return</span> tensor
+
+range_tensor <span class="op">=</span> f()</code></pre></div>
+<p>(This prints &quot;[0 1 2 ... 7 8 9]&quot; to sys.stderr)</p>
+<p>Usage when constructing graphs:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">sess <span class="op">=</span> tf.compat.v1.Session()
+<span class="cf">with</span> sess.as_default():
+    tensor <span class="op">=</span> tf.<span class="bu">range</span>(<span class="dv">10</span>)
+    print_op <span class="op">=</span> tf.<span class="bu">print</span>(<span class="st">&quot;tensors:&quot;</span>, tensor, {<span class="dv">2</span>: tensor <span class="op">*</span> <span class="dv">2</span>},
+                        output_stream<span class="op">=</span>sys.stdout)
+    <span class="cf">with</span> tf.control_dependencies([print_op]):
+      tripled_tensor <span class="op">=</span> tensor <span class="op">*</span> <span class="dv">3</span>
+    sess.run(tripled_tensor)</code></pre></div>
+<p>(This prints &quot;tensors: [0 1 2 ... 7 8 9] {2: [0 2 4 ... 14 16 18]}&quot; to sys.stdout)</p>
+<p>Note: In Jupyter notebooks and colabs, this operator prints to the notebook cell outputs. It will not write to the notebook kernel's console logs.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>*inputs</code></b>: Positional arguments that are the inputs to print. Inputs in the printed output will be separated by spaces. Inputs may be python primitives, tensors, data structures such as dicts and lists that may contain tensors (with the data structures possibly nested in arbitrary ways), and printable python objects.</li>
+<li><b><code>output_stream</code></b>: The output stream, logging level, or file to print to. Defaults to sys.stderr, but sys.stdout, tf.compat.v1.logging.info, tf.compat.v1.logging.warning, and tf.compat.v1.logging.error are also supported. To print to a file, pass a string started with &quot;file://&quot; followed by the file path, e.g., &quot;file:///tmp/foo.out&quot;.</li>
+<li><b><code>summarize</code></b>: The first and last <code>summarize</code> elements within each dimension are recursively printed per Tensor. If None, then the first 3 and last 3 elements of each dimension are printed for each tensor. If set to -1, it will print all elements of every tensor.</li>
+<li><b><code>sep</code></b>: The string to use to separate the inputs. Defaults to &quot; &quot;.</li>
+<li><b><code>end</code></b>: End character that is appended at the end the printed string. Defaults to the newline character.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A print operator that prints the specified inputs in the specified output stream or logging level.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If an unsupported output stream is specified.</li>
+</ul>
+<h4 id="python2-compatibility">Python2 Compatibility</h4>
+<p>In python 2.7, make sure to import the following: <code>from __future__ import print_function</code></p>

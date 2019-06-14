@@ -1,0 +1,27 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.backend.print_tensor" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.keras.backend.print_tensor" class="dashAnchor"></a><h1 id="tf.keras.backend.print_tensor">tf.keras.backend.print_tensor</h1>
+<p>Prints <code>message</code> and the tensor value when evaluated.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.keras.backend.print_tensor</code></li>
+<li><code>tf.compat.v2.keras.backend.print_tensor</code></li>
+<li><code>tf.keras.backend.print_tensor</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.keras.backend.print_tensor(
+    x,
+    message<span class="op">=</span><span class="st">&#39;&#39;</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/backend.py"><code>python/keras/backend.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Note that <code>print_tensor</code> returns a new tensor identical to <code>x</code> which should be used in the following code. Otherwise the print operation is not taken into account during evaluation.</p>
+<h4 id="example">Example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">   <span class="op">&gt;&gt;&gt;</span> x <span class="op">=</span> K.print_tensor(x, message<span class="op">=</span><span class="st">&quot;x is: &quot;</span>)</code></pre></div>
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>x</code></b>: Tensor to print.</li>
+<li><b><code>message</code></b>: Message to print jointly with the tensor.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The same tensor <code>x</code>, unchanged.</p>

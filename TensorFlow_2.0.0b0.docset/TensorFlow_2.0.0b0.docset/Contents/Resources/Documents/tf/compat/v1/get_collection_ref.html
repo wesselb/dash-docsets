@@ -1,0 +1,17 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.get_collection_ref" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.get_collection_ref" class="dashAnchor"></a><h1 id="tf.compat.v1.get_collection_ref">tf.compat.v1.get_collection_ref</h1>
+<p>Wrapper for <code>Graph.get_collection_ref()</code> using the default graph.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.get_collection_ref(key)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/framework/ops.py"><code>python/framework/ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>See <a href="../../../tf/Graph.md#get_collection_ref"><code>tf.Graph.get_collection_ref</code></a> for more details.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>key</code></b>: The key for the collection. For example, the <code>GraphKeys</code> class contains many standard names for collections.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The list of values in the collection with the given <code>name</code>, or an empty list if no value has been added to that collection. Note that this returns the collection list itself, which can be modified in place to change the collection.</p>
+<h4 id="eager-compatibility">Eager Compatibility</h4>
+<p>Collections are not supported when eager execution is enabled.</p>

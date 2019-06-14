@@ -1,0 +1,23 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.assign_add" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.assign_add" class="dashAnchor"></a><h1 id="tf.compat.v1.assign_add">tf.compat.v1.assign_add</h1>
+<p>Update <code>ref</code> by adding <code>value</code> to it.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.assign_add(
+    ref,
+    value,
+    use_locking<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/state_ops.py"><code>python/ops/state_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>This operation outputs &quot;ref&quot; after the update is done. This makes it easier to chain operations that need to use the reset value. Unlike <a href="../../../tf/math/add.html"><code>tf.math.add</code></a>, this op does not broadcast. <code>ref</code> and <code>value</code> must have the same shape.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>ref</code></b>: A mutable <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int64</code>, <code>int32</code>, <code>uint8</code>, <code>uint16</code>, <code>int16</code>, <code>int8</code>, <code>complex64</code>, <code>complex128</code>, <code>qint8</code>, <code>quint8</code>, <code>qint32</code>, <code>half</code>. Should be from a <code>Variable</code> node.</li>
+<li><b><code>value</code></b>: A <code>Tensor</code>. Must have the same shape and dtype as <code>ref</code>. The value to be added to the variable.</li>
+<li><b><code>use_locking</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>. If True, the addition will be protected by a lock; otherwise the behavior is undefined, but may exhibit less contention.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Same as &quot;ref&quot;. Returned as a convenience for operations that want to use the new value after the variable has been updated.</p>

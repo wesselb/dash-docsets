@@ -1,0 +1,20 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.load_file_system_library" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.load_file_system_library" class="dashAnchor"></a><h1 id="tf.compat.v1.load_file_system_library">tf.compat.v1.load_file_system_library</h1>
+<p>Loads a TensorFlow plugin, containing file system implementation. (deprecated)</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.load_file_system_library(library_filename)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/framework/load_library.py"><code>python/framework/load_library.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Warning: THIS FUNCTION IS DEPRECATED. It will be removed in a future version. Instructions for updating: Use <a href="../../../tf/load_library.html"><code>tf.load_library</code></a> instead.</p>
+<p>Pass <code>library_filename</code> to a platform-specific mechanism for dynamically loading a library. The rules for determining the exact location of the library are platform-specific and are not documented here.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>library_filename</code></b>: Path to the plugin. Relative or absolute filesystem path to a dynamic library file.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>None.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>RuntimeError</code></b>: when unable to load the library.</li>
+</ul>

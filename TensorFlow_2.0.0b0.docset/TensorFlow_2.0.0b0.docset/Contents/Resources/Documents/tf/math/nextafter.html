@@ -1,0 +1,30 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.math.nextafter" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.math.nextafter" class="dashAnchor"></a><h1 id="tf.math.nextafter">tf.math.nextafter</h1>
+<p>Returns the next representable value of <code>x1</code> in the direction of <code>x2</code>, element-wise.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.math.nextafter</code></li>
+<li><code>tf.compat.v2.math.nextafter</code></li>
+<li><code>tf.math.nextafter</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.math.nextafter(
+    x1,
+    x2,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in generated file: <code>python/ops/gen_math_ops.py</code>.</p>
+<!-- Placeholder for "Used in" -->
+<p>This operation returns the same result as the C++ std::nextafter function.</p>
+<p>It can also return a subnormal number.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>x1</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float64</code>, <code>float32</code>.</li>
+<li><b><code>x2</code></b>: A <code>Tensor</code>. Must have the same type as <code>x1</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>x1</code>.</p>
+<h4 id="cpp-compatibility">Cpp Compatibility</h4>
+<p>Equivalent to C++ std::nextafter function.</p>

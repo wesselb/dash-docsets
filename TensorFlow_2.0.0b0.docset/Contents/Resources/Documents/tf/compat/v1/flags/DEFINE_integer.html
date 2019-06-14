@@ -1,0 +1,31 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.flags.DEFINE_integer" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.compat.v1.flags.DEFINE_integer" class="dashAnchor"></a><h1 id="tf.compat.v1.flags.define_integer">tf.compat.v1.flags.DEFINE_integer</h1>
+<p>Registers a flag whose value must be an integer.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.app.flags.DEFINE_integer</code></li>
+<li><code>tf.compat.v1.flags.DEFINE_integer</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.flags.DEFINE_integer(
+    name,
+    default,
+    <span class="bu">help</span>,
+    lower_bound<span class="op">=</span><span class="va">None</span>,
+    upper_bound<span class="op">=</span><span class="va">None</span>,
+    flag_values<span class="op">=</span>_flagvalues.FLAGS,
+    <span class="op">**</span>args
+)</code></pre></div>
+<!-- Placeholder for "Used in" -->
+<p>If lower_bound, or upper_bound are set, then this flag must be within the given range.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>name</code></b>: str, the flag name.</li>
+<li><b><code>default</code></b>: int|str|None, the default value of the flag.</li>
+<li><b><code>help</code></b>: str, the help message.</li>
+<li><b><code>lower_bound</code></b>: int, min value of the flag.</li>
+<li><b><code>upper_bound</code></b>: int, max value of the flag.</li>
+<li><b><code>flag_values</code></b>: FlagValues, the FlagValues instance with which the flag will be registered. This should almost never need to be overridden.</li>
+<li><b><code>**args</code></b>: dict, the extra keyword args that are passed to DEFINE.</li>
+</ul>

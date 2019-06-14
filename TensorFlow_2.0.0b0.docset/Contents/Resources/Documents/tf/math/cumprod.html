@@ -1,0 +1,39 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.math.cumprod" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.math.cumprod" class="dashAnchor"></a><h1 id="tf.math.cumprod">tf.math.cumprod</h1>
+<p>Compute the cumulative product of the tensor <code>x</code> along <code>axis</code>.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.cumprod</code></li>
+<li><code>tf.compat.v1.math.cumprod</code></li>
+<li><code>tf.compat.v2.math.cumprod</code></li>
+<li><code>tf.math.cumprod</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.math.cumprod(
+    x,
+    axis<span class="op">=</span><span class="dv">0</span>,
+    exclusive<span class="op">=</span><span class="va">False</span>,
+    reverse<span class="op">=</span><span class="va">False</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/math_ops.py"><code>python/ops/math_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>By default, this op performs an inclusive cumprod, which means that the first element of the input is identical to the first element of the output:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.math.cumprod([a, b, c])  <span class="co"># [a, a * b, a * b * c]</span></code></pre></div>
+<p>By setting the <code>exclusive</code> kwarg to <code>True</code>, an exclusive cumprod is performed instead:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.math.cumprod([a, b, c], exclusive<span class="op">=</span><span class="va">True</span>)  <span class="co"># [1, a, a * b]</span></code></pre></div>
+<p>By setting the <code>reverse</code> kwarg to <code>True</code>, the cumprod is performed in the opposite direction:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.math.cumprod([a, b, c], reverse<span class="op">=</span><span class="va">True</span>)  <span class="co"># [a * b * c, b * c, c]</span></code></pre></div>
+<p>This is more efficient than using separate <a href="../../tf/reverse.html"><code>tf.reverse</code></a> ops. The <code>reverse</code> and <code>exclusive</code> kwargs can also be combined:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.math.cumprod([a, b, c], exclusive<span class="op">=</span><span class="va">True</span>, reverse<span class="op">=</span><span class="va">True</span>)  <span class="co"># [b * c, c, 1]</span></code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int64</code>, <code>int32</code>, <code>uint8</code>, <code>uint16</code>, <code>int16</code>, <code>int8</code>, <code>complex64</code>, <code>complex128</code>, <code>qint8</code>, <code>quint8</code>, <code>qint32</code>, <code>half</code>.</li>
+<li><b><code>axis</code></b>: A <code>Tensor</code> of type <code>int32</code> (default: 0). Must be in the range <code>[-rank(x), rank(x))</code>.</li>
+<li><b><code>exclusive</code></b>: If <code>True</code>, perform exclusive cumprod.</li>
+<li><b><code>reverse</code></b>: A <code>bool</code> (default: False).</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>

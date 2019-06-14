@@ -1,0 +1,75 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.strings.substr" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.strings.substr" class="dashAnchor"></a><h1 id="tf.strings.substr">tf.strings.substr</h1>
+<p>Return substrings from <code>Tensor</code> of strings.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v2.strings.substr</code></li>
+<li><code>tf.strings.substr</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.strings.substr(
+    <span class="bu">input</span>,
+    pos,
+    <span class="bu">len</span>,
+    unit<span class="op">=</span><span class="st">&#39;BYTE&#39;</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/string_ops.py"><code>python/ops/string_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>For each string in the input <code>Tensor</code>, creates a substring starting at index <code>pos</code> with a total length of <code>len</code>.</p>
+<p>If <code>len</code> defines a substring that would extend beyond the length of the input string, then as many characters as possible are used.</p>
+<p>A negative <code>pos</code> indicates distance within the string backwards from the end.</p>
+<p>If <code>pos</code> specifies an index which is out of range for any of the input strings, then an <code>InvalidArgumentError</code> is thrown.</p>
+<p><code>pos</code> and <code>len</code> must have the same shape, otherwise a <code>ValueError</code> is thrown on Op creation.</p>
+<p><em>NOTE</em>: <code>Substr</code> supports broadcasting up to two dimensions. More about broadcasting <a href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">here</a></p>
+<hr />
+<p>Examples</p>
+<p>Using scalar <code>pos</code> and <code>len</code>:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="bu">input</span> <span class="op">=</span> [b<span class="st">&#39;Hello&#39;</span>, b<span class="st">&#39;World&#39;</span>]
+position <span class="op">=</span> <span class="dv">1</span>
+length <span class="op">=</span> <span class="dv">3</span>
+
+output <span class="op">=</span> [b<span class="st">&#39;ell&#39;</span>, b<span class="st">&#39;orl&#39;</span>]</code></pre></div>
+<p>Using <code>pos</code> and <code>len</code> with same shape as <code>input</code>:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="bu">input</span> <span class="op">=</span> [[b<span class="st">&#39;ten&#39;</span>, b<span class="st">&#39;eleven&#39;</span>, b<span class="st">&#39;twelve&#39;</span>],
+         [b<span class="st">&#39;thirteen&#39;</span>, b<span class="st">&#39;fourteen&#39;</span>, b<span class="st">&#39;fifteen&#39;</span>],
+         [b<span class="st">&#39;sixteen&#39;</span>, b<span class="st">&#39;seventeen&#39;</span>, b<span class="st">&#39;eighteen&#39;</span>]]
+position <span class="op">=</span> [[<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>],
+            [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>],
+            [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]]
+length <span class="op">=</span>   [[<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>],
+            [<span class="dv">4</span>, <span class="dv">3</span>, <span class="dv">2</span>],
+            [<span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>]]
+
+output <span class="op">=</span> [[b<span class="st">&#39;en&#39;</span>, b<span class="st">&#39;eve&#39;</span>, b<span class="st">&#39;lve&#39;</span>],
+          [b<span class="st">&#39;hirt&#39;</span>, b<span class="st">&#39;urt&#39;</span>, b<span class="st">&#39;te&#39;</span>],
+          [b<span class="st">&#39;ixtee&#39;</span>, b<span class="st">&#39;vente&#39;</span>, b<span class="st">&#39;hteen&#39;</span>]]</code></pre></div>
+<p>Broadcasting <code>pos</code> and <code>len</code> onto <code>input</code>:</p>
+<pre><code>input = [[b&#39;ten&#39;, b&#39;eleven&#39;, b&#39;twelve&#39;],
+         [b&#39;thirteen&#39;, b&#39;fourteen&#39;, b&#39;fifteen&#39;],
+         [b&#39;sixteen&#39;, b&#39;seventeen&#39;, b&#39;eighteen&#39;],
+         [b&#39;nineteen&#39;, b&#39;twenty&#39;, b&#39;twentyone&#39;]]
+position = [1, 2, 3]
+length =   [1, 2, 3]
+
+output = [[b&#39;e&#39;, b&#39;ev&#39;, b&#39;lve&#39;],
+          [b&#39;h&#39;, b&#39;ur&#39;, b&#39;tee&#39;],
+          [b&#39;i&#39;, b&#39;ve&#39;, b&#39;hte&#39;],
+          [b&#39;i&#39;, b&#39;en&#39;, b&#39;nty&#39;]]</code></pre>
+<p>Broadcasting <code>input</code> onto <code>pos</code> and <code>len</code>:</p>
+<pre><code>input = b&#39;thirteen&#39;
+position = [1, 5, 7]
+length =   [3, 2, 1]
+
+output = [b&#39;hir&#39;, b&#39;ee&#39;, b&#39;n&#39;]</code></pre>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code> of type <code>string</code>. Tensor of strings</li>
+<li><b><code>pos</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. Scalar defining the position of first character in each substring</li>
+<li><b><code>len</code></b>: A <code>Tensor</code>. Must have the same type as <code>pos</code>. Scalar defining the number of characters to include in each substring</li>
+<li><b><code>unit</code></b>: An optional <code>string</code> from: <code>&quot;BYTE&quot;, &quot;UTF8_CHAR&quot;</code>. Defaults to <code>&quot;BYTE&quot;</code>. The unit that is used to create the substring. One of: <code>&quot;BYTE&quot;</code> (for defining position and length by bytes) or <code>&quot;UTF8_CHAR&quot;</code> (for the UTF-8 encoded Unicode code points). The default is <code>&quot;BYTE&quot;</code>. Results are undefined if <code>unit=UTF8_CHAR</code> and the <code>input</code> strings do not contain structurally valid UTF-8.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>string</code>.</p>

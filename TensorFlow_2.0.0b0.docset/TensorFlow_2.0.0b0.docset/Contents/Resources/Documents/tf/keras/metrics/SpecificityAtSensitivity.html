@@ -1,0 +1,77 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.metrics.SpecificityAtSensitivity" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="reset_states"/> <meta itemprop="property" content="result"/> <meta itemprop="property" content="update_state"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.keras.metrics.SpecificityAtSensitivity" class="dashAnchor"></a><h1 id="tf.keras.metrics.specificityatsensitivity">tf.keras.metrics.SpecificityAtSensitivity</h1>
+<h2 id="class-specificityatsensitivity">Class <code>SpecificityAtSensitivity</code></h2>
+<p>Computes the specificity at a given sensitivity.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.keras.metrics.SpecificityAtSensitivity</code></li>
+<li>Class <code>tf.compat.v2.keras.metrics.SpecificityAtSensitivity</code></li>
+<li>Class <code>tf.compat.v2.metrics.SpecificityAtSensitivity</code></li>
+<li>Class <code>tf.keras.metrics.SpecificityAtSensitivity</code></li>
+<li>Class <code>tf.metrics.SpecificityAtSensitivity</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/metrics.py"><code>python/keras/metrics.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p><code>Sensitivity</code> measures the proportion of actual positives that are correctly identified as such (tp / (tp + fn)). <code>Specificity</code> measures the proportion of actual negatives that are correctly identified as such (tn / (tn + fp)).</p>
+<p>This metric creates four local variables, <code>true_positives</code>, <code>true_negatives</code>, <code>false_positives</code> and <code>false_negatives</code> that are used to compute the specificity at the given sensitivity. The threshold for the given sensitivity value is computed and used to evaluate the corresponding specificity.</p>
+<p>If <code>sample_weight</code> is <code>None</code>, weights default to 1. Use <code>sample_weight</code> of 0 to mask values.</p>
+<p>For additional information about specificity and sensitivity, see the following: https://en.wikipedia.org/wiki/Sensitivity_and_specificity</p>
+<h4 id="usage">Usage:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">m <span class="op">=</span> tf.keras.metrics.SpecificityAtSensitivity(<span class="fl">0.8</span>, num_thresholds<span class="op">=</span><span class="dv">1</span>)
+m.update_state([<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>], [<span class="dv">0</span>, <span class="fl">0.5</span>, <span class="fl">0.3</span>, <span class="fl">0.9</span>])
+<span class="bu">print</span>(<span class="st">&#39;Final result: &#39;</span>, m.result().numpy())  <span class="co"># Final result: 1.0</span></code></pre></div>
+<p>Usage with tf.keras API:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">model <span class="op">=</span> tf.keras.Model(inputs, outputs)
+model.<span class="bu">compile</span>(
+    <span class="st">&#39;sgd&#39;</span>,
+    loss<span class="op">=</span><span class="st">&#39;mse&#39;</span>,
+    metrics<span class="op">=</span>[tf.keras.metrics.SpecificityAtSensitivity()])</code></pre></div>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    sensitivity,
+    num_thresholds<span class="op">=</span><span class="dv">200</span>,
+    name<span class="op">=</span><span class="va">None</span>,
+    dtype<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Creates a <code>SpecificityAtSensitivity</code> instance.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>sensitivity</code></b>: A scalar value in range <code>[0, 1]</code>.</li>
+<li><b><code>num_thresholds</code></b>: (Optional) Defaults to 200. The number of thresholds to use for matching the given specificity.</li>
+<li><b><code>name</code></b>: (Optional) string name of the metric instance.</li>
+<li><b><code>dtype</code></b>: (Optional) data type of the metric result.</li>
+</ul>
+<h2 id="methods">Methods</h2>
+<h3 id="reset_states">
+<code>reset_states</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">reset_states()</code></pre></div>
+<p>Resets all of the metric state variables.</p>
+<p>This function is called between epochs/steps, when a metric is evaluated during training.</p>
+<h3 id="result">
+<code>result</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">result()</code></pre></div>
+<p>Computes and returns the metric value tensor.</p>
+<p>Result computation is an idempotent operation that simply calculates the metric value using the state variables.</p>
+<h3 id="update_state">
+<code>update_state</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">update_state(
+    y_true,
+    y_pred,
+    sample_weight<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Accumulates confusion matrix statistics.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>y_true</code></b>: The ground truth values.</li>
+<li><b><code>y_pred</code></b>: The predicted values.</li>
+<li><b><code>sample_weight</code></b>: Optional weighting of each example. Defaults to 1. Can be a <code>Tensor</code> whose rank is either 0, or the same rank as <code>y_true</code>, and must be broadcastable to <code>y_true</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Update op.</p>

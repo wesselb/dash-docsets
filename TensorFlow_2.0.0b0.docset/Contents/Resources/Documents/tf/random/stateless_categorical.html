@@ -1,0 +1,36 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.random.stateless_categorical" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.random.stateless_categorical" class="dashAnchor"></a><h1 id="tf.random.stateless_categorical">tf.random.stateless_categorical</h1>
+<p>Draws deterministic pseudorandom samples from a categorical distribution.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.random.stateless_categorical</code></li>
+<li><code>tf.compat.v2.random.stateless_categorical</code></li>
+<li><code>tf.random.stateless_categorical</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.random.stateless_categorical(
+    logits,
+    num_samples,
+    seed,
+    dtype<span class="op">=</span>tf.dtypes.int64,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/stateless_random_ops.py"><code>python/ops/stateless_random_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>This is a stateless version of <code>tf.categorical</code>: if run twice with the same seeds, it will produce the same pseudorandom numbers. The output is consistent across multiple runs on the same hardware (and between CPU and GPU), but may change between versions of TensorFlow or on non-CPU/GPU hardware.</p>
+<h4 id="example">Example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># samples has shape [1, 5], where each value is either 0 or 1 with equal</span>
+<span class="co"># probability.</span>
+samples <span class="op">=</span> tf.random.stateless_categorical(
+    tf.math.log([[<span class="dv">10</span>., <span class="dv">10</span>.]]), <span class="dv">5</span>, seed<span class="op">=</span>[<span class="dv">7</span>, <span class="dv">17</span>])</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>logits</code></b>: 2-D Tensor with shape <code>[batch_size, num_classes]</code>. Each slice <code>[i, :]</code> represents the unnormalized log-probabilities for all classes.</li>
+<li><b><code>num_samples</code></b>: 0-D. Number of independent samples to draw for each row slice.</li>
+<li><b><code>seed</code></b>: A shape [2] integer Tensor of seeds to the random number generator.</li>
+<li><b><code>dtype</code></b>: integer type to use for the output. Defaults to int64.</li>
+<li><b><code>name</code></b>: Optional name for the operation.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The drawn samples of shape <code>[batch_size, num_samples]</code>.</p>

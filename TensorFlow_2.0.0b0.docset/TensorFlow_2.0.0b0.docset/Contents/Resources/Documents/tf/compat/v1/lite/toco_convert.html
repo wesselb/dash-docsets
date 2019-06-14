@@ -1,0 +1,28 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.lite.toco_convert" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.lite.toco_convert" class="dashAnchor"></a><h1 id="tf.compat.v1.lite.toco_convert">tf.compat.v1.lite.toco_convert</h1>
+<p>Convert a model using TOCO. (deprecated)</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.lite.toco_convert(
+    input_data,
+    input_tensors,
+    output_tensors,
+    <span class="op">*</span>args,
+    <span class="op">**</span>kwargs
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/lite/python/convert.py"><code>lite/python/convert.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Warning: THIS FUNCTION IS DEPRECATED. It will be removed in a future version. Instructions for updating: Use <code>lite.TFLiteConverter</code> instead.</p>
+<p>Typically this function is used to convert from TensorFlow GraphDef to TFLite. Conversion can be customized by providing arguments that are forwarded to <code>build_toco_convert_protos</code> (see documentation for details). This function has been deprecated. Please use <code>lite.TFLiteConverter</code> instead.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input_data</code></b>: Input data (i.e. often <code>sess.graph_def</code>),</li>
+<li><b><code>input_tensors</code></b>: List of input tensors. Type and shape are computed using <code>foo.shape</code> and <code>foo.dtype</code>.</li>
+<li><b><code>output_tensors</code></b>: List of output tensors (only .name is used from this).</li>
+<li><b><code>*args</code></b>: See <code>build_toco_convert_protos</code>,</li>
+<li><b><code>**kwargs</code></b>: See <code>build_toco_convert_protos</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The converted data. For example if TFLite was the destination, then this will be a tflite flatbuffer in a bytes array.</p>
+<h4 id="raises">Raises:</h4>
+<p>Defined in <code>build_toco_convert_protos</code>.</p>

@@ -1,0 +1,29 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.linalg.eigh" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.linalg.eigh" class="dashAnchor"></a><h1 id="tf.linalg.eigh">tf.linalg.eigh</h1>
+<p>Computes the eigen decomposition of a batch of self-adjoint matrices.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.linalg.eigh</code></li>
+<li><code>tf.compat.v1.self_adjoint_eig</code></li>
+<li><code>tf.compat.v2.linalg.eigh</code></li>
+<li><code>tf.linalg.eigh</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.linalg.eigh(
+    tensor,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/linalg_ops.py"><code>python/ops/linalg_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Computes the eigenvalues and eigenvectors of the innermost N-by-N matrices in <code>tensor</code> such that <code>tensor[...,:,:] * v[..., :,i] = e[..., i] * v[...,:,i]</code>, for i=0...N-1.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>tensor</code></b>: <code>Tensor</code> of shape <code>[..., N, N]</code>. Only the lower triangular part of each inner inner matrix is referenced.</li>
+<li><b><code>name</code></b>: string, optional name of the operation.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<ul>
+<li><b><code>e</code></b>: Eigenvalues. Shape is <code>[..., N]</code>. Sorted in non-decreasing order.</li>
+<li><b><code>v</code></b>: Eigenvectors. Shape is <code>[..., N, N]</code>. The columns of the inner most matrices contain eigenvectors of the corresponding matrices in <code>tensor</code></li>
+</ul>

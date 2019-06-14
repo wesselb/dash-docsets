@@ -1,0 +1,30 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.get_static_value" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.get_static_value" class="dashAnchor"></a><h1 id="tf.get_static_value">tf.get_static_value</h1>
+<p>Returns the constant value of the given tensor, if efficiently calculable.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.get_static_value</code></li>
+<li><code>tf.compat.v2.get_static_value</code></li>
+<li><code>tf.get_static_value</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.get_static_value(
+    tensor,
+    partial<span class="op">=</span><span class="va">False</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/framework/tensor_util.py"><code>python/framework/tensor_util.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>This function attempts to partially evaluate the given tensor, and returns its value as a numpy ndarray if this succeeds.</p>
+<p>Compatibility(V1): If <code>constant_value(tensor)</code> returns a non-<code>None</code> result, it will no longer be possible to feed a different value for <code>tensor</code>. This allows the result of this function to influence the graph that is constructed, and permits static shape optimizations.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>tensor</code></b>: The Tensor to be evaluated.</li>
+<li><b><code>partial</code></b>: If True, the returned numpy array is allowed to have partially evaluated values. Values that can't be evaluated will be None.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A numpy ndarray containing the constant value of the given <code>tensor</code>, or None if it cannot be calculated.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: if tensor is not an ops.Tensor.</li>
+</ul>

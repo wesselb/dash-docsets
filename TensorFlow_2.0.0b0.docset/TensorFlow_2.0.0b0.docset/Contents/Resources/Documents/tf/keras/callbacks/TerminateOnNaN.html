@@ -1,0 +1,219 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.callbacks.TerminateOnNaN" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="on_batch_begin"/> <meta itemprop="property" content="on_batch_end"/> <meta itemprop="property" content="on_epoch_begin"/> <meta itemprop="property" content="on_epoch_end"/> <meta itemprop="property" content="on_predict_batch_begin"/> <meta itemprop="property" content="on_predict_batch_end"/> <meta itemprop="property" content="on_predict_begin"/> <meta itemprop="property" content="on_predict_end"/> <meta itemprop="property" content="on_test_batch_begin"/> <meta itemprop="property" content="on_test_batch_end"/> <meta itemprop="property" content="on_test_begin"/> <meta itemprop="property" content="on_test_end"/> <meta itemprop="property" content="on_train_batch_begin"/> <meta itemprop="property" content="on_train_batch_end"/> <meta itemprop="property" content="on_train_begin"/> <meta itemprop="property" content="on_train_end"/> <meta itemprop="property" content="set_model"/> <meta itemprop="property" content="set_params"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.keras.callbacks.TerminateOnNaN" class="dashAnchor"></a><h1 id="tf.keras.callbacks.terminateonnan">tf.keras.callbacks.TerminateOnNaN</h1>
+<h2 id="class-terminateonnan">Class <code>TerminateOnNaN</code></h2>
+<p>Callback that terminates training when a NaN loss is encountered.</p>
+<p>Inherits From: <a href="../../../tf/keras/callbacks/Callback.html"><code>Callback</code></a></p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.keras.callbacks.TerminateOnNaN</code></li>
+<li>Class <code>tf.compat.v2.keras.callbacks.TerminateOnNaN</code></li>
+<li>Class <code>tf.keras.callbacks.TerminateOnNaN</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/callbacks.py"><code>python/keras/callbacks.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>()</code></pre></div>
+<p>Initialize self. See help(type(self)) for accurate signature.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="on_batch_begin">
+<code>on_batch_begin</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_batch_begin(
+    batch,
+    logs<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>A backwards compatibility alias for <code>on_train_batch_begin</code>.</p>
+<h3 id="on_batch_end">
+<code>on_batch_end</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_batch_end(
+    batch,
+    logs<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>A backwards compatibility alias for <code>on_train_batch_end</code>.</p>
+<h3 id="on_epoch_begin">
+<code>on_epoch_begin</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_epoch_begin(
+    epoch,
+    logs<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Called at the start of an epoch.</p>
+<p>Subclasses should override for any actions to run. This function should only be called during TRAIN mode.</p>
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>epoch</code></b>: integer, index of epoch.</li>
+<li><b><code>logs</code></b>: dict. Currently no data is passed to this argument for this method but that may change in the future.</li>
+</ul>
+<h3 id="on_epoch_end">
+<code>on_epoch_end</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_epoch_end(
+    epoch,
+    logs<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Called at the end of an epoch.</p>
+<p>Subclasses should override for any actions to run. This function should only be called during TRAIN mode.</p>
+<h4 id="arguments-1">Arguments:</h4>
+<ul>
+<li><b><code>epoch</code></b>: integer, index of epoch.</li>
+<li><b><code>logs</code></b>: dict, metric results for this training epoch, and for the validation epoch if validation is performed. Validation result keys are prefixed with <code>val_</code>.</li>
+</ul>
+<h3 id="on_predict_batch_begin">
+<code>on_predict_batch_begin</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_predict_batch_begin(
+    batch,
+    logs<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Called at the beginning of a batch in <code>predict</code> methods.</p>
+<p>Subclasses should override for any actions to run.</p>
+<h4 id="arguments-2">Arguments:</h4>
+<ul>
+<li><b><code>batch</code></b>: integer, index of batch within the current epoch.</li>
+<li><b><code>logs</code></b>: dict. Has keys <code>batch</code> and <code>size</code> representing the current batch number and the size of the batch.</li>
+</ul>
+<h3 id="on_predict_batch_end">
+<code>on_predict_batch_end</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_predict_batch_end(
+    batch,
+    logs<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Called at the end of a batch in <code>predict</code> methods.</p>
+<p>Subclasses should override for any actions to run.</p>
+<h4 id="arguments-3">Arguments:</h4>
+<ul>
+<li><b><code>batch</code></b>: integer, index of batch within the current epoch.</li>
+<li><b><code>logs</code></b>: dict. Metric results for this batch.</li>
+</ul>
+<h3 id="on_predict_begin">
+<code>on_predict_begin</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_predict_begin(logs<span class="op">=</span><span class="va">None</span>)</code></pre></div>
+<p>Called at the beginning of prediction.</p>
+<p>Subclasses should override for any actions to run.</p>
+<h4 id="arguments-4">Arguments:</h4>
+<ul>
+<li><b><code>logs</code></b>: dict. Currently no data is passed to this argument for this method but that may change in the future.</li>
+</ul>
+<h3 id="on_predict_end">
+<code>on_predict_end</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_predict_end(logs<span class="op">=</span><span class="va">None</span>)</code></pre></div>
+<p>Called at the end of prediction.</p>
+<p>Subclasses should override for any actions to run.</p>
+<h4 id="arguments-5">Arguments:</h4>
+<ul>
+<li><b><code>logs</code></b>: dict. Currently no data is passed to this argument for this method but that may change in the future.</li>
+</ul>
+<h3 id="on_test_batch_begin">
+<code>on_test_batch_begin</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_test_batch_begin(
+    batch,
+    logs<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Called at the beginning of a batch in <code>evaluate</code> methods.</p>
+<p>Also called at the beginning of a validation batch in the <code>fit</code> methods, if validation data is provided.</p>
+<p>Subclasses should override for any actions to run.</p>
+<h4 id="arguments-6">Arguments:</h4>
+<ul>
+<li><b><code>batch</code></b>: integer, index of batch within the current epoch.</li>
+<li><b><code>logs</code></b>: dict. Has keys <code>batch</code> and <code>size</code> representing the current batch number and the size of the batch.</li>
+</ul>
+<h3 id="on_test_batch_end">
+<code>on_test_batch_end</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_test_batch_end(
+    batch,
+    logs<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Called at the end of a batch in <code>evaluate</code> methods.</p>
+<p>Also called at the end of a validation batch in the <code>fit</code> methods, if validation data is provided.</p>
+<p>Subclasses should override for any actions to run.</p>
+<h4 id="arguments-7">Arguments:</h4>
+<ul>
+<li><b><code>batch</code></b>: integer, index of batch within the current epoch.</li>
+<li><b><code>logs</code></b>: dict. Metric results for this batch.</li>
+</ul>
+<h3 id="on_test_begin">
+<code>on_test_begin</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_test_begin(logs<span class="op">=</span><span class="va">None</span>)</code></pre></div>
+<p>Called at the beginning of evaluation or validation.</p>
+<p>Subclasses should override for any actions to run.</p>
+<h4 id="arguments-8">Arguments:</h4>
+<ul>
+<li><b><code>logs</code></b>: dict. Currently no data is passed to this argument for this method but that may change in the future.</li>
+</ul>
+<h3 id="on_test_end">
+<code>on_test_end</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_test_end(logs<span class="op">=</span><span class="va">None</span>)</code></pre></div>
+<p>Called at the end of evaluation or validation.</p>
+<p>Subclasses should override for any actions to run.</p>
+<h4 id="arguments-9">Arguments:</h4>
+<ul>
+<li><b><code>logs</code></b>: dict. Currently no data is passed to this argument for this method but that may change in the future.</li>
+</ul>
+<h3 id="on_train_batch_begin">
+<code>on_train_batch_begin</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_train_batch_begin(
+    batch,
+    logs<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Called at the beginning of a training batch in <code>fit</code> methods.</p>
+<p>Subclasses should override for any actions to run.</p>
+<h4 id="arguments-10">Arguments:</h4>
+<ul>
+<li><b><code>batch</code></b>: integer, index of batch within the current epoch.</li>
+<li><b><code>logs</code></b>: dict. Has keys <code>batch</code> and <code>size</code> representing the current batch number and the size of the batch.</li>
+</ul>
+<h3 id="on_train_batch_end">
+<code>on_train_batch_end</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_train_batch_end(
+    batch,
+    logs<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Called at the end of a training batch in <code>fit</code> methods.</p>
+<p>Subclasses should override for any actions to run.</p>
+<h4 id="arguments-11">Arguments:</h4>
+<ul>
+<li><b><code>batch</code></b>: integer, index of batch within the current epoch.</li>
+<li><b><code>logs</code></b>: dict. Metric results for this batch.</li>
+</ul>
+<h3 id="on_train_begin">
+<code>on_train_begin</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_train_begin(logs<span class="op">=</span><span class="va">None</span>)</code></pre></div>
+<p>Called at the beginning of training.</p>
+<p>Subclasses should override for any actions to run.</p>
+<h4 id="arguments-12">Arguments:</h4>
+<ul>
+<li><b><code>logs</code></b>: dict. Currently no data is passed to this argument for this method but that may change in the future.</li>
+</ul>
+<h3 id="on_train_end">
+<code>on_train_end</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_train_end(logs<span class="op">=</span><span class="va">None</span>)</code></pre></div>
+<p>Called at the end of training.</p>
+<p>Subclasses should override for any actions to run.</p>
+<h4 id="arguments-13">Arguments:</h4>
+<ul>
+<li><b><code>logs</code></b>: dict. Currently no data is passed to this argument for this method but that may change in the future.</li>
+</ul>
+<h3 id="set_model">
+<code>set_model</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">set_model(model)</code></pre></div>
+<h3 id="set_params">
+<code>set_params</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">set_params(params)</code></pre></div>

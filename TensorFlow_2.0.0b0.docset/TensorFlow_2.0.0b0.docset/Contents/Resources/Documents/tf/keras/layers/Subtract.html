@@ -1,0 +1,35 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.layers.subtract" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.keras.layers.Subtract" class="dashAnchor"></a><a name="//apple_ref/cpp/Function/tf.keras.layers.subtract" class="dashAnchor"></a><h1 id="tf.keras.layers.subtract">tf.keras.layers.subtract</h1>
+<p>Functional interface to the <code>Subtract</code> layer.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.keras.layers.subtract</code></li>
+<li><code>tf.compat.v2.keras.layers.subtract</code></li>
+<li><code>tf.keras.layers.subtract</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.keras.layers.subtract(
+    inputs,
+    <span class="op">**</span>kwargs
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/layers/merge.py"><code>python/keras/layers/merge.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>inputs</code></b>: A list of input tensors (exactly 2).</li>
+<li><b><code>**kwargs</code></b>: Standard layer keyword arguments.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A tensor, the difference of the inputs.</p>
+<h4 id="examples">Examples:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    <span class="im">import</span> keras
+
+    input1 <span class="op">=</span> keras.layers.Input(shape<span class="op">=</span>(<span class="dv">16</span>,))
+    x1 <span class="op">=</span> keras.layers.Dense(<span class="dv">8</span>, activation<span class="op">=</span><span class="st">&#39;relu&#39;</span>)(input1)
+    input2 <span class="op">=</span> keras.layers.Input(shape<span class="op">=</span>(<span class="dv">32</span>,))
+    x2 <span class="op">=</span> keras.layers.Dense(<span class="dv">8</span>, activation<span class="op">=</span><span class="st">&#39;relu&#39;</span>)(input2)
+    subtracted <span class="op">=</span> keras.layers.subtract([x1, x2])
+
+    out <span class="op">=</span> keras.layers.Dense(<span class="dv">4</span>)(subtracted)
+    model <span class="op">=</span> keras.models.Model(inputs<span class="op">=</span>[input1, input2], outputs<span class="op">=</span>out)</code></pre></div>

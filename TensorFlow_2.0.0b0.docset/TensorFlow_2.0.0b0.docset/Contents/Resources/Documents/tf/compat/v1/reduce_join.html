@@ -1,0 +1,45 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.reduce_join" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.reduce_join" class="dashAnchor"></a><h1 id="tf.compat.v1.reduce_join">tf.compat.v1.reduce_join</h1>
+<p>Joins a string Tensor across the given dimensions.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.reduce_join</code></li>
+<li><code>tf.compat.v1.strings.reduce_join</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.reduce_join(
+    inputs,
+    axis<span class="op">=</span><span class="va">None</span>,
+    keep_dims<span class="op">=</span><span class="va">False</span>,
+    separator<span class="op">=</span><span class="st">&#39;&#39;</span>,
+    name<span class="op">=</span><span class="va">None</span>,
+    reduction_indices<span class="op">=</span><span class="va">None</span>,
+    keepdims<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/string_ops.py"><code>python/ops/string_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Computes the string join across dimensions in the given string Tensor of shape <code>[\\(d_0, d_1, ..., d_{n-1}\\)]</code>. Returns a new Tensor created by joining the input strings with the given separator (default: empty string). Negative indices are counted backwards from the end, with <code>-1</code> being equivalent to <code>n - 1</code>. If indices are not specified, joins across all dimensions beginning from <code>n - 1</code> through <code>0</code>.</p>
+<h4 id="for-example">For example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># tensor `a` is [[&quot;a&quot;, &quot;b&quot;], [&quot;c&quot;, &quot;d&quot;]]</span>
+tf.strings.reduce_join(a, <span class="dv">0</span>) <span class="op">==&gt;</span> [<span class="st">&quot;ac&quot;</span>, <span class="st">&quot;bd&quot;</span>]
+tf.strings.reduce_join(a, <span class="dv">1</span>) <span class="op">==&gt;</span> [<span class="st">&quot;ab&quot;</span>, <span class="st">&quot;cd&quot;</span>]
+tf.strings.reduce_join(a, <span class="op">-</span><span class="dv">2</span>) <span class="op">=</span> tf.strings.reduce_join(a, <span class="dv">0</span>) <span class="op">==&gt;</span> [<span class="st">&quot;ac&quot;</span>, <span class="st">&quot;bd&quot;</span>]
+tf.strings.reduce_join(a, <span class="op">-</span><span class="dv">1</span>) <span class="op">=</span> tf.strings.reduce_join(a, <span class="dv">1</span>) <span class="op">==&gt;</span> [<span class="st">&quot;ab&quot;</span>, <span class="st">&quot;cd&quot;</span>]
+tf.strings.reduce_join(a, <span class="dv">0</span>, keep_dims<span class="op">=</span><span class="va">True</span>) <span class="op">==&gt;</span> [[<span class="st">&quot;ac&quot;</span>, <span class="st">&quot;bd&quot;</span>]]
+tf.strings.reduce_join(a, <span class="dv">1</span>, keep_dims<span class="op">=</span><span class="va">True</span>) <span class="op">==&gt;</span> [[<span class="st">&quot;ab&quot;</span>], [<span class="st">&quot;cd&quot;</span>]]
+tf.strings.reduce_join(a, <span class="dv">0</span>, separator<span class="op">=</span><span class="st">&quot;.&quot;</span>) <span class="op">==&gt;</span> [<span class="st">&quot;a.c&quot;</span>, <span class="st">&quot;b.d&quot;</span>]
+tf.strings.reduce_join(a, [<span class="dv">0</span>, <span class="dv">1</span>]) <span class="op">==&gt;</span> <span class="st">&quot;acbd&quot;</span>
+tf.strings.reduce_join(a, [<span class="dv">1</span>, <span class="dv">0</span>]) <span class="op">==&gt;</span> <span class="st">&quot;abcd&quot;</span>
+tf.strings.reduce_join(a, []) <span class="op">==&gt;</span> [[<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>], [<span class="st">&quot;c&quot;</span>, <span class="st">&quot;d&quot;</span>]]
+tf.strings.reduce_join(a) <span class="op">=</span> tf.strings.reduce_join(a, [<span class="dv">1</span>, <span class="dv">0</span>]) <span class="op">==&gt;</span> <span class="st">&quot;abcd&quot;</span></code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>inputs</code></b>: A <code>Tensor</code> of type <code>string</code>. The input to be joined. All reduced indices must have non-zero size.</li>
+<li><b><code>axis</code></b>: A <code>Tensor</code> of type <code>int32</code>. The dimensions to reduce over. Dimensions are reduced in the order specified. Omitting <code>axis</code> is equivalent to passing <code>[n-1, n-2, ..., 0]</code>. Negative indices from <code>-n</code> to <code>-1</code> are supported.</li>
+<li><b><code>keep_dims</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>. If <code>True</code>, retain reduced dimensions with length <code>1</code>.</li>
+<li><b><code>separator</code></b>: An optional <code>string</code>. Defaults to <code>&quot;&quot;</code>. The separator to use when joining.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>string</code>.</p>

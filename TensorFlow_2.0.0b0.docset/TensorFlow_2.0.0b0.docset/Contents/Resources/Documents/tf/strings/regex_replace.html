@@ -1,0 +1,31 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.strings.regex_replace" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.strings.regex_replace" class="dashAnchor"></a><h1 id="tf.strings.regex_replace">tf.strings.regex_replace</h1>
+<p>Replace elements of <code>input</code> matching regex <code>pattern</code> with <code>rewrite</code>.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.regex_replace</code></li>
+<li><code>tf.compat.v1.strings.regex_replace</code></li>
+<li><code>tf.compat.v2.strings.regex_replace</code></li>
+<li><code>tf.strings.regex_replace</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.strings.regex_replace(
+    <span class="bu">input</span>,
+    pattern,
+    rewrite,
+    replace_global<span class="op">=</span><span class="va">True</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/string_ops.py"><code>python/ops/string_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: string <code>Tensor</code>, the source strings to process.</li>
+<li><b><code>pattern</code></b>: string or scalar string <code>Tensor</code>, regular expression to use, see more details at https://github.com/google/re2/wiki/Syntax</li>
+<li><b><code>rewrite</code></b>: string or scalar string <code>Tensor</code>, value to use in match replacement, supports backslash-escaped digits ( to ) can be to insert text matching corresponding parenthesized group.</li>
+<li><b><code>replace_global</code></b>: <code>bool</code>, if <code>True</code> replace all non-overlapping matches, else replace only the first match.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>string <code>Tensor</code> of the same shape as <code>input</code> with specified replacements.</p>

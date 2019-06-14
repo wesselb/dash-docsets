@@ -1,0 +1,114 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.estimator.BestExporter" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="name"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="export"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.estimator.BestExporter" class="dashAnchor"></a><h1 id="tf.estimator.bestexporter">tf.estimator.BestExporter</h1>
+<h2 id="class-bestexporter">Class <code>BestExporter</code></h2>
+<p>This class exports the serving graph and checkpoints of the best models.</p>
+<p>Inherits From: <a href="../../tf/estimator/Exporter.html"><code>Exporter</code></a></p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.estimator.BestExporter</code></li>
+<li>Class <code>tf.compat.v2.estimator.BestExporter</code></li>
+<li>Class <code>tf.estimator.BestExporter</code></li>
+</ul>
+<p>Defined in <a href="https://github.com/tensorflow/estimator/tree/master/tensorflow_estimator/python/estimator/exporter.py"><code>python/estimator/exporter.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>This class performs a model export everytime the new model is better than any existing model.</p>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    name<span class="op">=</span><span class="st">&#39;best_exporter&#39;</span>,
+    serving_input_receiver_fn<span class="op">=</span><span class="va">None</span>,
+    event_file_pattern<span class="op">=</span><span class="st">&#39;eval/*.tfevents.*&#39;</span>,
+    compare_fn<span class="op">=</span>_loss_smaller,
+    assets_extra<span class="op">=</span><span class="va">None</span>,
+    as_text<span class="op">=</span><span class="va">False</span>,
+    exports_to_keep<span class="op">=</span><span class="dv">5</span>
+)</code></pre></div>
+<p>Create an <code>Exporter</code> to use with <a href="../../tf/estimator/EvalSpec.html"><code>tf.estimator.EvalSpec</code></a>.</p>
+<p>Example of creating a BestExporter for training and evaluation:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="kw">def</span> make_train_and_eval_fn():
+  <span class="co"># Set up feature columns.</span>
+  categorical_feature_a <span class="op">=</span> (
+      tf.feature_column.categorical_column_with_hash_bucket(...))
+  categorical_feature_a_emb <span class="op">=</span> embedding_column(
+      categorical_column<span class="op">=</span>categorical_feature_a, ...)
+  ...  <span class="co"># other feature columns</span>
+
+  estimator <span class="op">=</span> tf.estimator.DNNClassifier(
+      config<span class="op">=</span>tf.estimator.RunConfig(
+          model_dir<span class="op">=</span><span class="st">&#39;/my_model&#39;</span>, save_summary_steps<span class="op">=</span><span class="dv">100</span>),
+      feature_columns<span class="op">=</span>[categorical_feature_a_emb, ...],
+      hidden_units<span class="op">=</span>[<span class="dv">1024</span>, <span class="dv">512</span>, <span class="dv">256</span>])
+
+  serving_feature_spec <span class="op">=</span> tf.feature_column.make_parse_example_spec(
+      categorical_feature_a_emb)
+  serving_input_receiver_fn <span class="op">=</span> (
+      tf.estimator.export.build_parsing_serving_input_receiver_fn(
+      serving_feature_spec))
+
+  exporter <span class="op">=</span> tf.estimator.BestExporter(
+      name<span class="op">=</span><span class="st">&quot;best_exporter&quot;</span>,
+      serving_input_receiver_fn<span class="op">=</span>serving_input_receiver_fn,
+      exports_to_keep<span class="op">=</span><span class="dv">5</span>)
+
+  train_spec <span class="op">=</span> tf.estimator.TrainSpec(...)
+
+  eval_spec <span class="op">=</span> [tf.estimator.EvalSpec(
+    input_fn<span class="op">=</span>eval_input_fn,
+    steps<span class="op">=</span><span class="dv">100</span>,
+    exporters<span class="op">=</span>exporter,
+    start_delay_secs<span class="op">=</span><span class="dv">0</span>,
+    throttle_secs<span class="op">=</span><span class="dv">5</span>)]
+
+  <span class="cf">return</span> tf.estimator.DistributedTrainingSpec(estimator, train_spec,
+                                              eval_spec)</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>name</code></b>: unique name of this <code>Exporter</code> that is going to be used in the export path.</li>
+<li><b><code>serving_input_receiver_fn</code></b>: a function that takes no arguments and returns a <code>ServingInputReceiver</code>.</li>
+<li><b><code>event_file_pattern</code></b>: event file name pattern relative to model_dir. If None, however, the exporter would not be preemption-safe. To be preemption-safe, event_file_pattern must be specified.</li>
+<li><b><code>compare_fn</code></b>: a function that compares two evaluation results and returns true if current evaluation result is better. Follows the signature:</li>
+<li>Args:
+<ul>
+<li><code>best_eval_result</code>: This is the evaluation result of the best model.</li>
+<li><code>current_eval_result</code>: This is the evaluation result of current candidate model.</li>
+</ul></li>
+<li>Returns: True if current evaluation result is better; otherwise, False.</li>
+<li><b><code>assets_extra</code></b>: An optional dict specifying how to populate the assets.extra directory within the exported SavedModel. Each key should give the destination path (including the filename) relative to the assets.extra directory. The corresponding value gives the full path of the source file to be copied. For example, the simple case of copying a single file without renaming it is specified as <code>{'my_asset_file.txt':   '/path/to/my_asset_file.txt'}</code>.</li>
+<li><b><code>as_text</code></b>: whether to write the SavedModel proto in text format. Defaults to <code>False</code>.</li>
+<li><b><code>exports_to_keep</code></b>: Number of exports to keep. Older exports will be garbage-collected. Defaults to 5. Set to <code>None</code> to disable garbage collection.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if any argument is invalid.</li>
+</ul>
+<h2 id="properties">Properties</h2>
+<h3 id="name">
+<code>name</code>
+</h3>
+<p>Directory name.</p>
+<p>A directory name under the export base directory where exports of this type are written. Should not be <code>None</code> nor empty.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="export">
+<code>export</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">export(
+    estimator,
+    export_path,
+    checkpoint_path,
+    eval_result,
+    is_the_final_export
+)</code></pre></div>
+<p>Exports the given <code>Estimator</code> to a specific format.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>estimator</code></b>: the <code>Estimator</code> to export.</li>
+<li><b><code>export_path</code></b>: A string containing a directory where to write the export.</li>
+<li><b><code>checkpoint_path</code></b>: The checkpoint path to export.</li>
+<li><b><code>eval_result</code></b>: The output of <code>Estimator.evaluate</code> on this checkpoint.</li>
+<li><b><code>is_the_final_export</code></b>: This boolean is True when this is an export in the end of training. It is False for the intermediate exports during the training. When passing <code>Exporter</code> to <a href="../../tf/estimator/train_and_evaluate.html"><code>tf.estimator.train_and_evaluate</code></a> <code>is_the_final_export</code> is always False if <code>TrainSpec.max_steps</code> is <code>None</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The string path to the exported directory or <code>None</code> if export is skipped.</p>

@@ -1,0 +1,32 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.math.polyval" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.math.polyval" class="dashAnchor"></a><h1 id="tf.math.polyval">tf.math.polyval</h1>
+<p>Computes the elementwise value of a polynomial.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.math.polyval</code></li>
+<li><code>tf.compat.v2.math.polyval</code></li>
+<li><code>tf.math.polyval</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.math.polyval(
+    coeffs,
+    x,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/math_ops.py"><code>python/ops/math_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>If <code>x</code> is a tensor and <code>coeffs</code> is a list n + 1 tensors, this function returns the value of the n-th order polynomial</p>
+<p>p(x) = coeffs[n-1] + coeffs[n-2] * x + ... + coeffs[0] * x**(n-1)</p>
+<p>evaluated using Horner's method, i.e.</p>
+<p>p(x) = coeffs[n-1] + x * (coeffs[n-2] + ... + x * (coeffs[1] + x * coeffs[0]))</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>coeffs</code></b>: A list of <code>Tensor</code> representing the coefficients of the polynomial.</li>
+<li><b><code>x</code></b>: A <code>Tensor</code> representing the variable of the polynomial.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>tensor</code> of the shape as the expression p(x) with usual broadcasting rules for element-wise addition and multiplication applied.</p>
+<h4 id="numpy-compatibility">Numpy Compatibility</h4>
+<p>Equivalent to numpy.polyval.</p>

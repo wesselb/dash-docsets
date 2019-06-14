@@ -1,0 +1,35 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.losses.categorical_crossentropy" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.keras.losses.categorical_crossentropy" class="dashAnchor"></a><h1 id="tf.keras.losses.categorical_crossentropy">tf.keras.losses.categorical_crossentropy</h1>
+<p>Computes the categorical crossentropy loss.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.keras.losses.categorical_crossentropy</code></li>
+<li><code>tf.compat.v1.keras.metrics.categorical_crossentropy</code></li>
+<li><code>tf.compat.v2.keras.losses.categorical_crossentropy</code></li>
+<li><code>tf.compat.v2.keras.metrics.categorical_crossentropy</code></li>
+<li><code>tf.compat.v2.losses.categorical_crossentropy</code></li>
+<li><code>tf.compat.v2.metrics.categorical_crossentropy</code></li>
+<li><code>tf.keras.losses.categorical_crossentropy</code></li>
+<li><code>tf.keras.metrics.categorical_crossentropy</code></li>
+<li><code>tf.losses.categorical_crossentropy</code></li>
+<li><code>tf.metrics.categorical_crossentropy</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.keras.losses.categorical_crossentropy(
+    y_true,
+    y_pred,
+    from_logits<span class="op">=</span><span class="va">False</span>,
+    label_smoothing<span class="op">=</span><span class="dv">0</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/losses.py"><code>python/keras/losses.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>y_true</code></b>: tensor of true targets.</li>
+<li><b><code>y_pred</code></b>: tensor of predicted targets.</li>
+<li><b><code>from_logits</code></b>: Whether <code>y_pred</code> is expected to be a logits tensor. By default, we assume that <code>y_pred</code> encodes a probability distribution.</li>
+<li><b><code>label_smoothing</code></b>: Float in [0, 1]. If &gt; <code>0</code> then smooth the labels.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Categorical crossentropy loss value.</p>

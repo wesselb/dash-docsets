@@ -1,0 +1,24 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.data.experimental.copy_to_device" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.data.experimental.copy_to_device" class="dashAnchor"></a><h1 id="tf.data.experimental.copy_to_device">tf.data.experimental.copy_to_device</h1>
+<p>A transformation that copies dataset elements to the given <code>target_device</code>.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.data.experimental.copy_to_device</code></li>
+<li><code>tf.compat.v2.data.experimental.copy_to_device</code></li>
+<li><code>tf.data.experimental.copy_to_device</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.data.experimental.copy_to_device(
+    target_device,
+    source_device<span class="op">=</span><span class="st">&#39;/cpu:0&#39;</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/data/experimental/ops/prefetching_ops.py"><code>python/data/experimental/ops/prefetching_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>target_device</code></b>: The name of a device to which elements will be copied.</li>
+<li><b><code>source_device</code></b>: The original device on which <code>input_dataset</code> will be placed.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Dataset</code> transformation function, which can be passed to <a href="../../../tf/data/Dataset.md#apply"><code>tf.data.Dataset.apply</code></a>.</p>

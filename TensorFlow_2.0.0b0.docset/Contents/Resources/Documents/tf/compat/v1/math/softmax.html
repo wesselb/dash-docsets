@@ -1,0 +1,34 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.math.softmax" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.math.softmax" class="dashAnchor"></a><h1 id="tf.compat.v1.math.softmax">tf.compat.v1.math.softmax</h1>
+<p>Computes softmax activations. (deprecated arguments)</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.math.softmax</code></li>
+<li><code>tf.compat.v1.nn.softmax</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.math.softmax(
+    logits,
+    axis<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>,
+    dim<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/nn_ops.py"><code>python/ops/nn_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Warning: SOME ARGUMENTS ARE DEPRECATED: <code>(dim)</code>. They will be removed in a future version. Instructions for updating: dim is deprecated, use axis instead</p>
+<p>This function performs the equivalent of</p>
+<pre><code>softmax = tf.exp(logits) / tf.reduce_sum(tf.exp(logits), axis)</code></pre>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>logits</code></b>: A non-empty <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>float32</code>, <code>float64</code>.</li>
+<li><b><code>axis</code></b>: The dimension softmax would be performed on. The default is -1 which indicates the last dimension.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+<li><b><code>dim</code></b>: Deprecated alias for <code>axis</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type and shape as <code>logits</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>InvalidArgumentError</code></b>: if <code>logits</code> is empty or <code>axis</code> is beyond the last dimension of <code>logits</code>.</li>
+</ul>

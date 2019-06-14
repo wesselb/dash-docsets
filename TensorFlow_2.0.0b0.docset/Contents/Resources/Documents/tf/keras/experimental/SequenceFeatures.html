@@ -1,0 +1,56 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.experimental.SequenceFeatures" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="__init__"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.keras.experimental.SequenceFeatures" class="dashAnchor"></a><h1 id="tf.keras.experimental.sequencefeatures">tf.keras.experimental.SequenceFeatures</h1>
+<h2 id="class-sequencefeatures">Class <code>SequenceFeatures</code></h2>
+<p>A layer for sequence input.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.keras.experimental.SequenceFeatures</code></li>
+<li>Class <code>tf.compat.v2.keras.experimental.SequenceFeatures</code></li>
+<li>Class <code>tf.keras.experimental.SequenceFeatures</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/feature_column/sequence_feature_column.py"><code>python/feature_column/sequence_feature_column.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>All <code>feature_columns</code> must be sequence dense columns with the same <code>sequence_length</code>. The output of this method can be fed into sequence networks, such as RNN.</p>
+<p>The output of this method is a 3D <code>Tensor</code> of shape <code>[batch_size, T, D]</code>. <code>T</code> is the maximum sequence length for this batch, which could differ from batch to batch.</p>
+<p>If multiple <code>feature_columns</code> are given with <code>Di</code> <code>num_elements</code> each, their outputs are concatenated. So, the final <code>Tensor</code> has shape <code>[batch_size, T, D0 + D1 + ... + Dn]</code>.</p>
+<h4 id="example">Example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">rating <span class="op">=</span> sequence_numeric_column(<span class="st">&#39;rating&#39;</span>)
+watches <span class="op">=</span> sequence_categorical_column_with_identity(
+    <span class="st">&#39;watches&#39;</span>, num_buckets<span class="op">=</span><span class="dv">1000</span>)
+watches_embedding <span class="op">=</span> embedding_column(watches, dimension<span class="op">=</span><span class="dv">10</span>)
+columns <span class="op">=</span> [rating, watches_embedding]
+
+sequence_input_layer <span class="op">=</span> SequenceFeatures(columns)
+features <span class="op">=</span> tf.io.parse_example(...,
+                               features<span class="op">=</span>make_parse_example_spec(columns))
+sequence_input, sequence_length <span class="op">=</span> sequence_input_layer(features)
+sequence_length_mask <span class="op">=</span> tf.sequence_mask(sequence_length)
+
+rnn_cell <span class="op">=</span> tf.keras.layers.SimpleRNNCell(hidden_size)
+rnn_layer <span class="op">=</span> tf.keras.layers.RNN(rnn_cell)
+outputs, state <span class="op">=</span> rnn_layer(sequence_input, mask<span class="op">=</span>sequence_length_mask)</code></pre></div>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    feature_columns,
+    trainable<span class="op">=</span><span class="va">True</span>,
+    name<span class="op">=</span><span class="va">None</span>,
+    <span class="op">**</span>kwargs
+)</code></pre></div>
+<p>&quot;Constructs a SequenceFeatures layer.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>feature_columns</code></b>: An iterable of dense sequence columns. Valid columns are</li>
+<li><code>embedding_column</code> that wraps a <code>sequence_categorical_column_with_*</code></li>
+<li><code>sequence_numeric_column</code>.</li>
+<li><b><code>trainable</code></b>: Boolean, whether the layer's variables will be updated via gradient descent during training.</li>
+<li><b><code>name</code></b>: Name to give to the SequenceFeatures.</li>
+<li><b><code>**kwargs</code></b>: Keyword arguments to construct a layer.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If any of the <code>feature_columns</code> is not a <code>SequenceDenseColumn</code>.</li>
+</ul>

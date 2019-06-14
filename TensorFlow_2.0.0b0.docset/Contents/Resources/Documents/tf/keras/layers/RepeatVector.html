@@ -1,0 +1,38 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.layers.RepeatVector" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="__init__"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.keras.layers.RepeatVector" class="dashAnchor"></a><h1 id="tf.keras.layers.repeatvector">tf.keras.layers.RepeatVector</h1>
+<h2 id="class-repeatvector">Class <code>RepeatVector</code></h2>
+<p>Repeats the input n times.</p>
+<p>Inherits From: <a href="../../../tf/keras/layers/Layer.html"><code>Layer</code></a></p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.keras.layers.RepeatVector</code></li>
+<li>Class <code>tf.compat.v2.keras.layers.RepeatVector</code></li>
+<li>Class <code>tf.keras.layers.RepeatVector</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/layers/core.py"><code>python/keras/layers/core.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="example">Example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">model <span class="op">=</span> Sequential()
+model.add(Dense(<span class="dv">32</span>, input_dim<span class="op">=</span><span class="dv">32</span>))
+<span class="co"># now: model.output_shape == (None, 32)</span>
+<span class="co"># note: `None` is the batch dimension</span>
+
+model.add(RepeatVector(<span class="dv">3</span>))
+<span class="co"># now: model.output_shape == (None, 3, 32)</span></code></pre></div>
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>n</code></b>: Integer, repetition factor.</li>
+</ul>
+<h4 id="input-shape">Input shape:</h4>
+<p>2D tensor of shape <code>(num_samples, features)</code>.</p>
+<h4 id="output-shape">Output shape:</h4>
+<p>3D tensor of shape <code>(num_samples, n, features)</code>.</p>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    n,
+    <span class="op">**</span>kwargs
+)</code></pre></div>

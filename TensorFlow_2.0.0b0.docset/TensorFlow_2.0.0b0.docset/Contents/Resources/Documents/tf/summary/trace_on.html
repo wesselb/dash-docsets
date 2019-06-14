@@ -1,0 +1,24 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.summary.trace_on" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.summary.trace_on" class="dashAnchor"></a><h1 id="tf.summary.trace_on">tf.summary.trace_on</h1>
+<p>Starts a trace to record computation graphs and profiling information.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v2.summary.trace_on</code></li>
+<li><code>tf.summary.trace_on</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.summary.trace_on(
+    graph<span class="op">=</span><span class="va">True</span>,
+    profiler<span class="op">=</span><span class="va">False</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/summary_ops_v2.py"><code>python/ops/summary_ops_v2.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Must be invoked in eager mode.</p>
+<p>When enabled, TensorFlow runtime will collection information that can later be exported and consumed by TensorBoard. The trace is activated across the entire TensorFlow runtime and affects all threads of execution.</p>
+<p>To stop the trace and export the collected information, use <a href="../../tf/summary/trace_export.html"><code>tf.summary.trace_export</code></a>. To stop the trace without exporting, use <a href="../../tf/summary/trace_off.html"><code>tf.summary.trace_off</code></a>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>graph</code></b>: If True, enables collection of executed graphs. It includes ones from tf.function invocation and ones from the legacy graph mode. The default is True.</li>
+<li><b><code>profiler</code></b>: If True, enables the advanced profiler. Enabling profiler implicitly enables the graph collection. The profiler may incur a high memory overhead. The default is False.</li>
+</ul>

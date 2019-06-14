@@ -1,0 +1,24 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.flags.adopt_module_key_flags" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.flags.adopt_module_key_flags" class="dashAnchor"></a><h1 id="tf.compat.v1.flags.adopt_module_key_flags">tf.compat.v1.flags.adopt_module_key_flags</h1>
+<p>Declares that all flags key to a module are key to the current module.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.app.flags.adopt_module_key_flags</code></li>
+<li><code>tf.compat.v1.flags.adopt_module_key_flags</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.flags.adopt_module_key_flags(
+    module,
+    flag_values<span class="op">=</span>_flagvalues.FLAGS
+)</code></pre></div>
+<!-- Placeholder for "Used in" -->
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>module</code></b>: module, the module object from which all key flags will be declared as key flags to the current module.</li>
+<li><b><code>flag_values</code></b>: FlagValues, the FlagValues instance in which the flags will be declared as key flags. This should almost never need to be overridden.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>Error</code></b>: Raised when given an argument that is a module name (a string), instead of a module object.</li>
+</ul>

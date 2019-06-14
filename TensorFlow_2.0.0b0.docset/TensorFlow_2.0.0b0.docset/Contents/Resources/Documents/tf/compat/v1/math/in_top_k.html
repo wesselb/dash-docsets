@@ -1,0 +1,31 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.math.in_top_k" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.math.in_top_k" class="dashAnchor"></a><h1 id="tf.compat.v1.math.in_top_k">tf.compat.v1.math.in_top_k</h1>
+<p>Says whether the targets are in the top <code>K</code> predictions.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.math.in_top_k</code></li>
+<li><code>tf.compat.v1.nn.in_top_k</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.math.in_top_k(
+    predictions,
+    targets,
+    k,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/nn_ops.py"><code>python/ops/nn_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>This outputs a <code>batch_size</code> bool array, an entry <code>out[i]</code> is <code>true</code> if the prediction for the target class is finite (not inf, -inf, or nan) and among the top <code>k</code> predictions among all predictions for example <code>i</code>. Note that the behavior of <code>InTopK</code> differs from the <code>TopK</code> op in its handling of ties; if multiple classes have the same prediction value and straddle the top-<code>k</code> boundary, all of those classes are considered to be in the top <code>k</code>.</p>
+<p>More formally, let</p>
+<p>\(predictions_i\) be the predictions for all classes for example <code>i</code>, \(targets_i\) be the target class for example <code>i</code>, \(out_i\) be the output for example <code>i</code>,</p>
+<p><br /><span class="math display"><em>o</em><em>u</em><em>t</em><sub><em>i</em></sub> = <em>p</em><em>r</em><em>e</em><em>d</em><em>i</em><em>c</em><em>t</em><em>i</em><em>o</em><em>n</em><em>s</em><sub><em>i</em>, <em>t</em><em>a</em><em>r</em><em>g</em><em>e</em><em>t</em><em>s</em><sub><em>i</em></sub></sub> ∈ <em>T</em><em>o</em><em>p</em><em>K</em><em>I</em><em>n</em><em>c</em><em>l</em><em>u</em><em>d</em><em>i</em><em>n</em><em>g</em><em>T</em><em>i</em><em>e</em><em>s</em>(<em>p</em><em>r</em><em>e</em><em>d</em><em>i</em><em>c</em><em>t</em><em>i</em><em>o</em><em>n</em><em>s</em><sub><em>i</em></sub>)</span><br /></p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>predictions</code></b>: A <code>Tensor</code> of type <code>float32</code>. A <code>batch_size</code> x <code>classes</code> tensor.</li>
+<li><b><code>targets</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. A <code>batch_size</code> vector of class ids.</li>
+<li><b><code>k</code></b>: An <code>int</code>. Number of top elements to look at for computing precision.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>bool</code>. Computed Precision at <code>k</code> as a <code>bool Tensor</code>.</p>

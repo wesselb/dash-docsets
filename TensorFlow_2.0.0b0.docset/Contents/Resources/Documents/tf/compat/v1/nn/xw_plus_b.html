@@ -1,0 +1,22 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.nn.xw_plus_b" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.nn.xw_plus_b" class="dashAnchor"></a><h1 id="tf.compat.v1.nn.xw_plus_b">tf.compat.v1.nn.xw_plus_b</h1>
+<p>Computes matmul(x, weights) + biases.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.nn.xw_plus_b(
+    x,
+    weights,
+    biases,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/nn_ops.py"><code>python/ops/nn_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: a 2D tensor. Dimensions typically: batch, in_units</li>
+<li><b><code>weights</code></b>: a 2D tensor. Dimensions typically: in_units, out_units</li>
+<li><b><code>biases</code></b>: a 1D tensor. Dimensions: out_units</li>
+<li><b><code>name</code></b>: A name for the operation (optional). If not specified &quot;xw_plus_b&quot; is used.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A 2-D Tensor computing matmul(x, weights) + biases. Dimensions typically: batch, out_units.</p>

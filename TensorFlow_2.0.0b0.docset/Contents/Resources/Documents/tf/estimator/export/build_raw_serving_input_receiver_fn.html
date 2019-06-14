@@ -1,0 +1,25 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.estimator.export.build_raw_serving_input_receiver_fn" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.estimator.export.build_raw_serving_input_receiver_fn" class="dashAnchor"></a><h1 id="tf.estimator.export.build_raw_serving_input_receiver_fn">tf.estimator.export.build_raw_serving_input_receiver_fn</h1>
+<p>Build a serving_input_receiver_fn expecting feature Tensors.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.estimator.export.build_raw_serving_input_receiver_fn</code></li>
+<li><code>tf.compat.v2.estimator.export.build_raw_serving_input_receiver_fn</code></li>
+<li><code>tf.estimator.export.build_raw_serving_input_receiver_fn</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.estimator.export.build_raw_serving_input_receiver_fn(
+    features,
+    default_batch_size<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://github.com/tensorflow/estimator/tree/master/tensorflow_estimator/python/estimator/export/export.py"><code>python/estimator/export/export.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Creates an serving_input_receiver_fn that expects all features to be fed directly.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>features</code></b>: a dict of string to <code>Tensor</code>.</li>
+<li><b><code>default_batch_size</code></b>: the number of query examples expected per batch. Leave unset for variable batch size (recommended).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A serving_input_receiver_fn.</p>

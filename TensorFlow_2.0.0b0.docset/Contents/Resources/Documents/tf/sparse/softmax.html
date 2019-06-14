@@ -1,0 +1,51 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.sparse.softmax" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.sparse.softmax" class="dashAnchor"></a><h1 id="tf.sparse.softmax">tf.sparse.softmax</h1>
+<p>Applies softmax to a batched N-D <code>SparseTensor</code>.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.sparse.softmax</code></li>
+<li><code>tf.compat.v1.sparse_softmax</code></li>
+<li><code>tf.compat.v2.sparse.softmax</code></li>
+<li><code>tf.sparse.softmax</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.sparse.softmax(
+    sp_input,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/sparse_ops.py"><code>python/ops/sparse_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>The inputs represent an N-D SparseTensor with logical shape <code>[..., B, C]</code> (where <code>N &gt;= 2</code>), and with indices sorted in the canonical lexicographic order.</p>
+<p>This op is equivalent to applying the normal <code>tf.nn.softmax()</code> to each innermost logical submatrix with shape <code>[B, C]</code>, but with the catch that <em>the implicitly zero elements do not participate</em>. Specifically, the algorithm is equivalent to:</p>
+<ol style="list-style-type: decimal">
+<li>Applies <code>tf.nn.softmax()</code> to a densified view of each innermost submatrix with shape <code>[B, C]</code>, along the size-C dimension;</li>
+<li>Masks out the original implicitly-zero locations;</li>
+<li>Renormalizes the remaining elements.</li>
+</ol>
+<p>Hence, the <code>SparseTensor</code> result has exactly the same non-zero indices and shape.</p>
+<h4 id="example">Example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># First batch:</span>
+<span class="co"># [?   e.]</span>
+<span class="co"># [1.  ? ]</span>
+<span class="co"># Second batch:</span>
+<span class="co"># [e   ? ]</span>
+<span class="co"># [e   e ]</span>
+shape <span class="op">=</span> [<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>]  <span class="co"># 3-D SparseTensor</span>
+values <span class="op">=</span> np.asarray([[[<span class="dv">0</span>., np.e], [<span class="dv">1</span>., <span class="dv">0</span>.]], [[np.e, <span class="dv">0</span>.], [np.e, np.e]]])
+indices <span class="op">=</span> np.vstack(np.where(values)).astype(np.int64).T
+
+result <span class="op">=</span> tf.sparse.softmax(tf.SparseTensor(indices, values, shape))
+<span class="co"># ...returning a 3-D SparseTensor, equivalent to:</span>
+<span class="co"># [?   1.]     [1    ?]</span>
+<span class="co"># [1.  ? ] and [.5  .5]</span>
+<span class="co"># where ? means implicitly zero.</span></code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>sp_input</code></b>: N-D <code>SparseTensor</code>, where <code>N &gt;= 2</code>.</li>
+<li><b><code>name</code></b>: optional name of the operation.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<ul>
+<li><b><code>output</code></b>: N-D <code>SparseTensor</code> representing the results.</li>
+</ul>

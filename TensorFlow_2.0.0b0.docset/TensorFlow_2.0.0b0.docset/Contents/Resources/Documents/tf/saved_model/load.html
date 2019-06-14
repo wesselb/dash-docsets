@@ -1,0 +1,54 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.saved_model.load" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.saved_model.load" class="dashAnchor"></a><h1 id="tf.saved_model.load">tf.saved_model.load</h1>
+<p>Load a SavedModel from <code>export_dir</code>.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.saved_model.load_v2</code></li>
+<li><code>tf.compat.v2.saved_model.load</code></li>
+<li><code>tf.saved_model.load</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.saved_model.load(
+    export_dir,
+    tags<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/saved_model/load.py"><code>python/saved_model/load.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Signatures associated with the SavedModel are available as functions:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">imported <span class="op">=</span> tf.saved_model.load(path)
+f <span class="op">=</span> imported.signatures[<span class="st">&quot;serving_default&quot;</span>]
+<span class="bu">print</span>(f(x<span class="op">=</span>tf.constant([[<span class="dv">1</span>.]])))</code></pre></div>
+<p>Objects exported with <a href="../../tf/saved_model/save.html"><code>tf.saved_model.save</code></a> additionally have trackable objects and functions assigned to attributes:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">exported <span class="op">=</span> tf.train.Checkpoint(v<span class="op">=</span>tf.Variable(<span class="dv">3</span>.))
+exported.f <span class="op">=</span> tf.function(
+    <span class="kw">lambda</span> x: exported.v <span class="op">*</span> x,
+    input_signature<span class="op">=</span>[tf.TensorSpec(shape<span class="op">=</span><span class="va">None</span>, dtype<span class="op">=</span>tf.float32)])
+tf.saved_model.save(exported, path)
+imported <span class="op">=</span> tf.saved_model.load(path)
+<span class="cf">assert</span> <span class="dv">3</span>. <span class="op">==</span> imported.v.numpy()
+<span class="cf">assert</span> <span class="dv">6</span>. <span class="op">==</span> imported.f(x<span class="op">=</span>tf.constant(<span class="dv">2</span>.)).numpy()</code></pre></div>
+<p><em>Loading Keras models</em></p>
+<p>Keras models are trackable, so they can be saved to SavedModel. The object returned by <a href="../../tf/saved_model/load.html"><code>tf.saved_model.load</code></a> is not a Keras object (i.e. doesn't have <code>.fit</code>, <code>.predict</code>, etc. methods). A few attributes and functions are still available: <code>.variables</code>, <code>.trainable_variables</code> and <code>.__call__</code>.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">model <span class="op">=</span> tf.keras.Model(...)
+tf.saved_model.save(model, path)
+imported <span class="op">=</span> tf.saved_model.load(path)
+outputs <span class="op">=</span> imported(inputs)</code></pre></div>
+<p>Use <a href="../../tf/keras/models/load_model.html"><code>tf.keras.models.load_model</code></a> to restore the Keras model.</p>
+<p><em>Importing SavedModels from TensorFlow 1.x</em></p>
+<p>SavedModels from <a href="../../tf/estimator/Estimator.html"><code>tf.estimator.Estimator</code></a> or 1.x SavedModel APIs have a flat graph instead of <a href="../../tf/function.html"><code>tf.function</code></a> objects. These SavedModels will have functions corresponding to their signatures in the <code>.signatures</code> attribute, but also have a <code>.prune</code> method which allows you to extract functions for new subgraphs. This is equivalent to importing the SavedModel and naming feeds and fetches in a Session from TensorFlow 1.x.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">imported <span class="op">=</span> tf.saved_model.load(path_to_v1_saved_model)
+pruned <span class="op">=</span> imported.prune(<span class="st">&quot;x:0&quot;</span>, <span class="st">&quot;out:0&quot;</span>)
+pruned(tf.ones([]))</code></pre></div>
+<p>See <a href="../../tf/compat/v1/wrap_function.html"><code>tf.compat.v1.wrap_function</code></a> for details. These SavedModels also have a <code>.variables</code> attribute containing imported variables, and a <code>.graph</code> attribute representing the whole imported graph. For SavedModels exported from <a href="../../tf/saved_model/save.html"><code>tf.saved_model.save</code></a>, variables are instead assigned to whichever attributes they were assigned before export.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>export_dir</code></b>: The SavedModel directory to load from.</li>
+<li><b><code>tags</code></b>: A tag or sequence of tags identifying the MetaGraph to load. Optional if the SavedModel contains a single MetaGraph, as for those exported from <a href="../../tf/saved_model/load.html"><code>tf.saved_model.load</code></a>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A trackable object with a <code>signatures</code> attribute mapping from signature keys to functions. If the SavedModel was exported by <a href="../../tf/saved_model/load.html"><code>tf.saved_model.load</code></a>, it also points to trackable objects and functions which were attached to the exported object.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>tags</code> don't match a MetaGraph in the SavedModel.</li>
+</ul>

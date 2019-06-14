@@ -1,0 +1,37 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.math.bincount" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.math.bincount" class="dashAnchor"></a><h1 id="tf.math.bincount">tf.math.bincount</h1>
+<p>Counts the number of occurrences of each value in an integer array.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v2.math.bincount</code></li>
+<li><code>tf.math.bincount</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.math.bincount(
+    arr,
+    weights<span class="op">=</span><span class="va">None</span>,
+    minlength<span class="op">=</span><span class="va">None</span>,
+    maxlength<span class="op">=</span><span class="va">None</span>,
+    dtype<span class="op">=</span>tf.dtypes.int32,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/math_ops.py"><code>python/ops/math_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>If <code>minlength</code> and <code>maxlength</code> are not given, returns a vector with length <code>tf.reduce_max(arr) + 1</code> if <code>arr</code> is non-empty, and length 0 otherwise. If <code>weights</code> are non-None, then index <code>i</code> of the output stores the sum of the value in <code>weights</code> at each index where the corresponding value in <code>arr</code> is <code>i</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>arr</code></b>: An int32 tensor of non-negative values.</li>
+<li><b><code>weights</code></b>: If non-None, must be the same shape as arr. For each value in <code>arr</code>, the bin will be incremented by the corresponding weight instead of</li>
+</ul>
+<ol style="list-style-type: decimal">
+<li></li>
+</ol>
+<ul>
+<li><b><code>minlength</code></b>: If given, ensures the output has length at least <code>minlength</code>, padding with zeros at the end if necessary.</li>
+<li><b><code>maxlength</code></b>: If given, skips values in <code>arr</code> that are equal or greater than <code>maxlength</code>, ensuring that the output has length at most <code>maxlength</code>.</li>
+<li><b><code>dtype</code></b>: If <code>weights</code> is None, determines the type of the output bins.</li>
+<li><b><code>name</code></b>: A name scope for the associated operations (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A vector with the same dtype as <code>weights</code> or the given <code>dtype</code>. The bin values.</p>

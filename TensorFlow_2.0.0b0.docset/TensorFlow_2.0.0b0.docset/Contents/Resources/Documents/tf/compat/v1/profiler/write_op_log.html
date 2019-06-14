@@ -1,0 +1,23 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.profiler.write_op_log" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.profiler.write_op_log" class="dashAnchor"></a><h1 id="tf.compat.v1.profiler.write_op_log">tf.compat.v1.profiler.write_op_log</h1>
+<p>Log provided 'op_log', and add additional model information below.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.profiler.write_op_log(
+    graph,
+    log_dir,
+    op_log<span class="op">=</span><span class="va">None</span>,
+    run_meta<span class="op">=</span><span class="va">None</span>,
+    add_trace<span class="op">=</span><span class="va">True</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/profiler/tfprof_logger.py"><code>python/profiler/tfprof_logger.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>The API also assigns ops in tf.compat.v1.trainable_variables() an op type called '_trainable_variables'. The API also logs 'flops' statistics for ops with op.RegisterStatistics() defined. flops calculation depends on Tensor shapes defined in 'graph', which might not be complete. 'run_meta', if provided, completes the shape information with best effort.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>graph</code></b>: tf.Graph. If None and eager execution is not enabled, use default graph.</li>
+<li><b><code>log_dir</code></b>: directory to write the log file.</li>
+<li><b><code>op_log</code></b>: (Optional) OpLogProto proto to be written. If not provided, an new one is created.</li>
+<li><b><code>run_meta</code></b>: (Optional) RunMetadata proto that helps flops computation using run time shape information.</li>
+<li><b><code>add_trace</code></b>: Whether to add python code trace information. Used to support &quot;code&quot; view.</li>
+</ul>

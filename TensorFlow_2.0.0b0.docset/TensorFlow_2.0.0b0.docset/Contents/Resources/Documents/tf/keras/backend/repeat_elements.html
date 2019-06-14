@@ -1,0 +1,27 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.backend.repeat_elements" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.keras.backend.repeat_elements" class="dashAnchor"></a><h1 id="tf.keras.backend.repeat_elements">tf.keras.backend.repeat_elements</h1>
+<p>Repeats the elements of a tensor along an axis, like <code>np.repeat</code>.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.keras.backend.repeat_elements</code></li>
+<li><code>tf.compat.v2.keras.backend.repeat_elements</code></li>
+<li><code>tf.keras.backend.repeat_elements</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.keras.backend.repeat_elements(
+    x,
+    rep,
+    axis
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/backend.py"><code>python/keras/backend.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>If <code>x</code> has shape <code>(s1, s2, s3)</code> and <code>axis</code> is <code>1</code>, the output will have shape <code>(s1, s2 * rep, s3)</code>.</p>
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>x</code></b>: Tensor or variable.</li>
+<li><b><code>rep</code></b>: Python integer, number of times to repeat.</li>
+<li><b><code>axis</code></b>: Axis along which to repeat.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A tensor.</p>

@@ -1,0 +1,67 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.utils.OrderedEnqueuer" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="get"/> <meta itemprop="property" content="is_running"/> <meta itemprop="property" content="start"/> <meta itemprop="property" content="stop"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.keras.utils.OrderedEnqueuer" class="dashAnchor"></a><h1 id="tf.keras.utils.orderedenqueuer">tf.keras.utils.OrderedEnqueuer</h1>
+<h2 id="class-orderedenqueuer">Class <code>OrderedEnqueuer</code></h2>
+<p>Builds a Enqueuer from a Sequence.</p>
+<p>Inherits From: <a href="../../../tf/keras/utils/SequenceEnqueuer.html"><code>SequenceEnqueuer</code></a></p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.keras.utils.OrderedEnqueuer</code></li>
+<li>Class <code>tf.compat.v2.keras.utils.OrderedEnqueuer</code></li>
+<li>Class <code>tf.keras.utils.OrderedEnqueuer</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/utils/data_utils.py"><code>python/keras/utils/data_utils.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Used in <code>fit_generator</code>, <code>evaluate_generator</code>, <code>predict_generator</code>.</p>
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>sequence</code></b>: A <code>tf.keras.utils.data_utils.Sequence</code> object.</li>
+<li><b><code>use_multiprocessing</code></b>: use multiprocessing if True, otherwise threading</li>
+<li><b><code>shuffle</code></b>: whether to shuffle the data at the beginning of each epoch</li>
+</ul>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    sequence,
+    use_multiprocessing<span class="op">=</span><span class="va">False</span>,
+    shuffle<span class="op">=</span><span class="va">False</span>
+)</code></pre></div>
+<p>Initialize self. See help(type(self)) for accurate signature.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="get">
+<code>get</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get()</code></pre></div>
+<p>Creates a generator to extract data from the queue.</p>
+<p>Skip the data if it is <code>None</code>.</p>
+<h4 id="yields">Yields:</h4>
+<p>The next element in the queue, i.e. a tuple <code>(inputs, targets)</code> or <code>(inputs, targets, sample_weights)</code>.</p>
+<h3 id="is_running">
+<code>is_running</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">is_running()</code></pre></div>
+<h3 id="start">
+<code>start</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">start(
+    workers<span class="op">=</span><span class="dv">1</span>,
+    max_queue_size<span class="op">=</span><span class="dv">10</span>
+)</code></pre></div>
+<p>Starts the handler's workers.</p>
+<h4 id="arguments-1">Arguments:</h4>
+<ul>
+<li><b><code>workers</code></b>: Number of workers.</li>
+<li><b><code>max_queue_size</code></b>: queue size (when full, workers could block on <code>put()</code>)</li>
+</ul>
+<h3 id="stop">
+<code>stop</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">stop(timeout<span class="op">=</span><span class="va">None</span>)</code></pre></div>
+<p>Stops running threads and wait for them to exit, if necessary.</p>
+<p>Should be called by the same thread which called <code>start()</code>.</p>
+<h4 id="arguments-2">Arguments:</h4>
+<ul>
+<li><b><code>timeout</code></b>: maximum time to wait on <code>thread.join()</code></li>
+</ul>

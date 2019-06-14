@@ -1,0 +1,37 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.io.write_graph" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.io.write_graph" class="dashAnchor"></a><h1 id="tf.io.write_graph">tf.io.write_graph</h1>
+<p>Writes a graph proto to a file.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.io.write_graph</code></li>
+<li><code>tf.compat.v1.train.write_graph</code></li>
+<li><code>tf.compat.v2.io.write_graph</code></li>
+<li><code>tf.io.write_graph</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.io.write_graph(
+    graph_or_graph_def,
+    logdir,
+    name,
+    as_text<span class="op">=</span><span class="va">True</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/framework/graph_io.py"><code>python/framework/graph_io.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>The graph is written as a text proto unless <code>as_text</code> is <code>False</code>.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">v <span class="op">=</span> tf.Variable(<span class="dv">0</span>, name<span class="op">=</span><span class="st">&#39;my_variable&#39;</span>)
+sess <span class="op">=</span> tf.compat.v1.Session()
+tf.io.write_graph(sess.graph_def, <span class="st">&#39;/tmp/my-model&#39;</span>, <span class="st">&#39;train.pbtxt&#39;</span>)</code></pre></div>
+<p>or</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">v <span class="op">=</span> tf.Variable(<span class="dv">0</span>, name<span class="op">=</span><span class="st">&#39;my_variable&#39;</span>)
+sess <span class="op">=</span> tf.compat.v1.Session()
+tf.io.write_graph(sess.graph, <span class="st">&#39;/tmp/my-model&#39;</span>, <span class="st">&#39;train.pbtxt&#39;</span>)</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>graph_or_graph_def</code></b>: A <code>Graph</code> or a <code>GraphDef</code> protocol buffer.</li>
+<li><b><code>logdir</code></b>: Directory where to write the graph. This can refer to remote filesystems, such as Google Cloud Storage (GCS).</li>
+<li><b><code>name</code></b>: Filename for the graph.</li>
+<li><b><code>as_text</code></b>: If <code>True</code>, writes the graph as an ASCII proto.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The path of the output proto file.</p>

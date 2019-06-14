@@ -1,0 +1,20 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.distribute.get_strategy" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.distribute.get_strategy" class="dashAnchor"></a><h1 id="tf.distribute.get_strategy">tf.distribute.get_strategy</h1>
+<p>Returns the current <a href="../../tf/distribute/Strategy.html"><code>tf.distribute.Strategy</code></a> object.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.distribute.get_strategy</code></li>
+<li><code>tf.compat.v2.distribute.get_strategy</code></li>
+<li><code>tf.distribute.get_strategy</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.distribute.get_strategy()</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/distribute/distribution_strategy_context.py"><code>python/distribute/distribution_strategy_context.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Typically only used in a cross-replica context:</p>
+<pre><code>if tf.distribute.in_cross_replica_context():
+  strategy = tf.distribute.get_strategy()
+  ...</code></pre>
+<h4 id="returns">Returns:</h4>
+<p>A <a href="../../tf/distribute/Strategy.html"><code>tf.distribute.Strategy</code></a> object. Inside a <code>with strategy.scope()</code> block, it returns <code>strategy</code>, otherwise it returns the default (single-replica) <a href="../../tf/distribute/Strategy.html"><code>tf.distribute.Strategy</code></a> object.</p>

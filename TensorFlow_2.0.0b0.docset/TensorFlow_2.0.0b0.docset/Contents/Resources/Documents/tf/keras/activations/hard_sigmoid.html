@@ -1,0 +1,21 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.activations.hard_sigmoid" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.keras.activations.hard_sigmoid" class="dashAnchor"></a><h1 id="tf.keras.activations.hard_sigmoid">tf.keras.activations.hard_sigmoid</h1>
+<p>Hard sigmoid activation function.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.keras.activations.hard_sigmoid</code></li>
+<li><code>tf.compat.v2.keras.activations.hard_sigmoid</code></li>
+<li><code>tf.keras.activations.hard_sigmoid</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.keras.activations.hard_sigmoid(x)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/activations.py"><code>python/keras/activations.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Faster to compute than sigmoid activation.</p>
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>x</code></b>: Input tensor.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Hard sigmoid activation: - <code>0</code> if <code>x &lt; -2.5</code> - <code>1</code> if <code>x &gt; 2.5</code> - <code>0.2 * x + 0.5</code> if <code>-2.5 &lt;= x &lt;= 2.5</code>.</p>

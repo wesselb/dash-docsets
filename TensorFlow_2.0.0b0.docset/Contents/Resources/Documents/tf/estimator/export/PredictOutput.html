@@ -1,0 +1,45 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.estimator.export.PredictOutput" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="outputs"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="as_signature_def"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.estimator.export.PredictOutput" class="dashAnchor"></a><h1 id="tf.estimator.export.predictoutput">tf.estimator.export.PredictOutput</h1>
+<h2 id="class-predictoutput">Class <code>PredictOutput</code></h2>
+<p>Represents the output of a generic prediction head.</p>
+<p>Inherits From: <a href="../../../tf/estimator/export/ExportOutput.html"><code>ExportOutput</code></a></p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.estimator.export.PredictOutput</code></li>
+<li>Class <code>tf.compat.v2.estimator.export.PredictOutput</code></li>
+<li>Class <code>tf.estimator.export.PredictOutput</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/saved_model/model_utils/export_output.py"><code>python/saved_model/model_utils/export_output.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>A generic prediction need not be either a classification or a regression.</p>
+<p>Named outputs must be provided as a dict from string to <code>Tensor</code>,</p>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(outputs)</code></pre></div>
+<p>Constructor for PredictOutput.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>outputs</code></b>: A <code>Tensor</code> or a dict of string to <code>Tensor</code> representing the predictions.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if the outputs is not dict, or any of its keys are not strings, or any of its values are not <code>Tensor</code>s.</li>
+</ul>
+<h2 id="properties">Properties</h2>
+<h3 id="outputs">
+<code>outputs</code>
+</h3>
+<h2 id="methods">Methods</h2>
+<h3 id="as_signature_def">
+<code>as_signature_def</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">as_signature_def(receiver_tensors)</code></pre></div>
+<p>Generate a SignatureDef proto for inclusion in a MetaGraphDef.</p>
+<p>The SignatureDef will specify outputs as described in this ExportOutput, and will use the provided receiver_tensors as inputs.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>receiver_tensors</code></b>: a <code>Tensor</code>, or a dict of string to <code>Tensor</code>, specifying input nodes that will be fed.</li>
+</ul>

@@ -1,0 +1,61 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.quantization.dequantize" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.quantization.dequantize" class="dashAnchor"></a><h1 id="tf.quantization.dequantize">tf.quantization.dequantize</h1>
+<p>Dequantize the 'input' tensor into a float Tensor.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.dequantize</code></li>
+<li><code>tf.compat.v1.quantization.dequantize</code></li>
+<li><code>tf.compat.v2.quantization.dequantize</code></li>
+<li><code>tf.quantization.dequantize</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.quantization.dequantize(
+    <span class="bu">input</span>,
+    min_range,
+    max_range,
+    mode<span class="op">=</span><span class="st">&#39;MIN_COMBINED&#39;</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in generated file: <code>python/ops/gen_array_ops.py</code>.</p>
+<!-- Placeholder for "Used in" -->
+<p>[min_range, max_range] are scalar floats that specify the range for the 'input' data. The 'mode' attribute controls exactly which calculations are used to convert the float values to their quantized equivalents.</p>
+<p>In 'MIN_COMBINED' mode, each value of the tensor will undergo the following:</p>
+<pre><code>if T == qint8: in[i] += (range(T) + 1)/ 2.0
+out[i] = min_range + (in[i]* (max_range - min_range) / range(T))</code></pre>
+<p>here <code>range(T) = numeric_limits&lt;T&gt;::max() - numeric_limits&lt;T&gt;::min()</code></p>
+<p><em>MIN_COMBINED Mode Example</em></p>
+<p>If the input comes from a QuantizedRelu6, the output type is quint8 (range of 0-255) but the possible range of QuantizedRelu6 is 0-6. The min_range and max_range values are therefore 0.0 and 6.0. Dequantize on quint8 will take each value, cast to float, and multiply by 6 / 255. Note that if quantizedtype is qint8, the operation will additionally add each value by 128 prior to casting.</p>
+<p>If the mode is 'MIN_FIRST', then this approach is used:</p>
+<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp">num_discrete_values = <span class="dv">1</span> &lt;&lt; (<span class="er">#</span> of bits in T)
+range_adjust = num_discrete_values / (num_discrete_values - <span class="dv">1</span>)
+range = (range_max - range_min) * range_adjust
+range_scale = range / nu<span class="va">m_discrete_values</span>
+<span class="at">const</span> <span class="dt">double</span> offset_input = <span class="kw">static_cast</span>&lt;<span class="dt">double</span>&gt;(input) - lowest_quantized;
+result = range_min + ((input - numeric_limits&lt;T&gt;::min()) * range_scale)</code></pre></div>
+<p><em>SCALED mode Example</em></p>
+<p><code>SCALED</code> mode matches the quantization approach used in <code>QuantizeAndDequantize{V2|V3}</code>.</p>
+<p>If the mode is <code>SCALED</code>, we do not use the full range of the output type, choosing to elide the lowest possible value for symmetry (e.g., output range is -127 to 127, not -128 to 127 for signed 8 bit quantization), so that 0.0 maps to 0.</p>
+<p>We first find the range of values in our tensor. The range we use is always centered on 0, so we find m such that</p>
+<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp">  m = max(abs(input_min), abs(input_max))</code></pre></div>
+<p>Our input tensor range is then <code>[-m, m]</code>.</p>
+<p>Next, we choose our fixed-point quantization buckets, <code>[min_fixed, max_fixed]</code>. If T is signed, this is</p>
+<pre><code>  num_bits = sizeof(T) * 8
+  [min_fixed, max_fixed] =
+      [-(1 &lt;&lt; (num_bits - 1) - 1), (1 &lt;&lt; (num_bits - 1)) - 1]</code></pre>
+<p>Otherwise, if T is unsigned, the fixed-point range is</p>
+<pre><code>  [min_fixed, max_fixed] = [0, (1 &lt;&lt; num_bits) - 1]</code></pre>
+<p>From this we compute our scaling factor, s:</p>
+<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp">  s = (<span class="dv">2</span> * m) / (max_fixed - min_fixed)</code></pre></div>
+<p>Now we can dequantize the elements of our tensor:</p>
+<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp">result = input * s</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>qint8</code>, <code>quint8</code>, <code>qint32</code>, <code>qint16</code>, <code>quint16</code>.</li>
+<li><b><code>min_range</code></b>: A <code>Tensor</code> of type <code>float32</code>. The minimum scalar value possibly produced for the input.</li>
+<li><b><code>max_range</code></b>: A <code>Tensor</code> of type <code>float32</code>. The maximum scalar value possibly produced for the input.</li>
+<li><b><code>mode</code></b>: An optional <code>string</code> from: <code>&quot;MIN_COMBINED&quot;, &quot;MIN_FIRST&quot;, &quot;SCALED&quot;</code>. Defaults to <code>&quot;MIN_COMBINED&quot;</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>float32</code>.</p>

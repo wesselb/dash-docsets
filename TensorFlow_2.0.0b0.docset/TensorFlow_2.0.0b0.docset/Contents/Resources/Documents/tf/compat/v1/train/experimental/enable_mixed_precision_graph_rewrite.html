@@ -1,0 +1,23 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.train.experimental.enable_mixed_precision_graph_rewrite" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.train.experimental.enable_mixed_precision_graph_rewrite" class="dashAnchor"></a><h1 id="tf.compat.v1.train.experimental.enable_mixed_precision_graph_rewrite">tf.compat.v1.train.experimental.enable_mixed_precision_graph_rewrite</h1>
+<p>Enable mixed precision via a graph rewrite.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.train.experimental.enable_mixed_precision_graph_rewrite(
+    opt,
+    loss_scale<span class="op">=</span><span class="st">&#39;dynamic&#39;</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/training/experimental/mixed_precision.py"><code>python/training/experimental/mixed_precision.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Mixed precision is the use of both float16 and float32 when training a model, and is used to make the model run faster. This function will use mixed precision to speed up the execution time of your model when run on a GPU. It does this by changing the dtype of certain operations in the graph from float32 to float16.</p>
+<p>This function additionally wraps an Optimizer with a LossScaleOptimizer, which is required to prevent underflow in the float16 tensors during the backwards pass. An optimizer must be passed to this function, which will then be wrapped to use loss scaling.</p>
+<p>When this function is used, gradients should only be computed and applied with the returned optimizer, either by calling <code>opt.minimize()</code> or <code>opt.compute_gradients()</code> followed by <code>opt.apply_gradients()</code>. Gradients should not be computed with <a href="../../../../../tf/gradients.html"><code>tf.gradients</code></a> or <a href="../../../../../tf/GradientTape.html"><code>tf.GradientTape</code></a>. This is because the returned optimizer will apply loss scaling, and <a href="../../../../../tf/gradients.html"><code>tf.gradients</code></a>/<a href="../../../../../tf/GradientTape.html"><code>tf.GradientTape</code></a> will not. If you do directly use <a href="../../../../../tf/gradients.html"><code>tf.gradients</code></a> or <a href="../../../../../tf/GradientTape.html"><code>tf.GradientTape</code></a>, your model may train to a worse quality.</p>
+<p>When eager execution is enabled, the mixed precision graph rewrite is only enabled within <a href="../../../../../tf/function.html"><code>tf.function</code></a>s, as outside <a href="../../../../../tf/function.html"><code>tf.function</code></a>s, there is no graph.</p>
+<p>When enabled, mixed precision is only used on Volta GPUs and above. The parts of the graph on CPUs and TPUs are untouched by the graph rewrite.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>opt</code></b>: An instance of a <a href="../../../../../tf/keras/optimizers/Optimizer.html"><code>tf.keras.optimizers.Optimizer</code></a> or a <code>tf.train.Optimizer</code>.</li>
+<li><b><code>loss_scale</code></b>: Either an int/float, the string &quot;dynamic&quot;, or an instance of a <a href="../../../../../tf/train/experimental/LossScale.html"><code>tf.train.experimental.LossScale</code></a>. The loss scale to use. It is recommended to keep this as its default value of &quot;dynamic&quot;.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A version of <code>opt</code> that will use loss scaling to prevent underflow.</p>

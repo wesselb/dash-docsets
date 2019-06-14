@@ -1,0 +1,38 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.config.experimental_connect_to_host" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.config.experimental_connect_to_host" class="dashAnchor"></a><h1 id="tf.config.experimental_connect_to_host">tf.config.experimental_connect_to_host</h1>
+<p>Connects to a single machine to enable remote execution on it.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.config.experimental_connect_to_host</code></li>
+<li><code>tf.compat.v2.config.experimental_connect_to_host</code></li>
+<li><code>tf.config.experimental_connect_to_host</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.config.experimental_connect_to_host(
+    remote_host<span class="op">=</span><span class="va">None</span>,
+    job_name<span class="op">=</span><span class="st">&#39;worker&#39;</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/eager/remote.py"><code>python/eager/remote.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Will make devices on the remote host available to use. Note that calling this more than once will work, but will invalidate any tensor handles on the old remote devices.</p>
+<p>Using the default job_name of worker, you can schedule ops to run remotely as follows:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Enable eager execution, and connect to the remote host.</span>
+tf.compat.v1.enable_eager_execution()
+tf.contrib.eager.connect_to_remote_host(<span class="st">&quot;exampleaddr.com:9876&quot;</span>)
+
+<span class="cf">with</span> ops.device(<span class="st">&quot;job:worker/replica:0/task:1/device:CPU:0&quot;</span>):
+  <span class="co"># The following tensors should be resident on the remote device, and the op</span>
+  <span class="co"># will also execute remotely.</span>
+  x1 <span class="op">=</span> array_ops.ones([<span class="dv">2</span>, <span class="dv">2</span>])
+  x2 <span class="op">=</span> array_ops.ones([<span class="dv">2</span>, <span class="dv">2</span>])
+  y <span class="op">=</span> math_ops.matmul(x1, x2)</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>remote_host</code></b>: a single or a list the remote server addr in host-port format.</li>
+<li><b><code>job_name</code></b>: The job name under which the new server will be accessible.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if remote_host is None.</li>
+</ul>

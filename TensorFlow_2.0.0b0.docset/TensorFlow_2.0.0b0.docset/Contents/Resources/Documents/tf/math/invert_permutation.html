@@ -1,0 +1,31 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.math.invert_permutation" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.math.invert_permutation" class="dashAnchor"></a><h1 id="tf.math.invert_permutation">tf.math.invert_permutation</h1>
+<p>Computes the inverse permutation of a tensor.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.invert_permutation</code></li>
+<li><code>tf.compat.v1.math.invert_permutation</code></li>
+<li><code>tf.compat.v2.math.invert_permutation</code></li>
+<li><code>tf.math.invert_permutation</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.math.invert_permutation(
+    x,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in generated file: <code>python/ops/gen_array_ops.py</code>.</p>
+<!-- Placeholder for "Used in" -->
+<p>This operation computes the inverse of an index permutation. It takes a 1-D integer tensor <code>x</code>, which represents the indices of a zero-based array, and swaps each value with its index position. In other words, for an output tensor <code>y</code> and an input tensor <code>x</code>, this operation computes the following:</p>
+<p><code>y[x[i]] = i for i in [0, 1, ..., len(x) - 1]</code></p>
+<p>The values must include 0. There can be no duplicate values or negative values.</p>
+<h4 id="for-example">For example:</h4>
+<pre><code># tensor `x` is [3, 4, 0, 2, 1]
+invert_permutation(x) ==&gt; [2, 4, 3, 0, 1]</code></pre>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. 1-D.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>

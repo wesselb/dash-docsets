@@ -1,0 +1,31 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.image.convert_image_dtype" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.image.convert_image_dtype" class="dashAnchor"></a><h1 id="tf.image.convert_image_dtype">tf.image.convert_image_dtype</h1>
+<p>Convert <code>image</code> to <code>dtype</code>, scaling its values if needed.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.image.convert_image_dtype</code></li>
+<li><code>tf.compat.v2.image.convert_image_dtype</code></li>
+<li><code>tf.image.convert_image_dtype</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.image.convert_image_dtype(
+    image,
+    dtype,
+    saturate<span class="op">=</span><span class="va">False</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/image_ops_impl.py"><code>python/ops/image_ops_impl.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Images that are represented using floating point values are expected to have values in the range [0,1). Image data stored in integer data types are expected to have values in the range <code>[0,MAX]</code>, where <code>MAX</code> is the largest positive representable number for the data type.</p>
+<p>This op converts between data types, scaling the values appropriately before casting.</p>
+<p>Note that converting from floating point inputs to integer types may lead to over/underflow problems. Set saturate to <code>True</code> to avoid such problem in problematic conversions. If enabled, saturation will clip the output into the allowed range before performing a potentially dangerous cast (and only before performing such a cast, i.e., when casting from a floating point to an integer type, and when casting from a signed to an unsigned type; <code>saturate</code> has no effect on casts between floats, or on casts that increase the type's range).</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>image</code></b>: An image.</li>
+<li><b><code>dtype</code></b>: A <code>DType</code> to convert <code>image</code> to.</li>
+<li><b><code>saturate</code></b>: If <code>True</code>, clip the input before casting (if necessary).</li>
+<li><b><code>name</code></b>: A name for this operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p><code>image</code>, converted to <code>dtype</code>.</p>

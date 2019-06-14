@@ -1,0 +1,33 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.backend.zeros" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.keras.backend.zeros" class="dashAnchor"></a><h1 id="tf.keras.backend.zeros">tf.keras.backend.zeros</h1>
+<p>Instantiates an all-zeros variable and returns it.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.keras.backend.zeros</code></li>
+<li><code>tf.compat.v2.keras.backend.zeros</code></li>
+<li><code>tf.keras.backend.zeros</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.keras.backend.zeros(
+    shape,
+    dtype<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/backend.py"><code>python/keras/backend.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>shape</code></b>: Tuple of integers, shape of returned Keras variable</li>
+<li><b><code>dtype</code></b>: String, data type of returned Keras variable</li>
+<li><b><code>name</code></b>: String, name of returned Keras variable</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A variable (including Keras metadata), filled with <code>0.0</code>. Note that if <code>shape</code> was symbolic, we cannot return a variable, and will return a dynamically-shaped tensor instead.</p>
+<h4 id="example">Example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    <span class="op">&gt;&gt;&gt;</span> <span class="im">from</span> keras <span class="im">import</span> backend <span class="im">as</span> K
+    <span class="op">&gt;&gt;&gt;</span> kvar <span class="op">=</span> K.zeros((<span class="dv">3</span>,<span class="dv">4</span>))
+    <span class="op">&gt;&gt;&gt;</span> K.<span class="bu">eval</span>(kvar)
+    array([[ <span class="dv">0</span>.,  <span class="dv">0</span>.,  <span class="dv">0</span>.,  <span class="dv">0</span>.],
+           [ <span class="dv">0</span>.,  <span class="dv">0</span>.,  <span class="dv">0</span>.,  <span class="dv">0</span>.],
+           [ <span class="dv">0</span>.,  <span class="dv">0</span>.,  <span class="dv">0</span>.,  <span class="dv">0</span>.]], dtype<span class="op">=</span>float32)</code></pre></div>

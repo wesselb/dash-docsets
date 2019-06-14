@@ -1,0 +1,22 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.control_dependencies" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.control_dependencies" class="dashAnchor"></a><h1 id="tf.control_dependencies">tf.control_dependencies</h1>
+<p>Wrapper for <code>Graph.control_dependencies()</code> using the default graph.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.control_dependencies</code></li>
+<li><code>tf.compat.v2.control_dependencies</code></li>
+<li><code>tf.control_dependencies</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.control_dependencies(control_inputs)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/framework/ops.py"><code>python/framework/ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>See <a href="../tf/Graph.md#control_dependencies"><code>tf.Graph.control_dependencies</code></a> for more details.</p>
+<p>When eager execution is enabled, any callable object in the <code>control_inputs</code> list will be called.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>control_inputs</code></b>: A list of <code>Operation</code> or <code>Tensor</code> objects which must be executed or computed before running the operations defined in the context. Can also be <code>None</code> to clear the control dependencies. If eager execution is enabled, any callable object in the <code>control_inputs</code> list will be called.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A context manager that specifies control dependencies for all operations constructed within the context.</p>

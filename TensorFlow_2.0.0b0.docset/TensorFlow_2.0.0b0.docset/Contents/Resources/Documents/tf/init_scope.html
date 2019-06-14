@@ -1,0 +1,35 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.init_scope" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.init_scope" class="dashAnchor"></a><h1 id="tf.init_scope">tf.init_scope</h1>
+<p>A context manager that lifts ops out of control-flow scopes and function-building graphs.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.init_scope</code></li>
+<li><code>tf.compat.v2.init_scope</code></li>
+<li><code>tf.init_scope</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.init_scope()</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/framework/ops.py"><code>python/framework/ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>There is often a need to lift variable initialization ops out of control-flow scopes, function-building graphs, and gradient tapes. Entering an <code>init_scope</code> is a mechanism for satisfying these desiderata. In particular, entering an <code>init_scope</code> has three effects:</p>
+<ol style="list-style-type: decimal">
+<li><p>All control dependencies are cleared the moment the scope is entered; this is equivalent to entering the context manager returned from <code>control_dependencies(None)</code>, which has the side-effect of exiting control-flow scopes like <a href="../tf/cond.html"><code>tf.cond</code></a> and <a href="../tf/while_loop.html"><code>tf.while_loop</code></a>.</p></li>
+<li><p>All operations that are created while the scope is active are lifted into the lowest context on the <code>context_stack</code> that is not building a graph function. Here, a context is defined as either a graph or an eager context. Every context switch, i.e., every installation of a graph as the default graph and every switch into eager mode, is logged in a thread-local stack called <code>context_switches</code>; the log entry for a context switch is popped from the stack when the context is exited. Entering an <code>init_scope</code> is equivalent to crawling up <code>context_switches</code>, finding the first context that is not building a graph function, and entering it. A caveat is that if graph mode is enabled but the default graph stack is empty, then entering an <code>init_scope</code> will simply install a fresh graph as the default one.</p></li>
+<li><p>The gradient tape is paused while the scope is active.</p></li>
+</ol>
+<p>When eager execution is enabled, code inside an init_scope block runs with eager execution enabled even when defining graph functions via tf.contrib.eager.defun. For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.enable_eager_execution()
+
+<span class="at">@tf.contrib.eager.defun</span>
+<span class="kw">def</span> func():
+  <span class="co"># A defun-decorated function constructs TensorFlow graphs,</span>
+  <span class="co"># it does not execute eagerly.</span>
+  <span class="cf">assert</span> <span class="kw">not</span> tf.executing_eagerly()
+  <span class="cf">with</span> tf.init_scope():
+    <span class="co"># Initialization runs with eager execution enabled</span>
+    <span class="cf">assert</span> tf.executing_eagerly()</code></pre></div>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>RuntimeError</code></b>: if graph state is incompatible with this initialization.</li>
+</ul>

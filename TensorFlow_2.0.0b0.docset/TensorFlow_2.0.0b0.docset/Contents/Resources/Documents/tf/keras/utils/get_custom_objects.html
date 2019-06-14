@@ -1,0 +1,20 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.utils.get_custom_objects" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.keras.utils.get_custom_objects" class="dashAnchor"></a><h1 id="tf.keras.utils.get_custom_objects">tf.keras.utils.get_custom_objects</h1>
+<p>Retrieves a live reference to the global dictionary of custom objects.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.keras.utils.get_custom_objects</code></li>
+<li><code>tf.compat.v2.keras.utils.get_custom_objects</code></li>
+<li><code>tf.keras.utils.get_custom_objects</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.keras.utils.get_custom_objects()</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/utils/generic_utils.py"><code>python/keras/utils/generic_utils.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Updating and clearing custom objects using <code>custom_object_scope</code> is preferred, but <code>get_custom_objects</code> can be used to directly access <code>_GLOBAL_CUSTOM_OBJECTS</code>.</p>
+<h4 id="example">Example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    get_custom_objects().clear()
+    get_custom_objects()[<span class="st">&#39;MyObject&#39;</span>] <span class="op">=</span> MyObject</code></pre></div>
+<h4 id="returns">Returns:</h4>
+<p>Global dictionary of names to classes (<code>_GLOBAL_CUSTOM_OBJECTS</code>).</p>

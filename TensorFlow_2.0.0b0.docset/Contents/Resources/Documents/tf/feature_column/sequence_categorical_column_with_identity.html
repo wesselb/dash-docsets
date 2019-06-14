@@ -1,0 +1,46 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.feature_column.sequence_categorical_column_with_identity" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.feature_column.sequence_categorical_column_with_identity" class="dashAnchor"></a><h1 id="tf.feature_column.sequence_categorical_column_with_identity">tf.feature_column.sequence_categorical_column_with_identity</h1>
+<p>Returns a feature column that represents sequences of integers.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.feature_column.sequence_categorical_column_with_identity</code></li>
+<li><code>tf.compat.v2.feature_column.sequence_categorical_column_with_identity</code></li>
+<li><code>tf.feature_column.sequence_categorical_column_with_identity</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.feature_column.sequence_categorical_column_with_identity(
+    key,
+    num_buckets,
+    default_value<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/feature_column/sequence_feature_column.py"><code>python/feature_column/sequence_feature_column.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Pass this to <code>embedding_column</code> or <code>indicator_column</code> to convert sequence categorical data into dense representation for input to sequence NN, such as RNN.</p>
+<h4 id="example">Example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">watches <span class="op">=</span> sequence_categorical_column_with_identity(
+    <span class="st">&#39;watches&#39;</span>, num_buckets<span class="op">=</span><span class="dv">1000</span>)
+watches_embedding <span class="op">=</span> embedding_column(watches, dimension<span class="op">=</span><span class="dv">10</span>)
+columns <span class="op">=</span> [watches_embedding]
+
+features <span class="op">=</span> tf.io.parse_example(..., features<span class="op">=</span>make_parse_example_spec(columns))
+sequence_feature_layer <span class="op">=</span> SequenceFeatures(columns)
+sequence_input, sequence_length <span class="op">=</span> sequence_feature_layer(features)
+sequence_length_mask <span class="op">=</span> tf.sequence_mask(sequence_length)
+
+rnn_cell <span class="op">=</span> tf.keras.layers.SimpleRNNCell(hidden_size)
+rnn_layer <span class="op">=</span> tf.keras.layers.RNN(rnn_cell)
+outputs, state <span class="op">=</span> rnn_layer(sequence_input, mask<span class="op">=</span>sequence_length_mask)</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>key</code></b>: A unique string identifying the input feature.</li>
+<li><b><code>num_buckets</code></b>: Range of inputs. Namely, inputs are expected to be in the range <code>[0, num_buckets)</code>.</li>
+<li><b><code>default_value</code></b>: If <code>None</code>, this column's graph operations will fail for out-of-range inputs. Otherwise, this value must be in the range <code>[0, num_buckets)</code>, and will replace out-of-range inputs.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>SequenceCategoricalColumn</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>num_buckets</code> is less than one.</li>
+<li><b><code>ValueError</code></b>: if <code>default_value</code> is not in range <code>[0, num_buckets)</code>.</li>
+</ul>

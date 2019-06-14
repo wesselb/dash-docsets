@@ -1,0 +1,30 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.data.experimental.StatsAggregator" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="__init__"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.data.experimental.StatsAggregator" class="dashAnchor"></a><h1 id="tf.data.experimental.statsaggregator">tf.data.experimental.StatsAggregator</h1>
+<h2 id="class-statsaggregator">Class <code>StatsAggregator</code></h2>
+<p>A stateful resource that aggregates statistics from one or more iterators.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v2.data.experimental.StatsAggregator</code></li>
+<li>Class <code>tf.data.experimental.StatsAggregator</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/data/experimental/ops/stats_aggregator.py"><code>python/data/experimental/ops/stats_aggregator.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>To record statistics, use one of the custom transformation functions defined in this module when defining your <a href="../../../tf/data/Dataset.html"><code>tf.data.Dataset</code></a>. All statistics will be aggregated by the <code>StatsAggregator</code> that is associated with a particular iterator (see below). For example, to record the latency of producing each element by iterating over a dataset:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">dataset <span class="op">=</span> ...
+dataset <span class="op">=</span> dataset.<span class="bu">apply</span>(tf.data.experimental.latency_stats(<span class="st">&quot;total_bytes&quot;</span>))</code></pre></div>
+<p>To associate a <code>StatsAggregator</code> with a <a href="../../../tf/data/Dataset.html"><code>tf.data.Dataset</code></a> object, use the following pattern:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">aggregator <span class="op">=</span> tf.data.experimental.StatsAggregator()
+dataset <span class="op">=</span> ...
+
+<span class="co"># Apply `StatsOptions` to associate `dataset` with `aggregator`.</span>
+options <span class="op">=</span> tf.data.Options()
+options.experimental_stats.aggregator <span class="op">=</span> aggregator
+dataset <span class="op">=</span> dataset.with_options(options)</code></pre></div>
+<p>Note: This interface is experimental and expected to change. In particular, we expect to add other implementations of <code>StatsAggregator</code> that provide different ways of exporting statistics, and add more types of statistics.</p>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>()</code></pre></div>
+<p>Initialize self. See help(type(self)) for accurate signature.</p>

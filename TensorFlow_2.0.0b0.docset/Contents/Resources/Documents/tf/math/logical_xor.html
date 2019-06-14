@@ -1,0 +1,36 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.math.logical_xor" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.math.logical_xor" class="dashAnchor"></a><h1 id="tf.math.logical_xor">tf.math.logical_xor</h1>
+<p>Logical XOR function.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.RaggedTensor.__xor__</code></li>
+<li><code>tf.compat.v1.RaggedTensor.__xor__</code></li>
+<li><code>tf.compat.v1.logical_xor</code></li>
+<li><code>tf.compat.v1.math.logical_xor</code></li>
+<li><code>tf.compat.v2.RaggedTensor.__xor__</code></li>
+<li><code>tf.compat.v2.math.logical_xor</code></li>
+<li><code>tf.math.logical_xor</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.math.logical_xor(
+    x,
+    y,
+    name<span class="op">=</span><span class="st">&#39;LogicalXor&#39;</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/math_ops.py"><code>python/ops/math_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>x ^ y = (x | y) &amp; ~(x &amp; y)</p>
+<p>Inputs are tensor and if the tensors contains more than one element, an element-wise logical XOR is computed.</p>
+<h4 id="usage">Usage:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">x <span class="op">=</span> tf.constant([<span class="va">False</span>, <span class="va">False</span>, <span class="va">True</span>, <span class="va">True</span>], dtype <span class="op">=</span> tf.<span class="bu">bool</span>)
+y <span class="op">=</span> tf.constant([<span class="va">False</span>, <span class="va">True</span>, <span class="va">False</span>, <span class="va">True</span>], dtype <span class="op">=</span> tf.<span class="bu">bool</span>)
+z <span class="op">=</span> tf.logical_xor(x, y, name<span class="op">=</span><span class="st">&quot;LogicalXor&quot;</span>)
+<span class="co">#  here z = [False  True  True False]</span></code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> type bool.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code> of type bool.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type bool with the same size as that of x or y.</p>

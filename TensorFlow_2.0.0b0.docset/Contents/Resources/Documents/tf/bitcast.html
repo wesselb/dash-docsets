@@ -1,0 +1,56 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.bitcast" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.bitcast" class="dashAnchor"></a><h1 id="tf.bitcast">tf.bitcast</h1>
+<p>Bitcasts a tensor from one type to another without copying data.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.bitcast</code></li>
+<li><code>tf.compat.v1.bitcast</code></li>
+<li><code>tf.compat.v2.bitcast</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.bitcast(
+    <span class="bu">input</span>,
+    <span class="bu">type</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in generated file: <code>python/ops/gen_array_ops.py</code>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Given a tensor <code>input</code>, this operation returns a tensor that has the same buffer data as <code>input</code> with datatype <code>type</code>.</p>
+<p>If the input datatype <code>T</code> is larger than the output datatype <code>type</code> then the shape changes from [...] to [..., sizeof(<code>T</code>)/sizeof(<code>type</code>)].</p>
+<p>If <code>T</code> is smaller than <code>type</code>, the operator requires that the rightmost dimension be equal to sizeof(<code>type</code>)/sizeof(<code>T</code>). The shape then goes from [..., sizeof(<code>type</code>)/sizeof(<code>T</code>)] to [...].</p>
+<p>tf.bitcast() and tf.cast() work differently when real dtype is casted as a complex dtype (e.g. tf.complex64 or tf.complex128) as tf.cast() make imaginary part 0 while tf.bitcast() gives module error. For example,</p>
+<h4 id="example-1">Example 1:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="op">&gt;&gt;&gt;</span> a <span class="op">=</span> [<span class="dv">1</span>., <span class="dv">2</span>., <span class="dv">3</span>.]
+<span class="op">&gt;&gt;&gt;</span> equality_bitcast <span class="op">=</span> tf.bitcast(a,tf.complex128)
+tensorflow.python.framework.errors_impl.InvalidArgumentError: Cannot bitcast <span class="im">from</span> <span class="bu">float</span> to complex128: shape [<span class="dv">3</span>] [Op:Bitcast]
+<span class="op">&gt;&gt;&gt;</span> equality_cast <span class="op">=</span> tf.cast(a,tf.complex128)
+<span class="op">&gt;&gt;&gt;</span> <span class="bu">print</span>(equality_cast)
+tf.Tensor([<span class="dv">1</span>.<span class="op">+</span><span class="fl">0.</span>j <span class="dv">2</span>.<span class="op">+</span><span class="fl">0.</span>j <span class="dv">3</span>.<span class="op">+</span><span class="fl">0.</span>j], shape<span class="op">=</span>(<span class="dv">3</span>,), dtype<span class="op">=</span>complex128)</code></pre></div>
+<p>Example 2:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="op">&gt;&gt;&gt;</span> tf.bitcast(tf.constant(<span class="bn">0xffffffff</span>, dtype<span class="op">=</span>tf.uint32), tf.uint8)
+<span class="op">&lt;</span>tf.Tensor: ... shape<span class="op">=</span>(<span class="dv">4</span>,), dtype<span class="op">=</span>uint8, numpy<span class="op">=</span>array([<span class="dv">255</span>, <span class="dv">255</span>, <span class="dv">255</span>, <span class="dv">255</span>], dtype<span class="op">=</span>uint8)<span class="op">&gt;</span></code></pre></div>
+<p>Example 3:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="op">&gt;&gt;&gt;</span> x <span class="op">=</span> [<span class="dv">1</span>., <span class="dv">2</span>., <span class="dv">3</span>.]
+<span class="op">&gt;&gt;&gt;</span> y <span class="op">=</span> [<span class="dv">0</span>., <span class="dv">2</span>., <span class="dv">3</span>.]
+<span class="op">&gt;&gt;&gt;</span> equality<span class="op">=</span> tf.equal(x,y)
+<span class="op">&gt;&gt;&gt;</span> equality_cast <span class="op">=</span> tf.cast(equality,tf.float32)
+<span class="op">&gt;&gt;&gt;</span> equality_bitcast <span class="op">=</span> tf.bitcast(equality_cast,tf.uint8)
+<span class="op">&gt;&gt;&gt;</span> <span class="bu">print</span>(equality)
+tf.Tensor([<span class="va">False</span> <span class="va">True</span> <span class="va">True</span>], shape<span class="op">=</span>(<span class="dv">3</span>,), dtype<span class="op">=</span><span class="bu">bool</span>)
+<span class="op">&gt;&gt;&gt;</span> <span class="bu">print</span>(equality_cast)
+tf.Tensor([<span class="dv">0</span>. <span class="dv">1</span>. <span class="dv">1</span>.], shape<span class="op">=</span>(<span class="dv">3</span>,), dtype<span class="op">=</span>float32)
+<span class="op">&gt;&gt;&gt;</span> <span class="bu">print</span>(equality_bitcast)
+tf.Tensor(
+[[ <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span>]
+ [ <span class="dv">0</span> <span class="dv">0</span> <span class="dv">128</span> <span class="dv">63</span>]
+ [ <span class="dv">0</span> <span class="dv">0</span> <span class="dv">128</span> <span class="dv">63</span>]], shape<span class="op">=</span>(<span class="dv">3</span>, <span class="dv">4</span>), dtype<span class="op">=</span>uint8)</code></pre></div>
+<p><em>NOTE</em>: Bitcast is implemented as a low-level cast, so machines with different endian orderings will give different results.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>bfloat16</code>, <code>half</code>, <code>float32</code>, <code>float64</code>, <code>int64</code>, <code>int32</code>, <code>uint8</code>, <code>uint16</code>, <code>uint32</code>, <code>uint64</code>, <code>int8</code>, <code>int16</code>, <code>complex64</code>, <code>complex128</code>, <code>qint8</code>, <code>quint8</code>, <code>qint16</code>, <code>quint16</code>, <code>qint32</code>.</li>
+<li><b><code>type</code></b>: A <a href="../tf/dtypes/DType.html"><code>tf.DType</code></a> from: <code>tf.bfloat16, tf.half, tf.float32, tf.float64, tf.int64, tf.int32, tf.uint8, tf.uint16, tf.uint32, tf.uint64, tf.int8, tf.int16, tf.complex64, tf.complex128, tf.qint8, tf.quint8, tf.qint16, tf.quint16, tf.qint32</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>type</code>.</p>

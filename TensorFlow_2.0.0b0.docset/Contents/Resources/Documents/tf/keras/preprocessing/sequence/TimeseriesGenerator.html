@@ -1,0 +1,83 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.preprocessing.sequence.TimeseriesGenerator" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="__getitem__"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="__iter__"/> <meta itemprop="property" content="__len__"/> <meta itemprop="property" content="get_config"/> <meta itemprop="property" content="on_epoch_end"/> <meta itemprop="property" content="to_json"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.keras.preprocessing.sequence.TimeseriesGenerator" class="dashAnchor"></a><h1 id="tf.keras.preprocessing.sequence.timeseriesgenerator">tf.keras.preprocessing.sequence.TimeseriesGenerator</h1>
+<h2 id="class-timeseriesgenerator">Class <code>TimeseriesGenerator</code></h2>
+<p>Utility class for generating batches of temporal data.</p>
+<p>Inherits From: <a href="../../../../tf/keras/utils/Sequence.html"><code>Sequence</code></a></p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.keras.preprocessing.sequence.TimeseriesGenerator</code></li>
+<li>Class <code>tf.compat.v2.keras.preprocessing.sequence.TimeseriesGenerator</code></li>
+<li>Class <code>tf.keras.preprocessing.sequence.TimeseriesGenerator</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/preprocessing/sequence.py"><code>python/keras/preprocessing/sequence.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>This class takes in a sequence of data-points gathered at equal intervals, along with time series parameters such as stride, length of history, etc., to produce batches for training/validation. # Arguments data: Indexable generator (such as list or Numpy array) containing consecutive data points (timesteps). The data should be at 2D, and axis 0 is expected to be the time dimension. targets: Targets corresponding to timesteps in <code>data</code>. It should have same length as <code>data</code>. length: Length of the output sequences (in number of timesteps). sampling_rate: Period between successive individual timesteps within sequences. For rate <code>r</code>, timesteps <code>data[i]</code>, <code>data[i-r]</code>, ... <code>data[i - length]</code> are used for create a sample sequence. stride: Period between successive output sequences. For stride <code>s</code>, consecutive output samples would be centered around <code>data[i]</code>, <code>data[i+s]</code>, <code>data[i+2*s]</code>, etc. start_index: Data points earlier than <code>start_index</code> will not be used in the output sequences. This is useful to reserve part of the data for test or validation. end_index: Data points later than <code>end_index</code> will not be used in the output sequences. This is useful to reserve part of the data for test or validation. shuffle: Whether to shuffle output samples, or instead draw them in chronological order. reverse: Boolean: if <code>true</code>, timesteps in each output sample will be in reverse chronological order. batch_size: Number of timeseries samples in each batch (except maybe the last one). # Returns A <a href="/utils/#sequence">Sequence</a> instance. # Examples</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">from</span> keras.preprocessing.sequence <span class="im">import</span> TimeseriesGenerator
+<span class="im">import</span> numpy <span class="im">as</span> np
+data <span class="op">=</span> np.array([[i] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">50</span>)])
+targets <span class="op">=</span> np.array([[i] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">50</span>)])
+data_gen <span class="op">=</span> TimeseriesGenerator(data, targets,
+                               length<span class="op">=</span><span class="dv">10</span>, sampling_rate<span class="op">=</span><span class="dv">2</span>,
+                               batch_size<span class="op">=</span><span class="dv">2</span>)
+<span class="cf">assert</span> <span class="bu">len</span>(data_gen) <span class="op">==</span> <span class="dv">20</span>
+batch_0 <span class="op">=</span> data_gen[<span class="dv">0</span>]
+x, y <span class="op">=</span> batch_0
+<span class="cf">assert</span> np.array_equal(x,
+                      np.array([[[<span class="dv">0</span>], [<span class="dv">2</span>], [<span class="dv">4</span>], [<span class="dv">6</span>], [<span class="dv">8</span>]],
+                                [[<span class="dv">1</span>], [<span class="dv">3</span>], [<span class="dv">5</span>], [<span class="dv">7</span>], [<span class="dv">9</span>]]]))
+<span class="cf">assert</span> np.array_equal(y,
+                      np.array([[<span class="dv">10</span>], [<span class="dv">11</span>]]))</code></pre></div>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    data,
+    targets,
+    length,
+    sampling_rate<span class="op">=</span><span class="dv">1</span>,
+    stride<span class="op">=</span><span class="dv">1</span>,
+    start_index<span class="op">=</span><span class="dv">0</span>,
+    end_index<span class="op">=</span><span class="va">None</span>,
+    shuffle<span class="op">=</span><span class="va">False</span>,
+    reverse<span class="op">=</span><span class="va">False</span>,
+    batch_size<span class="op">=</span><span class="dv">128</span>
+)</code></pre></div>
+<p>Initialize self. See help(type(self)) for accurate signature.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__getitem__">
+<code><strong>getitem</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__getitem__</span>(index)</code></pre></div>
+<h3 id="__iter__">
+<code><strong>iter</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__iter__</span>()</code></pre></div>
+<p>Create a generator that iterate over the Sequence.</p>
+<h3 id="__len__">
+<code><strong>len</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__len__</span>()</code></pre></div>
+<h3 id="get_config">
+<code>get_config</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_config()</code></pre></div>
+<p>Returns the TimeseriesGenerator configuration as Python dictionary.</p>
+<h1 id="returns">Returns</h1>
+<pre><code>A Python dictionary with the TimeseriesGenerator configuration.</code></pre>
+<h3 id="on_epoch_end">
+<code>on_epoch_end</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_epoch_end()</code></pre></div>
+<p>Method called at the end of every epoch.</p>
+<h3 id="to_json">
+<code>to_json</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">to_json(<span class="op">**</span>kwargs)</code></pre></div>
+<p>Returns a JSON string containing the timeseries generator configuration. To load a generator from a JSON string, use <code>keras.preprocessing.sequence.timeseries_generator_from_json(json_string)</code>.</p>
+<h1 id="arguments">Arguments</h1>
+<pre><code>**kwargs: Additional keyword arguments
+    to be passed to `json.dumps()`.</code></pre>
+<h1 id="returns-1">Returns</h1>
+<pre><code>A JSON string containing the tokenizer configuration.</code></pre>

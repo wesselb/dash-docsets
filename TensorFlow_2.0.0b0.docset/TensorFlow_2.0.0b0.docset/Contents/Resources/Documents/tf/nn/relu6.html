@@ -1,0 +1,25 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.nn.relu6" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.nn.relu6" class="dashAnchor"></a><h1 id="tf.nn.relu6">tf.nn.relu6</h1>
+<p>Computes Rectified Linear 6: <code>min(max(features, 0), 6)</code>.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.nn.relu6</code></li>
+<li><code>tf.compat.v2.nn.relu6</code></li>
+<li><code>tf.nn.relu6</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.nn.relu6(
+    features,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/nn_ops.py"><code>python/ops/nn_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Source: <a href="http://www.cs.utoronto.ca/~kriz/conv-cifar10-aug2010.pdf">Convolutional Deep Belief Networks on CIFAR-10. A. Krizhevsky</a></p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>features</code></b>: A <code>Tensor</code> with type <code>float</code>, <code>double</code>, <code>int32</code>, <code>int64</code>, <code>uint8</code>, <code>int16</code>, or <code>int8</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> with the same type as <code>features</code>.</p>

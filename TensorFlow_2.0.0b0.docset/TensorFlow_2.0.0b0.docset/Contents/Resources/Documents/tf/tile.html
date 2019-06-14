@@ -1,0 +1,28 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.tile" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.tile" class="dashAnchor"></a><h1 id="tf.tile">tf.tile</h1>
+<p>Constructs a tensor by tiling a given tensor.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.manip.tile</code></li>
+<li><code>tf.compat.v1.tile</code></li>
+<li><code>tf.compat.v2.tile</code></li>
+<li><code>tf.tile</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.tile(
+    <span class="bu">input</span>,
+    multiples,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in generated file: <code>python/ops/gen_array_ops.py</code>.</p>
+<!-- Placeholder for "Used in" -->
+<p>This operation creates a new tensor by replicating <code>input</code> <code>multiples</code> times. The output tensor's i'th dimension has <code>input.dims(i) * multiples[i]</code> elements, and the values of <code>input</code> are replicated <code>multiples[i]</code> times along the 'i'th dimension. For example, tiling <code>[a b c d]</code> by <code>[2]</code> produces <code>[a b c d a b c d]</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. 1-D or higher.</li>
+<li><b><code>multiples</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. 1-D. Length must be the same as the number of dimensions in <code>input</code></li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>input</code>.</p>

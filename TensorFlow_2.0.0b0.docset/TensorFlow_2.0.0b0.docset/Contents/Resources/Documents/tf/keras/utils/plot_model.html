@@ -1,0 +1,34 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.utils.plot_model" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.keras.utils.plot_model" class="dashAnchor"></a><h1 id="tf.keras.utils.plot_model">tf.keras.utils.plot_model</h1>
+<p>Converts a Keras model to dot format and save to a file.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.keras.utils.plot_model</code></li>
+<li><code>tf.compat.v2.keras.utils.plot_model</code></li>
+<li><code>tf.keras.utils.plot_model</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.keras.utils.plot_model(
+    model,
+    to_file<span class="op">=</span><span class="st">&#39;model.png&#39;</span>,
+    show_shapes<span class="op">=</span><span class="va">False</span>,
+    show_layer_names<span class="op">=</span><span class="va">True</span>,
+    rankdir<span class="op">=</span><span class="st">&#39;TB&#39;</span>,
+    expand_nested<span class="op">=</span><span class="va">False</span>,
+    dpi<span class="op">=</span><span class="dv">96</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/utils/vis_utils.py"><code>python/keras/utils/vis_utils.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>model</code></b>: A Keras model instance</li>
+<li><b><code>to_file</code></b>: File name of the plot image.</li>
+<li><b><code>show_shapes</code></b>: whether to display shape information.</li>
+<li><b><code>show_layer_names</code></b>: whether to display layer names.</li>
+<li><b><code>rankdir</code></b>: <code>rankdir</code> argument passed to PyDot, a string specifying the format of the plot: 'TB' creates a vertical plot; 'LR' creates a horizontal plot.</li>
+<li><b><code>expand_nested</code></b>: Whether to expand nested models into clusters.</li>
+<li><b><code>dpi</code></b>: Dots per inch.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A Jupyter notebook Image object if Jupyter is installed. This enables in-line display of the model plots in notebooks.</p>

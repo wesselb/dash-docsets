@@ -1,0 +1,29 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.zeros" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.zeros" class="dashAnchor"></a><h1 id="tf.zeros">tf.zeros</h1>
+<p>Creates a tensor with all elements set to zero.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.zeros</code></li>
+<li><code>tf.compat.v2.zeros</code></li>
+<li><code>tf.zeros</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.zeros(
+    shape,
+    dtype<span class="op">=</span>tf.dtypes.float32,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/array_ops.py"><code>python/ops/array_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>This operation returns a tensor of type <code>dtype</code> with shape <code>shape</code> and all elements set to zero.</p>
+<h4 id="for-example">For example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.zeros([<span class="dv">3</span>, <span class="dv">4</span>], tf.int32)  <span class="co"># [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]</span></code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>shape</code></b>: A list of integers, a tuple of integers, or a 1-D <code>Tensor</code> of type <code>int32</code>.</li>
+<li><b><code>dtype</code></b>: The type of an element in the resulting <code>Tensor</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> with all elements set to zero.</p>

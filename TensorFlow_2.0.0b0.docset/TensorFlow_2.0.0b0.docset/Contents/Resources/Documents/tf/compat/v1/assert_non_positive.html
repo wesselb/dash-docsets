@@ -1,0 +1,33 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.assert_non_positive" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.assert_non_positive" class="dashAnchor"></a><h1 id="tf.compat.v1.assert_non_positive">tf.compat.v1.assert_non_positive</h1>
+<p>Assert the condition <code>x &lt;= 0</code> holds element-wise.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.assert_non_positive</code></li>
+<li><code>tf.compat.v1.debugging.assert_non_positive</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.assert_non_positive(
+    x,
+    data<span class="op">=</span><span class="va">None</span>,
+    summarize<span class="op">=</span><span class="va">None</span>,
+    message<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/check_ops.py"><code>python/ops/check_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Example of adding a dependency to an operation:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> tf.control_dependencies([tf.compat.v1.assert_non_positive(x)]):
+  output <span class="op">=</span> tf.reduce_sum(x)</code></pre></div>
+<p>Non-positive means, for every element <code>x[i]</code> of <code>x</code>, we have <code>x[i] &lt;= 0</code>. If <code>x</code> is empty this is trivially satisfied.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: Numeric <code>Tensor</code>.</li>
+<li><b><code>data</code></b>: The tensors to print out if the condition is False. Defaults to error message and first few entries of <code>x</code>.</li>
+<li><b><code>summarize</code></b>: Print this many entries of each tensor.</li>
+<li><b><code>message</code></b>: A string to prefix to the default message.</li>
+<li><b><code>name</code></b>: A name for this operation (optional). Defaults to &quot;assert_non_positive&quot;.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Op raising <code>InvalidArgumentError</code> unless <code>x</code> is all non-positive.</p>

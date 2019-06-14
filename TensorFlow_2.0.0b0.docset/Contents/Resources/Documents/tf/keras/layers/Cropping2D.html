@@ -1,0 +1,45 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.layers.Cropping2D" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="__init__"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.keras.layers.Cropping2D" class="dashAnchor"></a><h1 id="tf.keras.layers.cropping2d">tf.keras.layers.Cropping2D</h1>
+<h2 id="class-cropping2d">Class <code>Cropping2D</code></h2>
+<p>Cropping layer for 2D input (e.g. picture).</p>
+<p>Inherits From: <a href="../../../tf/keras/layers/Layer.html"><code>Layer</code></a></p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.keras.layers.Cropping2D</code></li>
+<li>Class <code>tf.compat.v2.keras.layers.Cropping2D</code></li>
+<li>Class <code>tf.keras.layers.Cropping2D</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/layers/convolutional.py"><code>python/keras/layers/convolutional.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>It crops along spatial dimensions, i.e. height and width.</p>
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>cropping</code></b>: Int, or tuple of 2 ints, or tuple of 2 tuples of 2 ints.</li>
+<li>If int: the same symmetric cropping is applied to height and width.</li>
+<li>If tuple of 2 ints: interpreted as two different symmetric cropping values for height and width: <code>(symmetric_height_crop, symmetric_width_crop)</code>.</li>
+<li>If tuple of 2 tuples of 2 ints: interpreted as <code>((top_crop, bottom_crop), (left_crop, right_crop))</code></li>
+<li><b><code>data_format</code></b>: A string, one of <code>channels_last</code> (default) or <code>channels_first</code>. The ordering of the dimensions in the inputs. <code>channels_last</code> corresponds to inputs with shape <code>(batch, height, width, channels)</code> while <code>channels_first</code> corresponds to inputs with shape <code>(batch, channels, height, width)</code>. It defaults to the <code>image_data_format</code> value found in your Keras config file at <code>~/.keras/keras.json</code>. If you never set it, then it will be &quot;channels_last&quot;.</li>
+</ul>
+<h4 id="input-shape">Input shape:</h4>
+<p>4D tensor with shape: - If <code>data_format</code> is <code>&quot;channels_last&quot;</code>: <code>(batch, rows, cols, channels)</code> - If <code>data_format</code> is <code>&quot;channels_first&quot;</code>: <code>(batch, channels, rows, cols)</code></p>
+<h4 id="output-shape">Output shape:</h4>
+<p>4D tensor with shape: - If <code>data_format</code> is <code>&quot;channels_last&quot;</code>: <code>(batch, cropped_rows, cropped_cols, channels)</code> - If <code>data_format</code> is <code>&quot;channels_first&quot;</code>: <code>(batch, channels, cropped_rows, cropped_cols)</code></p>
+<h4 id="examples">Examples:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Crop the input 2D images or feature maps</span>
+model <span class="op">=</span> Sequential()
+model.add(Cropping2D(cropping<span class="op">=</span>((<span class="dv">2</span>, <span class="dv">2</span>), (<span class="dv">4</span>, <span class="dv">4</span>)),
+                     input_shape<span class="op">=</span>(<span class="dv">28</span>, <span class="dv">28</span>, <span class="dv">3</span>)))
+<span class="co"># now model.output_shape == (None, 24, 20, 3)</span>
+model.add(Conv2D(<span class="dv">64</span>, (<span class="dv">3</span>, <span class="dv">3</span>), padding<span class="op">=</span><span class="st">&#39;same&#39;</span>))
+model.add(Cropping2D(cropping<span class="op">=</span>((<span class="dv">2</span>, <span class="dv">2</span>), (<span class="dv">2</span>, <span class="dv">2</span>))))
+<span class="co"># now model.output_shape == (None, 20, 16. 64)</span></code></pre></div>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    cropping<span class="op">=</span>((<span class="dv">0</span>, <span class="dv">0</span>), (<span class="dv">0</span>, <span class="dv">0</span>)),
+    data_format<span class="op">=</span><span class="va">None</span>,
+    <span class="op">**</span>kwargs
+)</code></pre></div>

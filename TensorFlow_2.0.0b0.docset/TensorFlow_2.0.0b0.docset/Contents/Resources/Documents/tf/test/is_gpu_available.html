@@ -1,0 +1,25 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.test.is_gpu_available" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.test.is_gpu_available" class="dashAnchor"></a><h1 id="tf.test.is_gpu_available">tf.test.is_gpu_available</h1>
+<p>Returns whether TensorFlow can access a GPU.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.test.is_gpu_available</code></li>
+<li><code>tf.compat.v2.test.is_gpu_available</code></li>
+<li><code>tf.test.is_gpu_available</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.test.is_gpu_available(
+    cuda_only<span class="op">=</span><span class="va">False</span>,
+    min_cuda_compute_capability<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/framework/test_util.py"><code>python/framework/test_util.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Warning: if a non-GPU version of the package is installed, the function would also return False. Use <a href="../../tf/test/is_built_with_cuda.html"><code>tf.test.is_built_with_cuda</code></a> to validate if TensorFlow was build with CUDA support.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>cuda_only</code></b>: limit the search to CUDA GPUs.</li>
+<li><b><code>min_cuda_compute_capability</code></b>: a (major,minor) pair that indicates the minimum CUDA compute capability required, or None if no requirement.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>True if a GPU device of the requested kind is available.</p>

@@ -1,0 +1,40 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.nn.compute_average_loss" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.nn.compute_average_loss" class="dashAnchor"></a><h1 id="tf.nn.compute_average_loss">tf.nn.compute_average_loss</h1>
+<p>Scales per-example losses with sample_weights and computes their average.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.nn.compute_average_loss</code></li>
+<li><code>tf.compat.v2.nn.compute_average_loss</code></li>
+<li><code>tf.nn.compute_average_loss</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.nn.compute_average_loss(
+    per_example_loss,
+    sample_weight<span class="op">=</span><span class="va">None</span>,
+    global_batch_size<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/nn_impl.py"><code>python/ops/nn_impl.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Usage with distribution strategy and custom training loop:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> strategy.scope():
+  <span class="kw">def</span> compute_loss(labels, predictions, sample_weight<span class="op">=</span><span class="va">None</span>):
+
+    <span class="co"># If you are using a `Loss` class instead, set reduction to `NONE` so that</span>
+    <span class="co"># we can do the reduction afterwards and divide by global batch size.</span>
+    per_example_loss <span class="op">=</span> tf.keras.losses.sparse_categorical_crossentropy(
+        labels, predictions)
+
+    <span class="co"># Compute loss that is scaled by sample_weight and by global batch size.</span>
+    <span class="cf">return</span> tf.compute_average_loss(
+        per_example_loss,
+        sample_weight<span class="op">=</span>sample_weight,
+        global_batch_size<span class="op">=</span>GLOBAL_BATCH_SIZE)</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>per_example_loss</code></b>: Per-example loss.</li>
+<li><b><code>sample_weight</code></b>: Optional weighting for each example.</li>
+<li><b><code>global_batch_size</code></b>: Optional global batch size value. Defaults to (size of first dimension of <code>losses</code>) * (number of replicas).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Scalar loss value.</p>

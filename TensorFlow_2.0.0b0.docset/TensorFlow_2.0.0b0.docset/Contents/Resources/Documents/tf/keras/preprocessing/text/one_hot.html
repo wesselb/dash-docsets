@@ -1,0 +1,31 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.preprocessing.text.one_hot" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.keras.preprocessing.text.one_hot" class="dashAnchor"></a><h1 id="tf.keras.preprocessing.text.one_hot">tf.keras.preprocessing.text.one_hot</h1>
+<p>One-hot encodes a text into a list of word indexes of size n.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.keras.preprocessing.text.one_hot</code></li>
+<li><code>tf.compat.v2.keras.preprocessing.text.one_hot</code></li>
+<li><code>tf.keras.preprocessing.text.one_hot</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.keras.preprocessing.text.one_hot(
+    text,
+    n,
+    filters<span class="op">=</span><span class="st">&#39;!&quot;#$%&amp;()*+,-./:;&lt;=&gt;?@[</span><span class="ch">\\</span><span class="st">]^_`{|}~</span><span class="ch">\t\n</span><span class="st">&#39;</span>,
+    lower<span class="op">=</span><span class="va">True</span>,
+    split<span class="op">=</span><span class="st">&#39; &#39;</span>
+)</code></pre></div>
+<!-- Placeholder for "Used in" -->
+<p>This is a wrapper to the <code>hashing_trick</code> function using <code>hash</code> as the hashing function; unicity of word to index mapping non-guaranteed.</p>
+<h1 id="arguments">Arguments</h1>
+<pre><code>text: Input text (string).
+n: int. Size of vocabulary.
+filters: list (or concatenation) of characters to filter out, such as
+    punctuation. Default: ``!&quot;#$%&amp;()*+,-./:;&lt;=&gt;?@[\]^_`{|}~\t\n``,
+    includes basic punctuation, tabs, and newlines.
+lower: boolean. Whether to set the text to lowercase.
+split: str. Separator for word splitting.</code></pre>
+<h1 id="returns">Returns</h1>
+<pre><code>List of integers in [1, n]. Each integer encodes a word
+(unicity non-guaranteed).</code></pre>

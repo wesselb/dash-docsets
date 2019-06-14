@@ -1,0 +1,50 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.nn.static_rnn" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.nn.static_rnn" class="dashAnchor"></a><h1 id="tf.compat.v1.nn.static_rnn">tf.compat.v1.nn.static_rnn</h1>
+<p>Creates a recurrent neural network specified by RNNCell <code>cell</code>. (deprecated)</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.nn.static_rnn(
+    cell,
+    inputs,
+    initial_state<span class="op">=</span><span class="va">None</span>,
+    dtype<span class="op">=</span><span class="va">None</span>,
+    sequence_length<span class="op">=</span><span class="va">None</span>,
+    scope<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/rnn.py"><code>python/ops/rnn.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Warning: THIS FUNCTION IS DEPRECATED. It will be removed in a future version. Instructions for updating: Please use <code>keras.layers.RNN(cell, unroll=True)</code>, which is equivalent to this API</p>
+<p>The simplest form of RNN network generated is:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">  state <span class="op">=</span> cell.zero_state(...)
+  outputs <span class="op">=</span> []
+  <span class="cf">for</span> input_ <span class="kw">in</span> inputs:
+    output, state <span class="op">=</span> cell(input_, state)
+    outputs.append(output)
+  <span class="cf">return</span> (outputs, state)</code></pre></div>
+<p>However, a few other options are available:</p>
+<p>An initial state can be provided. If the sequence_length vector is provided, dynamic calculation is performed. This method of calculation does not compute the RNN steps past the maximum sequence length of the minibatch (thus saving computational time), and properly propagates the state at an example's sequence length to the final state output.</p>
+<p>The dynamic calculation performed is, at time <code>t</code> for batch row <code>b</code>,</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">  (output, state)(b, t) <span class="op">=</span>
+    (t <span class="op">&gt;=</span> sequence_length(b))
+      ? (zeros(cell.output_size), states(b, sequence_length(b) <span class="op">-</span> <span class="dv">1</span>))
+      : cell(<span class="bu">input</span>(b, t), state(b, t <span class="op">-</span> <span class="dv">1</span>))</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>cell</code></b>: An instance of RNNCell.</li>
+<li><b><code>inputs</code></b>: A length T list of inputs, each a <code>Tensor</code> of shape <code>[batch_size,   input_size]</code>, or a nested tuple of such elements.</li>
+<li><b><code>initial_state</code></b>: (optional) An initial state for the RNN. If <code>cell.state_size</code> is an integer, this must be a <code>Tensor</code> of appropriate type and shape <code>[batch_size, cell.state_size]</code>. If <code>cell.state_size</code> is a tuple, this should be a tuple of tensors having shapes <code>[batch_size, s] for s in   cell.state_size</code>.</li>
+<li><b><code>dtype</code></b>: (optional) The data type for the initial state and expected output. Required if initial_state is not provided or RNN state has a heterogeneous dtype.</li>
+<li><b><code>sequence_length</code></b>: Specifies the length of each sequence in inputs. An int32 or int64 vector (tensor) size <code>[batch_size]</code>, values in <code>[0, T)</code>.</li>
+<li><b><code>scope</code></b>: VariableScope for the created subgraph; defaults to &quot;rnn&quot;.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A pair (outputs, state) where:</p>
+<ul>
+<li>outputs is a length T list of outputs (one for each input), or a nested tuple of such elements.</li>
+<li>state is the final state</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>cell</code> is not an instance of RNNCell.</li>
+<li><b><code>ValueError</code></b>: If <code>inputs</code> is <code>None</code> or an empty list, or if the input depth (column size) cannot be inferred from inputs via shape inference.</li>
+</ul>

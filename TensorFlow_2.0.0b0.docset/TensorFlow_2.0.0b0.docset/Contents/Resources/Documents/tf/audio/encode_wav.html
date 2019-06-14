@@ -1,0 +1,28 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.audio.encode_wav" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.audio.encode_wav" class="dashAnchor"></a><h1 id="tf.audio.encode_wav">tf.audio.encode_wav</h1>
+<p>Encode audio data using the WAV file format.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.audio.encode_wav</code></li>
+<li><code>tf.compat.v1.audio.encode_wav</code></li>
+<li><code>tf.compat.v2.audio.encode_wav</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.audio.encode_wav(
+    audio,
+    sample_rate,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in generated file: <code>python/ops/gen_audio_ops.py</code>.</p>
+<!-- Placeholder for "Used in" -->
+<p>This operation will generate a string suitable to be saved out to create a .wav audio file. It will be encoded in the 16-bit PCM format. It takes in float values in the range -1.0f to 1.0f, and any outside that value will be clamped to that range.</p>
+<p><code>audio</code> is a 2-D float Tensor of shape <code>[length, channels]</code>. <code>sample_rate</code> is a scalar Tensor holding the rate to use (e.g. 44100).</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>audio</code></b>: A <code>Tensor</code> of type <code>float32</code>. 2-D with shape <code>[length, channels]</code>.</li>
+<li><b><code>sample_rate</code></b>: A <code>Tensor</code> of type <code>int32</code>. Scalar containing the sample frequency.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>string</code>.</p>

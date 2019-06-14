@@ -1,0 +1,28 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.io.tf_record_iterator" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.io.tf_record_iterator" class="dashAnchor"></a><h1 id="tf.compat.v1.io.tf_record_iterator">tf.compat.v1.io.tf_record_iterator</h1>
+<p>An iterator that read the records from a TFRecords file. (deprecated)</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.io.tf_record_iterator</code></li>
+<li><code>tf.compat.v1.python_io.tf_record_iterator</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.io.tf_record_iterator(
+    path,
+    options<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/lib/io/tf_record.py"><code>python/lib/io/tf_record.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Warning: THIS FUNCTION IS DEPRECATED. It will be removed in a future version. Instructions for updating: Use eager execution and: <code>tf.data.TFRecordDataset(path)</code></p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>path</code></b>: The path to the TFRecords file.</li>
+<li><b><code>options</code></b>: (optional) A TFRecordOptions object.</li>
+</ul>
+<h4 id="yields">Yields:</h4>
+<p>Strings.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>IOError</code></b>: If <code>path</code> cannot be opened for reading.</li>
+</ul>

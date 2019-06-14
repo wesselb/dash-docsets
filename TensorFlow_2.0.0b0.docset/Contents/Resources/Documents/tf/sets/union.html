@@ -1,0 +1,77 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.sets.union" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.sets.union" class="dashAnchor"></a><h1 id="tf.sets.union">tf.sets.union</h1>
+<p>Compute set union of elements in last dimension of <code>a</code> and <code>b</code>.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.sets.set_union</code></li>
+<li><code>tf.compat.v1.sets.union</code></li>
+<li><code>tf.compat.v2.sets.union</code></li>
+<li><code>tf.sets.union</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.sets.union(
+    a,
+    b,
+    validate_indices<span class="op">=</span><span class="va">True</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/sets_impl.py"><code>python/ops/sets_impl.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>All but the last dimension of <code>a</code> and <code>b</code> must match.</p>
+<h4 id="example">Example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">  <span class="im">import</span> tensorflow <span class="im">as</span> tf
+  <span class="im">import</span> collections
+
+  <span class="co"># [[{1, 2}, {3}], [{4}, {5, 6}]]</span>
+  a <span class="op">=</span> collections.OrderedDict([
+      ((<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="dv">1</span>),
+      ((<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>), <span class="dv">2</span>),
+      ((<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>), <span class="dv">3</span>),
+      ((<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="dv">4</span>),
+      ((<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>), <span class="dv">5</span>),
+      ((<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="dv">6</span>),
+  ])
+  a <span class="op">=</span> tf.SparseTensor(<span class="bu">list</span>(a.keys()), <span class="bu">list</span>(a.values()), dense_shape<span class="op">=</span>[<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>])
+
+  <span class="co"># [[{1, 3}, {2}], [{4, 5}, {5, 6, 7, 8}]]</span>
+  b <span class="op">=</span> collections.OrderedDict([
+      ((<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="dv">1</span>),
+      ((<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>), <span class="dv">3</span>),
+      ((<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>), <span class="dv">2</span>),
+      ((<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="dv">4</span>),
+      ((<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>), <span class="dv">5</span>),
+      ((<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>), <span class="dv">5</span>),
+      ((<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="dv">6</span>),
+      ((<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>), <span class="dv">7</span>),
+      ((<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3</span>), <span class="dv">8</span>),
+  ])
+  b <span class="op">=</span> tf.SparseTensor(<span class="bu">list</span>(b.keys()), <span class="bu">list</span>(b.values()), dense_shape<span class="op">=</span>[<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">4</span>])
+
+  <span class="co"># `set_union` is applied to each aligned pair of sets.</span>
+  tf.sets.union(a, b)
+
+  <span class="co"># The result will be a equivalent to either of:</span>
+  <span class="co">#</span>
+  <span class="co"># np.array([[{1, 2, 3}, {2, 3}], [{4, 5}, {5, 6, 7, 8}]])</span>
+  <span class="co">#</span>
+  <span class="co"># collections.OrderedDict([</span>
+  <span class="co">#     ((0, 0, 0), 1),</span>
+  <span class="co">#     ((0, 0, 1), 2),</span>
+  <span class="co">#     ((0, 0, 2), 3),</span>
+  <span class="co">#     ((0, 1, 0), 2),</span>
+  <span class="co">#     ((0, 1, 1), 3),</span>
+  <span class="co">#     ((1, 0, 0), 4),</span>
+  <span class="co">#     ((1, 0, 1), 5),</span>
+  <span class="co">#     ((1, 1, 0), 5),</span>
+  <span class="co">#     ((1, 1, 1), 6),</span>
+  <span class="co">#     ((1, 1, 2), 7),</span>
+  <span class="co">#     ((1, 1, 3), 8),</span>
+  <span class="co"># ])</span></code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>a</code></b>: <code>Tensor</code> or <code>SparseTensor</code> of the same type as <code>b</code>. If sparse, indices must be sorted in row-major order.</li>
+<li><b><code>b</code></b>: <code>Tensor</code> or <code>SparseTensor</code> of the same type as <code>a</code>. If sparse, indices must be sorted in row-major order.</li>
+<li><b><code>validate_indices</code></b>: Whether to validate the order and range of sparse indices in <code>a</code> and <code>b</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>SparseTensor</code> whose shape is the same rank as <code>a</code> and <code>b</code>, and all but the last dimension the same. Elements along the last dimension contain the unions.</p>

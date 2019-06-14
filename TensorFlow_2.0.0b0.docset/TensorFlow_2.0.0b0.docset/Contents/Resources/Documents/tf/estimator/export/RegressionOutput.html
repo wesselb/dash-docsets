@@ -1,0 +1,43 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.estimator.export.RegressionOutput" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="value"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="as_signature_def"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.estimator.export.RegressionOutput" class="dashAnchor"></a><h1 id="tf.estimator.export.regressionoutput">tf.estimator.export.RegressionOutput</h1>
+<h2 id="class-regressionoutput">Class <code>RegressionOutput</code></h2>
+<p>Represents the output of a regression head.</p>
+<p>Inherits From: <a href="../../../tf/estimator/export/ExportOutput.html"><code>ExportOutput</code></a></p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.estimator.export.RegressionOutput</code></li>
+<li>Class <code>tf.compat.v2.estimator.export.RegressionOutput</code></li>
+<li>Class <code>tf.estimator.export.RegressionOutput</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/saved_model/model_utils/export_output.py"><code>python/saved_model/model_utils/export_output.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(value)</code></pre></div>
+<p>Constructor for <code>RegressionOutput</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>value</code></b>: a float <code>Tensor</code> giving the predicted values. Required.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if the value is not a <code>Tensor</code> with dtype tf.float32.</li>
+</ul>
+<h2 id="properties">Properties</h2>
+<h3 id="value">
+<code>value</code>
+</h3>
+<h2 id="methods">Methods</h2>
+<h3 id="as_signature_def">
+<code>as_signature_def</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">as_signature_def(receiver_tensors)</code></pre></div>
+<p>Generate a SignatureDef proto for inclusion in a MetaGraphDef.</p>
+<p>The SignatureDef will specify outputs as described in this ExportOutput, and will use the provided receiver_tensors as inputs.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>receiver_tensors</code></b>: a <code>Tensor</code>, or a dict of string to <code>Tensor</code>, specifying input nodes that will be fed.</li>
+</ul>

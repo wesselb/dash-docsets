@@ -1,0 +1,21 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.count_up_to" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.count_up_to" class="dashAnchor"></a><h1 id="tf.compat.v1.count_up_to">tf.compat.v1.count_up_to</h1>
+<p>Increments 'ref' until it reaches 'limit'. (deprecated)</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.count_up_to(
+    ref,
+    limit,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/state_ops.py"><code>python/ops/state_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Warning: THIS FUNCTION IS DEPRECATED. It will be removed in a future version. Instructions for updating: Prefer Dataset.range instead.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>ref</code></b>: A Variable. Must be one of the following types: <code>int32</code>, <code>int64</code>. Should be from a scalar <code>Variable</code> node.</li>
+<li><b><code>limit</code></b>: An <code>int</code>. If incrementing ref would bring it above limit, instead generates an 'OutOfRange' error.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>ref</code>. A copy of the input before increment. If nothing else modifies the input, the values produced will all be distinct.</p>

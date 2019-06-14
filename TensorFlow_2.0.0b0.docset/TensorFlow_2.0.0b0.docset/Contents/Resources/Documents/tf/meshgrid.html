@@ -1,0 +1,46 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.meshgrid" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.meshgrid" class="dashAnchor"></a><h1 id="tf.meshgrid">tf.meshgrid</h1>
+<p>Broadcasts parameters for evaluation on an N-D grid.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.meshgrid</code></li>
+<li><code>tf.compat.v2.meshgrid</code></li>
+<li><code>tf.meshgrid</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.meshgrid(
+    <span class="op">*</span>args,
+    <span class="op">**</span>kwargs
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/array_ops.py"><code>python/ops/array_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Given N one-dimensional coordinate arrays <code>*args</code>, returns a list <code>outputs</code> of N-D coordinate arrays for evaluating expressions on an N-D grid.</p>
+<h4 id="notes">Notes:</h4>
+<p><code>meshgrid</code> supports cartesian ('xy') and matrix ('ij') indexing conventions. When the <code>indexing</code> argument is set to 'xy' (the default), the broadcasting instructions for the first two dimensions are swapped.</p>
+<h4 id="examples">Examples:</h4>
+<p>Calling <code>X, Y = meshgrid(x, y)</code> with the tensors</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">x <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]
+y <span class="op">=</span> [<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>]
+X, Y <span class="op">=</span> tf.meshgrid(x, y)
+<span class="co"># X = [[1, 2, 3],</span>
+<span class="co">#      [1, 2, 3],</span>
+<span class="co">#      [1, 2, 3]]</span>
+<span class="co"># Y = [[4, 4, 4],</span>
+<span class="co">#      [5, 5, 5],</span>
+<span class="co">#      [6, 6, 6]]</span></code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>*args</code></b>: <code>Tensor</code>s with rank 1.</li>
+<li><b><code>**kwargs</code></b>: - indexing: Either 'xy' or 'ij' (optional, default: 'xy').</li>
+<li>name: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<ul>
+<li><b><code>outputs</code></b>: A list of N <code>Tensor</code>s with rank N.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: When no keyword arguments (kwargs) are passed.</li>
+<li><b><code>ValueError</code></b>: When indexing keyword argument is not one of <code>xy</code> or <code>ij</code>.</li>
+</ul>

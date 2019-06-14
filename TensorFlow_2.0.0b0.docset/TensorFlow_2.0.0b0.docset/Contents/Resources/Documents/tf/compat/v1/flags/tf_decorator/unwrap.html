@@ -1,0 +1,19 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.flags.tf_decorator.unwrap" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.flags.tf_decorator.unwrap" class="dashAnchor"></a><h1 id="tf.compat.v1.flags.tf_decorator.unwrap">tf.compat.v1.flags.tf_decorator.unwrap</h1>
+<p>Unwraps an object into a list of TFDecorators and a final target.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.app.flags.tf_decorator.unwrap</code></li>
+<li><code>tf.compat.v1.flags.tf_decorator.unwrap</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.flags.tf_decorator.unwrap(maybe_tf_decorator)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/util/tf_decorator.py"><code>python/util/tf_decorator.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>maybe_tf_decorator</code></b>: Any callable object.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A tuple whose first element is an list of TFDecorator-derived objects that were applied to the final callable target, and whose second element is the final undecorated callable target. If the <code>maybe_tf_decorator</code> parameter is not decorated by any TFDecorators, the first tuple element will be an empty list. The <code>TFDecorator</code> list is ordered from outermost to innermost decorators.</p>

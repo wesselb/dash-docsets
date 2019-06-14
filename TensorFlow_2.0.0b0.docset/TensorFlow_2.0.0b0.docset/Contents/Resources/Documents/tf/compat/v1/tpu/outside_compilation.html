@@ -1,0 +1,20 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.tpu.outside_compilation" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.tpu.outside_compilation" class="dashAnchor"></a><h1 id="tf.compat.v1.tpu.outside_compilation">tf.compat.v1.tpu.outside_compilation</h1>
+<p>Builds part of a computation outside any current TPU replicate scope.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.tpu.outside_compilation(
+    computation,
+    <span class="op">*</span>args,
+    <span class="op">**</span>kwargs
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/tpu/tpu.py"><code>python/tpu/tpu.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>computation</code></b>: A Python function that builds the computation to place on the host.</li>
+<li><b><code>*args</code></b>: the positional arguments for the computation.</li>
+<li><b><code>**kwargs</code></b>: the keyword arguments for the computation.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The Tensors returned by computation.</p>

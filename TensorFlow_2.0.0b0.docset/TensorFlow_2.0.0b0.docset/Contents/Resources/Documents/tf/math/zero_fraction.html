@@ -1,0 +1,31 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.math.zero_fraction" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.math.zero_fraction" class="dashAnchor"></a><h1 id="tf.math.zero_fraction">tf.math.zero_fraction</h1>
+<p>Returns the fraction of zeros in <code>value</code>.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.math.zero_fraction</code></li>
+<li><code>tf.compat.v1.nn.zero_fraction</code></li>
+<li><code>tf.compat.v2.math.zero_fraction</code></li>
+<li><code>tf.compat.v2.nn.zero_fraction</code></li>
+<li><code>tf.math.zero_fraction</code></li>
+<li><code>tf.nn.zero_fraction</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.math.zero_fraction(
+    value,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/nn_impl.py"><code>python/ops/nn_impl.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>If <code>value</code> is empty, the result is <code>nan</code>.</p>
+<p>This is useful in summaries to measure and report sparsity. For example,</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    z <span class="op">=</span> tf.nn.relu(...)
+    summ <span class="op">=</span> tf.compat.v1.summary.scalar(<span class="st">&#39;sparsity&#39;</span>, tf.nn.zero_fraction(z))</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>value</code></b>: A tensor of numeric type.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The fraction of zeros in <code>value</code>, with type <code>float32</code>.</p>

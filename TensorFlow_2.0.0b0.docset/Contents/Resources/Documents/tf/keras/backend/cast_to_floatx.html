@@ -1,0 +1,32 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.backend.cast_to_floatx" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.keras.backend.cast_to_floatx" class="dashAnchor"></a><h1 id="tf.keras.backend.cast_to_floatx">tf.keras.backend.cast_to_floatx</h1>
+<p>Cast a Numpy array to the default Keras float type.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.keras.backend.cast_to_floatx</code></li>
+<li><code>tf.compat.v2.keras.backend.cast_to_floatx</code></li>
+<li><code>tf.keras.backend.cast_to_floatx</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.keras.backend.cast_to_floatx(x)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/backend.py"><code>python/keras/backend.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>x</code></b>: Numpy array.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The same Numpy array, cast to its new type.</p>
+<h4 id="example">Example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    <span class="op">&gt;&gt;&gt;</span> <span class="im">from</span> keras <span class="im">import</span> backend <span class="im">as</span> K
+    <span class="op">&gt;&gt;&gt;</span> K.floatx()
+    <span class="co">&#39;float32&#39;</span>
+    <span class="op">&gt;&gt;&gt;</span> arr <span class="op">=</span> numpy.array([<span class="fl">1.0</span>, <span class="fl">2.0</span>], dtype<span class="op">=</span><span class="st">&#39;float64&#39;</span>)
+    <span class="op">&gt;&gt;&gt;</span> arr.dtype
+    dtype(<span class="st">&#39;float64&#39;</span>)
+    <span class="op">&gt;&gt;&gt;</span> new_arr <span class="op">=</span> K.cast_to_floatx(arr)
+    <span class="op">&gt;&gt;&gt;</span> new_arr
+    array([ <span class="dv">1</span>.,  <span class="dv">2</span>.], dtype<span class="op">=</span>float32)
+    <span class="op">&gt;&gt;&gt;</span> new_arr.dtype
+    dtype(<span class="st">&#39;float32&#39;</span>)</code></pre></div>

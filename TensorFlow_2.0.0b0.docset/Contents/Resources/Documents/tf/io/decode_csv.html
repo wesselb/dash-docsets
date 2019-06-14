@@ -1,0 +1,38 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.io.decode_csv" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.io.decode_csv" class="dashAnchor"></a><h1 id="tf.io.decode_csv">tf.io.decode_csv</h1>
+<p>Convert CSV records to tensors. Each column maps to one tensor.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v2.io.decode_csv</code></li>
+<li><code>tf.io.decode_csv</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.io.decode_csv(
+    records,
+    record_defaults,
+    field_delim<span class="op">=</span><span class="st">&#39;,&#39;</span>,
+    use_quote_delim<span class="op">=</span><span class="va">True</span>,
+    na_value<span class="op">=</span><span class="st">&#39;&#39;</span>,
+    select_cols<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/parsing_ops.py"><code>python/ops/parsing_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>RFC 4180 format is expected for the CSV records. (https://tools.ietf.org/html/rfc4180) Note that we allow leading and trailing spaces with int or float field.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>records</code></b>: A <code>Tensor</code> of type <code>string</code>. Each string is a record/row in the csv and all records should have the same format.</li>
+<li><b><code>record_defaults</code></b>: A list of <code>Tensor</code> objects with specific types. Acceptable types are <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>string</code>. One tensor per column of the input record, with either a scalar default value for that column or an empty vector if the column is required.</li>
+<li><b><code>field_delim</code></b>: An optional <code>string</code>. Defaults to <code>&quot;,&quot;</code>. char delimiter to separate fields in a record.</li>
+<li><b><code>use_quote_delim</code></b>: An optional <code>bool</code>. Defaults to <code>True</code>. If false, treats double quotation marks as regular characters inside of the string fields (ignoring RFC 4180, Section 2, Bullet 5).</li>
+<li><b><code>na_value</code></b>: Additional string to recognize as NA/NaN.</li>
+<li><b><code>select_cols</code></b>: Optional sorted list of column indices to select. If specified, only this subset of columns will be parsed and returned.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A list of <code>Tensor</code> objects. Has the same type as <code>record_defaults</code>. Each tensor will have the same shape as records.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If any of the arguments is malformed.</li>
+</ul>

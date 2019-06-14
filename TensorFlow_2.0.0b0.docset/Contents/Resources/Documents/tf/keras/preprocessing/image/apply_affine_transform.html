@@ -1,0 +1,46 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.preprocessing.image.apply_affine_transform" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.keras.preprocessing.image.apply_affine_transform" class="dashAnchor"></a><h1 id="tf.keras.preprocessing.image.apply_affine_transform">tf.keras.preprocessing.image.apply_affine_transform</h1>
+<p>Applies an affine transformation specified by the parameters given.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.keras.preprocessing.image.apply_affine_transform</code></li>
+<li><code>tf.compat.v2.keras.preprocessing.image.apply_affine_transform</code></li>
+<li><code>tf.keras.preprocessing.image.apply_affine_transform</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.keras.preprocessing.image.apply_affine_transform(
+    x,
+    theta<span class="op">=</span><span class="dv">0</span>,
+    tx<span class="op">=</span><span class="dv">0</span>,
+    ty<span class="op">=</span><span class="dv">0</span>,
+    shear<span class="op">=</span><span class="dv">0</span>,
+    zx<span class="op">=</span><span class="dv">1</span>,
+    zy<span class="op">=</span><span class="dv">1</span>,
+    row_axis<span class="op">=</span><span class="dv">0</span>,
+    col_axis<span class="op">=</span><span class="dv">1</span>,
+    channel_axis<span class="op">=</span><span class="dv">2</span>,
+    fill_mode<span class="op">=</span><span class="st">&#39;nearest&#39;</span>,
+    cval<span class="op">=</span><span class="fl">0.0</span>,
+    order<span class="op">=</span><span class="dv">1</span>
+)</code></pre></div>
+<!-- Placeholder for "Used in" -->
+<h1 id="arguments">Arguments</h1>
+<pre><code>x: 2D numpy array, single image.
+theta: Rotation angle in degrees.
+tx: Width shift.
+ty: Heigh shift.
+shear: Shear angle in degrees.
+zx: Zoom in x direction.
+zy: Zoom in y direction
+row_axis: Index of axis for rows in the input image.
+col_axis: Index of axis for columns in the input image.
+channel_axis: Index of axis for channels in the input image.
+fill_mode: Points outside the boundaries of the input
+    are filled according to the given mode
+    (one of `{&#39;constant&#39;, &#39;nearest&#39;, &#39;reflect&#39;, &#39;wrap&#39;}`).
+cval: Value used for points outside the boundaries
+    of the input if `mode=&#39;constant&#39;`.
+order: int, order of interpolation</code></pre>
+<h1 id="returns">Returns</h1>
+<pre><code>The transformed version of the input.</code></pre>

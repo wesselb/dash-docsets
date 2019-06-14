@@ -1,0 +1,33 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.backend.ones" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.keras.backend.ones" class="dashAnchor"></a><h1 id="tf.keras.backend.ones">tf.keras.backend.ones</h1>
+<p>Instantiates an all-ones variable and returns it.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.keras.backend.ones</code></li>
+<li><code>tf.compat.v2.keras.backend.ones</code></li>
+<li><code>tf.keras.backend.ones</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.keras.backend.ones(
+    shape,
+    dtype<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/backend.py"><code>python/keras/backend.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>shape</code></b>: Tuple of integers, shape of returned Keras variable.</li>
+<li><b><code>dtype</code></b>: String, data type of returned Keras variable.</li>
+<li><b><code>name</code></b>: String, name of returned Keras variable.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A Keras variable, filled with <code>1.0</code>. Note that if <code>shape</code> was symbolic, we cannot return a variable, and will return a dynamically-shaped tensor instead.</p>
+<h4 id="example">Example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    <span class="op">&gt;&gt;&gt;</span> <span class="im">from</span> keras <span class="im">import</span> backend <span class="im">as</span> K
+    <span class="op">&gt;&gt;&gt;</span> kvar <span class="op">=</span> K.ones((<span class="dv">3</span>,<span class="dv">4</span>))
+    <span class="op">&gt;&gt;&gt;</span> K.<span class="bu">eval</span>(kvar)
+    array([[ <span class="dv">1</span>.,  <span class="dv">1</span>.,  <span class="dv">1</span>.,  <span class="dv">1</span>.],
+           [ <span class="dv">1</span>.,  <span class="dv">1</span>.,  <span class="dv">1</span>.,  <span class="dv">1</span>.],
+           [ <span class="dv">1</span>.,  <span class="dv">1</span>.,  <span class="dv">1</span>.,  <span class="dv">1</span>.]], dtype<span class="op">=</span>float32)</code></pre></div>

@@ -1,0 +1,32 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.nn.max_pool2d" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.nn.max_pool2d" class="dashAnchor"></a><h1 id="tf.nn.max_pool2d">tf.nn.max_pool2d</h1>
+<p>Performs the max pooling on the input.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.nn.max_pool2d</code></li>
+<li><code>tf.compat.v2.nn.max_pool2d</code></li>
+<li><code>tf.nn.max_pool2d</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.nn.max_pool2d(
+    <span class="bu">input</span>,
+    ksize,
+    strides,
+    padding,
+    data_format<span class="op">=</span><span class="st">&#39;NHWC&#39;</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/nn_ops.py"><code>python/ops/nn_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A 4-D <code>Tensor</code> of the format specified by <code>data_format</code>.</li>
+<li><b><code>ksize</code></b>: An int or list of <code>ints</code> that has length <code>1</code>, <code>2</code> or <code>4</code>. The size of the window for each dimension of the input tensor.</li>
+<li><b><code>strides</code></b>: An int or list of <code>ints</code> that has length <code>1</code>, <code>2</code> or <code>4</code>. The stride of the sliding window for each dimension of the input tensor.</li>
+<li><b><code>padding</code></b>: A string, either <code>'VALID'</code> or <code>'SAME'</code>. The padding algorithm. See the &quot;returns&quot; section of <a href="../../tf/nn/convolution.html"><code>tf.nn.convolution</code></a> for details.</li>
+<li><b><code>data_format</code></b>: A string. 'NHWC', 'NCHW' and 'NCHW_VECT_C' are supported.</li>
+<li><b><code>name</code></b>: Optional name for the operation.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of format specified by <code>data_format</code>. The max pooled output tensor.</p>

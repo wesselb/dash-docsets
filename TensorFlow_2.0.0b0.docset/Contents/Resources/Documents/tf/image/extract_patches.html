@@ -1,0 +1,32 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.image.extract_patches" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.image.extract_patches" class="dashAnchor"></a><h1 id="tf.image.extract_patches">tf.image.extract_patches</h1>
+<p>Extract <code>patches</code> from <code>images</code> and put them in the &quot;depth&quot; output dimension.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.image.extract_patches</code></li>
+<li><code>tf.compat.v2.image.extract_patches</code></li>
+<li><code>tf.image.extract_patches</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.image.extract_patches(
+    images,
+    sizes,
+    strides,
+    rates,
+    padding,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/array_ops.py"><code>python/ops/array_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>images</code></b>: A 4-D Tensor with shape `[batch, in_rows, in_cols, depth]</li>
+<li><b><code>sizes</code></b>: The size of the sliding window for each dimension of <code>images</code>.</li>
+<li><b><code>strides</code></b>: A 1-D Tensor of length 4. How far the centers of two consecutive patches are in the images. Must be: <code>[1, stride_rows, stride_cols, 1]</code>.</li>
+<li><b><code>rates</code></b>: A 1-D Tensor of length 4. Must be: <code>[1, rate_rows, rate_cols, 1]</code>. This is the input stride, specifying how far two consecutive patch samples are in the input. Equivalent to extracting patches with <code>patch_sizes_eff =   patch_sizes + (patch_sizes - 1) * (rates - 1)</code>, followed by subsampling them spatially by a factor of <code>rates</code>. This is equivalent to <code>rate</code> in dilated (a.k.a. Atrous) convolutions.</li>
+<li><b><code>padding</code></b>: The type of padding algorithm to use. We specify the size-related attributes as: ```python ksizes = [1, ksize_rows, ksize_cols, 1] strides = [1, strides_rows, strides_cols, 1] rates = [1, rates_rows, rates_cols, 1]</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A 4-D Tensor. Has the same type as <code>images</code>, and with shape <code>[batch, out_rows, out_cols, ksize_rows * ksize_cols * depth]</code> containing image patches with size <code>ksize_rows x ksize_cols x depth</code> vectorized in the &quot;depth&quot; dimension. Note <code>out_rows</code> and <code>out_cols</code> are the dimensions of the output patches.</p>

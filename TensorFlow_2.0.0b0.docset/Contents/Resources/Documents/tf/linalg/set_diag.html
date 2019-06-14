@@ -1,0 +1,34 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.linalg.set_diag" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.linalg.set_diag" class="dashAnchor"></a><h1 id="tf.linalg.set_diag">tf.linalg.set_diag</h1>
+<p>Returns a batched matrix tensor with new batched diagonal values.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.linalg.set_diag</code></li>
+<li><code>tf.compat.v1.matrix_set_diag</code></li>
+<li><code>tf.compat.v2.linalg.set_diag</code></li>
+<li><code>tf.linalg.set_diag</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.linalg.set_diag(
+    <span class="bu">input</span>,
+    diagonal,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in generated file: <code>python/ops/gen_array_ops.py</code>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Given <code>input</code> and <code>diagonal</code>, this operation returns a tensor with the same shape and values as <code>input</code>, except for the main diagonal of the innermost matrices. These will be overwritten by the values in <code>diagonal</code>.</p>
+<p>The output is computed as follows:</p>
+<p>Assume <code>input</code> has <code>k+1</code> dimensions <code>[I, J, K, ..., M, N]</code> and <code>diagonal</code> has <code>k</code> dimensions <code>[I, J, K, ..., min(M, N)]</code>. Then the output is a tensor of rank <code>k+1</code> with dimensions <code>[I, J, K, ..., M, N]</code> where:</p>
+<ul>
+<li><code>output[i, j, k, ..., m, n] = diagonal[i, j, k, ..., n]</code> for <code>m == n</code>.</li>
+<li><code>output[i, j, k, ..., m, n] = input[i, j, k, ..., m, n]</code> for <code>m != n</code>.</li>
+</ul>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. Rank <code>k+1</code>, where <code>k &gt;= 1</code>.</li>
+<li><b><code>diagonal</code></b>: A <code>Tensor</code>. Must have the same type as <code>input</code>. Rank <code>k</code>, where <code>k &gt;= 1</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>input</code>.</p>

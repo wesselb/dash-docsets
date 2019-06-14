@@ -1,0 +1,43 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.ensure_shape" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.ensure_shape" class="dashAnchor"></a><h1 id="tf.ensure_shape">tf.ensure_shape</h1>
+<p>Updates the shape of a tensor and checks at runtime that the shape holds.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.ensure_shape</code></li>
+<li><code>tf.compat.v2.ensure_shape</code></li>
+<li><code>tf.ensure_shape</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.ensure_shape(
+    x,
+    shape,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/check_ops.py"><code>python/ops/check_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="for-example">For example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">x <span class="op">=</span> tf.compat.v1.placeholder(tf.int32)
+<span class="bu">print</span>(x.shape)
+<span class="op">==&gt;</span> TensorShape(<span class="va">None</span>)
+y <span class="op">=</span> x <span class="op">*</span> <span class="dv">2</span>
+<span class="bu">print</span>(y.shape)
+<span class="op">==&gt;</span> TensorShape(<span class="va">None</span>)
+
+y <span class="op">=</span> tf.ensure_shape(y, (<span class="va">None</span>, <span class="dv">3</span>, <span class="dv">3</span>))
+<span class="bu">print</span>(y.shape)
+<span class="op">==&gt;</span> TensorShape([Dimension(<span class="va">None</span>), Dimension(<span class="dv">3</span>), Dimension(<span class="dv">3</span>)])
+
+<span class="cf">with</span> tf.compat.v1.Session() <span class="im">as</span> sess:
+  <span class="co"># Raises tf.errors.InvalidArgumentError, because the shape (3,) is not</span>
+  <span class="co"># compatible with the shape (None, 3, 3)</span>
+  sess.run(y, feed_dict<span class="op">=</span>{x: [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]})</code></pre></div>
+<p>NOTE: This differs from <code>Tensor.set_shape</code> in that it sets the static shape of the resulting tensor and enforces it at runtime, raising an error if the tensor's runtime shape is incompatible with the specified shape. <code>Tensor.set_shape</code> sets the static shape of the tensor without enforcing it at runtime, which may result in inconsistencies between the statically-known shape of tensors and the runtime value of tensors.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>.</li>
+<li><b><code>shape</code></b>: A <code>TensorShape</code> representing the shape of this tensor, a <code>TensorShapeProto</code>, a list, a tuple, or None.</li>
+<li><b><code>name</code></b>: A name for this operation (optional). Defaults to &quot;EnsureShape&quot;.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type and contents as <code>x</code>. At runtime, raises a <a href="../tf/errors/InvalidArgumentError.html"><code>tf.errors.InvalidArgumentError</code></a> if <code>shape</code> is incompatible with the shape of <code>x</code>.</p>

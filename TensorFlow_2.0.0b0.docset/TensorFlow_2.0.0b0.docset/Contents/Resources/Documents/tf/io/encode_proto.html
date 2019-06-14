@@ -1,0 +1,42 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.io.encode_proto" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.io.encode_proto" class="dashAnchor"></a><h1 id="tf.io.encode_proto">tf.io.encode_proto</h1>
+<p>The op serializes protobuf messages provided in the input tensors.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.io.encode_proto</code></li>
+<li><code>tf.compat.v2.io.encode_proto</code></li>
+<li><code>tf.io.encode_proto</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.io.encode_proto(
+    sizes,
+    values,
+    field_names,
+    message_type,
+    descriptor_source<span class="op">=</span><span class="st">&#39;local://&#39;</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in generated file: <code>python/ops/gen_encode_proto_ops.py</code>.</p>
+<!-- Placeholder for "Used in" -->
+<p>The types of the tensors in <code>values</code> must match the schema for the fields specified in <code>field_names</code>. All the tensors in <code>values</code> must have a common shape prefix, <em>batch_shape</em>.</p>
+<p>The <code>sizes</code> tensor specifies repeat counts for each field. The repeat count (last dimension) of a each tensor in <code>values</code> must be greater than or equal to corresponding repeat count in <code>sizes</code>.</p>
+<p>A <code>message_type</code> name must be provided to give context for the field names. The actual message descriptor can be looked up either in the linked-in descriptor pool or a filename provided by the caller using the <code>descriptor_source</code> attribute.</p>
+<p>The <code>descriptor_source</code> attribute selects a source of protocol descriptors to consult when looking up <code>message_type</code>. This may be a filename containing a serialized <code>FileDescriptorSet</code> message, or the special value <code>local://</code>, in which case only descriptors linked into the code will be searched; the filename can be on any filesystem accessible to TensorFlow.</p>
+<p>You can build a <code>descriptor_source</code> file using the <code>--descriptor_set_out</code> and <code>--include_imports</code> options to the protocol compiler <code>protoc</code>.</p>
+<p>The <code>local://</code> database only covers descriptors linked into the code via C++ libraries, not Python imports. You can link in a proto descriptor by creating a cc_library target with alwayslink=1.</p>
+<p>There are a few special cases in the value mapping:</p>
+<p>Submessage and group fields must be pre-serialized as TensorFlow strings.</p>
+<p>TensorFlow lacks support for unsigned int64s, so they must be represented as <a href="../../tf.md#int64"><code>tf.int64</code></a> with the same twos-complement bit pattern (the obvious way).</p>
+<p>Unsigned int32 values can be represented exactly with <a href="../../tf.md#int64"><code>tf.int64</code></a>, or with sign wrapping if the input is of type <a href="../../tf.md#int32"><code>tf.int32</code></a>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>sizes</code></b>: A <code>Tensor</code> of type <code>int32</code>. Tensor of int32 with shape <code>[batch_shape, len(field_names)]</code>.</li>
+<li><b><code>values</code></b>: A list of <code>Tensor</code> objects. List of tensors containing values for the corresponding field.</li>
+<li><b><code>field_names</code></b>: A list of <code>strings</code>. List of strings containing proto field names.</li>
+<li><b><code>message_type</code></b>: A <code>string</code>. Name of the proto message type to decode.</li>
+<li><b><code>descriptor_source</code></b>: An optional <code>string</code>. Defaults to <code>&quot;local://&quot;</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>string</code>.</p>

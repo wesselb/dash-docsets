@@ -1,0 +1,36 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.data.experimental.get_single_element" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.data.experimental.get_single_element" class="dashAnchor"></a><h1 id="tf.data.experimental.get_single_element">tf.data.experimental.get_single_element</h1>
+<p>Returns the single element in <code>dataset</code> as a nested structure of tensors.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.data.experimental.get_single_element</code></li>
+<li><code>tf.compat.v2.data.experimental.get_single_element</code></li>
+<li><code>tf.data.experimental.get_single_element</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.data.experimental.get_single_element(dataset)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/data/experimental/ops/get_single_element.py"><code>python/data/experimental/ops/get_single_element.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>This function enables you to use a <a href="../../../tf/data/Dataset.html"><code>tf.data.Dataset</code></a> in a stateless &quot;tensor-in tensor-out&quot; expression, without creating a <a href="../../../tf/compat/v1/data/Iterator.html"><code>tf.compat.v1.data.Iterator</code></a>. This can be useful when your preprocessing transformations are expressed as a <code>Dataset</code>, and you want to use the transformation at serving time. For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">input_batch <span class="op">=</span> tf.compat.v1.placeholder(tf.string, shape<span class="op">=</span>[BATCH_SIZE])
+
+<span class="kw">def</span> preprocessing_fn(input_str):
+  <span class="co"># ...</span>
+  <span class="cf">return</span> image, label
+
+dataset <span class="op">=</span> (tf.data.Dataset.from_tensor_slices(input_batch)
+           .<span class="bu">map</span>(preprocessing_fn, num_parallel_calls<span class="op">=</span>BATCH_SIZE)
+           .batch(BATCH_SIZE))
+
+image_batch, label_batch <span class="op">=</span> tf.data.experimental.get_single_element(dataset)</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>dataset</code></b>: A <a href="../../../tf/data/Dataset.html"><code>tf.data.Dataset</code></a> object containing a single element.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A nested structure of <a href="../../../tf/Tensor.html"><code>tf.Tensor</code></a> objects, corresponding to the single element of <code>dataset</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>dataset</code> is not a <a href="../../../tf/data/Dataset.html"><code>tf.data.Dataset</code></a> object. InvalidArgumentError (at runtime): if <code>dataset</code> does not contain exactly one element.</li>
+</ul>

@@ -1,0 +1,40 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.math.unsorted_segment_sum" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.math.unsorted_segment_sum" class="dashAnchor"></a><h1 id="tf.math.unsorted_segment_sum">tf.math.unsorted_segment_sum</h1>
+<p>Computes the sum along segments of a tensor.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.math.unsorted_segment_sum</code></li>
+<li><code>tf.compat.v1.unsorted_segment_sum</code></li>
+<li><code>tf.compat.v2.math.unsorted_segment_sum</code></li>
+<li><code>tf.math.unsorted_segment_sum</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.math.unsorted_segment_sum(
+    data,
+    segment_ids,
+    num_segments,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in generated file: <code>python/ops/gen_math_ops.py</code>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Read <a href="https://tensorflow.org/api_docs/python/tf/math#Segmentation">the section on segmentation</a> for an explanation of segments.</p>
+<p>Computes a tensor such that \(output[i] = _{j...} data[j...]\) where the sum is over tuples <code>j...</code> such that <code>segment_ids[j...] == i</code>. Unlike <code>SegmentSum</code>, <code>segment_ids</code> need not be sorted and need not cover all values in the full range of valid values.</p>
+<p>If the sum is empty for a given segment ID <code>i</code>, <code>output[i] = 0</code>. If the given segment ID <code>i</code> is negative, the value is dropped and will not be added to the sum of the segment.</p>
+<p><code>num_segments</code> should equal the number of distinct segment IDs.</p>
+<div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+<p><img style="width:100%" src="https://www.tensorflow.org/images/UnsortedSegmentSum.png" alt></p>
+</div>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">c <span class="op">=</span> tf.constant([[<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>], [<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">7</span>,<span class="dv">8</span>], [<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">1</span>]])
+tf.unsorted_segment_sum(c, tf.constant([<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>]), num_segments<span class="op">=</span><span class="dv">2</span>)
+<span class="co"># ==&gt; [[ 5,  5, 5, 5],</span>
+<span class="co">#       [5,  6, 7, 8]]</span></code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>data</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>uint8</code>, <code>int16</code>, <code>int8</code>, <code>complex64</code>, <code>int64</code>, <code>qint8</code>, <code>quint8</code>, <code>qint32</code>, <code>bfloat16</code>, <code>uint16</code>, <code>complex128</code>, <code>half</code>, <code>uint32</code>, <code>uint64</code>.</li>
+<li><b><code>segment_ids</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. A tensor whose shape is a prefix of <code>data.shape</code>.</li>
+<li><b><code>num_segments</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>data</code>.</p>

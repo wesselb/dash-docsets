@@ -1,0 +1,17 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.config.get_soft_device_placement" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.config.get_soft_device_placement" class="dashAnchor"></a><h1 id="tf.config.get_soft_device_placement">tf.config.get_soft_device_placement</h1>
+<p>Get if soft device placement is enabled.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.config.get_soft_device_placement</code></li>
+<li><code>tf.compat.v2.config.get_soft_device_placement</code></li>
+<li><code>tf.config.get_soft_device_placement</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.config.get_soft_device_placement()</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/framework/config.py"><code>python/framework/config.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>If enabled, an op will be placed on CPU if any of the following are true 1. there's no GPU implementation for the OP 2. no GPU devices are known or registered 3. need to co-locate with reftype input(s) which are from CPU</p>
+<h4 id="returns">Returns:</h4>
+<p>If soft placement is enabled.</p>

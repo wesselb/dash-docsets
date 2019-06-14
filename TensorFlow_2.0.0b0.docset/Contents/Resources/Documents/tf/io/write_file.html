@@ -1,0 +1,28 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.io.write_file" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.io.write_file" class="dashAnchor"></a><h1 id="tf.io.write_file">tf.io.write_file</h1>
+<p>Writes contents to the file at input filename. Creates file and recursively</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.io.write_file</code></li>
+<li><code>tf.compat.v1.write_file</code></li>
+<li><code>tf.compat.v2.io.write_file</code></li>
+<li><code>tf.io.write_file</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.io.write_file(
+    filename,
+    contents,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in generated file: <code>python/ops/gen_io_ops.py</code>.</p>
+<!-- Placeholder for "Used in" -->
+<p>creates directory if not existing.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>filename</code></b>: A <code>Tensor</code> of type <code>string</code>. scalar. The name of the file to which we write the contents.</li>
+<li><b><code>contents</code></b>: A <code>Tensor</code> of type <code>string</code>. scalar. The content to be written to the output file.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The created Operation.</p>

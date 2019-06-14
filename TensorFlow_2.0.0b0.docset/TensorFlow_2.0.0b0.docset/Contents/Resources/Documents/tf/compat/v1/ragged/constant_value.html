@@ -1,0 +1,34 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.ragged.constant_value" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.ragged.constant_value" class="dashAnchor"></a><h1 id="tf.compat.v1.ragged.constant_value">tf.compat.v1.ragged.constant_value</h1>
+<p>Constructs a RaggedTensorValue from a nested Python list.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.ragged.constant_value(
+    pylist,
+    dtype<span class="op">=</span><span class="va">None</span>,
+    ragged_rank<span class="op">=</span><span class="va">None</span>,
+    inner_shape<span class="op">=</span><span class="va">None</span>,
+    row_splits_dtype<span class="op">=</span><span class="st">&#39;int64&#39;</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/ragged/ragged_factory_ops.py"><code>python/ops/ragged/ragged_factory_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Warning: This function returns a <code>RaggedTensorValue</code>, not a <code>RaggedTensor</code>. If you wish to construct a constant <code>RaggedTensor</code>, use <a href="constant.html"><code>ragged.constant(...)</code></a> instead.</p>
+<h4 id="example">Example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="op">&gt;&gt;&gt;</span> ragged.constant_value([[<span class="dv">1</span>, <span class="dv">2</span>], [<span class="dv">3</span>], [<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>]])
+RaggedTensorValue(values<span class="op">=</span>[<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>], splits<span class="op">=</span>[<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">6</span>])</code></pre></div>
+<p>All scalar values in <code>pylist</code> must have the same nesting depth <code>K</code>, and the returned <code>RaggedTensorValue</code> will have rank <code>K</code>. If <code>pylist</code> contains no scalar values, then <code>K</code> is one greater than the maximum depth of empty lists in <code>pylist</code>. All scalar values in <code>pylist</code> must be compatible with <code>dtype</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>pylist</code></b>: A nested <code>list</code>, <code>tuple</code> or <code>np.ndarray</code>. Any nested element that is not a <code>list</code> or <code>tuple</code> must be a scalar value compatible with <code>dtype</code>.</li>
+<li><b><code>dtype</code></b>: <code>numpy.dtype</code>. The type of elements for the returned <code>RaggedTensor</code>. If not specified, then a default is chosen based on the scalar values in <code>pylist</code>.</li>
+<li><b><code>ragged_rank</code></b>: An integer specifying the ragged rank of the returned <code>RaggedTensorValue</code>. Must be nonnegative and less than <code>K</code>. Defaults to <code>max(0, K - 1)</code> if <code>inner_shape</code> is not specified. Defaults to `max(0, K</li>
+<li>1 - len(inner_shape))<code>if</code>inner_shape` is specified.</li>
+<li><b><code>inner_shape</code></b>: A tuple of integers specifying the shape for individual inner values in the returned <code>RaggedTensorValue</code>. Defaults to <code>()</code> if <code>ragged_rank</code> is not specified. If <code>ragged_rank</code> is specified, then a default is chosen based on the contents of <code>pylist</code>.</li>
+<li><b><code>row_splits_dtype</code></b>: data type for the constructed <code>RaggedTensorValue</code>'s row_splits. One of <code>numpy.int32</code> or <code>numpy.int64</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>tf.RaggedTensorValue</code> or <code>numpy.array</code> with rank <code>K</code> and the specified <code>ragged_rank</code>, containing the values from <code>pylist</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If the scalar values in <code>pylist</code> have inconsistent nesting depth; or if ragged_rank or inner_shape are incompatible with <code>pylist</code>.</li>
+</ul>

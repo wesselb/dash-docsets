@@ -1,0 +1,26 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.utils.custom_object_scope" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.keras.utils.custom_object_scope" class="dashAnchor"></a><h1 id="tf.keras.utils.custom_object_scope">tf.keras.utils.custom_object_scope</h1>
+<p>Provides a scope that changes to <code>_GLOBAL_CUSTOM_OBJECTS</code> cannot escape.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.keras.utils.custom_object_scope</code></li>
+<li><code>tf.compat.v2.keras.utils.custom_object_scope</code></li>
+<li><code>tf.keras.utils.custom_object_scope</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.keras.utils.custom_object_scope(<span class="op">*</span>args)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/utils/generic_utils.py"><code>python/keras/utils/generic_utils.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Convenience wrapper for <code>CustomObjectScope</code>. Code within a <code>with</code> statement will be able to access custom objects by name. Changes to global custom objects persist within the enclosing <code>with</code> statement. At end of the <code>with</code> statement, global custom objects are reverted to state at beginning of the <code>with</code> statement.</p>
+<h4 id="example">Example:</h4>
+<p>Consider a custom object <code>MyObject</code></p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    <span class="cf">with</span> custom_object_scope({<span class="st">&#39;MyObject&#39;</span>:MyObject}):
+        layer <span class="op">=</span> Dense(..., kernel_regularizer<span class="op">=</span><span class="st">&#39;MyObject&#39;</span>)
+        <span class="co"># save, load, etc. will recognize custom object by name</span></code></pre></div>
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>*args</code></b>: Variable length list of dictionaries of name, class pairs to add to custom objects.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Object of type <code>CustomObjectScope</code>.</p>

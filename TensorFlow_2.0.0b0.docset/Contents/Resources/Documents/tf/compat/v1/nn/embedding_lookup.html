@@ -1,0 +1,35 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.nn.embedding_lookup" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.nn.embedding_lookup" class="dashAnchor"></a><h1 id="tf.compat.v1.nn.embedding_lookup">tf.compat.v1.nn.embedding_lookup</h1>
+<p>Looks up <code>ids</code> in a list of embedding tensors.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.nn.embedding_lookup(
+    params,
+    ids,
+    partition_strategy<span class="op">=</span><span class="st">&#39;mod&#39;</span>,
+    name<span class="op">=</span><span class="va">None</span>,
+    validate_indices<span class="op">=</span><span class="va">True</span>,
+    max_norm<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/embedding_ops.py"><code>python/ops/embedding_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>This function is used to perform parallel lookups on the list of tensors in <code>params</code>. It is a generalization of <a href="../../../../tf/gather.html"><code>tf.gather</code></a>, where <code>params</code> is interpreted as a partitioning of a large embedding tensor. <code>params</code> may be a <code>PartitionedVariable</code> as returned by using <code>tf.compat.v1.get_variable()</code> with a partitioner.</p>
+<p>If <code>len(params) &gt; 1</code>, each element <code>id</code> of <code>ids</code> is partitioned between the elements of <code>params</code> according to the <code>partition_strategy</code>. In all strategies, if the id space does not evenly divide the number of partitions, each of the first <code>(max_id + 1) % len(params)</code> partitions will be assigned one more id.</p>
+<p>If <code>partition_strategy</code> is <code>&quot;mod&quot;</code>, we assign each id to partition <code>p = id % len(params)</code>. For instance, 13 ids are split across 5 partitions as: <code>[[0, 5, 10], [1, 6, 11], [2, 7, 12], [3, 8], [4, 9]]</code></p>
+<p>If <code>partition_strategy</code> is <code>&quot;div&quot;</code>, we assign ids to partitions in a contiguous manner. In this case, 13 ids are split across 5 partitions as: <code>[[0, 1, 2], [3, 4, 5], [6, 7, 8], [9, 10], [11, 12]]</code></p>
+<p>The results of the lookup are concatenated into a dense tensor. The returned tensor has shape <code>shape(ids) + shape(params)[1:]</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>params</code></b>: A single tensor representing the complete embedding tensor, or a list of P tensors all of same shape except for the first dimension, representing sharded embedding tensors. Alternatively, a <code>PartitionedVariable</code>, created by partitioning along dimension 0. Each element must be appropriately sized for the given <code>partition_strategy</code>.</li>
+<li><b><code>ids</code></b>: A <code>Tensor</code> with type <code>int32</code> or <code>int64</code> containing the ids to be looked up in <code>params</code>.</li>
+<li><b><code>partition_strategy</code></b>: A string specifying the partitioning strategy, relevant if <code>len(params) &gt; 1</code>. Currently <code>&quot;div&quot;</code> and <code>&quot;mod&quot;</code> are supported. Default is <code>&quot;mod&quot;</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+<li><b><code>validate_indices</code></b>: DEPRECATED. If this operation is assigned to CPU, values in <code>indices</code> are always validated to be within range. If assigned to GPU, out-of-bound indices result in safe but unspecified behavior, which may include raising an error.</li>
+<li><b><code>max_norm</code></b>: If not <code>None</code>, each embedding is clipped if its l2-norm is larger than this value.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> with the same type as the tensors in <code>params</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>params</code> is empty.</li>
+</ul>

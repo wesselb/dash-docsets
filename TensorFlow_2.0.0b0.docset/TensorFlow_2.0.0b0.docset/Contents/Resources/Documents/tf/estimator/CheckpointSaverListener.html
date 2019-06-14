@@ -1,0 +1,69 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.estimator.CheckpointSaverListener" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="after_save"/> <meta itemprop="property" content="before_save"/> <meta itemprop="property" content="begin"/> <meta itemprop="property" content="end"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.estimator.CheckpointSaverListener" class="dashAnchor"></a><h1 id="tf.estimator.checkpointsaverlistener">tf.estimator.CheckpointSaverListener</h1>
+<h2 id="class-checkpointsaverlistener">Class <code>CheckpointSaverListener</code></h2>
+<p>Interface for listeners that take action before or after checkpoint save.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.estimator.CheckpointSaverListener</code></li>
+<li>Class <code>tf.compat.v1.train.CheckpointSaverListener</code></li>
+<li>Class <code>tf.compat.v2.estimator.CheckpointSaverListener</code></li>
+<li>Class <code>tf.estimator.CheckpointSaverListener</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/training/basic_session_run_hooks.py"><code>python/training/basic_session_run_hooks.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p><code>CheckpointSaverListener</code> triggers only in steps when <code>CheckpointSaverHook</code> is triggered, and provides callbacks at the following points: - before using the session - before each call to <code>Saver.save()</code> - after each call to <code>Saver.save()</code> - at the end of session</p>
+<p>To use a listener, implement a class and pass the listener to a <code>CheckpointSaverHook</code>, as in this example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="kw">class</span> ExampleCheckpointSaverListener(CheckpointSaverListener):
+  <span class="kw">def</span> begin(<span class="va">self</span>):
+    <span class="co"># You can add ops to the graph here.</span>
+    <span class="bu">print</span>(<span class="st">&#39;Starting the session.&#39;</span>)
+    <span class="va">self</span>.your_tensor <span class="op">=</span> ...
+
+  <span class="kw">def</span> before_save(<span class="va">self</span>, session, global_step_value):
+    <span class="bu">print</span>(<span class="st">&#39;About to write a checkpoint&#39;</span>)
+
+  <span class="kw">def</span> after_save(<span class="va">self</span>, session, global_step_value):
+    <span class="bu">print</span>(<span class="st">&#39;Done writing checkpoint.&#39;</span>)
+    <span class="cf">if</span> decided_to_stop_training():
+      <span class="cf">return</span> <span class="va">True</span>
+
+  <span class="kw">def</span> end(<span class="va">self</span>, session, global_step_value):
+    <span class="bu">print</span>(<span class="st">&#39;Done with the session.&#39;</span>)
+
+...
+listener <span class="op">=</span> ExampleCheckpointSaverListener()
+saver_hook <span class="op">=</span> tf.estimator.CheckpointSaverHook(
+    checkpoint_dir, listeners<span class="op">=</span>[listener])
+<span class="cf">with</span>
+tf.compat.v1.train.MonitoredTrainingSession(chief_only_hooks<span class="op">=</span>[saver_hook]):
+  ...</code></pre></div>
+<p>A <code>CheckpointSaverListener</code> may simply take some action after every checkpoint save. It is also possible for the listener to use its own schedule to act less frequently, e.g. based on global_step_value. In this case, implementors should implement the <code>end()</code> method to handle actions related to the last checkpoint save. But the listener should not act twice if <code>after_save()</code> already handled this last checkpoint save.</p>
+<p>A <code>CheckpointSaverListener</code> can request training to be stopped, by returning True in <code>after_save</code>. Please note that, in replicated distributed training setting, only <code>chief</code> should use this behavior. Otherwise each worker will do their own evaluation, which may be wasteful of resources.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="after_save">
+<code>after_save</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">after_save(
+    session,
+    global_step_value
+)</code></pre></div>
+<h3 id="before_save">
+<code>before_save</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">before_save(
+    session,
+    global_step_value
+)</code></pre></div>
+<h3 id="begin">
+<code>begin</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">begin()</code></pre></div>
+<h3 id="end">
+<code>end</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">end(
+    session,
+    global_step_value
+)</code></pre></div>

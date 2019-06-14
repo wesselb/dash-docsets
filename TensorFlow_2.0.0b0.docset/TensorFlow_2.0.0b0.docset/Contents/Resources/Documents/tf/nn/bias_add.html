@@ -1,0 +1,29 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.nn.bias_add" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.nn.bias_add" class="dashAnchor"></a><h1 id="tf.nn.bias_add">tf.nn.bias_add</h1>
+<p>Adds <code>bias</code> to <code>value</code>.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.nn.bias_add</code></li>
+<li><code>tf.compat.v2.nn.bias_add</code></li>
+<li><code>tf.nn.bias_add</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.nn.bias_add(
+    value,
+    bias,
+    data_format<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/nn_ops.py"><code>python/ops/nn_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>This is (mostly) a special case of <a href="../../tf/math/add.html"><code>tf.add</code></a> where <code>bias</code> is restricted to 1-D. Broadcasting is supported, so <code>value</code> may have any number of dimensions. Unlike <a href="../../tf/math/add.html"><code>tf.add</code></a>, the type of <code>bias</code> is allowed to differ from <code>value</code> in the case where both types are quantized.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>value</code></b>: A <code>Tensor</code> with type <code>float</code>, <code>double</code>, <code>int64</code>, <code>int32</code>, <code>uint8</code>, <code>int16</code>, <code>int8</code>, <code>complex64</code>, or <code>complex128</code>.</li>
+<li><b><code>bias</code></b>: A 1-D <code>Tensor</code> with size matching the last dimension of <code>value</code>. Must be the same type as <code>value</code> unless <code>value</code> is a quantized type, in which case a different quantized type may be used.</li>
+<li><b><code>data_format</code></b>: A string. 'N...C' and 'NC...' are supported.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> with the same type as <code>value</code>.</p>

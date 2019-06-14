@@ -1,0 +1,26 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.data.experimental.Counter" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.compat.v1.data.experimental.Counter" class="dashAnchor"></a><h1 id="tf.compat.v1.data.experimental.counter">tf.compat.v1.data.experimental.Counter</h1>
+<p>Creates a <code>Dataset</code> that counts from <code>start</code> in steps of size <code>step</code>.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.data.experimental.Counter(
+    start<span class="op">=</span><span class="dv">0</span>,
+    step<span class="op">=</span><span class="dv">1</span>,
+    dtype<span class="op">=</span>tf.dtypes.int64
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/data/experimental/ops/counter.py"><code>python/data/experimental/ops/counter.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="for-example">For example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">Dataset.count() <span class="op">==</span> [<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, ...)
+Dataset.count(<span class="dv">2</span>) <span class="op">==</span> [<span class="dv">2</span>, <span class="dv">3</span>, ...)
+Dataset.count(<span class="dv">2</span>, <span class="dv">5</span>) <span class="op">==</span> [<span class="dv">2</span>, <span class="dv">7</span>, <span class="dv">12</span>, ...)
+Dataset.count(<span class="dv">0</span>, <span class="op">-</span><span class="dv">1</span>) <span class="op">==</span> [<span class="dv">0</span>, <span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">2</span>, ...)
+Dataset.count(<span class="dv">10</span>, <span class="op">-</span><span class="dv">1</span>) <span class="op">==</span> [<span class="dv">10</span>, <span class="dv">9</span>, ...)</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>start</code></b>: (Optional.) The starting value for the counter. Defaults to 0.</li>
+<li><b><code>step</code></b>: (Optional.) The step size for the counter. Defaults to 1.</li>
+<li><b><code>dtype</code></b>: (Optional.) The data type for counter elements. Defaults to <a href="../../../../../tf.md#int64"><code>tf.int64</code></a>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Dataset</code> of scalar <code>dtype</code> elements.</p>

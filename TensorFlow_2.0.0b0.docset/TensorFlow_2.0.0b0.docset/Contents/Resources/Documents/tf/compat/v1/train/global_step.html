@@ -1,0 +1,29 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.train.global_step" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.train.global_step" class="dashAnchor"></a><h1 id="tf.compat.v1.train.global_step">tf.compat.v1.train.global_step</h1>
+<p>Small helper to get the global step.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.train.global_step(
+    sess,
+    global_step_tensor
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/training/training_util.py"><code>python/training/training_util.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Create a variable to hold the global_step.</span>
+global_step_tensor <span class="op">=</span> tf.Variable(<span class="dv">10</span>, trainable<span class="op">=</span><span class="va">False</span>, name<span class="op">=</span><span class="st">&#39;global_step&#39;</span>)
+<span class="co"># Create a session.</span>
+sess <span class="op">=</span> tf.compat.v1.Session()
+<span class="co"># Initialize the variable</span>
+sess.run(global_step_tensor.initializer)
+<span class="co"># Get the variable value.</span>
+<span class="bu">print</span>(<span class="st">&#39;global_step: </span><span class="sc">%s</span><span class="st">&#39;</span> <span class="op">%</span> tf.compat.v1.train.global_step(sess,
+global_step_tensor))
+
+global_step: <span class="dv">10</span></code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>sess</code></b>: A TensorFlow <code>Session</code> object.</li>
+<li><b><code>global_step_tensor</code></b>: <code>Tensor</code> or the <code>name</code> of the operation that contains the global step.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The global step value.</p>

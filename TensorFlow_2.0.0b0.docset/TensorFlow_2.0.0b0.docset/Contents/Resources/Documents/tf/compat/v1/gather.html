@@ -1,0 +1,42 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.gather" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.gather" class="dashAnchor"></a><h1 id="tf.compat.v1.gather">tf.compat.v1.gather</h1>
+<p>Gather slices from <code>params</code> axis <code>axis</code> according to <code>indices</code>.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.gather(
+    params,
+    indices,
+    validate_indices<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>,
+    axis<span class="op">=</span><span class="va">None</span>,
+    batch_dims<span class="op">=</span><span class="dv">0</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/array_ops.py"><code>python/ops/array_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p><code>indices</code> must be an integer tensor of any dimension (usually 0-D or 1-D). Produces an output tensor with shape <code>params.shape[:axis] + indices.shape + params.shape[axis + 1:]</code> where:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    <span class="co"># Scalar indices (output is rank(params) - 1).</span>
+    output[a_0, ..., a_n, b_0, ..., b_n] <span class="op">=</span>
+      params[a_0, ..., a_n, indices, b_0, ..., b_n]
+
+    <span class="co"># Vector indices (output is rank(params)).</span>
+    output[a_0, ..., a_n, i, b_0, ..., b_n] <span class="op">=</span>
+      params[a_0, ..., a_n, indices[i], b_0, ..., b_n]
+
+    <span class="co"># Higher rank indices (output is rank(params) + rank(indices) - 1).</span>
+    output[a_0, ..., a_n, i, ..., j, b_0, ... b_n] <span class="op">=</span>
+      params[a_0, ..., a_n, indices[i, ..., j], b_0, ..., b_n]</code></pre></div>
+<div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+<p><img style="width:100%" src="https://www.tensorflow.org/images/Gather.png" alt></p>
+</div>
+<p>Note that on CPU, if an out of bound index is found, an error is returned. On GPU, if an out of bound index is found, a 0 is stored in the corresponding output value.</p>
+<p>See also <code>tf.batch_gather</code> and <a href="../../../tf/gather_nd.html"><code>tf.gather_nd</code></a>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>params</code></b>: A <code>Tensor</code>. The tensor from which to gather values. Must be at least rank <code>axis + 1</code>.</li>
+<li><b><code>indices</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. Index tensor. Must be in range <code>[0, params.shape[axis])</code>.</li>
+<li><b><code>axis</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. The axis in <code>params</code> to gather <code>indices</code> from. Defaults to the first dimension. Supports negative indexes.</li>
+<li><b><code>batch_dims</code></b>: An optional <code>int</code>. Defaults to <code>0</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>params</code>.</p>

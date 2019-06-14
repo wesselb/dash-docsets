@@ -1,0 +1,39 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.backend.separable_conv2d" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.keras.backend.separable_conv2d" class="dashAnchor"></a><h1 id="tf.keras.backend.separable_conv2d">tf.keras.backend.separable_conv2d</h1>
+<p>2D convolution with separable filters.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.keras.backend.separable_conv2d</code></li>
+<li><code>tf.compat.v2.keras.backend.separable_conv2d</code></li>
+<li><code>tf.keras.backend.separable_conv2d</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.keras.backend.separable_conv2d(
+    x,
+    depthwise_kernel,
+    pointwise_kernel,
+    strides<span class="op">=</span>(<span class="dv">1</span>, <span class="dv">1</span>),
+    padding<span class="op">=</span><span class="st">&#39;valid&#39;</span>,
+    data_format<span class="op">=</span><span class="va">None</span>,
+    dilation_rate<span class="op">=</span>(<span class="dv">1</span>, <span class="dv">1</span>)
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/backend.py"><code>python/keras/backend.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>x</code></b>: input tensor</li>
+<li><b><code>depthwise_kernel</code></b>: convolution kernel for the depthwise convolution.</li>
+<li><b><code>pointwise_kernel</code></b>: kernel for the 1x1 convolution.</li>
+<li><b><code>strides</code></b>: strides tuple (length 2).</li>
+<li><b><code>padding</code></b>: string, <code>&quot;same&quot;</code> or <code>&quot;valid&quot;</code>.</li>
+<li><b><code>data_format</code></b>: string, <code>&quot;channels_last&quot;</code> or <code>&quot;channels_first&quot;</code>.</li>
+<li><b><code>dilation_rate</code></b>: tuple of integers, dilation rates for the separable convolution.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Output tensor.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>data_format</code> is neither <code>channels_last</code> or <code>channels_first</code>.</li>
+<li><b><code>ValueError</code></b>: if <code>strides</code> is not a tuple of 2 integers.</li>
+</ul>

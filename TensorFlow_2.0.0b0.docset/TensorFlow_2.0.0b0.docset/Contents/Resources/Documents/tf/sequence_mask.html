@@ -1,0 +1,43 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.sequence_mask" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.sequence_mask" class="dashAnchor"></a><h1 id="tf.sequence_mask">tf.sequence_mask</h1>
+<p>Returns a mask tensor representing the first N positions of each cell.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.sequence_mask</code></li>
+<li><code>tf.compat.v2.sequence_mask</code></li>
+<li><code>tf.sequence_mask</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.sequence_mask(
+    lengths,
+    maxlen<span class="op">=</span><span class="va">None</span>,
+    dtype<span class="op">=</span>tf.dtypes.<span class="bu">bool</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/array_ops.py"><code>python/ops/array_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>If <code>lengths</code> has shape <code>[d_1, d_2, ..., d_n]</code> the resulting tensor <code>mask</code> has dtype <code>dtype</code> and shape <code>[d_1, d_2, ..., d_n, maxlen]</code>, with</p>
+<pre><code>mask[i_1, i_2, ..., i_n, j] = (j &lt; lengths[i_1, i_2, ..., i_n])</code></pre>
+<h4 id="examples">Examples:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.sequence_mask([<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">2</span>], <span class="dv">5</span>)  <span class="co"># [[True, False, False, False, False],</span>
+                                <span class="co">#  [True, True, True, False, False],</span>
+                                <span class="co">#  [True, True, False, False, False]]</span>
+
+tf.sequence_mask([[<span class="dv">1</span>, <span class="dv">3</span>],[<span class="dv">2</span>,<span class="dv">0</span>]])  <span class="co"># [[[True, False, False],</span>
+                                  <span class="co">#   [True, True, True]],</span>
+                                  <span class="co">#  [[True, True, False],</span>
+                                  <span class="co">#   [False, False, False]]]</span></code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>lengths</code></b>: integer tensor, all its values &lt;= maxlen.</li>
+<li><b><code>maxlen</code></b>: scalar integer tensor, size of last dimension of returned tensor. Default is the maximum value in <code>lengths</code>.</li>
+<li><b><code>dtype</code></b>: output type of the resulting tensor.</li>
+<li><b><code>name</code></b>: name of the op.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A mask tensor of shape <code>lengths.shape + (maxlen,)</code>, cast to specified dtype.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>maxlen</code> is not a scalar.</li>
+</ul>

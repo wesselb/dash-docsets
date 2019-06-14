@@ -1,0 +1,35 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.nest.assert_same_structure" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.nest.assert_same_structure" class="dashAnchor"></a><h1 id="tf.nest.assert_same_structure">tf.nest.assert_same_structure</h1>
+<p>Asserts that two structures are nested in the same way.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.nest.assert_same_structure</code></li>
+<li><code>tf.compat.v2.nest.assert_same_structure</code></li>
+<li><code>tf.nest.assert_same_structure</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.nest.assert_same_structure(
+    nest1,
+    nest2,
+    check_types<span class="op">=</span><span class="va">True</span>,
+    expand_composites<span class="op">=</span><span class="va">False</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/util/nest.py"><code>python/util/nest.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Note that namedtuples with identical name and fields are always considered to have the same shallow structure (even with <code>check_types=True</code>). For instance, this code will print <code>True</code>:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="kw">def</span> nt(a, b):
+  <span class="cf">return</span> collections.namedtuple(<span class="st">&#39;foo&#39;</span>, <span class="st">&#39;a b&#39;</span>)(a, b)
+<span class="bu">print</span>(assert_same_structure(nt(<span class="dv">0</span>, <span class="dv">1</span>), nt(<span class="dv">2</span>, <span class="dv">3</span>)))</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>nest1</code></b>: an arbitrarily nested structure.</li>
+<li><b><code>nest2</code></b>: an arbitrarily nested structure.</li>
+<li><b><code>check_types</code></b>: if <code>True</code> (default) types of sequences are checked as well, including the keys of dictionaries. If set to <code>False</code>, for example a list and a tuple of objects will look the same if they have the same size. Note that namedtuples with identical name and fields are always considered to have the same shallow structure. Two types will also be considered the same if they are both list subtypes (which allows &quot;list&quot; and &quot;_ListWrapper&quot; from trackable dependency tracking to compare equal).</li>
+<li><b><code>expand_composites</code></b>: If true, then composite tensors such as <a href="../../tf/sparse/SparseTensor.html"><code>tf.SparseTensor</code></a> and <a href="../../tf/RaggedTensor.html"><code>tf.RaggedTensor</code></a> are expanded into their component tensors.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If the two structures do not have the same number of elements or if the two structures are not nested in the same way.</li>
+<li><b><code>TypeError</code></b>: If the two structures differ in the type of sequence in any of their substructures. Only possible if <code>check_types</code> is <code>True</code>.</li>
+</ul>

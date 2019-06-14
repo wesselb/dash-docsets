@@ -1,0 +1,45 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.linalg.tridiagonal_matmul" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.linalg.tridiagonal_matmul" class="dashAnchor"></a><h1 id="tf.linalg.tridiagonal_matmul">tf.linalg.tridiagonal_matmul</h1>
+<p>Multiplies tridiagonal matrix by matrix.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.linalg.tridiagonal_matmul</code></li>
+<li><code>tf.compat.v2.linalg.tridiagonal_matmul</code></li>
+<li><code>tf.linalg.tridiagonal_matmul</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.linalg.tridiagonal_matmul(
+    diagonals,
+    rhs,
+    diagonals_format<span class="op">=</span><span class="st">&#39;compact&#39;</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/linalg/linalg_impl.py"><code>python/ops/linalg/linalg_impl.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p><code>diagonals</code> is representation of 3-diagonal NxN matrix, which depends on <code>diagonals_format</code>.</p>
+<p>In <code>matrix</code> format, <code>diagonals</code> must be a tensor of shape <code>[..., M, M]</code>, with two inner-most dimensions representing the square tridiagonal matrices. Elements outside of the three diagonals will be ignored.</p>
+<p>If <code>sequence</code> format, <code>diagonals</code> is list or tuple of three tensors: <code>[superdiag, maindiag, subdiag]</code>, each having shape [..., M]. Last element of <code>superdiag</code> first element of <code>subdiag</code> are ignored.</p>
+<p>In <code>compact</code> format the three diagonals are brought together into one tensor of shape <code>[..., 3, M]</code>, with last two dimensions containing superdiagonals, diagonals, and subdiagonals, in order. Similarly to <code>sequence</code> format, elements <code>diagonals[..., 0, M-1]</code> and <code>diagonals[..., 2, 0]</code> are ignored.</p>
+<p>The <code>sequence</code> format is recommended as the one with the best performance.</p>
+<p><code>rhs</code> is matrix to the right of multiplication. It has shape <code>[..., M, N]</code>.</p>
+<h4 id="example">Example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">superdiag <span class="op">=</span> tf.constant([<span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>, <span class="dv">0</span>], dtype<span class="op">=</span>tf.float64)
+maindiag <span class="op">=</span> tf.constant([<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>], dtype<span class="op">=</span>tf.float64)
+subdiag <span class="op">=</span> tf.constant([<span class="dv">0</span>, <span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>], dtype<span class="op">=</span>tf.float64)
+diagonals <span class="op">=</span> [superdiag, maindiag, subdiag]
+rhs <span class="op">=</span> tf.constant([[<span class="dv">1</span>, <span class="dv">1</span>], [<span class="dv">1</span>, <span class="dv">1</span>], [<span class="dv">1</span>, <span class="dv">1</span>]], dtype<span class="op">=</span>tf.float64)
+x <span class="op">=</span> tf.linalg.tridiagonal_matmul(diagonals, rhs, diagonals_format<span class="op">=</span><span class="st">&#39;sequence&#39;</span>)</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>diagonals</code></b>: A <code>Tensor</code> or tuple of <code>Tensor</code>s describing left-hand sides. The shape depends of <code>diagonals_format</code>, see description above. Must be <code>float32</code>, <code>float64</code>, <code>complex64</code>, or <code>complex128</code>.</li>
+<li><b><code>rhs</code></b>: A <code>Tensor</code> of shape [..., M, N] and with the same dtype as <code>diagonals</code>.</li>
+<li><b><code>diagonals_format</code></b>: one of <code>sequence</code>, or <code>compact</code>. Default is <code>compact</code>.</li>
+<li><b><code>name</code></b>: A name to give this <code>Op</code> (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of shape [..., M, N] containing the result of multiplication.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: An unsupported type is provided as input, or when the input tensors have incorrect shapes.</li>
+</ul>

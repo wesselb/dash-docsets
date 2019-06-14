@@ -1,0 +1,27 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.autograph.to_code" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.autograph.to_code" class="dashAnchor"></a><h1 id="tf.autograph.to_code">tf.autograph.to_code</h1>
+<p>Similar to <code>to_graph</code>, but returns Python source code as a string.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.autograph.to_code</code></li>
+<li><code>tf.compat.v2.autograph.to_code</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.autograph.to_code(
+    entity,
+    recursive<span class="op">=</span><span class="va">True</span>,
+    experimental_optional_features<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/autograph/impl/api.py"><code>python/autograph/impl/api.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Also see: <a href="../../tf/autograph/to_graph.html"><code>tf.autograph.to_graph</code></a>.</p>
+<p><code>to_graph</code> returns the Python source code that can be used to generate a TensorFlow graph that is functionally identical to the input Python code.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>entity</code></b>: Python callable or class to convert.</li>
+<li><b><code>recursive</code></b>: Whether to recursively convert any functions that the converted function may call.</li>
+<li><b><code>experimental_optional_features</code></b>: <code>None</code>, a tuple of, or a single <a href="../../tf/autograph/experimental/Feature.html"><code>tf.autograph.experimental.Feature</code></a> value. Controls the use of optional features in the conversion process.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The converted code as string.</p>

@@ -1,0 +1,38 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.assert_rank_in" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.assert_rank_in" class="dashAnchor"></a><h1 id="tf.compat.v1.assert_rank_in">tf.compat.v1.assert_rank_in</h1>
+<p>Assert <code>x</code> has rank in <code>ranks</code>.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.assert_rank_in</code></li>
+<li><code>tf.compat.v1.debugging.assert_rank_in</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.assert_rank_in(
+    x,
+    ranks,
+    data<span class="op">=</span><span class="va">None</span>,
+    summarize<span class="op">=</span><span class="va">None</span>,
+    message<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/check_ops.py"><code>python/ops/check_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Example of adding a dependency to an operation:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> tf.control_dependencies([tf.compat.v1.assert_rank_in(x, (<span class="dv">2</span>, <span class="dv">4</span>))]):
+  output <span class="op">=</span> tf.reduce_sum(x)</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: Numeric <code>Tensor</code>.</li>
+<li><b><code>ranks</code></b>: Iterable of scalar <code>Tensor</code> objects.</li>
+<li><b><code>data</code></b>: The tensors to print out if the condition is False. Defaults to error message and first few entries of <code>x</code>.</li>
+<li><b><code>summarize</code></b>: Print this many entries of each tensor.</li>
+<li><b><code>message</code></b>: A string to prefix to the default message.</li>
+<li><b><code>name</code></b>: A name for this operation (optional). Defaults to &quot;assert_rank_in&quot;.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Op raising <code>InvalidArgumentError</code> unless rank of <code>x</code> is in <code>ranks</code>. If static checks determine <code>x</code> has matching rank, a <code>no_op</code> is returned.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If static checks determine <code>x</code> has mismatched rank.</li>
+</ul>

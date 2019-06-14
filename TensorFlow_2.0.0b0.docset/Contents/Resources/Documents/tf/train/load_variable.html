@@ -1,0 +1,24 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.train.load_variable" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.train.load_variable" class="dashAnchor"></a><h1 id="tf.train.load_variable">tf.train.load_variable</h1>
+<p>Returns the tensor value of the given variable in the checkpoint.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.train.load_variable</code></li>
+<li><code>tf.compat.v2.train.load_variable</code></li>
+<li><code>tf.train.load_variable</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.train.load_variable(
+    ckpt_dir_or_file,
+    name
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/training/checkpoint_utils.py"><code>python/training/checkpoint_utils.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>ckpt_dir_or_file</code></b>: Directory with checkpoints file or path to checkpoint.</li>
+<li><b><code>name</code></b>: Name of the variable to return.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A numpy <code>ndarray</code> with a copy of the value of this variable.</p>

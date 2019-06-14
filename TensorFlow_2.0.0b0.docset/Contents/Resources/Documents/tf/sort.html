@@ -1,0 +1,38 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.sort" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.sort" class="dashAnchor"></a><h1 id="tf.sort">tf.sort</h1>
+<p>Sorts a tensor.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.sort</code></li>
+<li><code>tf.compat.v2.sort</code></li>
+<li><code>tf.sort</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.sort(
+    values,
+    axis<span class="op">=-</span><span class="dv">1</span>,
+    direction<span class="op">=</span><span class="st">&#39;ASCENDING&#39;</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/sort_ops.py"><code>python/ops/sort_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="usage">Usage:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">import</span> tensorflow <span class="im">as</span> tf
+a <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">10</span>, <span class="fl">26.9</span>, <span class="fl">2.8</span>, <span class="fl">166.32</span>, <span class="fl">62.3</span>]
+b <span class="op">=</span> tf.sort(a,axis<span class="op">=-</span><span class="dv">1</span>,direction<span class="op">=</span><span class="st">&#39;ASCENDING&#39;</span>,name<span class="op">=</span><span class="va">None</span>)
+c <span class="op">=</span> tf.keras.backend.<span class="bu">eval</span>(b)
+<span class="co"># Here, c = [  1.     2.8   10.    26.9   62.3  166.32]</span></code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>values</code></b>: 1-D or higher numeric <code>Tensor</code>.</li>
+<li><b><code>axis</code></b>: The axis along which to sort. The default is -1, which sorts the last axis.</li>
+<li><b><code>direction</code></b>: The direction in which to sort the values (<code>'ASCENDING'</code> or <code>'DESCENDING'</code>).</li>
+<li><b><code>name</code></b>: Optional name for the operation.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> with the same dtype and shape as <code>values</code>, with the elements sorted along the given <code>axis</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If axis is not a constant scalar, or the direction is invalid.</li>
+</ul>

@@ -1,0 +1,26 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.io.decode_json_example" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.io.decode_json_example" class="dashAnchor"></a><h1 id="tf.io.decode_json_example">tf.io.decode_json_example</h1>
+<p>Convert JSON-encoded Example records to binary protocol buffer strings.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.decode_json_example</code></li>
+<li><code>tf.compat.v1.io.decode_json_example</code></li>
+<li><code>tf.compat.v2.io.decode_json_example</code></li>
+<li><code>tf.io.decode_json_example</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.io.decode_json_example(
+    json_examples,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in generated file: <code>python/ops/gen_parsing_ops.py</code>.</p>
+<!-- Placeholder for "Used in" -->
+<p>This op translates a tensor containing Example records, encoded using the <a href="https://developers.google.com/protocol-buffers/docs/proto3#json">standard JSON mapping</a>, into a tensor containing the same records encoded as binary protocol buffers. The resulting tensor can then be fed to any of the other Example-parsing ops.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>json_examples</code></b>: A <code>Tensor</code> of type <code>string</code>. Each string is a JSON object serialized according to the JSON mapping of the Example proto.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>string</code>.</p>

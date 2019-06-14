@@ -1,0 +1,11 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.train.experimental.disable_mixed_precision_graph_rewrite" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.train.experimental.disable_mixed_precision_graph_rewrite" class="dashAnchor"></a><h1 id="tf.compat.v1.train.experimental.disable_mixed_precision_graph_rewrite">tf.compat.v1.train.experimental.disable_mixed_precision_graph_rewrite</h1>
+<p>Disables the mixed precision graph rewrite.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.train.experimental.disable_mixed_precision_graph_rewrite()</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/training/experimental/mixed_precision.py"><code>python/training/experimental/mixed_precision.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>After this is called, the mixed precision graph rewrite will no longer run for new Sessions, and so float32 operations will no longer be converted to float16 in such Sessions. However, any existing Sessions will continue to have the graph rewrite enabled if they were created after <code>enable_mixed_precision_graph_rewrite</code> was called but before <code>disable_mixed_precision_graph_rewrite</code> was called.</p>
+<p>This does not undo the effects of loss scaling. Any optimizers wrapped with a LossScaleOptimizer will continue to do loss scaling, although this loss scaling will no longer be useful if the optimizer is used in new Sessions, as the graph rewrite no longer converts the graph to use float16.</p>
+<p>This function is useful for unit testing. A unit tests can test using the mixed precision graph rewrite, then disable it so future unit tests continue using float32. If this is done, unit tests should not share a single session, as <code>enable_mixed_precision_graph_rewrite</code> and <code>disable_mixed_precision_graph_rewrite</code> have no effect on existing sessions.</p>

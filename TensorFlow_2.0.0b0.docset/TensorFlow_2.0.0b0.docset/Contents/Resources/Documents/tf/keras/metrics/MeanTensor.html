@@ -1,0 +1,73 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.metrics.MeanTensor" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="count"/> <meta itemprop="property" content="total"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="reset_states"/> <meta itemprop="property" content="result"/> <meta itemprop="property" content="update_state"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.keras.metrics.MeanTensor" class="dashAnchor"></a><h1 id="tf.keras.metrics.meantensor">tf.keras.metrics.MeanTensor</h1>
+<h2 id="class-meantensor">Class <code>MeanTensor</code></h2>
+<p>Computes the element-wise (weighted) mean of the given tensors.</p>
+<p>Inherits From: <a href="../../../tf/keras/metrics/Metric.html"><code>Metric</code></a></p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.keras.metrics.MeanTensor</code></li>
+<li>Class <code>tf.compat.v2.keras.metrics.MeanTensor</code></li>
+<li>Class <code>tf.compat.v2.metrics.MeanTensor</code></li>
+<li>Class <code>tf.keras.metrics.MeanTensor</code></li>
+<li>Class <code>tf.metrics.MeanTensor</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/metrics.py"><code>python/keras/metrics.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p><code>MeanTensor</code> returns a tensor with the same shape of the input tensors. The mean value is updated by keeping local variables <code>total</code> and <code>count</code>. The <code>total</code> tracks the sum of the weighted values, and <code>count</code> stores the sum of the weighted counts.</p>
+<h4 id="usage">Usage:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">m <span class="op">=</span> tf.keras.metrics.MeanTensor()
+m.update_state([<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>])
+m.update_state([<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>])
+<span class="bu">print</span>(<span class="st">&#39;Result: &#39;</span>, m.result().numpy())  <span class="co"># Result: [2, 3, 4, 5]</span>
+m.update_state([<span class="dv">12</span>, <span class="dv">10</span>, <span class="dv">8</span>, <span class="dv">6</span>], sample_weights<span class="op">=</span> [<span class="dv">0</span>, <span class="fl">0.2</span>, <span class="fl">0.5</span>, <span class="dv">1</span>])
+<span class="bu">print</span>(<span class="st">&#39;Result: &#39;</span>, m.result().numpy())  <span class="co"># Result: [2, 3.636, 4.8, 5.333]</span></code></pre></div>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    name<span class="op">=</span><span class="st">&#39;mean_tensor&#39;</span>,
+    dtype<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Creates a <code>MeanTensor</code> instance.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>name</code></b>: (Optional) string name of the metric instance.</li>
+<li><b><code>dtype</code></b>: (Optional) data type of the metric result.</li>
+</ul>
+<h2 id="properties">Properties</h2>
+<h3 id="count">
+<code>count</code>
+</h3>
+<h3 id="total">
+<code>total</code>
+</h3>
+<h2 id="methods">Methods</h2>
+<h3 id="reset_states">
+<code>reset_states</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">reset_states()</code></pre></div>
+<p>Resets all of the metric state variables.</p>
+<p>This function is called between epochs/steps, when a metric is evaluated during training.</p>
+<h3 id="result">
+<code>result</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">result()</code></pre></div>
+<p>Computes and returns the metric value tensor.</p>
+<p>Result computation is an idempotent operation that simply calculates the metric value using the state variables.</p>
+<h3 id="update_state">
+<code>update_state</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">update_state(
+    values,
+    sample_weight<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Accumulates statistics for computing the element-wise mean.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>values</code></b>: Per-example value.</li>
+<li><b><code>sample_weight</code></b>: Optional weighting of each example. Defaults to 1.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Update op.</p>

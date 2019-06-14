@@ -1,0 +1,29 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.linalg.cholesky" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.linalg.cholesky" class="dashAnchor"></a><h1 id="tf.linalg.cholesky">tf.linalg.cholesky</h1>
+<p>Computes the Cholesky decomposition of one or more square matrices.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.cholesky</code></li>
+<li><code>tf.compat.v1.linalg.cholesky</code></li>
+<li><code>tf.compat.v2.linalg.cholesky</code></li>
+<li><code>tf.linalg.cholesky</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.linalg.cholesky(
+    <span class="bu">input</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in generated file: <code>python/ops/gen_linalg_ops.py</code>.</p>
+<!-- Placeholder for "Used in" -->
+<p>The input is a tensor of shape <code>[..., M, M]</code> whose inner-most 2 dimensions form square matrices.</p>
+<p>The input has to be symmetric and positive definite. Only the lower-triangular part of the input will be used for this operation. The upper-triangular part will not be read.</p>
+<p>The output is a tensor of the same shape as the input containing the Cholesky decompositions for all input submatrices <code>[..., :, :]</code>.</p>
+<p><strong>Note</strong>: The gradient computation on GPU is faster for large matrices but not for large batch dimensions when the submatrices are small. In this case it might be faster to use the CPU.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float64</code>, <code>float32</code>, <code>half</code>, <code>complex64</code>, <code>complex128</code>. Shape is <code>[..., M, M]</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>input</code>.</p>

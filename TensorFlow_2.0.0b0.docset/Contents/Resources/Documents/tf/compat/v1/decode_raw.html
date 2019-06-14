@@ -1,0 +1,30 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.decode_raw" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.decode_raw" class="dashAnchor"></a><h1 id="tf.compat.v1.decode_raw">tf.compat.v1.decode_raw</h1>
+<p>Convert raw byte strings into tensors. (deprecated arguments)</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.decode_raw</code></li>
+<li><code>tf.compat.v1.io.decode_raw</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.decode_raw(
+    input_bytes<span class="op">=</span><span class="va">None</span>,
+    out_type<span class="op">=</span><span class="va">None</span>,
+    little_endian<span class="op">=</span><span class="va">True</span>,
+    name<span class="op">=</span><span class="va">None</span>,
+    <span class="bu">bytes</span><span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/parsing_ops.py"><code>python/ops/parsing_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Warning: SOME ARGUMENTS ARE DEPRECATED: <code>(bytes)</code>. They will be removed in a future version. Instructions for updating: bytes is deprecated, use input_bytes instead</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input_bytes</code></b>: Each element of the input Tensor is converted to an array of bytes.</li>
+<li><b><code>out_type</code></b>: <code>DType</code> of the output. Acceptable types are <code>half</code>, <code>float</code>, <code>double</code>, <code>int32</code>, <code>uint16</code>, <code>uint8</code>, <code>int16</code>, <code>int8</code>, <code>int64</code>.</li>
+<li><b><code>little_endian</code></b>: Whether the <code>input_bytes</code> data is in little-endian format. Data will be converted into host byte order if necessary.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+<li><b><code>bytes</code></b>: Deprecated parameter. Use <code>input_bytes</code> instead.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> object storing the decoded bytes.</p>

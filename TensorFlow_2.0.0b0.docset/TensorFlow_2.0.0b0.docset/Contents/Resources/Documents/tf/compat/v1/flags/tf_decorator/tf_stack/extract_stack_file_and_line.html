@@ -1,0 +1,21 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.flags.tf_decorator.tf_stack.extract_stack_file_and_line" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.flags.tf_decorator.tf_stack.extract_stack_file_and_line" class="dashAnchor"></a><h1 id="tf.compat.v1.flags.tf_decorator.tf_stack.extract_stack_file_and_line">tf.compat.v1.flags.tf_decorator.tf_stack.extract_stack_file_and_line</h1>
+<p>A version of extract_stack that only returns filenames and line numbers.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.app.flags.tf_decorator.tf_stack.extract_stack_file_and_line</code></li>
+<li><code>tf.compat.v1.flags.tf_decorator.tf_stack.extract_stack_file_and_line</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.flags.tf_decorator.tf_stack.extract_stack_file_and_line(max_length<span class="op">=</span><span class="dv">1000</span>)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/util/tf_stack.py"><code>python/util/tf_stack.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Callers often only require filenames and line numbers, and do not need the additional information gathered by extract_stack, as they never call convert_stack.</p>
+<p>As a further optimisation, we allow users to specify a limit on the number of frames examined.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>max_length</code></b>: The maximum length of stack to extract.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A list of FileAndLine objects corresponding to the call stack of the current thread.</p>

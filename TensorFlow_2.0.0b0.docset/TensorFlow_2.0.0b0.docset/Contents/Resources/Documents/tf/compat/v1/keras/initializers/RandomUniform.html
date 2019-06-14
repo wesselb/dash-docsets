@@ -1,0 +1,76 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.keras.initializers.RandomUniform" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="__call__"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="from_config"/> <meta itemprop="property" content="get_config"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.compat.v1.keras.initializers.RandomUniform" class="dashAnchor"></a><h1 id="tf.compat.v1.keras.initializers.randomuniform">tf.compat.v1.keras.initializers.RandomUniform</h1>
+<h2 id="class-randomuniform">Class <code>RandomUniform</code></h2>
+<p>Initializer that generates tensors with a uniform distribution.</p>
+<p>Inherits From: <a href="../../../../../tf/compat/v1/random_uniform_initializer.html"><code>random_uniform_initializer</code></a></p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.keras.initializers.RandomUniform</code></li>
+<li>Class <code>tf.compat.v1.keras.initializers.random_uniform</code></li>
+<li>Class <code>tf.compat.v1.keras.initializers.uniform</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/initializers.py"><code>python/keras/initializers.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>minval</code></b>: A python scalar or a scalar tensor. Lower bound of the range of random values to generate. Defaults to -0.05.</li>
+<li><b><code>maxval</code></b>: A python scalar or a scalar tensor. Upper bound of the range of random values to generate. Defaults to 0.05.</li>
+<li><b><code>seed</code></b>: A Python integer. Used to create random seeds. See <a href="../../../../../tf/compat/v1/set_random_seed.html"><code>tf.compat.v1.set_random_seed</code></a> for behavior.</li>
+<li><b><code>dtype</code></b>: The data type.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A RandomUniform instance.</p>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    minval<span class="op">=-</span><span class="fl">0.05</span>,
+    maxval<span class="op">=</span><span class="fl">0.05</span>,
+    seed<span class="op">=</span><span class="va">None</span>,
+    dtype<span class="op">=</span>tf.dtypes.float32
+)</code></pre></div>
+<p>DEPRECATED FUNCTION ARGUMENTS</p>
+<p>Warning: SOME ARGUMENTS ARE DEPRECATED: <code>(dtype)</code>. They will be removed in a future version. Instructions for updating: Call initializer instance with the dtype argument instead of passing it to the constructor</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__call__">
+<code><strong>call</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__call__</span>(
+    shape,
+    dtype<span class="op">=</span><span class="va">None</span>,
+    partition_info<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Returns a tensor object initialized as specified by the initializer.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>shape</code></b>: Shape of the tensor.</li>
+<li><b><code>dtype</code></b>: Optional dtype of the tensor. If not provided use the initializer dtype.</li>
+<li><b><code>partition_info</code></b>: Optional information about the possible partitioning of a tensor.</li>
+</ul>
+<h3 id="from_config">
+<code>from_config</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">from_config(
+    cls,
+    config
+)</code></pre></div>
+<p>Instantiates an initializer from a configuration dictionary.</p>
+<h4 id="example">Example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">initializer <span class="op">=</span> RandomUniform(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)
+config <span class="op">=</span> initializer.get_config()
+initializer <span class="op">=</span> RandomUniform.from_config(config)</code></pre></div>
+<h4 id="args-2">Args:</h4>
+<ul>
+<li><b><code>config</code></b>: A Python dictionary. It will typically be the output of <code>get_config</code>.</li>
+</ul>
+<h4 id="returns-1">Returns:</h4>
+<p>An Initializer instance.</p>
+<h3 id="get_config">
+<code>get_config</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_config()</code></pre></div>
+<p>Returns the configuration of the initializer as a JSON-serializable dict.</p>
+<h4 id="returns-2">Returns:</h4>
+<p>A JSON-serializable Python dict.</p>

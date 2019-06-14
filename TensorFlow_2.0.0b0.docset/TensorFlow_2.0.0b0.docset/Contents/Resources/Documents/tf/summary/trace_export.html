@@ -1,0 +1,28 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.summary.trace_export" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.summary.trace_export" class="dashAnchor"></a><h1 id="tf.summary.trace_export">tf.summary.trace_export</h1>
+<p>Stops and exports the active trace as a Summary and/or profile file.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v2.summary.trace_export</code></li>
+<li><code>tf.summary.trace_export</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.summary.trace_export(
+    name,
+    step<span class="op">=</span><span class="va">None</span>,
+    profiler_outdir<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/summary_ops_v2.py"><code>python/ops/summary_ops_v2.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Stops the trace and exports all metadata collected during the trace to the default SummaryWriter, if one has been set.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>name</code></b>: A name for the summary to be written.</li>
+<li><b><code>step</code></b>: Explicit <code>int64</code>-castable monotonic step value for this summary. If omitted, this defaults to <code>tf.summary.experimental.get_step()</code>, which must not be None.</li>
+<li><b><code>profiler_outdir</code></b>: Output directory for profiler. It is required when profiler is enabled when trace was started. Otherwise, it is ignored.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if a default writer exists, but no step was provided and <code>tf.summary.experimental.get_step()</code> is None.</li>
+</ul>

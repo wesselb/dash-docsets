@@ -1,0 +1,237 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.GradientTape" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="__enter__"/> <meta itemprop="property" content="__exit__"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="batch_jacobian"/> <meta itemprop="property" content="gradient"/> <meta itemprop="property" content="jacobian"/> <meta itemprop="property" content="reset"/> <meta itemprop="property" content="stop_recording"/> <meta itemprop="property" content="watch"/> <meta itemprop="property" content="watched_variables"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.GradientTape" class="dashAnchor"></a><h1 id="tf.gradienttape">tf.GradientTape</h1>
+<h2 id="class-gradienttape">Class <code>GradientTape</code></h2>
+<p>Record operations for automatic differentiation.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.GradientTape</code></li>
+<li>Class <code>tf.compat.v1.GradientTape</code></li>
+<li>Class <code>tf.compat.v2.GradientTape</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/eager/backprop.py"><code>python/eager/backprop.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Operations are recorded if they are executed within this context manager and at least one of their inputs is being &quot;watched&quot;.</p>
+<p>Trainable variables (created by <a href="../tf/Variable.html"><code>tf.Variable</code></a> or <a href="../tf/compat/v1/get_variable.html"><code>tf.compat.v1.get_variable</code></a>, where <code>trainable=True</code> is default in both cases) are automatically watched. Tensors can be manually watched by invoking the <code>watch</code> method on this context manager.</p>
+<p>For example, consider the function <code>y = x * x</code>. The gradient at <code>x = 3.0</code> can be computed as:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">x <span class="op">=</span> tf.constant(<span class="fl">3.0</span>)
+<span class="cf">with</span> tf.GradientTape() <span class="im">as</span> g:
+  g.watch(x)
+  y <span class="op">=</span> x <span class="op">*</span> x
+dy_dx <span class="op">=</span> g.gradient(y, x) <span class="co"># Will compute to 6.0</span></code></pre></div>
+<p>GradientTapes can be nested to compute higher-order derivatives. For example,</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">x <span class="op">=</span> tf.constant(<span class="fl">3.0</span>)
+<span class="cf">with</span> tf.GradientTape() <span class="im">as</span> g:
+  g.watch(x)
+  <span class="cf">with</span> tf.GradientTape() <span class="im">as</span> gg:
+    gg.watch(x)
+    y <span class="op">=</span> x <span class="op">*</span> x
+  dy_dx <span class="op">=</span> gg.gradient(y, x)     <span class="co"># Will compute to 6.0</span>
+d2y_dx2 <span class="op">=</span> g.gradient(dy_dx, x)  <span class="co"># Will compute to 2.0</span></code></pre></div>
+<p>By default, the resources held by a GradientTape are released as soon as GradientTape.gradient() method is called. To compute multiple gradients over the same computation, create a persistent gradient tape. This allows multiple calls to the gradient() method as resources are released when the tape object is garbage collected. For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">x <span class="op">=</span> tf.constant(<span class="fl">3.0</span>)
+<span class="cf">with</span> tf.GradientTape(persistent<span class="op">=</span><span class="va">True</span>) <span class="im">as</span> g:
+  g.watch(x)
+  y <span class="op">=</span> x <span class="op">*</span> x
+  z <span class="op">=</span> y <span class="op">*</span> y
+dz_dx <span class="op">=</span> g.gradient(z, x)  <span class="co"># 108.0 (4*x^3 at x = 3)</span>
+dy_dx <span class="op">=</span> g.gradient(y, x)  <span class="co"># 6.0</span>
+<span class="kw">del</span> g  <span class="co"># Drop the reference to the tape</span></code></pre></div>
+<p>By default GradientTape will automatically watch any trainable variables that are accessed inside the context. If you want fine grained control over which variables are watched you can disable automatic tracking by passing <code>watch_accessed_variables=False</code> to the tape constructor:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> tf.GradientTape(watch_accessed_variables<span class="op">=</span><span class="va">False</span>) <span class="im">as</span> tape:
+  tape.watch(variable_a)
+  y <span class="op">=</span> variable_a <span class="op">**</span> <span class="dv">2</span>  <span class="co"># Gradients will be available for `variable_a`.</span>
+  z <span class="op">=</span> variable_b <span class="op">**</span> <span class="dv">3</span>  <span class="co"># No gradients will be available since `variable_b` is</span>
+                       <span class="co"># not being watched.</span></code></pre></div>
+<p>Note that when using models you should ensure that your variables exist when using <code>watch_accessed_variables=False</code>. Otherwise it's quite easy to make your first iteration not have any gradients:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">a <span class="op">=</span> tf.keras.layers.Dense(<span class="dv">32</span>)
+b <span class="op">=</span> tf.keras.layers.Dense(<span class="dv">32</span>)
+
+<span class="cf">with</span> tf.GradientTape(watch_accessed_variables<span class="op">=</span><span class="va">False</span>) <span class="im">as</span> tape:
+  tape.watch(a.variables)  <span class="co"># Since `a.build` has not been called at this point</span>
+                           <span class="co"># `a.variables` will return an empty list and the</span>
+                           <span class="co"># tape will not be watching anything.</span>
+  result <span class="op">=</span> b(a(inputs))
+  tape.gradient(result, a.variables)  <span class="co"># The result of this computation will be</span>
+                                      <span class="co"># a list of `None`s since a&#39;s variables</span>
+                                      <span class="co"># are not being watched.</span></code></pre></div>
+<p>Note that only tensors with real or complex dtypes are differentiable.</p>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    persistent<span class="op">=</span><span class="va">False</span>,
+    watch_accessed_variables<span class="op">=</span><span class="va">True</span>
+)</code></pre></div>
+<p>Creates a new GradientTape.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>persistent</code></b>: Boolean controlling whether a persistent gradient tape is created. False by default, which means at most one call can be made to the gradient() method on this object.</li>
+<li><b><code>watch_accessed_variables</code></b>: Boolean controlling whether the tape will automatically <code>watch</code> any (trainable) variables accessed while the tape is active. Defaults to True meaning gradients can be requested from any result computed in the tape derived from reading a trainable <code>Variable</code>. If False users must explicitly <code>watch</code> any <code>Variable</code>s they want to request gradients from.</li>
+</ul>
+<h2 id="methods">Methods</h2>
+<h3 id="__enter__">
+<code><strong>enter</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__enter__</span>()</code></pre></div>
+<p>Enters a context inside which operations are recorded on this tape.</p>
+<h3 id="__exit__">
+<code><strong>exit</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__exit__</span>(
+    typ,
+    value,
+    traceback
+)</code></pre></div>
+<p>Exits the recording context, no further operations are traced.</p>
+<h3 id="batch_jacobian">
+<code>batch_jacobian</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">batch_jacobian(
+    target,
+    source,
+    unconnected_gradients<span class="op">=</span>tf.UnconnectedGradients.NONE,
+    parallel_iterations<span class="op">=</span><span class="va">None</span>,
+    experimental_use_pfor<span class="op">=</span><span class="va">True</span>
+)</code></pre></div>
+<p>Computes and stacks per-example jacobians.</p>
+<p>See <a href="http://en.wikipedia.org/wiki/jacobian_matrix_and_determinant">wikipedia article</a> for the definition of a Jacobian. This function is essentially an efficient implementation of the following:</p>
+<p><code>tf.stack([self.jacobian(y[i], x[i]) for i in range(x.shape[0])])</code>.</p>
+<p>Note that compared to <code>GradientTape.jacobian</code> which computes gradient of each output value w.r.t each input value, this function is useful when <code>target[i,...]</code> is independent of <code>source[j,...]</code> for <code>j != i</code>. This assumption allows more efficient computation as compared to <code>GradientTape.jacobian</code>. The output, as well as intermediate activations, are lower dimensional and avoid a bunch of redundant zeros which would result in the jacobian computation given the independence assumption.</p>
+<h4 id="example-usage">Example usage:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> tf.GradientTape() <span class="im">as</span> g:
+  x <span class="op">=</span> tf.constant([[<span class="dv">1</span>., <span class="dv">2</span>.], [<span class="dv">3</span>., <span class="dv">4</span>.]], dtype<span class="op">=</span>tf.float32)
+  g.watch(x)
+  y <span class="op">=</span> x <span class="op">*</span> x
+batch_jacobian <span class="op">=</span> g.batch_jacobian(y, x) 
+<span class="co"># batch_jacobian is [[[2,  0], [0,  4]], [[6,  0], [0,  8]]]</span></code></pre></div>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>target</code></b>: A tensor with rank 2 or higher and with shape [b, y1, ..., y_n]. <code>target[i,...]</code> should only depend on <code>source[i,...]</code>.</li>
+<li><b><code>source</code></b>: A tensor with rank 2 or higher and with shape [b, x1, ..., x_m].</li>
+<li><b><code>unconnected_gradients</code></b>: a value which can either hold 'none' or 'zero' and alters the value which will be returned if the target and sources are unconnected. The possible values and effects are detailed in 'UnconnectedGradients' and it defaults to 'none'.</li>
+<li><b><code>parallel_iterations</code></b>: A knob to control how many iterations are dispatched in parallel. This knob can be used to control the total memory usage.</li>
+<li><b><code>experimental_use_pfor</code></b>: If true, uses pfor for computing the Jacobian. Else uses a tf.while_loop.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A tensor <code>t</code> with shape [b, y_1, ..., y_n, x1, ..., x_m] where <code>t[i, ...]</code> is the jacobian of <code>target[i, ...]</code> w.r.t. <code>source[i, ...]</code>, i.e. stacked per-example jacobians.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>RuntimeError</code></b>: If called on a non-persistent tape with eager execution enabled and without enabling experimental_use_pfor.</li>
+<li><b><code>ValueError</code></b>: If vectorization of jacobian computation fails or if first dimension of <code>target</code> and <code>source</code> do not match.</li>
+</ul>
+<h3 id="gradient">
+<code>gradient</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">gradient(
+    target,
+    sources,
+    output_gradients<span class="op">=</span><span class="va">None</span>,
+    unconnected_gradients<span class="op">=</span>tf.UnconnectedGradients.NONE
+)</code></pre></div>
+<p>Computes the gradient using operations recorded in context of this tape.</p>
+<h4 id="args-2">Args:</h4>
+<ul>
+<li><b><code>target</code></b>: Tensor (or list of tensors) to be differentiated.</li>
+<li><b><code>sources</code></b>: a list or nested structure of Tensors or Variables. <code>target</code> will be differentiated against elements in <code>sources</code>.</li>
+<li><b><code>output_gradients</code></b>: a list of gradients, one for each element of target. Defaults to None.</li>
+<li><b><code>unconnected_gradients</code></b>: a value which can either hold 'none' or 'zero' and alters the value which will be returned if the target and sources are unconnected. The possible values and effects are detailed in 'UnconnectedGradients' and it defaults to 'none'.</li>
+</ul>
+<h4 id="returns-1">Returns:</h4>
+<p>a list or nested structure of Tensors (or IndexedSlices, or None), one for each element in <code>sources</code>. Returned structure is the same as the structure of <code>sources</code>.</p>
+<h4 id="raises-1">Raises:</h4>
+<ul>
+<li><b><code>RuntimeError</code></b>: if called inside the context of the tape, or if called more than once on a non-persistent tape.</li>
+<li><b><code>ValueError</code></b>: if the target is a variable or if unconnected gradients is called with an unknown value.</li>
+</ul>
+<h3 id="jacobian">
+<code>jacobian</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">jacobian(
+    target,
+    sources,
+    unconnected_gradients<span class="op">=</span>tf.UnconnectedGradients.NONE,
+    parallel_iterations<span class="op">=</span><span class="va">None</span>,
+    experimental_use_pfor<span class="op">=</span><span class="va">True</span>
+)</code></pre></div>
+<p>Computes the jacobian using operations recorded in context of this tape.</p>
+<p>See <a href="http://en.wikipedia.org/wiki/jacobian_matrix_and_determinant">wikipedia article</a> for the definition of a Jacobian.</p>
+<h4 id="example-usage-1">Example usage:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> tf.GradientTape() <span class="im">as</span> g:
+  x  <span class="op">=</span> tf.constant([<span class="fl">1.0</span>, <span class="fl">2.0</span>])
+  g.watch(x)
+  y <span class="op">=</span> x <span class="op">*</span> x
+jacobian <span class="op">=</span> g.jacobian(y, x)
+<span class="co"># jacobian value is [[2., 0.], [0., 4.]]</span></code></pre></div>
+<h4 id="args-3">Args:</h4>
+<ul>
+<li><b><code>target</code></b>: Tensor to be differentiated.</li>
+<li><b><code>sources</code></b>: a list or nested structure of Tensors or Variables. <code>target</code> will be differentiated against elements in <code>sources</code>.</li>
+<li><b><code>unconnected_gradients</code></b>: a value which can either hold 'none' or 'zero' and alters the value which will be returned if the target and sources are unconnected. The possible values and effects are detailed in 'UnconnectedGradients' and it defaults to 'none'.</li>
+<li><b><code>parallel_iterations</code></b>: A knob to control how many iterations are dispatched in parallel. This knob can be used to control the total memory usage.</li>
+<li><b><code>experimental_use_pfor</code></b>: If true, vectorizes the jacobian computation. Else falls back to a sequential while_loop. Vectorization can sometimes fail or lead to excessive memory usage. This option can be used to disable vectorization in such cases.</li>
+</ul>
+<h4 id="returns-2">Returns:</h4>
+<p>a list or nested structure of Tensors (or IndexedSlices, or None), one for each element in <code>sources</code>. Returned structure is the same as the structure of <code>sources</code>.</p>
+<h4 id="raises-2">Raises:</h4>
+<ul>
+<li><b><code>RuntimeError</code></b>: If called on a non-persistent tape with eager execution enabled and without enabling experimental_use_pfor.</li>
+<li><b><code>ValueError</code></b>: If vectorization of jacobian computation fails.</li>
+</ul>
+<h3 id="reset">
+<code>reset</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">reset()</code></pre></div>
+<p>Clears all information stored in this tape.</p>
+<p>Equivalent to exiting and reentering the tape context manager with a new tape. For example, the two following code blocks are equivalent:</p>
+<pre><code>with tf.GradientTape() as t:
+  loss = loss_fn()
+with tf.GradientTape() as t:
+  loss += other_loss_fn()
+t.gradient(loss, ...)  # Only differentiates other_loss_fn, not loss_fn
+
+
+# The following is equivalent to the above
+with tf.GradientTape() as t:
+  loss = loss_fn()
+  t.reset()
+  loss += other_loss_fn()
+t.gradient(loss, ...)  # Only differentiates other_loss_fn, not loss_fn</code></pre>
+<p>This is useful if you don't want to exit the context manager for the tape, or can't because the desired reset point is inside a control flow construct:</p>
+<pre><code>with tf.GradientTape() as t:
+  loss = ...
+  if loss &gt; k:
+    t.reset()</code></pre>
+<h3 id="stop_recording">
+<code>stop_recording</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">stop_recording()</code></pre></div>
+<p>Temporarily stops recording operations on this tape.</p>
+<p>Operations executed while this context manager is active will not be recorded on the tape. This is useful for reducing the memory used by tracing all computations.</p>
+<h4 id="for-example">For example:</h4>
+<pre><code>  with tf.GradientTape(persistent=True) as t:
+    loss = compute_loss(model)
+    with t.stop_recording():
+      # The gradient computation below is not traced, saving memory.
+      grads = t.gradient(loss, model.variables)</code></pre>
+<h4 id="yields">Yields:</h4>
+<p>None</p>
+<h4 id="raises-3">Raises:</h4>
+<ul>
+<li><b><code>RuntimeError</code></b>: if the tape is not currently recording.</li>
+</ul>
+<h3 id="watch">
+<code>watch</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">watch(tensor)</code></pre></div>
+<p>Ensures that <code>tensor</code> is being traced by this tape.</p>
+<h4 id="args-4">Args:</h4>
+<ul>
+<li><b><code>tensor</code></b>: a Tensor or list of Tensors.</li>
+</ul>
+<h3 id="watched_variables">
+<code>watched_variables</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">watched_variables()</code></pre></div>
+<p>Returns variables watched by this tape in order of construction.</p>

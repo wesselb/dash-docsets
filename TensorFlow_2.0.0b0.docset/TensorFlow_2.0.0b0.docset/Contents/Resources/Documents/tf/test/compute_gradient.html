@@ -1,0 +1,39 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.test.compute_gradient" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.test.compute_gradient" class="dashAnchor"></a><h1 id="tf.test.compute_gradient">tf.test.compute_gradient</h1>
+<p>Computes the theoretical and numeric Jacobian of <code>f</code>.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v2.test.compute_gradient</code></li>
+<li><code>tf.test.compute_gradient</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.test.compute_gradient(
+    f,
+    x,
+    delta<span class="op">=</span><span class="fl">0.001</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/gradient_checker_v2.py"><code>python/ops/gradient_checker_v2.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>With y = f(x), computes the theoretical and numeric Jacobian dy/dx.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>f</code></b>: the function.</li>
+<li><b><code>x</code></b>: a list arguments for the function</li>
+<li><b><code>delta</code></b>: (optional) perturbation used to compute numeric Jacobian.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A pair of lists, where the first is a list of 2-d numpy arrays representing the theoretical Jacobians for each argument, and the second list is the numerical ones. Each 2-d array has &quot;x_size&quot; rows and &quot;y_size&quot; columns where &quot;x_size&quot; is the number of elements in the corresponding argument and &quot;y_size&quot; is the number of elements in f(x).</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If result is empty but the gradient is nonzero.</li>
+<li><b><code>ValueError</code></b>: If x is not list, but any other type.</li>
+</ul>
+<h4 id="example">Example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="at">@tf.function</span>
+<span class="kw">def</span> test_func(x):
+  <span class="cf">return</span> x<span class="op">*</span>x
+
+theoretical, numerical <span class="op">=</span> tf.test.compute_gradient(test_func, [<span class="fl">1.0</span>])
+theoretical, numerical
+<span class="co"># ((array([[2.]], dtype=float32),), (array([[2.000004]], dtype=float32),))</span></code></pre></div>

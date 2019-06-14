@@ -1,0 +1,21 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.data.experimental.bytes_produced_stats" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.data.experimental.bytes_produced_stats" class="dashAnchor"></a><h1 id="tf.data.experimental.bytes_produced_stats">tf.data.experimental.bytes_produced_stats</h1>
+<p>Records the number of bytes produced by each element of the input dataset.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.data.experimental.bytes_produced_stats</code></li>
+<li><code>tf.compat.v2.data.experimental.bytes_produced_stats</code></li>
+<li><code>tf.data.experimental.bytes_produced_stats</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.data.experimental.bytes_produced_stats(tag)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/data/experimental/ops/stats_ops.py"><code>python/data/experimental/ops/stats_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>To consume the statistics, associate a <code>StatsAggregator</code> with the output dataset.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>tag</code></b>: String. All statistics recorded by the returned transformation will be associated with the given <code>tag</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Dataset</code> transformation function, which can be passed to <a href="../../../tf/data/Dataset.md#apply"><code>tf.data.Dataset.apply</code></a>.</p>

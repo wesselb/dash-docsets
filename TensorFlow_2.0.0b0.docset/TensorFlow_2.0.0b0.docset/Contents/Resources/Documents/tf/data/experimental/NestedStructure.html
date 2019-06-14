@@ -1,0 +1,71 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.data.experimental.NestedStructure" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="__eq__"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="__ne__"/> <meta itemprop="property" content="from_value"/> <meta itemprop="property" content="is_compatible_with"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.data.experimental.NestedStructure" class="dashAnchor"></a><h1 id="tf.data.experimental.nestedstructure">tf.data.experimental.NestedStructure</h1>
+<h2 id="class-nestedstructure">Class <code>NestedStructure</code></h2>
+<p>Represents a nested structure in which each leaf is a <code>Structure</code>.</p>
+<p>Inherits From: <a href="../../../tf/data/experimental/Structure.html"><code>Structure</code></a></p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.data.experimental.NestedStructure</code></li>
+<li>Class <code>tf.compat.v2.data.experimental.NestedStructure</code></li>
+<li>Class <code>tf.data.experimental.NestedStructure</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/data/util/structure.py"><code>python/data/util/structure.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(nested_structure)</code></pre></div>
+<p>Initialize self. See help(type(self)) for accurate signature.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__eq__">
+<code><strong>eq</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__eq__</span>(other)</code></pre></div>
+<p>Returns the this structure and the input structure are equal.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>other</code></b>: the structure to use for equality check</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p><code>True</code> if this and the input structure are equal and <code>False</code> otherwise.</p>
+<h3 id="__ne__">
+<code><strong>ne</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__ne__</span>(other)</code></pre></div>
+<p>Return self!=value.</p>
+<h3 id="from_value">
+<code>from_value</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="at">@staticmethod</span>
+from_value(value)</code></pre></div>
+<p>Returns a <code>Structure</code> that represents the given <code>value</code>.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>value</code></b>: A potentially structured value.</li>
+</ul>
+<h4 id="returns-1">Returns:</h4>
+<p>A <code>Structure</code> that is compatible with <code>value</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: If a structure cannot be built for <code>value</code>, because its type or one of its component types is not supported.</li>
+</ul>
+<h3 id="is_compatible_with">
+<code>is_compatible_with</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">is_compatible_with(other)</code></pre></div>
+<p>Returns <code>True</code> if <code>other</code> is compatible with this structure.</p>
+<p>A structure <code>t</code> is a &quot;subtype&quot; of <code>s</code> if:</p>
+<ul>
+<li><code>s</code> and <code>t</code> are instances of the same <code>Structure</code> subclass.</li>
+<li>The nested structures (if any) of <code>s</code> and <code>t</code> are the same, according to <a href="../../../tf/nest/assert_same_structure.html"><code>tf.nest.assert_same_structure</code></a>, and each nested structure of <code>t</code> is a &quot;subtype&quot; of the corresponding nested structure of <code>s</code>.</li>
+<li>Any <a href="../../../tf/dtypes/DType.html"><code>tf.DType</code></a> components of <code>t</code> are the same as the corresponding components in <code>s</code>.</li>
+<li>Any <a href="../../../tf/TensorShape.html"><code>tf.TensorShape</code></a> components of <code>t</code> are compatible with the corresponding components in <code>s</code>, according to <a href="../../../tf/TensorShape.md#is_compatible_with"><code>tf.TensorShape.is_compatible_with</code></a>.</li>
+</ul>
+<h4 id="args-2">Args:</h4>
+<ul>
+<li><b><code>other</code></b>: A <code>Structure</code>.</li>
+</ul>
+<h4 id="returns-2">Returns:</h4>
+<p><code>True</code> if <code>other</code> is a subtype of this structure, otherwise <code>False</code>.</p>

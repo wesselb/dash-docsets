@@ -1,0 +1,30 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.preprocessing.image.save_img" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.keras.preprocessing.image.save_img" class="dashAnchor"></a><h1 id="tf.keras.preprocessing.image.save_img">tf.keras.preprocessing.image.save_img</h1>
+<p>Saves an image stored as a Numpy array to a path or file object.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.keras.preprocessing.image.save_img</code></li>
+<li><code>tf.compat.v2.keras.preprocessing.image.save_img</code></li>
+<li><code>tf.keras.preprocessing.image.save_img</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.keras.preprocessing.image.save_img(
+    path,
+    x,
+    data_format<span class="op">=</span><span class="va">None</span>,
+    file_format<span class="op">=</span><span class="va">None</span>,
+    scale<span class="op">=</span><span class="va">True</span>,
+    <span class="op">**</span>kwargs
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/preprocessing/image.py"><code>python/keras/preprocessing/image.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>path</code></b>: Path or file object.</li>
+<li><b><code>x</code></b>: Numpy array.</li>
+<li><b><code>data_format</code></b>: Image data format, either &quot;channels_first&quot; or &quot;channels_last&quot;.</li>
+<li><b><code>file_format</code></b>: Optional file format override. If omitted, the format to use is determined from the filename extension. If a file object was used instead of a filename, this parameter should always be used.</li>
+<li><b><code>scale</code></b>: Whether to rescale image values to be within <code>[0, 255]</code>.</li>
+<li><b><code>**kwargs</code></b>: Additional keyword arguments passed to <code>PIL.Image.save()</code>.</li>
+</ul>

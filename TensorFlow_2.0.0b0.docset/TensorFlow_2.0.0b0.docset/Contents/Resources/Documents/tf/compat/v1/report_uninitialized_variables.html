@@ -1,0 +1,20 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.report_uninitialized_variables" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.report_uninitialized_variables" class="dashAnchor"></a><h1 id="tf.compat.v1.report_uninitialized_variables">tf.compat.v1.report_uninitialized_variables</h1>
+<p>Adds ops to list the names of uninitialized variables.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.report_uninitialized_variables(
+    var_list<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="st">&#39;report_uninitialized_variables&#39;</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/variables.py"><code>python/ops/variables.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>When run, it returns a 1-D tensor containing the names of uninitialized variables if there are any, or an empty array if there are none.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>var_list</code></b>: List of <code>Variable</code> objects to check. Defaults to the value of <code>global_variables() + local_variables()</code></li>
+<li><b><code>name</code></b>: Optional name of the <code>Operation</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A 1-D tensor containing names of the uninitialized variables, or an empty 1-D tensor if there are no variables or no uninitialized variables.</p>
+<p><strong>NOTE</strong> The output of this function should be used. If it is not, a warning will be logged. To mark the output as used, call its .mark_used() method.</p>

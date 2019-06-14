@@ -1,0 +1,56 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.layers.conv2d_transpose" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.layers.conv2d_transpose" class="dashAnchor"></a><h1 id="tf.compat.v1.layers.conv2d_transpose">tf.compat.v1.layers.conv2d_transpose</h1>
+<p>Functional interface for transposed 2D convolution layer. (deprecated)</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.layers.conv2d_transpose(
+    inputs,
+    filters,
+    kernel_size,
+    strides<span class="op">=</span>(<span class="dv">1</span>, <span class="dv">1</span>),
+    padding<span class="op">=</span><span class="st">&#39;valid&#39;</span>,
+    data_format<span class="op">=</span><span class="st">&#39;channels_last&#39;</span>,
+    activation<span class="op">=</span><span class="va">None</span>,
+    use_bias<span class="op">=</span><span class="va">True</span>,
+    kernel_initializer<span class="op">=</span><span class="va">None</span>,
+    bias_initializer<span class="op">=</span>tf.zeros_initializer(),
+    kernel_regularizer<span class="op">=</span><span class="va">None</span>,
+    bias_regularizer<span class="op">=</span><span class="va">None</span>,
+    activity_regularizer<span class="op">=</span><span class="va">None</span>,
+    kernel_constraint<span class="op">=</span><span class="va">None</span>,
+    bias_constraint<span class="op">=</span><span class="va">None</span>,
+    trainable<span class="op">=</span><span class="va">True</span>,
+    name<span class="op">=</span><span class="va">None</span>,
+    reuse<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/layers/convolutional.py"><code>python/layers/convolutional.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Warning: THIS FUNCTION IS DEPRECATED. It will be removed in a future version. Instructions for updating: Use <a href="../../../../tf/keras/layers/Conv2DTranspose.html"><code>tf.keras.layers.Conv2DTranspose</code></a> instead.</p>
+<p>The need for transposed convolutions generally arises from the desire to use a transformation going in the opposite direction of a normal convolution, i.e., from something that has the shape of the output of some convolution to something that has the shape of its input while maintaining a connectivity pattern that is compatible with said convolution.</p>
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>inputs</code></b>: Input tensor.</li>
+<li><b><code>filters</code></b>: Integer, the dimensionality of the output space (i.e. the number of filters in the convolution).</li>
+<li><b><code>kernel_size</code></b>: A tuple or list of 2 positive integers specifying the spatial dimensions of the filters. Can be a single integer to specify the same value for all spatial dimensions.</li>
+<li><b><code>strides</code></b>: A tuple or list of 2 positive integers specifying the strides of the convolution. Can be a single integer to specify the same value for all spatial dimensions.</li>
+<li><b><code>padding</code></b>: one of <code>&quot;valid&quot;</code> or <code>&quot;same&quot;</code> (case-insensitive).</li>
+<li><b><code>data_format</code></b>: A string, one of <code>channels_last</code> (default) or <code>channels_first</code>. The ordering of the dimensions in the inputs. <code>channels_last</code> corresponds to inputs with shape <code>(batch, height, width, channels)</code> while <code>channels_first</code> corresponds to inputs with shape <code>(batch, channels, height, width)</code>.</li>
+<li><b><code>activation</code></b>: Activation function. Set it to <code>None</code> to maintain a linear activation.</li>
+<li><b><code>use_bias</code></b>: Boolean, whether the layer uses a bias.</li>
+<li><b><code>kernel_initializer</code></b>: An initializer for the convolution kernel.</li>
+<li><b><code>bias_initializer</code></b>: An initializer for the bias vector. If <code>None</code>, the default initializer will be used.</li>
+<li><b><code>kernel_regularizer</code></b>: Optional regularizer for the convolution kernel.</li>
+<li><b><code>bias_regularizer</code></b>: Optional regularizer for the bias vector.</li>
+<li><b><code>activity_regularizer</code></b>: Optional regularizer function for the output.</li>
+<li><b><code>kernel_constraint</code></b>: Optional projection function to be applied to the kernel after being updated by an <code>Optimizer</code> (e.g. used to implement norm constraints or value constraints for layer weights). The function must take as input the unprojected variable and must return the projected variable (which must have the same shape). Constraints are not safe to use when doing asynchronous distributed training.</li>
+<li><b><code>bias_constraint</code></b>: Optional projection function to be applied to the bias after being updated by an <code>Optimizer</code>.</li>
+<li><b><code>trainable</code></b>: Boolean, if <code>True</code> also add variables to the graph collection <code>GraphKeys.TRAINABLE_VARIABLES</code> (see <a href="../../../../tf/Variable.html"><code>tf.Variable</code></a>).</li>
+<li><b><code>name</code></b>: A string, the name of the layer.</li>
+<li><b><code>reuse</code></b>: Boolean, whether to reuse the weights of a previous layer by the same name.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Output tensor.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if eager execution is enabled.</li>
+</ul>

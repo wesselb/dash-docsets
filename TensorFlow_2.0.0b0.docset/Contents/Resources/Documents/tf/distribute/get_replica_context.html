@@ -1,0 +1,31 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.distribute.get_replica_context" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.distribute.get_replica_context" class="dashAnchor"></a><h1 id="tf.distribute.get_replica_context">tf.distribute.get_replica_context</h1>
+<p>Returns the current <a href="../../tf/distribute/ReplicaContext.html"><code>tf.distribute.ReplicaContext</code></a> or <code>None</code>.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.distribute.get_replica_context</code></li>
+<li><code>tf.compat.v2.distribute.get_replica_context</code></li>
+<li><code>tf.distribute.get_replica_context</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.distribute.get_replica_context()</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/distribute/distribution_strategy_context.py"><code>python/distribute/distribution_strategy_context.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Returns <code>None</code> if in a cross-replica context.</p>
+<h4 id="note-that-execution">Note that execution:</h4>
+<ol style="list-style-type: decimal">
+<li>starts in the default (single-replica) replica context (this function will return the default <code>ReplicaContext</code> object);</li>
+<li>switches to cross-replica context (in which case this will return <code>None</code>) when entering a <code>with tf.distribute.Strategy.scope():</code> block;</li>
+<li>switches to a (non-default) replica context inside <code>extended.call_for_each_replica(fn, ...)</code>;</li>
+<li>if <code>fn</code> calls <code>get_replica_context().merge_call(merge_fn, ...)</code>, then inside <code>merge_fn</code> you are back in the cross-replica context (and again this function will return <code>None</code>).</li>
+</ol>
+<p>Note that you can also go directly from step 1 to 4 to switch to a cross-replica context for the default <a href="../../tf/distribute/Strategy.html"><code>tf.distribute.Strategy</code></a>. You may also switch from the cross-replica context of 4 to a replica context by calling <code>extended.call_for_each_replica()</code>, jumping back to step 3.</p>
+<p>Most <a href="../../tf/distribute/Strategy.html"><code>tf.distribute.Strategy</code></a> methods may only be executed in a cross-replica context, in a replica context you should use the <code>ReplicaContext</code> API instead.</p>
+<h4 id="returns">Returns:</h4>
+<p>The current <code>ReplicaContext</code> object when in a replica context scope, else <code>None</code>.</p>
+<p>Within a particular block, exactly one of these two things will be true:</p>
+<ul>
+<li><code>get_replica_context()</code> returns non-<code>None</code>, or</li>
+<li><code>tf.distribute.is_cross_replica_context()</code> returns True.</li>
+</ul>

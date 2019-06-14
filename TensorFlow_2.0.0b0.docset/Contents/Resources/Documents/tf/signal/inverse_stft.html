@@ -1,0 +1,57 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.signal.inverse_stft" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.signal.inverse_stft" class="dashAnchor"></a><h1 id="tf.signal.inverse_stft">tf.signal.inverse_stft</h1>
+<p>Computes the inverse <a href="https://en.wikipedia.org/wiki/Short-time_Fourier_transform">Short-time Fourier Transform</a> of <code>stfts</code>.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.signal.inverse_stft</code></li>
+<li><code>tf.compat.v2.signal.inverse_stft</code></li>
+<li><code>tf.signal.inverse_stft</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.signal.inverse_stft(
+    stfts,
+    frame_length,
+    frame_step,
+    fft_length<span class="op">=</span><span class="va">None</span>,
+    window_fn<span class="op">=</span>tf.signal.hann_window,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/signal/spectral_ops.py"><code>python/ops/signal/spectral_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>To reconstruct an original waveform, a complimentary window function should be used in inverse_stft. Such a window function can be constructed with tf.signal.inverse_stft_window_fn.</p>
+<h4 id="example">Example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">frame_length <span class="op">=</span> <span class="dv">400</span>
+frame_step <span class="op">=</span> <span class="dv">160</span>
+waveform <span class="op">=</span> tf.compat.v1.placeholder(dtype<span class="op">=</span>tf.float32, shape<span class="op">=</span>[<span class="dv">1000</span>])
+stft <span class="op">=</span> tf.signal.stft(waveform, frame_length, frame_step)
+inverse_stft <span class="op">=</span> tf.signal.inverse_stft(
+    stft, frame_length, frame_step,
+    window_fn<span class="op">=</span>tf.signal.inverse_stft_window_fn(frame_step))</code></pre></div>
+<p>if a custom window_fn is used in stft, it must be passed to inverse_stft_window_fn:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">frame_length <span class="op">=</span> <span class="dv">400</span>
+frame_step <span class="op">=</span> <span class="dv">160</span>
+window_fn <span class="op">=</span> functools.partial(window_ops.hamming_window, periodic<span class="op">=</span><span class="va">True</span>),
+waveform <span class="op">=</span> tf.compat.v1.placeholder(dtype<span class="op">=</span>tf.float32, shape<span class="op">=</span>[<span class="dv">1000</span>])
+stft <span class="op">=</span> tf.signal.stft(
+    waveform, frame_length, frame_step, window_fn<span class="op">=</span>window_fn)
+inverse_stft <span class="op">=</span> tf.signal.inverse_stft(
+    stft, frame_length, frame_step,
+    window_fn<span class="op">=</span>tf.signal.inverse_stft_window_fn(
+       frame_step, forward_window_fn<span class="op">=</span>window_fn))</code></pre></div>
+<p>Implemented with GPU-compatible ops and supports gradients.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>stfts</code></b>: A <code>complex64</code> <code>[..., frames, fft_unique_bins]</code> <code>Tensor</code> of STFT bins representing a batch of <code>fft_length</code>-point STFTs where <code>fft_unique_bins</code> is <code>fft_length // 2 + 1</code></li>
+<li><b><code>frame_length</code></b>: An integer scalar <code>Tensor</code>. The window length in samples.</li>
+<li><b><code>frame_step</code></b>: An integer scalar <code>Tensor</code>. The number of samples to step.</li>
+<li><b><code>fft_length</code></b>: An integer scalar <code>Tensor</code>. The size of the FFT that produced <code>stfts</code>. If not provided, uses the smallest power of 2 enclosing <code>frame_length</code>.</li>
+<li><b><code>window_fn</code></b>: A callable that takes a window length and a <code>dtype</code> keyword argument and returns a <code>[window_length]</code> <code>Tensor</code> of samples in the provided datatype. If set to <code>None</code>, no windowing is used.</li>
+<li><b><code>name</code></b>: An optional name for the operation.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>[..., samples]</code> <code>Tensor</code> of <code>float32</code> signals representing the inverse STFT for each input STFT in <code>stfts</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>stfts</code> is not at least rank 2, <code>frame_length</code> is not scalar, <code>frame_step</code> is not scalar, or <code>fft_length</code> is not scalar.</li>
+</ul>

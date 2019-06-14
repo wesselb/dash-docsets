@@ -1,0 +1,30 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.data.experimental.parse_example_dataset" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.data.experimental.parse_example_dataset" class="dashAnchor"></a><h1 id="tf.data.experimental.parse_example_dataset">tf.data.experimental.parse_example_dataset</h1>
+<p>A transformation that parses <code>Example</code> protos into a <code>dict</code> of tensors.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.data.experimental.parse_example_dataset</code></li>
+<li><code>tf.compat.v2.data.experimental.parse_example_dataset</code></li>
+<li><code>tf.data.experimental.parse_example_dataset</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.data.experimental.parse_example_dataset(
+    features,
+    num_parallel_calls<span class="op">=</span><span class="dv">1</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/data/experimental/ops/parsing_ops.py"><code>python/data/experimental/ops/parsing_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Parses a number of serialized <code>Example</code> protos given in <code>serialized</code>. We refer to <code>serialized</code> as a batch with <code>batch_size</code> many entries of individual <code>Example</code> protos.</p>
+<p>This op parses serialized examples into a dictionary mapping keys to <code>Tensor</code> and <code>SparseTensor</code> objects. <code>features</code> is a dict from keys to <code>VarLenFeature</code>, <code>SparseFeature</code>, and <code>FixedLenFeature</code> objects. Each <code>VarLenFeature</code> and <code>SparseFeature</code> is mapped to a <code>SparseTensor</code>, and each <code>FixedLenFeature</code> is mapped to a <code>Tensor</code>. See <a href="../../../tf/io/parse_example.html"><code>tf.io.parse_example</code></a> for more details about feature dictionaries.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>features</code></b>: A <code>dict</code> mapping feature keys to <code>FixedLenFeature</code>, <code>VarLenFeature</code>, and <code>SparseFeature</code> values.</li>
+<li><b><code>num_parallel_calls</code></b>: (Optional.) A <a href="../../../tf.md#int32"><code>tf.int32</code></a> scalar <a href="../../../tf/Tensor.html"><code>tf.Tensor</code></a>, representing the number of parsing processes to call in parallel.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A dataset transformation function, which can be passed to <a href="../../../tf/data/Dataset.md#apply"><code>tf.data.Dataset.apply</code></a>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if features argument is None.</li>
+</ul>

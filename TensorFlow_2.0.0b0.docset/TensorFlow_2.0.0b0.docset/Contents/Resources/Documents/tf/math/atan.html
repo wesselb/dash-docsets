@@ -1,0 +1,35 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.math.atan" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.math.atan" class="dashAnchor"></a><h1 id="tf.math.atan">tf.math.atan</h1>
+<p>Computes the trignometric inverse tangent of x element-wise.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.atan</code></li>
+<li><code>tf.compat.v1.atan</code></li>
+<li><code>tf.compat.v1.math.atan</code></li>
+<li><code>tf.compat.v2.atan</code></li>
+<li><code>tf.compat.v2.math.atan</code></li>
+<li><code>tf.math.atan</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.math.atan(
+    x,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in generated file: <code>python/ops/gen_math_ops.py</code>.</p>
+<!-- Placeholder for "Used in" -->
+<p>The <a href="../../tf/math/atan.html"><code>tf.math.atan</code></a> operation returns the inverse of <a href="../../tf/math/tan.html"><code>tf.math.tan</code></a>, such that if <code>y = tf.math.tan(x)</code> then, <code>x = tf.math.atan(y)</code>.</p>
+<p><strong>Note</strong>: The output of <a href="../../tf/math/atan.html"><code>tf.math.atan</code></a> will lie within the invertible range of tan, i.e (-pi/2, pi/2).</p>
+<h4 id="for-example">For example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Note: [1.047, 0.785] ~= [(pi/3), (pi/4)]</span>
+x <span class="op">=</span> tf.constant([<span class="fl">1.047</span>, <span class="fl">0.785</span>])
+y <span class="op">=</span> tf.math.tan(x) <span class="co"># [1.731261, 0.99920404]</span>
+
+tf.math.atan(y) <span class="co"># [1.047, 0.785] = x</span></code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>bfloat16</code>, <code>half</code>, <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>complex128</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>x</code>.</p>

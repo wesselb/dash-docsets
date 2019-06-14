@@ -1,0 +1,30 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.linalg.solve" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.linalg.solve" class="dashAnchor"></a><h1 id="tf.linalg.solve">tf.linalg.solve</h1>
+<p>Solves systems of linear equations.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.linalg.solve</code></li>
+<li><code>tf.compat.v1.matrix_solve</code></li>
+<li><code>tf.compat.v2.linalg.solve</code></li>
+<li><code>tf.linalg.solve</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.linalg.solve(
+    matrix,
+    rhs,
+    adjoint<span class="op">=</span><span class="va">False</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in generated file: <code>python/ops/gen_linalg_ops.py</code>.</p>
+<!-- Placeholder for "Used in" -->
+<p><code>Matrix</code> is a tensor of shape <code>[..., M, M]</code> whose inner-most 2 dimensions form square matrices. <code>Rhs</code> is a tensor of shape <code>[..., M, K]</code>. The <code>output</code> is a tensor shape <code>[..., M, K]</code>. If <code>adjoint</code> is <code>False</code> then each output matrix satisfies <code>matrix[..., :, :] * output[..., :, :] = rhs[..., :, :]</code>. If <code>adjoint</code> is <code>True</code> then each output matrix satisfies <code>adjoint(matrix[..., :, :]) * output[..., :, :] = rhs[..., :, :]</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>matrix</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float64</code>, <code>float32</code>, <code>half</code>, <code>complex64</code>, <code>complex128</code>. Shape is <code>[..., M, M]</code>.</li>
+<li><b><code>rhs</code></b>: A <code>Tensor</code>. Must have the same type as <code>matrix</code>. Shape is <code>[..., M, K]</code>.</li>
+<li><b><code>adjoint</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>. Boolean indicating whether to solve with <code>matrix</code> or its (block-wise) adjoint.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>matrix</code>.</p>

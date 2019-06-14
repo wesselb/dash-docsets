@@ -1,0 +1,44 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.backend.dot" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.keras.backend.dot" class="dashAnchor"></a><h1 id="tf.keras.backend.dot">tf.keras.backend.dot</h1>
+<p>Multiplies 2 tensors (and/or variables) and returns a <em>tensor</em>.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.keras.backend.dot</code></li>
+<li><code>tf.compat.v2.keras.backend.dot</code></li>
+<li><code>tf.keras.backend.dot</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.keras.backend.dot(
+    x,
+    y
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/backend.py"><code>python/keras/backend.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>When attempting to multiply a nD tensor with a nD tensor, it reproduces the Theano behavior. (e.g. <code>(2, 3) * (4, 3, 5) -&gt; (2, 4, 5)</code>)</p>
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>x</code></b>: Tensor or variable.</li>
+<li><b><code>y</code></b>: Tensor or variable.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A tensor, dot product of <code>x</code> and <code>y</code>.</p>
+<h4 id="examples">Examples:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    <span class="co"># dot product between tensors</span>
+    <span class="op">&gt;&gt;&gt;</span> x <span class="op">=</span> K.placeholder(shape<span class="op">=</span>(<span class="dv">2</span>, <span class="dv">3</span>))
+    <span class="op">&gt;&gt;&gt;</span> y <span class="op">=</span> K.placeholder(shape<span class="op">=</span>(<span class="dv">3</span>, <span class="dv">4</span>))
+    <span class="op">&gt;&gt;&gt;</span> xy <span class="op">=</span> K.dot(x, y)
+    <span class="op">&gt;&gt;&gt;</span> xy
+    <span class="op">&lt;</span>tf.Tensor <span class="st">&#39;MatMul_9:0&#39;</span> shape<span class="op">=</span>(<span class="dv">2</span>, <span class="dv">4</span>) dtype<span class="op">=</span>float32<span class="op">&gt;</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    <span class="co"># dot product between tensors</span>
+    <span class="op">&gt;&gt;&gt;</span> x <span class="op">=</span> K.placeholder(shape<span class="op">=</span>(<span class="dv">32</span>, <span class="dv">28</span>, <span class="dv">3</span>))
+    <span class="op">&gt;&gt;&gt;</span> y <span class="op">=</span> K.placeholder(shape<span class="op">=</span>(<span class="dv">3</span>, <span class="dv">4</span>))
+    <span class="op">&gt;&gt;&gt;</span> xy <span class="op">=</span> K.dot(x, y)
+    <span class="op">&gt;&gt;&gt;</span> xy
+    <span class="op">&lt;</span>tf.Tensor <span class="st">&#39;MatMul_9:0&#39;</span> shape<span class="op">=</span>(<span class="dv">32</span>, <span class="dv">28</span>, <span class="dv">4</span>) dtype<span class="op">=</span>float32<span class="op">&gt;</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    <span class="co"># Theano-like behavior example</span>
+    <span class="op">&gt;&gt;&gt;</span> x <span class="op">=</span> K.random_uniform_variable(shape<span class="op">=</span>(<span class="dv">2</span>, <span class="dv">3</span>), low<span class="op">=</span><span class="dv">0</span>, high<span class="op">=</span><span class="dv">1</span>)
+    <span class="op">&gt;&gt;&gt;</span> y <span class="op">=</span> K.ones((<span class="dv">4</span>, <span class="dv">3</span>, <span class="dv">5</span>))
+    <span class="op">&gt;&gt;&gt;</span> xy <span class="op">=</span> K.dot(x, y)
+    <span class="op">&gt;&gt;&gt;</span> K.int_shape(xy)
+    (<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">5</span>)</code></pre></div>

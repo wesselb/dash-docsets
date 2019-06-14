@@ -1,0 +1,28 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.backend.batch_flatten" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.keras.backend.batch_flatten" class="dashAnchor"></a><h1 id="tf.keras.backend.batch_flatten">tf.keras.backend.batch_flatten</h1>
+<p>Turn a nD tensor into a 2D tensor with same 0th dimension.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.keras.backend.batch_flatten</code></li>
+<li><code>tf.compat.v2.keras.backend.batch_flatten</code></li>
+<li><code>tf.keras.backend.batch_flatten</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.keras.backend.batch_flatten(x)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/backend.py"><code>python/keras/backend.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>In other words, it flattens each data samples of a batch.</p>
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>x</code></b>: A tensor or variable.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A tensor.</p>
+<h4 id="examples">Examples:</h4>
+<p>Flattening a 3D tensor to 2D by collapsing the last dimension.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    <span class="op">&gt;&gt;&gt;</span> <span class="im">from</span> tensorflow.keras <span class="im">import</span> backend <span class="im">as</span> K
+    <span class="op">&gt;&gt;&gt;</span> x_batch <span class="op">=</span> K.ones(shape<span class="op">=</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>))
+    <span class="op">&gt;&gt;&gt;</span> x_batch_flatten <span class="op">=</span> K.batch_flatten(x_batch)
+    <span class="op">&gt;&gt;&gt;</span> K.int_shape(x_batch_flatten)
+    (<span class="dv">2</span>, <span class="dv">60</span>)</code></pre></div>

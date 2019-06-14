@@ -1,0 +1,152 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.preprocessing.text.Tokenizer" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="fit_on_sequences"/> <meta itemprop="property" content="fit_on_texts"/> <meta itemprop="property" content="get_config"/> <meta itemprop="property" content="sequences_to_matrix"/> <meta itemprop="property" content="sequences_to_texts"/> <meta itemprop="property" content="sequences_to_texts_generator"/> <meta itemprop="property" content="texts_to_matrix"/> <meta itemprop="property" content="texts_to_sequences"/> <meta itemprop="property" content="texts_to_sequences_generator"/> <meta itemprop="property" content="to_json"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.keras.preprocessing.text.Tokenizer" class="dashAnchor"></a><h1 id="tf.keras.preprocessing.text.tokenizer">tf.keras.preprocessing.text.Tokenizer</h1>
+<h2 id="class-tokenizer">Class <code>Tokenizer</code></h2>
+<p>Text tokenization utility class.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.keras.preprocessing.text.Tokenizer</code></li>
+<li>Class <code>tf.compat.v2.keras.preprocessing.text.Tokenizer</code></li>
+<li>Class <code>tf.keras.preprocessing.text.Tokenizer</code></li>
+</ul>
+<!-- Placeholder for "Used in" -->
+<p>This class allows to vectorize a text corpus, by turning each text into either a sequence of integers (each integer being the index of a token in a dictionary) or into a vector where the coefficient for each token could be binary, based on word count, based on tf-idf...</p>
+<h1 id="arguments">Arguments</h1>
+<pre><code>num_words: the maximum number of words to keep, based
+    on word frequency. Only the most common `num_words-1` words will
+    be kept.
+filters: a string where each element is a character that will be
+    filtered from the texts. The default is all punctuation, plus
+    tabs and line breaks, minus the `&#39;` character.
+lower: boolean. Whether to convert the texts to lowercase.
+split: str. Separator for word splitting.
+char_level: if True, every character will be treated as a token.
+oov_token: if given, it will be added to word_index and used to
+    replace out-of-vocabulary words during text_to_sequence calls</code></pre>
+<p>By default, all punctuation is removed, turning the texts into space-separated sequences of words (words maybe include the <code>'</code> character). These sequences are then split into lists of tokens. They will then be indexed or vectorized.</p>
+<p><code>0</code> is a reserved index that won't be assigned to any word.</p>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    num_words<span class="op">=</span><span class="va">None</span>,
+    filters<span class="op">=</span><span class="st">&#39;!&quot;#$%&amp;()*+,-./:;&lt;=&gt;?@[</span><span class="ch">\\</span><span class="st">]^_`{|}~</span><span class="ch">\t\n</span><span class="st">&#39;</span>,
+    lower<span class="op">=</span><span class="va">True</span>,
+    split<span class="op">=</span><span class="st">&#39; &#39;</span>,
+    char_level<span class="op">=</span><span class="va">False</span>,
+    oov_token<span class="op">=</span><span class="va">None</span>,
+    document_count<span class="op">=</span><span class="dv">0</span>,
+    <span class="op">**</span>kwargs
+)</code></pre></div>
+<p>Initialize self. See help(type(self)) for accurate signature.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="fit_on_sequences">
+<code>fit_on_sequences</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">fit_on_sequences(sequences)</code></pre></div>
+<p>Updates internal vocabulary based on a list of sequences.</p>
+<p>Required before using <code>sequences_to_matrix</code> (if <code>fit_on_texts</code> was never called).</p>
+<h1 id="arguments-1">Arguments</h1>
+<pre><code>sequences: A list of sequence.
+    A &quot;sequence&quot; is a list of integer word indices.</code></pre>
+<h3 id="fit_on_texts">
+<code>fit_on_texts</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">fit_on_texts(texts)</code></pre></div>
+<p>Updates internal vocabulary based on a list of texts.</p>
+<p>In the case where texts contains lists, we assume each entry of the lists to be a token.</p>
+<p>Required before using <code>texts_to_sequences</code> or <code>texts_to_matrix</code>.</p>
+<h1 id="arguments-2">Arguments</h1>
+<pre><code>texts: can be a list of strings,
+    a generator of strings (for memory-efficiency),
+    or a list of list of strings.</code></pre>
+<h3 id="get_config">
+<code>get_config</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_config()</code></pre></div>
+<p>Returns the tokenizer configuration as Python dictionary. The word count dictionaries used by the tokenizer get serialized into plain JSON, so that the configuration can be read by other projects.</p>
+<h1 id="returns">Returns</h1>
+<pre><code>A Python dictionary with the tokenizer configuration.</code></pre>
+<h3 id="sequences_to_matrix">
+<code>sequences_to_matrix</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">sequences_to_matrix(
+    sequences,
+    mode<span class="op">=</span><span class="st">&#39;binary&#39;</span>
+)</code></pre></div>
+<p>Converts a list of sequences into a Numpy matrix.</p>
+<h1 id="arguments-3">Arguments</h1>
+<pre><code>sequences: list of sequences
+    (a sequence is a list of integer word indices).
+mode: one of &quot;binary&quot;, &quot;count&quot;, &quot;tfidf&quot;, &quot;freq&quot;</code></pre>
+<h1 id="returns-1">Returns</h1>
+<pre><code>A Numpy matrix.</code></pre>
+<h1 id="raises">Raises</h1>
+<pre><code>ValueError: In case of invalid `mode` argument,
+    or if the Tokenizer requires to be fit to sample data.</code></pre>
+<h3 id="sequences_to_texts">
+<code>sequences_to_texts</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">sequences_to_texts(sequences)</code></pre></div>
+<p>Transforms each sequence into a list of text.</p>
+<p>Only top <code>num_words-1</code> most frequent words will be taken into account. Only words known by the tokenizer will be taken into account.</p>
+<h1 id="arguments-4">Arguments</h1>
+<pre><code>sequences: A list of sequences (list of integers).</code></pre>
+<h1 id="returns-2">Returns</h1>
+<pre><code>A list of texts (strings)</code></pre>
+<h3 id="sequences_to_texts_generator">
+<code>sequences_to_texts_generator</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">sequences_to_texts_generator(sequences)</code></pre></div>
+<p>Transforms each sequence in <code>sequences</code> to a list of texts(strings).</p>
+<p>Each sequence has to a list of integers. In other words, sequences should be a list of sequences</p>
+<p>Only top <code>num_words-1</code> most frequent words will be taken into account. Only words known by the tokenizer will be taken into account.</p>
+<h1 id="arguments-5">Arguments</h1>
+<pre><code>sequences: A list of sequences.</code></pre>
+<h1 id="yields">Yields</h1>
+<pre><code>Yields individual texts.</code></pre>
+<h3 id="texts_to_matrix">
+<code>texts_to_matrix</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">texts_to_matrix(
+    texts,
+    mode<span class="op">=</span><span class="st">&#39;binary&#39;</span>
+)</code></pre></div>
+<p>Convert a list of texts to a Numpy matrix.</p>
+<h1 id="arguments-6">Arguments</h1>
+<pre><code>texts: list of strings.
+mode: one of &quot;binary&quot;, &quot;count&quot;, &quot;tfidf&quot;, &quot;freq&quot;.</code></pre>
+<h1 id="returns-3">Returns</h1>
+<pre><code>A Numpy matrix.</code></pre>
+<h3 id="texts_to_sequences">
+<code>texts_to_sequences</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">texts_to_sequences(texts)</code></pre></div>
+<p>Transforms each text in texts to a sequence of integers.</p>
+<p>Only top <code>num_words-1</code> most frequent words will be taken into account. Only words known by the tokenizer will be taken into account.</p>
+<h1 id="arguments-7">Arguments</h1>
+<pre><code>texts: A list of texts (strings).</code></pre>
+<h1 id="returns-4">Returns</h1>
+<pre><code>A list of sequences.</code></pre>
+<h3 id="texts_to_sequences_generator">
+<code>texts_to_sequences_generator</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">texts_to_sequences_generator(texts)</code></pre></div>
+<p>Transforms each text in <code>texts</code> to a sequence of integers.</p>
+<p>Each item in texts can also be a list, in which case we assume each item of that list to be a token.</p>
+<p>Only top <code>num_words-1</code> most frequent words will be taken into account. Only words known by the tokenizer will be taken into account.</p>
+<h1 id="arguments-8">Arguments</h1>
+<pre><code>texts: A list of texts (strings).</code></pre>
+<h1 id="yields-1">Yields</h1>
+<pre><code>Yields individual sequences.</code></pre>
+<h3 id="to_json">
+<code>to_json</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">to_json(<span class="op">**</span>kwargs)</code></pre></div>
+<p>Returns a JSON string containing the tokenizer configuration. To load a tokenizer from a JSON string, use <code>keras.preprocessing.text.tokenizer_from_json(json_string)</code>.</p>
+<h1 id="arguments-9">Arguments</h1>
+<pre><code>**kwargs: Additional keyword arguments
+    to be passed to `json.dumps()`.</code></pre>
+<h1 id="returns-5">Returns</h1>
+<pre><code>A JSON string containing the tokenizer configuration.</code></pre>

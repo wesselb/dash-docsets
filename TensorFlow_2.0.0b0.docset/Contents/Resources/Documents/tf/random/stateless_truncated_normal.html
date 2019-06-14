@@ -1,0 +1,34 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.random.stateless_truncated_normal" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.random.stateless_truncated_normal" class="dashAnchor"></a><h1 id="tf.random.stateless_truncated_normal">tf.random.stateless_truncated_normal</h1>
+<p>Outputs deterministic pseudorandom values, truncated normally distributed.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.random.stateless_truncated_normal</code></li>
+<li><code>tf.compat.v2.random.stateless_truncated_normal</code></li>
+<li><code>tf.random.stateless_truncated_normal</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.random.stateless_truncated_normal(
+    shape,
+    seed,
+    mean<span class="op">=</span><span class="fl">0.0</span>,
+    stddev<span class="op">=</span><span class="fl">1.0</span>,
+    dtype<span class="op">=</span>tf.dtypes.float32,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/stateless_random_ops.py"><code>python/ops/stateless_random_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>This is a stateless version of <a href="../../tf/random/truncated_normal.html"><code>tf.random.truncated_normal</code></a>: if run twice with the same seeds, it will produce the same pseudorandom numbers. The output is consistent across multiple runs on the same hardware (and between CPU and GPU), but may change between versions of TensorFlow or on non-CPU/GPU hardware.</p>
+<p>The generated values follow a normal distribution with specified mean and standard deviation, except that values whose magnitude is more than 2 standard deviations from the mean are dropped and re-picked.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>shape</code></b>: A 1-D integer Tensor or Python array. The shape of the output tensor.</li>
+<li><b><code>seed</code></b>: A shape [2] integer Tensor of seeds to the random number generator.</li>
+<li><b><code>mean</code></b>: A 0-D Tensor or Python value of type <code>dtype</code>. The mean of the truncated normal distribution.</li>
+<li><b><code>stddev</code></b>: A 0-D Tensor or Python value of type <code>dtype</code>. The standard deviation of the normal distribution, before truncation.</li>
+<li><b><code>dtype</code></b>: The type of the output.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A tensor of the specified shape filled with random truncated normal values.</p>

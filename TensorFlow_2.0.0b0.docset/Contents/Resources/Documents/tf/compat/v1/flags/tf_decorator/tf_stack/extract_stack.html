@@ -1,0 +1,20 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.flags.tf_decorator.tf_stack.extract_stack" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.flags.tf_decorator.tf_stack.extract_stack" class="dashAnchor"></a><h1 id="tf.compat.v1.flags.tf_decorator.tf_stack.extract_stack">tf.compat.v1.flags.tf_decorator.tf_stack.extract_stack</h1>
+<p>A lightweight, extensible re-implementation of traceback.extract_stack.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.app.flags.tf_decorator.tf_stack.extract_stack</code></li>
+<li><code>tf.compat.v1.flags.tf_decorator.tf_stack.extract_stack</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.flags.tf_decorator.tf_stack.extract_stack(limit<span class="op">=</span><span class="va">None</span>)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/util/tf_stack.py"><code>python/util/tf_stack.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>NOTE(mrry): traceback.extract_stack eagerly retrieves the line of code for each stack frame using linecache, which results in an abundance of stat() calls. This implementation does not retrieve the code, and any consumer should apply _convert_stack to the result to obtain a traceback that can be formatted etc. using traceback methods.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>limit</code></b>: A limit on the number of frames to return.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A list of 5-tuples (filename, lineno, name, frame_globals, func_start_lineno) corresponding to the call stack of the current thread. The returned tuples have the innermost stack frame at the end, unlike the Python inspect module's stack() function.</p>

@@ -1,0 +1,27 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.summary.scalar" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.summary.scalar" class="dashAnchor"></a><h1 id="tf.compat.v1.summary.scalar">tf.compat.v1.summary.scalar</h1>
+<p>Outputs a <code>Summary</code> protocol buffer containing a single scalar value.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.summary.scalar(
+    name,
+    tensor,
+    collections<span class="op">=</span><span class="va">None</span>,
+    family<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/summary/summary.py"><code>python/summary/summary.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>The generated Summary has a Tensor.proto containing the input Tensor.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>name</code></b>: A name for the generated node. Will also serve as the series name in TensorBoard.</li>
+<li><b><code>tensor</code></b>: A real numeric Tensor containing a single value.</li>
+<li><b><code>collections</code></b>: Optional list of graph collections keys. The new summary op is added to these collections. Defaults to <code>[GraphKeys.SUMMARIES]</code>.</li>
+<li><b><code>family</code></b>: Optional; if provided, used as the prefix of the summary tag name, which controls the tab name used for display on Tensorboard.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A scalar <code>Tensor</code> of type <code>string</code>. Which contains a <code>Summary</code> protobuf.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If tensor has the wrong shape or type.</li>
+</ul>

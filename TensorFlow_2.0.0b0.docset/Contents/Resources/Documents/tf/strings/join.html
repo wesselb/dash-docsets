@@ -1,0 +1,28 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.strings.join" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.strings.join" class="dashAnchor"></a><h1 id="tf.strings.join">tf.strings.join</h1>
+<p>Joins the strings in the given list of string tensors into one tensor;</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.string_join</code></li>
+<li><code>tf.compat.v1.strings.join</code></li>
+<li><code>tf.compat.v2.strings.join</code></li>
+<li><code>tf.strings.join</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.strings.join(
+    inputs,
+    separator<span class="op">=</span><span class="st">&#39;&#39;</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in generated file: <code>python/ops/gen_string_ops.py</code>.</p>
+<!-- Placeholder for "Used in" -->
+<p>with the given separator (default is an empty separator).</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>inputs</code></b>: A list of at least 1 <code>Tensor</code> objects with type <code>string</code>. A list of string tensors. The tensors must all have the same shape, or be scalars. Scalars may be mixed in; these will be broadcast to the shape of non-scalar inputs.</li>
+<li><b><code>separator</code></b>: An optional <code>string</code>. Defaults to <code>&quot;&quot;</code>. string, an optional join separator.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>string</code>.</p>

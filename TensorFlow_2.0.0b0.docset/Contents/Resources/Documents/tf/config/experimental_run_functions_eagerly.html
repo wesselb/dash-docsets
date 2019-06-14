@@ -1,0 +1,21 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.config.experimental_run_functions_eagerly" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.config.experimental_run_functions_eagerly" class="dashAnchor"></a><h1 id="tf.config.experimental_run_functions_eagerly">tf.config.experimental_run_functions_eagerly</h1>
+<p>Enables / disables eager execution of <a href="../../tf/function.html"><code>tf.function</code></a>s.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.config.experimental_run_functions_eagerly</code></li>
+<li><code>tf.compat.v2.config.experimental_run_functions_eagerly</code></li>
+<li><code>tf.config.experimental_run_functions_eagerly</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.config.experimental_run_functions_eagerly(run_eagerly)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/eager/def_function.py"><code>python/eager/def_function.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>After calling <code>tf.config.experimental_run_functions_eagerly(True)</code> all invocations of tf.function will run eagerly instead of running through a graph function.</p>
+<p>This can be useful for debugging or profiling.</p>
+<p>Similarly, calling <code>tf.config.experimental_run_functions_eagerly(False)</code> will revert the behavior of all functions to graph functions.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>run_eagerly</code></b>: Boolean. Whether to run functions eagerly.</li>
+</ul>

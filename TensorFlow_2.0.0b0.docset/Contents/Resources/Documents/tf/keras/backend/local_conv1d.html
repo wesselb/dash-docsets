@@ -1,0 +1,30 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.backend.local_conv1d" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.keras.backend.local_conv1d" class="dashAnchor"></a><h1 id="tf.keras.backend.local_conv1d">tf.keras.backend.local_conv1d</h1>
+<p>Apply 1D conv with un-shared weights.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.keras.backend.local_conv1d</code></li>
+<li><code>tf.compat.v2.keras.backend.local_conv1d</code></li>
+<li><code>tf.keras.backend.local_conv1d</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.keras.backend.local_conv1d(
+    inputs,
+    kernel,
+    kernel_size,
+    strides,
+    data_format<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/backend.py"><code>python/keras/backend.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>inputs</code></b>: 3D tensor with shape: (batch_size, steps, input_dim) if data_format is &quot;channels_last&quot; or (batch_size, input_dim, steps) if data_format is &quot;channels_first&quot;.</li>
+<li><b><code>kernel</code></b>: the unshared weight for convolution, with shape (output_length, feature_dim, filters).</li>
+<li><b><code>kernel_size</code></b>: a tuple of a single integer, specifying the length of the 1D convolution window.</li>
+<li><b><code>strides</code></b>: a tuple of a single integer, specifying the stride length of the convolution.</li>
+<li><b><code>data_format</code></b>: the data format, channels_first or channels_last.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A 3d tensor with shape: (batch_size, output_length, filters) if data_format='channels_first' or 3D tensor with shape: (batch_size, filters, output_length) if data_format='channels_last'.</p>

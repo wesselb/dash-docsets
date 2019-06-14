@@ -1,0 +1,72 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.losses.MeanSquaredLogarithmicError" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="__call__"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="from_config"/> <meta itemprop="property" content="get_config"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.keras.losses.MeanSquaredLogarithmicError" class="dashAnchor"></a><h1 id="tf.keras.losses.meansquaredlogarithmicerror">tf.keras.losses.MeanSquaredLogarithmicError</h1>
+<h2 id="class-meansquaredlogarithmicerror">Class <code>MeanSquaredLogarithmicError</code></h2>
+<p>Computes the mean squared logarithmic error between <code>y_true</code> and <code>y_pred</code>.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.keras.losses.MeanSquaredLogarithmicError</code></li>
+<li>Class <code>tf.compat.v2.keras.losses.MeanSquaredLogarithmicError</code></li>
+<li>Class <code>tf.compat.v2.losses.MeanSquaredLogarithmicError</code></li>
+<li>Class <code>tf.keras.losses.MeanSquaredLogarithmicError</code></li>
+<li>Class <code>tf.losses.MeanSquaredLogarithmicError</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/losses.py"><code>python/keras/losses.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>For example, if <code>y_true</code> is [0., 0., 1., 1.] and <code>y_pred</code> is [1., 1., 1., 0.] then the mean squared logarithmic error value is 0.36034.</p>
+<h4 id="usage">Usage:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">msle <span class="op">=</span> tf.keras.losses.MeanSquaredLogarithmicError()
+loss <span class="op">=</span> msle([<span class="dv">0</span>., <span class="dv">0</span>., <span class="dv">1</span>., <span class="dv">1</span>.], [<span class="dv">1</span>., <span class="dv">1</span>., <span class="dv">1</span>., <span class="dv">0</span>.])
+<span class="bu">print</span>(<span class="st">&#39;Loss: &#39;</span>, loss.numpy())  <span class="co"># Loss: 0.36034</span></code></pre></div>
+<p>Usage with tf.keras API:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">model <span class="op">=</span> tf.keras.Model(inputs, outputs)
+model.<span class="bu">compile</span>(<span class="st">&#39;sgd&#39;</span>, loss<span class="op">=</span>tf.keras.losses.MeanSquaredLogarithmicError())</code></pre></div>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    reduction<span class="op">=</span>losses_utils.ReductionV2.AUTO,
+    name<span class="op">=</span><span class="st">&#39;mean_squared_logarithmic_error&#39;</span>
+)</code></pre></div>
+<p>Initialize self. See help(type(self)) for accurate signature.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__call__">
+<code><strong>call</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__call__</span>(
+    y_true,
+    y_pred,
+    sample_weight<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Invokes the <code>Loss</code> instance.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>y_true</code></b>: Ground truth values.</li>
+<li><b><code>y_pred</code></b>: The predicted values.</li>
+<li><b><code>sample_weight</code></b>: Optional <code>Tensor</code> whose rank is either 0, or the same rank as <code>y_true</code>, or is broadcastable to <code>y_true</code>. <code>sample_weight</code> acts as a coefficient for the loss. If a scalar is provided, then the loss is simply scaled by the given value. If <code>sample_weight</code> is a tensor of size <code>[batch_size]</code>, then the total loss for each sample of the batch is rescaled by the corresponding element in the <code>sample_weight</code> vector. If the shape of <code>sample_weight</code> matches the shape of <code>y_pred</code>, then the loss of each measurable element of <code>y_pred</code> is scaled by the corresponding value of <code>sample_weight</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Weighted loss float <code>Tensor</code>. If <code>reduction</code> is <code>NONE</code>, this has the same shape as <code>y_true</code>; otherwise, it is scalar.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If the shape of <code>sample_weight</code> is invalid.</li>
+</ul>
+<h3 id="from_config">
+<code>from_config</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">from_config(
+    cls,
+    config
+)</code></pre></div>
+<p>Instantiates a <code>Loss</code> from its config (output of <code>get_config()</code>).</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>config</code></b>: Output of <code>get_config()</code>.</li>
+</ul>
+<h4 id="returns-1">Returns:</h4>
+<p>A <code>Loss</code> instance.</p>
+<h3 id="get_config">
+<code>get_config</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_config()</code></pre></div>

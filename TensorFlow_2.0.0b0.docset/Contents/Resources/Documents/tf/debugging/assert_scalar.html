@@ -1,0 +1,29 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.debugging.assert_scalar" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.debugging.assert_scalar" class="dashAnchor"></a><h1 id="tf.debugging.assert_scalar">tf.debugging.assert_scalar</h1>
+<p>Asserts that the given <code>tensor</code> is a scalar.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v2.debugging.assert_scalar</code></li>
+<li><code>tf.debugging.assert_scalar</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.debugging.assert_scalar(
+    tensor,
+    message<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/check_ops.py"><code>python/ops/check_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>This function raises <code>ValueError</code> unless it can be certain that the given <code>tensor</code> is a scalar. <code>ValueError</code> is also raised if the shape of <code>tensor</code> is unknown.</p>
+<p>This is always checked statically, so this method returns nothing.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>tensor</code></b>: A <code>Tensor</code>.</li>
+<li><b><code>message</code></b>: A string to prefix to the default message.</li>
+<li><b><code>name</code></b>: A name for this operation. Defaults to &quot;assert_scalar&quot;</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If the tensor is not scalar (rank 0), or if its shape is unknown.</li>
+</ul>

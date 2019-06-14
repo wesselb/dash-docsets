@@ -1,0 +1,29 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.config.experimental.get_visible_devices" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.config.experimental.get_visible_devices" class="dashAnchor"></a><h1 id="tf.config.experimental.get_visible_devices">tf.config.experimental.get_visible_devices</h1>
+<p>Get the list of visible physical devices.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.config.experimental.get_visible_devices</code></li>
+<li><code>tf.compat.v2.config.experimental.get_visible_devices</code></li>
+<li><code>tf.config.experimental.get_visible_devices</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.config.experimental.get_visible_devices(device_type<span class="op">=</span><span class="va">None</span>)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/framework/config.py"><code>python/framework/config.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Returns a list of PhysicalDevice objects that are current marked as visible to the runtime. Any visible devices will have LogicalDevices assigned to them once the runtime is initialized.</p>
+<p>The following example verifies all visible GPUs have been disabled:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">physical_devices <span class="op">=</span> config.experimental.list_physical_devices(<span class="st">&#39;GPU&#39;</span>)
+<span class="cf">assert</span> <span class="bu">len</span>(physical_devices) <span class="op">&gt;</span> <span class="dv">0</span>, <span class="st">&quot;Not enough GPU hardware devices available&quot;</span>
+<span class="co"># Disable all GPUS</span>
+tf.config.experimental.set_visible_devices([], <span class="st">&#39;GPU&#39;</span>)
+visible_devices <span class="op">=</span> tf.config.experimental.get_visible_devices()
+<span class="cf">for</span> device <span class="kw">in</span> visible_devices:
+  <span class="cf">assert</span> device.device_type <span class="op">!=</span> <span class="st">&#39;GPU&#39;</span></code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>device_type</code></b>: (optional) Device types to limit query to.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>List of PhysicalDevice objects</p>

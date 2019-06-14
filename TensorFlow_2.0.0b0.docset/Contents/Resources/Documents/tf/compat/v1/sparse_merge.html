@@ -1,0 +1,61 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.sparse_merge" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.sparse_merge" class="dashAnchor"></a><h1 id="tf.compat.v1.sparse_merge">tf.compat.v1.sparse_merge</h1>
+<p>Combines a batch of feature ids and values into a single <code>SparseTensor</code>. (deprecated)</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.sparse.merge</code></li>
+<li><code>tf.compat.v1.sparse_merge</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.sparse_merge(
+    sp_ids,
+    sp_values,
+    vocab_size,
+    name<span class="op">=</span><span class="va">None</span>,
+    already_sorted<span class="op">=</span><span class="va">False</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/sparse_ops.py"><code>python/ops/sparse_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Warning: THIS FUNCTION IS DEPRECATED. It will be removed in a future version. Instructions for updating: No similar op available at this time.</p>
+<p>The most common use case for this function occurs when feature ids and their corresponding values are stored in <code>Example</code> protos on disk. <code>parse_example</code> will return a batch of ids and a batch of values, and this function joins them into a single logical <code>SparseTensor</code> for use in functions such as <code>sparse_tensor_dense_matmul</code>, <code>sparse_to_dense</code>, etc.</p>
+<p>The <code>SparseTensor</code> returned by this function has the following properties:</p>
+<ul>
+<li><code>indices</code> is equivalent to <code>sp_ids.indices</code> with the last dimension discarded and replaced with <code>sp_ids.values</code>.</li>
+<li><code>values</code> is simply <code>sp_values.values</code>.</li>
+<li>If <code>sp_ids.dense_shape = [D0, D1, ..., Dn, K]</code>, then <code>output.shape = [D0, D1, ..., Dn, vocab_size]</code>.</li>
+</ul>
+<p>For example, consider the following feature vectors:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">  vector1 <span class="op">=</span> [<span class="op">-</span><span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>]
+  vector2 <span class="op">=</span> [ <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">0</span>]
+  vector3 <span class="op">=</span> [ <span class="dv">5</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">9</span>, <span class="dv">0</span>, <span class="dv">0</span>]</code></pre></div>
+<p>These might be stored sparsely in the following Example protos by storing only the feature ids (column number if the vectors are treated as a matrix) of the non-zero elements and the corresponding values:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">  examples <span class="op">=</span> [Example(features<span class="op">=</span>{
+                  <span class="st">&quot;ids&quot;</span>: Feature(int64_list<span class="op">=</span>Int64List(value<span class="op">=</span>[<span class="dv">0</span>])),
+                  <span class="st">&quot;values&quot;</span>: Feature(float_list<span class="op">=</span>FloatList(value<span class="op">=</span>[<span class="op">-</span><span class="dv">3</span>]))}),
+              Example(features<span class="op">=</span>{
+                  <span class="st">&quot;ids&quot;</span>: Feature(int64_list<span class="op">=</span>Int64List(value<span class="op">=</span>[<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">3</span>])),
+                  <span class="st">&quot;values&quot;</span>: Feature(float_list<span class="op">=</span>FloatList(value<span class="op">=</span>[<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">4</span>]))}),
+              Example(features<span class="op">=</span>{
+                  <span class="st">&quot;ids&quot;</span>: Feature(int64_list<span class="op">=</span>Int64List(value<span class="op">=</span>[<span class="dv">0</span>, <span class="dv">3</span>])),
+                  <span class="st">&quot;values&quot;</span>: Feature(float_list<span class="op">=</span>FloatList(value<span class="op">=</span>[<span class="dv">5</span>, <span class="dv">9</span>]))})]</code></pre></div>
+<p>The result of calling parse_example on these examples will produce a dictionary with entries for &quot;ids&quot; and &quot;values&quot;. Passing those two objects to this function along with vocab_size=6, will produce a <code>SparseTensor</code> that sparsely represents all three instances. Namely, the <code>indices</code> property will contain the coordinates of the non-zero entries in the feature matrix (the first dimension is the row number in the matrix, i.e., the index within the batch, and the second dimension is the column number, i.e., the feature id); <code>values</code> will contain the actual values. <code>shape</code> will be the shape of the original matrix, i.e., (3, 6). For our example above, the output will be equal to:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">  SparseTensor(indices<span class="op">=</span>[[<span class="dv">0</span>, <span class="dv">0</span>], [<span class="dv">1</span>, <span class="dv">1</span>], [<span class="dv">1</span>, <span class="dv">3</span>], [<span class="dv">1</span>, <span class="dv">4</span>], [<span class="dv">2</span>, <span class="dv">0</span>], [<span class="dv">2</span>, <span class="dv">3</span>]],
+               values<span class="op">=</span>[<span class="op">-</span><span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">9</span>],
+               dense_shape<span class="op">=</span>[<span class="dv">3</span>, <span class="dv">6</span>])</code></pre></div>
+<p>This method generalizes to higher-dimensions by simply providing a list for both the sp_ids as well as the vocab_size. In this case the resulting <code>SparseTensor</code> has the following properties: - <code>indices</code> is equivalent to <code>sp_ids[0].indices</code> with the last dimension discarded and concatenated with <code>sp_ids[0].values, sp_ids[1].values, ...</code>. - <code>values</code> is simply <code>sp_values.values</code>. - If <code>sp_ids.dense_shape = [D0, D1, ..., Dn, K]</code>, then <code>output.shape = [D0, D1, ..., Dn] + vocab_size</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>sp_ids</code></b>: A single <code>SparseTensor</code> with <code>values</code> property of type <code>int32</code> or <code>int64</code> or a Python list of such <code>SparseTensor</code>s or a list thereof.</li>
+<li><b><code>sp_values</code></b>: A <code>SparseTensor</code> of any type.</li>
+<li><b><code>vocab_size</code></b>: A scalar <code>int64</code> Tensor (or Python int) containing the new size of the last dimension, <code>all(0 &lt;= sp_ids.values &lt; vocab_size)</code>. Or a list thereof with <code>all(0 &lt;= sp_ids[i].values &lt; vocab_size[i])</code> for all <code>i</code>.</li>
+<li><b><code>name</code></b>: A name prefix for the returned tensors (optional)</li>
+<li><b><code>already_sorted</code></b>: A boolean to specify whether the per-batch values in <code>sp_values</code> are already sorted. If so skip sorting, False by default (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>SparseTensor</code> compactly representing a batch of feature ids and values, useful for passing to functions that expect such a <code>SparseTensor</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>sp_values</code> is not a <code>SparseTensor</code>. Or if <code>sp_ids</code> is neither a <code>SparseTensor</code> nor a list thereof. Or if <code>vocab_size</code> is not a <code>Tensor</code> or a Python int and <code>sp_ids</code> is a <code>SparseTensor</code>. Or if <code>vocab_size</code> is not a or list thereof and <code>sp_ids</code> is a list.</li>
+<li><b><code>ValueError</code></b>: If <code>sp_ids</code> and <code>vocab_size</code> are lists of different lengths.</li>
+</ul>

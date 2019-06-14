@@ -1,0 +1,40 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.ragged.map_flat_values" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.ragged.map_flat_values" class="dashAnchor"></a><h1 id="tf.ragged.map_flat_values">tf.ragged.map_flat_values</h1>
+<p>Applies <code>op</code> to the values of one or more RaggedTensors.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.ragged.map_flat_values</code></li>
+<li><code>tf.compat.v2.ragged.map_flat_values</code></li>
+<li><code>tf.ragged.map_flat_values</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.ragged.map_flat_values(
+    op,
+    <span class="op">*</span>args,
+    <span class="op">**</span>kwargs
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/ragged/ragged_functional_ops.py"><code>python/ops/ragged/ragged_functional_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Replaces any <code>RaggedTensor</code> in <code>args</code> or <code>kwargs</code> with its <code>flat_values</code> tensor, and then calls <code>op</code>. Returns a <code>RaggedTensor</code> that is constructed from the input <code>RaggedTensor</code>s' <code>nested_row_splits</code> and the value returned by the <code>op</code>.</p>
+<p>If the input arguments contain multiple <code>RaggedTensor</code>s, then they must have identical <code>nested_row_splits</code>.</p>
+<h4 id="examples">Examples:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="op">&gt;&gt;&gt;</span> rt <span class="op">=</span> ragged.constant([[<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>], [], [<span class="dv">4</span>, <span class="dv">5</span>], [<span class="dv">6</span>]])
+<span class="op">&gt;&gt;&gt;</span> ragged.map_flat_values(tf.ones_like, rt).<span class="bu">eval</span>().tolist()
+[[<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>], [], [<span class="dv">1</span>, <span class="dv">1</span>], [<span class="dv">1</span>]]
+<span class="op">&gt;&gt;&gt;</span> ragged.map_flat_values(tf.multiply, rt, rt).<span class="bu">eval</span>().tolist()
+[[<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">9</span>], [], [<span class="dv">16</span>, <span class="dv">25</span>], [<span class="dv">36</span>]]
+<span class="op">&gt;&gt;&gt;</span> ragged.map_flat_values(tf.add, rt, <span class="dv">5</span>).<span class="bu">eval</span>().tolist()
+[[<span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>], [], [<span class="dv">9</span>, <span class="dv">10</span>], [<span class="dv">11</span>]]</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>op</code></b>: The operation that should be applied to the RaggedTensor <code>flat_values</code>. <code>op</code> is typically an element-wise operation (such as math_ops.add), but any operation that preserves the size of the outermost dimension can be used. I.e., <code>shape[0]</code> of the value returned by <code>op</code> must match <code>shape[0]</code> of the <code>RaggedTensor</code>s' <code>flat_values</code> tensors.</li>
+<li><b><code>*args</code></b>: Arguments for <code>op</code>.</li>
+<li><b><code>**kwargs</code></b>: Keyword arguments for <code>op</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>RaggedTensor</code> whose <code>ragged_rank</code> matches the <code>ragged_rank</code> of all input <code>RaggedTensor</code>s.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If args contains no <code>RaggedTensors</code>, or if the <code>nested_splits</code> of the input <code>RaggedTensor</code>s are not identical.</li>
+</ul>

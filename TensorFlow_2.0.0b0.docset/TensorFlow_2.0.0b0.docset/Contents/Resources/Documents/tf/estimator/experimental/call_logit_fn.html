@@ -1,0 +1,36 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.estimator.experimental.call_logit_fn" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.estimator.experimental.call_logit_fn" class="dashAnchor"></a><h1 id="tf.estimator.experimental.call_logit_fn">tf.estimator.experimental.call_logit_fn</h1>
+<p>Calls logit_fn (experimental).</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.estimator.experimental.call_logit_fn</code></li>
+<li><code>tf.compat.v2.estimator.experimental.call_logit_fn</code></li>
+<li><code>tf.estimator.experimental.call_logit_fn</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.estimator.experimental.call_logit_fn(
+    logit_fn,
+    features,
+    mode,
+    params,
+    config
+)</code></pre></div>
+<p>Defined in <a href="https://github.com/tensorflow/estimator/tree/master/tensorflow_estimator/python/estimator/model_fn.py"><code>python/estimator/model_fn.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>THIS FUNCTION IS EXPERIMENTAL. Keras layers/models are the recommended APIs for logit and model composition.</p>
+<p>A utility function that calls the provided logit_fn with the relevant subset of provided arguments. Similar to tf.estimator._call_model_fn().</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>logit_fn</code></b>: A logit_fn as defined above.</li>
+<li><b><code>features</code></b>: The features dict.</li>
+<li><b><code>mode</code></b>: TRAIN / EVAL / PREDICT ModeKeys.</li>
+<li><b><code>params</code></b>: The hyperparameter dict.</li>
+<li><b><code>config</code></b>: The configuration object.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A logit Tensor, the output of logit_fn.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if logit_fn does not return a Tensor or a dictionary mapping strings to Tensors.</li>
+</ul>

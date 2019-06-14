@@ -1,0 +1,11 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.distribute.get_loss_reduction" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.distribute.get_loss_reduction" class="dashAnchor"></a><h1 id="tf.compat.v1.distribute.get_loss_reduction">tf.compat.v1.distribute.get_loss_reduction</h1>
+<p><a href="../../../../tf/distribute/ReduceOp.html"><code>tf.distribute.ReduceOp</code></a> corresponding to the last loss reduction.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.distribute.get_loss_reduction()</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/distribute/distribute_lib.py"><code>python/distribute/distribute_lib.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>This is used to decide whether loss should be scaled in optimizer (used only for estimator + v1 optimizer use case).</p>
+<h4 id="returns">Returns:</h4>
+<p><a href="../../../../tf/distribute/ReduceOp.html"><code>tf.distribute.ReduceOp</code></a> corresponding to the last loss reduction for estimator and v1 optimizer use case. <a href="../../../../tf/distribute/ReduceOp.md#SUM"><code>tf.distribute.ReduceOp.SUM</code></a> otherwise.</p>

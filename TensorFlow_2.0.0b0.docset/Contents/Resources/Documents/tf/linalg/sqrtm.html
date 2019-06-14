@@ -1,0 +1,31 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.linalg.sqrtm" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.linalg.sqrtm" class="dashAnchor"></a><h1 id="tf.linalg.sqrtm">tf.linalg.sqrtm</h1>
+<p>Computes the matrix square root of one or more square matrices:</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.linalg.sqrtm</code></li>
+<li><code>tf.compat.v1.matrix_square_root</code></li>
+<li><code>tf.compat.v2.linalg.sqrtm</code></li>
+<li><code>tf.compat.v2.matrix_square_root</code></li>
+<li><code>tf.linalg.sqrtm</code></li>
+<li><code>tf.matrix_square_root</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.linalg.sqrtm(
+    <span class="bu">input</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in generated file: <code>python/ops/gen_linalg_ops.py</code>.</p>
+<!-- Placeholder for "Used in" -->
+<p>matmul(sqrtm(A), sqrtm(A)) = A</p>
+<p>The input matrix should be invertible. If the input matrix is real, it should have no eigenvalues which are real and negative (pairs of complex conjugate eigenvalues are allowed).</p>
+<p>The matrix square root is computed by first reducing the matrix to quasi-triangular form with the real Schur decomposition. The square root of the quasi-triangular matrix is then computed directly. Details of the algorithm can be found in: Nicholas J. Higham, &quot;Computing real square roots of a real matrix&quot;, Linear Algebra Appl., 1987.</p>
+<p>The input is a tensor of shape <code>[..., M, M]</code> whose inner-most 2 dimensions form square matrices. The output is a tensor of the same shape as the input containing the matrix square root for all input submatrices <code>[..., :, :]</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float64</code>, <code>float32</code>, <code>half</code>, <code>complex64</code>, <code>complex128</code>. Shape is <code>[..., M, M]</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>input</code>.</p>

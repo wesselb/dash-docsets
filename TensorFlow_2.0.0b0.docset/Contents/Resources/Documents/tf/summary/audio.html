@@ -1,0 +1,37 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.summary.audio" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.summary.audio" class="dashAnchor"></a><h1 id="tf.summary.audio">tf.summary.audio</h1>
+<p>Write an audio summary.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v2.summary.audio</code></li>
+<li><code>tf.summary.audio</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.summary.audio(
+    name,
+    data,
+    sample_rate,
+    step<span class="op">=</span><span class="va">None</span>,
+    max_outputs<span class="op">=</span><span class="dv">3</span>,
+    encoding<span class="op">=</span><span class="va">None</span>,
+    description<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="https://github.com/tensorflow/tensorboard/tree/master/tensorboard/plugins/audio/summary_v2.py"><code>plugins/audio/summary_v2.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>name</code></b>: A name for this summary. The summary tag used for TensorBoard will be this name prefixed by any active name scopes.</li>
+<li><b><code>data</code></b>: A <code>Tensor</code> representing audio data with shape <code>[k, t, c]</code>, where <code>k</code> is the number of audio clips, <code>t</code> is the number of frames, and <code>c</code> is the number of channels. Elements should be floating-point values in <code>[-1.0, 1.0]</code>. Any of the dimensions may be statically unknown (i.e., <code>None</code>).</li>
+<li><b><code>sample_rate</code></b>: An <code>int</code> or rank-0 <code>int32</code> <code>Tensor</code> that represents the sample rate, in Hz. Must be positive.</li>
+<li><b><code>step</code></b>: Explicit <code>int64</code>-castable monotonic step value for this summary. If omitted, this defaults to <code>tf.summary.experimental.get_step()</code>, which must not be None.</li>
+<li><b><code>max_outputs</code></b>: Optional <code>int</code> or rank-0 integer <code>Tensor</code>. At most this many audio clips will be emitted at each step. When more than <code>max_outputs</code> many clips are provided, the first <code>max_outputs</code> many clips will be used and the rest silently discarded.</li>
+<li><b><code>encoding</code></b>: Optional constant <code>str</code> for the desired encoding. Only &quot;wav&quot; is currently supported, but this is not guaranteed to remain the default, so if you want &quot;wav&quot; in particular, set this explicitly.</li>
+<li><b><code>description</code></b>: Optional long-form description for this summary, as a constant <code>str</code>. Markdown is supported. Defaults to empty.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>True on success, or false if no summary was emitted because no default summary writer was available.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if a default writer exists, but no step was provided and <code>tf.summary.experimental.get_step()</code> is None.</li>
+</ul>

@@ -1,0 +1,35 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.layers.GlobalMaxPool2D" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="__init__"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.keras.layers.GlobalMaxPool2D" class="dashAnchor"></a><h1 id="tf.keras.layers.globalmaxpool2d">tf.keras.layers.GlobalMaxPool2D</h1>
+<h2 id="class-globalmaxpool2d">Class <code>GlobalMaxPool2D</code></h2>
+<p>Global max pooling operation for spatial data.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.keras.layers.GlobalMaxPool2D</code></li>
+<li>Class <code>tf.compat.v1.keras.layers.GlobalMaxPooling2D</code></li>
+<li>Class <code>tf.compat.v2.keras.layers.GlobalMaxPool2D</code></li>
+<li>Class <code>tf.compat.v2.keras.layers.GlobalMaxPooling2D</code></li>
+<li>Class <code>tf.keras.layers.GlobalMaxPool2D</code></li>
+<li>Class <code>tf.keras.layers.GlobalMaxPooling2D</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/layers/pooling.py"><code>python/keras/layers/pooling.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>data_format</code></b>: A string, one of <code>channels_last</code> (default) or <code>channels_first</code>. The ordering of the dimensions in the inputs. <code>channels_last</code> corresponds to inputs with shape <code>(batch, height, width, channels)</code> while <code>channels_first</code> corresponds to inputs with shape <code>(batch, channels, height, width)</code>. It defaults to the <code>image_data_format</code> value found in your Keras config file at <code>~/.keras/keras.json</code>. If you never set it, then it will be &quot;channels_last&quot;.</li>
+</ul>
+<h4 id="input-shape">Input shape:</h4>
+<ul>
+<li>If <code>data_format='channels_last'</code>: 4D tensor with shape <code>(batch_size, rows, cols, channels)</code>.</li>
+<li>If <code>data_format='channels_first'</code>: 4D tensor with shape <code>(batch_size, channels, rows, cols)</code>.</li>
+</ul>
+<h4 id="output-shape">Output shape:</h4>
+<p>2D tensor with shape <code>(batch_size, channels)</code>.</p>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    data_format<span class="op">=</span><span class="va">None</span>,
+    <span class="op">**</span>kwargs
+)</code></pre></div>

@@ -1,0 +1,41 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.roll" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.roll" class="dashAnchor"></a><h1 id="tf.roll">tf.roll</h1>
+<p>Rolls the elements of a tensor along an axis.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.manip.roll</code></li>
+<li><code>tf.compat.v1.roll</code></li>
+<li><code>tf.compat.v2.roll</code></li>
+<li><code>tf.roll</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.roll(
+    <span class="bu">input</span>,
+    shift,
+    axis,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/manip_ops.py"><code>python/ops/manip_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>The elements are shifted positively (towards larger indices) by the offset of <code>shift</code> along the dimension of <code>axis</code>. Negative <code>shift</code> values will shift elements in the opposite direction. Elements that roll passed the last position will wrap around to the first and vice versa. Multiple shifts along multiple axes may be specified.</p>
+<h4 id="for-example">For example:</h4>
+<pre><code># &#39;t&#39; is [0, 1, 2, 3, 4]
+roll(t, shift=2, axis=0) ==&gt; [3, 4, 0, 1, 2]
+
+# shifting along multiple dimensions
+# &#39;t&#39; is [[0, 1, 2, 3, 4], [5, 6, 7, 8, 9]]
+roll(t, shift=[1, -2], axis=[0, 1]) ==&gt; [[7, 8, 9, 5, 6], [2, 3, 4, 0, 1]]
+
+# shifting along the same axis multiple times
+# &#39;t&#39; is [[0, 1, 2, 3, 4], [5, 6, 7, 8, 9]]
+roll(t, shift=[2, -3], axis=[1, 1]) ==&gt; [[1, 2, 3, 4, 0], [6, 7, 8, 9, 5]]</code></pre>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>.</li>
+<li><b><code>shift</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. Dimension must be 0-D or 1-D. <code>shift[i]</code> specifies the number of places by which elements are shifted positively (towards larger indices) along the dimension specified by <code>axis[i]</code>. Negative shifts will roll the elements in the opposite direction.</li>
+<li><b><code>axis</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. Dimension must be 0-D or 1-D. <code>axis[i]</code> specifies the dimension that the shift <code>shift[i]</code> should occur. If the same axis is referenced more than once, the total shift for that axis will be the sum of all the shifts that belong to that axis.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>input</code>.</p>

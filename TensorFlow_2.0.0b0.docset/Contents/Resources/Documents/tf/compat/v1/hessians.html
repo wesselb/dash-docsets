@@ -1,0 +1,32 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.hessians" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.hessians" class="dashAnchor"></a><h1 id="tf.compat.v1.hessians">tf.compat.v1.hessians</h1>
+<p>Constructs the Hessian of sum of <code>ys</code> with respect to <code>x</code> in <code>xs</code>.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.hessians(
+    ys,
+    xs,
+    name<span class="op">=</span><span class="st">&#39;hessians&#39;</span>,
+    colocate_gradients_with_ops<span class="op">=</span><span class="va">False</span>,
+    gate_gradients<span class="op">=</span><span class="va">False</span>,
+    aggregation_method<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/gradients_impl.py"><code>python/ops/gradients_impl.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p><code>hessians()</code> adds ops to the graph to output the Hessian matrix of <code>ys</code> with respect to <code>xs</code>. It returns a list of <code>Tensor</code> of length <code>len(xs)</code> where each tensor is the Hessian of <code>sum(ys)</code>.</p>
+<p>The Hessian is a matrix of second-order partial derivatives of a scalar tensor (see https://en.wikipedia.org/wiki/Hessian_matrix for more details).</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>ys</code></b>: A <code>Tensor</code> or list of tensors to be differentiated.</li>
+<li><b><code>xs</code></b>: A <code>Tensor</code> or list of tensors to be used for differentiation.</li>
+<li><b><code>name</code></b>: Optional name to use for grouping all the gradient ops together. defaults to 'hessians'.</li>
+<li><b><code>colocate_gradients_with_ops</code></b>: See <code>gradients()</code> documentation for details.</li>
+<li><b><code>gate_gradients</code></b>: See <code>gradients()</code> documentation for details.</li>
+<li><b><code>aggregation_method</code></b>: See <code>gradients()</code> documentation for details.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A list of Hessian matrices of <code>sum(ys)</code> for each <code>x</code> in <code>xs</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>LookupError</code></b>: if one of the operations between <code>xs</code> and <code>ys</code> does not have a registered gradient function.</li>
+</ul>

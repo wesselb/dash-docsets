@@ -1,0 +1,43 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.data.experimental.ThreadingOptions" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="max_intra_op_parallelism"/> <meta itemprop="property" content="private_threadpool_size"/> <meta itemprop="property" content="__eq__"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="__ne__"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.data.experimental.ThreadingOptions" class="dashAnchor"></a><h1 id="tf.data.experimental.threadingoptions">tf.data.experimental.ThreadingOptions</h1>
+<h2 id="class-threadingoptions">Class <code>ThreadingOptions</code></h2>
+<p>Represents options for dataset threading.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.data.experimental.ThreadingOptions</code></li>
+<li>Class <code>tf.compat.v2.data.experimental.ThreadingOptions</code></li>
+<li>Class <code>tf.data.experimental.ThreadingOptions</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/data/experimental/ops/threading_options.py"><code>python/data/experimental/ops/threading_options.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>You can set the threading options of a dataset through the <code>experimental_threading</code> property of <a href="../../../tf/data/Options.html"><code>tf.data.Options</code></a>; the property is an instance of <a href="../../../tf/data/experimental/ThreadingOptions.html"><code>tf.data.experimental.ThreadingOptions</code></a>.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">options <span class="op">=</span> tf.data.Options()
+options.experimental_threading.private_threadpool_size <span class="op">=</span> <span class="dv">10</span>
+dataset <span class="op">=</span> dataset.with_options(options)</code></pre></div>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>()</code></pre></div>
+<p>Initialize self. See help(type(self)) for accurate signature.</p>
+<h2 id="properties">Properties</h2>
+<h3 id="max_intra_op_parallelism">
+<code>max_intra_op_parallelism</code>
+</h3>
+<p>If set, it overrides the maximum degree of intra-op parallelism.</p>
+<h3 id="private_threadpool_size">
+<code>private_threadpool_size</code>
+</h3>
+<p>If set, the dataset will use a private threadpool of the given size.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__eq__">
+<code><strong>eq</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__eq__</span>(other)</code></pre></div>
+<p>Return self==value.</p>
+<h3 id="__ne__">
+<code><strong>ne</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__ne__</span>(other)</code></pre></div>
+<p>Return self!=value.</p>

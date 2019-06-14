@@ -1,0 +1,24 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.config.experimental.list_physical_devices" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.config.experimental.list_physical_devices" class="dashAnchor"></a><h1 id="tf.config.experimental.list_physical_devices">tf.config.experimental.list_physical_devices</h1>
+<p>Return a list of physical devices visible to the runtime.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.config.experimental.list_physical_devices</code></li>
+<li><code>tf.compat.v2.config.experimental.list_physical_devices</code></li>
+<li><code>tf.config.experimental.list_physical_devices</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.config.experimental.list_physical_devices(device_type<span class="op">=</span><span class="va">None</span>)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/framework/config.py"><code>python/framework/config.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Physical devices are hardware devices locally present on the current machine. By default all discovered CPU and GPU devices are considered visible. The <code>list_physical_devices</code> allows querying the hardware prior to runtime initialization.</p>
+<p>The following example ensures the machine can see at least 1 GPU.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">physical_devices <span class="op">=</span> tf.config.experimental.list_physical_devices(<span class="st">&#39;GPU&#39;</span>)
+<span class="cf">assert</span> <span class="bu">len</span>(physical_devices) <span class="op">&gt;</span> <span class="dv">0</span>, <span class="st">&quot;No GPUs found.&quot;</span></code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>device_type</code></b>: (optional) Device type to filter by such as &quot;CPU&quot; or &quot;GPU&quot;</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>List of PhysicalDevice objects</p>

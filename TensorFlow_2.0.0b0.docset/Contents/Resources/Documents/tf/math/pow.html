@@ -1,0 +1,36 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.math.pow" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.math.pow" class="dashAnchor"></a><h1 id="tf.math.pow">tf.math.pow</h1>
+<p>Computes the power of one value to another.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.RaggedTensor.__pow__</code></li>
+<li><code>tf.compat.v1.RaggedTensor.__pow__</code></li>
+<li><code>tf.compat.v1.math.pow</code></li>
+<li><code>tf.compat.v1.pow</code></li>
+<li><code>tf.compat.v2.RaggedTensor.__pow__</code></li>
+<li><code>tf.compat.v2.math.pow</code></li>
+<li><code>tf.compat.v2.pow</code></li>
+<li><code>tf.math.pow</code></li>
+<li><code>tf.pow</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.math.<span class="bu">pow</span>(
+    x,
+    y,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/math_ops.py"><code>python/ops/math_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Given a tensor <code>x</code> and a tensor <code>y</code>, this operation computes \(x^y\) for corresponding elements in <code>x</code> and <code>y</code>. For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">x <span class="op">=</span> tf.constant([[<span class="dv">2</span>, <span class="dv">2</span>], [<span class="dv">3</span>, <span class="dv">3</span>]])
+y <span class="op">=</span> tf.constant([[<span class="dv">8</span>, <span class="dv">16</span>], [<span class="dv">2</span>, <span class="dv">3</span>]])
+tf.<span class="bu">pow</span>(x, y)  <span class="co"># [[256, 65536], [9, 27]]</span></code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A <code>Tensor</code> of type <code>float16</code>, <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, or <code>complex128</code>.</li>
+<li><b><code>y</code></b>: A <code>Tensor</code> of type <code>float16</code>, <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, or <code>complex128</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>.</p>

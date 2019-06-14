@@ -1,0 +1,73 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.initializers.Identity" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="__call__"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="from_config"/> <meta itemprop="property" content="get_config"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.keras.initializers.Identity" class="dashAnchor"></a><a name="//apple_ref/cpp/Function/tf.keras.initializers.identity" class="dashAnchor"></a><h1 id="tf.keras.initializers.identity">tf.keras.initializers.Identity</h1>
+<h2 id="class-identity">Class <code>Identity</code></h2>
+<p>Initializer that generates the identity matrix.</p>
+<p>Inherits From: <a href="../../../tf/keras/initializers/Initializer.html"><code>Initializer</code></a></p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v2.initializers.Identity</code></li>
+<li>Class <code>tf.compat.v2.initializers.identity</code></li>
+<li>Class <code>tf.compat.v2.keras.initializers.Identity</code></li>
+<li>Class <code>tf.compat.v2.keras.initializers.identity</code></li>
+<li>Class <code>tf.initializers.Identity</code></li>
+<li>Class <code>tf.initializers.identity</code></li>
+<li>Class <code>tf.keras.initializers.Identity</code></li>
+<li>Class <code>tf.keras.initializers.identity</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/init_ops_v2.py"><code>python/ops/init_ops_v2.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Only use for 2D matrices.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>gain</code></b>: Multiplicative factor to apply to the identity matrix.</li>
+</ul>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(gain<span class="op">=</span><span class="fl">1.0</span>)</code></pre></div>
+<p>Initialize self. See help(type(self)) for accurate signature.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__call__">
+<code><strong>call</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__call__</span>(
+    shape,
+    dtype<span class="op">=</span>tf.dtypes.float32
+)</code></pre></div>
+<p>Returns a tensor object initialized as specified by the initializer.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>shape</code></b>: Shape of the tensor.</li>
+<li><b><code>dtype</code></b>: Optional dtype of the tensor. Only floating point types are supported.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If the dtype is not floating point</li>
+</ul>
+<h3 id="from_config">
+<code>from_config</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">from_config(
+    cls,
+    config
+)</code></pre></div>
+<p>Instantiates an initializer from a configuration dictionary.</p>
+<h4 id="example">Example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">initializer <span class="op">=</span> RandomUniform(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)
+config <span class="op">=</span> initializer.get_config()
+initializer <span class="op">=</span> RandomUniform.from_config(config)</code></pre></div>
+<h4 id="args-2">Args:</h4>
+<ul>
+<li><b><code>config</code></b>: A Python dictionary. It will typically be the output of <code>get_config</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>An Initializer instance.</p>
+<h3 id="get_config">
+<code>get_config</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_config()</code></pre></div>
+<p>Returns the configuration of the initializer as a JSON-serializable dict.</p>
+<h4 id="returns-1">Returns:</h4>
+<p>A JSON-serializable Python dict.</p>

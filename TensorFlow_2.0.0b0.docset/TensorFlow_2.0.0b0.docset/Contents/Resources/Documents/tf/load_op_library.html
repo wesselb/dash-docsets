@@ -1,0 +1,25 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.load_op_library" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.load_op_library" class="dashAnchor"></a><h1 id="tf.load_op_library">tf.load_op_library</h1>
+<p>Loads a TensorFlow plugin, containing custom ops and kernels.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.load_op_library</code></li>
+<li><code>tf.compat.v2.load_op_library</code></li>
+<li><code>tf.load_op_library</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.load_op_library(library_filename)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/framework/load_library.py"><code>python/framework/load_library.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Pass &quot;library_filename&quot; to a platform-specific mechanism for dynamically loading a library. The rules for determining the exact location of the library are platform-specific and are not documented here. When the library is loaded, ops and kernels registered in the library via the <code>REGISTER_*</code> macros are made available in the TensorFlow process. Note that ops with the same name as an existing op are rejected and not registered with the process.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>library_filename</code></b>: Path to the plugin. Relative or absolute filesystem path to a dynamic library file.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A python module containing the Python wrappers for Ops defined in the plugin.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>RuntimeError</code></b>: when unable to load the library or get the python wrappers.</li>
+</ul>

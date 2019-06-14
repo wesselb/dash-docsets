@@ -1,0 +1,49 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.searchsorted" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.searchsorted" class="dashAnchor"></a><h1 id="tf.searchsorted">tf.searchsorted</h1>
+<p>Searches input tensor for values on the innermost dimension.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.searchsorted</code></li>
+<li><code>tf.compat.v2.searchsorted</code></li>
+<li><code>tf.searchsorted</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.searchsorted(
+    sorted_sequence,
+    values,
+    side<span class="op">=</span><span class="st">&#39;left&#39;</span>,
+    out_type<span class="op">=</span>tf.dtypes.int32,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/array_ops.py"><code>python/ops/array_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>A 2-D example:</p>
+<pre><code>  sorted_sequence = [[0, 3, 9, 9, 10],
+                     [1, 2, 3, 4, 5]]
+  values = [[2, 4, 9],
+            [0, 2, 6]]
+
+  result = searchsorted(sorted_sequence, values, side=&quot;left&quot;)
+
+  result == [[1, 2, 2],
+             [0, 1, 5]]
+
+  result = searchsorted(sorted_sequence, values, side=&quot;right&quot;)
+
+  result == [[1, 2, 4],
+             [0, 2, 5]]</code></pre>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>sorted_sequence</code></b>: N-D <code>Tensor</code> containing a sorted sequence.</li>
+<li><b><code>values</code></b>: N-D <code>Tensor</code> containing the search values.</li>
+<li><b><code>side</code></b>: 'left' or 'right'; 'left' corresponds to lower_bound and 'right' to upper_bound.</li>
+<li><b><code>out_type</code></b>: The output type (<code>int32</code> or <code>int64</code>). Default is <a href="../tf.md#int32"><code>tf.int32</code></a>.</li>
+<li><b><code>name</code></b>: Optional name for the operation.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>An N-D <code>Tensor</code> the size of values containing the result of applying either lower_bound or upper_bound (depending on side) to each value. The result is not a global index to the entire <code>Tensor</code>, but the index in the last dimension.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If the last dimension of <code>sorted_sequence &gt;= 2^31-1</code> elements. If the total size of values exceeds <code>2^31 - 1</code> elements. If the first <code>N-1</code> dimensions of the two tensors don't match.</li>
+</ul>

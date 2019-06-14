@@ -1,0 +1,32 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.nn.static_state_saving_rnn" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.nn.static_state_saving_rnn" class="dashAnchor"></a><h1 id="tf.compat.v1.nn.static_state_saving_rnn">tf.compat.v1.nn.static_state_saving_rnn</h1>
+<p>RNN that accepts a state saver for time-truncated RNN calculation. (deprecated)</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.nn.static_state_saving_rnn(
+    cell,
+    inputs,
+    state_saver,
+    state_name,
+    sequence_length<span class="op">=</span><span class="va">None</span>,
+    scope<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/rnn.py"><code>python/ops/rnn.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Warning: THIS FUNCTION IS DEPRECATED. It will be removed in a future version. Instructions for updating: Please use <code>keras.layers.RNN(cell, stateful=True)</code>, which is equivalent to this API</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>cell</code></b>: An instance of <code>RNNCell</code>.</li>
+<li><b><code>inputs</code></b>: A length T list of inputs, each a <code>Tensor</code> of shape <code>[batch_size,   input_size]</code>.</li>
+<li><b><code>state_saver</code></b>: A state saver object with methods <code>state</code> and <code>save_state</code>.</li>
+<li><b><code>state_name</code></b>: Python string or tuple of strings. The name to use with the state_saver. If the cell returns tuples of states (i.e., <code>cell.state_size</code> is a tuple) then <code>state_name</code> should be a tuple of strings having the same length as <code>cell.state_size</code>. Otherwise it should be a single string.</li>
+<li><b><code>sequence_length</code></b>: (optional) An int32/int64 vector size [batch_size]. See the documentation for rnn() for more details about sequence_length.</li>
+<li><b><code>scope</code></b>: VariableScope for the created subgraph; defaults to &quot;rnn&quot;.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A pair (outputs, state) where: outputs is a length T list of outputs (one for each input) states is the final state</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>cell</code> is not an instance of RNNCell.</li>
+<li><b><code>ValueError</code></b>: If <code>inputs</code> is <code>None</code> or an empty list, or if the arity and type of <code>state_name</code> does not match that of <code>cell.state_size</code>.</li>
+</ul>

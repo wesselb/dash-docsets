@@ -1,0 +1,26 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.nn.l2_loss" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.nn.l2_loss" class="dashAnchor"></a><h1 id="tf.nn.l2_loss">tf.nn.l2_loss</h1>
+<p>L2 Loss.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.nn.l2_loss</code></li>
+<li><code>tf.compat.v2.nn.l2_loss</code></li>
+<li><code>tf.nn.l2_loss</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.nn.l2_loss(
+    t,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in generated file: <code>python/ops/gen_nn_ops.py</code>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Computes half the L2 norm of a tensor without the <code>sqrt</code>:</p>
+<pre><code>output = sum(t ** 2) / 2</code></pre>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>t</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>bfloat16</code>, <code>float32</code>, <code>float64</code>. Typically 2-D, but may have any dimensions.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>t</code>.</p>

@@ -1,0 +1,50 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.pad" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.pad" class="dashAnchor"></a><h1 id="tf.compat.v1.pad">tf.compat.v1.pad</h1>
+<p>Pads a tensor.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.pad(
+    tensor,
+    paddings,
+    mode<span class="op">=</span><span class="st">&#39;CONSTANT&#39;</span>,
+    name<span class="op">=</span><span class="va">None</span>,
+    constant_values<span class="op">=</span><span class="dv">0</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/array_ops.py"><code>python/ops/array_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>This operation pads a <code>tensor</code> according to the <code>paddings</code> you specify. <code>paddings</code> is an integer tensor with shape <code>[n, 2]</code>, where n is the rank of <code>tensor</code>. For each dimension D of <code>input</code>, <code>paddings[D, 0]</code> indicates how many values to add before the contents of <code>tensor</code> in that dimension, and <code>paddings[D, 1]</code> indicates how many values to add after the contents of <code>tensor</code> in that dimension. If <code>mode</code> is &quot;REFLECT&quot; then both <code>paddings[D, 0]</code> and <code>paddings[D, 1]</code> must be no greater than <code>tensor.dim_size(D) - 1</code>. If <code>mode</code> is &quot;SYMMETRIC&quot; then both <code>paddings[D, 0]</code> and <code>paddings[D, 1]</code> must be no greater than <code>tensor.dim_size(D)</code>.</p>
+<p>The padded size of each dimension D of the output is:</p>
+<p><code>paddings[D, 0] + tensor.dim_size(D) + paddings[D, 1]</code></p>
+<h4 id="for-example">For example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">t <span class="op">=</span> tf.constant([[<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>], [<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>]])
+paddings <span class="op">=</span> tf.constant([[<span class="dv">1</span>, <span class="dv">1</span>,], [<span class="dv">2</span>, <span class="dv">2</span>]])
+<span class="co"># &#39;constant_values&#39; is 0.</span>
+<span class="co"># rank of &#39;t&#39; is 2.</span>
+tf.pad(t, paddings, <span class="st">&quot;CONSTANT&quot;</span>)  <span class="co"># [[0, 0, 0, 0, 0, 0, 0],</span>
+                                 <span class="co">#  [0, 0, 1, 2, 3, 0, 0],</span>
+                                 <span class="co">#  [0, 0, 4, 5, 6, 0, 0],</span>
+                                 <span class="co">#  [0, 0, 0, 0, 0, 0, 0]]</span>
+
+tf.pad(t, paddings, <span class="st">&quot;REFLECT&quot;</span>)  <span class="co"># [[6, 5, 4, 5, 6, 5, 4],</span>
+                                <span class="co">#  [3, 2, 1, 2, 3, 2, 1],</span>
+                                <span class="co">#  [6, 5, 4, 5, 6, 5, 4],</span>
+                                <span class="co">#  [3, 2, 1, 2, 3, 2, 1]]</span>
+
+tf.pad(t, paddings, <span class="st">&quot;SYMMETRIC&quot;</span>)  <span class="co"># [[2, 1, 1, 2, 3, 3, 2],</span>
+                                  <span class="co">#  [2, 1, 1, 2, 3, 3, 2],</span>
+                                  <span class="co">#  [5, 4, 4, 5, 6, 6, 5],</span>
+                                  <span class="co">#  [5, 4, 4, 5, 6, 6, 5]]</span></code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>tensor</code></b>: A <code>Tensor</code>.</li>
+<li><b><code>paddings</code></b>: A <code>Tensor</code> of type <code>int32</code>.</li>
+<li><b><code>mode</code></b>: One of &quot;CONSTANT&quot;, &quot;REFLECT&quot;, or &quot;SYMMETRIC&quot; (case-insensitive)</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+<li><b><code>constant_values</code></b>: In &quot;CONSTANT&quot; mode, the scalar pad value to use. Must be same type as <code>tensor</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>tensor</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: When mode is not one of &quot;CONSTANT&quot;, &quot;REFLECT&quot;, or &quot;SYMMETRIC&quot;.</li>
+</ul>

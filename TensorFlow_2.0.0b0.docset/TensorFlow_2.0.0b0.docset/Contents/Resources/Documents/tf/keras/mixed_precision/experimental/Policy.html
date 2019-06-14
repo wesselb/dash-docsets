@@ -1,0 +1,62 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.mixed_precision.experimental.Policy" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="default_variable_dtype"/> <meta itemprop="property" content="name"/> <meta itemprop="property" content="should_cast_variables"/> <meta itemprop="property" content="__init__"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.keras.mixed_precision.experimental.Policy" class="dashAnchor"></a><h1 id="tf.keras.mixed_precision.experimental.policy">tf.keras.mixed_precision.experimental.Policy</h1>
+<h2 id="class-policy">Class <code>Policy</code></h2>
+<p>A mixed precision policy for a Keras layer.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.keras.mixed_precision.experimental.Policy</code></li>
+<li>Class <code>tf.compat.v2.keras.mixed_precision.experimental.Policy</code></li>
+<li>Class <code>tf.keras.mixed_precision.experimental.Policy</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/mixed_precision/experimental/policy.py"><code>python/keras/mixed_precision/experimental/policy.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>A mixed precision policy determines the floating-point dtype that Keras layers should create variables in. For non-default policies, if the variable dtype does not match the input dtype, variables will automatically be casted to the input dtype to avoid type errors. Policies can be passed to the 'dtype' argument of layer constructors, or a global policy can be set with 'set_policy'.</p>
+<p>In the near future, policies will also determine the computation dtype of layers, as well as the loss scaling algorithm.</p>
+<p>Policies are intended to enable mixed precision training, which require using float32 variables and [b]float16 computations for most layers. The term &quot;mixed precision&quot; refers to the use of both float16 (or bfloat16) and float32 in a model. See https://arxiv.org/abs/1710.03740 for more information on mixed precision training.</p>
+<p>Policies are constructed by passing a string to the <code>name</code> constructor argument. <code>name</code> determines the behavior of the policy. Currently, <code>name</code> can be one of the following values.</p>
+<ul>
+<li>'infer': Infer the variable and computation dtypes from the input dtype. This is the default behavior.</li>
+<li>'infer_float32_vars': Infer the computation dtypes from the input dtype, but create variables in float32. Variables will be casted to the computation dtype. This is intended to enable mixed precision. Users can cast tensors to float16 before passing them to a layer, which causes the layer to run it's computation in float16 while keeping variables in float32.</li>
+</ul>
+<p>To use mixed precision in a model, the 'infer_float32_vars' policy can be used alongside float16 input tensors, which results in float16 computations and float32 variables. For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.keras.mixed_precision.experimental.set_policy(<span class="st">&#39;infer_float32_vars&#39;</span>)
+model <span class="op">=</span> tf.keras.models.Sequential(
+    tf.keras.layers.Input((<span class="dv">100</span>,), dtype<span class="op">=</span><span class="st">&#39;float16&#39;</span>),
+    tf.keras.layers.Dense(<span class="dv">10</span>),
+    tf.keras.layers.Dense(<span class="dv">10</span>),
+    tf.keras.layers.Lambda(<span class="kw">lambda</span> x: tf.cast(x, <span class="st">&#39;float32&#39;</span>)),
+    tf.keras.layers.Activation(<span class="st">&#39;Softmax&#39;</span>)
+)</code></pre></div>
+<p>Alternatively, the policy can be passed to individual layers instead of setting the global policy with <code>set_policy</code>:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">policy <span class="op">=</span> tf.keras.mixed_precision.experimental.Policy(<span class="st">&#39;infer_float32_vars&#39;</span>)
+model <span class="op">=</span> tf.keras.models.Sequential(
+    tf.keras.layers.Input((<span class="dv">100</span>,), dtype<span class="op">=</span><span class="st">&#39;float16&#39;</span>),
+    tf.keras.layers.Dense(<span class="dv">10</span>, dtype<span class="op">=</span>policy),
+    tf.keras.layers.Dense(<span class="dv">10</span>, dtype<span class="op">=</span>policy),
+    tf.keras.layers.Lambda(<span class="kw">lambda</span> x: tf.cast(x, <span class="st">&#39;float32&#39;</span>)),
+    tf.keras.layers.Activation(<span class="st">&#39;Softmax&#39;</span>)
+)</code></pre></div>
+<p>Note that a LossScaleOptimizer should also be used for mixed precision models to avoid numerical underflow. See <code>LossScaleOptimizer</code>.</p>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(name)</code></pre></div>
+<p>Initialize self. See help(type(self)) for accurate signature.</p>
+<h2 id="properties">Properties</h2>
+<h3 id="default_variable_dtype">
+<code>default_variable_dtype</code>
+</h3>
+<p>Returns the default variable dtype of this policy.</p>
+<p>This is the dtype layers will create their variables in, unless a layer explicit chooses a different dtype. Layers will cast variables to the appropriate dtype to avoid type errors.</p>
+<h4 id="returns">Returns:</h4>
+<p>The default variable dtype of this policy, or None if the default variable dtype should be derived from the inputs.</p>
+<h3 id="name">
+<code>name</code>
+</h3>
+<p>Returns the name of the policy: &quot;infer&quot; or &quot;infer_float32_vars.</p>
+<h3 id="should_cast_variables">
+<code>should_cast_variables</code>
+</h3>
+<p>Returns true if variables should be casted.</p>

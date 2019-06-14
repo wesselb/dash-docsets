@@ -1,0 +1,42 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.constraints.MaxNorm" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="__call__"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="get_config"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.keras.constraints.MaxNorm" class="dashAnchor"></a><h1 id="tf.keras.constraints.maxnorm">tf.keras.constraints.MaxNorm</h1>
+<h2 id="class-maxnorm">Class <code>MaxNorm</code></h2>
+<p>MaxNorm weight constraint.</p>
+<p>Inherits From: <a href="../../../tf/keras/constraints/Constraint.html"><code>Constraint</code></a></p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.keras.constraints.MaxNorm</code></li>
+<li>Class <code>tf.compat.v1.keras.constraints.max_norm</code></li>
+<li>Class <code>tf.compat.v2.keras.constraints.MaxNorm</code></li>
+<li>Class <code>tf.compat.v2.keras.constraints.max_norm</code></li>
+<li>Class <code>tf.keras.constraints.MaxNorm</code></li>
+<li>Class <code>tf.keras.constraints.max_norm</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/constraints.py"><code>python/keras/constraints.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Constrains the weights incident to each hidden unit to have a norm less than or equal to a desired value.</p>
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>m</code></b>: the maximum norm for the incoming weights.</li>
+<li><b><code>axis</code></b>: integer, axis along which to calculate weight norms. For instance, in a <code>Dense</code> layer the weight matrix has shape <code>(input_dim, output_dim)</code>, set <code>axis</code> to <code>0</code> to constrain each weight vector of length <code>(input_dim,)</code>. In a <code>Conv2D</code> layer with <code>data_format=&quot;channels_last&quot;</code>, the weight tensor has shape <code>(rows, cols, input_depth, output_depth)</code>, set <code>axis</code> to <code>[0, 1, 2]</code> to constrain the weights of each filter tensor of size <code>(rows, cols, input_depth)</code>.</li>
+</ul>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    max_value<span class="op">=</span><span class="dv">2</span>,
+    axis<span class="op">=</span><span class="dv">0</span>
+)</code></pre></div>
+<p>Initialize self. See help(type(self)) for accurate signature.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__call__">
+<code><strong>call</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__call__</span>(w)</code></pre></div>
+<p>Call self as a function.</p>
+<h3 id="get_config">
+<code>get_config</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_config()</code></pre></div>

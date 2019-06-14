@@ -1,0 +1,30 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.debugging.is_numeric_tensor" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.debugging.is_numeric_tensor" class="dashAnchor"></a><h1 id="tf.debugging.is_numeric_tensor">tf.debugging.is_numeric_tensor</h1>
+<p>Returns <code>True</code> if the elements of <code>tensor</code> are numbers.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.debugging.is_numeric_tensor</code></li>
+<li><code>tf.compat.v1.is_numeric_tensor</code></li>
+<li><code>tf.compat.v2.debugging.is_numeric_tensor</code></li>
+<li><code>tf.debugging.is_numeric_tensor</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.debugging.is_numeric_tensor(tensor)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/check_ops.py"><code>python/ops/check_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Specifically, returns <code>True</code> if the dtype of <code>tensor</code> is one of the following:</p>
+<ul>
+<li><a href="../../tf.md#float32"><code>tf.float32</code></a></li>
+<li><a href="../../tf.md#float64"><code>tf.float64</code></a></li>
+<li><a href="../../tf.md#int8"><code>tf.int8</code></a></li>
+<li><a href="../../tf.md#int16"><code>tf.int16</code></a></li>
+<li><a href="../../tf.md#int32"><code>tf.int32</code></a></li>
+<li><a href="../../tf.md#int64"><code>tf.int64</code></a></li>
+<li><a href="../../tf.md#uint8"><code>tf.uint8</code></a></li>
+<li><a href="../../tf.md#qint8"><code>tf.qint8</code></a></li>
+<li><a href="../../tf.md#qint32"><code>tf.qint32</code></a></li>
+<li><a href="../../tf.md#quint8"><code>tf.quint8</code></a></li>
+<li><a href="../../tf.md#complex64"><code>tf.complex64</code></a></li>
+</ul>
+<p>Returns <code>False</code> if <code>tensor</code> is of a non-numeric type or if <code>tensor</code> is not a <a href="../../tf/Tensor.html"><code>tf.Tensor</code></a> object.</p>

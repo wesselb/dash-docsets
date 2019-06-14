@@ -1,0 +1,44 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.layers.Reshape" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="__init__"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.keras.layers.Reshape" class="dashAnchor"></a><h1 id="tf.keras.layers.reshape">tf.keras.layers.Reshape</h1>
+<h2 id="class-reshape">Class <code>Reshape</code></h2>
+<p>Reshapes an output to a certain shape.</p>
+<p>Inherits From: <a href="../../../tf/keras/layers/Layer.html"><code>Layer</code></a></p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.keras.layers.Reshape</code></li>
+<li>Class <code>tf.compat.v2.keras.layers.Reshape</code></li>
+<li>Class <code>tf.keras.layers.Reshape</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/layers/core.py"><code>python/keras/layers/core.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>target_shape</code></b>: Target shape. Tuple of integers, does not include the samples dimension (batch size).</li>
+</ul>
+<h4 id="input-shape">Input shape:</h4>
+<p>Arbitrary, although all dimensions in the input shaped must be fixed. Use the keyword argument <code>input_shape</code> (tuple of integers, does not include the samples axis) when using this layer as the first layer in a model.</p>
+<h4 id="output-shape">Output shape:</h4>
+<p><code>(batch_size,) + target_shape</code></p>
+<h4 id="example">Example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># as first layer in a Sequential model</span>
+model <span class="op">=</span> Sequential()
+model.add(Reshape((<span class="dv">3</span>, <span class="dv">4</span>), input_shape<span class="op">=</span>(<span class="dv">12</span>,)))
+<span class="co"># now: model.output_shape == (None, 3, 4)</span>
+<span class="co"># note: `None` is the batch dimension</span>
+
+<span class="co"># as intermediate layer in a Sequential model</span>
+model.add(Reshape((<span class="dv">6</span>, <span class="dv">2</span>)))
+<span class="co"># now: model.output_shape == (None, 6, 2)</span>
+
+<span class="co"># also supports shape inference using `-1` as dimension</span>
+model.add(Reshape((<span class="op">-</span><span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>)))
+<span class="co"># now: model.output_shape == (None, 3, 2, 2)</span></code></pre></div>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    target_shape,
+    <span class="op">**</span>kwargs
+)</code></pre></div>

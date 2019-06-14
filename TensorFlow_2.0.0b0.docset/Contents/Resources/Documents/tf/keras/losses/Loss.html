@@ -1,0 +1,99 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.losses.Loss" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="__call__"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="call"/> <meta itemprop="property" content="from_config"/> <meta itemprop="property" content="get_config"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.keras.losses.Loss" class="dashAnchor"></a><h1 id="tf.keras.losses.loss">tf.keras.losses.Loss</h1>
+<h2 id="class-loss">Class <code>Loss</code></h2>
+<p>Loss base class.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.keras.losses.Loss</code></li>
+<li>Class <code>tf.compat.v2.keras.losses.Loss</code></li>
+<li>Class <code>tf.compat.v2.losses.Loss</code></li>
+<li>Class <code>tf.keras.losses.Loss</code></li>
+<li>Class <code>tf.losses.Loss</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/losses.py"><code>python/keras/losses.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>To be implemented by subclasses: * <code>call()</code>: Contains the logic for loss calculation using <code>y_true</code>, <code>y_pred</code>.</p>
+<p>Example subclass implementation:</p>
+<pre><code>class MeanSquaredError(Loss):
+  def call(self, y_true, y_pred):
+    y_pred = ops.convert_to_tensor(y_pred)
+    y_true = math_ops.cast(y_true, y_pred.dtype)
+    return K.mean(math_ops.square(y_pred - y_true), axis=-1)</code></pre>
+<p>When used with <a href="../../../tf/distribute/Strategy.html"><code>tf.distribute.Strategy</code></a>, outside of built-in training loops such as <a href="../../../tf/keras.html"><code>tf.keras</code></a> <code>compile</code> and <code>fit</code>, please use 'SUM' or 'NONE' reduction types, and reduce losses explicitly in your training loop. Using 'AUTO' or 'SUM_OVER_BATCH_SIZE' will raise an error.</p>
+<p>Please see https://www.tensorflow.org/alpha/tutorials/distribute/training_loops for more details on this.</p>
+<p>You can implement 'SUM_OVER_BATCH_SIZE' using global batch size like:</p>
+<pre><code>with strategy.scope():
+  loss_obj = tf.keras.losses.CategoricalCrossentropy(
+      reduction=tf.keras.losses.Reduction.NONE)
+  ....
+  loss = (tf.reduce_sum(loss_obj(labels, predictions)) *
+          (1. / global_batch_size))</code></pre>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>reduction</code></b>: (Optional) Type of <a href="../../../tf/keras/losses/Reduction.html"><code>tf.keras.losses.Reduction</code></a> to apply to loss. Default value is <code>AUTO</code>. <code>AUTO</code> indicates that the reduction option will be determined by the usage context. For almost all cases this defaults to <code>SUM_OVER_BATCH_SIZE</code>. When used with <a href="../../../tf/distribute/Strategy.html"><code>tf.distribute.Strategy</code></a>, outside of built-in training loops such as <a href="../../../tf/keras.html"><code>tf.keras</code></a> <code>compile</code> and <code>fit</code>, using <code>AUTO</code> or <code>SUM_OVER_BATCH_SIZE</code> will raise an error. Please see https://www.tensorflow.org/alpha/tutorials/distribute/training_loops for more details on this.</li>
+<li><b><code>name</code></b>: Optional name for the op.</li>
+</ul>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    reduction<span class="op">=</span>losses_utils.ReductionV2.AUTO,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Initialize self. See help(type(self)) for accurate signature.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__call__">
+<code><strong>call</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__call__</span>(
+    y_true,
+    y_pred,
+    sample_weight<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Invokes the <code>Loss</code> instance.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>y_true</code></b>: Ground truth values.</li>
+<li><b><code>y_pred</code></b>: The predicted values.</li>
+<li><b><code>sample_weight</code></b>: Optional <code>Tensor</code> whose rank is either 0, or the same rank as <code>y_true</code>, or is broadcastable to <code>y_true</code>. <code>sample_weight</code> acts as a coefficient for the loss. If a scalar is provided, then the loss is simply scaled by the given value. If <code>sample_weight</code> is a tensor of size <code>[batch_size]</code>, then the total loss for each sample of the batch is rescaled by the corresponding element in the <code>sample_weight</code> vector. If the shape of <code>sample_weight</code> matches the shape of <code>y_pred</code>, then the loss of each measurable element of <code>y_pred</code> is scaled by the corresponding value of <code>sample_weight</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Weighted loss float <code>Tensor</code>. If <code>reduction</code> is <code>NONE</code>, this has the same shape as <code>y_true</code>; otherwise, it is scalar.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If the shape of <code>sample_weight</code> is invalid.</li>
+</ul>
+<h3 id="call">
+<code>call</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">call(
+    y_true,
+    y_pred
+)</code></pre></div>
+<p>Invokes the <code>Loss</code> instance.</p>
+<h4 id="args-2">Args:</h4>
+<ul>
+<li><b><code>y_true</code></b>: Ground truth values, with the same shape as 'y_pred'.</li>
+<li><b><code>y_pred</code></b>: The predicted values.</li>
+</ul>
+<h3 id="from_config">
+<code>from_config</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="at">@classmethod</span>
+from_config(
+    cls,
+    config
+)</code></pre></div>
+<p>Instantiates a <code>Loss</code> from its config (output of <code>get_config()</code>).</p>
+<h4 id="args-3">Args:</h4>
+<ul>
+<li><b><code>config</code></b>: Output of <code>get_config()</code>.</li>
+</ul>
+<h4 id="returns-1">Returns:</h4>
+<p>A <code>Loss</code> instance.</p>
+<h3 id="get_config">
+<code>get_config</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_config()</code></pre></div>

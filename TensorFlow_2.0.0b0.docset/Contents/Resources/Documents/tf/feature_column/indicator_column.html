@@ -1,0 +1,33 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.feature_column.indicator_column" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.feature_column.indicator_column" class="dashAnchor"></a><h1 id="tf.feature_column.indicator_column">tf.feature_column.indicator_column</h1>
+<p>Represents multi-hot representation of given categorical column.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.feature_column.indicator_column</code></li>
+<li><code>tf.compat.v2.feature_column.indicator_column</code></li>
+<li><code>tf.feature_column.indicator_column</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.feature_column.indicator_column(categorical_column)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/feature_column/feature_column_v2.py"><code>python/feature_column/feature_column_v2.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<ul>
+<li><p>For DNN model, <code>indicator_column</code> can be used to wrap any <code>categorical_column_*</code> (e.g., to feed to DNN). Consider to Use <code>embedding_column</code> if the number of buckets/unique(values) are large.</p></li>
+<li><p>For Wide (aka linear) model, <code>indicator_column</code> is the internal representation for categorical column when passing categorical column directly (as any element in feature_columns) to <code>linear_model</code>. See <code>linear_model</code> for details.</p></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">name <span class="op">=</span> indicator_column(categorical_column_with_vocabulary_list(
+    <span class="st">&#39;name&#39;</span>, [<span class="st">&#39;bob&#39;</span>, <span class="st">&#39;george&#39;</span>, <span class="st">&#39;wanda&#39;</span>])
+columns <span class="op">=</span> [name, ...]
+features <span class="op">=</span> tf.io.parse_example(..., features<span class="op">=</span>make_parse_example_spec(columns))
+dense_tensor <span class="op">=</span> input_layer(features, columns)
+
+dense_tensor <span class="op">==</span> [[<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>]]  <span class="co"># If &quot;name&quot; bytes_list is [&quot;bob&quot;]</span>
+dense_tensor <span class="op">==</span> [[<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>]]  <span class="co"># If &quot;name&quot; bytes_list is [&quot;bob&quot;, &quot;wanda&quot;]</span>
+dense_tensor <span class="op">==</span> [[<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">0</span>]]  <span class="co"># If &quot;name&quot; bytes_list is [&quot;bob&quot;, &quot;bob&quot;]</span></code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>categorical_column</code></b>: A <code>CategoricalColumn</code> which is created by <code>categorical_column_with_*</code> or <code>crossed_column</code> functions.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>An <code>IndicatorColumn</code>.</p>

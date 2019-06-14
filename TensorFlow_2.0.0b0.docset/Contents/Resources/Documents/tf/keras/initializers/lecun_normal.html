@@ -1,0 +1,27 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.initializers.lecun_normal" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.keras.initializers.lecun_normal" class="dashAnchor"></a><h1 id="tf.keras.initializers.lecun_normal">tf.keras.initializers.lecun_normal</h1>
+<p>LeCun normal initializer.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v2.initializers.lecun_normal</code></li>
+<li><code>tf.compat.v2.keras.initializers.lecun_normal</code></li>
+<li><code>tf.initializers.lecun_normal</code></li>
+<li><code>tf.keras.initializers.lecun_normal</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.keras.initializers.lecun_normal(seed<span class="op">=</span><span class="va">None</span>)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/init_ops_v2.py"><code>python/ops/init_ops_v2.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>It draws samples from a truncated normal distribution centered on 0 with <code>stddev = sqrt(1 / fan_in)</code> where <code>fan_in</code> is the number of input units in the weight tensor.</p>
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>seed</code></b>: A Python integer. Used to seed the random generator.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>An initializer.</p>
+<h4 id="references">References:</h4>
+<ul>
+<li>Self-Normalizing Neural Networks, [Klambauer et al., 2017] (https://papers.nips.cc/paper/6698-self-normalizing-neural-networks) ([pdf] (https://papers.nips.cc/paper/6698-self-normalizing-neural-networks.pdf))</li>
+<li>Efficient Backprop, <a href="http://yann.lecun.com/exdb/publis/pdf/lecun-98b.pdf">Lecun et al., 1998</a></li>
+</ul>

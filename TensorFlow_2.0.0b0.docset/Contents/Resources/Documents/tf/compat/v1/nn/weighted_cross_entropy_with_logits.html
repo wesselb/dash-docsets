@@ -1,0 +1,22 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.nn.weighted_cross_entropy_with_logits" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.nn.weighted_cross_entropy_with_logits" class="dashAnchor"></a><h1 id="tf.compat.v1.nn.weighted_cross_entropy_with_logits">tf.compat.v1.nn.weighted_cross_entropy_with_logits</h1>
+<p>Computes a weighted cross entropy. (deprecated arguments)</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.nn.weighted_cross_entropy_with_logits(
+    labels<span class="op">=</span><span class="va">None</span>,
+    logits<span class="op">=</span><span class="va">None</span>,
+    pos_weight<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>,
+    targets<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/nn_impl.py"><code>python/ops/nn_impl.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Warning: SOME ARGUMENTS ARE DEPRECATED: <code>(targets)</code>. They will be removed in a future version. Instructions for updating: targets is deprecated, use labels instead</p>
+<p>This is like <code>sigmoid_cross_entropy_with_logits()</code> except that <code>pos_weight</code>, allows one to trade off recall and precision by up- or down-weighting the cost of a positive error relative to a negative error. The usual cross-entropy cost is defined as: labels * -log(sigmoid(logits)) + (1 - labels) * -log(1 - sigmoid(logits)) A value <code>pos_weights &gt; 1</code> decreases the false negative count, hence increasing the recall. Conversely setting <code>pos_weights &lt; 1</code> decreases the false positive count and increases the precision. This can be seen from the fact that <code>pos_weight</code> is introduced as a multiplicative coefficient for the positive labels term in the loss expression: labels * -log(sigmoid(logits)) * pos_weight + (1 - labels) * -log(1 - sigmoid(logits)) For brevity, let <code>x = logits</code>, <code>z = labels</code>, <code>q = pos_weight</code>. The loss is: qz * -log(sigmoid(x)) + (1 - z) * -log(1 - sigmoid(x)) = qz * -log(1 / (1 + exp(-x))) + (1 - z) * -log(exp(-x) / (1 + exp(-x))) = qz * log(1 + exp(-x)) + (1 - z) * (-log(exp(-x)) + log(1 + exp(-x))) = qz * log(1 + exp(-x)) + (1 - z) * (x + log(1 + exp(-x)) = (1 - z) * x + (qz + 1 - z) * log(1 + exp(-x)) = (1 - z) * x + (1 + (q - 1) * z) * log(1 + exp(-x)) Setting <code>l = (1 + (q - 1) * z)</code>, to ensure stability and avoid overflow, the implementation uses (1 - z) * x + l * (log(1 + exp(-abs(x))) + max(-x, 0)) <code>logits</code> and <code>labels</code> must have the same type and shape. Args: labels: A <code>Tensor</code> of the same type and shape as <code>logits</code>. logits: A <code>Tensor</code> of type <code>float32</code> or <code>float64</code>. pos_weight: A coefficient to use on the positive examples. name: A name for the operation (optional). targets: Deprecated alias for labels.</p>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of the same shape as <code>logits</code> with the componentwise weighted logistic losses.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>logits</code> and <code>labels</code> do not have the same shape.</li>
+</ul>

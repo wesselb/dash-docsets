@@ -1,0 +1,40 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.nn.local_response_normalization" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.nn.local_response_normalization" class="dashAnchor"></a><h1 id="tf.nn.local_response_normalization">tf.nn.local_response_normalization</h1>
+<p>Local Response Normalization.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.nn.local_response_normalization</code></li>
+<li><code>tf.compat.v1.nn.lrn</code></li>
+<li><code>tf.compat.v2.nn.local_response_normalization</code></li>
+<li><code>tf.compat.v2.nn.lrn</code></li>
+<li><code>tf.nn.local_response_normalization</code></li>
+<li><code>tf.nn.lrn</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.nn.local_response_normalization(
+    <span class="bu">input</span>,
+    depth_radius<span class="op">=</span><span class="dv">5</span>,
+    bias<span class="op">=</span><span class="dv">1</span>,
+    alpha<span class="op">=</span><span class="dv">1</span>,
+    beta<span class="op">=</span><span class="fl">0.5</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in generated file: <code>python/ops/gen_nn_ops.py</code>.</p>
+<!-- Placeholder for "Used in" -->
+<p>The 4-D <code>input</code> tensor is treated as a 3-D array of 1-D vectors (along the last dimension), and each vector is normalized independently. Within a given vector, each component is divided by the weighted, squared sum of inputs within <code>depth_radius</code>. In detail,</p>
+<pre><code>sqr_sum[a, b, c, d] =
+    sum(input[a, b, c, d - depth_radius : d + depth_radius + 1] ** 2)
+output = input / (bias + alpha * sqr_sum) ** beta</code></pre>
+<p>For details, see <a href="http://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks">Krizhevsky et al., ImageNet classification with deep convolutional neural networks (NIPS 2012)</a>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>bfloat16</code>, <code>float32</code>. 4-D.</li>
+<li><b><code>depth_radius</code></b>: An optional <code>int</code>. Defaults to <code>5</code>. 0-D. Half-width of the 1-D normalization window.</li>
+<li><b><code>bias</code></b>: An optional <code>float</code>. Defaults to <code>1</code>. An offset (usually positive to avoid dividing by 0).</li>
+<li><b><code>alpha</code></b>: An optional <code>float</code>. Defaults to <code>1</code>. A scale factor, usually positive.</li>
+<li><b><code>beta</code></b>: An optional <code>float</code>. Defaults to <code>0.5</code>. An exponent.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>input</code>.</p>

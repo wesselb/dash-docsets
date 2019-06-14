@@ -1,0 +1,21 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.data.experimental.cardinality" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.data.experimental.cardinality" class="dashAnchor"></a><h1 id="tf.data.experimental.cardinality">tf.data.experimental.cardinality</h1>
+<p>Returns the cardinality of <code>dataset</code>, if known.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.data.experimental.cardinality</code></li>
+<li><code>tf.compat.v2.data.experimental.cardinality</code></li>
+<li><code>tf.data.experimental.cardinality</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.data.experimental.cardinality(dataset)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/data/experimental/ops/cardinality.py"><code>python/data/experimental/ops/cardinality.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>The operation returns the cardinality of <code>dataset</code>. The operation may return <a href="../../../tf/data/experimental.md#INFINITE_CARDINALITY"><code>tf.data.experimental.INFINITE_CARDINALITY</code></a> if <code>dataset</code> contains an infinite number of elements or <a href="../../../tf/data/experimental.md#UNKNOWN_CARDINALITY"><code>tf.data.experimental.UNKNOWN_CARDINALITY</code></a> if the analysis fails to determine the number of elements in <code>dataset</code> (e.g. when the dataset source is a file).</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>dataset</code></b>: A <a href="../../../tf/data/Dataset.html"><code>tf.data.Dataset</code></a> for which to determine cardinality.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A scalar <a href="../../../tf.md#int64"><code>tf.int64</code></a> <code>Tensor</code> representing the cardinality of <code>dataset</code>. If the cardinality is infinite or unknown, the operation returns the named constant <code>INFINITE_CARDINALITY</code> and <code>UNKNOWN_CARDINALITY</code> respectively.</p>

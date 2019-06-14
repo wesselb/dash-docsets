@@ -1,0 +1,27 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.nn.leaky_relu" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.nn.leaky_relu" class="dashAnchor"></a><h1 id="tf.nn.leaky_relu">tf.nn.leaky_relu</h1>
+<p>Compute the Leaky ReLU activation function.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.nn.leaky_relu</code></li>
+<li><code>tf.compat.v2.nn.leaky_relu</code></li>
+<li><code>tf.nn.leaky_relu</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.nn.leaky_relu(
+    features,
+    alpha<span class="op">=</span><span class="fl">0.2</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/nn_ops.py"><code>python/ops/nn_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Source: <a href="https://ai.stanford.edu/~amaas/papers/relu_hybrid_icml2013_final.pdf">Rectifier Nonlinearities Improve Neural Network Acoustic Models. AL Maas, AY Hannun, AY Ng - Proc. ICML, 2013</a>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>features</code></b>: A <code>Tensor</code> representing preactivation values. Must be one of the following types: <code>float16</code>, <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>int64</code>.</li>
+<li><b><code>alpha</code></b>: Slope of the activation function at x &lt; 0.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The activation value.</p>

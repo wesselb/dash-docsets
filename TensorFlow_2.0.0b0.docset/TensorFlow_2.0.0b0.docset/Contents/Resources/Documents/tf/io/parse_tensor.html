@@ -1,0 +1,27 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.io.parse_tensor" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.io.parse_tensor" class="dashAnchor"></a><h1 id="tf.io.parse_tensor">tf.io.parse_tensor</h1>
+<p>Transforms a serialized tensorflow.TensorProto proto into a Tensor.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.io.parse_tensor</code></li>
+<li><code>tf.compat.v1.parse_tensor</code></li>
+<li><code>tf.compat.v2.io.parse_tensor</code></li>
+<li><code>tf.io.parse_tensor</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.io.parse_tensor(
+    serialized,
+    out_type,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in generated file: <code>python/ops/gen_parsing_ops.py</code>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>serialized</code></b>: A <code>Tensor</code> of type <code>string</code>. A scalar string containing a serialized TensorProto proto.</li>
+<li><b><code>out_type</code></b>: A <a href="../../tf/dtypes/DType.html"><code>tf.DType</code></a>. The type of the serialized tensor. The provided type must match the type of the serialized tensor and no implicit conversion will take place.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>out_type</code>.</p>

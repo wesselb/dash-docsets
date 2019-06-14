@@ -1,0 +1,35 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.image.adjust_gamma" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.image.adjust_gamma" class="dashAnchor"></a><h1 id="tf.image.adjust_gamma">tf.image.adjust_gamma</h1>
+<p>Performs Gamma Correction on the input image.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.image.adjust_gamma</code></li>
+<li><code>tf.compat.v2.image.adjust_gamma</code></li>
+<li><code>tf.image.adjust_gamma</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.image.adjust_gamma(
+    image,
+    gamma<span class="op">=</span><span class="dv">1</span>,
+    gain<span class="op">=</span><span class="dv">1</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/image_ops_impl.py"><code>python/ops/image_ops_impl.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Also known as Power Law Transform. This function converts the input images at first to float representation, then transforms them pixelwise according to the equation <code>Out = gain * In**gamma</code>, and then converts the back to the original data type.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>image</code></b>: RGB image or images to adjust.</li>
+<li><b><code>gamma</code></b>: A scalar or tensor. Non negative real number.</li>
+<li><b><code>gain</code></b>: A scalar or tensor. The constant multiplier.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A Tensor. A Gamma-adjusted tensor of the same shape and type as <code>image</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If gamma is negative.</li>
+</ul>
+<h4 id="notes">Notes:</h4>
+<p>For gamma greater than 1, the histogram will shift towards left and the output image will be darker than the input image. For gamma less than 1, the histogram will shift towards right and the output image will be brighter than the input image.</p>
+<h4 id="references">References:</h4>
+<p>[1] http://en.wikipedia.org/wiki/Gamma_correction</p>

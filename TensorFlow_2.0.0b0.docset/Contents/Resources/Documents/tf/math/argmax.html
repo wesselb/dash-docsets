@@ -1,0 +1,37 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.math.argmax" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.math.argmax" class="dashAnchor"></a><h1 id="tf.math.argmax">tf.math.argmax</h1>
+<p>Returns the index with the largest value across axes of a tensor.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.argmax</code></li>
+<li><code>tf.compat.v2.argmax</code></li>
+<li><code>tf.compat.v2.math.argmax</code></li>
+<li><code>tf.math.argmax</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.math.argmax(
+    <span class="bu">input</span>,
+    axis<span class="op">=</span><span class="va">None</span>,
+    output_type<span class="op">=</span>tf.dtypes.int64,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/math_ops.py"><code>python/ops/math_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Note that in case of ties the identity of the return value is not guaranteed.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>uint8</code>, <code>int16</code>, <code>int8</code>, <code>complex64</code>, <code>int64</code>, <code>qint8</code>, <code>quint8</code>, <code>qint32</code>, <code>bfloat16</code>, <code>uint16</code>, <code>complex128</code>, <code>half</code>, <code>uint32</code>, <code>uint64</code>.</li>
+<li><b><code>axis</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. int32 or int64, must be in the range <code>-rank(input), rank(input))</code>. Describes which axis of the input Tensor to reduce across. For vectors, use axis = 0.</li>
+<li><b><code>output_type</code></b>: An optional <a href="../../tf/dtypes/DType.html"><code>tf.DType</code></a> from: <code>tf.int32, tf.int64</code>. Defaults to <a href="../../tf.md#int64"><code>tf.int64</code></a>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>output_type</code>.</p>
+<h4 id="usage">Usage:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">import</span> tensorflow <span class="im">as</span> tf
+a <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">10</span>, <span class="fl">26.9</span>, <span class="fl">2.8</span>, <span class="fl">166.32</span>, <span class="fl">62.3</span>]
+b <span class="op">=</span> tf.math.argmax(<span class="bu">input</span> <span class="op">=</span> a)
+c <span class="op">=</span> tf.keras.backend.<span class="bu">eval</span>(b)
+<span class="co"># c = 4</span>
+<span class="co"># here a[4] = 166.32 which is the largest element of a across axis 0</span></code></pre></div>

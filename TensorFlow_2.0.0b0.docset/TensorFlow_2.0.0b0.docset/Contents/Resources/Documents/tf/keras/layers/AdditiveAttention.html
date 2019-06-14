@@ -1,0 +1,86 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.layers.AdditiveAttention" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="__init__"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.keras.layers.AdditiveAttention" class="dashAnchor"></a><h1 id="tf.keras.layers.additiveattention">tf.keras.layers.AdditiveAttention</h1>
+<h2 id="class-additiveattention">Class <code>AdditiveAttention</code></h2>
+<p>Additive attention layer, a.k.a. Bahdanau-style attention.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.keras.layers.AdditiveAttention</code></li>
+<li>Class <code>tf.compat.v2.keras.layers.AdditiveAttention</code></li>
+<li>Class <code>tf.keras.layers.AdditiveAttention</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/layers/dense_attention.py"><code>python/keras/layers/dense_attention.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Inputs are <code>query</code> tensor of shape <code>[batch_size, Tq, dim]</code>, <code>value</code> tensor of shape <code>[batch_size, Tv, dim]</code> and <code>key</code> tensor of shape <code>[batch_size, Tv, dim]</code>. The calculation follows the steps:</p>
+<ol style="list-style-type: decimal">
+<li>Reshape <code>query</code> and <code>value</code> into shapes <code>[batch_size, Tq, 1, dim]</code> and <code>[batch_size, 1, Tv, dim]</code> respectively.</li>
+<li>Calculate scores with shape <code>[batch_size, Tq, Tv]</code> as a non-linear sum: <code>scores = tf.reduce_sum(tf.tanh(query + value), axis=-1)</code></li>
+<li>Use scores to calculate a distribution with shape <code>[batch_size, Tq, Tv]</code>: <code>distribution = tf.nn.softmax(scores)</code>.</li>
+<li>Use <code>distribution</code> to create a linear combination of <code>value</code> with shape <code>batch_size, Tq, dim]</code>: <code>return tf.matmul(distribution, value)</code>.</li>
+</ol>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>use_scale</code></b>: If <code>True</code>, will create a variable to scale the attention scores.</li>
+<li><b><code>causal</code></b>: Boolean. Set to <code>True</code> for decoder self-attention. Adds a mask such that position <code>i</code> cannot attend to positions <code>j &gt; i</code>. This prevents the flow of information from the future towards the past.</li>
+</ul>
+<h4 id="call-arguments">Call Arguments:</h4>
+<ul>
+<li><b><code>inputs</code></b>: List of the following tensors:</li>
+<li>query: Query <code>Tensor</code> of shape <code>[batch_size, Tq, dim]</code>.</li>
+<li>value: Value <code>Tensor</code> of shape <code>[batch_size, Tv, dim]</code>.</li>
+<li>key: Optional key <code>Tensor</code> of shape <code>[batch_size, Tv, dim]</code>. If not given, will use <code>value</code> for both <code>key</code> and <code>value</code>, which is the most common case.</li>
+<li><b><code>mask</code></b>: List of the following tensors:</li>
+<li>query_mask: A boolean mask <code>Tensor</code> of shape <code>[batch_size, Tq]</code>. If given, the output will be zero at the positions where <code>mask==False</code>.</li>
+<li>value_mask: A boolean mask <code>Tensor</code> of shape <code>[batch_size, Tv]</code>. If given, will apply the mask such that values at positions where <code>mask==False</code> do not contribute to the result.</li>
+</ul>
+<h4 id="output-shape">Output shape:</h4>
+<p>Attention outputs of shape <code>[batch_size, Tq, dim]</code>.</p>
+<p>The meaning of <code>query</code>, <code>value</code> and <code>key</code> depend on the application. In the case of text similarity, for example, <code>query</code> is the sequence embeddings of the first piece of text and <code>value</code> is the sequence embeddings of the second piece of text. <code>key</code> is usually the same tensor as <code>value</code>.</p>
+<p>Here is a code example for using <code>AdditiveAttention</code> in a CNN+Attention network:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Variable-length int sequences.</span>
+query_input <span class="op">=</span> tf.keras.Input(shape<span class="op">=</span>(<span class="va">None</span>,), dtype<span class="op">=</span><span class="st">&#39;int32&#39;</span>)
+value_input <span class="op">=</span> tf.keras.Input(shape<span class="op">=</span>(<span class="va">None</span>,), dtype<span class="op">=</span><span class="st">&#39;int32&#39;</span>)
+
+<span class="co"># Embedding lookup.</span>
+token_embedding <span class="op">=</span> tf.keras.layers.Embedding(max_tokens, dimension)
+<span class="co"># Query embeddings of shape [batch_size, Tq, dimension].</span>
+query_embeddings <span class="op">=</span> token_embedding(query_input)
+<span class="co"># Value embeddings of shape [batch_size, Tv, dimension].</span>
+value_embeddings <span class="op">=</span> token_embedding(query_input)
+
+<span class="co"># CNN layer.</span>
+cnn_layer <span class="op">=</span> tf.keras.layers.Conv1D(
+    filters<span class="op">=</span><span class="dv">100</span>,
+    kernel_size<span class="op">=</span><span class="dv">4</span>,
+    <span class="co"># Use &#39;same&#39; padding so outputs have the same shape as inputs.</span>
+    padding<span class="op">=</span><span class="st">&#39;same&#39;</span>)
+<span class="co"># Query encoding of shape [batch_size, Tq, filters].</span>
+query_seq_encoding <span class="op">=</span> cnn_layer(query_embeddings)
+<span class="co"># Value encoding of shape [batch_size, Tv, filters].</span>
+value_seq_encoding <span class="op">=</span> cnn_layer(value_embeddings)
+
+<span class="co"># Query-value attention of shape [batch_size, Tq, filters].</span>
+query_value_attention_seq <span class="op">=</span> tf.keras.layers.AdditiveAttention()(
+    [query_seq_encoding, value_seq_encoding])
+
+<span class="co"># Reduce over the sequence axis to produce encodings of shape</span>
+<span class="co"># [batch_size, filters].</span>
+query_encoding <span class="op">=</span> tf.keras.layers.GlobalAveragePooling1D()(
+    query_seq_encoding)
+query_value_attention <span class="op">=</span> tf.keras.layers.GlobalAveragePooling1D()(
+    query_value_attention_seq)
+
+<span class="co"># Concatenate query and document encodings to produce a DNN input layer.</span>
+input_layer <span class="op">=</span> tf.keras.layers.Concatenate()(
+    [query_encoding, query_value_attention])
+
+<span class="co"># Add DNN layers, and create Model.</span>
+<span class="co"># ...</span></code></pre></div>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    use_scale<span class="op">=</span><span class="va">True</span>,
+    <span class="op">**</span>kwargs
+)</code></pre></div>

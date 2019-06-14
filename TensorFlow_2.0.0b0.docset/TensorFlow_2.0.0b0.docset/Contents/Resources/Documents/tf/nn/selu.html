@@ -1,0 +1,27 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.nn.selu" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.nn.selu" class="dashAnchor"></a><h1 id="tf.nn.selu">tf.nn.selu</h1>
+<p>Computes scaled exponential linear: <code>scale * alpha * (exp(features) - 1)</code></p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.nn.selu</code></li>
+<li><code>tf.compat.v2.nn.selu</code></li>
+<li><code>tf.nn.selu</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.nn.selu(
+    features,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in generated file: <code>python/ops/gen_nn_ops.py</code>.</p>
+<!-- Placeholder for "Used in" -->
+<p>if &lt; 0, <code>scale * features</code> otherwise.</p>
+<p>To be used together with <code>initializer = tf.variance_scaling_initializer(factor=1.0, mode='FAN_IN')</code>. For correct dropout, use <code>tf.contrib.nn.alpha_dropout</code>.</p>
+<p>See <a href="https://arxiv.org/abs/1706.02515">Self-Normalizing Neural Networks</a></p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>features</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>half</code>, <code>bfloat16</code>, <code>float32</code>, <code>float64</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>features</code>.</p>

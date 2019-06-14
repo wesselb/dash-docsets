@@ -1,0 +1,15 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.data.get_output_types" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.data.get_output_types" class="dashAnchor"></a><h1 id="tf.compat.v1.data.get_output_types">tf.compat.v1.data.get_output_types</h1>
+<p>Returns the output shapes of a <code>Dataset</code> or <code>Iterator</code>.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.data.get_output_types(dataset_or_iterator)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/data/ops/dataset_ops.py"><code>python/data/ops/dataset_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>This utility method replaces the deprecated-in-V2 <code>tf.compat.v1.Dataset.output_types</code> property.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>dataset_or_iterator</code></b>: A <a href="../../../../tf/data/Dataset.html"><code>tf.data.Dataset</code></a>, <a href="../../../../tf/compat/v1/data/Iterator.html"><code>tf.compat.v1.data.Iterator</code></a>, or <code>IteratorV2</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A nested structure of <a href="../../../../tf/dtypes/DType.html"><code>tf.DType</code></a> objects corresponding to each component of an element of this dataset.</p>

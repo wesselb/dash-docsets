@@ -1,0 +1,32 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.signal.hann_window" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.signal.hann_window" class="dashAnchor"></a><h1 id="tf.signal.hann_window">tf.signal.hann_window</h1>
+<p>Generate a <a href="https://en.wikipedia.org/wiki/Window_function#Hann_and_Hamming_windows">Hann window</a>.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.signal.hann_window</code></li>
+<li><code>tf.compat.v2.signal.hann_window</code></li>
+<li><code>tf.signal.hann_window</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.signal.hann_window(
+    window_length,
+    periodic<span class="op">=</span><span class="va">True</span>,
+    dtype<span class="op">=</span>tf.dtypes.float32,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/signal/window_ops.py"><code>python/ops/signal/window_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>window_length</code></b>: A scalar <code>Tensor</code> indicating the window length to generate.</li>
+<li><b><code>periodic</code></b>: A bool <code>Tensor</code> indicating whether to generate a periodic or symmetric window. Periodic windows are typically used for spectral analysis while symmetric windows are typically used for digital filter design.</li>
+<li><b><code>dtype</code></b>: The data type to produce. Must be a floating point type.</li>
+<li><b><code>name</code></b>: An optional name for the operation.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of shape <code>[window_length]</code> of type <code>dtype</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>dtype</code> is not a floating point type.</li>
+</ul>

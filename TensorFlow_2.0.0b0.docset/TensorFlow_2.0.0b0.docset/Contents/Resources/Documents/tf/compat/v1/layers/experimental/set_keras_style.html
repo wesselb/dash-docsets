@@ -1,0 +1,25 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.layers.experimental.set_keras_style" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.layers.experimental.set_keras_style" class="dashAnchor"></a><h1 id="tf.compat.v1.layers.experimental.set_keras_style">tf.compat.v1.layers.experimental.set_keras_style</h1>
+<p>Use Keras-style variable management.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.layers.experimental.set_keras_style()</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/layers/base.py"><code>python/layers/base.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>All tf.layers and tf RNN cells created after keras style ha been enabled use Keras-style variable management. Creating such layers with a scope= argument is disallowed, and reuse=True is disallowed.</p>
+<p>The purpose of this function is to allow users of existing layers to slowly transition to Keras layers API without breaking existing functionality.</p>
+<p>For more details, see the documentation for <code>keras_style_scope</code>.</p>
+<p>Note, once keras style has been set, it is set globally for the entire program and cannot be unset.</p>
+<h4 id="example">Example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">set_keras_style()
+
+model_1 <span class="op">=</span> RNNModel(name<span class="op">=</span><span class="st">&quot;model_1&quot;</span>)
+model_2 <span class="op">=</span> RNNModel(name<span class="op">=</span><span class="st">&quot;model_2&quot;</span>)
+
+<span class="co"># model_1 and model_2 are guaranteed to create their own variables.</span>
+output_1, next_state_1 <span class="op">=</span> model_1(<span class="bu">input</span>, state)
+output_2, next_state_2 <span class="op">=</span> model_2(<span class="bu">input</span>, state)
+
+<span class="cf">assert</span> <span class="bu">len</span>(model_1.weights) <span class="op">&gt;</span> <span class="dv">0</span>
+<span class="cf">assert</span> <span class="bu">len</span>(model_2.weights) <span class="op">&gt;</span> <span class="dv">0</span>
+<span class="cf">assert</span>(model_1.weights <span class="op">!=</span> model_2.weights)</code></pre></div>

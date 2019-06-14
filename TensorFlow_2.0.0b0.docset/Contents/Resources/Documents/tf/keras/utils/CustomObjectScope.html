@@ -1,0 +1,37 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.utils.CustomObjectScope" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="__enter__"/> <meta itemprop="property" content="__exit__"/> <meta itemprop="property" content="__init__"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.keras.utils.CustomObjectScope" class="dashAnchor"></a><h1 id="tf.keras.utils.customobjectscope">tf.keras.utils.CustomObjectScope</h1>
+<h2 id="class-customobjectscope">Class <code>CustomObjectScope</code></h2>
+<p>Provides a scope that changes to <code>_GLOBAL_CUSTOM_OBJECTS</code> cannot escape.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.keras.utils.CustomObjectScope</code></li>
+<li>Class <code>tf.compat.v2.keras.utils.CustomObjectScope</code></li>
+<li>Class <code>tf.keras.utils.CustomObjectScope</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/utils/generic_utils.py"><code>python/keras/utils/generic_utils.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Code within a <code>with</code> statement will be able to access custom objects by name. Changes to global custom objects persist within the enclosing <code>with</code> statement. At end of the <code>with</code> statement, global custom objects are reverted to state at beginning of the <code>with</code> statement.</p>
+<h4 id="example">Example:</h4>
+<p>Consider a custom object <code>MyObject</code> (e.g. a class):</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    <span class="cf">with</span> CustomObjectScope({<span class="st">&#39;MyObject&#39;</span>:MyObject}):
+        layer <span class="op">=</span> Dense(..., kernel_regularizer<span class="op">=</span><span class="st">&#39;MyObject&#39;</span>)
+        <span class="co"># save, load, etc. will recognize custom object by name</span></code></pre></div>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(<span class="op">*</span>args)</code></pre></div>
+<p>Initialize self. See help(type(self)) for accurate signature.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__enter__">
+<code><strong>enter</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__enter__</span>()</code></pre></div>
+<h3 id="__exit__">
+<code><strong>exit</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__exit__</span>(
+    <span class="op">*</span>args,
+    <span class="op">**</span>kwargs
+)</code></pre></div>

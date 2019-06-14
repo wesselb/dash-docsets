@@ -1,0 +1,43 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.boolean_mask" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.boolean_mask" class="dashAnchor"></a><h1 id="tf.boolean_mask">tf.boolean_mask</h1>
+<p>Apply boolean mask to tensor.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.boolean_mask</code></li>
+<li><code>tf.compat.v2.boolean_mask</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.boolean_mask(
+    tensor,
+    mask,
+    axis<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="st">&#39;boolean_mask&#39;</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/array_ops.py"><code>python/ops/array_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Numpy equivalent is <code>tensor[mask]</code>.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># 1-D example</span>
+tensor <span class="op">=</span> [<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]
+mask <span class="op">=</span> np.array([<span class="va">True</span>, <span class="va">False</span>, <span class="va">True</span>, <span class="va">False</span>])
+boolean_mask(tensor, mask)  <span class="co"># [0, 2]</span></code></pre></div>
+<p>In general, <code>0 &lt; dim(mask) = K &lt;= dim(tensor)</code>, and <code>mask</code>'s shape must match the first K dimensions of <code>tensor</code>'s shape. We then have: <code>boolean_mask(tensor, mask)[i, j1,...,jd] = tensor[i1,...,iK,j1,...,jd]</code> where <code>(i1,...,iK)</code> is the ith <code>True</code> entry of <code>mask</code> (row-major order). The <code>axis</code> could be used with <code>mask</code> to indicate the axis to mask from. In that case, <code>axis + dim(mask) &lt;= dim(tensor)</code> and <code>mask</code>'s shape must match the first <code>axis + dim(mask)</code> dimensions of <code>tensor</code>'s shape.</p>
+<p>See also: <a href="../tf/ragged/boolean_mask.html"><code>tf.ragged.boolean_mask</code></a>, which can be applied to both dense and ragged tensors, and can be used if you need to preserve the masked dimensions of <code>tensor</code> (rather than flattening them, as <a href="../tf/boolean_mask.html"><code>tf.boolean_mask</code></a> does).</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>tensor</code></b>: N-D tensor.</li>
+<li><b><code>mask</code></b>: K-D boolean tensor, K &lt;= N and K must be known statically.</li>
+<li><b><code>axis</code></b>: A 0-D int Tensor representing the axis in <code>tensor</code> to mask from. By default, axis is 0 which will mask from the first dimension. Otherwise K + axis &lt;= N.</li>
+<li><b><code>name</code></b>: A name for this operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>(N-K+1)-dimensional tensor populated by entries in <code>tensor</code> corresponding to <code>True</code> values in <code>mask</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If shapes do not conform.</li>
+</ul>
+<h4 id="examples">Examples:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># 2-D example</span>
+tensor <span class="op">=</span> [[<span class="dv">1</span>, <span class="dv">2</span>], [<span class="dv">3</span>, <span class="dv">4</span>], [<span class="dv">5</span>, <span class="dv">6</span>]]
+mask <span class="op">=</span> np.array([<span class="va">True</span>, <span class="va">False</span>, <span class="va">True</span>])
+boolean_mask(tensor, mask)  <span class="co"># [[1, 2], [5, 6]]</span></code></pre></div>

@@ -1,0 +1,37 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.preprocessing.image.load_img" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.keras.preprocessing.image.load_img" class="dashAnchor"></a><h1 id="tf.keras.preprocessing.image.load_img">tf.keras.preprocessing.image.load_img</h1>
+<p>Loads an image into PIL format.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.keras.preprocessing.image.load_img</code></li>
+<li><code>tf.compat.v2.keras.preprocessing.image.load_img</code></li>
+<li><code>tf.keras.preprocessing.image.load_img</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.keras.preprocessing.image.load_img(
+    path,
+    grayscale<span class="op">=</span><span class="va">False</span>,
+    color_mode<span class="op">=</span><span class="st">&#39;rgb&#39;</span>,
+    target_size<span class="op">=</span><span class="va">None</span>,
+    interpolation<span class="op">=</span><span class="st">&#39;nearest&#39;</span>
+)</code></pre></div>
+<!-- Placeholder for "Used in" -->
+<h1 id="arguments">Arguments</h1>
+<pre><code>path: Path to image file.
+grayscale: DEPRECATED use `color_mode=&quot;grayscale&quot;`.
+color_mode: One of &quot;grayscale&quot;, &quot;rgb&quot;, &quot;rgba&quot;. Default: &quot;rgb&quot;.
+    The desired image format.
+target_size: Either `None` (default to original size)
+    or tuple of ints `(img_height, img_width)`.
+interpolation: Interpolation method used to resample the image if the
+    target size is different from that of the loaded image.
+    Supported methods are &quot;nearest&quot;, &quot;bilinear&quot;, and &quot;bicubic&quot;.
+    If PIL version 1.1.3 or newer is installed, &quot;lanczos&quot; is also
+    supported. If PIL version 3.4.0 or newer is installed, &quot;box&quot; and
+    &quot;hamming&quot; are also supported. By default, &quot;nearest&quot; is used.</code></pre>
+<h1 id="returns">Returns</h1>
+<pre><code>A PIL Image instance.</code></pre>
+<h1 id="raises">Raises</h1>
+<pre><code>ImportError: if PIL is not available.
+ValueError: if interpolation method is not supported.</code></pre>

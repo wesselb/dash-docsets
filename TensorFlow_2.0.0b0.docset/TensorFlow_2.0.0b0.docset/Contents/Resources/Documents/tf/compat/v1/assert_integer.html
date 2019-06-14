@@ -1,0 +1,32 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.assert_integer" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.assert_integer" class="dashAnchor"></a><h1 id="tf.compat.v1.assert_integer">tf.compat.v1.assert_integer</h1>
+<p>Assert that <code>x</code> is of integer dtype.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.assert_integer</code></li>
+<li><code>tf.compat.v1.debugging.assert_integer</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.assert_integer(
+    x,
+    message<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/check_ops.py"><code>python/ops/check_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Example of adding a dependency to an operation:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">with</span> tf.control_dependencies([tf.compat.v1.assert_integer(x)]):
+  output <span class="op">=</span> tf.reduce_sum(x)</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: <code>Tensor</code> whose basetype is integer and is not quantized.</li>
+<li><b><code>message</code></b>: A string to prefix to the default message.</li>
+<li><b><code>name</code></b>: A name for this operation (optional). Defaults to &quot;assert_integer&quot;.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>x.dtype</code> is anything other than non-quantized integer.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>no_op</code> that does nothing. Type can be determined statically.</p>

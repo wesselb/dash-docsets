@@ -1,0 +1,34 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.clip_by_value" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.clip_by_value" class="dashAnchor"></a><h1 id="tf.clip_by_value">tf.clip_by_value</h1>
+<p>Clips tensor values to a specified min and max.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.clip_by_value</code></li>
+<li><code>tf.compat.v1.clip_by_value</code></li>
+<li><code>tf.compat.v2.clip_by_value</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.clip_by_value(
+    t,
+    clip_value_min,
+    clip_value_max,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/clip_ops.py"><code>python/ops/clip_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Given a tensor <code>t</code>, this operation returns a tensor of the same type and shape as <code>t</code> with its values clipped to <code>clip_value_min</code> and <code>clip_value_max</code>. Any values less than <code>clip_value_min</code> are set to <code>clip_value_min</code>. Any values greater than <code>clip_value_max</code> are set to <code>clip_value_max</code>.</p>
+<p>Note: <code>clip_value_min</code> needs to be smaller or equal to <code>clip_value_max</code> for correct results.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>t</code></b>: A <code>Tensor</code> or <code>IndexedSlices</code>.</li>
+<li><b><code>clip_value_min</code></b>: A 0-D (scalar) <code>Tensor</code>, or a <code>Tensor</code> with the same shape as <code>t</code>. The minimum value to clip by.</li>
+<li><b><code>clip_value_max</code></b>: A 0-D (scalar) <code>Tensor</code>, or a <code>Tensor</code> with the same shape as <code>t</code>. The maximum value to clip by.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A clipped <code>Tensor</code> or <code>IndexedSlices</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If the clip tensors would trigger array broadcasting that would make the returned tensor larger than the input.</li>
+</ul>

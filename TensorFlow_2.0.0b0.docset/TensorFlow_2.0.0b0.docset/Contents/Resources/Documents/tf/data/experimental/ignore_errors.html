@@ -1,0 +1,26 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.data.experimental.ignore_errors" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.data.experimental.ignore_errors" class="dashAnchor"></a><h1 id="tf.data.experimental.ignore_errors">tf.data.experimental.ignore_errors</h1>
+<p>Creates a <code>Dataset</code> from another <code>Dataset</code> and silently ignores any errors.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.data.experimental.ignore_errors</code></li>
+<li><code>tf.compat.v2.data.experimental.ignore_errors</code></li>
+<li><code>tf.data.experimental.ignore_errors</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.data.experimental.ignore_errors()</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/data/experimental/ops/error_ops.py"><code>python/data/experimental/ops/error_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Use this transformation to produce a dataset that contains the same elements as the input, but silently drops any elements that caused an error. For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">dataset <span class="op">=</span> tf.data.Dataset.from_tensor_slices([<span class="dv">1</span>., <span class="dv">2</span>., <span class="dv">0</span>., <span class="dv">4</span>.])
+
+<span class="co"># Computing `tf.debugging.check_numerics(1. / 0.)` will raise an</span>
+InvalidArgumentError.
+dataset <span class="op">=</span> dataset.<span class="bu">map</span>(<span class="kw">lambda</span> x: tf.debugging.check_numerics(<span class="dv">1</span>. <span class="op">/</span> x, <span class="st">&quot;error&quot;</span>))
+
+<span class="co"># Using `ignore_errors()` will drop the element that causes an error.</span>
+dataset <span class="op">=</span>
+    dataset.<span class="bu">apply</span>(tf.data.experimental.ignore_errors())  <span class="co"># ==&gt; {1., 0.5, 0.2}</span></code></pre></div>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Dataset</code> transformation function, which can be passed to <a href="../../../tf/data/Dataset.md#apply"><code>tf.data.Dataset.apply</code></a>.</p>

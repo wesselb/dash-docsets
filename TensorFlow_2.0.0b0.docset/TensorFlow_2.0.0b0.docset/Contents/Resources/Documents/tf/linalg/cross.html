@@ -1,0 +1,28 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.linalg.cross" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.linalg.cross" class="dashAnchor"></a><h1 id="tf.linalg.cross">tf.linalg.cross</h1>
+<p>Compute the pairwise cross product.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.cross</code></li>
+<li><code>tf.compat.v1.linalg.cross</code></li>
+<li><code>tf.compat.v2.linalg.cross</code></li>
+<li><code>tf.linalg.cross</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.linalg.cross(
+    a,
+    b,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in generated file: <code>python/ops/gen_math_ops.py</code>.</p>
+<!-- Placeholder for "Used in" -->
+<p><code>a</code> and <code>b</code> must be the same shape; they can either be simple 3-element vectors, or any shape where the innermost dimension is 3. In the latter case, each pair of corresponding 3-element vectors is cross-multiplied independently.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>a</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>float32</code>, <code>float64</code>, <code>int32</code>, <code>uint8</code>, <code>int16</code>, <code>int8</code>, <code>int64</code>, <code>bfloat16</code>, <code>uint16</code>, <code>half</code>, <code>uint32</code>, <code>uint64</code>. A tensor containing 3-element vectors.</li>
+<li><b><code>b</code></b>: A <code>Tensor</code>. Must have the same type as <code>a</code>. Another tensor, of same type and shape as <code>a</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>a</code>.</p>

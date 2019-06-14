@@ -1,0 +1,26 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.ones_like" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.ones_like" class="dashAnchor"></a><h1 id="tf.compat.v1.ones_like">tf.compat.v1.ones_like</h1>
+<p>Creates a tensor with all elements set to 1.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.ones_like(
+    tensor,
+    dtype<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>,
+    optimize<span class="op">=</span><span class="va">True</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/array_ops.py"><code>python/ops/array_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Given a single tensor (<code>tensor</code>), this operation returns a tensor of the same type and shape as <code>tensor</code> with all elements set to 1. Optionally, you can specify a new type (<code>dtype</code>) for the returned tensor.</p>
+<h4 id="for-example">For example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tensor <span class="op">=</span> tf.constant([[<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>], [<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>]])
+tf.ones_like(tensor)  <span class="co"># [[1, 1, 1], [1, 1, 1]]</span></code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>tensor</code></b>: A <code>Tensor</code>.</li>
+<li><b><code>dtype</code></b>: A type for the returned <code>Tensor</code>. Must be <code>float32</code>, <code>float64</code>, <code>int8</code>, <code>uint8</code>, <code>int16</code>, <code>uint16</code>, <code>int32</code>, <code>int64</code>, <code>complex64</code>, <code>complex128</code> or <code>bool</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+<li><b><code>optimize</code></b>: if true, attempt to statically determine the shape of 'tensor' and encode it as a constant.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> with all elements set to 1.</p>

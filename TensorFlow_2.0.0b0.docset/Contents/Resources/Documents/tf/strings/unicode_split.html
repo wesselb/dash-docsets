@@ -1,0 +1,36 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.strings.unicode_split" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.strings.unicode_split" class="dashAnchor"></a><h1 id="tf.strings.unicode_split">tf.strings.unicode_split</h1>
+<p>Splits each string in <code>input</code> into a sequence of Unicode code points.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.strings.unicode_split</code></li>
+<li><code>tf.compat.v2.strings.unicode_split</code></li>
+<li><code>tf.strings.unicode_split</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.strings.unicode_split(
+    <span class="bu">input</span>,
+    input_encoding,
+    errors<span class="op">=</span><span class="st">&#39;replace&#39;</span>,
+    replacement_char<span class="op">=</span><span class="dv">65533</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/ragged/ragged_string_ops.py"><code>python/ops/ragged/ragged_string_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p><code>result[i1...iN, j]</code> is the substring of <code>input[i1...iN]</code> that encodes its <code>j</code>th character, when decoded using <code>input_encoding</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: An <code>N</code> dimensional potentially ragged <code>string</code> tensor with shape <code>[D1...DN]</code>. <code>N</code> must be statically known.</li>
+<li><b><code>input_encoding</code></b>: String name for the unicode encoding that should be used to decode each string.</li>
+<li><b><code>errors</code></b>: Specifies the response when an input string can't be converted using the indicated encoding. One of:</li>
+<li><code>'strict'</code>: Raise an exception for any illegal substrings.</li>
+<li><code>'replace'</code>: Replace illegal substrings with <code>replacement_char</code>.</li>
+<li><code>'ignore'</code>: Skip illegal substrings.</li>
+<li><b><code>replacement_char</code></b>: The replacement codepoint to be used in place of invalid substrings in <code>input</code> when <code>errors='replace'</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>N+1</code> dimensional <code>int32</code> tensor with shape <code>[D1...DN, (num_chars)]</code>. The returned tensor is a <a href="../../tf/Tensor.html"><code>tf.Tensor</code></a> if <code>input</code> is a scalar, or a <a href="../../tf/RaggedTensor.html"><code>tf.RaggedTensor</code></a> otherwise.</p>
+<h4 id="example">Example:</h4>
+<p><code>python   &gt;&gt;&gt; input = [s.encode('utf8') for s in (u'G\xf6\xf6dnight', u'\U0001f60a')]   &gt;&gt;&gt; tf.strings.unicode_split(input, 'UTF-8').tolist()   [['G', '\xc3\xb6', '\xc3\xb6', 'd', 'n', 'i', 'g', 'h', 't'],    ['\xf0\x9f\x98\x8a']]</code></p>

@@ -1,0 +1,37 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.preprocessing.image.random_rotation" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.keras.preprocessing.image.random_rotation" class="dashAnchor"></a><h1 id="tf.keras.preprocessing.image.random_rotation">tf.keras.preprocessing.image.random_rotation</h1>
+<p>Performs a random rotation of a Numpy image tensor.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.keras.preprocessing.image.random_rotation</code></li>
+<li><code>tf.compat.v2.keras.preprocessing.image.random_rotation</code></li>
+<li><code>tf.keras.preprocessing.image.random_rotation</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.keras.preprocessing.image.random_rotation(
+    x,
+    rg,
+    row_axis<span class="op">=</span><span class="dv">1</span>,
+    col_axis<span class="op">=</span><span class="dv">2</span>,
+    channel_axis<span class="op">=</span><span class="dv">0</span>,
+    fill_mode<span class="op">=</span><span class="st">&#39;nearest&#39;</span>,
+    cval<span class="op">=</span><span class="fl">0.0</span>,
+    interpolation_order<span class="op">=</span><span class="dv">1</span>
+)</code></pre></div>
+<!-- Placeholder for "Used in" -->
+<h1 id="arguments">Arguments</h1>
+<pre><code>x: Input tensor. Must be 3D.
+rg: Rotation range, in degrees.
+row_axis: Index of axis for rows in the input tensor.
+col_axis: Index of axis for columns in the input tensor.
+channel_axis: Index of axis for channels in the input tensor.
+fill_mode: Points outside the boundaries of the input
+    are filled according to the given mode
+    (one of `{&#39;constant&#39;, &#39;nearest&#39;, &#39;reflect&#39;, &#39;wrap&#39;}`).
+cval: Value used for points outside the boundaries
+    of the input if `mode=&#39;constant&#39;`.
+interpolation_order: int, order of spline interpolation.
+    see `ndimage.interpolation.affine_transform`</code></pre>
+<h1 id="returns">Returns</h1>
+<pre><code>Rotated Numpy image tensor.</code></pre>

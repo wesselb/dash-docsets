@@ -1,0 +1,29 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.nn.weighted_moments" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.nn.weighted_moments" class="dashAnchor"></a><h1 id="tf.nn.weighted_moments">tf.nn.weighted_moments</h1>
+<p>Returns the frequency-weighted mean and variance of <code>x</code>.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v2.nn.weighted_moments</code></li>
+<li><code>tf.nn.weighted_moments</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.nn.weighted_moments(
+    x,
+    axes,
+    frequency_weights,
+    keepdims<span class="op">=</span><span class="va">False</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/nn_impl.py"><code>python/ops/nn_impl.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>x</code></b>: A tensor.</li>
+<li><b><code>axes</code></b>: 1-d tensor of int32 values; these are the axes along which to compute mean and variance.</li>
+<li><b><code>frequency_weights</code></b>: A tensor of positive weights which can be broadcast with x.</li>
+<li><b><code>keepdims</code></b>: Produce moments with the same dimensionality as the input.</li>
+<li><b><code>name</code></b>: Name used to scope the operation.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Two tensors: <code>weighted_mean</code> and <code>weighted_variance</code>.</p>

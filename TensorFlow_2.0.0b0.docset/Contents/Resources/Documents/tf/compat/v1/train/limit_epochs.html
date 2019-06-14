@@ -1,0 +1,26 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.train.limit_epochs" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.train.limit_epochs" class="dashAnchor"></a><h1 id="tf.compat.v1.train.limit_epochs">tf.compat.v1.train.limit_epochs</h1>
+<p>Returns tensor <code>num_epochs</code> times and then raises an <code>OutOfRange</code> error. (deprecated)</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.train.limit_epochs(
+    tensor,
+    num_epochs<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/training/input.py"><code>python/training/input.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Warning: THIS FUNCTION IS DEPRECATED. It will be removed in a future version. Instructions for updating: Queue-based input pipelines have been replaced by <a href="../../../../tf/data.html"><code>tf.data</code></a>. Use <code>tf.data.Dataset.from_tensors(tensor).repeat(num_epochs)</code>.</p>
+<p>Note: creates local counter <code>epochs</code>. Use <code>local_variables_initializer()</code> to initialize local variables.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>tensor</code></b>: Any <code>Tensor</code>.</li>
+<li><b><code>num_epochs</code></b>: A positive integer (optional). If specified, limits the number of steps the output tensor may be evaluated.</li>
+<li><b><code>name</code></b>: A name for the operations (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>tensor or <code>OutOfRange</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>num_epochs</code> is invalid.</li>
+</ul>

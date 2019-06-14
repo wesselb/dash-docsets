@@ -1,0 +1,36 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.backend.transpose" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.keras.backend.transpose" class="dashAnchor"></a><h1 id="tf.keras.backend.transpose">tf.keras.backend.transpose</h1>
+<p>Transposes a tensor and returns it.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.keras.backend.transpose</code></li>
+<li><code>tf.compat.v2.keras.backend.transpose</code></li>
+<li><code>tf.keras.backend.transpose</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.keras.backend.transpose(x)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/backend.py"><code>python/keras/backend.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>x</code></b>: Tensor or variable.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A tensor.</p>
+<h4 id="examples">Examples:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    <span class="op">&gt;&gt;&gt;</span> var <span class="op">=</span> K.variable([[<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>], [<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>]])
+    <span class="op">&gt;&gt;&gt;</span> K.<span class="bu">eval</span>(var)
+    array([[ <span class="dv">1</span>.,  <span class="dv">2</span>.,  <span class="dv">3</span>.],
+           [ <span class="dv">4</span>.,  <span class="dv">5</span>.,  <span class="dv">6</span>.]], dtype<span class="op">=</span>float32)
+    <span class="op">&gt;&gt;&gt;</span> var_transposed <span class="op">=</span> K.transpose(var)
+    <span class="op">&gt;&gt;&gt;</span> K.<span class="bu">eval</span>(var_transposed)
+    array([[ <span class="dv">1</span>.,  <span class="dv">4</span>.],
+           [ <span class="dv">2</span>.,  <span class="dv">5</span>.],
+           [ <span class="dv">3</span>.,  <span class="dv">6</span>.]], dtype<span class="op">=</span>float32)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    <span class="op">&gt;&gt;&gt;</span> <span class="bu">input</span> <span class="op">=</span> K.placeholder((<span class="dv">2</span>, <span class="dv">3</span>))
+    <span class="op">&gt;&gt;&gt;</span> <span class="bu">input</span>
+    <span class="op">&lt;</span>tf.Tensor <span class="st">&#39;Placeholder_11:0&#39;</span> shape<span class="op">=</span>(<span class="dv">2</span>, <span class="dv">3</span>) dtype<span class="op">=</span>float32<span class="op">&gt;</span>
+    <span class="op">&gt;&gt;&gt;</span> input_transposed <span class="op">=</span> K.transpose(<span class="bu">input</span>)
+    <span class="op">&gt;&gt;&gt;</span> input_transposed
+    <span class="op">&lt;</span>tf.Tensor <span class="st">&#39;transpose_4:0&#39;</span> shape<span class="op">=</span>(<span class="dv">3</span>, <span class="dv">2</span>) dtype<span class="op">=</span>float32<span class="op">&gt;</span></code></pre></div>

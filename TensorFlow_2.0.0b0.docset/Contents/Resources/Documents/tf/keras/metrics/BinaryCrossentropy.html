@@ -1,0 +1,86 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.metrics.BinaryCrossentropy" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="reset_states"/> <meta itemprop="property" content="result"/> <meta itemprop="property" content="update_state"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.keras.metrics.BinaryCrossentropy" class="dashAnchor"></a><h1 id="tf.keras.metrics.binarycrossentropy">tf.keras.metrics.BinaryCrossentropy</h1>
+<h2 id="class-binarycrossentropy">Class <code>BinaryCrossentropy</code></h2>
+<p>Computes the crossentropy metric between the labels and predictions.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.keras.metrics.BinaryCrossentropy</code></li>
+<li>Class <code>tf.compat.v2.keras.metrics.BinaryCrossentropy</code></li>
+<li>Class <code>tf.compat.v2.metrics.BinaryCrossentropy</code></li>
+<li>Class <code>tf.keras.metrics.BinaryCrossentropy</code></li>
+<li>Class <code>tf.metrics.BinaryCrossentropy</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/metrics.py"><code>python/keras/metrics.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>This is the crossentropy metric class to be used when there are only two label classes (0 and 1).</p>
+<h4 id="usage">Usage:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">m <span class="op">=</span> tf.keras.metrics.BinaryCrossentropy()
+m.update_state([<span class="dv">1</span>., <span class="dv">0</span>., <span class="dv">1</span>., <span class="dv">0</span>.], [<span class="dv">1</span>., <span class="dv">1</span>., <span class="dv">1</span>., <span class="dv">0</span>.])
+
+<span class="co"># EPSILON = 1e-7, y = y_true, y` = y_pred, Y_MAX = 0.9999999</span>
+<span class="co"># y` = clip_ops.clip_by_value(output, EPSILON, 1. - EPSILON)</span>
+<span class="co"># y` = [Y_MAX, Y_MAX, Y_MAX, EPSILON]</span>
+
+<span class="co"># Metric = -(y log(y` + EPSILON) + (1 - y) log(1 - y` + EPSILON))</span>
+<span class="co">#        = [-log(Y_MAX + EPSILON), -log(1 - Y_MAX + EPSILON),</span>
+<span class="co">#           -log(Y_MAX + EPSILON), -log(1)]</span>
+<span class="co">#        = [(0 + 15.33) / 2, (0 + 0) / 2]</span>
+<span class="co"># Reduced metric = 7.665 / 2</span>
+
+<span class="bu">print</span>(<span class="st">&#39;Final result: &#39;</span>, m.result().numpy())  <span class="co"># Final result: 3.833</span></code></pre></div>
+<p>Usage with tf.keras API:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">model <span class="op">=</span> tf.keras.Model(inputs, outputs)
+model.<span class="bu">compile</span>(
+    <span class="st">&#39;sgd&#39;</span>,
+    loss<span class="op">=</span><span class="st">&#39;mse&#39;</span>,
+    metrics<span class="op">=</span>[tf.keras.metrics.BinaryCrossentropy()])</code></pre></div>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    name<span class="op">=</span><span class="st">&#39;binary_crossentropy&#39;</span>,
+    dtype<span class="op">=</span><span class="va">None</span>,
+    from_logits<span class="op">=</span><span class="va">False</span>,
+    label_smoothing<span class="op">=</span><span class="dv">0</span>
+)</code></pre></div>
+<p>Creates a <code>BinaryCrossentropy</code> instance.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>name</code></b>: (Optional) string name of the metric instance.</li>
+<li><b><code>dtype</code></b>: (Optional) data type of the metric result.</li>
+<li><b><code>from_logits</code></b>: (Optional )Whether output is expected to be a logits tensor. By default, we consider that output encodes a probability distribution.</li>
+<li><b><code>label_smoothing</code></b>: (Optional) Float in [0, 1]. When &gt; 0, label values are smoothed, meaning the confidence on label values are relaxed. e.g. <code>label_smoothing=0.2</code> means that we will use a value of <code>0.1</code> for label <code>0</code> and <code>0.9</code> for label <code>1</code>&quot;</li>
+</ul>
+<h2 id="methods">Methods</h2>
+<h3 id="reset_states">
+<code>reset_states</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">reset_states()</code></pre></div>
+<p>Resets all of the metric state variables.</p>
+<p>This function is called between epochs/steps, when a metric is evaluated during training.</p>
+<h3 id="result">
+<code>result</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">result()</code></pre></div>
+<p>Computes and returns the metric value tensor.</p>
+<p>Result computation is an idempotent operation that simply calculates the metric value using the state variables.</p>
+<h3 id="update_state">
+<code>update_state</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">update_state(
+    y_true,
+    y_pred,
+    sample_weight<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Accumulates metric statistics.</p>
+<p><code>y_true</code> and <code>y_pred</code> should have the same shape.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>y_true</code></b>: The ground truth values.</li>
+<li><b><code>y_pred</code></b>: The predicted values.</li>
+<li><b><code>sample_weight</code></b>: Optional weighting of each example. Defaults to 1. Can be a <code>Tensor</code> whose rank is either 0, or the same rank as <code>y_true</code>, and must be broadcastable to <code>y_true</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Update op.</p>

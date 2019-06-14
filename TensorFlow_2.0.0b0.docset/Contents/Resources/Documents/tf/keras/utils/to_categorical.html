@@ -1,0 +1,27 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.utils.to_categorical" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.keras.utils.to_categorical" class="dashAnchor"></a><h1 id="tf.keras.utils.to_categorical">tf.keras.utils.to_categorical</h1>
+<p>Converts a class vector (integers) to binary class matrix.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.keras.utils.to_categorical</code></li>
+<li><code>tf.compat.v2.keras.utils.to_categorical</code></li>
+<li><code>tf.keras.utils.to_categorical</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.keras.utils.to_categorical(
+    y,
+    num_classes<span class="op">=</span><span class="va">None</span>,
+    dtype<span class="op">=</span><span class="st">&#39;float32&#39;</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/utils/np_utils.py"><code>python/keras/utils/np_utils.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>E.g. for use with categorical_crossentropy.</p>
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>y</code></b>: class vector to be converted into a matrix (integers from 0 to num_classes).</li>
+<li><b><code>num_classes</code></b>: total number of classes.</li>
+<li><b><code>dtype</code></b>: The data type expected by the input. Default: <code>'float32'</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A binary matrix representation of the input. The classes axis is placed last.</p>

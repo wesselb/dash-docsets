@@ -1,0 +1,29 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.summary.create_file_writer" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.summary.create_file_writer" class="dashAnchor"></a><h1 id="tf.summary.create_file_writer">tf.summary.create_file_writer</h1>
+<p>Creates a summary file writer for the given log directory.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v2.summary.create_file_writer</code></li>
+<li><code>tf.summary.create_file_writer</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.summary.create_file_writer(
+    logdir,
+    max_queue<span class="op">=</span><span class="va">None</span>,
+    flush_millis<span class="op">=</span><span class="va">None</span>,
+    filename_suffix<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/summary_ops_v2.py"><code>python/ops/summary_ops_v2.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>logdir</code></b>: a string specifying the directory in which to write an event file.</li>
+<li><b><code>max_queue</code></b>: the largest number of summaries to keep in a queue; will flush once the queue gets bigger than this. Defaults to 10.</li>
+<li><b><code>flush_millis</code></b>: the largest interval between flushes. Defaults to 120,000.</li>
+<li><b><code>filename_suffix</code></b>: optional suffix for the event file name. Defaults to <code>.v2</code>.</li>
+<li><b><code>name</code></b>: a name for the op that creates the writer.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A SummaryWriter object.</p>

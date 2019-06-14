@@ -1,0 +1,21 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.profiler.advise" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.profiler.advise" class="dashAnchor"></a><h1 id="tf.compat.v1.profiler.advise">tf.compat.v1.profiler.advise</h1>
+<p>Auto profile and advise.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.profiler.advise(
+    graph<span class="op">=</span><span class="va">None</span>,
+    run_meta<span class="op">=</span><span class="va">None</span>,
+    options<span class="op">=</span>_DEFAULT_ADVISE_OPTIONS
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/profiler/model_analyzer.py"><code>python/profiler/model_analyzer.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Builds profiles and automatically check anomalies of various aspects. For more details: https://github.com/tensorflow/tensorflow/tree/master/tensorflow/core/profiler/README.md</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>graph</code></b>: tf.Graph. If None and eager execution is not enabled, use default graph.</li>
+<li><b><code>run_meta</code></b>: optional tensorflow.RunMetadata proto. It is necessary to to support run time information profiling, such as time and memory.</li>
+<li><b><code>options</code></b>: see ALL_ADVICE example above. Default checks everything.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Returns AdviceProto proto</p>

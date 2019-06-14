@@ -1,0 +1,30 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.linalg.logdet" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.linalg.logdet" class="dashAnchor"></a><h1 id="tf.linalg.logdet">tf.linalg.logdet</h1>
+<p>Computes log of the determinant of a hermitian positive definite matrix.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.linalg.logdet</code></li>
+<li><code>tf.compat.v2.linalg.logdet</code></li>
+<li><code>tf.linalg.logdet</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.linalg.logdet(
+    matrix,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/linalg/linalg_impl.py"><code>python/ops/linalg/linalg_impl.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Compute the determinant of a matrix while reducing the chance of over- or</span>
+underflow:
+A <span class="op">=</span> ... <span class="co"># shape 10 x 10</span>
+det <span class="op">=</span> tf.exp(tf.linalg.logdet(A))  <span class="co"># scalar</span></code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>matrix</code></b>: A <code>Tensor</code>. Must be <code>float16</code>, <code>float32</code>, <code>float64</code>, <code>complex64</code>, or <code>complex128</code> with shape <code>[..., M, M]</code>.</li>
+<li><b><code>name</code></b>: A name to give this <code>Op</code>. Defaults to <code>logdet</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The natural log of the determinant of <code>matrix</code>.</p>
+<h4 id="numpy-compatibility">Numpy Compatibility</h4>
+<p>Equivalent to numpy.linalg.slogdet, although no sign is returned since only hermitian positive definite matrices are supported.</p>

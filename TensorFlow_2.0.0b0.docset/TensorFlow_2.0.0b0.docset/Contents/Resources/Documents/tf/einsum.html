@@ -1,0 +1,67 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.einsum" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.einsum" class="dashAnchor"></a><h1 id="tf.einsum">tf.einsum</h1>
+<p>A generalized contraction between tensors of arbitrary dimension.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.einsum</code></li>
+<li><code>tf.compat.v1.linalg.einsum</code></li>
+<li><code>tf.compat.v2.einsum</code></li>
+<li><code>tf.compat.v2.linalg.einsum</code></li>
+<li><code>tf.einsum</code></li>
+<li><code>tf.linalg.einsum</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.einsum(
+    equation,
+    <span class="op">*</span>inputs,
+    <span class="op">**</span>kwargs
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/special_math_ops.py"><code>python/ops/special_math_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>This function returns a tensor whose elements are defined by <code>equation</code>, which is written in a shorthand form inspired by the Einstein summation convention. As an example, consider multiplying two matrices A and B to form a matrix C. The elements of C are given by:</p>
+<pre><code>  C[i,k] = sum_j A[i,j] * B[j,k]</code></pre>
+<p>The corresponding <code>equation</code> is:</p>
+<pre><code>  ij,jk-&gt;ik</code></pre>
+<p>In general, the <code>equation</code> is obtained from the more familiar element-wise equation by 1. removing variable names, brackets, and commas, 2. replacing &quot;*&quot; with &quot;,&quot;, 3. dropping summation signs, and 4. moving the output to the right, and replacing &quot;=&quot; with &quot;-&gt;&quot;.</p>
+<p>Many common operations can be expressed in this way. For example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># Matrix multiplication</span>
+<span class="op">&gt;&gt;&gt;</span> einsum(<span class="st">&#39;ij,jk-&gt;ik&#39;</span>, m0, m1)  <span class="co"># output[i,k] = sum_j m0[i,j] * m1[j, k]</span>
+
+<span class="co"># Dot product</span>
+<span class="op">&gt;&gt;&gt;</span> einsum(<span class="st">&#39;i,i-&gt;&#39;</span>, u, v)  <span class="co"># output = sum_i u[i]*v[i]</span>
+
+<span class="co"># Outer product</span>
+<span class="op">&gt;&gt;&gt;</span> einsum(<span class="st">&#39;i,j-&gt;ij&#39;</span>, u, v)  <span class="co"># output[i,j] = u[i]*v[j]</span>
+
+<span class="co"># Transpose</span>
+<span class="op">&gt;&gt;&gt;</span> einsum(<span class="st">&#39;ij-&gt;ji&#39;</span>, m)  <span class="co"># output[j,i] = m[i,j]</span>
+
+<span class="co"># Trace</span>
+<span class="op">&gt;&gt;&gt;</span> einsum(<span class="st">&#39;ii&#39;</span>, m)  <span class="co"># output[j,i] = trace(m) = sum_i m[i, i]</span>
+
+<span class="co"># Batch matrix multiplication</span>
+<span class="op">&gt;&gt;&gt;</span> einsum(<span class="st">&#39;aij,ajk-&gt;aik&#39;</span>, s, t)  <span class="co"># out[a,i,k] = sum_j s[a,i,j] * t[a, j, k]</span></code></pre></div>
+<p>To enable and control broadcasting, use an ellipsis. For example, to do batch matrix multiplication, you could use:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="op">&gt;&gt;&gt;</span> einsum(<span class="st">&#39;...ij,...jk-&gt;...ik&#39;</span>, u, v)</code></pre></div>
+<p>This function behaves like <code>numpy.einsum</code>, but does not support:</p>
+<ul>
+<li>Subscripts where an axis appears more than once for a single input (e.g. <code>ijj,k-&gt;ik</code>) unless it is a trace (e.g. <code>ijji</code>).</li>
+</ul>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>equation</code></b>: a <code>str</code> describing the contraction, in the same format as <code>numpy.einsum</code>.</li>
+<li><b><code>*inputs</code></b>: the inputs to contract (each one a <code>Tensor</code>), whose shapes should be consistent with <code>equation</code>.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The contracted <code>Tensor</code>, with shape determined by <code>equation</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If</li>
+<li>the format of <code>equation</code> is incorrect,</li>
+<li>the number of inputs implied by <code>equation</code> does not match <code>len(inputs)</code>,</li>
+<li>an axis appears in the output subscripts but not in any of the inputs,</li>
+<li>the number of dimensions of an input differs from the number of indices in its subscript, or</li>
+<li>the input shapes are inconsistent along a particular axis.</li>
+</ul>

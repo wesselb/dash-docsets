@@ -1,0 +1,51 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.layers.InputSpec" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="from_config"/> <meta itemprop="property" content="get_config"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.keras.layers.InputSpec" class="dashAnchor"></a><h1 id="tf.keras.layers.inputspec">tf.keras.layers.InputSpec</h1>
+<h2 id="class-inputspec">Class <code>InputSpec</code></h2>
+<p>Specifies the ndim, dtype and shape of every input to a layer.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.keras.layers.InputSpec</code></li>
+<li>Class <code>tf.compat.v1.layers.InputSpec</code></li>
+<li>Class <code>tf.compat.v2.keras.layers.InputSpec</code></li>
+<li>Class <code>tf.keras.layers.InputSpec</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/engine/input_spec.py"><code>python/keras/engine/input_spec.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Every layer should expose (if appropriate) an <code>input_spec</code> attribute: a list of instances of InputSpec (one per input tensor).</p>
+<p>A None entry in a shape is compatible with any dimension, a None shape is compatible with any shape.</p>
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>dtype</code></b>: Expected DataType of the input.</li>
+<li><b><code>shape</code></b>: Shape tuple, expected shape of the input (may include None for unchecked axes).</li>
+<li><b><code>ndim</code></b>: Integer, expected rank of the input.</li>
+<li><b><code>max_ndim</code></b>: Integer, maximum rank of the input.</li>
+<li><b><code>min_ndim</code></b>: Integer, minimum rank of the input.</li>
+<li><b><code>axes</code></b>: Dictionary mapping integer axes to a specific dimension value.</li>
+</ul>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    dtype<span class="op">=</span><span class="va">None</span>,
+    shape<span class="op">=</span><span class="va">None</span>,
+    ndim<span class="op">=</span><span class="va">None</span>,
+    max_ndim<span class="op">=</span><span class="va">None</span>,
+    min_ndim<span class="op">=</span><span class="va">None</span>,
+    axes<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Initialize self. See help(type(self)) for accurate signature.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="from_config">
+<code>from_config</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="at">@classmethod</span>
+from_config(
+    cls,
+    config
+)</code></pre></div>
+<h3 id="get_config">
+<code>get_config</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_config()</code></pre></div>

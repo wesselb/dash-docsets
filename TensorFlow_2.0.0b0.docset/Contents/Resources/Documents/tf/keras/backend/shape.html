@@ -1,0 +1,36 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.backend.shape" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.keras.backend.shape" class="dashAnchor"></a><h1 id="tf.keras.backend.shape">tf.keras.backend.shape</h1>
+<p>Returns the symbolic shape of a tensor or variable.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.keras.backend.shape</code></li>
+<li><code>tf.compat.v2.keras.backend.shape</code></li>
+<li><code>tf.keras.backend.shape</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.keras.backend.shape(x)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/backend.py"><code>python/keras/backend.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>x</code></b>: A tensor or variable.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A symbolic shape (which is itself a tensor).</p>
+<h4 id="examples">Examples:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    <span class="co"># TensorFlow example</span>
+    <span class="op">&gt;&gt;&gt;</span> <span class="im">from</span> keras <span class="im">import</span> backend <span class="im">as</span> K
+    <span class="op">&gt;&gt;&gt;</span> tf_session <span class="op">=</span> K.get_session()
+    <span class="op">&gt;&gt;&gt;</span> val <span class="op">=</span> np.array([[<span class="dv">1</span>, <span class="dv">2</span>], [<span class="dv">3</span>, <span class="dv">4</span>]])
+    <span class="op">&gt;&gt;&gt;</span> kvar <span class="op">=</span> K.variable(value<span class="op">=</span>val)
+    <span class="op">&gt;&gt;&gt;</span> <span class="bu">input</span> <span class="op">=</span> keras.backend.placeholder(shape<span class="op">=</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">5</span>))
+    <span class="op">&gt;&gt;&gt;</span> K.shape(kvar)
+    <span class="op">&lt;</span>tf.Tensor <span class="st">&#39;Shape_8:0&#39;</span> shape<span class="op">=</span>(<span class="dv">2</span>,) dtype<span class="op">=</span>int32<span class="op">&gt;</span>
+    <span class="op">&gt;&gt;&gt;</span> K.shape(<span class="bu">input</span>)
+    <span class="op">&lt;</span>tf.Tensor <span class="st">&#39;Shape_9:0&#39;</span> shape<span class="op">=</span>(<span class="dv">3</span>,) dtype<span class="op">=</span>int32<span class="op">&gt;</span>
+    <span class="co"># To get integer shape (Instead, you can use K.int_shape(x))</span>
+    <span class="op">&gt;&gt;&gt;</span> K.shape(kvar).<span class="bu">eval</span>(session<span class="op">=</span>tf_session)
+    array([<span class="dv">2</span>, <span class="dv">2</span>], dtype<span class="op">=</span>int32)
+    <span class="op">&gt;&gt;&gt;</span> K.shape(<span class="bu">input</span>).<span class="bu">eval</span>(session<span class="op">=</span>tf_session)
+    array([<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">5</span>], dtype<span class="op">=</span>int32)</code></pre></div>

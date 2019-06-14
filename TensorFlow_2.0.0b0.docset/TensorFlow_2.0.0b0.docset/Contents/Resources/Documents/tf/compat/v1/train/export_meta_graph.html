@@ -1,0 +1,49 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.train.export_meta_graph" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.train.export_meta_graph" class="dashAnchor"></a><h1 id="tf.compat.v1.train.export_meta_graph">tf.compat.v1.train.export_meta_graph</h1>
+<p>Returns <code>MetaGraphDef</code> proto.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.train.export_meta_graph(
+    filename<span class="op">=</span><span class="va">None</span>,
+    meta_info_def<span class="op">=</span><span class="va">None</span>,
+    graph_def<span class="op">=</span><span class="va">None</span>,
+    saver_def<span class="op">=</span><span class="va">None</span>,
+    collection_list<span class="op">=</span><span class="va">None</span>,
+    as_text<span class="op">=</span><span class="va">False</span>,
+    graph<span class="op">=</span><span class="va">None</span>,
+    export_scope<span class="op">=</span><span class="va">None</span>,
+    clear_devices<span class="op">=</span><span class="va">False</span>,
+    clear_extraneous_savers<span class="op">=</span><span class="va">False</span>,
+    strip_default_attrs<span class="op">=</span><span class="va">False</span>,
+    save_debug_info<span class="op">=</span><span class="va">False</span>,
+    <span class="op">**</span>kwargs
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/training/saver.py"><code>python/training/saver.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Optionally writes it to filename.</p>
+<p>This function exports the graph, saver, and collection objects into <code>MetaGraphDef</code> protocol buffer with the intention of it being imported at a later time or location to restart training, run inference, or be a subgraph.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>filename</code></b>: Optional filename including the path for writing the generated <code>MetaGraphDef</code> protocol buffer.</li>
+<li><b><code>meta_info_def</code></b>: <code>MetaInfoDef</code> protocol buffer.</li>
+<li><b><code>graph_def</code></b>: <code>GraphDef</code> protocol buffer.</li>
+<li><b><code>saver_def</code></b>: <code>SaverDef</code> protocol buffer.</li>
+<li><b><code>collection_list</code></b>: List of string keys to collect.</li>
+<li><b><code>as_text</code></b>: If <code>True</code>, writes the <code>MetaGraphDef</code> as an ASCII proto.</li>
+<li><b><code>graph</code></b>: The <code>Graph</code> to export. If <code>None</code>, use the default graph.</li>
+<li><b><code>export_scope</code></b>: Optional <code>string</code>. Name scope under which to extract the subgraph. The scope name will be striped from the node definitions for easy import later into new name scopes. If <code>None</code>, the whole graph is exported. graph_def and export_scope cannot both be specified.</li>
+<li><b><code>clear_devices</code></b>: Whether or not to clear the device field for an <code>Operation</code> or <code>Tensor</code> during export.</li>
+<li><b><code>clear_extraneous_savers</code></b>: Remove any Saver-related information from the graph (both Save/Restore ops and SaverDefs) that are not associated with the provided SaverDef.</li>
+<li><b><code>strip_default_attrs</code></b>: Boolean. If <code>True</code>, default-valued attributes will be removed from the NodeDefs. For a detailed guide, see <a href="https://github.com/tensorflow/tensorflow/blob/master/tensorflow/python/saved_model/README.md#stripping-default-valued-attributes">Stripping Default-Valued Attributes</a>.</li>
+<li><b><code>save_debug_info</code></b>: If <code>True</code>, save the GraphDebugInfo to a separate file, which in the same directory of filename and with <code>_debug</code> added before the file extend.</li>
+<li><b><code>**kwargs</code></b>: Optional keyed arguments.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>MetaGraphDef</code> proto.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: When the <code>GraphDef</code> is larger than 2GB.</li>
+<li><b><code>RuntimeError</code></b>: If called with eager execution enabled.</li>
+</ul>
+<h4 id="eager-compatibility">Eager Compatibility</h4>
+<p>Exporting/importing meta graphs is not supported unless both <code>graph_def</code> and <code>graph</code> are provided. No graph exists when eager execution is enabled.</p>

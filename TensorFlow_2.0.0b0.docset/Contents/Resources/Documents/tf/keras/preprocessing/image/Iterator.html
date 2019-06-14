@@ -1,0 +1,75 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.preprocessing.image.Iterator" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="__getitem__"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="__iter__"/> <meta itemprop="property" content="__len__"/> <meta itemprop="property" content="next"/> <meta itemprop="property" content="on_epoch_end"/> <meta itemprop="property" content="reset"/> <meta itemprop="property" content="white_list_formats"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.keras.preprocessing.image.Iterator" class="dashAnchor"></a><h1 id="tf.keras.preprocessing.image.iterator">tf.keras.preprocessing.image.Iterator</h1>
+<h2 id="class-iterator">Class <code>Iterator</code></h2>
+<p>Base class for image data iterators.</p>
+<p>Inherits From: <a href="../../../../tf/keras/utils/Sequence.html"><code>Sequence</code></a></p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.keras.preprocessing.image.Iterator</code></li>
+<li>Class <code>tf.compat.v2.keras.preprocessing.image.Iterator</code></li>
+<li>Class <code>tf.keras.preprocessing.image.Iterator</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/preprocessing/image.py"><code>python/keras/preprocessing/image.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Every <code>Iterator</code> must implement the <code>_get_batches_of_transformed_samples</code> method.</p>
+<h1 id="arguments">Arguments</h1>
+<pre><code>n: Integer, total number of samples in the dataset to loop over.
+batch_size: Integer, size of a batch.
+shuffle: Boolean, whether to shuffle the data between epochs.
+seed: Random seeding for data shuffling.</code></pre>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    n,
+    batch_size,
+    shuffle,
+    seed
+)</code></pre></div>
+<p>Initialize self. See help(type(self)) for accurate signature.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__getitem__">
+<code><strong>getitem</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__getitem__</span>(idx)</code></pre></div>
+<p>Gets batch at position <code>index</code>.</p>
+<h4 id="arguments-1">Arguments:</h4>
+<ul>
+<li><b><code>index</code></b>: position of the batch in the Sequence.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A batch</p>
+<h3 id="__iter__">
+<code><strong>iter</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__iter__</span>()</code></pre></div>
+<p>Create a generator that iterate over the Sequence.</p>
+<h3 id="__len__">
+<code><strong>len</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__len__</span>()</code></pre></div>
+<p>Number of batch in the Sequence.</p>
+<h4 id="returns-1">Returns:</h4>
+<p>The number of batches in the Sequence.</p>
+<h3 id="next">
+<code>next</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="bu">next</span>()</code></pre></div>
+<p>For python 2.x.</p>
+<h1 id="returns-2">Returns</h1>
+<pre><code>The next batch.</code></pre>
+<h3 id="on_epoch_end">
+<code>on_epoch_end</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_epoch_end()</code></pre></div>
+<p>Method called at the end of every epoch.</p>
+<h3 id="reset">
+<code>reset</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">reset()</code></pre></div>
+<h2 id="class-members">Class Members</h2>
+<ul>
+<li><code>white_list_formats</code> <a id="white_list_formats"></a></li>
+</ul>

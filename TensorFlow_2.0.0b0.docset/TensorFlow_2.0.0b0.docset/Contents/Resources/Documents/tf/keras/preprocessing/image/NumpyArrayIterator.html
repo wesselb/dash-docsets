@@ -1,0 +1,94 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.preprocessing.image.NumpyArrayIterator" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="__getitem__"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="__iter__"/> <meta itemprop="property" content="__len__"/> <meta itemprop="property" content="next"/> <meta itemprop="property" content="on_epoch_end"/> <meta itemprop="property" content="reset"/> <meta itemprop="property" content="white_list_formats"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.keras.preprocessing.image.NumpyArrayIterator" class="dashAnchor"></a><h1 id="tf.keras.preprocessing.image.numpyarrayiterator">tf.keras.preprocessing.image.NumpyArrayIterator</h1>
+<h2 id="class-numpyarrayiterator">Class <code>NumpyArrayIterator</code></h2>
+<p>Iterator yielding data from a Numpy array.</p>
+<p>Inherits From: <a href="../../../../tf/keras/preprocessing/image/Iterator.html"><code>Iterator</code></a></p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.keras.preprocessing.image.NumpyArrayIterator</code></li>
+<li>Class <code>tf.compat.v2.keras.preprocessing.image.NumpyArrayIterator</code></li>
+<li>Class <code>tf.keras.preprocessing.image.NumpyArrayIterator</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/preprocessing/image.py"><code>python/keras/preprocessing/image.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>x</code></b>: Numpy array of input data or tuple. If tuple, the second elements is either another numpy array or a list of numpy arrays, each of which gets passed through as an output without any modifications.</li>
+<li><b><code>y</code></b>: Numpy array of targets data.</li>
+<li><b><code>image_data_generator</code></b>: Instance of <code>ImageDataGenerator</code> to use for random transformations and normalization.</li>
+<li><b><code>batch_size</code></b>: Integer, size of a batch.</li>
+<li><b><code>shuffle</code></b>: Boolean, whether to shuffle the data between epochs.</li>
+<li><b><code>sample_weight</code></b>: Numpy array of sample weights.</li>
+<li><b><code>seed</code></b>: Random seed for data shuffling.</li>
+<li><b><code>data_format</code></b>: String, one of <code>channels_first</code>, <code>channels_last</code>.</li>
+<li><b><code>save_to_dir</code></b>: Optional directory where to save the pictures being yielded, in a viewable format. This is useful for visualizing the random transformations being applied, for debugging purposes.</li>
+<li><b><code>save_prefix</code></b>: String prefix to use for saving sample images (if <code>save_to_dir</code> is set).</li>
+<li><b><code>save_format</code></b>: Format to use for saving sample images (if <code>save_to_dir</code> is set).</li>
+<li><b><code>subset</code></b>: Subset of data (<code>&quot;training&quot;</code> or <code>&quot;validation&quot;</code>) if validation_split is set in ImageDataGenerator.</li>
+<li><b><code>dtype</code></b>: Dtype to use for the generated arrays.</li>
+</ul>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    x,
+    y,
+    image_data_generator,
+    batch_size<span class="op">=</span><span class="dv">32</span>,
+    shuffle<span class="op">=</span><span class="va">False</span>,
+    sample_weight<span class="op">=</span><span class="va">None</span>,
+    seed<span class="op">=</span><span class="va">None</span>,
+    data_format<span class="op">=</span><span class="va">None</span>,
+    save_to_dir<span class="op">=</span><span class="va">None</span>,
+    save_prefix<span class="op">=</span><span class="st">&#39;&#39;</span>,
+    save_format<span class="op">=</span><span class="st">&#39;png&#39;</span>,
+    subset<span class="op">=</span><span class="va">None</span>,
+    dtype<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Initialize self. See help(type(self)) for accurate signature.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__getitem__">
+<code><strong>getitem</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__getitem__</span>(idx)</code></pre></div>
+<p>Gets batch at position <code>index</code>.</p>
+<h4 id="arguments-1">Arguments:</h4>
+<ul>
+<li><b><code>index</code></b>: position of the batch in the Sequence.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A batch</p>
+<h3 id="__iter__">
+<code><strong>iter</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__iter__</span>()</code></pre></div>
+<p>Create a generator that iterate over the Sequence.</p>
+<h3 id="__len__">
+<code><strong>len</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__len__</span>()</code></pre></div>
+<p>Number of batch in the Sequence.</p>
+<h4 id="returns-1">Returns:</h4>
+<p>The number of batches in the Sequence.</p>
+<h3 id="next">
+<code>next</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="bu">next</span>()</code></pre></div>
+<p>For python 2.x.</p>
+<h1 id="returns-2">Returns</h1>
+<pre><code>The next batch.</code></pre>
+<h3 id="on_epoch_end">
+<code>on_epoch_end</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">on_epoch_end()</code></pre></div>
+<p>Method called at the end of every epoch.</p>
+<h3 id="reset">
+<code>reset</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">reset()</code></pre></div>
+<h2 id="class-members">Class Members</h2>
+<ul>
+<li><code>white_list_formats</code> <a id="white_list_formats"></a></li>
+</ul>

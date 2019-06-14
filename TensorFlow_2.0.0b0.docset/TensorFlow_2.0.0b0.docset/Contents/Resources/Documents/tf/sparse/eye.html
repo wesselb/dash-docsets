@@ -1,0 +1,28 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.sparse.eye" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.sparse.eye" class="dashAnchor"></a><h1 id="tf.sparse.eye">tf.sparse.eye</h1>
+<p>Creates a two-dimensional sparse tensor with ones along the diagonal.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.sparse.eye</code></li>
+<li><code>tf.compat.v2.sparse.eye</code></li>
+<li><code>tf.sparse.eye</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.sparse.eye(
+    num_rows,
+    num_columns<span class="op">=</span><span class="va">None</span>,
+    dtype<span class="op">=</span>tf.dtypes.float32,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/sparse_ops.py"><code>python/ops/sparse_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>num_rows</code></b>: Non-negative integer or <code>int32</code> scalar <code>tensor</code> giving the number of rows in the resulting matrix.</li>
+<li><b><code>num_columns</code></b>: Optional non-negative integer or <code>int32</code> scalar <code>tensor</code> giving the number of columns in the resulting matrix. Defaults to <code>num_rows</code>.</li>
+<li><b><code>dtype</code></b>: The type of element in the resulting <code>Tensor</code>.</li>
+<li><b><code>name</code></b>: A name for this <code>Op</code>. Defaults to &quot;eye&quot;.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>SparseTensor</code> of shape [num_rows, num_columns] with ones along the diagonal.</p>

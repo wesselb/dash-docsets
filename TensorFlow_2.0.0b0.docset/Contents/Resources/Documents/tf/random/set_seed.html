@@ -1,0 +1,82 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.random.set_seed" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.random.set_seed" class="dashAnchor"></a><h1 id="tf.random.set_seed">tf.random.set_seed</h1>
+<p>Sets the graph-level random seed.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v2.random.set_seed</code></li>
+<li><code>tf.random.set_seed</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.random.set_seed(seed)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/framework/random_seed.py"><code>python/framework/random_seed.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Operations that rely on a random seed actually derive it from two seeds: the graph-level and operation-level seeds. This sets the graph-level seed.</p>
+<p>Its interactions with operation-level seeds is as follows:</p>
+<ol style="list-style-type: decimal">
+<li>If neither the graph-level nor the operation seed is set: A random seed is used for this op.</li>
+<li>If the graph-level seed is set, but the operation seed is not: The system deterministically picks an operation seed in conjunction with the graph-level seed so that it gets a unique random sequence.</li>
+<li>If the graph-level seed is not set, but the operation seed is set: A default graph-level seed and the specified operation seed are used to determine the random sequence.</li>
+<li>If both the graph-level and the operation seed are set: Both seeds are used in conjunction to determine the random sequence.</li>
+</ol>
+<p>To illustrate the user-visible effects, consider these examples:</p>
+<p>To generate different sequences across sessions, set neither graph-level nor op-level seeds:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">a <span class="op">=</span> tf.random.uniform([<span class="dv">1</span>])
+b <span class="op">=</span> tf.random.normal([<span class="dv">1</span>])
+
+<span class="bu">print</span>(<span class="st">&quot;Session 1&quot;</span>)
+<span class="cf">with</span> tf.compat.v1.Session() <span class="im">as</span> sess1:
+  <span class="bu">print</span>(sess1.run(a))  <span class="co"># generates &#39;A1&#39;</span>
+  <span class="bu">print</span>(sess1.run(a))  <span class="co"># generates &#39;A2&#39;</span>
+  <span class="bu">print</span>(sess1.run(b))  <span class="co"># generates &#39;B1&#39;</span>
+  <span class="bu">print</span>(sess1.run(b))  <span class="co"># generates &#39;B2&#39;</span>
+
+<span class="bu">print</span>(<span class="st">&quot;Session 2&quot;</span>)
+<span class="cf">with</span> tf.compat.v1.Session() <span class="im">as</span> sess2:
+  <span class="bu">print</span>(sess2.run(a))  <span class="co"># generates &#39;A3&#39;</span>
+  <span class="bu">print</span>(sess2.run(a))  <span class="co"># generates &#39;A4&#39;</span>
+  <span class="bu">print</span>(sess2.run(b))  <span class="co"># generates &#39;B3&#39;</span>
+  <span class="bu">print</span>(sess2.run(b))  <span class="co"># generates &#39;B4&#39;</span></code></pre></div>
+<p>To generate the same repeatable sequence for an op across sessions, set the seed for the op:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">a <span class="op">=</span> tf.random.uniform([<span class="dv">1</span>], seed<span class="op">=</span><span class="dv">1</span>)
+b <span class="op">=</span> tf.random.normal([<span class="dv">1</span>])
+
+<span class="co"># Repeatedly running this block with the same graph will generate the same</span>
+<span class="co"># sequence of values for &#39;a&#39;, but different sequences of values for &#39;b&#39;.</span>
+<span class="bu">print</span>(<span class="st">&quot;Session 1&quot;</span>)
+<span class="cf">with</span> tf.compat.v1.Session() <span class="im">as</span> sess1:
+  <span class="bu">print</span>(sess1.run(a))  <span class="co"># generates &#39;A1&#39;</span>
+  <span class="bu">print</span>(sess1.run(a))  <span class="co"># generates &#39;A2&#39;</span>
+  <span class="bu">print</span>(sess1.run(b))  <span class="co"># generates &#39;B1&#39;</span>
+  <span class="bu">print</span>(sess1.run(b))  <span class="co"># generates &#39;B2&#39;</span>
+
+<span class="bu">print</span>(<span class="st">&quot;Session 2&quot;</span>)
+<span class="cf">with</span> tf.compat.v1.Session() <span class="im">as</span> sess2:
+  <span class="bu">print</span>(sess2.run(a))  <span class="co"># generates &#39;A1&#39;</span>
+  <span class="bu">print</span>(sess2.run(a))  <span class="co"># generates &#39;A2&#39;</span>
+  <span class="bu">print</span>(sess2.run(b))  <span class="co"># generates &#39;B3&#39;</span>
+  <span class="bu">print</span>(sess2.run(b))  <span class="co"># generates &#39;B4&#39;</span></code></pre></div>
+<p>To make the random sequences generated by all ops be repeatable across sessions, set a graph-level seed:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.random.set_seed(<span class="dv">1234</span>)
+a <span class="op">=</span> tf.random.uniform([<span class="dv">1</span>])
+b <span class="op">=</span> tf.random.normal([<span class="dv">1</span>])
+
+<span class="co"># Repeatedly running this block with the same graph will generate the same</span>
+<span class="co"># sequences of &#39;a&#39; and &#39;b&#39;.</span>
+<span class="bu">print</span>(<span class="st">&quot;Session 1&quot;</span>)
+<span class="cf">with</span> tf.compat.v1.Session() <span class="im">as</span> sess1:
+  <span class="bu">print</span>(sess1.run(a))  <span class="co"># generates &#39;A1&#39;</span>
+  <span class="bu">print</span>(sess1.run(a))  <span class="co"># generates &#39;A2&#39;</span>
+  <span class="bu">print</span>(sess1.run(b))  <span class="co"># generates &#39;B1&#39;</span>
+  <span class="bu">print</span>(sess1.run(b))  <span class="co"># generates &#39;B2&#39;</span>
+
+<span class="bu">print</span>(<span class="st">&quot;Session 2&quot;</span>)
+<span class="cf">with</span> tf.compat.v1.Session() <span class="im">as</span> sess2:
+  <span class="bu">print</span>(sess2.run(a))  <span class="co"># generates &#39;A1&#39;</span>
+  <span class="bu">print</span>(sess2.run(a))  <span class="co"># generates &#39;A2&#39;</span>
+  <span class="bu">print</span>(sess2.run(b))  <span class="co"># generates &#39;B1&#39;</span>
+  <span class="bu">print</span>(sess2.run(b))  <span class="co"># generates &#39;B2&#39;</span></code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>seed</code></b>: integer.</li>
+</ul>

@@ -1,0 +1,37 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.path_to_str" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.path_to_str" class="dashAnchor"></a><h1 id="tf.compat.path_to_str">tf.compat.path_to_str</h1>
+<p>Converts input which is a <code>PathLike</code> object to <code>str</code> type.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.path_to_str</code></li>
+<li><code>tf.compat.v1.compat.path_to_str</code></li>
+<li><code>tf.compat.v2.compat.path_to_str</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.path_to_str(path)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/util/compat.py"><code>python/util/compat.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Converts from any python constant representation of a <code>PathLike</code> object to a string. If the input is not a <code>PathLike</code> object, simply returns the input.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>path</code></b>: An object that can be converted to path representation.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>str</code> object.</p>
+<h4 id="usage">Usage:</h4>
+<p>In case a simplified <code>str</code> version of the path is needed from an <code>os.PathLike</code> object</p>
+<h4 id="examples">Examples:</h4>
+<pre class="python3"><code>&gt;&gt;&gt; tf.compat.path_to_str(&#39;C:\XYZ\tensorflow\./.././tensorflow&#39;)
+&#39;C:\XYZ\tensorflow\./.././tensorflow&#39; # Windows OS
+&gt;&gt;&gt; tf.compat.path_to_str(Path(&#39;C:\XYZ\tensorflow\./.././tensorflow&#39;))
+&#39;C:\XYZ\tensorflow\..\tensorflow&#39; # Windows OS
+&gt;&gt;&gt; tf.compat.path_to_str(Path(&#39;./corpus&#39;))
+&#39;corpus&#39; # Linux OS
+&gt;&gt;&gt; tf.compat.path_to_str(&#39;./.././Corpus&#39;)
+&#39;./.././Corpus&#39; # Linux OS
+&gt;&gt;&gt; tf.compat.path_to_str(Path(&#39;./.././Corpus&#39;))
+&#39;../Corpus&#39; # Linux OS
+&gt;&gt;&gt; tf.compat.path_to_str(Path(&#39;./..////../&#39;))
+&#39;../..&#39; # Linux OS
+</code></pre>

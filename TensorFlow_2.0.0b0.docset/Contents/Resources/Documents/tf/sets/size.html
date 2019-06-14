@@ -1,0 +1,29 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.sets.size" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.sets.size" class="dashAnchor"></a><h1 id="tf.sets.size">tf.sets.size</h1>
+<p>Compute number of unique elements along last dimension of <code>a</code>.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.sets.set_size</code></li>
+<li><code>tf.compat.v1.sets.size</code></li>
+<li><code>tf.compat.v2.sets.size</code></li>
+<li><code>tf.sets.size</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.sets.size(
+    a,
+    validate_indices<span class="op">=</span><span class="va">True</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/sets_impl.py"><code>python/ops/sets_impl.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>a</code></b>: <code>SparseTensor</code>, with indices sorted in row-major order.</li>
+<li><b><code>validate_indices</code></b>: Whether to validate the order and range of sparse indices in <code>a</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p><code>int32</code> <code>Tensor</code> of set sizes. For <code>a</code> ranked <code>n</code>, this is a <code>Tensor</code> with rank <code>n-1</code>, and the same 1st <code>n-1</code> dimensions as <code>a</code>. Each value is the number of unique elements in the corresponding <code>[0...n-1]</code> dimension of <code>a</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: If <code>a</code> is an invalid types.</li>
+</ul>

@@ -1,0 +1,28 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.train.summary_iterator" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.train.summary_iterator" class="dashAnchor"></a><h1 id="tf.compat.v1.train.summary_iterator">tf.compat.v1.train.summary_iterator</h1>
+<p>An iterator for reading <code>Event</code> protocol buffers from an event file.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.train.summary_iterator(path)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/summary/summary_iterator.py"><code>python/summary/summary_iterator.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>You can use this function to read events written to an event file. It returns a Python iterator that yields <code>Event</code> protocol buffers.</p>
+<p>Example: Print the contents of an events file.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">for</span> e <span class="kw">in</span> tf.compat.v1.train.summary_iterator(path to events <span class="bu">file</span>):
+    <span class="bu">print</span>(e)</code></pre></div>
+<p>Example: Print selected summary values.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co"># This example supposes that the events file contains summaries with a</span>
+<span class="co"># summary value tag &#39;loss&#39;.  These could have been added by calling</span>
+<span class="co"># `add_summary()`, passing the output of a scalar summary op created with</span>
+<span class="co"># with: `tf.compat.v1.summary.scalar(&#39;loss&#39;, loss_tensor)`.</span>
+<span class="cf">for</span> e <span class="kw">in</span> tf.compat.v1.train.summary_iterator(path to events <span class="bu">file</span>):
+    <span class="cf">for</span> v <span class="kw">in</span> e.summary.value:
+        <span class="cf">if</span> v.tag <span class="op">==</span> <span class="st">&#39;loss&#39;</span>:
+            <span class="bu">print</span>(v.simple_value)</code></pre></div>
+<p>See the protocol buffer definitions of <a href="https://www.tensorflow.org/code/tensorflow/core/util/event.proto">Event</a> and <a href="https://www.tensorflow.org/code/tensorflow/core/framework/summary.proto">Summary</a> for more information about their attributes.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>path</code></b>: The path to an event file created by a <code>SummaryWriter</code>.</li>
+</ul>
+<h4 id="yields">Yields:</h4>
+<p><code>Event</code> protocol buffers.</p>

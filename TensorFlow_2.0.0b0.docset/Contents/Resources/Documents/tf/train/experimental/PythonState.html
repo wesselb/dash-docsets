@@ -1,0 +1,56 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.train.experimental.PythonState" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="deserialize"/> <meta itemprop="property" content="serialize"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.train.experimental.PythonState" class="dashAnchor"></a><h1 id="tf.train.experimental.pythonstate">tf.train.experimental.PythonState</h1>
+<h2 id="class-pythonstate">Class <code>PythonState</code></h2>
+<p>A mixin for putting Python state in an object-based checkpoint.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.train.experimental.PythonState</code></li>
+<li>Class <code>tf.compat.v2.train.experimental.PythonState</code></li>
+<li>Class <code>tf.train.experimental.PythonState</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/training/tracking/python_state.py"><code>python/training/tracking/python_state.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>This is an abstract class which allows extensions to TensorFlow's object-based checkpointing (see <a href="../../../tf/train/Checkpoint.html"><code>tf.train.Checkpoint</code></a>). For example a wrapper for NumPy arrays:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">import</span> io
+<span class="im">import</span> numpy
+
+<span class="kw">class</span> NumpyWrapper(tf.train.experimental.PythonState):
+
+  <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, array):
+    <span class="va">self</span>.array <span class="op">=</span> array
+
+  <span class="kw">def</span> serialize(<span class="va">self</span>):
+    string_file <span class="op">=</span> io.BytesIO()
+    <span class="cf">try</span>:
+      numpy.save(string_file, <span class="va">self</span>.array, allow_pickle<span class="op">=</span><span class="va">False</span>)
+      serialized <span class="op">=</span> string_file.getvalue()
+    <span class="cf">finally</span>:
+      string_file.close()
+    <span class="cf">return</span> serialized
+
+  <span class="kw">def</span> deserialize(<span class="va">self</span>, string_value):
+    string_file <span class="op">=</span> io.BytesIO(string_value)
+    <span class="cf">try</span>:
+      <span class="va">self</span>.array <span class="op">=</span> numpy.load(string_file, allow_pickle<span class="op">=</span><span class="va">False</span>)
+    <span class="cf">finally</span>:
+      string_file.close()</code></pre></div>
+<p>Instances of <code>NumpyWrapper</code> are checkpointable objects, and will be saved and restored from checkpoints along with TensorFlow state like variables.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">root <span class="op">=</span> tf.train.Checkpoint(numpy<span class="op">=</span>NumpyWrapper(numpy.array([<span class="dv">1</span>.])))
+save_path <span class="op">=</span> root.save(prefix)
+root.numpy.array <span class="op">*=</span> <span class="dv">2</span>.
+<span class="cf">assert</span> [<span class="dv">2</span>.] <span class="op">==</span> root.numpy.array
+root.restore(save_path)
+<span class="cf">assert</span> [<span class="dv">1</span>.] <span class="op">==</span> root.numpy.array</code></pre></div>
+<h2 id="methods">Methods</h2>
+<h3 id="deserialize">
+<code>deserialize</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">deserialize(string_value)</code></pre></div>
+<p>Callback to deserialize the object.</p>
+<h3 id="serialize">
+<code>serialize</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">serialize()</code></pre></div>
+<p>Callback to serialize the object. Returns a string.</p>

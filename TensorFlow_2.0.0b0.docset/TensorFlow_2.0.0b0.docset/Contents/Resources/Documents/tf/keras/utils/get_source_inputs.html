@@ -1,0 +1,27 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.utils.get_source_inputs" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.keras.utils.get_source_inputs" class="dashAnchor"></a><h1 id="tf.keras.utils.get_source_inputs">tf.keras.utils.get_source_inputs</h1>
+<p>Returns the list of input tensors necessary to compute <code>tensor</code>.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.keras.utils.get_source_inputs</code></li>
+<li><code>tf.compat.v2.keras.utils.get_source_inputs</code></li>
+<li><code>tf.keras.utils.get_source_inputs</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.keras.utils.get_source_inputs(
+    tensor,
+    layer<span class="op">=</span><span class="va">None</span>,
+    node_index<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/utils/layer_utils.py"><code>python/keras/utils/layer_utils.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Output will always be a list of tensors (potentially with 1 element).</p>
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>tensor</code></b>: The tensor to start from.</li>
+<li><b><code>layer</code></b>: Origin layer of the tensor. Will be determined via tensor._keras_history if not provided.</li>
+<li><b><code>node_index</code></b>: Origin node index of the tensor.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>List of input tensors.</p>

@@ -1,0 +1,37 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.backend.pool3d" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.keras.backend.pool3d" class="dashAnchor"></a><h1 id="tf.keras.backend.pool3d">tf.keras.backend.pool3d</h1>
+<p>3D Pooling.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.keras.backend.pool3d</code></li>
+<li><code>tf.compat.v2.keras.backend.pool3d</code></li>
+<li><code>tf.keras.backend.pool3d</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.keras.backend.pool3d(
+    x,
+    pool_size,
+    strides<span class="op">=</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>),
+    padding<span class="op">=</span><span class="st">&#39;valid&#39;</span>,
+    data_format<span class="op">=</span><span class="va">None</span>,
+    pool_mode<span class="op">=</span><span class="st">&#39;max&#39;</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/backend.py"><code>python/keras/backend.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>x</code></b>: Tensor or variable.</li>
+<li><b><code>pool_size</code></b>: tuple of 3 integers.</li>
+<li><b><code>strides</code></b>: tuple of 3 integers.</li>
+<li><b><code>padding</code></b>: string, <code>&quot;same&quot;</code> or <code>&quot;valid&quot;</code>.</li>
+<li><b><code>data_format</code></b>: string, <code>&quot;channels_last&quot;</code> or <code>&quot;channels_first&quot;</code>.</li>
+<li><b><code>pool_mode</code></b>: string, <code>&quot;max&quot;</code> or <code>&quot;avg&quot;</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A tensor, result of 3D pooling.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if <code>data_format</code> is neither <code>&quot;channels_last&quot;</code> or <code>&quot;channels_first&quot;</code>.</li>
+<li><b><code>ValueError</code></b>: if <code>pool_mode</code> is neither <code>&quot;max&quot;</code> or <code>&quot;avg&quot;</code>.</li>
+</ul>

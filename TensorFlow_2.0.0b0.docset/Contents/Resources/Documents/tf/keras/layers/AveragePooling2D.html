@@ -1,0 +1,44 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.layers.AveragePooling2D" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="__init__"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.keras.layers.AveragePooling2D" class="dashAnchor"></a><h1 id="tf.keras.layers.averagepooling2d">tf.keras.layers.AveragePooling2D</h1>
+<h2 id="class-averagepooling2d">Class <code>AveragePooling2D</code></h2>
+<p>Average pooling operation for spatial data.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.keras.layers.AveragePooling2D</code></li>
+<li>Class <code>tf.compat.v1.keras.layers.AvgPool2D</code></li>
+<li>Class <code>tf.compat.v2.keras.layers.AveragePooling2D</code></li>
+<li>Class <code>tf.compat.v2.keras.layers.AvgPool2D</code></li>
+<li>Class <code>tf.keras.layers.AveragePooling2D</code></li>
+<li>Class <code>tf.keras.layers.AvgPool2D</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/layers/pooling.py"><code>python/keras/layers/pooling.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>pool_size</code></b>: integer or tuple of 2 integers, factors by which to downscale (vertical, horizontal). <code>(2, 2)</code> will halve the input in both spatial dimension. If only one integer is specified, the same window length will be used for both dimensions.</li>
+<li><b><code>strides</code></b>: Integer, tuple of 2 integers, or None. Strides values. If None, it will default to <code>pool_size</code>.</li>
+<li><b><code>padding</code></b>: One of <code>&quot;valid&quot;</code> or <code>&quot;same&quot;</code> (case-insensitive).</li>
+<li><b><code>data_format</code></b>: A string, one of <code>channels_last</code> (default) or <code>channels_first</code>. The ordering of the dimensions in the inputs. <code>channels_last</code> corresponds to inputs with shape <code>(batch, height, width, channels)</code> while <code>channels_first</code> corresponds to inputs with shape <code>(batch, channels, height, width)</code>. It defaults to the <code>image_data_format</code> value found in your Keras config file at <code>~/.keras/keras.json</code>. If you never set it, then it will be &quot;channels_last&quot;.</li>
+</ul>
+<h4 id="input-shape">Input shape:</h4>
+<ul>
+<li>If <code>data_format='channels_last'</code>: 4D tensor with shape <code>(batch_size, rows, cols, channels)</code>.</li>
+<li>If <code>data_format='channels_first'</code>: 4D tensor with shape <code>(batch_size, channels, rows, cols)</code>.</li>
+</ul>
+<h4 id="output-shape">Output shape:</h4>
+<ul>
+<li>If <code>data_format='channels_last'</code>: 4D tensor with shape <code>(batch_size, pooled_rows, pooled_cols, channels)</code>.</li>
+<li>If <code>data_format='channels_first'</code>: 4D tensor with shape <code>(batch_size, channels, pooled_rows, pooled_cols)</code>.</li>
+</ul>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    pool_size<span class="op">=</span>(<span class="dv">2</span>, <span class="dv">2</span>),
+    strides<span class="op">=</span><span class="va">None</span>,
+    padding<span class="op">=</span><span class="st">&#39;valid&#39;</span>,
+    data_format<span class="op">=</span><span class="va">None</span>,
+    <span class="op">**</span>kwargs
+)</code></pre></div>

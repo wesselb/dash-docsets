@@ -1,0 +1,58 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.signal.mfccs_from_log_mel_spectrograms" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.signal.mfccs_from_log_mel_spectrograms" class="dashAnchor"></a><h1 id="tf.signal.mfccs_from_log_mel_spectrograms">tf.signal.mfccs_from_log_mel_spectrograms</h1>
+<p>Computes <a href="https://en.wikipedia.org/wiki/Mel-frequency_cepstrum">MFCCs</a> of <code>log_mel_spectrograms</code>.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.signal.mfccs_from_log_mel_spectrograms</code></li>
+<li><code>tf.compat.v2.signal.mfccs_from_log_mel_spectrograms</code></li>
+<li><code>tf.signal.mfccs_from_log_mel_spectrograms</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.signal.mfccs_from_log_mel_spectrograms(
+    log_mel_spectrograms,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/signal/mfcc_ops.py"><code>python/ops/signal/mfcc_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Implemented with GPU-compatible ops and supports gradients.</p>
+<p><a href="https://en.wikipedia.org/wiki/Mel-frequency_cepstrum">Mel-Frequency Cepstral Coefficient (MFCC)</a> calculation consists of taking the DCT-II of a log-magnitude mel-scale spectrogram. <a href="https://en.wikipedia.org/wiki/HTK_(software)">HTK</a>'s MFCCs use a particular scaling of the DCT-II which is almost orthogonal normalization. We follow this convention.</p>
+<p>All <code>num_mel_bins</code> MFCCs are returned and it is up to the caller to select a subset of the MFCCs based on their application. For example, it is typical to only use the first few for speech recognition, as this results in an approximately pitch-invariant representation of the signal.</p>
+<h4 id="for-example">For example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">sample_rate <span class="op">=</span> <span class="fl">16000.0</span>
+<span class="co"># A Tensor of [batch_size, num_samples] mono PCM samples in the range [-1, 1].</span>
+pcm <span class="op">=</span> tf.compat.v1.placeholder(tf.float32, [<span class="va">None</span>, <span class="va">None</span>])
+
+<span class="co"># A 1024-point STFT with frames of 64 ms and 75% overlap.</span>
+stfts <span class="op">=</span> tf.signal.stft(pcm, frame_length<span class="op">=</span><span class="dv">1024</span>, frame_step<span class="op">=</span><span class="dv">256</span>,
+                       fft_length<span class="op">=</span><span class="dv">1024</span>)
+spectrograms <span class="op">=</span> tf.<span class="bu">abs</span>(stfts)
+
+<span class="co"># Warp the linear scale spectrograms into the mel-scale.</span>
+num_spectrogram_bins <span class="op">=</span> stfts.shape[<span class="op">-</span><span class="dv">1</span>].value
+lower_edge_hertz, upper_edge_hertz, num_mel_bins <span class="op">=</span> <span class="fl">80.0</span>, <span class="fl">7600.0</span>, <span class="dv">80</span>
+linear_to_mel_weight_matrix <span class="op">=</span> tf.signal.linear_to_mel_weight_matrix(
+  num_mel_bins, num_spectrogram_bins, sample_rate, lower_edge_hertz,
+  upper_edge_hertz)
+mel_spectrograms <span class="op">=</span> tf.tensordot(
+  spectrograms, linear_to_mel_weight_matrix, <span class="dv">1</span>)
+mel_spectrograms.set_shape(spectrograms.shape[:<span class="op">-</span><span class="dv">1</span>].concatenate(
+  linear_to_mel_weight_matrix.shape[<span class="op">-</span><span class="dv">1</span>:]))
+
+<span class="co"># Compute a stabilized log to get log-magnitude mel-scale spectrograms.</span>
+log_mel_spectrograms <span class="op">=</span> tf.math.log(mel_spectrograms <span class="op">+</span> <span class="fl">1e-6</span>)
+
+<span class="co"># Compute MFCCs from log_mel_spectrograms and take the first 13.</span>
+mfccs <span class="op">=</span> tf.signal.mfccs_from_log_mel_spectrograms(
+  log_mel_spectrograms)[..., :<span class="dv">13</span>]</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>log_mel_spectrograms</code></b>: A <code>[..., num_mel_bins]</code> <code>float32</code> <code>Tensor</code> of log-magnitude mel-scale spectrograms.</li>
+<li><b><code>name</code></b>: An optional name for the operation.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>[..., num_mel_bins]</code> <code>float32</code> <code>Tensor</code> of the MFCCs of <code>log_mel_spectrograms</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>num_mel_bins</code> is not positive.</li>
+</ul>

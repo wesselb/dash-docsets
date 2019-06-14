@@ -1,0 +1,34 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.sparse.minimum" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.sparse.minimum" class="dashAnchor"></a><h1 id="tf.sparse.minimum">tf.sparse.minimum</h1>
+<p>Returns the element-wise min of two SparseTensors.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.sparse.minimum</code></li>
+<li><code>tf.compat.v1.sparse_minimum</code></li>
+<li><code>tf.compat.v2.sparse.minimum</code></li>
+<li><code>tf.sparse.minimum</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.sparse.minimum(
+    sp_a,
+    sp_b,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/sparse_ops.py"><code>python/ops/sparse_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Assumes the two SparseTensors have the same shape, i.e., no broadcasting. Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">sp_zero <span class="op">=</span> sparse_tensor.SparseTensor([[<span class="dv">0</span>]], [<span class="dv">0</span>], [<span class="dv">7</span>])
+sp_one <span class="op">=</span> sparse_tensor.SparseTensor([[<span class="dv">1</span>]], [<span class="dv">1</span>], [<span class="dv">7</span>])
+res <span class="op">=</span> tf.sparse.minimum(sp_zero, sp_one).<span class="bu">eval</span>()
+<span class="co"># &quot;res&quot; should be equal to SparseTensor([[0], [1]], [0, 0], [7]).</span></code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>sp_a</code></b>: a <code>SparseTensor</code> operand whose dtype is real, and indices lexicographically ordered.</li>
+<li><b><code>sp_b</code></b>: the other <code>SparseTensor</code> operand with the same requirements (and the same shape).</li>
+<li><b><code>name</code></b>: optional name of the operation.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<ul>
+<li><b><code>output</code></b>: the output SparseTensor.</li>
+</ul>

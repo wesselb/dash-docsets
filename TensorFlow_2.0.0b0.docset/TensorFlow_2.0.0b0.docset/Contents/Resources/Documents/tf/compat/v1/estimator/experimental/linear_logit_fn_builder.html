@@ -1,0 +1,20 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.estimator.experimental.linear_logit_fn_builder" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.estimator.experimental.linear_logit_fn_builder" class="dashAnchor"></a><h1 id="tf.compat.v1.estimator.experimental.linear_logit_fn_builder">tf.compat.v1.estimator.experimental.linear_logit_fn_builder</h1>
+<p>Function builder for a linear logit_fn.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.estimator.experimental.linear_logit_fn_builder(
+    units,
+    feature_columns,
+    sparse_combiner<span class="op">=</span><span class="st">&#39;sum&#39;</span>
+)</code></pre></div>
+<p>Defined in <a href="https://github.com/tensorflow/estimator/tree/master/tensorflow_estimator/python/estimator/canned/linear.py"><code>python/estimator/canned/linear.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>units</code></b>: An int indicating the dimension of the logit layer.</li>
+<li><b><code>feature_columns</code></b>: An iterable containing all the feature columns used by the model.</li>
+<li><b><code>sparse_combiner</code></b>: A string specifying how to reduce if a categorical column is multivalent. One of &quot;mean&quot;, &quot;sqrtn&quot;, and &quot;sum&quot;.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A logit_fn (see below).</p>

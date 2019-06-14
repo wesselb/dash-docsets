@@ -1,0 +1,56 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.utils.Progbar" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="add"/> <meta itemprop="property" content="update"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.keras.utils.Progbar" class="dashAnchor"></a><h1 id="tf.keras.utils.progbar">tf.keras.utils.Progbar</h1>
+<h2 id="class-progbar">Class <code>Progbar</code></h2>
+<p>Displays a progress bar.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.keras.utils.Progbar</code></li>
+<li>Class <code>tf.compat.v2.keras.utils.Progbar</code></li>
+<li>Class <code>tf.keras.utils.Progbar</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/utils/generic_utils.py"><code>python/keras/utils/generic_utils.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>target</code></b>: Total number of steps expected, None if unknown.</li>
+<li><b><code>width</code></b>: Progress bar width on screen.</li>
+<li><b><code>verbose</code></b>: Verbosity mode, 0 (silent), 1 (verbose), 2 (semi-verbose)</li>
+<li><b><code>stateful_metrics</code></b>: Iterable of string names of metrics that should <em>not</em> be averaged over time. Metrics in this list will be displayed as-is. All others will be averaged by the progbar before display.</li>
+<li><b><code>interval</code></b>: Minimum visual progress update interval (in seconds).</li>
+<li><b><code>unit_name</code></b>: Display name for step counts (usually &quot;step&quot; or &quot;sample&quot;).</li>
+</ul>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    target,
+    width<span class="op">=</span><span class="dv">30</span>,
+    verbose<span class="op">=</span><span class="dv">1</span>,
+    interval<span class="op">=</span><span class="fl">0.05</span>,
+    stateful_metrics<span class="op">=</span><span class="va">None</span>,
+    unit_name<span class="op">=</span><span class="st">&#39;step&#39;</span>
+)</code></pre></div>
+<p>Initialize self. See help(type(self)) for accurate signature.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="add">
+<code>add</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">add(
+    n,
+    values<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<h3 id="update">
+<code>update</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">update(
+    current,
+    values<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Updates the progress bar.</p>
+<h4 id="arguments-1">Arguments:</h4>
+<ul>
+<li><b><code>current</code></b>: Index of current step.</li>
+<li><b><code>values</code></b>: List of tuples: <code>(name, value_for_last_step)</code>. If <code>name</code> is in <code>stateful_metrics</code>, <code>value_for_last_step</code> will be displayed as-is. Else, an average of the metric over time will be displayed.</li>
+</ul>

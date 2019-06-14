@@ -1,0 +1,27 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.flags.declare_key_flag" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.flags.declare_key_flag" class="dashAnchor"></a><h1 id="tf.compat.v1.flags.declare_key_flag">tf.compat.v1.flags.declare_key_flag</h1>
+<p>Declares one flag as key to the current module.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.app.flags.declare_key_flag</code></li>
+<li><code>tf.compat.v1.flags.declare_key_flag</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.flags.declare_key_flag(
+    flag_name,
+    flag_values<span class="op">=</span>_flagvalues.FLAGS
+)</code></pre></div>
+<!-- Placeholder for "Used in" -->
+<p>Key flags are flags that are deemed really important for a module. They are important when listing help messages; e.g., if the --helpshort command-line flag is used, then only the key flags of the main module are listed (instead of all flags, as in the case of --helpfull).</p>
+<h4 id="sample-usage">Sample usage:</h4>
+<p>flags.declare_key_flag('flag_1')</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>flag_name</code></b>: str, the name of an already declared flag. (Redeclaring flags as key, including flags implicitly key because they were declared in this module, is a no-op.)</li>
+<li><b><code>flag_values</code></b>: FlagValues, the FlagValues instance in which the flag will be declared as a key flag. This should almost never need to be overridden.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: Raised if flag_name not defined as a Python flag.</li>
+</ul>

@@ -1,0 +1,68 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.layers.Bidirectional" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="constraints"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="reset_states"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.keras.layers.Bidirectional" class="dashAnchor"></a><h1 id="tf.keras.layers.bidirectional">tf.keras.layers.Bidirectional</h1>
+<h2 id="class-bidirectional">Class <code>Bidirectional</code></h2>
+<p>Bidirectional wrapper for RNNs.</p>
+<p>Inherits From: <a href="../../../tf/keras/layers/Wrapper.html"><code>Wrapper</code></a></p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.keras.layers.Bidirectional</code></li>
+<li>Class <code>tf.compat.v2.keras.layers.Bidirectional</code></li>
+<li>Class <code>tf.keras.layers.Bidirectional</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/layers/wrappers.py"><code>python/keras/layers/wrappers.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>layer</code></b>: <code>Recurrent</code> instance.</li>
+<li><b><code>merge_mode</code></b>: Mode by which outputs of the forward and backward RNNs will be combined. One of {'sum', 'mul', 'concat', 'ave', None}. If None, the outputs will not be combined, they will be returned as a list.</li>
+<li><b><code>backward_layer</code></b>: Optional <code>Recurrent</code> instance to be used to handle backwards input processing. If <code>backward_layer</code> is not provided, the layer instance passed as the <code>layer</code> argument will be used to generate the backward layer automatically. Note that the provided <code>backward_layer</code> layer should have properties matching those of the <code>layer</code> argument, in particular it should have the same values for <code>stateful</code>, <code>return_states</code>, <code>return_sequence</code>, etc. In addition, <code>backward_layer</code> and <code>layer</code> should have different <code>go_backwards</code> argument values. A <code>ValueError</code> will be raised if these requirements are not met.</li>
+</ul>
+<h4 id="call-arguments">Call arguments:</h4>
+<p>The call arguments for this layer are the same as those of the wrapped RNN layer.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: 1. If <code>layer</code> or <code>backward_layer</code> is not a <code>Layer</code> instance.</li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li>In case of invalid <code>merge_mode</code> argument.</li>
+<li>If <code>backward_layer</code> has mismatched properties compared to <code>layer</code>.</li>
+</ol>
+<h4 id="examples">Examples:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">model <span class="op">=</span> Sequential()
+model.add(Bidirectional(LSTM(<span class="dv">10</span>, return_sequences<span class="op">=</span><span class="va">True</span>), input_shape<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">10</span>)))
+model.add(Bidirectional(LSTM(<span class="dv">10</span>)))
+model.add(Dense(<span class="dv">5</span>))
+model.add(Activation(<span class="st">&#39;softmax&#39;</span>))
+model.<span class="bu">compile</span>(loss<span class="op">=</span><span class="st">&#39;categorical_crossentropy&#39;</span>, optimizer<span class="op">=</span><span class="st">&#39;rmsprop&#39;</span>)
+
+ <span class="co"># With custom backward layer</span>
+ model <span class="op">=</span> Sequential()
+ forward_layer <span class="op">=</span> LSTM(<span class="dv">10</span>, return_sequences<span class="op">=</span><span class="va">True</span>)
+ backard_layer <span class="op">=</span> LSTM(<span class="dv">10</span>, activation<span class="op">=</span><span class="st">&#39;relu&#39;</span>, return_sequences<span class="op">=</span><span class="va">True</span>,
+                      go_backwards<span class="op">=</span><span class="va">True</span>)
+ model.add(Bidirectional(forward_layer, backward_layer<span class="op">=</span>backward_layer,
+                         input_shape<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">10</span>)))
+ model.add(Dense(<span class="dv">5</span>))
+ model.add(Activation(<span class="st">&#39;softmax&#39;</span>))
+ model.<span class="bu">compile</span>(loss<span class="op">=</span><span class="st">&#39;categorical_crossentropy&#39;</span>, optimizer<span class="op">=</span><span class="st">&#39;rmsprop&#39;</span>)</code></pre></div>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    layer,
+    merge_mode<span class="op">=</span><span class="st">&#39;concat&#39;</span>,
+    weights<span class="op">=</span><span class="va">None</span>,
+    backward_layer<span class="op">=</span><span class="va">None</span>,
+    <span class="op">**</span>kwargs
+)</code></pre></div>
+<h2 id="properties">Properties</h2>
+<h3 id="constraints">
+<code>constraints</code>
+</h3>
+<h2 id="methods">Methods</h2>
+<h3 id="reset_states">
+<code>reset_states</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">reset_states()</code></pre></div>

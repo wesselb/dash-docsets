@@ -1,0 +1,52 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.layers.StackedRNNCells" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="output_size"/> <meta itemprop="property" content="state_size"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="get_initial_state"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.keras.layers.StackedRNNCells" class="dashAnchor"></a><h1 id="tf.keras.layers.stackedrnncells">tf.keras.layers.StackedRNNCells</h1>
+<h2 id="class-stackedrnncells">Class <code>StackedRNNCells</code></h2>
+<p>Wrapper allowing a stack of RNN cells to behave as a single cell.</p>
+<p>Inherits From: <a href="../../../tf/keras/layers/Layer.html"><code>Layer</code></a></p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.keras.layers.StackedRNNCells</code></li>
+<li>Class <code>tf.compat.v2.keras.layers.StackedRNNCells</code></li>
+<li>Class <code>tf.keras.layers.StackedRNNCells</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/layers/recurrent.py"><code>python/keras/layers/recurrent.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Used to implement efficient stacked RNNs.</p>
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>cells</code></b>: List of RNN cell instances.</li>
+</ul>
+<h4 id="examples">Examples:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">cells <span class="op">=</span> [
+    keras.layers.LSTMCell(output_dim),
+    keras.layers.LSTMCell(output_dim),
+    keras.layers.LSTMCell(output_dim),
+]
+
+inputs <span class="op">=</span> keras.Input((timesteps, input_dim))
+x <span class="op">=</span> keras.layers.RNN(cells)(inputs)</code></pre></div>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    cells,
+    <span class="op">**</span>kwargs
+)</code></pre></div>
+<h2 id="properties">Properties</h2>
+<h3 id="output_size">
+<code>output_size</code>
+</h3>
+<h3 id="state_size">
+<code>state_size</code>
+</h3>
+<h2 id="methods">Methods</h2>
+<h3 id="get_initial_state">
+<code>get_initial_state</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">get_initial_state(
+    inputs<span class="op">=</span><span class="va">None</span>,
+    batch_size<span class="op">=</span><span class="va">None</span>,
+    dtype<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>

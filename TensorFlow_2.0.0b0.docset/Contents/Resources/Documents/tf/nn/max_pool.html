@@ -1,0 +1,32 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.nn.max_pool" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.nn.max_pool" class="dashAnchor"></a><h1 id="tf.nn.max_pool">tf.nn.max_pool</h1>
+<p>Performs the max pooling on the input.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.nn.max_pool_v2</code></li>
+<li><code>tf.compat.v2.nn.max_pool</code></li>
+<li><code>tf.nn.max_pool</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.nn.max_pool(
+    <span class="bu">input</span>,
+    ksize,
+    strides,
+    padding,
+    data_format<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/nn_ops.py"><code>python/ops/nn_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: Tensor of rank N+2, of shape <code>[batch_size] + input_spatial_shape +   [num_channels]</code> if <code>data_format</code> does not start with &quot;NC&quot; (default), or <code>[batch_size, num_channels] + input_spatial_shape</code> if data_format starts with &quot;NC&quot;. Pooling happens over the spatial dimensions only.</li>
+<li><b><code>ksize</code></b>: An int or list of <code>ints</code> that has length <code>1</code>, <code>N</code> or <code>N+2</code>. The size of the window for each dimension of the input tensor.</li>
+<li><b><code>strides</code></b>: An int or list of <code>ints</code> that has length <code>1</code>, <code>N</code> or <code>N+2</code>. The stride of the sliding window for each dimension of the input tensor.</li>
+<li><b><code>padding</code></b>: A string, either <code>'VALID'</code> or <code>'SAME'</code>. The padding algorithm. See the &quot;returns&quot; section of <a href="../../tf/nn/convolution.html"><code>tf.nn.convolution</code></a> for details.</li>
+<li><b><code>data_format</code></b>: A string. Specifies the channel dimension. For N=1 it can be either &quot;NWC&quot; (default) or &quot;NCW&quot;, for N=2 it can be either &quot;NHWC&quot; (default) or &quot;NCHW&quot; and for N=3 either &quot;NDHWC&quot; (default) or &quot;NCDHW&quot;.</li>
+<li><b><code>name</code></b>: Optional name for the operation.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of format specified by <code>data_format</code>. The max pooled output tensor.</p>

@@ -1,0 +1,18 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.train.get_checkpoint_mtimes" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.train.get_checkpoint_mtimes" class="dashAnchor"></a><h1 id="tf.compat.v1.train.get_checkpoint_mtimes">tf.compat.v1.train.get_checkpoint_mtimes</h1>
+<p>Returns the mtimes (modification timestamps) of the checkpoints. (deprecated)</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.train.get_checkpoint_mtimes(checkpoint_prefixes)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/training/checkpoint_management.py"><code>python/training/checkpoint_management.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Warning: THIS FUNCTION IS DEPRECATED. It will be removed in a future version. Instructions for updating: Use standard file utilities to get mtimes.</p>
+<p>Globs for the checkpoints pointed to by <code>checkpoint_prefixes</code>. If the files exist, collect their mtime. Both V2 and V1 checkpoints are considered, in that priority.</p>
+<p>This is the recommended way to get the mtimes, since it takes into account the naming difference between V1 and V2 formats.</p>
+<p>Note: If not all checkpoints exist, the length of the returned mtimes list will be smaller than the length of <code>checkpoint_prefixes</code> list, so mapping checkpoints to corresponding mtimes will not be possible.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>checkpoint_prefixes</code></b>: a list of checkpoint paths, typically the results of <code>Saver.save()</code> or those of <code>tf.train.latest_checkpoint()</code>, regardless of sharded/non-sharded or V1/V2.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A list of mtimes (in microseconds) of the found checkpoints.</p>

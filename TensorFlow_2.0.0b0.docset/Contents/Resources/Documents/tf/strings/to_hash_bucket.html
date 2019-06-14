@@ -1,0 +1,27 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.strings.to_hash_bucket" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.strings.to_hash_bucket" class="dashAnchor"></a><h1 id="tf.strings.to_hash_bucket">tf.strings.to_hash_bucket</h1>
+<p>Converts each string in the input Tensor to its hash mod by a number of buckets.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v2.strings.to_hash_bucket</code></li>
+<li><code>tf.strings.to_hash_bucket</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.strings.to_hash_bucket(
+    <span class="bu">input</span>,
+    num_buckets,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/string_ops.py"><code>python/ops/string_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>The hash function is deterministic on the content of the string within the process.</p>
+<p>Note that the hash function may change from time to time. This functionality will be deprecated and it's recommended to use <code>tf.strings.to_hash_bucket_fast()</code> or <code>tf.strings.to_hash_bucket_strong()</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code> of type <code>string</code>.</li>
+<li><b><code>num_buckets</code></b>: An <code>int</code> that is <code>&gt;= 1</code>. The number of buckets.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>int64</code>.</p>

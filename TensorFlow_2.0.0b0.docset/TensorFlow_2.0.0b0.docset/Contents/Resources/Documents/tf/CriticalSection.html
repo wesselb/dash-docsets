@@ -1,0 +1,87 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.CriticalSection" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="name"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="execute"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.CriticalSection" class="dashAnchor"></a><h1 id="tf.criticalsection">tf.CriticalSection</h1>
+<h2 id="class-criticalsection">Class <code>CriticalSection</code></h2>
+<p>Critical section.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.CriticalSection</code></li>
+<li>Class <code>tf.compat.v1.CriticalSection</code></li>
+<li>Class <code>tf.compat.v2.CriticalSection</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/critical_section_ops.py"><code>python/ops/critical_section_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>A <code>CriticalSection</code> object is a resource in the graph which executes subgraphs in <strong>serial</strong> order. A common example of a subgraph one may wish to run exclusively is the one given by the following function:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">v <span class="op">=</span> resource_variable_ops.ResourceVariable(<span class="fl">0.0</span>, name<span class="op">=</span><span class="st">&quot;v&quot;</span>)
+
+<span class="kw">def</span> count():
+  value <span class="op">=</span> v.read_value()
+  <span class="cf">with</span> tf.control_dependencies([value]):
+    <span class="cf">with</span> tf.control_dependencies([v.assign_add(<span class="dv">1</span>)]):
+      <span class="cf">return</span> tf.identity(value)</code></pre></div>
+<p>Here, a snapshot of <code>v</code> is captured in <code>value</code>; and then <code>v</code> is updated. The snapshot value is returned.</p>
+<p>If multiple workers or threads all execute <code>count</code> in parallel, there is no guarantee that access to the variable <code>v</code> is atomic at any point within any thread's calculation of <code>count</code>. In fact, even implementing an atomic counter that guarantees that the user will see each value <code>0, 1, ...,</code> is currently impossible.</p>
+<p>The solution is to ensure any access to the underlying resource <code>v</code> is only processed through a critical section:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">cs <span class="op">=</span> CriticalSection()
+f1 <span class="op">=</span> cs.execute(count)
+f2 <span class="op">=</span> cs.execute(count)
+output <span class="op">=</span> f1 <span class="op">+</span> f2
+session.run(output)</code></pre></div>
+<p>The functions <code>f1</code> and <code>f2</code> will be executed serially, and updates to <code>v</code> will be atomic.</p>
+<p><strong>NOTES</strong></p>
+<p>All resource objects, including the critical section and any captured variables of functions executed on that critical section, will be colocated to the same device (host and cpu/gpu).</p>
+<p>When using multiple critical sections on the same resources, there is no guarantee of exclusive access to those resources. This behavior is disallowed by default (but see the kwarg <code>exclusive_resource_access</code>).</p>
+<p>For example, running the same function in two separate critical sections will not ensure serial execution:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">v <span class="op">=</span> tf.compat.v1.get_variable(<span class="st">&quot;v&quot;</span>, initializer<span class="op">=</span><span class="fl">0.0</span>, use_resource<span class="op">=</span><span class="va">True</span>)
+<span class="kw">def</span> accumulate(up):
+  x <span class="op">=</span> v.read_value()
+  <span class="cf">with</span> tf.control_dependencies([x]):
+    <span class="cf">with</span> tf.control_dependencies([v.assign_add(up)]):
+      <span class="cf">return</span> tf.identity(x)
+ex1 <span class="op">=</span> CriticalSection().execute(
+  accumulate, <span class="fl">1.0</span>, exclusive_resource_access<span class="op">=</span><span class="va">False</span>)
+ex2 <span class="op">=</span> CriticalSection().execute(
+  accumulate, <span class="fl">1.0</span>, exclusive_resource_access<span class="op">=</span><span class="va">False</span>)
+bad_sum <span class="op">=</span> ex1 <span class="op">+</span> ex2
+sess.run(v.initializer)
+sess.run(bad_sum)  <span class="co"># May return 0.0</span></code></pre></div>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    name<span class="op">=</span><span class="va">None</span>,
+    shared_name<span class="op">=</span><span class="va">None</span>,
+    critical_section_def<span class="op">=</span><span class="va">None</span>,
+    import_scope<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Creates a critical section.</p>
+<h2 id="properties">Properties</h2>
+<h3 id="name">
+<code>name</code>
+</h3>
+<h2 id="methods">Methods</h2>
+<h3 id="execute">
+<code>execute</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">execute(
+    fn,
+    exclusive_resource_access<span class="op">=</span><span class="va">True</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Execute function <code>fn()</code> inside the critical section.</p>
+<p><code>fn</code> should not accept any arguments. To add extra arguments to when calling <code>fn</code> in the critical section, create a lambda:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">critical_section.execute(<span class="kw">lambda</span>: fn(<span class="op">*</span>my_args, <span class="op">**</span>my_kwargs))</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>fn</code></b>: The function to execute. Must return at least one tensor.</li>
+<li><b><code>exclusive_resource_access</code></b>: Whether the resources required by <code>fn</code> should be exclusive to this <code>CriticalSection</code>. Default: <code>True</code>. You may want to set this to <code>False</code> if you will be accessing a resource in read-only mode in two different CriticalSections.</li>
+<li><b><code>name</code></b>: The name to use when creating the execute operation.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The tensors returned from <code>fn()</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>fn</code> attempts to lock this <code>CriticalSection</code> in any nested or lazy way that may cause a deadlock.</li>
+<li><b><code>ValueError</code></b>: If <code>exclusive_resource_access == True</code> and another <code>CriticalSection</code> has an execution requesting the same resources as <code>fn``.  Note, even if</code>exclusive_resource_access<code>is</code>True<code>, if another execution in another</code>CriticalSection<code>was created   without</code>exclusive_resource_access=True<code>, a</code>ValueError` will be raised.</li>
+</ul>

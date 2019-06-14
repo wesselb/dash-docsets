@@ -1,0 +1,35 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.models.load_model" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.keras.models.load_model" class="dashAnchor"></a><h1 id="tf.keras.models.load_model">tf.keras.models.load_model</h1>
+<p>Loads a model saved via <code>save_model</code>.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.keras.models.load_model</code></li>
+<li><code>tf.compat.v2.keras.models.load_model</code></li>
+<li><code>tf.keras.models.load_model</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.keras.models.load_model(
+    filepath,
+    custom_objects<span class="op">=</span><span class="va">None</span>,
+    <span class="bu">compile</span><span class="op">=</span><span class="va">True</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/saving/save.py"><code>python/keras/saving/save.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>filepath</code></b>: One of the following:
+<ul>
+<li>String, path to the saved model</li>
+<li><code>h5py.File</code> object from which to load the model</li>
+</ul></li>
+<li><b><code>custom_objects</code></b>: Optional dictionary mapping names (strings) to custom classes or functions to be considered during deserialization.</li>
+<li><b><code>compile</code></b>: Boolean, whether to compile the model after loading.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A Keras model instance. If an optimizer was found as part of the saved model, the model is already compiled. Otherwise, the model is uncompiled and a warning will be displayed. When <code>compile</code> is set to False, the compilation is omitted without any warning.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ImportError</code></b>: if loading from an hdf5 file and h5py is not available.</li>
+<li><b><code>IOError</code></b>: In case of an invalid savefile.</li>
+</ul>

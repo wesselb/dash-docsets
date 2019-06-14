@@ -1,0 +1,67 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.layers.SeparableConv1D" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="__init__"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.keras.layers.SeparableConv1D" class="dashAnchor"></a><h1 id="tf.keras.layers.separableconv1d">tf.keras.layers.SeparableConv1D</h1>
+<h2 id="class-separableconv1d">Class <code>SeparableConv1D</code></h2>
+<p>Depthwise separable 1D convolution.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.keras.layers.SeparableConv1D</code></li>
+<li>Class <code>tf.compat.v1.keras.layers.SeparableConvolution1D</code></li>
+<li>Class <code>tf.compat.v2.keras.layers.SeparableConv1D</code></li>
+<li>Class <code>tf.compat.v2.keras.layers.SeparableConvolution1D</code></li>
+<li>Class <code>tf.keras.layers.SeparableConv1D</code></li>
+<li>Class <code>tf.keras.layers.SeparableConvolution1D</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/layers/convolutional.py"><code>python/keras/layers/convolutional.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>This layer performs a depthwise convolution that acts separately on channels, followed by a pointwise convolution that mixes channels. If <code>use_bias</code> is True and a bias initializer is provided, it adds a bias vector to the output. It then optionally applies an activation function to produce the final output.</p>
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>filters</code></b>: Integer, the dimensionality of the output space (i.e. the number of filters in the convolution).</li>
+<li><b><code>kernel_size</code></b>: A single integer specifying the spatial dimensions of the filters.</li>
+<li><b><code>strides</code></b>: A single integer specifying the strides of the convolution. Specifying any <code>stride</code> value != 1 is incompatible with specifying any <code>dilation_rate</code> value != 1.</li>
+<li><b><code>padding</code></b>: One of <code>&quot;valid&quot;</code>, <code>&quot;same&quot;</code>, or <code>&quot;causal&quot;</code> (case-insensitive).</li>
+<li><b><code>data_format</code></b>: A string, one of <code>channels_last</code> (default) or <code>channels_first</code>. The ordering of the dimensions in the inputs. <code>channels_last</code> corresponds to inputs with shape <code>(batch, length, channels)</code> while <code>channels_first</code> corresponds to inputs with shape <code>(batch, channels, length)</code>.</li>
+<li><b><code>dilation_rate</code></b>: A single integer, specifying the dilation rate to use for dilated convolution. Currently, specifying any <code>dilation_rate</code> value != 1 is incompatible with specifying any stride value != 1.</li>
+<li><b><code>depth_multiplier</code></b>: The number of depthwise convolution output channels for each input channel. The total number of depthwise convolution output channels will be equal to <code>num_filters_in * depth_multiplier</code>.</li>
+<li><b><code>activation</code></b>: Activation function. Set it to None to maintain a linear activation.</li>
+<li><b><code>use_bias</code></b>: Boolean, whether the layer uses a bias.</li>
+<li><b><code>depthwise_initializer</code></b>: An initializer for the depthwise convolution kernel.</li>
+<li><b><code>pointwise_initializer</code></b>: An initializer for the pointwise convolution kernel.</li>
+<li><b><code>bias_initializer</code></b>: An initializer for the bias vector. If None, the default initializer will be used.</li>
+<li><b><code>depthwise_regularizer</code></b>: Optional regularizer for the depthwise convolution kernel.</li>
+<li><b><code>pointwise_regularizer</code></b>: Optional regularizer for the pointwise convolution kernel.</li>
+<li><b><code>bias_regularizer</code></b>: Optional regularizer for the bias vector.</li>
+<li><b><code>activity_regularizer</code></b>: Optional regularizer function for the output.</li>
+<li><b><code>depthwise_constraint</code></b>: Optional projection function to be applied to the depthwise kernel after being updated by an <code>Optimizer</code> (e.g. used for norm constraints or value constraints for layer weights). The function must take as input the unprojected variable and must return the projected variable (which must have the same shape). Constraints are not safe to use when doing asynchronous distributed training.</li>
+<li><b><code>pointwise_constraint</code></b>: Optional projection function to be applied to the pointwise kernel after being updated by an <code>Optimizer</code>.</li>
+<li><b><code>bias_constraint</code></b>: Optional projection function to be applied to the bias after being updated by an <code>Optimizer</code>.</li>
+<li><b><code>trainable</code></b>: Boolean, if <code>True</code> the weights of this layer will be marked as trainable (and listed in <code>layer.trainable_weights</code>).</li>
+<li><b><code>name</code></b>: A string, the name of the layer.</li>
+</ul>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    filters,
+    kernel_size,
+    strides<span class="op">=</span><span class="dv">1</span>,
+    padding<span class="op">=</span><span class="st">&#39;valid&#39;</span>,
+    data_format<span class="op">=</span><span class="va">None</span>,
+    dilation_rate<span class="op">=</span><span class="dv">1</span>,
+    depth_multiplier<span class="op">=</span><span class="dv">1</span>,
+    activation<span class="op">=</span><span class="va">None</span>,
+    use_bias<span class="op">=</span><span class="va">True</span>,
+    depthwise_initializer<span class="op">=</span><span class="st">&#39;glorot_uniform&#39;</span>,
+    pointwise_initializer<span class="op">=</span><span class="st">&#39;glorot_uniform&#39;</span>,
+    bias_initializer<span class="op">=</span><span class="st">&#39;zeros&#39;</span>,
+    depthwise_regularizer<span class="op">=</span><span class="va">None</span>,
+    pointwise_regularizer<span class="op">=</span><span class="va">None</span>,
+    bias_regularizer<span class="op">=</span><span class="va">None</span>,
+    activity_regularizer<span class="op">=</span><span class="va">None</span>,
+    depthwise_constraint<span class="op">=</span><span class="va">None</span>,
+    pointwise_constraint<span class="op">=</span><span class="va">None</span>,
+    bias_constraint<span class="op">=</span><span class="va">None</span>,
+    <span class="op">**</span>kwargs
+)</code></pre></div>

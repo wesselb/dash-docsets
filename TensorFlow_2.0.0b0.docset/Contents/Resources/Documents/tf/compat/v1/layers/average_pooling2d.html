@@ -1,0 +1,31 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.layers.average_pooling2d" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.layers.average_pooling2d" class="dashAnchor"></a><h1 id="tf.compat.v1.layers.average_pooling2d">tf.compat.v1.layers.average_pooling2d</h1>
+<p>Average pooling layer for 2D inputs (e.g. images). (deprecated)</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.layers.average_pooling2d(
+    inputs,
+    pool_size,
+    strides,
+    padding<span class="op">=</span><span class="st">&#39;valid&#39;</span>,
+    data_format<span class="op">=</span><span class="st">&#39;channels_last&#39;</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/layers/pooling.py"><code>python/layers/pooling.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Warning: THIS FUNCTION IS DEPRECATED. It will be removed in a future version. Instructions for updating: Use keras.layers.AveragePooling2D instead.</p>
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>inputs</code></b>: The tensor over which to pool. Must have rank 4.</li>
+<li><b><code>pool_size</code></b>: An integer or tuple/list of 2 integers: (pool_height, pool_width) specifying the size of the pooling window. Can be a single integer to specify the same value for all spatial dimensions.</li>
+<li><b><code>strides</code></b>: An integer or tuple/list of 2 integers, specifying the strides of the pooling operation. Can be a single integer to specify the same value for all spatial dimensions.</li>
+<li><b><code>padding</code></b>: A string. The padding method, either 'valid' or 'same'. Case-insensitive.</li>
+<li><b><code>data_format</code></b>: A string. The ordering of the dimensions in the inputs. <code>channels_last</code> (default) and <code>channels_first</code> are supported. <code>channels_last</code> corresponds to inputs with shape <code>(batch, height, width, channels)</code> while <code>channels_first</code> corresponds to inputs with shape <code>(batch, channels, height, width)</code>.</li>
+<li><b><code>name</code></b>: A string, the name of the layer.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Output tensor.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: if eager execution is enabled.</li>
+</ul>

@@ -1,0 +1,27 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.autograph.experimental.do_not_convert" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.autograph.experimental.do_not_convert" class="dashAnchor"></a><h1 id="tf.autograph.experimental.do_not_convert">tf.autograph.experimental.do_not_convert</h1>
+<p>Decorator that suppresses the conversion of a function.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.autograph.experimental.do_not_convert</code></li>
+<li><code>tf.compat.v1.autograph.experimental.do_not_convert</code></li>
+<li><code>tf.compat.v2.autograph.experimental.do_not_convert</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.autograph.experimental.do_not_convert(
+    func<span class="op">=</span><span class="va">None</span>,
+    run_as<span class="op">=</span>RunMode.GRAPH,
+    return_dtypes<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/autograph/impl/api.py"><code>python/autograph/impl/api.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>See also: docs/pyfunc_dtypes.md</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>func</code></b>: function to decorate.</li>
+<li><b><code>run_as</code></b>: RunMode, specifies how to use the function in TensorFlow.</li>
+<li><b><code>return_dtypes</code></b>: Optional[Iterable[ Union[tf.DType, utils.py_func.MatchDType]]], the return data types of the converted function, if run_as is RunMode.PY_FUNC. Ignored otherwise. May be set to None if the function has no return values.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>If <code>func</code> is not None, returns a <code>Callable</code> which is equivalent to <code>func</code>, but is not converted by AutoGraph. If <code>func</code> is None, returns a decorator that, when invoked with a single <code>func</code> argument, returns a <code>Callable</code> equivalent to the above case.</p>

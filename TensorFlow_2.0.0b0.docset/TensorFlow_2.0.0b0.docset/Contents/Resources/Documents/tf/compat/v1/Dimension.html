@@ -1,0 +1,348 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.Dimension" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="value"/> <meta itemprop="property" content="__add__"/> <meta itemprop="property" content="__div__"/> <meta itemprop="property" content="__eq__"/> <meta itemprop="property" content="__floordiv__"/> <meta itemprop="property" content="__ge__"/> <meta itemprop="property" content="__gt__"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="__le__"/> <meta itemprop="property" content="__lt__"/> <meta itemprop="property" content="__mod__"/> <meta itemprop="property" content="__mul__"/> <meta itemprop="property" content="__ne__"/> <meta itemprop="property" content="__radd__"/> <meta itemprop="property" content="__rdiv__"/> <meta itemprop="property" content="__rfloordiv__"/> <meta itemprop="property" content="__rmod__"/> <meta itemprop="property" content="__rmul__"/> <meta itemprop="property" content="__rsub__"/> <meta itemprop="property" content="__rtruediv__"/> <meta itemprop="property" content="__sub__"/> <meta itemprop="property" content="__truediv__"/> <meta itemprop="property" content="assert_is_compatible_with"/> <meta itemprop="property" content="is_compatible_with"/> <meta itemprop="property" content="merge_with"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.compat.v1.Dimension" class="dashAnchor"></a><h1 id="tf.compat.v1.dimension">tf.compat.v1.Dimension</h1>
+<h2 id="class-dimension">Class <code>Dimension</code></h2>
+<p>Represents the value of one dimension in a TensorShape.</p>
+<p>Defined in <a href="/code/stable/tensorflow/python/framework/tensor_shape.py"><code>python/framework/tensor_shape.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(value)</code></pre></div>
+<p>Creates a new Dimension with the given value.</p>
+<h2 id="properties">Properties</h2>
+<h3 id="value">
+<code>value</code>
+</h3>
+<p>The value of this dimension, or None if it is unknown.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="__add__">
+<code><strong>add</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__add__</span>(other)</code></pre></div>
+<p>Returns the sum of <code>self</code> and <code>other</code>.</p>
+<p>Dimensions are summed as follows:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.Dimension(m)    <span class="op">+</span> tf.compat.v1.Dimension(n)     <span class="op">==</span>
+tf.compat.v1.Dimension(m <span class="op">+</span> n)
+tf.compat.v1.Dimension(m)    <span class="op">+</span> tf.compat.v1.Dimension(<span class="va">None</span>)  <span class="co"># equiv. to</span>
+tf.compat.v1.Dimension(<span class="va">None</span>)
+tf.compat.v1.Dimension(<span class="va">None</span>) <span class="op">+</span> tf.compat.v1.Dimension(n)     <span class="co"># equiv. to</span>
+tf.compat.v1.Dimension(<span class="va">None</span>)
+tf.compat.v1.Dimension(<span class="va">None</span>) <span class="op">+</span> tf.compat.v1.Dimension(<span class="va">None</span>)  <span class="co"># equiv. to</span>
+tf.compat.v1.Dimension(<span class="va">None</span>)</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>other</code></b>: Another Dimension, or a value accepted by <code>as_dimension</code>.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A Dimension whose value is the sum of <code>self</code> and <code>other</code>.</p>
+<h3 id="__div__">
+<code><strong>div</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__div__</span>(other)</code></pre></div>
+<p>DEPRECATED: Use <code>__floordiv__</code> via <code>x // y</code> instead.</p>
+<p>This function exists only for backwards compatibility purposes; new code should use <code>__floordiv__</code> via the syntax <code>x // y</code>. Using <code>x // y</code> communicates clearly that the result rounds down, and is forward compatible to Python 3.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>other</code></b>: Another <code>Dimension</code>.</li>
+</ul>
+<h4 id="returns-1">Returns:</h4>
+<p>A <code>Dimension</code> whose value is the integer quotient of <code>self</code> and <code>other</code>.</p>
+<h3 id="__eq__">
+<code><strong>eq</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__eq__</span>(other)</code></pre></div>
+<p>Returns true if <code>other</code> has the same known value as this Dimension.</p>
+<h3 id="__floordiv__">
+<code><strong>floordiv</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__floordiv__</span>(other)</code></pre></div>
+<p>Returns the quotient of <code>self</code> and <code>other</code> rounded down.</p>
+<p>Dimensions are divided as follows:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.Dimension(m)    <span class="op">//</span> tf.compat.v1.Dimension(n)     <span class="op">==</span>
+tf.compat.v1.Dimension(m <span class="op">//</span> n)
+tf.compat.v1.Dimension(m)    <span class="op">//</span> tf.compat.v1.Dimension(<span class="va">None</span>)  <span class="co"># equiv. to</span>
+tf.compat.v1.Dimension(<span class="va">None</span>)
+tf.compat.v1.Dimension(<span class="va">None</span>) <span class="op">//</span> tf.compat.v1.Dimension(n)     <span class="co"># equiv. to</span>
+tf.compat.v1.Dimension(<span class="va">None</span>)
+tf.compat.v1.Dimension(<span class="va">None</span>) <span class="op">//</span> tf.compat.v1.Dimension(<span class="va">None</span>)  <span class="co"># equiv. to</span>
+tf.compat.v1.Dimension(<span class="va">None</span>)</code></pre></div>
+<h4 id="args-2">Args:</h4>
+<ul>
+<li><b><code>other</code></b>: Another Dimension, or a value accepted by <code>as_dimension</code>.</li>
+</ul>
+<h4 id="returns-2">Returns:</h4>
+<p>A <code>Dimension</code> whose value is the integer quotient of <code>self</code> and <code>other</code>.</p>
+<h3 id="__ge__">
+<code><strong>ge</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__ge__</span>(other)</code></pre></div>
+<p>Returns True if <code>self</code> is known to be greater than or equal to <code>other</code>.</p>
+<p>Dimensions are compared as follows:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">(tf.compat.v1.Dimension(m)    <span class="op">&gt;=</span> tf.compat.v1.Dimension(n))    <span class="op">==</span> (m <span class="op">&gt;=</span> n)
+(tf.compat.v1.Dimension(m)    <span class="op">&gt;=</span> tf.compat.v1.Dimension(<span class="va">None</span>)) <span class="op">==</span> <span class="va">None</span>
+(tf.compat.v1.Dimension(<span class="va">None</span>) <span class="op">&gt;=</span> tf.compat.v1.Dimension(n))    <span class="op">==</span> <span class="va">None</span>
+(tf.compat.v1.Dimension(<span class="va">None</span>) <span class="op">&gt;=</span> tf.compat.v1.Dimension(<span class="va">None</span>)) <span class="op">==</span> <span class="va">None</span></code></pre></div>
+<h4 id="args-3">Args:</h4>
+<ul>
+<li><b><code>other</code></b>: Another Dimension.</li>
+</ul>
+<h4 id="returns-3">Returns:</h4>
+<p>The value of <code>self.value &gt;= other.value</code> if both are known, otherwise None.</p>
+<h3 id="__gt__">
+<code><strong>gt</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__gt__</span>(other)</code></pre></div>
+<p>Returns True if <code>self</code> is known to be greater than <code>other</code>.</p>
+<p>Dimensions are compared as follows:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">(tf.compat.v1.Dimension(m)    <span class="op">&gt;</span> tf.compat.v1.Dimension(n))    <span class="op">==</span> (m <span class="op">&gt;</span> n)
+(tf.compat.v1.Dimension(m)    <span class="op">&gt;</span> tf.compat.v1.Dimension(<span class="va">None</span>)) <span class="op">==</span> <span class="va">None</span>
+(tf.compat.v1.Dimension(<span class="va">None</span>) <span class="op">&gt;</span> tf.compat.v1.Dimension(n))    <span class="op">==</span> <span class="va">None</span>
+(tf.compat.v1.Dimension(<span class="va">None</span>) <span class="op">&gt;</span> tf.compat.v1.Dimension(<span class="va">None</span>)) <span class="op">==</span> <span class="va">None</span></code></pre></div>
+<h4 id="args-4">Args:</h4>
+<ul>
+<li><b><code>other</code></b>: Another Dimension.</li>
+</ul>
+<h4 id="returns-4">Returns:</h4>
+<p>The value of <code>self.value &gt; other.value</code> if both are known, otherwise None.</p>
+<h3 id="__le__">
+<code><strong>le</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__le__</span>(other)</code></pre></div>
+<p>Returns True if <code>self</code> is known to be less than or equal to <code>other</code>.</p>
+<p>Dimensions are compared as follows:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">(tf.compat.v1.Dimension(m)    <span class="op">&lt;=</span> tf.compat.v1.Dimension(n))    <span class="op">==</span> (m <span class="op">&lt;=</span> n)
+(tf.compat.v1.Dimension(m)    <span class="op">&lt;=</span> tf.compat.v1.Dimension(<span class="va">None</span>)) <span class="op">==</span> <span class="va">None</span>
+(tf.compat.v1.Dimension(<span class="va">None</span>) <span class="op">&lt;=</span> tf.compat.v1.Dimension(n))    <span class="op">==</span> <span class="va">None</span>
+(tf.compat.v1.Dimension(<span class="va">None</span>) <span class="op">&lt;=</span> tf.compat.v1.Dimension(<span class="va">None</span>)) <span class="op">==</span> <span class="va">None</span></code></pre></div>
+<h4 id="args-5">Args:</h4>
+<ul>
+<li><b><code>other</code></b>: Another Dimension.</li>
+</ul>
+<h4 id="returns-5">Returns:</h4>
+<p>The value of <code>self.value &lt;= other.value</code> if both are known, otherwise None.</p>
+<h3 id="__lt__">
+<code><strong>lt</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__lt__</span>(other)</code></pre></div>
+<p>Returns True if <code>self</code> is known to be less than <code>other</code>.</p>
+<p>Dimensions are compared as follows:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">(tf.compat.v1.Dimension(m)    <span class="op">&lt;</span> tf.compat.v1.Dimension(n))    <span class="op">==</span> (m <span class="op">&lt;</span> n)
+(tf.compat.v1.Dimension(m)    <span class="op">&lt;</span> tf.compat.v1.Dimension(<span class="va">None</span>)) <span class="op">==</span> <span class="va">None</span>
+(tf.compat.v1.Dimension(<span class="va">None</span>) <span class="op">&lt;</span> tf.compat.v1.Dimension(n))    <span class="op">==</span> <span class="va">None</span>
+(tf.compat.v1.Dimension(<span class="va">None</span>) <span class="op">&lt;</span> tf.compat.v1.Dimension(<span class="va">None</span>)) <span class="op">==</span> <span class="va">None</span></code></pre></div>
+<h4 id="args-6">Args:</h4>
+<ul>
+<li><b><code>other</code></b>: Another Dimension.</li>
+</ul>
+<h4 id="returns-6">Returns:</h4>
+<p>The value of <code>self.value &lt; other.value</code> if both are known, otherwise None.</p>
+<h3 id="__mod__">
+<code><strong>mod</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__mod__</span>(other)</code></pre></div>
+<p>Returns <code>self</code> modulo <code>other</code>.</p>
+<p>Dimension moduli are computed as follows:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.Dimension(m)    <span class="op">%</span> tf.compat.v1.Dimension(n)     <span class="op">==</span>
+tf.compat.v1.Dimension(m <span class="op">%</span> n)
+tf.compat.v1.Dimension(m)    <span class="op">%</span> tf.compat.v1.Dimension(<span class="va">None</span>)  <span class="co"># equiv. to</span>
+tf.compat.v1.Dimension(<span class="va">None</span>)
+tf.compat.v1.Dimension(<span class="va">None</span>) <span class="op">%</span> tf.compat.v1.Dimension(n)     <span class="co"># equiv. to</span>
+tf.compat.v1.Dimension(<span class="va">None</span>)
+tf.compat.v1.Dimension(<span class="va">None</span>) <span class="op">%</span> tf.compat.v1.Dimension(<span class="va">None</span>)  <span class="co"># equiv. to</span>
+tf.compat.v1.Dimension(<span class="va">None</span>)</code></pre></div>
+<h4 id="args-7">Args:</h4>
+<ul>
+<li><b><code>other</code></b>: Another Dimension, or a value accepted by <code>as_dimension</code>.</li>
+</ul>
+<h4 id="returns-7">Returns:</h4>
+<p>A Dimension whose value is <code>self</code> modulo <code>other</code>.</p>
+<h3 id="__mul__">
+<code><strong>mul</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__mul__</span>(other)</code></pre></div>
+<p>Returns the product of <code>self</code> and <code>other</code>.</p>
+<p>Dimensions are summed as follows:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.Dimension(m)    <span class="op">*</span> tf.compat.v1.Dimension(n)     <span class="op">==</span>
+tf.compat.v1.Dimension(m <span class="op">*</span> n)
+tf.compat.v1.Dimension(m)    <span class="op">*</span> tf.compat.v1.Dimension(<span class="va">None</span>)  <span class="co"># equiv. to</span>
+tf.compat.v1.Dimension(<span class="va">None</span>)
+tf.compat.v1.Dimension(<span class="va">None</span>) <span class="op">*</span> tf.compat.v1.Dimension(n)     <span class="co"># equiv. to</span>
+tf.compat.v1.Dimension(<span class="va">None</span>)
+tf.compat.v1.Dimension(<span class="va">None</span>) <span class="op">*</span> tf.compat.v1.Dimension(<span class="va">None</span>)  <span class="co"># equiv. to</span>
+tf.compat.v1.Dimension(<span class="va">None</span>)</code></pre></div>
+<h4 id="args-8">Args:</h4>
+<ul>
+<li><b><code>other</code></b>: Another Dimension, or a value accepted by <code>as_dimension</code>.</li>
+</ul>
+<h4 id="returns-8">Returns:</h4>
+<p>A Dimension whose value is the product of <code>self</code> and <code>other</code>.</p>
+<h3 id="__ne__">
+<code><strong>ne</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__ne__</span>(other)</code></pre></div>
+<p>Returns true if <code>other</code> has a different known value from <code>self</code>.</p>
+<h3 id="__radd__">
+<code><strong>radd</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__radd__</span>(other)</code></pre></div>
+<p>Returns the sum of <code>other</code> and <code>self</code>.</p>
+<h4 id="args-9">Args:</h4>
+<ul>
+<li><b><code>other</code></b>: Another Dimension, or a value accepted by <code>as_dimension</code>.</li>
+</ul>
+<h4 id="returns-9">Returns:</h4>
+<p>A Dimension whose value is the sum of <code>self</code> and <code>other</code>.</p>
+<h3 id="__rdiv__">
+<code><strong>rdiv</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__rdiv__</span>(other)</code></pre></div>
+<p>Use <code>__floordiv__</code> via <code>x // y</code> instead.</p>
+<p>This function exists only to have a better error message. Instead of: <code>TypeError: unsupported operand type(s) for /: 'int' and 'Dimension'</code>, this function will explicitly call for usage of <code>//</code> instead.</p>
+<h4 id="args-10">Args:</h4>
+<ul>
+<li><b><code>other</code></b>: Another <code>Dimension</code>.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<p>TypeError.</p>
+<h3 id="__rfloordiv__">
+<code><strong>rfloordiv</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__rfloordiv__</span>(other)</code></pre></div>
+<p>Returns the quotient of <code>other</code> and <code>self</code> rounded down.</p>
+<h4 id="args-11">Args:</h4>
+<ul>
+<li><b><code>other</code></b>: Another Dimension, or a value accepted by <code>as_dimension</code>.</li>
+</ul>
+<h4 id="returns-10">Returns:</h4>
+<p>A <code>Dimension</code> whose value is the integer quotient of <code>self</code> and <code>other</code>.</p>
+<h3 id="__rmod__">
+<code><strong>rmod</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__rmod__</span>(other)</code></pre></div>
+<p>Returns <code>other</code> modulo <code>self</code>.</p>
+<h4 id="args-12">Args:</h4>
+<ul>
+<li><b><code>other</code></b>: Another Dimension, or a value accepted by <code>as_dimension</code>.</li>
+</ul>
+<h4 id="returns-11">Returns:</h4>
+<p>A Dimension whose value is <code>other</code> modulo <code>self</code>.</p>
+<h3 id="__rmul__">
+<code><strong>rmul</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__rmul__</span>(other)</code></pre></div>
+<p>Returns the product of <code>self</code> and <code>other</code>.</p>
+<h4 id="args-13">Args:</h4>
+<ul>
+<li><b><code>other</code></b>: Another Dimension, or a value accepted by <code>as_dimension</code>.</li>
+</ul>
+<h4 id="returns-12">Returns:</h4>
+<p>A Dimension whose value is the product of <code>self</code> and <code>other</code>.</p>
+<h3 id="__rsub__">
+<code><strong>rsub</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__rsub__</span>(other)</code></pre></div>
+<p>Returns the subtraction of <code>self</code> from <code>other</code>.</p>
+<h4 id="args-14">Args:</h4>
+<ul>
+<li><b><code>other</code></b>: Another Dimension, or a value accepted by <code>as_dimension</code>.</li>
+</ul>
+<h4 id="returns-13">Returns:</h4>
+<p>A Dimension whose value is the subtraction of <code>self</code> from <code>other</code>.</p>
+<h3 id="__rtruediv__">
+<code><strong>rtruediv</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__rtruediv__</span>(other)</code></pre></div>
+<p>Use <code>__floordiv__</code> via <code>x // y</code> instead.</p>
+<p>This function exists only to have a better error message. Instead of: <code>TypeError: unsupported operand type(s) for /: 'int' and 'Dimension'</code>, this function will explicitly call for usage of <code>//</code> instead.</p>
+<h4 id="args-15">Args:</h4>
+<ul>
+<li><b><code>other</code></b>: Another <code>Dimension</code>.</li>
+</ul>
+<h4 id="raises-1">Raises:</h4>
+<p>TypeError.</p>
+<h3 id="__sub__">
+<code><strong>sub</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__sub__</span>(other)</code></pre></div>
+<p>Returns the subtraction of <code>other</code> from <code>self</code>.</p>
+<p>Dimensions are subtracted as follows:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.Dimension(m)    <span class="op">-</span> tf.compat.v1.Dimension(n)     <span class="op">==</span>
+tf.compat.v1.Dimension(m <span class="op">-</span> n)
+tf.compat.v1.Dimension(m)    <span class="op">-</span> tf.compat.v1.Dimension(<span class="va">None</span>)  <span class="co"># equiv. to</span>
+tf.compat.v1.Dimension(<span class="va">None</span>)
+tf.compat.v1.Dimension(<span class="va">None</span>) <span class="op">-</span> tf.compat.v1.Dimension(n)     <span class="co"># equiv. to</span>
+tf.compat.v1.Dimension(<span class="va">None</span>)
+tf.compat.v1.Dimension(<span class="va">None</span>) <span class="op">-</span> tf.compat.v1.Dimension(<span class="va">None</span>)  <span class="co"># equiv. to</span>
+tf.compat.v1.Dimension(<span class="va">None</span>)</code></pre></div>
+<h4 id="args-16">Args:</h4>
+<ul>
+<li><b><code>other</code></b>: Another Dimension, or a value accepted by <code>as_dimension</code>.</li>
+</ul>
+<h4 id="returns-14">Returns:</h4>
+<p>A Dimension whose value is the subtraction of <code>other</code> from <code>self</code>.</p>
+<h3 id="__truediv__">
+<code><strong>truediv</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__truediv__</span>(other)</code></pre></div>
+<p>Use <code>__floordiv__</code> via <code>x // y</code> instead.</p>
+<p>This function exists only to have a better error message. Instead of: <code>TypeError: unsupported operand type(s) for /: 'Dimension' and 'int'</code>, this function will explicitly call for usage of <code>//</code> instead.</p>
+<h4 id="args-17">Args:</h4>
+<ul>
+<li><b><code>other</code></b>: Another <code>Dimension</code>.</li>
+</ul>
+<h4 id="raises-2">Raises:</h4>
+<p>TypeError.</p>
+<h3 id="assert_is_compatible_with">
+<code>assert_is_compatible_with</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">assert_is_compatible_with(other)</code></pre></div>
+<p>Raises an exception if <code>other</code> is not compatible with this Dimension.</p>
+<h4 id="args-18">Args:</h4>
+<ul>
+<li><b><code>other</code></b>: Another Dimension.</li>
+</ul>
+<h4 id="raises-3">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>self</code> and <code>other</code> are not compatible (see is_compatible_with).</li>
+</ul>
+<h3 id="is_compatible_with">
+<code>is_compatible_with</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">is_compatible_with(other)</code></pre></div>
+<p>Returns true if <code>other</code> is compatible with this Dimension.</p>
+<p>Two known Dimensions are compatible if they have the same value. An unknown Dimension is compatible with all other Dimensions.</p>
+<h4 id="args-19">Args:</h4>
+<ul>
+<li><b><code>other</code></b>: Another Dimension.</li>
+</ul>
+<h4 id="returns-15">Returns:</h4>
+<p>True if this Dimension and <code>other</code> are compatible.</p>
+<h3 id="merge_with">
+<code>merge_with</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">merge_with(other)</code></pre></div>
+<p>Returns a Dimension that combines the information in <code>self</code> and <code>other</code>.</p>
+<p>Dimensions are combined as follows:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.Dimension(n)   .merge_with(tf.compat.v1.Dimension(n))     <span class="op">==</span>
+tf.compat.v1.Dimension(n)
+tf.compat.v1.Dimension(n)   .merge_with(tf.compat.v1.Dimension(<span class="va">None</span>))  <span class="op">==</span>
+tf.compat.v1.Dimension(n)
+tf.compat.v1.Dimension(<span class="va">None</span>).merge_with(tf.compat.v1.Dimension(n))     <span class="op">==</span>
+tf.compat.v1.Dimension(n)
+<span class="co"># equivalent to tf.compat.v1.Dimension(None)</span>
+tf.compat.v1.Dimension(<span class="va">None</span>).merge_with(tf.compat.v1.Dimension(<span class="va">None</span>))
+
+<span class="co"># raises ValueError for n != m</span>
+tf.compat.v1.Dimension(n)   .merge_with(tf.compat.v1.Dimension(m))</code></pre></div>
+<h4 id="args-20">Args:</h4>
+<ul>
+<li><b><code>other</code></b>: Another Dimension.</li>
+</ul>
+<h4 id="returns-16">Returns:</h4>
+<p>A Dimension containing the combined information of <code>self</code> and <code>other</code>.</p>
+<h4 id="raises-4">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: If <code>self</code> and <code>other</code> are not compatible (see is_compatible_with).</li>
+</ul>

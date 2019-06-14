@@ -1,0 +1,39 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.fill" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.fill" class="dashAnchor"></a><h1 id="tf.fill">tf.fill</h1>
+<p>Creates a tensor filled with a scalar value.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.fill</code></li>
+<li><code>tf.compat.v2.fill</code></li>
+<li><code>tf.fill</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.fill(
+    dims,
+    value,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in generated file: <code>python/ops/gen_array_ops.py</code>.</p>
+<!-- Placeholder for "Used in" -->
+<p>This operation creates a tensor of shape <code>dims</code> and fills it with <code>value</code>.</p>
+<h4 id="for-example">For example:</h4>
+<pre><code># Output tensor has shape [2, 3].
+fill([2, 3], 9) ==&gt; [[9, 9, 9]
+                     [9, 9, 9]]</code></pre>
+<p><a href="../tf/fill.html"><code>tf.fill</code></a> differs from <a href="../tf/constant.html"><code>tf.constant</code></a> in a few ways:</p>
+<ul>
+<li><a href="../tf/fill.html"><code>tf.fill</code></a> only supports scalar contents, whereas <a href="../tf/constant.html"><code>tf.constant</code></a> supports Tensor values.</li>
+<li><a href="../tf/fill.html"><code>tf.fill</code></a> creates an Op in the computation graph that constructs the actual Tensor value at runtime. This is in contrast to <a href="../tf/constant.html"><code>tf.constant</code></a> which embeds the entire Tensor into the graph with a <code>Const</code> node.</li>
+<li>Because <a href="../tf/fill.html"><code>tf.fill</code></a> evaluates at graph runtime, it supports dynamic shapes based on other runtime Tensors, unlike <a href="../tf/constant.html"><code>tf.constant</code></a>.</li>
+</ul>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>dims</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>int32</code>, <code>int64</code>. 1-D. Represents the shape of the output tensor.</li>
+<li><p><b><code>value</code></b>: A <code>Tensor</code>. 0-D (scalar). Value to fill the returned tensor.</p></li>
+<li><p><b><code>name</code></b>: A name for the operation (optional).</p></li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>value</code>.</p>
+<h4 id="numpy-compatibility">Numpy Compatibility</h4>
+<p>Equivalent to np.full</p>

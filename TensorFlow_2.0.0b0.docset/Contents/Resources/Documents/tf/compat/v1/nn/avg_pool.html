@@ -1,0 +1,34 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.nn.avg_pool" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.nn.avg_pool" class="dashAnchor"></a><a name="//apple_ref/cpp/Function/tf.compat.v1.nn.avg_pool2d" class="dashAnchor"></a><h1 id="tf.compat.v1.nn.avg_pool">tf.compat.v1.nn.avg_pool</h1>
+<p>Performs the average pooling on the input.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.nn.avg_pool</code></li>
+<li><code>tf.compat.v1.nn.avg_pool2d</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.nn.avg_pool(
+    value,
+    ksize,
+    strides,
+    padding,
+    data_format<span class="op">=</span><span class="st">&#39;NHWC&#39;</span>,
+    name<span class="op">=</span><span class="va">None</span>,
+    <span class="bu">input</span><span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/nn_ops.py"><code>python/ops/nn_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Each entry in <code>output</code> is the mean of the corresponding size <code>ksize</code> window in <code>value</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>value</code></b>: A 4-D <code>Tensor</code> of shape <code>[batch, height, width, channels]</code> and type <code>float32</code>, <code>float64</code>, <code>qint8</code>, <code>quint8</code>, or <code>qint32</code>.</li>
+<li><b><code>ksize</code></b>: An int or list of <code>ints</code> that has length <code>1</code>, <code>2</code> or <code>4</code>. The size of the window for each dimension of the input tensor.</li>
+<li><b><code>strides</code></b>: An int or list of <code>ints</code> that has length <code>1</code>, <code>2</code> or <code>4</code>. The stride of the sliding window for each dimension of the input tensor.</li>
+<li><b><code>padding</code></b>: A string, either <code>'VALID'</code> or <code>'SAME'</code>. The padding algorithm. See the &quot;returns&quot; section of <a href="../../../../tf/nn/convolution.html"><code>tf.nn.convolution</code></a> for details.</li>
+<li><b><code>data_format</code></b>: A string. 'NHWC' and 'NCHW' are supported.</li>
+<li><b><code>name</code></b>: Optional name for the operation.</li>
+<li><b><code>input</code></b>: Alias for value.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> with the same type as <code>value</code>. The average pooled output tensor.</p>

@@ -1,0 +1,29 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.activations.softmax" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.keras.activations.softmax" class="dashAnchor"></a><h1 id="tf.keras.activations.softmax">tf.keras.activations.softmax</h1>
+<p>The softmax activation function transforms the outputs so that all values are in</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.keras.activations.softmax</code></li>
+<li><code>tf.compat.v2.keras.activations.softmax</code></li>
+<li><code>tf.keras.activations.softmax</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.keras.activations.softmax(
+    x,
+    axis<span class="op">=-</span><span class="dv">1</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/activations.py"><code>python/keras/activations.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>range (0, 1) and sum to 1. It is often used as the activation for the last layer of a classification network because the result could be interpreted as a probability distribution. The softmax of x is calculated by exp(x)/tf.reduce_sum(exp(x)).</p>
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>x</code></b>: Input tensor.</li>
+<li><b><code>axis</code></b>: Integer, axis along which the softmax normalization is applied.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>Tensor, output of softmax transformation (all values are non-negative and sum to 1).</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>ValueError</code></b>: In case <code>dim(x) == 1</code>.</li>
+</ul>

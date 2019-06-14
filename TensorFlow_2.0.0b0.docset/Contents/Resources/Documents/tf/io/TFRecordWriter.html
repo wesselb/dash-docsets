@@ -1,0 +1,68 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.io.TFRecordWriter" /> <meta itemprop="path" content="Stable" /> <meta itemprop="property" content="__enter__"/> <meta itemprop="property" content="__exit__"/> <meta itemprop="property" content="__init__"/> <meta itemprop="property" content="close"/> <meta itemprop="property" content="flush"/> <meta itemprop="property" content="write"/></p>
+</div>
+<a name="//apple_ref/cpp/Class/tf.io.TFRecordWriter" class="dashAnchor"></a><h1 id="tf.io.tfrecordwriter">tf.io.TFRecordWriter</h1>
+<h2 id="class-tfrecordwriter">Class <code>TFRecordWriter</code></h2>
+<p>A class to write records to a TFRecords file.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li>Class <code>tf.compat.v1.io.TFRecordWriter</code></li>
+<li>Class <code>tf.compat.v1.python_io.TFRecordWriter</code></li>
+<li>Class <code>tf.compat.v2.io.TFRecordWriter</code></li>
+<li>Class <code>tf.io.TFRecordWriter</code></li>
+</ul>
+<p>Defined in <a href="/code/stable/tensorflow/python/lib/io/tf_record.py"><code>python/lib/io/tf_record.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>This class implements <code>__enter__</code> and <code>__exit__</code>, and can be used in <code>with</code> blocks like a normal file.</p>
+<h2 id="__init__">
+<code><strong>init</strong></code>
+</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__init__</span>(
+    path,
+    options<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Opens file <code>path</code> and creates a <code>TFRecordWriter</code> writing to it.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>path</code></b>: The path to the TFRecords file.</li>
+<li><b><code>options</code></b>: (optional) String specifying compression type, <code>TFRecordCompressionType</code>, or <code>TFRecordOptions</code> object.</li>
+</ul>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>IOError</code></b>: If <code>path</code> cannot be opened for writing.</li>
+<li><b><code>ValueError</code></b>: If valid compression_type can't be determined from <code>options</code>.</li>
+</ul>
+<h2 id="methods">Methods</h2>
+<h3 id="__enter__">
+<code><strong>enter</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__enter__</span>()</code></pre></div>
+<p>Enter a <code>with</code> block.</p>
+<h3 id="__exit__">
+<code><strong>exit</strong></code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="fu">__exit__</span>(
+    unused_type,
+    unused_value,
+    unused_traceback
+)</code></pre></div>
+<p>Exit a <code>with</code> block, closing the file.</p>
+<h3 id="close">
+<code>close</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">close()</code></pre></div>
+<p>Close the file.</p>
+<h3 id="flush">
+<code>flush</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">flush()</code></pre></div>
+<p>Flush the file.</p>
+<h3 id="write">
+<code>write</code>
+</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">write(record)</code></pre></div>
+<p>Write a string record to the file.</p>
+<h4 id="args-1">Args:</h4>
+<ul>
+<li><b><code>record</code></b>: str</li>
+</ul>

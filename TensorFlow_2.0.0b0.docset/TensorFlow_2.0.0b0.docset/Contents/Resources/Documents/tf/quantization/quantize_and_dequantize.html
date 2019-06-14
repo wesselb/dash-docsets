@@ -1,0 +1,63 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.quantization.quantize_and_dequantize" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.quantization.quantize_and_dequantize" class="dashAnchor"></a><h1 id="tf.quantization.quantize_and_dequantize">tf.quantization.quantize_and_dequantize</h1>
+<p>Quantizes then dequantizes a tensor.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.quantization.quantize_and_dequantize</code></li>
+<li><code>tf.compat.v2.quantization.quantize_and_dequantize</code></li>
+<li><code>tf.quantization.quantize_and_dequantize</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.quantization.quantize_and_dequantize(
+    <span class="bu">input</span>,
+    input_min,
+    input_max,
+    signed_input<span class="op">=</span><span class="va">True</span>,
+    num_bits<span class="op">=</span><span class="dv">8</span>,
+    range_given<span class="op">=</span><span class="va">False</span>,
+    round_mode<span class="op">=</span><span class="st">&#39;HALF_TO_EVEN&#39;</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in generated file: <code>python/ops/gen_array_ops.py</code>.</p>
+<!-- Placeholder for "Used in" -->
+<p>This op simulates the precision loss from the quantized forward pass by:</p>
+<ol style="list-style-type: decimal">
+<li>Quantizing the tensor to fixed point numbers, which should match the target quantization method when it is used in inference.</li>
+<li>Dequantizing it back to floating point numbers for the following ops, most likely matmul.</li>
+</ol>
+<p>There are different ways to quantize. This version uses only scaling, so 0.0 maps to 0.</p>
+<p>From the specified 'num_bits' in the quantized output type, it determines minimum and maximum representable quantized values.</p>
+<p>e.g.</p>
+<ul>
+<li>[-128, 127] for signed, num_bits = 8, or</li>
+<li>[0, 255] for unsigned, num_bits = 8.</li>
+</ul>
+<p>If range_given == False, the initial input_min, input_max will be determined automatically as the minimum and maximum values in the input tensor, otherwise the specified values of input_min, input_max are used.</p>
+<p>Note: If the input_min, input_max are specified, they do not need to equal the actual minimum and maximum values in the tensor. e.g. in some cases it may be beneficial to specify these values such that the low probability extremes of the input distribution are clipped.</p>
+<p>This op determines the maximum scale_factor that would map the initial [input_min, input_max] range to a range that lies within the representable quantized range.</p>
+<p>It determines the scale from one of input_min and input_max, then updates the other one to maximize the respresentable range.</p>
+<p>e.g.</p>
+<ul>
+<li>if the output is signed, num_bits = 8, [input_min, input_max] = [-10.0, 5.0]: it would use a scale_factor of -128 / -10.0 = 12.8 In this case, it would update input_max to be 127 / 12.8 = 9.921875</li>
+<li>if the output is signed, num_bits = 8, [input_min, input_max] = [-10.0, 10.0]: it would use a scale_factor of 127 / 10.0 = 12.7 In this case, it would update input_min to be 128.0 / 12.7 = -10.07874</li>
+<li>if the output is unsigned, input_min is forced to be 0, and only the specified input_max is used.</li>
+</ul>
+<p>After determining the scale_factor and updating the input range, it applies the following to each value in the 'input' tensor.</p>
+<p>output = round(clamp(value, input_min, input_max) * scale_factor) / scale_factor.</p>
+<p>The above round function rounds the value based on the given round_mode.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code>. Must be one of the following types: <code>bfloat16</code>, <code>half</code>, <code>float32</code>, <code>float64</code>. Tensor to quantize and then dequantize.</li>
+<li><b><code>input_min</code></b>: A <code>Tensor</code>. Must have the same type as <code>input</code>. If <code>range_given == True</code>, this specifies the minimum input value that needs to be represented, otherwise it is determined from the min value of the <code>input</code> tensor.</li>
+<li><b><code>input_max</code></b>: A <code>Tensor</code>. Must have the same type as <code>input</code>. If <code>range_given == True</code>, this specifies the maximum input value that needs to be represented, otherwise it is determined from the max value of the <code>input</code> tensor.</li>
+<li><b><code>signed_input</code></b>: An optional <code>bool</code>. Defaults to <code>True</code>. Whether the quantization is signed or unsigned. (actually this parameter should have been called <b><code>signed_output</code></b>)</li>
+<li><b><code>num_bits</code></b>: An optional <code>int</code>. Defaults to <code>8</code>. The bitwidth of the quantization.</li>
+<li><b><code>range_given</code></b>: An optional <code>bool</code>. Defaults to <code>False</code>. Whether the range is given or should be determined from the <code>input</code> tensor.</li>
+<li><p><b><code>round_mode</code></b>: An optional <code>string</code> from: <code>&quot;HALF_TO_EVEN&quot;, &quot;HALF_UP&quot;</code>. Defaults to <code>&quot;HALF_TO_EVEN&quot;</code>. The 'round_mode' attribute controls which rounding tie-breaking algorithm is used when rounding float values to their quantized equivalents. The following rounding modes are currently supported:</p></li>
+<li>HALF_TO_EVEN: this is the default round_mode.</li>
+<li>HALF_UP: round towards positive. In this mode 7.5 rounds up to 8 and -7.5 rounds up to -7.</li>
+<li><p><b><code>name</code></b>: A name for the operation (optional).</p></li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code>. Has the same type as <code>input</code>.</p>

@@ -1,0 +1,91 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.while_loop" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.while_loop" class="dashAnchor"></a><h1 id="tf.while_loop">tf.while_loop</h1>
+<p>Repeat <code>body</code> while the condition <code>cond</code> is true.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v2.while_loop</code></li>
+<li><code>tf.while_loop</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.while_loop(
+    cond,
+    body,
+    loop_vars,
+    shape_invariants<span class="op">=</span><span class="va">None</span>,
+    parallel_iterations<span class="op">=</span><span class="dv">10</span>,
+    back_prop<span class="op">=</span><span class="va">True</span>,
+    swap_memory<span class="op">=</span><span class="va">False</span>,
+    maximum_iterations<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/control_flow_ops.py"><code>python/ops/control_flow_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p><code>cond</code> is a callable returning a boolean scalar tensor. <code>body</code> is a callable returning a (possibly nested) tuple, namedtuple or list of tensors of the same arity (length and structure) and types as <code>loop_vars</code>. <code>loop_vars</code> is a (possibly nested) tuple, namedtuple or list of tensors that is passed to both <code>cond</code> and <code>body</code>. <code>cond</code> and <code>body</code> both take as many arguments as there are <code>loop_vars</code>.</p>
+<p>In addition to regular Tensors or IndexedSlices, the body may accept and return TensorArray objects. The flows of the TensorArray objects will be appropriately forwarded between loops and during gradient calculations.</p>
+<p>Note that <code>while_loop</code> calls <code>cond</code> and <code>body</code> <em>exactly once</em> (inside the call to <code>while_loop</code>, and not at all during <code>Session.run()</code>). <code>while_loop</code> stitches together the graph fragments created during the <code>cond</code> and <code>body</code> calls with some additional graph nodes to create the graph flow that repeats <code>body</code> until <code>cond</code> returns false.</p>
+<p>For correctness, <code>tf.while_loop()</code> strictly enforces shape invariants for the loop variables. A shape invariant is a (possibly partial) shape that is unchanged across the iterations of the loop. An error will be raised if the shape of a loop variable after an iteration is determined to be more general than or incompatible with its shape invariant. For example, a shape of [11, None] is more general than a shape of [11, 17], and [11, 21] is not compatible with [11, 17]. By default (if the argument <code>shape_invariants</code> is not specified), it is assumed that the initial shape of each tensor in <code>loop_vars</code> is the same in every iteration. The <code>shape_invariants</code> argument allows the caller to specify a less specific shape invariant for each loop variable, which is needed if the shape varies between iterations. The <a href="../tf/Tensor.md#set_shape"><code>tf.Tensor.set_shape</code></a> function may also be used in the <code>body</code> function to indicate that the output loop variable has a particular shape. The shape invariant for SparseTensor and IndexedSlices are treated specially as follows:</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>If a loop variable is a SparseTensor, the shape invariant must be TensorShape([r]) where r is the rank of the dense tensor represented by the sparse tensor. It means the shapes of the three tensors of the SparseTensor are ([None], [None, r], [r]). NOTE: The shape invariant here is the shape of the SparseTensor.dense_shape property. It must be the shape of a vector.</p></li>
+<li><p>If a loop variable is an IndexedSlices, the shape invariant must be a shape invariant of the values tensor of the IndexedSlices. It means the shapes of the three tensors of the IndexedSlices are (shape, [shape[0]], [shape.ndims]).</p></li>
+</ol>
+<p><code>while_loop</code> implements non-strict semantics, enabling multiple iterations to run in parallel. The maximum number of parallel iterations can be controlled by <code>parallel_iterations</code>, which gives users some control over memory consumption and execution order. For correct programs, <code>while_loop</code> should return the same result for any parallel_iterations &gt; 0.</p>
+<p>For training, TensorFlow stores the tensors that are produced in the forward inference and are needed in back propagation. These tensors are a main source of memory consumption and often cause OOM errors when training on GPUs. When the flag swap_memory is true, we swap out these tensors from GPU to CPU. This for example allows us to train RNN models with very long sequences and large batches.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>cond</code></b>: A callable that represents the termination condition of the loop.</li>
+<li><b><code>body</code></b>: A callable that represents the loop body.</li>
+<li><b><code>loop_vars</code></b>: A (possibly nested) tuple, namedtuple or list of numpy array, <code>Tensor</code>, and <code>TensorArray</code> objects.</li>
+<li><b><code>shape_invariants</code></b>: The shape invariants for the loop variables.</li>
+<li><b><code>parallel_iterations</code></b>: The number of iterations allowed to run in parallel. It must be a positive integer.</li>
+<li><b><code>back_prop</code></b>: Whether backprop is enabled for this while loop.</li>
+<li><b><code>swap_memory</code></b>: Whether GPU-CPU memory swap is enabled for this loop.</li>
+<li><b><code>maximum_iterations</code></b>: Optional maximum number of iterations of the while loop to run. If provided, the <code>cond</code> output is AND-ed with an additional condition ensuring the number of iterations executed is no greater than <code>maximum_iterations</code>.</li>
+<li><b><code>name</code></b>: Optional name prefix for the returned tensors.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>The output tensors for the loop variables after the loop. The return value has the same structure as <code>loop_vars</code>.</p>
+<h4 id="raises">Raises:</h4>
+<ul>
+<li><b><code>TypeError</code></b>: if <code>cond</code> or <code>body</code> is not callable.</li>
+<li><b><code>ValueError</code></b>: if <code>loop_vars</code> is empty.</li>
+</ul>
+<h4 id="example">Example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">i <span class="op">=</span> tf.constant(<span class="dv">0</span>)
+c <span class="op">=</span> <span class="kw">lambda</span> i: tf.less(i, <span class="dv">10</span>)
+b <span class="op">=</span> <span class="kw">lambda</span> i: tf.add(i, <span class="dv">1</span>)
+r <span class="op">=</span> tf.while_loop(c, b, [i])</code></pre></div>
+<p>Example with nesting and a namedtuple:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">import</span> collections
+Pair <span class="op">=</span> collections.namedtuple(<span class="st">&#39;Pair&#39;</span>, <span class="st">&#39;j, k&#39;</span>)
+ijk_0 <span class="op">=</span> (tf.constant(<span class="dv">0</span>), Pair(tf.constant(<span class="dv">1</span>), tf.constant(<span class="dv">2</span>)))
+c <span class="op">=</span> <span class="kw">lambda</span> i, p: i <span class="op">&lt;</span> <span class="dv">10</span>
+b <span class="op">=</span> <span class="kw">lambda</span> i, p: (i <span class="op">+</span> <span class="dv">1</span>, Pair((p.j <span class="op">+</span> p.k), (p.j <span class="op">-</span> p.k)))
+ijk_final <span class="op">=</span> tf.while_loop(c, b, ijk_0)</code></pre></div>
+<p>Example using shape_invariants:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">i0 <span class="op">=</span> tf.constant(<span class="dv">0</span>)
+m0 <span class="op">=</span> tf.ones([<span class="dv">2</span>, <span class="dv">2</span>])
+c <span class="op">=</span> <span class="kw">lambda</span> i, m: i <span class="op">&lt;</span> <span class="dv">10</span>
+b <span class="op">=</span> <span class="kw">lambda</span> i, m: [i<span class="op">+</span><span class="dv">1</span>, tf.concat([m, m], axis<span class="op">=</span><span class="dv">0</span>)]
+tf.while_loop(
+    c, b, loop_vars<span class="op">=</span>[i0, m0],
+    shape_invariants<span class="op">=</span>[i0.get_shape(), tf.TensorShape([<span class="va">None</span>, <span class="dv">2</span>])])</code></pre></div>
+<p>Example which demonstrates non-strict semantics: In the following example, the final value of the counter <code>i</code> does not depend on <code>x</code>. So the <code>while_loop</code> can increment the counter parallel to updates of <code>x</code>. However, because the loop counter at one loop iteration depends on the value at the previous iteration, the loop counter itself cannot be incremented in parallel. Hence if we just want the final value of the counter (which we print on the line <code>print(sess.run(i))</code>), then <code>x</code> will never be incremented, but the counter will be updated on a single thread. Conversely, if we want the value of the output (which we print on the line <code>print(sess.run(out).shape)</code>), then the counter may be incremented on its own thread, while <code>x</code> can be incremented in parallel on a separate thread. In the extreme case, it is conceivable that the thread incrementing the counter runs until completion before <code>x</code> is incremented even a single time. The only thing that can never happen is that the thread updating <code>x</code> can never get ahead of the counter thread because the thread incrementing <code>x</code> depends on the value of the counter.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">import</span> tensorflow <span class="im">as</span> tf
+
+n <span class="op">=</span> <span class="dv">10000</span>
+x <span class="op">=</span> tf.constant(<span class="bu">list</span>(<span class="bu">range</span>(n)))
+c <span class="op">=</span> <span class="kw">lambda</span> i, x: i <span class="op">&lt;</span> n
+b <span class="op">=</span> <span class="kw">lambda</span> i, x: (tf.compat.v1.Print(i <span class="op">+</span> <span class="dv">1</span>, [i]), tf.compat.v1.Print(x <span class="op">+</span> <span class="dv">1</span>,
+[i], <span class="st">&quot;x:&quot;</span>))
+i, out <span class="op">=</span> tf.while_loop(c, b, (<span class="dv">0</span>, x))
+<span class="cf">with</span> tf.compat.v1.Session() <span class="im">as</span> sess:
+    <span class="bu">print</span>(sess.run(i))  <span class="co"># prints [0] ... [9999]</span>
+
+    <span class="co"># The following line may increment the counter and x in parallel.</span>
+    <span class="co"># The counter thread may get ahead of the other thread, but not the</span>
+    <span class="co"># other way around. So you may see things like</span>
+    <span class="co"># [9996] x:[9987]</span>
+    <span class="co"># meaning that the counter thread is on iteration 9996,</span>
+    <span class="co"># while the other thread is on iteration 9987</span>
+    <span class="bu">print</span>(sess.run(out).shape)</code></pre></div>

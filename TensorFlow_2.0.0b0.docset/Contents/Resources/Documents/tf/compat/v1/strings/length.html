@@ -1,0 +1,21 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.compat.v1.strings.length" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.compat.v1.strings.length" class="dashAnchor"></a><h1 id="tf.compat.v1.strings.length">tf.compat.v1.strings.length</h1>
+<p>String lengths of <code>input</code>.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.compat.v1.strings.length(
+    <span class="bu">input</span>,
+    name<span class="op">=</span><span class="va">None</span>,
+    unit<span class="op">=</span><span class="st">&#39;BYTE&#39;</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/string_ops.py"><code>python/ops/string_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Computes the length of each string given in the input tensor.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: A <code>Tensor</code> of type <code>string</code>. The string for which to compute the length.</li>
+<li><b><code>unit</code></b>: An optional <code>string</code> from: <code>&quot;BYTE&quot;, &quot;UTF8_CHAR&quot;</code>. Defaults to <code>&quot;BYTE&quot;</code>. The unit that is counted to compute string length. One of: <code>&quot;BYTE&quot;</code> (for the number of bytes in each string) or <code>&quot;UTF8_CHAR&quot;</code> (for the number of UTF-8 encoded Unicode code points in each string). Results are undefined if <code>unit=UTF8_CHAR</code> and the <code>input</code> strings do not contain structurally valid UTF-8.</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>Tensor</code> of type <code>int32</code>.</p>

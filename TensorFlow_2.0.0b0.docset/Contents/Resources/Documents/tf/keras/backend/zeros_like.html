@@ -1,0 +1,33 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.keras.backend.zeros_like" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.keras.backend.zeros_like" class="dashAnchor"></a><h1 id="tf.keras.backend.zeros_like">tf.keras.backend.zeros_like</h1>
+<p>Instantiates an all-zeros variable of the same shape as another tensor.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.keras.backend.zeros_like</code></li>
+<li><code>tf.compat.v2.keras.backend.zeros_like</code></li>
+<li><code>tf.keras.backend.zeros_like</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.keras.backend.zeros_like(
+    x,
+    dtype<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/keras/backend.py"><code>python/keras/backend.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<h4 id="arguments">Arguments:</h4>
+<ul>
+<li><b><code>x</code></b>: Keras variable or Keras tensor.</li>
+<li><b><code>dtype</code></b>: String, dtype of returned Keras variable. None uses the dtype of x.</li>
+<li><b><code>name</code></b>: String, name for the variable to create.</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A Keras variable with the shape of x filled with zeros.</p>
+<h4 id="example">Example:</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">    <span class="op">&gt;&gt;&gt;</span> <span class="im">from</span> keras <span class="im">import</span> backend <span class="im">as</span> K
+    <span class="op">&gt;&gt;&gt;</span> kvar <span class="op">=</span> K.variable(np.random.random((<span class="dv">2</span>,<span class="dv">3</span>)))
+    <span class="op">&gt;&gt;&gt;</span> kvar_zeros <span class="op">=</span> K.zeros_like(kvar)
+    <span class="op">&gt;&gt;&gt;</span> K.<span class="bu">eval</span>(kvar_zeros)
+    array([[ <span class="dv">0</span>.,  <span class="dv">0</span>.,  <span class="dv">0</span>.],
+           [ <span class="dv">0</span>.,  <span class="dv">0</span>.,  <span class="dv">0</span>.]], dtype<span class="op">=</span>float32)</code></pre></div>

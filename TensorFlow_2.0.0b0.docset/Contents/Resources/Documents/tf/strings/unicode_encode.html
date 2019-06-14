@@ -1,0 +1,33 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.strings.unicode_encode" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.strings.unicode_encode" class="dashAnchor"></a><h1 id="tf.strings.unicode_encode">tf.strings.unicode_encode</h1>
+<p>Encodes each sequence of Unicode code points in <code>input</code> into a string.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.strings.unicode_encode</code></li>
+<li><code>tf.compat.v2.strings.unicode_encode</code></li>
+<li><code>tf.strings.unicode_encode</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.strings.unicode_encode(
+    <span class="bu">input</span>,
+    output_encoding,
+    errors<span class="op">=</span><span class="st">&#39;replace&#39;</span>,
+    replacement_char<span class="op">=</span><span class="dv">65533</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/ragged/ragged_string_ops.py"><code>python/ops/ragged/ragged_string_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p><code>result[i1...iN]</code> is the string formed by concatenating the Unicode codepoints <code>input[1...iN, :]</code>, encoded using <code>output_encoding</code>.</p>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>input</code></b>: An <code>N+1</code> dimensional potentially ragged integer tensor with shape <code>[D1...DN, num_chars]</code>.</li>
+<li><b><code>output_encoding</code></b>: Unicode encoding that should be used to encode each codepoint sequence. Can be <code>&quot;UTF-8&quot;</code>, <code>&quot;UTF-16-BE&quot;</code>, or <code>&quot;UTF-32-BE&quot;</code>.</li>
+<li><b><code>errors</code></b>: Specifies the response when an invalid codepoint is encountered (optional). One of: * <code>'replace'</code>: Replace invalid codepoint with the <code>replacement_char</code>. (default) * <code>'ignore'</code>: Skip invalid codepoints. * <code>'strict'</code>: Raise an exception for any invalid codepoint.</li>
+<li><b><code>replacement_char</code></b>: The replacement character codepoint to be used in place of any invalid input when <code>errors='replace'</code>. Any valid unicode codepoint may be used. The default value is the default unicode replacement character which is 0xFFFD (U+65533).</li>
+<li><b><code>name</code></b>: A name for the operation (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A <code>N</code> dimensional <code>string</code> tensor with shape <code>[D1...DN]</code>.</p>
+<h4 id="example">Example:</h4>
+<p><code>python     &gt;&gt;&gt; input = [[71, 246, 246, 100, 110, 105, 103, 104, 116], [128522]]     &gt;&gt;&gt; unicode_encode(input, 'UTF-8')     ['G\xc3\xb6\xc3\xb6dnight', '\xf0\x9f\x98\x8a']</code></p>

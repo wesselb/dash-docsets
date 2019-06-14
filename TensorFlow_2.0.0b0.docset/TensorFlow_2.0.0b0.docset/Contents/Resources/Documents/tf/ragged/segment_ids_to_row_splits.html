@@ -1,0 +1,31 @@
+<div itemscope="" itemtype="http://developers.google.com/ReferenceObject">
+<p><meta itemprop="name" content="tf.ragged.segment_ids_to_row_splits" /> <meta itemprop="path" content="Stable" /></p>
+</div>
+<a name="//apple_ref/cpp/Function/tf.ragged.segment_ids_to_row_splits" class="dashAnchor"></a><h1 id="tf.ragged.segment_ids_to_row_splits">tf.ragged.segment_ids_to_row_splits</h1>
+<p>Generates the RaggedTensor <code>row_splits</code> corresponding to a segmentation.</p>
+<h3 id="aliases">Aliases:</h3>
+<ul>
+<li><code>tf.compat.v1.ragged.segment_ids_to_row_splits</code></li>
+<li><code>tf.compat.v2.ragged.segment_ids_to_row_splits</code></li>
+<li><code>tf.ragged.segment_ids_to_row_splits</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">tf.ragged.segment_ids_to_row_splits(
+    segment_ids,
+    num_segments<span class="op">=</span><span class="va">None</span>,
+    out_type<span class="op">=</span><span class="va">None</span>,
+    name<span class="op">=</span><span class="va">None</span>
+)</code></pre></div>
+<p>Defined in <a href="/code/stable/tensorflow/python/ops/ragged/segment_id_ops.py"><code>python/ops/ragged/segment_id_ops.py</code></a>.</p>
+<!-- Placeholder for "Used in" -->
+<p>Returns an integer vector <code>splits</code>, where <code>splits[0] = 0</code> and <code>splits[i] = splits[i-1] + count(segment_ids==i)</code>. Example:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="op">&gt;&gt;&gt;</span> ragged.segment_ids_to_row_splits([<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">4</span>]).<span class="bu">eval</span>()
+[ <span class="dv">0</span> <span class="dv">3</span> <span class="dv">3</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">9</span> ]</code></pre></div>
+<h4 id="args">Args:</h4>
+<ul>
+<li><b><code>segment_ids</code></b>: A 1-D integer Tensor.</li>
+<li><b><code>num_segments</code></b>: A scalar integer indicating the number of segments. Defaults to <code>max(segment_ids) + 1</code> (or zero if <code>segment_ids</code> is empty).</li>
+<li><b><code>out_type</code></b>: The dtype for the return value. Defaults to <code>segment_ids.dtype</code>, or <a href="../../tf.md#int64"><code>tf.int64</code></a> if <code>segment_ids</code> does not have a dtype.</li>
+<li><b><code>name</code></b>: A name prefix for the returned tensor (optional).</li>
+</ul>
+<h4 id="returns">Returns:</h4>
+<p>A sorted 1-D integer Tensor, with <code>shape=[num_segments + 1]</code>.</p>
